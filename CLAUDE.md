@@ -21,6 +21,10 @@ interim milestone. When the C code is wrong (crash, memory error, CVE,
 inconsistent result), the spec states the correct behaviour and records
 the deviation from upstream with its reason.
 
+Two deliverables: a drop-in replacement for libonig (same C API and
+ABI), and an OCaml library that ideally pays no FFI cost (native OCaml
+code, not bindings to the C library).
+
 The specification language and the implementation language are still
 undecided. Do not assume a toolchain (Rocq, Lean, F*, Rust/Verus, OCaml, …)
 until the user picks one. Proficiency with a tool is not a constraint;
