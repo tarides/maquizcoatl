@@ -15,9 +15,18 @@ The target is Oniguruma as of `f95747b`. Compatibility with Onigmo
 (Ruby's fork) is a nice-to-have, not a goal: do not let Onigmo
 behaviour drive spec decisions.
 
+Bug-for-bug compatibility with `f95747b` is a non-goal: Maquizcoatl must
+be bug-free. Reproducing a C behaviour exactly is acceptable only as an
+interim milestone. When the C code is wrong (crash, memory error, CVE,
+inconsistent result), the spec states the correct behaviour and records
+the deviation from upstream with its reason.
+
 The specification language and the implementation language are still
 undecided. Do not assume a toolchain (Rocq, Lean, F*, Rust/Verus, OCaml, …)
-until the user picks one. The state-of-the-art survey that frames the
+until the user picks one. Proficiency with a tool is not a constraint;
+the selection criterion is that the tool is actively maintained. Never
+propose an abandoned or unmaintained tool: building on one would repeat
+the fate of the archived project being replaced. The state-of-the-art survey that frames the
 options is the Claude Doc "Verified reimplementation of Oniguruma: state
 of the art" (https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc).
 
