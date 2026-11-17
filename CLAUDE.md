@@ -11,6 +11,10 @@ two phases:
 1. Reverse-engineer a specification from the original C sources.
 2. Build a verified implementation against that specification.
 
+The target is Oniguruma as of `f95747b`. Compatibility with Onigmo
+(Ruby's fork) is a nice-to-have, not a goal: do not let Onigmo
+behaviour drive spec decisions.
+
 The specification language and the implementation language are still
 undecided. Do not assume a toolchain (Rocq, Lean, F*, Rust/Verus, OCaml, …)
 until the user picks one. The state-of-the-art survey that frames the
