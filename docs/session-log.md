@@ -166,3 +166,20 @@ than the documentation.
 
 Experiment #11 (performance baselines) now runs on the bench host with
 experiment #1's workloads; experiments #3 and #7 run there too.
+
+## 2026-11-19: experiment #13, Part C done
+
+Experiment #13 (upgrade cost) was led from a separate interactive session,
+outside the pipeline. It was then handed over to a background workflow,
+from a handoff note.
+
+**Part C (history mining) is done.** The mining tool ran on 8 projects over
+one year, then Claude agents classified 66 rows by reading their diffs (all
+48 that the plan requires). Observed adaptation per release: Rocq 12 to 103
+lines per 9.x release after a 380 to 1,630-line 9.0 migration; Lean a median
+of about 70, with a 9,220-line String API overhaul over three releases; F\*
+a median of 0; Why3 about 470 to 513 forced lines in the gallery for 1.8.2
+to 1.9.0; Verus about 147; Isabelle about 7. Results were posted on issue #3.
+
+The Part A driver (`upgrade_builds`) was reviewed and committed, but not run
+yet: it waits for the CPU set it may use on the bench host.
