@@ -132,7 +132,7 @@ const gate = await agent(
 
 Check whether the CPU set for Part A on the bench host has been agreed: read the comments of PR #20 and issue #3 (gh pr view 20 --comments; gh issue view 3 --comments) after the plan was posted. 
 - If a maintainer (Cuihtlauac) answered with a CPU set: return it verbatim with the comment URL. Change nothing.
-- If not: add label needs-decision to issue #3 (gh issue edit 3 --add-label needs-decision), and make sure the dashboard document e13 (artifact https://claude.ai/artifact/75qJzdKrn8cdFWmYAh72VG, collection data/team/experiments, ArtifactData tool via ToolSearch "select:ArtifactData") has the pending question "Which CPUs of blocksci-bench may Part A use (-j8, nice)?" and its labels include needs-decision if the schema has labels. Read before updating.
+- If not: add label needs-decision to issue #3 (gh issue edit 3 --add-label needs-decision), and make sure the dashboard document e13 (artifact https://claude.ai/artifact/75qJzdKrn8cdFWmYAh72VG, collection data/team/experiments, ArtifactData tool via ToolSearch "select:ArtifactData") has the pending question "Which CPUs of the bench host may Part A use (-j8, nice)?" and its labels include needs-decision if the schema has labels. Read before updating.
 Return: answered (yes/no), CPU set if any, actions taken.`,
   { label: 'gate:cpu-set', phase: 'Gate' })
 

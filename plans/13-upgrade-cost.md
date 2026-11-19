@@ -363,7 +363,7 @@ For each of the five projects of the issue:
 ## Machine budget
 
 - **Part C** runs on the local workstation: clones and `git` only.
-- **Part A** runs on the bench host `blocksci-bench` (64 threads, 503 GB
+- **Part A** runs on the shared bench host (64 threads, 503 GB
   of memory, about 140 GB of free disk on 2026-11-19), shared with the
   argostrace production server and with the other experiments. On
   2026-11-19 at 13:20 UTC, #3 was fuzzing on CPUs 8-31 and 40-63 (a
