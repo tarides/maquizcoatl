@@ -18,7 +18,7 @@ by running:
   least 3 CPU-days in total.
 
 Each confirmed bug becomes a candidate entry for the deviation log
-(#2): the spec will state the correct behaviour and record why it departs
+(experiment #2): the spec will state the correct behaviour and record why it departs
 from `f95747b`. The experiment chooses no stack.
 
 Stack exhaustion (maintainer decision (a), issue comment 7008670586): a
@@ -89,7 +89,7 @@ provenance at run time.
 
 **Revision at execution time.** The bench host is shared with
 experiments #7 and #11, so this run uses at most 40 parallel jobs,
-pinned with `taskset` to CPUs 8-31 and 40-63 (#11 pins CPUs 4-7 and
+pinned with `taskset` to CPUs 8-31 and 40-63 (experiment #11 pins CPUs 4-7 and
 their SMT siblings 36-39). The campaign therefore runs 40 workers for
 110 min (73.3 CPU-hours, still above the 72 required); `split.tsv` holds
 the actual split (encode 4, syntax 4, utf16-be 3, utf16-le 3, regset 6,
@@ -309,9 +309,9 @@ in a new entry, not an overwrite.
 - The scripts and the `fuzzer-deep` patch in
   `experiments/03-sanitizers-fuzzing/`.
 - The lab notebook entries above, with reproducers.
-- A list of candidate deviation-log entries handed to #2.
+- A list of candidate deviation-log entries handed to experiment #2.
 - A PR from `exp/03-sanitizers-fuzzing` with the results and a summary
-  comment on #9.
+  comment on issue #9.
 
 ## Done-criteria (copied from the issue)
 
