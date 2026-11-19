@@ -48,7 +48,13 @@ Project commits are frozen at D:
 directory holds only tests and the extracted C and Rust (4 `.fst`
 files); the Pulse sources are in `lib/everparse/cbor/spec` (39
 `.fst`/`.fsti`) and `lib/everparse/cbor/pulse` (73), on top of
-`lib/everparse/lowparse`. The plan uses those paths. EverParse is
+`lib/everparse/lowparse`. The plan uses those paths. They exist only
+since EverParse PR 343 (`3d13096c`, 2026-10-18); before it, the same
+sources were in `src/cbor/spec`, `src/cbor/pulse` and `src/lowparse`.
+The configuration measures both the current and the former paths,
+limited to `.fst` and `.fsti` files. The first Part C run measured only
+the current paths, so 12 of its 21 F\* bumps were 0 lines by
+construction; it was re-run (files named `*-rerun-*`). EverParse is
 maintained by the F\* developers, so it follows F\* closely and its
 adaptation cost is paid by the tool's own team; the notebook says so when
 comparing it with the other projects.
@@ -98,15 +104,19 @@ and committed as `experiments/13-upgrade-cost/releases/<tool>.tsv`
 - Why3: tags of `why3/why3` on gitlab.inria.fr, dates from the tag
   commits; latest at D: 1.9.0 (2026-10-19), previous 1.8.2 (2025-09-16).
 - Verus: GitHub releases of `verus-lang/verus` (rolling, about weekly;
-  53 stable releases in the window).
+  52 stable releases in the window). The list also has a stable row
+  `dependency/singular-4.3.2`, which is not a Verus release; the tool
+  still counts it as a series (53), and the Part C summary does not.
 - Isabelle: releases 2025, 2025-1, 2025-2 and 2026, from the AFP release
   mirrors. Release dates are taken from the Isabelle website and release
   announcements, with the URL in `source`; the mirrors' creation dates are
   only a cross-check.
 
 Release cadence (criterion 1) is computed from these files: number of
-stable releases in the window, and between each project's pinned version
-and the latest one. For Lean, the release candidates and the stable
+stable release series whose first stable release falls in the window
+(Rocq 2, Lean 11, F\* 28, Why3 1, Verus 52, Isabelle 3; patch releases
+do not count), and between each project's pinned version and the latest
+one. For Lean, the release candidates and the stable
 release of one minor version count as one release; pre-releases are also
 listed separately.
 
@@ -150,8 +160,8 @@ Pin files per project:
   releases, `verus_commit` only shows a change), `Cargo.toml` (`vstd`,
   an inline git table, only shows a change), `rust-toolchain.toml`.
 
-Two further selections, whose rows are **all** classified by hand
-whatever their size, since a message pattern also catches unrelated
+Two further selections, whose rows are **all** classified (see Manual
+classification) whatever their size, since a message pattern also catches unrelated
 commits:
 
 - Rocq projects: units whose messages match
@@ -188,7 +198,11 @@ normalised: lean-regex skipped v4.30.0 and v4.33.0), and the
 `--numstat` of the unit restricted to the configured paths and filtered:
 files, lines added, lines removed. Excluded paths: pin files, lockfiles
 (`lake-manifest.json`, `Cargo.lock`) and generated files, so that line
-counts measure hand-written changes.
+counts measure hand-written changes. Other lockfiles (`flake.lock`,
+`package-lock.json`) are not excluded; the classification counts them
+apart where they matter. Every measured directory must hold measured
+files at the start of the window and at the head (in snapshot mode, in
+the first and last release trees); the tool reports any that does not.
 
 **Snapshot mode** (AFP, Why3 gallery). Diff the restricted paths between
 consecutive releases (`mirror-afp-2025` to `-2025-1`, and so on; Why3
@@ -199,6 +213,9 @@ release dates, blob-less clone), not from the depth-1 mirrors.
 Caveat: an AFP release branch is forked before the Isabelle release date,
 so authors and diffs can be misaligned by one release period (seen on
 `Formula_Derivatives`). The notebook states it for each affected entry.
+For `Formula_Derivatives` the authors were corrected by hand in the
+results CSV, and the correction is re-applied after each run, until the
+tool attributes AFP authors by content.
 
 **Per release.** Several rows can reach one tool series (a release
 candidate then the stable release, several pinned commits of one F\*
@@ -206,7 +223,31 @@ release, one row per AFP entry). The per-release table sums the rows by
 (project, series reached) and divides by the releases the group spans.
 Lines of rows that reach no release, go back to an older series, or
 belong to a group that spans no release are reported as unattributed in
-the summary.
+the summary. A bump reaches a series only if one of its pins resolves to
+a release: a row that changes only opaque pins (Linden `b6396cb`,
+Creusot's why3find-only bumps) is unattributed. In the first run such
+rows joined the series of the release pins around them.
+
+The tool's table has raw lines. The classified table
+(`2026-11-19-exp-13-per-release-classified.csv`) applies one convention
+to every tool, stated in the Part C summary:
+
+- adaptation lines of a mixed row come from the counts in its reason,
+  not from the rounded share (lines times share only where the reason
+  gives no count);
+- a keyword row whose classification ties it to a release joins that
+  series (Warblre `5d7b76e`, Linden `a8c1859`);
+- the median and the mean per release both take one value per stable
+  release crossed (a series' adaptation lines divided by its span, once
+  per release of the span); the yearly total and the yearly total per
+  release of the tool's cadence are given in separate columns;
+- spans are the tool's. Two series have none because their starting pin
+  is in no release (F\* 2026.10.11, 12 releases by hand) or every pin is
+  in one release (Creusot 1.9); they are shown with the hand count as a
+  variant. Anvil's pins give no span: its per-release figure is the
+  yearly total divided by the 52 Verus releases of the window, and
+  Creusot counts as one release step. Both conventions are open
+  (decision 5 of the classification file).
 
 ### Tool
 
@@ -218,7 +259,9 @@ and tests. It depends on the standard library and `unix` only, and runs
 typed OCaml values in `mining/src/projects.ml`, not separate
 configuration files: per project, the clone, the commit at D, the pin
 files and their format, the excluded and restricted paths, and the
-message pattern. The window is given on the command line.
+message pattern. The window is given on the command line. The tool
+never overwrites result files, and list fields in its CSVs use `; ` as
+separator (the first run used a space).
 
 Tests (`dune test`) run on fixtures, with no network and no clone: a
 recorded first-parent `git log --numstat`, pin-file contents for each
@@ -238,6 +281,21 @@ decided by reading the diff:
 - `mixed`: adaptation plus unrelated work, with an estimate of the
   adaptation share and the reason;
 - `unrelated`: no adaptation.
+
+The classification was done by Claude agents in a background workflow,
+one per project group, reading each row's diff in the local clones (and
+PR descriptions, release notes or the tool's sources where useful). No
+human has spot-checked the shares yet. Each `*-bumps.csv` gets two
+columns after `class`: `adaptation_share` (0 to 1) and `reason`, which
+gives counts where it can. Bump rows below the threshold were classified
+too when cheap (18 rows), since they decide some per-release figures.
+After a re-run, the class of a row whose units and lines did not change
+is carried over; the other rows are read again.
+
+The Why3 gallery snapshot (one 82,849-line row) was decomposed per
+example and status with a one-off shell and awk pipeline, outside
+`upgrade_mining`
+(`2026-11-19-exp-13-why3-gallery-decomposition.csv`).
 
 Known large bumps: lean-regex `e2e33d6` v4.26.0-rc2 (69 files, +3406
 -4293), `153ed60` v4.27.0-rc1 (61 files), `e1600a1` v4.25.1 (35 files),
@@ -366,13 +424,24 @@ categories, patch size, hands-on time against the time box.
 In `lab/results/`:
 
 - `2026-11-19-exp-13-<project>-bumps.csv`: one row per bump, group or
-  pattern-selected unit, with the class;
-- `2026-11-19-exp-13-per-release.csv`: one row per (project, tool
-  release reached), lines changed and releases spanned;
+  pattern-selected unit, with the class; `-rerun-bumps.csv` for the
+  re-run;
+- `2026-11-19-exp-13-per-release.csv`, `-rerun-per-release.csv`: the
+  tool's table, one row per (project, tool series reached), raw lines
+  and releases spanned;
+- `2026-11-19-exp-13-mining-summary.md`, `-rerun-mining-summary.md`: the
+  tool's summary, raw lines;
+- `2026-11-19-exp-13-mining.md`, `-classification.md`, `-rerun.md`: run
+  provenance, classification notes and decisions;
+- `2026-11-19-exp-13-why3-gallery-decomposition.csv`: the gallery
+  snapshot per example;
+- `2026-11-19-exp-13-per-release-classified.csv`: one row per (project,
+  series reached), raw and adaptation lines, releases spanned;
 - `2026-11-19-exp-13-builds.csv`: Part A, one row per (project, side);
-- `2026-11-19-exp-13-summary.md`: the summary table across projects, one
-  line per tool on the observed upgrade cost, Verus and Isabelle
-  included.
+- `2026-11-19-exp-13-part-c-summary-v2.md` (it replaces
+  `-part-c-summary.md`): the summary table across projects, Verus and
+  Isabelle included. The final summary with Part A,
+  `2026-11-19-exp-13-summary.md`, is still to come.
 
 ## Steps
 
@@ -415,6 +484,14 @@ Raised by the plan review, decided by the experiment owner on
 
 1. **CPU set on the bench host** for Part A, to agree with the
    maintainer on the issue before step 5.
+2. **Normalisation by project size** (results review, problem 4): the
+   sizes are in the Part C summary v2; whether to report lines per kLOC
+   is for the maintainer.
+3. **Verus division** (results review, problem 7): Anvil's last commit
+   precedes the last 3 releases, and its first bump may pay for releases
+   before the window.
+4. **Human spot check** of the agent-estimated shares, and the open
+   decisions of the classification file.
 
 ## Risks
 
