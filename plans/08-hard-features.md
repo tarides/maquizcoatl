@@ -53,17 +53,26 @@ list actually used is recorded in the first notebook entry.
    `lab/08-hard-features/setup.sh verus`: the pinned release archive
    (sha256 checked), the Rust toolchain it names installed by rustup
    under `<cache>/rustup` and `<cache>/cargo`, and Verus's bundled Z3.
-   Smoke test per tool: one trivial lemma checked. Build the C library
-   out of tree from `f95747b` (`<exp>/build/onig/`, `test_utf8` must
-   print `FAIL: 0`).
+   Smoke test per tool: one trivial lemma checked (the smoke tests also
+   validate the memory cap, see "Machine budget"). Build the C library
+   out of tree from `f95747b` twice, a Debug build
+   (`<exp>/build/onig-debug/`) and an ASan/UBSan build
+   (`<exp>/build/onig-asan/`), with the flags of `probes/README.md`
+   ("Replay"); `test_utf8` must print `FAIL: 0` on both.
+   `lab/07-large-tables/setup.sh onig` builds a Release tree, so
+   `lab/08-hard-features/setup.sh onig` makes its own two builds rather
+   than reusing it.
 2. **Case corpus, shared by all tools.** For each feature, write the
    cases once in `lab/08-hard-features/cases/<feature>.tsv`, in
-   experiment #2's probe format (`probes/README.md`): id, syntax,
-   encoding, options, pattern, subject, expected result. Expected
-   results come from the C library, through `probes/harness.c` (which
-   already handles `ISO-8859-1` and `FIND_LONGEST`) plus a small driver
-   `lab/08-hard-features/cases/nest.c` for cases that need
-   `onig_set_subexp_call_max_nest_level`. At least 4 cases per feature
+   experiment #2's eight-column probe format (`probes/README.md`): id,
+   syntax, encoding, options, pattern, subject, js (left empty), note.
+   There is no input "expected result" column: `probes/harness.c`
+   (which already handles `ISO-8859-1` and `FIND_LONGEST`) computes the
+   result, and the expected column is derived by joining its Debug and
+   ASan outputs per case id, as `probes/compare.mjs` does, so the corpus
+   replays with the existing tools. A small driver
+   `lab/08-hard-features/cases/nest.c` covers the cases that need
+   `onig_set_subexp_call_max_nest_level`, with the same output format. At least 4 cases per feature
    (one more than the criterion, in case one turns out to exercise an
    out-of-scope path):
    - calls: `upstream/test/test_utf8.c:701`, `707`, `714`, `729`, and
@@ -72,7 +81,11 @@ list actually used is recorded in the first notebook entry.
    - absent operator, non-nested only: `upstream/test/test_utf8.c:840`,
      `842`, `847`, plus one absent expression `(?~|abc|\O*)` and one
      absent stopper case written for the experiment (`test_utf8.c:850`,
-     a nested use, is excluded and listed as a spec gap);
+     a nested use, is excluded and listed as a spec gap). `(?~abc)` and
+     `(?~|abc|\O*)` are run on the same subjects: `upstream/doc/RE:368`
+     says they are equivalent, but they compile through different code
+     paths (see step 3), so agreement is a finding and disagreement a
+     deviation-log candidate;
    - FIND_LONGEST, forward search: `upstream/test/test_options.c:217`
      and three written cases (equal-length tie, a longer match at a
      later start, a longer match through a lower-priority alternative);
@@ -101,36 +114,85 @@ list actually used is recorded in the first notebook entry.
      precondition stated as a hypothesis, not modelled. Termination is
      shown by a lexicographic measure (remaining input, remaining nest
      budget, pattern size); a tool that cannot accept that measure falls
-     back to fuel with an adequacy lemma, and the fallback is recorded as
-     an automation failure.
+     back to fuel with an adequacy lemma. Fuel used only so that a tool
+     can *compute* with the definition (Rocq and Lean cannot reduce
+     well-founded recursion conveniently, while F\* and Verus run
+     `decreases`-based definitions directly) is recorded under a separate
+     heading, "computability help", not as an automation failure.
    - Absent operator: a direct semantics, not the gimmick desugaring of
      `make_absent_engine`. The matcher state carries a right-range
      register (the end bound the stopper and range clear act on), and the
-     four forms are defined on it. Equality with the C behaviour is
-     checked on the test cases (step 4), not proved against the
-     desugaring; a proof of that equality is follow-up work.
+     four forms are defined on it. The register rules are derived from
+     the C wiring, not from `doc/RE`'s prose, and `SEMANTICS.md` cites
+     it: `make_absent_tree` (`upstream/src/regparse.c:3299-3380`)
+     compiles `(?~absent)` (body `\O*`) through
+     `make_absent_tree_for_simple_one_char_repeat`, step-wise, and every
+     other form through `make_absent_engine` (`regparse.c:2995-3076`):
+     save the right range, save s, a possessive scan
+     `((SAVE_S absent CUT FAIL) | \O)*` that cuts the right range at the
+     first position where `absent` matches within it, rewind s, then
+     `exp` bounded by the cut; `make_absent_tail`
+     (`regparse.c:3078-3127`) restores the right range on exit and
+     re-installs the cut when backtracking into the group, and the
+     stopper (`is_range_cutter`) skips the tail. The cut is the position
+     *before* the absent match (`UPDATE_VAR_RIGHT_RANGE_FROM_S_STACK`,
+     `upstream/src/regexec.c:4563-4571`), and the right range bounds
+     every consumption through `DATA_ENSURE` (`regexec.c:2725-2727`),
+     which is why `(?~abc)` on `abc` gives `[0,0)`
+     (`test_utf8.c:841`). Equality with the C behaviour is checked on
+     the test cases (step 4), not proved against the desugaring; a proof
+     of that equality is follow-up work.
    - FIND_LONGEST: a search-level function over the results of all
      start positions in the range: the first result of maximal length in
      (start ascending, then priority) order, as the strict comparison in
-     `upstream/src/regexec.c:3298-3299` gives. Forward search only.
+     `upstream/src/regexec.c:3298-3299` gives. Forward search only. The
+     mechanism, cited next to the definition: with the option,
+     `match_at` continues after every `OP_END` (`goto fail`,
+     `regexec.c:3404`) and returns `ONIG_MISMATCH` at `OP_FINISH`
+     (`regexec.c:4655-4660`), so `search_in_range` visits every start
+     and reads `msa.best_len`/`msa.best_s` afterwards
+     (`regexec.c:5993-5999`); the early exit at `regexec.c:3305` (a match
+     reaching the range end) is the only short cut.
    - ISO-8859-1 folding: a 256-entry byte fold table, read from
      `upstream/src/iso8859_1.c`, plus the one multi-character fold
-     `0xDF` to `ss`; a folded literal matches any byte string in its fold
-     closure, so match length and pattern length can differ.
+     `0xDF` to `ss`. A folded literal's language is the one-level,
+     per-position alternation of the original bytes and the items
+     returned by `get_case_fold_codes_by_str` (`iso8859_1.c:126-160`
+     maps any two-byte spelling of `ss` to `0xDF`, `173-199` maps `0xDF`
+     to `ss`, `SS`, `sS`, `Ss`), as `unravel_case_fold_string` expands
+     it; not a transitive closure, which could admit strings the C
+     rejects. Match length and pattern length can differ. Experiment
+     #2's cf21 and cf22 already confirm both directions. Character
+     classes (`[\xDF]`, `apply_all_case_fold`) are a separate path and
+     out of scope.
+   - Lemma statements, fixed here once for all tools so that the proof
+     columns compare the same proposition. Since every tool accepts a
+     `decreases` measure, "termination" is the definition's acceptance,
+     not a lemma; the calls lemma is instead: every result of the calls
+     semantics is produced with nest depth at most the limit at every
+     step (or, for a fuel version, fuel adequacy: fuel = f(input length,
+     limit, pattern size) suffices). The other three are the issue's
+     examples, stated precisely in `SEMANTICS.md`: no result of the
+     absent repeater contains the absent pattern as a substring;
+     FIND_LONGEST's result is no shorter than the first-match result
+     over the same range; `0xDF` matches each of `ss`, `SS`, `sS`, `Ss`
+     and back.
 4. **Per tool, per feature, calls first.** For each surviving tool, in
    the order calls, absent operator, FIND_LONGEST, ISO-8859-1 folding:
    write the definitions, run the cases, prove the lemma.
-   - Running the cases: Rocq `vm_compute` then `reflexivity`; Lean
-     `decide` or `rfl` (`native_decide` only if those fail, recorded,
-     since it adds the `Lean.ofReduceBool` axiom); F\* `assert_norm`;
+   - Running the cases: Rocq `vm_compute` then `reflexivity` (expected
+     to get stuck on `Fix`/`Acc` unless the accessibility proofs are
+     transparent, so the fuel version or `Equations` with transparent
+     well-foundedness is the likely route); Lean `decide` or `rfl`, then
+     `decide +kernel` (experiment #7 found plain `decide` fails on
+     well-founded recursion and `decide +kernel` works), and
+     `native_decide` only if those fail, recorded, since it adds the
+     `Lean.ofReduceBool` axiom; F\* `assert_norm`;
      Verus `assert(...) by (compute_only)`. A case that cannot be run
      this way is run through the tool's extraction or executable mirror
      and the gap is recorded.
-   - Lemmas (the issue's examples): termination of calls under the nest
-     limit; for the absent repeater, a result never contains the absent
-     pattern as a substring; FIND_LONGEST returns a match no shorter
-     than the first-match result over the same range; `0xDF` matches
-     each of `ss`, `SS`, `sS`, `Ss` and back under ISO-8859-1 folding.
+   - Lemmas: the four statements fixed in `SEMANTICS.md` (step 3), the
+     same in every tool.
    - F\* with Pulse: the semantics is pure F\* (Pulse is F\*'s
      separation-logic layer for imperative code and a semantics has
      none); it is checked with the Pulse-enabled `fstar.exe` of the
@@ -143,13 +205,23 @@ list actually used is recorded in the first notebook entry.
      grep for `assume`/`admit`/`external_body`/`external`. Output kept
      in the raw results.
 5. **Measurements.** Per tool and feature: lines of specification and
-   of proof (counted by a small script with per-tool rules for comment
-   syntax, `lab/08-hard-features/loc.py`), wall-clock checking time
-   (three runs of the full check after the work is done, median kept),
-   peak RSS (`/usr/bin/time -v`), solver names and versions, and a list
-   of every automation failure or manual help (triggers, fuel,
-   `decreases` hints, `by` blocks, rewriting, split lemmas), each with
-   file and line.
+   of proof (counted by `lab/08-hard-features/loc.py`, with per-tool
+   comment syntax and this spec/proof rule, also written in the script's
+   header: Rocq, `Lemma`/`Theorem` statements and `Proof.`…`Qed.`/
+   `Defined.` blocks are proof; Lean, `theorem`/`lemma` declarations and
+   their bodies; F\*, `let`s with a `Lemma` type and `assert`/`calc`
+   blocks; Verus, `proof fn` bodies, `by` blocks and `assert` lines;
+   everything else that is not blank or a comment is specification),
+   wall-clock checking time (three runs of the full check after the
+   work is done, median kept), peak RSS (`/usr/bin/time -v`, whose
+   "Maximum resident set size" is that of the largest single
+   descendant, not of the process tree: `lake`, `opam exec`, `verus` →
+   `rust_verify` + `z3`; noted next to the column, or the tree sampled
+   from `/proc`), solver names and versions, a list of every automation
+   failure or manual help (triggers, `decreases` hints, `by` blocks,
+   rewriting, split lemmas), and a separate list of computability help
+   (fuel or executable mirrors added only to run cases), each with file
+   and line.
 6. **Comparison.** A short per-feature table of the four tools
    (interactive against SMT-based, and within each kind), posted on
    issue #12, plus the list of deviation-log candidates found.
@@ -205,9 +277,21 @@ switching to another tool needs the maintainer's decision.
 
 At most 4 parallel jobs (`make -j4`, `opam --jobs=4`, at most four tool
 checks at a time, never more), and at most 3 hours of wall-clock for a
-run. Each check runs under `timeout` and `ulimit -v 32G`; hitting either
-is recorded as a failure for that tool and feature. Timed checks
-(step 5) run one after another, not concurrently with each other.
+run. Each check runs under `timeout` and a memory cap; hitting either
+is recorded as a failure for that tool and feature. The cap is not
+`ulimit -v`: that limits address space, which OCaml 5 (Rocq) and Lean
+reserve in large ranges at start-up, so it can fail a check
+spuriously. It is a cgroup limit (`systemd-run --user --scope -p
+MemoryMax=…`), or `prlimit --as` if the cgroup is unavailable, with a
+value below the host's RAM, validated by the smoke tests; the mechanism
+and value used are recorded. Timed checks (step 5) run one after
+another, not concurrently with each other.
+
+Bench-host etiquette: issue #13's accepted rules for experiment #5 apply
+here too. The Verus install and every timed check run under `taskset`
+on free cores and under `nice`, and no heavy install runs on the cores
+reserved for experiment #11's timed runs. The load at each timed run is
+recorded.
 
 The machine work of the whole experiment does not fit one 3-hour run
 next to the writing work it depends on, so it is split into milestones,
