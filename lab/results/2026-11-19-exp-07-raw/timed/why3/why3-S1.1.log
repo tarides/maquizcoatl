@@ -1,0 +1,2 @@
+why3 prove: Option '-T'/'--theory' with a non-qualified argument requires an input file.
+Try 'why3 prove --help' for more information.
