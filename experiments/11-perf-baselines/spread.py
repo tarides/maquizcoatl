@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Spread of timed repetitions, within one run or across runs.
+"""Spread of timed repetitions, within one run or across runs; compile
+and worst-case tables across runs.
 
 Usage:
   python3 -I -S spread.py <time-file>
@@ -31,6 +32,16 @@ Usage:
                                 than two runs with the reference cell
 A cell that run.sh repeated (spread over 10%) is taken from its repeat,
 as summarise.py does.
+  python3 -I -S spread.py --compile <raw-times.tsv>...
+      prints a CSV with one row per (engine, workload, pattern) compiled
+      in the engine's own column, over the runs given: runs, median_ns
+      (median over runs of the per-run median), min_ns and max_ns (of
+      the per-run medians), n_min (smallest number of compilations).
+  python3 -I -S spread.py --worst <worst.csv>...
+      prints a CSV with one row per worst-case point (family, engine,
+      length) over the runs given (one worst.csv per run): runs, outcome
+      and code (the distinct values, joined by '|' when the runs
+      disagree), median_s, min_s, max_s (empty for a point with no time).
 """
 import csv, math, statistics, sys
 
@@ -107,6 +118,49 @@ def runs_table(paths):
                 row += ['', '', '', '', '']
             W.writerow(row)
 
+def compile_table(paths):
+    """Per-pattern compile medians of the own-column cells, over runs."""
+    per = {}  # (engine, workload, pid) -> [(median_ns, n)], one per run
+    for p in paths:
+        seen = set()
+        for l in open(p):
+            if l.startswith('#'): continue
+            f = l.rstrip('\n').split('\t')
+            if f[2] != 'C' or f[1].endswith('.repeat') or '@' in f[1]: continue
+            e, w = f[1].split('.', 1)
+            key = (e, w, int(f[3]))
+            if key in seen: sys.exit('%s: pattern %d of %s.%s listed twice' % (p, key[2], e, w))
+            seen.add(key)
+            per.setdefault(key, []).append((float(f[4]), int(f[5])))
+    W = csv.writer(sys.stdout)
+    W.writerow(['engine', 'workload', 'pid', 'runs', 'median_ns', 'min_ns', 'max_ns', 'n_min'])
+    order = {c: i for i, c in enumerate((e, w) for e in ENGINES for w in WORKLOADS)}
+    for (e, w, pid) in sorted(per, key=lambda k: (order[k[0], k[1]], k[2])):
+        v = per[e, w, pid]
+        ns = [x[0] for x in v]
+        W.writerow([e, w, pid, len(v), '%.6g' % statistics.median(ns), '%.6g' % min(ns), '%.6g' % max(ns),
+                    min(x[1] for x in v)])
+
+def worst_table(paths):
+    """Worst-case points over runs, in the order of the first file."""
+    keys, per = [], {}
+    for p in paths:
+        for r in csv.DictReader(open(p)):
+            k = tuple(r[c] for c in ('family', 'pattern', 'syntax', 'options', 'engine', 'length'))
+            if k not in per: keys.append(k); per[k] = []
+            per[k].append(r)
+    W = csv.writer(sys.stdout)
+    W.writerow(['family', 'pattern', 'syntax', 'options', 'engine', 'length', 'runs', 'outcome', 'code',
+                'median_s', 'min_s', 'max_s'])
+    distinct = lambda xs: '|'.join(sorted(set(xs)))
+    for k in keys:
+        rs = per[k]
+        s = [float(r['seconds']) for r in rs if r['seconds']]
+        W.writerow(list(k) + [len(rs), distinct(r['outcome'] for r in rs), distinct(r['code'] for r in rs)] +
+                   (['%.6g' % statistics.median(s), '%.6g' % min(s), '%.6g' % max(s)] if s else ['', '', '']))
+
 if len(sys.argv) >= 3 and sys.argv[1] == '--runs': runs_table(sys.argv[2:])
+elif len(sys.argv) >= 3 and sys.argv[1] == '--compile': compile_table(sys.argv[2:])
+elif len(sys.argv) >= 3 and sys.argv[1] == '--worst': worst_table(sys.argv[2:])
 elif len(sys.argv) == 2: one_file(sys.argv[1])
 else: sys.exit(__doc__)
