@@ -35,6 +35,21 @@ From the maintainer's
    dropped. If no SMT-based tool survives, the least-eliminated one
    runs as a control.
 
+From the maintainer's
+[answer](https://github.com/tarides/maquizcoatl/issues/12#issuecomment-7022834760)
+to the plan review's
+[question](https://github.com/tarides/maquizcoatl/issues/12#issuecomment-7022815351),
+option (b):
+
+4. **Native computation.** Proofs closed by `native_decide` (Lean,
+   axiom `Lean.ofReduceBool`) or `native_compute` (Rocq, trusts the
+   compiled code) count for *running test cases*, with the axiom listed
+   in the notebook. Each feature's main lemma (the statement fixed in
+   `SEMANTICS.md`) must be checked by the kernel (for example
+   `decide +kernel` in Lean, `vm_compute` or plain reduction in Rocq);
+   if it cannot be, that is reported as an automation failure for that
+   feature and tool.
+
 ## Gate
 
 Execution waits for experiment #5 (issue #13, PR #21), which reports
@@ -186,13 +201,21 @@ list actually used is recorded in the first notebook entry.
      well-foundedness is the likely route); Lean `decide` or `rfl`, then
      `decide +kernel` (experiment #7 found plain `decide` fails on
      well-founded recursion and `decide +kernel` works), and
-     `native_decide` only if those fail, recorded, since it adds the
-     `Lean.ofReduceBool` axiom; F\* `assert_norm`;
+     `native_decide` only if those fail; Rocq `native_compute` likewise
+     after `vm_compute`. Native computation is accepted for running
+     cases (decision 4), recorded with its axiom (`Lean.ofReduceBool`
+     for Lean); F\* `assert_norm`;
      Verus `assert(...) by (compute_only)`. A case that cannot be run
      this way is run through the tool's extraction or executable mirror
      and the gap is recorded.
    - Lemmas: the four statements fixed in `SEMANTICS.md` (step 3), the
-     same in every tool.
+     same in every tool. Each main lemma must be kernel-checked
+     (decision 4): in Rocq and Lean, its proof may compute only by
+     kernel reduction (`decide +kernel`, `rfl`, `vm_compute`, plain
+     reduction), never `native_decide` or `native_compute`. A main lemma
+     that can be closed only natively is reported as an automation
+     failure for that feature and tool, with the native proof kept
+     alongside as evidence.
    - F\* with Pulse: the semantics is pure F\* (Pulse is F\*'s
      separation-logic layer for imperative code and a semantics has
      none); it is checked with the Pulse-enabled `fstar.exe` of the
@@ -203,7 +226,11 @@ list actually used is recorded in the first notebook entry.
      `#print axioms` plus a grep for `sorry`; F\* a grep for
      `assume`/`admit`/`assume_val` and `--admit_smt_queries`; Verus a
      grep for `assume`/`admit`/`external_body`/`external`. Output kept
-     in the raw results.
+     in the raw results. For Rocq and Lean the check also greps for
+     `native_compute`/`native_decide` and classifies each use: on a
+     test case, allowed and listed with its axiom; on a main lemma (its
+     `#print axioms` shows `Lean.ofReduceBool`, or its proof calls
+     `native_compute`), an automation failure.
 5. **Measurements.** Per tool and feature: lines of specification and
    of proof (counted by `lab/08-hard-features/loc.py`, with per-tool
    comment syntax and this spec/proof rule, also written in the script's
@@ -221,7 +248,10 @@ list actually used is recorded in the first notebook entry.
    failure or manual help (triggers, `decreases` hints, `by` blocks,
    rewriting, split lemmas), and a separate list of computability help
    (fuel or executable mirrors added only to run cases), each with file
-   and line.
+   and line. Per tool and feature, the notebook also records how the
+   cases were run (kernel or native computation, with the axioms the
+   native ones add) and whether the main lemma is kernel-checked; a
+   main lemma that is not is listed among the automation failures.
 6. **Comparison.** A short per-feature table of the four tools
    (interactive against SMT-based, and within each kind), posted on
    issue #12, plus the list of deviation-log candidates found.
@@ -323,7 +353,9 @@ only when the maintainer agrees it is worth keeping:
   and any deviation-log candidate.
 - `exp-08-<feature>` (one per feature): per tool, lines of spec and
   proof, check time, peak RSS, solvers, assumption-check output, cases
-  run and agreement, the lemma, and the list of automation failures.
+  run and agreement (kernel or native, with the axioms native
+  computation adds), the lemma and whether it is kernel-checked, and
+  the list of automation failures.
 - `exp-08-comparison`: the timed runs and the per-feature comparison.
 
 ## Outputs
@@ -350,10 +382,17 @@ only when the maintainer agrees it is worth keeping:
   grep for `assume`/`admit`/`external_body`/`external`.
 - For each tool, the semantics runs, or is proved by computation, on at
   least 3 test cases per feature (at least 12 cases per tool), and
-  agrees with the C library on each of them. Cases come from upstream
+  agrees with the C library on each of them. Native computation
+  (`native_decide` in Lean, `native_compute` in Rocq) counts here, with
+  its axiom (`Lean.ofReduceBool` for Lean) listed in the notebook. Cases come from upstream
   tests where they exist; otherwise they are written for the experiment
   and checked against the C library built from `f95747b`.
-- For each tool, at least one lemma per feature is proved. Examples:
+- For each tool, at least one lemma per feature (its main lemma) is
+  proved and checked by the kernel: in Rocq and Lean, no
+  `native_compute` or `native_decide` in its proof (for example
+  `decide +kernel` in Lean, `vm_compute` or plain reduction in Rocq).
+  A main lemma that cannot be kernel-checked is reported as an
+  automation failure for that feature and tool. Examples:
   termination of calls under the nest limit; FIND_LONGEST returns a
   match no shorter than the first-match result over the same range; ß
   matches each of `ss`, `SS`, `sS` and `Ss` (and back) under ISO-8859-1
