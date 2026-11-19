@@ -21,13 +21,14 @@ verus)
     (cd "$CACHE/dl/verus-unz" && unzip -q "../$VZ")
     mv "$CACHE/dl/verus-unz"/* "$CACHE/verus"; rmdir "$CACHE/dl/verus-unz"
   fi
-  export RUSTUP_HOME=$CACHE/rustup CARGO_HOME=$CACHE/cargo
+  export RUSTUP_HOME=$CACHE/rustup CARGO_HOME=$CACHE/cargo PATH=$CACHE/cargo/bin:$PATH
+  printf 'export RUSTUP_HOME=%s CARGO_HOME=%s PATH=%s:%s:$PATH\n' "$RUSTUP_HOME" "$CARGO_HOME" "$CACHE/cargo/bin" "$CACHE/verus" > "$CACHE/verus-env.sh"
   [ -x "$CARGO_HOME/bin/rustup" ] || {
     curl -fsSL -o "$CACHE/dl/rustup-init" https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init
     chmod +x "$CACHE/dl/rustup-init"
     "$CACHE/dl/rustup-init" -y --no-modify-path --default-toolchain none --profile minimal; }
   # the toolchain Verus names, e.g. 1.xx.0-x86_64-unknown-linux-gnu
-  TC=$(sed -n 's/.*"toolchain": *"\([^"]*\)".*/\1/p' "$CACHE/verus/version.json" 2>/dev/null || true)
+  TC=$(sed -n 's/.*"toolchain": *"\([^" ]*\).*/\1/p' "$CACHE/verus/version.json" 2>/dev/null || true)
   [ -n "$TC" ] || TC=$("$CACHE/verus/verus" --version 2>&1 | sed -n 's/.*rustup install \([^ ]*\).*/\1/p' | head -1)
   echo "toolchain: $TC"
   "$CARGO_HOME/bin/rustup" toolchain install "$TC" --profile minimal

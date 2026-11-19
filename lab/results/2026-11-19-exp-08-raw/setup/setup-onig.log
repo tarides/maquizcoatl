@@ -1,0 +1,3 @@
+onig-debug: RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
+onig-asan: RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
+EXIT 0
