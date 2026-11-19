@@ -35,7 +35,7 @@ about the frequency governor:
 
 3. No root on the bench host. The CPU frequency governor (`schedutil`)
    is left as it is; nothing is run through sudo. Frequency noise is
-   handled by the warm-up pass and the 10% spread rule (step 7), the
+   handled by the warm-up pass and the 10% repeat rule (step 7), the
    governor and frequency range are recorded in provenance (step 10),
    and the report treats ratios as the primary result (step 11).
 
@@ -46,6 +46,9 @@ on the review of the r2-r4 re-runs:
 4. Compilation is timed in a separate process from the search (the
    harnesses' `compile` mode), so that it cannot slow Oniguruma's own
    cells. A new series of three runs (r5, r6, r7) uses that protocol.
+5. The 10% repeat rule (step 7) is on the range ((max - min) / median
+   of the repetition times), not on the IQR: the re-runs showed that
+   the IQR understates the noise.
 
 ## Where things live
 
@@ -242,13 +245,17 @@ spread rules invalidate too many cells.
      (Rust) and `Mtime_clock` (OCaml). Definitions: a pass runs every
      (pattern, subject) pair of the workload once; bytes/s = sum of the
      subject lengths over all (pattern, subject) pairs of the pass /
-     median pass time; spread = IQR / median of the pass times. Output:
-     bytes/s, median pass time, min, max, IQR and spread, match count,
+     median pass time; spread = IQR / median of the pass times; range =
+     (max - min) / median of the pass times. Output: bytes/s, median
+     pass time, min, max, IQR, spread and range, match count,
      rejected, resource-limited and unsupported pattern counts;
    - the warm-up pass is untimed; it also lets the `schedutil`
      governor raise the pinned core's frequency before timing starts;
-   - a cell whose spread exceeds 10% is repeated once;
+   - a cell whose range exceeds 10% is repeated once;
      if it still exceeds 10%, it is reported as invalid with its data.
+     A cell with no subject byte times an empty pass: it is never
+     repeated, and has no throughput or ratio. Up to r4 the rule used
+     the spread instead of the range (decision 5).
 
 8. **Worst case** (criterion 4; at most 30 min). Per workload family,
    one catastrophic-backtracking pattern from #1's fuel tier if there is

@@ -4,7 +4,11 @@ and worst-case tables across runs.
 
 Usage:
   python3 -I -S spread.py <time-file>
-      prints 'median iqr spread' of the T lines of one `time` output.
+      prints 'median iqr spread range repeat' of the T lines of one
+      `time` output: spread is IQR / median, range is (max - min) /
+      median, repeat is yes when the cell must be repeated (see below),
+      no otherwise, and failed when the file has fewer than two T lines
+      (the other fields are then nan).
   python3 -I -S spread.py --runs <raw-times.tsv>...
       prints a CSV with one row per (engine, workload) over the runs
       given, one raw-times.tsv per run (as written by run.sh):
@@ -30,8 +34,12 @@ Usage:
                                 errors of the two medians add up in their
                                 ratio), no otherwise; empty with fewer
                                 than two runs with the reference cell
-A cell that run.sh repeated (spread over 10%) is taken from its repeat,
-as summarise.py does.
+A cell that has subject bytes and whose range ((max - min) / median)
+exceeds 10% is repeated once by run.sh, and taken from its repeat here
+and in summarise.py. A cell with no subject byte times an empty pass:
+its range is noise, so it is never repeated. (Runs up to r4 repeated a
+cell when its IQR / median exceeded 10%; such a cell's range exceeds
+10% too, so their repeats are still picked up.)
   python3 -I -S spread.py --compile <raw-times.tsv>...
       prints a CSV with one row per (engine, workload, pattern) compiled
       in the engine's own column, over the runs given: runs, median_ns
@@ -55,11 +63,23 @@ def spread(ts):
     med = statistics.median(ts)
     return med, q[2] - q[0], (q[2] - q[0]) / med, (ts[-1] - ts[0]) / med
 
+def needs_repeat(ts, nbytes):
+    """The repeat rule of run.sh: subject bytes and a range over 10%."""
+    return nbytes > 0 and spread(ts)[3] > 0.10
+
+def s_fields(line):
+    """{key: value} of an S line (or of its fields in raw-times.tsv)."""
+    return dict(kv.split('=') for kv in line.rstrip('\n').split('\t') if '=' in kv)
+
 def one_file(path):
-    ts = [float(l.split('\t')[2]) for l in open(path) if l.startswith('T\t')]
-    if len(ts) < 2: print('nan nan nan'); return
-    med, iqr, sp, _ = spread(ts)
-    print('%.9g %.9g %.4f' % (med, iqr, sp))
+    ts, nbytes = [], None
+    for l in open(path):
+        if l.startswith('T\t'): ts.append(float(l.split('\t')[2]))
+        elif l.startswith('S\t'): nbytes = int(s_fields(l)['bytes_per_pass'])
+    if len(ts) < 2: print('nan nan nan nan failed'); return
+    # Without an S line (truncated output), judge the cell as if it had bytes.
+    rep = needs_repeat(ts, 1 if nbytes is None else nbytes)
+    print('%.9g %.9g %.4f %.4f %s' % (spread(ts) + ('yes' if rep else 'no',)))
 
 def load_run(path):
     """{cell: (times, bytes_per_pass)} of one raw-times.tsv."""
@@ -69,12 +89,12 @@ def load_run(path):
         f = l.rstrip('\n').split('\t')
         cell, kind = f[1], f[2]
         if kind == 'T': t.setdefault(cell, []).append(float(f[4]))
-        elif kind == 'S': b[cell] = int(dict(kv.split('=') for kv in f[3:])['bytes_per_pass'])
+        elif kind == 'S': b[cell] = int(s_fields(l)['bytes_per_pass'])
     cells = {}
     for c, ts in t.items():
         if c.endswith('.repeat') or len(ts) < 2: continue
         r = t.get(c + '.repeat', [])
-        cells[c] = (r if spread(ts)[2] > 0.10 and len(r) >= 2 else ts, b.get(c, 0))
+        cells[c] = (r if needs_repeat(ts, b.get(c, 0)) and len(r) >= 2 else ts, b.get(c, 0))
     return cells
 
 def ref_cell(e, w):

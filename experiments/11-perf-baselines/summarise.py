@@ -3,9 +3,15 @@
 
 Usage: python3 -I -S summarise.py <run-dir> <out-prefix>
 Writes <out-prefix>-throughput.csv, <out-prefix>-compile.csv and prints
-a Markdown summary. A cell is valid when the spread (IQR / median of the
-repetition times) is at most 10%, on the first run or on its single
-repeat; otherwise it is reported as invalid with its data.
+a Markdown summary. A cell is valid when the range ((max - min) / median
+of the repetition times) is at most 10%, on the first run or on its
+single repeat; otherwise it is reported as invalid with its data. A cell
+with no subject byte times an empty pass: it is always valid (it has no
+throughput or ratio anyway) and never taken from a repeat.
+spread is IQR / median, reported for comparison with earlier runs.
+Runs up to r4 repeated a cell when its spread exceeded 10%; this script
+judges them on the range all the same, so a re-summarised old run may
+show a cell as invalid that was valid under the old rule.
 Compile times are read from compile/<cell>.txt (written by a separate
 process since r5), or from the C lines of time/<cell>.txt in earlier
 runs.
@@ -36,7 +42,11 @@ def stats(ts):
     ts = sorted(ts)
     q = statistics.quantiles(ts, n=4, method='inclusive')
     med = statistics.median(ts)
-    return med, ts[0], ts[-1], q[2] - q[0], (q[2] - q[0]) / med
+    return med, ts[0], ts[-1], q[2] - q[0], (q[2] - q[0]) / med, (ts[-1] - ts[0]) / med
+
+def unstable(d, s):
+    """The repeat rule of run.sh: subject bytes and a range over 10%."""
+    return d.get('bytes_per_pass', 0) > 0 and s[5] > 0.10
 
 def cell(name):
     """Returns (data, stats, used, valid) or None."""
@@ -47,7 +57,7 @@ def cell(name):
     cp = os.path.join(run, 'compile', name + '.txt')
     if os.path.exists(cp): d['C'] = parse(cp)['C']
     s = stats(d['T']); used = 'first'
-    if s[4] > 0.10:
+    if unstable(d, s):
         r = os.path.join(run, 'time', name + '.repeat.txt')
         if os.path.exists(r):
             d2 = parse(r)
@@ -55,14 +65,14 @@ def cell(name):
                 s2 = stats(d2['T'])
                 d2['C'] = d['C']  # compile times are not repeated
                 d, s, used = d2, s2, 'repeat'
-    return d, s, used, s[4] <= 0.10
+    return d, s, used, not unstable(d, s)
 
 rows, comp = [], []
 for e in ENGINES:
     for w in WORKLOADS:
         c = cell('%s.%s' % (e, w))
         if not c: continue
-        d, (med, mn, mx, iqr, sp), used, valid = c
+        d, (med, mn, mx, iqr, sp, rng), used, valid = c
         ct = [x[1] for x in d['C']]
         ref = c if e == 'onig-threaded' else cell('onig-threaded@%s.%s' % (e, w))
         if e == 'onig-switch': ref = cell('onig-threaded.%s' % w)
@@ -72,7 +82,7 @@ for e in ENGINES:
             ref_med = ref[1][0]
             ratio = ref_med / med if (valid and ref[3] and d.get('bytes_per_pass', 0) > 0) else ''
         rows.append(dict(engine=e, workload=w, valid=valid, run_used=used, reps=len(d['T']), passes_per_rep=d.get('npass'),
-                         median_pass_s=med, min_s=mn, max_s=mx, iqr_s=iqr, spread=sp,
+                         median_pass_s=med, min_s=mn, max_s=mx, iqr_s=iqr, spread=sp, range=rng,
                          bytes_per_pass=int(d.get('bytes_per_pass', 0)), bytes_per_s=d.get('bytes_per_pass', 0) / med,
                          matches_per_pass=int(d.get('matches_per_pass', 0)), timed_patterns=int(d.get('included_patterns', 0)),
                          onig_threaded_same_subset_s=ref_med, speed_ratio_vs_onig_threaded=ratio,
@@ -89,7 +99,7 @@ with open(prefix + '-compile.csv', 'w', newline='') as f:
 
 def fmt_bps(x): return '%.0f MB/s' % (x / 1e6) if x >= 1e6 else '%.2f MB/s' % (x / 1e6)
 by = {(r['engine'], r['workload']): r for r in rows}
-print('Speed ratio vs Oniguruma threaded on the same pattern subset (>1: faster); indicative MB/s; spread; * invalid (spread > 10%)\n')
+print('Speed ratio vs Oniguruma threaded on the same pattern subset (>1: faster); indicative MB/s; range; * invalid (range > 10%)\n')
 print('| engine | ' + ' | '.join(WORKLOADS) + ' |')
 print('|---|' + '---:|' * len(WORKLOADS))
 for e in ENGINES:
@@ -100,7 +110,7 @@ for e in ENGINES:
         if r['bytes_per_pass'] == 0: cells.append('no pair (%d patterns compile-timed only)' % r['compile_patterns']); continue
         rt = r['speed_ratio_vs_onig_threaded']
         cells.append('%s%s, %s, %.1f%%' % ('×%.2f' % rt if rt != '' else '–', '' if r['valid'] else '*',
-                                           fmt_bps(r['bytes_per_s']), 100 * r['spread']))
+                                           fmt_bps(r['bytes_per_s']), 100 * r['range']))
     print('| %s | %s |' % (e, ' | '.join(cells)))
 print('\nCompile time, median over patterns of the per-pattern median (µs)\n')
 print('| engine | ' + ' | '.join(WORKLOADS) + ' |')

@@ -14,7 +14,10 @@
 # (`time` mode, output in time/) and, in the engine's own column, its
 # compilation by another one (`compile` mode, output in compile/, run
 # after the search), so that the compile loop cannot change the state
-# the search is timed in.
+# the search is timed in. A cell with subject bytes is repeated once
+# when the range of its repetition times (max - min over median)
+# exceeds 10% (spread.py decides); a time file with fewer than two
+# repetitions is logged as a WARNING line and not repeated.
 #
 # The time phase also writes raw-times.tsv: every C, W, T and S line of
 # every cell, prefixed by the run label and the cell name (the time or
@@ -99,16 +102,18 @@ keep_raw() { # time-or-compile-file: append its C, W, T and S lines to raw-times
   awk -v p="$LABEL\t$(basename "$1" .txt)\t" '/^(C|W|T|S)\t/ { print p $0 }' "$1" >> raw-times.tsv
 }
 
-run_cell() { # engine workload only-file outfile: search timing
-  local e=$1 w=$2 only=$3 o=$4
+run_cell() { # engine workload only-file outfile: search timing, repeated once by the rule of spread.py
+  local e=$1 w=$2 only=$3 o=$4 med iqr sp rng rep
   taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "$o" 2> "${o%.txt}.err"
   keep_raw "$o"
-  read med iqr sp < <(python3 -I -S "$HERE/spread.py" "$o")
-  if awk -v s="$sp" 'BEGIN{exit !(s > 0.10)}'; then
-    echo "repeat $e $w spread $sp"
-    taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "${o%.txt}.repeat.txt" 2>> "${o%.txt}.err"
-    keep_raw "${o%.txt}.repeat.txt"
-  fi
+  read med iqr sp rng rep < <(python3 -I -S "$HERE/spread.py" "$o")
+  case $rep in
+    no) ;;
+    yes) echo "repeat $e $w range $rng"
+         taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "${o%.txt}.repeat.txt" 2>> "${o%.txt}.err"
+         keep_raw "${o%.txt}.repeat.txt" ;;
+    *) echo "WARNING: $o has fewer than two repetitions; not repeated" ;;
+  esac
 }
 
 compile_cell() { # engine workload only-file outfile: compile timing, in its own process
