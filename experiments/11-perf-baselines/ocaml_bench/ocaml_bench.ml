@@ -100,12 +100,12 @@ let () =
            (lines dir "pairs.tsv"))
     in
     let res = Array.map compile pats in
-    let include = Array.map Result.is_ok res in
+    let incl = Array.map Result.is_ok res in
     if mode = "time" && Array.length a > 3 then begin
-      Array.fill include 0 (Array.length include) false;
+      Array.fill incl 0 (Array.length incl) false;
       List.iter
         (fun l -> match int_of_string_opt (String.trim l) with
-          | Some p when p >= 0 && p < Array.length pats && Result.is_ok res.(p) -> include.(p) <- true
+          | Some p when p >= 0 && p < Array.length pats && Result.is_ok res.(p) -> incl.(p) <- true
           | _ -> ())
         (lines_of a.(3))
     end;
@@ -114,7 +114,7 @@ let () =
       let m = ref 0 and b = ref 0. in
       Array.iter
         (fun (p, s) ->
-          if include.(p) then
+          if incl.(p) then
             match res.(p) with Ok re -> m := !m + enum_pair re subs.(s) None; b := !b +. float (String.length subs.(s)) | Error _ -> ())
         pairs;
       (now () -. t0, !m, !b)
@@ -145,7 +145,7 @@ let () =
       if Sys.getenv_opt "E11_NO_COMPILE" = None then
         Array.iteri
           (fun i p ->
-            if include.(i) then begin
+            if incl.(i) then begin
               let start = now () in
               let ct = ref [] and n = ref 0 in
               let continue = ref true in
@@ -171,6 +171,6 @@ let () =
         Printf.printf "T\t%d\t%.9f\t%d\n%!" rep ((now () -. t0) /. float npass) npass
       done;
       Printf.printf "S\tbytes_per_pass=%.0f\tmatches_per_pass=%d\tincluded_patterns=%d\n" bytes matches
-        (Array.fold_left (fun k b -> if b then k + 1 else k) 0 include)
+        (Array.fold_left (fun k b -> if b then k + 1 else k) 0 incl)
     end
   end

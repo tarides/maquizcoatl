@@ -1,11 +1,59 @@
 {
-  "oniguruma": {"version": "f95747b462de672b6f8dbdeb478245ddf061ca53", "source": "upstream/ submodule", "licence": "BSD-2-Clause"},
-  "pcre2": {"version": "10.49", "url": "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.49/pcre2-10.49.tar.gz", "sha256": "TBD", "licence": "BSD-3-Clause WITH PCRE2-exception"},
-  "abseil": {"version": "20260817.0", "url": "https://github.com/abseil/abseil-cpp/releases/download/20260817.0/abseil-cpp-20260817.0.tar.gz", "sha256": "TBD", "licence": "Apache-2.0"},
-  "re2": {"version": "2025-11-05", "url": "https://github.com/google/re2/releases/download/2025-11-05/re2-2025-11-05.tar.gz", "sha256": "TBD", "licence": "BSD-3-Clause"},
-  "rustup-init": {"version": "latest at setup, recorded", "url": "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init", "sha256": "recorded at setup"},
-  "rust": {"version": "1.100.0", "source": "rustup, rust_bench/rust-toolchain.toml", "licence": "MIT OR Apache-2.0"},
-  "regex-crate": {"version": "1.13.2", "source": "crates.io, rust_bench/Cargo.lock", "licence": "MIT OR Apache-2.0"},
-  "ocaml": {"version": "5.5.2", "source": "opam ocaml-base-compiler", "licence": "LGPL-2.1-only WITH OCaml-LGPL-linking-exception"},
-  "ocaml-re": {"version": "1.14.0", "source": "opam re", "licence": "LGPL-2.1-only WITH OCaml-LGPL-linking-exception"}
+ "oniguruma": {
+  "version": "f95747b462de672b6f8dbdeb478245ddf061ca53",
+  "source": "upstream/ submodule",
+  "licence": "BSD-2-Clause"
+ },
+ "pcre2": {
+  "version": "10.49",
+  "url": "https://github.com/PCRE2Project/pcre2/releases/download/pcre2-10.49/pcre2-10.49.tar.gz",
+  "sha256": "929f0b20e62879252a15886b06c89f1edef61a363cbd5826fb041080a5e557ae",
+  "licence": "BSD-3-Clause WITH PCRE2-exception"
+ },
+ "abseil": {
+  "version": "20260817.0",
+  "url": "https://github.com/abseil/abseil-cpp/releases/download/20260817.0/abseil-cpp-20260817.0.tar.gz",
+  "sha256": "f7e05179df39c45434cad433f5783840bb3788ef322976f9138bc6b72b3a107d",
+  "licence": "Apache-2.0"
+ },
+ "re2": {
+  "version": "2025-11-05",
+  "url": "https://github.com/google/re2/releases/download/2025-11-05/re2-2025-11-05.tar.gz",
+  "sha256": "87f6029d2f6de8aa023654240a03ada90e876ce9a4676e258dd01ea4c26ffd67",
+  "licence": "BSD-3-Clause"
+ },
+ "rustup-init": {
+  "version": "latest at setup, recorded",
+  "url": "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init",
+  "sha256": "not pinned (rustup-init is fetched as latest; the toolchain is pinned)",
+  "sha256_at_setup": "b1c8cb14e30889e7e2999e6b69e62d9e9b9ffc0f4df8180564d306d9680e6c55"
+ },
+ "rust": {
+  "version": "1.100.0",
+  "source": "rustup, rust_bench/rust-toolchain.toml",
+  "licence": "MIT OR Apache-2.0"
+ },
+ "regex-crate": {
+  "version": "1.13.2",
+  "source": "crates.io, rust_bench/Cargo.lock",
+  "licence": "MIT OR Apache-2.0"
+ },
+ "ocaml": {
+  "version": "5.5.2",
+  "source": "opam ocaml-base-compiler",
+  "licence": "LGPL-2.1-only WITH OCaml-LGPL-linking-exception"
+ },
+ "ocaml-re": {
+  "version": "1.14.0",
+  "source": "opam re",
+  "licence": "LGPL-2.1-only WITH OCaml-LGPL-linking-exception"
+ },
+ "mtime": {
+  "version": "2.2.0",
+  "source": "opam"
+ },
+ "dune": {
+  "version": "3.25.0",
+  "source": "opam"
+ }
 }
