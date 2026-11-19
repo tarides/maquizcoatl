@@ -82,28 +82,42 @@ check.
 ## Tools and versions
 
 All actively maintained. Versions are the latest releases on the day
-this plan was written; `setup.sh` pins them in `pins.json`, and the
-notebook records the versions actually installed.
+this plan was written, except OCaml (see below); `setup.sh` pins every
+version in `pins.json`, and the notebook records the versions actually
+installed.
 
 | Tool | Version | Source on the bench host |
 |------|---------|--------------------------|
 | opam | 2.6.1 | release binary in `<cache>/bin`, sha256 checked |
 | OCaml | 5.4.1 (`ocaml-base-compiler`) | opam switch `provers` |
-| Rocq | 9.3.0 (`rocq-prover`) | opam |
+| Rocq | 9.3.0 (`rocq-prover`), plus `rocq-native` | opam |
 | Why3 | 1.9.0 | opam |
-| Alt-Ergo | latest in opam at setup | opam (prover for the Why3 lemma, if needed) |
-| F\* | v2026.11.15 | release source tarball, built in the switch (`opam pin`), so `fstar.lib` matches the switch's OCaml |
-| Z3 | versions required by that F\* release (4.13.3 and, if asked, 4.8.5) | GitHub release binaries in `<cache>/z3` |
-| KaRaMeL | `master` at setup, commit recorded (no tagged releases; last commit 2026-11-17) | git clone, built against the F\* above |
+| Alt-Ergo | exact version fixed in `pins.json` when it is written (step 1: the latest opam release that day), never "latest" at setup | opam (prover for the Why3 lemma, if needed) |
+| F\* | v2026.11.15, with Pulse (stage 3 `fstar.exe`) | Linux binary release first (`fstar.lib` and the Pulse-enabled `fstar.exe`); source build only if the binary release does not suffice (see below) |
+| Z3 | 5.3.0, the version F\* v2026.11.15 requires (its `INSTALL.md`; `.scripts/get_fstar_z3.sh` also fetches 4.8.5, 4.13.3 and 4.15.3, installed only if F\* asks for them) | GitHub release binaries in `<cache>/z3` |
+| KaRaMeL | `master` at setup, commit recorded (no release tag since v1.0.0 of 2022-02; last commit 2026-11-17) | git clone, built against the F\* above |
 | elan | v4.4.0 | release binary, `--no-modify-path`, `ELAN_HOME=<cache>/elan` |
 | Lean 4 | v4.36.0 | elan, pinned by `lean-toolchain` |
 | GCC | Ubuntu 24.04 package | system (C oracle, KaRaMeL and Why3 C output, Lean's native build) |
 | CMake | system | out-of-tree build of `upstream/` |
 | Python | 3.12, stdlib only, run with `-I` | system |
 
-If the F\* source build fails on OCaml 5.4.1, fall back to the F\*
-binary release for checking and the latest opam `fstar` for the OCaml
-extraction library, and record it. `gperf` is not needed.
+OCaml is pinned to 5.4.1 although 5.5.2 is the latest release: 5.4.1
+is the one release line on which all of Rocq 9.3.0, Why3 1.9.0,
+Alt-Ergo and F\*'s `fstar.lib` are expected to install together, and
+`fstar.lib` must be compiled by the switch's OCaml for the extracted
+OCaml to link. The reason is recorded beside the pin in `pins.json`.
+
+F\*: the Linux binary release is checked first. If its `fstar.exe`
+is Pulse-enabled and its `fstar.lib` links with OCaml code compiled by
+the switch, no source build is done. Otherwise F\* is built from the
+release source tarball, building only the `3.full` target (not
+`make all`, which builds three stages and runs the stage-1 and stage-2
+tests), and the choice is recorded. Low\* is not part of F\*
+v2026.11.15 (it moved to the separate `FStarLang/LowStar` repository)
+and is not used: the report's Decisions name Pulse, not Low\*. At
+setup, a one-line `#lang-pulse` module is checked as a smoke test.
+`gperf` is not needed.
 
 ## Machine budget
 
@@ -153,7 +167,7 @@ the issue), so each is recorded. Primary (milestone 1) and secondary
 | Rocq | one `Definition` per property, `list (Z * Z)`; membership by a recursive scan; `CodeRanges` as a list of those definitions | `PrimInt63` bounds in a `PArray.array` with binary search (fast `vm_compute`, extracts to native OCaml arrays) |
 | Lean 4 | one `def` per property, `Array (UInt32 × UInt32)` literal; binary search | `List` literal converted with `.toArray`, or a single flat `Array UInt32` split into chunks (Lean is known to be slow on large literals) |
 | Why3 | one `constant` per property, list of `(int, int)` pairs; membership as a recursive `let rec function` | for the C target (no WhyML arrays in the C fragment, per the report): a generated decision tree of bound comparisons per property |
-| F\* | one top-level `list (U32.t & U32.t)` per property, for OCaml extraction; Low\* immutable global buffers (`LowStar.ImmutableBuffer`, `createL_global`) for the KaRaMeL C target | `FStar.Seq` of bounds |
+| F\* | one top-level `list (U32.t & U32.t)` per property, for OCaml extraction; Pulse static global arrays (`Pulse.Lib.GlobalArray.mk_static_array`) for the KaRaMeL C target | `FStar.Seq` of bounds |
 
 The name lookup in every tool is the stated equivalent of the issue: a
 map from the 886 names, normalised as the generator's
@@ -173,10 +187,15 @@ represented as an association list sorted by name.
    directory and that disk and load are as expected; download the opam
    binary and verify it; `opam init --bare --disable-sandboxing -n`
    with `OPAMROOT=<cache>/opam`; create switch `provers` with OCaml
-   5.4.1; install `rocq-prover.9.3.0`, `why3.1.9.0`, `alt-ergo`;
-   pin F\* to the release source tarball and install it; fetch the Z3
-   binaries F\* names; clone and build KaRaMeL at the pinned commit
-   against that F\*. In parallel: install elan into `<cache>/elan` and
+   5.4.1; install `rocq-prover.9.3.0`, `rocq-native`, `why3.1.9.0`
+   and `alt-ergo` at the version in `pins.json`; install F\* from the
+   binary release (or, failing that, build `3.full` from the release
+   source tarball, see Tools and versions) and smoke-test
+   `#lang-pulse`; fetch Z3 5.3.0 (and any other version F\* names);
+   check that the OCaml produced by `--codegen OCaml` on a small module
+   compiles and links against `fstar.lib`, recording the exact command
+   lines; clone and build KaRaMeL at the pinned commit against that
+   F\*. In parallel: install elan into `<cache>/elan` and
    the Lean v4.36.0 toolchain. `setup.sh` is idempotent so later
    experiments reuse `<cache>`.
 
@@ -188,9 +207,12 @@ represented as an association list sorted by name.
 
 4. **Emit the tables** (about 5 min). `emit.py` parses
    `upstream/src/unicode_property_data.c` directly (its format is
-   regular: `static const OnigCodePoint CR_X[] = { n,` then
-   `0xA, 0xB,` lines; the `CodeRanges[]` list with the 17 `#define`
-   aliases; the gperf word list of 886 `{name, ctype}` entries) into an
+   regular: the array type `static const OnigCodePoint` on one line and
+   `CR_X[] = { n,` on the next, then `0xA, 0xB,` lines, so the parser
+   tolerates the split; the `CodeRanges[]` list with the 17 `#define`
+   aliases; the gperf word list of 886 `{pool_offset(N), ctype}`
+   entries, whose names are the `unicode_prop_name_pool_strN` fields of
+   `unicode_prop_name_pool_contents`, joined by `N`) into an
    intermediate JSON, then writes one source per tool and
    representation, recording size and sha256 of each.
 
@@ -198,9 +220,11 @@ represented as an association list sorted by name.
    24,443 ranges, 629 `CodeRanges` entries and 886 names, and that every
    range count matches the array's leading count. Then the generator
    `upstream/src/make_unicode_property_data.py` is copied into
-   `<exp>/gen/` with the nine UCD 16.0.0 files (from
-   `https://www.unicode.org/Public/16.0.0/ucd/`, `emoji-data.txt` from
-   its `emoji/` subdirectory; sha256 recorded) and run there; its
+   `<exp>/gen/` with the nine UCD 16.0.0 files copied (or symlinked)
+   flat into `<exp>/gen/` (from
+   `https://www.unicode.org/Public/16.0.0/ucd/`, `GraphemeBreakProperty.txt`
+   from its `auxiliary/` subdirectory and `emoji-data.txt` from its
+   `emoji/` subdirectory; sha256 recorded) and run there; its
    `CR_*` arrays are compared with the upstream file. Agreement is
    evidence for the "check the generator output" path of the report's
    "Generated tables" item; any difference is recorded, not fixed.
@@ -208,19 +232,34 @@ represented as an association list sorted by name.
 6. **C oracle and sample** (about 5 min). `oracle.c`, linked against
    the out-of-tree build, maps each of the 886 names through
    `ONIGENC_PROPERTY_NAME_TO_CTYPE` (`upstream/src/oniguruma.h:287`) and
-   answers membership with `onigenc_unicode_is_code_ctype`
-   (`upstream/src/regenc.h:186`). `sample.py` builds the query set:
+   answers the table question (is the code point in the `CR_*` table
+   of that ctype?) with `onigenc_unicode_ctype_code_range`
+   (`upstream/src/regenc.h:188`) followed by `onig_is_in_code_range`
+   (`upstream/src/regenc.h:261`). It also records, beside each answer,
+   the answer of `onigenc_unicode_is_code_ctype`
+   (`upstream/src/regenc.h:186`), named in the issue. The two differ by
+   design: for `ctype <= 14` and `code < 256`, `is_code_ctype` uses the
+   ISO-8859-1 ctype table, which disagrees with the `CR_*` tables on 13
+   code points (`CR_Cntrl`: U+00AD; `CR_Print`: U+0009-U+000D, U+0085;
+   `CR_Word`: U+00B2, U+00B3, U+00B9, U+00BC-U+00BE). U+00B9 is in the
+   sample, so comparing extracted tables against `is_code_ctype` would
+   mark every target incorrect. The 13 differences are listed in the
+   `fidelity` entry as a finding for the deviation log. `sample.py`
+   builds the query set:
    for each of the 629 indices, every range endpoint and its neighbours
    (`lo-1, lo, hi, hi+1`, clipped to `[0, 0x10FFFF]`, deduplicated),
-   about 98k queries, plus the 886 names. The oracle's answers are the
-   expected output for step 12.
+   about 98k queries, plus the 886 names. The oracle's table answers
+   are the expected output for step 12.
 
 7. **Check the table in each prover** (criteria 1 and 2). Clean build,
    `/usr/bin/time -v` (wall-clock and peak RSS), median of three runs
    (or a flagged single run, see Machine budget):
    - Rocq: `rocq compile` of the table file, then of the file using it;
-   - Lean: `lake build` of the table module (elaboration and
-     compilation to C are timed separately where `lake` reports them);
+   - Lean: `lake build -v` of the table module; `lake` does not
+     report elaboration and C compilation separately, so the `lean`
+     (elaboration and C emission) and `leanc` (C compilation)
+     invocations it prints are re-run and timed individually, and the
+     notebook says that this is the method used;
    - Why3: `why3 prove -L . --type-only` (parsing and typing), then
      `why3 prove -L .` without a prover to time VC generation;
    - F\*: `fstar.exe` verification of the table module, with the
@@ -236,15 +275,22 @@ represented as an association list sorted by name.
    - Lean: `lake build` of a native executable (Lean's own C path);
    - Why3 to OCaml (`why3 extract -D ocaml64`) and to C
      (`why3 extract -D c`), compiled with `ocamlopt` and `gcc -O2`;
-   - F\* to OCaml (`--codegen OCaml`, compiled against `fstar.lib`)
-     and to C via KaRaMeL (`krml`, compiled with `gcc -O2`).
-   The size of each extracted source and binary is recorded.
+   - F\* to OCaml (`--codegen OCaml`, the Custard extraction path;
+     legacy ML extraction is removed; compiled against `fstar.lib`)
+     and to C via KaRaMeL (`--codegen KrmlC`, then `krml`, compiled
+     with `gcc -O2`), with the command lines validated at setup.
+   The size of each extracted source and binary is recorded. Compile
+   steps that take the 24k-element nested `Cons` literals run under
+   `ulimit -s unlimited`; a stack overflow is recorded as such, not as
+   an extraction failure.
 
 9. **In-prover membership queries** (criterion 3). The three fixed
    queries of the issue (U+0041 and U+00E9 against `Lu`, and a code
-   point in the last range of `CR_Grapheme_Base`), each timed separately:
-   Rocq `Eval vm_compute` and `Eval native_compute` (if `native_compute`
-   is available in the switch); Lean `#eval` (and `#reduce` once, to
+   point in the last range of `CR_Grapheme_Base`, U+31350..U+323AF:
+   U+323AF, its upper bound, plus U+323B0, just past it), each timed
+   separately: Rocq `Eval vm_compute` and `Eval native_compute`
+   (`rocq-native` is installed in the switch so this figure is not
+   missing by omission); Lean `#eval` (and `#reduce` once, to
    record whether the kernel can do it); Why3 `why3 execute`; F\*
    `assert_norm`. Each query is checked against the oracle.
 
@@ -301,11 +347,13 @@ Planned entries:
 
 1. `toolchains`: installed versions, KaRaMeL commit, setup time and
    disk use of `<cache>` (useful to #13 and #5).
-2. `fidelity`: counts, generator-versus-file comparison, oracle build.
+2. `fidelity`: counts, generator-versus-file comparison, oracle build,
+   and the 13 code points where `onigenc_unicode_is_code_ctype`
+   disagrees with the `CR_*` tables (a finding for the deviation log).
 3. `tables`: per tool and representation, criteria 1, 2 and 3
    (load success or failure size, timings, peak RSS, queries).
 4. `extraction`: per target, criterion 2 extraction and compile
-   timings, artefact sizes, and criterion 5 sample results.
+   timings and exact command lines, artefact sizes, and criterion 5 sample results.
 5. `sanity-lemma`: per tool, criterion 4 outcome.
 6. `verdicts`: the provisional per-tool verdicts (criterion 6) with
    the numbers they rest on and the open threshold from #6.
@@ -337,7 +385,8 @@ For each of the four tools, recorded in the lab notebook:
 
 - **Toolchain setup eats the budget.** Building F\* from source and
   KaRaMeL is the slowest part. Mitigation: 32 jobs; Lean and the C
-  build proceed in parallel; the binary-release fallback for F\*; if
+  build proceed in parallel; the F\* binary release is tried first and
+  a source build, if needed, is limited to `3.full`; if
   KaRaMeL does not build against the pinned F\*, the KaRaMeL C target
   becomes follow-up and is recorded as such.
 - **A prover cannot load the full table in the time or memory cap.**
