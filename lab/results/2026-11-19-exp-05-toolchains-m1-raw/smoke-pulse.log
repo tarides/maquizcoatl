@@ -1,0 +1,17 @@
+Verified module: Smoke
+All verification conditions discharged successfully
+Verified module: Smoke
+All verification conditions discharged successfully
+[38;5;119m✔[0m [Monomorphization] ⏱️ 6ms
+[38;5;119m✔[0m [Inlining] ⏱️ 6ms
+[38;5;119m✔[0m [Pattern matches compilation] ⏱️ 5ms
+[38;5;119m✔[0m [Structs + Simplify 2] ⏱️ 8ms
+[38;5;119m✔[0m [Drop] ⏱️ <1ms
+[38;5;119m✔[0m [AstToCStar] ⏱️ 2ms
+[38;5;119m✔[0m [CStarToC] ⏱️ <1ms
+[4mKaRaMeL executable is:[0m <cache>/fstar/v2026.11.15/fstar/bin/krml
+[38;5;119m✔[0m [PrettyPrinting] ⏱️ <1ms
+KaRaMeL: wrote out .c files for Custard
+KaRaMeL: wrote out .h files for Custard
+10:uint32_t Smoke_add1(uint32_t x)
+pulse smoke: ok

@@ -1,0 +1,8 @@
+fetched verus-0.2026.11.02.8bf68ee-x86-linux.zip sha256=f3a0119292df8855e4435da8130bee1873b0e6a60c306accf81a08ea687bba3c
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+verus: 133M
