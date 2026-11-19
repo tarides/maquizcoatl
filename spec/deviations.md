@@ -362,7 +362,7 @@ every layout and binary check, including the Custard constructor route
 
 ---
 
-## DEV-006: `onigposix.h` declares a different `OnigSyntaxType` from the library's (candidate)
+## DEV-006: `onigposix.h` declares the library's `OnigSyntaxType`
 
 Origin: experiment #4, oracle entry and results review (issue #7).
 
@@ -385,11 +385,10 @@ syntax reads 24 bytes past it. Linking is unaffected: the copy
 relocations of the predefined syntaxes take their size from the shared
 object.
 
-**Maquizcoatl behaviour (proposed).** The type a client sees has the
-library's layout whichever public header it includes. For example,
-`onigposix.h` would include the definition from `oniguruma.h`, or
-declare the same five-field struct. No API call writes or reads past
-an object of a type the client can declare. To be decided.
+**Maquizcoatl behaviour.** The type a client sees has the library's
+layout whichever public header it includes: `onigposix.h` declares the
+same five-field, 40-byte struct as `oniguruma.h`. No API call writes or
+reads past an object of a type the client can declare.
 
 **Alternatives considered.**
 
@@ -408,6 +407,4 @@ documented header.
 [exports entry](../lab/results/2026-11-19-exp-04-exports.md),
 `posix_syntax_size.txt` (16 bytes seen, 24 bytes overwritten).
 
-**Status.** Candidate, not yet decided (recorded as a candidate by the
-maintainer 2026-11-19,
-https://github.com/tarides/maquizcoatl/issues/7#issuecomment-7019890064).
+**Status.** Decided by the maintainer 2026-11-19.
