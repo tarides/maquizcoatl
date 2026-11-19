@@ -50,11 +50,14 @@ instantiated from the template below.
 
 - **Workstation.** `<workdir>` is the work directory outside the
   repository; this branch's worktree is `<workdir>/wt/10-generated-code`.
-  Engineering (driver, classifier, adapters, route extraction) happens
-  here, with a Debug build of `upstream/` out of tree under
-  `<workdir>/e10/build/`. Extraction from the provers runs here or
-  wherever experiment #9 installed its toolchains; only the extracted
-  sources travel to the bench host.
+  Engineering for steps 1-6 (driver, classifier, translator, adapters)
+  happens here, with a Debug build of `upstream/` out of tree under
+  `<workdir>/e10/build/`; it needs only GCC, CMake and Python. No prover
+  is installed on the workstation.
+- **Extraction** of each route runs on the bench host, where experiment
+  #7 installed the provers and extractors into `<cache>`. It is counted
+  as setup, outside the timed phases; the extracted sources are
+  committed to this branch.
 - **Bench host** (never named in public text). `<cache>`: the shared
   toolchain cache of earlier experiments (opam root with the `provers`,
   `compcert` and `ffi` switches; the Rust toolchain of experiment #11).
@@ -91,10 +94,16 @@ Shared part (once, independent of experiment #9's tools):
    protocol (`lab/12-ffi-vs-native/`); experiment #11's build recipe,
    dispatch probe, catastrophic-pattern set and baselines (branch
    `exp/11-perf-baselines`, read only, owned by another contributor);
-   experiment #9's opcode subset from issue #4 (`OP_STR_*`, `OP_PUSH`,
-   `OP_JUMP`, `OP_FAIL`, `OP_MEM_START`, `OP_MEM_START_PUSH`,
-   `OP_MEM_END`, `OP_END`), updated to whatever experiment #9 actually
-   proves.
+   experiment #9's opcode subset, seeded with issue #4's list
+   (`OP_STR_*`, `OP_PUSH`, `OP_JUMP`, `OP_FAIL`, `OP_MEM_START`,
+   `OP_MEM_START_PUSH`, `OP_MEM_END`, `OP_EMPTY_CHECK_START`,
+   `OP_EMPTY_CHECK_END`, `OP_EMPTY_CHECK_END_MEMST` (emitted by
+   `compile_quant_body_with_empty_check`,
+   `upstream/src/regcomp.c:958-1000`), `OP_END`), updated to whatever
+   experiment #9 actually proves. `OP_FINISH`, which issue #4 also
+   lists, is the backtrack-stack sentinel
+   (`upstream/src/regexec.c:3074`) and is never stored in `reg->ops`, so
+   the classifier never sees it.
 
 2. **Three out-of-tree Oniguruma builds**, experiment #11's recipe
    (static, `Release`, identical flags apart from one macro):
@@ -102,8 +111,10 @@ Shared part (once, independent of experiment #9's tools):
    (`-DCMAKE_C_FLAGS=-DONIG_DISABLE_DIRECT_THREADING`), and, for
    classification only, `onig-dump` (`Debug`,
    `-DCMAKE_C_FLAGS=-DONIG_DEBUG_COMPILE`), which makes `onig_compile`
-   print the compiled bytecode list
-   (`upstream/src/regcomp.c:7636-7639`). The dispatch style of the two
+   print the compiled bytecode list (call site
+   `upstream/src/regcomp.c:7636-7639`; printer `print_compiled_byte_code`
+   and `onig_print_compiled_byte_code_list`,
+   `upstream/src/regexec.c:510-887`). The dispatch style of the two
    timing builds is checked with experiment #11's dispatch probe and by
    comparing the `regexec.c.o` hashes (they must differ). `test_utf8`
    is run on each build as a sanity check (1554 cases).
@@ -114,11 +125,28 @@ Shared part (once, independent of experiment #9's tools):
    subset* (every opcode in experiment #9's subset) or *out*, with the
    first offending opcode logged. Only the public API and the debug
    output are used: no internal symbol, no `regint.h` structure
-   (DEV-005, from experiment #4). For in-subset triples, the translator
-   turns the dump into experiment #9's bytecode format (jump targets
-   resolved, string operands decoded). Its correctness is checked by the
-   equal-results criterion (step 8), and the dump parser is unit-tested
-   on hand-picked patterns, one per opcode in the subset.
+   (DEV-005, from experiment #4: `spec/deviations.md:296` on branch
+   `exp/04-abi-feasibility`, cited from that branch until it merges).
+   For in-subset triples, the translator turns the dump into experiment
+   #9's bytecode format (jump targets resolved, string operands
+   decoded). Its correctness is checked by the equal-results criterion
+   (step 8).
+
+   **The dump is parsed as bytes, not lines.** `p_string` writes the
+   operand's raw bytes (`upstream/src/regexec.c:456-459`), so a literal
+   containing a newline splits its line (`a\nb` gives a `str_3` over two
+   lines); `OP_STR_N` prints no length (`:555-557`); the optimiser
+   dump's `PATTERN: /…/` line contains the raw pattern; and
+   `onig_print_names` lines precede the list
+   (`upstream/src/regcomp.c:7637`). The parser takes the length of
+   `str_1`..`str_5` from the opcode, ends a `str_n` at the next
+   `\n%4d: ` prefix carrying the expected index, and marks a triple out
+   ("ambiguous dump") when its literal itself contains such a prefix.
+   Each `onig_new` writes its dump to its own file (or fenced by a
+   marker on stderr), never one concatenated stream to be split
+   afterwards. The parser is unit-tested on hand-picked patterns, one
+   per opcode in the subset, plus a newline-bearing literal and a
+   `str_n` longer than 5 bytes.
 
 4. **Coverage table** (Decision A). Per workload (jq, PHP, VS Code,
    with VS Code also weighted by experiment #1's frequency profile):
@@ -130,13 +158,30 @@ Shared part (once, independent of experiment #9's tools):
 5. **Workloads.** In-subset cases written in experiment #12's flat
    format, in three shapes: short subjects (as recorded by experiment
    #1), large subjects (experiment #12's 1 MiB cuts of the OCaml source
-   and Loghub SSH log, top 16 in-subset patterns per source, find-all
-   loop), and catastrophic patterns (experiment #11's set, `"a"*n "!"`
-   for n = 16 to 4096, only those whose bytecode is in subset). Retry
-   budget: 10,000,000 per match through `OnigMatchParam`, the generated
-   VMs given the same counter (one retry per backtrack pop) and the
-   same stop-the-search rule as experiment #12; time-to-limit reported
-   where the limit is hit.
+   and Loghub SSH log, find-all loop; the top 16 patterns per source are
+   re-picked among the in-subset ones by running `pick_large.py` on the
+   bytecode classifier's coverage files, and there may be fewer than 16,
+   in which case the count is stated), and catastrophic patterns.
+   Experiment #11's catastrophic set (`(a+)+$`, `(a|aa)+$`,
+   `(\w+\s?)+$`) is entirely out of subset (`$`, `a+` as
+   `OP_PUSH_OR_JUMP_EXACT1`, `\w`/`\s`), so subset-shaped **analogues**
+   are used instead, one per family's syntax and options as experiment
+   #11's `worst.sh` does: `(a|aa)+(b|c)` (same blow-up as `(a|aa)+$`;
+   compiles to `mem-start-push`, `push`, `str_1`, `str_2`, `jump`,
+   `mem-end`, `mem-start`, `end` only) and `(?:a|aa)+(?:b|c)` without
+   captures, on `"a"*n "!"` for n = 16 to 4096. They are labelled as
+   analogues: comparable to experiments #11 and #12 in shape and
+   budget, not the same patterns. Retry budget: 10,000,000 per match
+   through `OnigMatchParam`, the generated VMs given the same counter
+   and the same stop-the-search rule as experiment #12; time-to-limit
+   reported where the limit is hit. Counting rule: one retry per
+   restored choice point. `CHECK_RETRY_LIMIT_IN_MATCH` runs once per
+   `fail`, after `STACK_POP` (`upstream/src/regexec.c:4674-4677`, macro
+   at `:1558-1563`), and `STACK_POP` (`:2295`) skips `STK_MEM_START`
+   and other non-choice entries without counting them. The counter
+   lives in the `MatchArg` and so resets on every
+   `onig_match_with_param` call, i.e. per start position, as in
+   experiment #12.
 
 6. **C reference columns.** The driver times `onig_match_with_param`
    at each start position (the generated VMs have no search optimiser,
@@ -147,8 +192,11 @@ Shared part (once, independent of experiment #9's tools):
 Per route (template below, once per route still standing):
 
 7. **Build** the route's extracted VM with the adapter, on the bench
-   host, with the compiler the route's proof assumes (and GCC `-O2` as
-   well where they differ, as an extra column).
+   host, with the compiler the route's proof assumes. C-emitting routes
+   and all C adapters are compiled with the reference's flags,
+   `-O3 -DNDEBUG` (experiment #11's `build.sh`, `CFLAGS_E11`, the flags
+   of the two `Release` timing builds), for the GCC column; GCC `-O2`
+   is only an optional extra column.
 8. **Agreement** on every in-subset case: return code, match span and
    all capture positions against `onig-threaded`; every difference is
    recorded (and, if Oniguruma is the one wrong, goes to
@@ -180,8 +228,8 @@ fields, filled before its timed run:
 - **Source**: experiment #9's proof artefact and commit.
 - **Extraction**: tool, version, command; generated files committed
   under `routes/<route>/`, with their sha256.
-- **Compile**: compiler and flags on the bench host (and the
-  additional GCC `-O2` column if the route's own compiler differs).
+- **Compile**: compiler and flags on the bench host (GCC column at
+  `-O3 -DNDEBUG` for C, like the reference; `-O2` only as an extra).
 - **Adapter**: what the hand-written glue does (reading the work file,
   the outer search loop, the retry counter if outside the proof), and
   which of it is outside the proof.
@@ -194,13 +242,13 @@ Routes and their specifics (instantiated only for the routes experiment
 
 | Route | Stack | Generated | Compiled on the bench host with | Notes |
 |-------|-------|-----------|---------------------------------|-------|
-| Why3 → C | E (Why3) | C | GCC (version recorded) | Why3's C printer emits `switch`; no labels-as-values |
-| Pulse → C via KaRaMeL, and via Custard if experiment #9 uses it | C (F\*/Pulse) | C, with krmllib headers vendored next to it | GCC | Same VM through each back end if both are standing, as separate columns |
+| Why3 → C | E (Why3) | C | GCC (version recorded) | Expected: Why3's C printer emits `switch`, no labels-as-values (not verified yet; confirmed at step 10) |
+| Pulse → C via KaRaMeL, and via F\*'s direct C back end (Custard, `--codegen C`) if experiment #9 uses it | C (F\*/Pulse) | C, with krmllib headers vendored next to it | GCC | Same VM through each back end if both are standing, as separate columns |
 | Verus Rust | D | Rust (the source is the verified artefact) | rustc, experiment #11's pinned toolchain or the one Verus pins, recorded | No computed goto in Rust; `match` |
 | Aeneas Rust | B | Rust | rustc, as above | Same as Verus |
 | hax Rust | A (or C) | Rust | rustc, as above | Native route of stack A |
 | VST/CompCert C | A | C | CompCert (`compcert` switch), plus GCC `-O2` | CompCert is the compiler the proof covers |
-| Isabelle-LLVM | F | LLVM IR | `llc`/Clang of a recorded LLVM version | Needs LLVM on the bench host; if absent, built into `<cache>` (counted as setup) |
+| Isabelle-LLVM | F | LLVM IR | `llc`/Clang of a recorded LLVM version | Needs LLVM on the bench host; if absent, the prebuilt LLVM release tarball of the version Isabelle-LLVM's release names, unpacked under `<cache>` (no source build, no root; counted as setup) |
 | generated OCaml | whichever tool proved the VM (Why3, Pulse, Rocq, Isabelle) | OCaml | OCaml 5.4.1 (`ffi` switch, shared with experiment #12) | Shares code with issue #22; allocation measured |
 
 ## Tools and versions
@@ -219,6 +267,7 @@ the notebook:
 | CMake | system (3.28.3) |
 | OCaml, dune | 5.4.1, switch `ffi` of experiment #12 |
 | Rust | 1.100.0 (experiment #11), or the toolchain the Rust route pins |
+| F\* direct C back end (Custard, `--codegen C`, `--custard_entry`) | ships with F\* 2026.11.15 (release of 2026-11-15, so active); used by experiment #7; Pulse → C route only, if experiment #9 uses it |
 | CompCert | the `compcert` switch's version (VST route only) |
 | LLVM | version recorded (Isabelle-LLVM route only) |
 | Python | 3.12, stdlib only, run with `-I` |
@@ -310,12 +359,29 @@ kept as data. The maintainer decides what is worth recording.
 - **Experiment #9 not finished, or proves a different subset.** The
   shared part runs first; the subset list in the classifier is read
   from experiment #9's result, not from issue #4's text.
-- **Low bytecode-level coverage.** Peephole opcodes
-  (`OP_PUSH_OR_JUMP_EXACT1`, `OP_PUSH_IF_PEEK_NEXT`, `OP_EMPTY_CHECK_*`,
-  `OP_REPEAT*`) push most star patterns out of subset; the timed set may
-  be small and skewed towards simple patterns. Mitigation: coverage is a
-  criterion in itself; rows below a few per cent are labelled, and the
-  bias is stated in the summary.
+- **Low bytecode-level coverage.** Three unconditional rewrites push
+  most star patterns out of subset (from `get_tree_head_literal`,
+  `upstream/src/regcomp.c:3237-3314`, which returns NULL for an
+  alternation, and `tune_next`, `:4703-4728`): a greedy star gets
+  `OP_PUSH_OR_JUMP_EXACT1` when its body begins with a literal (`(a)*`,
+  `ab*`), `OP_PUSH_IF_PEEK_NEXT` when the node after it begins with a
+  literal (`(a|b)*c`), and `OP_POP` (automatic possessivation,
+  `(?>a*)b`, compiled at `:1793-1807`) when both do and are exclusive:
+  `a*b` compiles to `push, str_1 a, pop, jump, str_1 b, end`. Expected
+  at the top of the offending opcodes: `OP_PUSH_OR_JUMP_EXACT1`,
+  `OP_PUSH_IF_PEEK_NEXT`, `OP_POP`, plus anchors and character types. A
+  plain `OP_PUSH` loop survives only when both the body head and the
+  successor are non-literal (alternation, group, end of pattern):
+  `x(a|b)*`, `(?:a|b)*`, `(a|b)+`, `(a|b)*(c|d)` are in subset. `{n,m}`
+  is expanded inline (no `OP_REPEAT*`) while body length times count
+  stays within `QUANTIFIER_EXPAND_LIMIT_SIZE` = 10
+  (`upstream/src/regcomp.c:1321-1353`): `a{2,3}` compiles to `str_1,
+  str_1, push, str_1, end` and is in subset; only larger counts give
+  `OP_REPEAT*`. Bytecode-level coverage will therefore be well below
+  experiment #12's 63/38/26-29% pattern-level figures, probably
+  dominated by literal-only and alternation-only patterns. Mitigation:
+  coverage is a criterion in itself; rows below a few per cent are
+  labelled, and the bias is stated in the summary.
 - **`onig_match` per start position** pays per-call setup (match
   argument, region) that `match_at` inside `onig_search` does not; the
   generated VMs' outer loop is in their adapter. Mitigation: both sides
