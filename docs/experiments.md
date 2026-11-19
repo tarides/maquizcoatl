@@ -11,7 +11,7 @@ Always say "experiment #N" or "issue #N", never a bare "#N".
 | 2 | Semantic probes on the C library | [#6](https://github.com/tarides/maquizcoatl/issues/6) | [#14](https://github.com/tarides/maquizcoatl/pull/14) | pipeline |
 | 3 | Sanitizers and fuzzing | [#9](https://github.com/tarides/maquizcoatl/issues/9) | [#18](https://github.com/tarides/maquizcoatl/pull/18) | pipeline |
 | 4 | ABI feasibility, per output mechanism | [#7](https://github.com/tarides/maquizcoatl/issues/7) | [#16](https://github.com/tarides/maquizcoatl/pull/16) | pipeline |
-| 5 | Calls to unverified code | [#13](https://github.com/tarides/maquizcoatl/issues/13) | — | pipeline |
+| 5 | Calls to unverified code | [#13](https://github.com/tarides/maquizcoatl/issues/13) | [#21](https://github.com/tarides/maquizcoatl/pull/21) | Vincent Balat |
 | 6 | Executable spec speed | [#1](https://github.com/tarides/maquizcoatl/issues/1) | — | pipeline |
 | 7 | Large tables in the prover | [#11](https://github.com/tarides/maquizcoatl/issues/11) | [#19](https://github.com/tarides/maquizcoatl/pull/19) | pipeline |
 | 8 | Hard-feature spec probe | [#12](https://github.com/tarides/maquizcoatl/issues/12) | — | pipeline |
@@ -19,4 +19,5 @@ Always say "experiment #N" or "issue #N", never a bare "#N".
 | 10 | Generated code quality | [#8](https://github.com/tarides/maquizcoatl/issues/8) | — | pipeline |
 | 11 | Performance baselines | [#2](https://github.com/tarides/maquizcoatl/issues/2) | [#17](https://github.com/tarides/maquizcoatl/pull/17) | Vincent Balat (review fixes) |
 | 12 | FFI versus native OCaml | [#10](https://github.com/tarides/maquizcoatl/issues/10) | — | pipeline |
+| 12 (follow-up) | Cost of Why3- and Pulse-generated OCaml | [#22](https://github.com/tarides/maquizcoatl/issues/22) | — | pipeline, after experiment #10 |
 | 13 | Upgrade cost | [#3](https://github.com/tarides/maquizcoatl/issues/3) | [#20](https://github.com/tarides/maquizcoatl/pull/20) | pipeline (Part C by Vincent Balat) |
