@@ -2,7 +2,7 @@
 """Experiment #11, step 6: compare every engine's `check` output with
 Oniguruma threaded (the reference).
 
-Usage: python3 -I agree.py <out-dir> <workloads-dir>
+Usage: python3 -I -S agree.py <out-dir> <workloads-dir>
 Reads <out-dir>/check/<engine>.<workload>.txt, writes
   <out-dir>/agreement.csv      counts per (engine, workload)
   <out-dir>/disagreements.csv  one row per disagreeing pattern

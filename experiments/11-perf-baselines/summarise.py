@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Experiment #11, step 11: engine x workload tables from a run directory.
 
-Usage: python3 -I summarise.py <run-dir> <out-prefix>
+Usage: python3 -I -S summarise.py <run-dir> <out-prefix>
 Writes <out-prefix>-throughput.csv, <out-prefix>-compile.csv and prints
 a Markdown summary. A cell is valid when the spread (IQR / median of the
 repetition times) is at most 10%, on the first run or on its single

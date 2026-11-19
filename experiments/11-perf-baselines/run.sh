@@ -1,16 +1,45 @@
 #!/bin/bash
 # Experiment #11, steps 6-8 on the bench host.
-# Usage: run.sh <run-id> [check|time|worst|all]
+# Usage: run.sh <run-label> [check|time|worst|all]
+#
+# Every output of a run goes under out/<run-label>/, so runs with
+# different labels (r1, r2, r3, r4, ...) never share a file. The time
+# phase reads the pattern lists written by the check phase of the same
+# label, so a run is `run.sh rN all`, or `run.sh rN check` then
+# `run.sh rN time`, then `run.sh rN worst`. Before any phase starts,
+# run.sh refuses to overwrite an earlier run's timing or worst-case
+# outputs, or to redo the check under timing outputs of the same label.
+#
+# The time phase also writes raw-times.tsv: every C, W, T and S line of
+# every cell, prefixed by the run label and the cell name (the time
+# file's name without .txt). It is meant to be committed with the
+# results: `cut -f3-` of one cell's rows gives back every line of that
+# cell that spread.py and summarise.py read.
 set -uo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 . "$HERE/env.sh"
-RUN="$BENCH/out/$1"; PHASE=${2:-all}
+LABEL=${1:-}
+[[ $LABEL =~ ^[A-Za-z0-9][A-Za-z0-9._-]*$ ]] || { echo "usage: run.sh <run-label> [check|time|worst|all]" >&2; exit 2; }
+RUN="$BENCH/out/$LABEL"; PHASE=${2:-all}
 BIN="$BENCH/bin"; WL="$BENCH/workloads/prepared"
 ENGINES="onig-threaded onig-switch pcre2-interp pcre2-jit re2 rust-regex ocaml-re"
 WORKLOADS="jq php php-legacy vscode vscode-subst"
 CPU=${TIME_CPU:-4}
+case $PHASE in check|time|worst|all) ;; *) echo "unknown phase $PHASE" >&2; exit 2;; esac
 mkdir -p "$RUN"/{check,time,worst}
 cd "$RUN"   # harness output never contains paths; relative names only
+# Never overwrite an earlier run's results, nor the check outputs they
+# were computed from; checked before any phase starts. raw-times.tsv
+# counts only once it has a cell row, not just its header.
+timed() { grep -q '^[^#]' raw-times.tsv 2>/dev/null || [ -n "$(ls time)" ]; }
+case $PHASE in
+  check|time) timed && { echo "STOP: run $LABEL already has timing outputs; use a new run label"; exit 1; } ;;
+  worst) [ -s worst/worst.csv ] && { echo "STOP: run $LABEL already has worst-case outputs; use a new run label"; exit 1; } ;;
+  all) { timed || [ -s worst/worst.csv ]; } && { echo "STOP: run $LABEL already has results; use a new run label"; exit 1; } ;;
+esac
+# Run conditions header, once per run label; later phases append samples,
+# each with the repository commit and a hash of the binaries then in use.
+[ -s provenance.txt ] || "$HERE/provenance.sh" full start > provenance.txt
 
 # Gate before each column. The plan's gate (1-min load average <= 2)
 # assumed an idle host; experiment #3's fuzzers share it, pinned to CPUs
@@ -36,13 +65,13 @@ wait_load() {
 }
 
 if [ "$PHASE" = check ] || [ "$PHASE" = all ]; then
-  "$HERE/provenance.sh" full start > provenance.txt
+  "$HERE/provenance.sh" sample before-check >> provenance.txt
   for e in $ENGINES; do for w in $WORKLOADS; do
     echo "taskset -c $BUILD_CPUS $e check $w"
   done; done | xargs -P 4 -I{} sh -c 'set -- {}; taskset -c "$3" "'"$BIN"'/$4" check "'"$WL"'/$6" > "check/$4.$6.txt" 2> "check/$4.$6.err"'
-  python3 -I "$HERE/agree.py" "$RUN" "$WL" > agree.log || { echo "STOP: switch build differs"; exit 1; }
+  python3 -I -S "$HERE/agree.py" "$RUN" "$WL" > agree.log || { echo "STOP: switch build differs"; exit 1; }
   # Projection of the timed phase from the one-pass durations.
-  python3 -I - "$RUN" <<'PY'
+  python3 -I -S - "$RUN" <<'PY'
 import csv, sys
 rows = list(csv.DictReader(open(sys.argv[1] + '/agreement.csv')))
 tot = 0
@@ -58,17 +87,25 @@ print('projected timed phase: %.0f s (%.1f min), plus possible repeats' % (tot, 
 PY
 fi
 
+keep_raw() { # time-file: append its C, W, T and S lines to raw-times.tsv
+  awk -v p="$LABEL\t$(basename "$1" .txt)\t" '/^(C|W|T|S)\t/ { print p $0 }' "$1" >> raw-times.tsv
+}
+
 run_cell() { # engine workload only-file outfile [extra env]
   local e=$1 w=$2 only=$3 o=$4; shift 4
   env "$@" taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "$o" 2> "${o%.txt}.err"
-  read med iqr sp < <(python3 -I "$HERE/spread.py" "$o")
+  keep_raw "$o"
+  read med iqr sp < <(python3 -I -S "$HERE/spread.py" "$o")
   if awk -v s="$sp" 'BEGIN{exit !(s > 0.10)}'; then
     echo "repeat $e $w spread $sp"
     env "$@" taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "${o%.txt}.repeat.txt" 2>> "${o%.txt}.err"
+    keep_raw "${o%.txt}.repeat.txt"
   fi
 }
 
 if [ "$PHASE" = time ] || [ "$PHASE" = all ]; then
+  [ -n "$(ls only 2>/dev/null)" ] || { echo "STOP: run $LABEL has no pattern lists; run its check phase first"; exit 1; }
+  printf '# run\tcell\tC pid compile_ns n | W warmup_s min_rep_s | T rep s_per_pass passes | S key=value...\n' > raw-times.tsv
   for e in $ENGINES; do
     wait_load
     "$HERE/provenance.sh" sample "before-$e" >> provenance.txt
@@ -92,4 +129,4 @@ if [ "$PHASE" = worst ] || [ "$PHASE" = all ]; then
   "$HERE/provenance.sh" sample after-worst >> provenance.txt
 fi
 "$HERE/provenance.sh" sample end >> provenance.txt
-echo "run $1 done"
+echo "run $LABEL done"

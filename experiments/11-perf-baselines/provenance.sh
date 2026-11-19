@@ -1,15 +1,17 @@
 #!/bin/bash
 # Experiment #11, step 10: run conditions. Records no hostname, address,
 # user name or path.  Usage: provenance.sh full|sample <label>
-. "$(cd "$(dirname "$0")" && pwd)/env.sh"
+HERE=$(cd "$(dirname "$0")" && pwd)
+. "$HERE/env.sh"
+REPO=$(cd "$HERE/../.." && pwd)
 CPU=${TIME_CPU:-4}
 sample() {
   echo "sample $1 time $(date -u +%Y-%m-%dT%H:%M:%SZ) load $(cut -d' ' -f1-3 /proc/loadavg) cur_freq_khz $(cat /sys/devices/system/cpu/cpu$CPU/cpufreq/scaling_cur_freq)"
+  # The code in use: a phase may be rerun after a rebuild under the same label.
+  echo "sample $1 code repo_commit $(git -C "$REPO" rev-parse HEAD) bin_sha256 $(cd "$BENCH/bin" && sha256sum -- * | sha256sum | cut -d' ' -f1)"
   grep -E '^cpu(4|36|5|6|7|37|38|39) ' /proc/stat | sed "s/^/sample $1 stat /"
 }
 if [ "$1" = sample ]; then sample "$2"; exit 0; fi
-HERE=$(cd "$(dirname "$0")" && pwd)
-REPO=$(cd "$HERE/../.." && pwd)
 f=/sys/devices/system/cpu/cpu$CPU/cpufreq
 echo "cpu_model $(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | sed 's/^ //')"
 echo "kernel $(uname -r)"
