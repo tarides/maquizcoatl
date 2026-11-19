@@ -41,6 +41,8 @@ of the art" (https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc).
   never build inside it (that dirties the submodule).
 - `spec/` — the specification being written. `spec/SOURCES.md` records
   provenance (commit, SWHID, BSD-2-Clause licence).
+  `spec/deviations.md` is the deviation log: one `DEV-NNN` entry per
+  deliberate deviation from upstream `f95747b`, with its reason.
 - `probes/` — probe harness, JavaScript oracle and probe data files
   that characterise the C library's behaviour (experiment #2).
 - `lab/` — append-only lab notebook (`lab/notebook.md`) and recorded
