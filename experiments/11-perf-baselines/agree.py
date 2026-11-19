@@ -40,11 +40,19 @@ def classify(engine, p, subj, ref, got):
     pat = p['pat']
     nonascii = any(b >= 0x80 for b in pat) or any(b >= 0x80 for b in subj)
     if '!' in got: return 'search error (resource limit)'
+    try: subj.decode('utf-8'); valid = True
+    except UnicodeDecodeError: valid = False
+    if not valid and engine != 'ocaml-re': return 'semantic: subject is not valid UTF-8'
+    if re.search(rb'\\[<>]', pat): return 'syntax: \\< \\> are word anchors in Rust regex, literals in Oniguruma'
+    if re.search(rb'&&', pat) and re.search(rb'\[', pat): return 'syntax: character-class intersection && is Oniguruma-only'
+    if re.search(rb'\\[1-9][0-9]', pat): return 'syntax: \\NN is a backreference in Oniguruma, an octal escape elsewhere'
     if engine == 'ocaml-re' and nonascii: return 'semantic: ocaml-re matches bytes, not code points'
     if re.search(rb'\\[hH]', pat): return 'syntax: \\h is a hex digit in Oniguruma, horizontal space elsewhere'
     if p['options'] & 1: return 'semantic: case folding differs'
     if engine == 're2' and nonascii and re.search(rb'\\[wWbBdDsS]|\[\[:', pat):
         return 'semantic: RE2 \\w \\b \\d \\s and POSIX classes are ASCII-only'
+    if pat.startswith(b'^') and subj.endswith(b'\n') and got.endswith('%d-%d' % (len(subj), len(subj))):
+        return 'semantic: ^ after a final newline (Oniguruma does not match there)'
     if re.search(rb'\\[zZ]|\$', pat) and subj.endswith(b'\n'):
         return 'semantic: end anchor before a final newline'
     if re.search(rb'\\G', pat): return 'semantic: \\G is the search start in Oniguruma'
