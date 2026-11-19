@@ -89,6 +89,13 @@ Recorded in the `toolchains-m1` notebook entry.
 - **F\* commands.** F\* v2026.11.15 extracts with `--codegen KrmlC
   --custard_entry M.f` after a check pass, then `krml
   -skip-compilation`; krmllib compiles with `-std=gnu11`.
+- **Prototype runs** (recorded in the `prototypes-m1` entry). Each tool
+  ran from its own copy of the harness in `<exp>/build/<tool>/harness`,
+  not from `<exp>/repo`, so that the three prototypes could be worked
+  on in parallel; the committed files have the same sha256 as the
+  copies that ran. Builds are in `<exp>/build/<run-id>/<tool>` (the
+  `run.sh` layout). `provenance.sh` was run with the Pulse run only, and
+  its tool versions cover the three tools.
 
 ## Where things live
 
