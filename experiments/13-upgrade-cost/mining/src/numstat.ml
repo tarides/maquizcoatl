@@ -28,8 +28,9 @@ let parse output =
   |> List.filter (fun r -> String.trim r <> "")
   |> List.map parse_record
 
-let keep ~under ~exclude e =
+let keep ~under ~only ~exclude e =
   (under = [] || List.exists (fun d -> Glob.under d e.path) under)
+  && (only = [] || List.exists (fun p -> Glob.matches p e.path) only)
   && not (List.exists (fun p -> Glob.matches p e.path) exclude)
 
 let zero = { files = 0; added = 0; removed = 0 }

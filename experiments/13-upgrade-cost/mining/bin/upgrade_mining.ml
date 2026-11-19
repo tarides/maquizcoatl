@@ -7,26 +7,30 @@ let usage =
   "upgrade_mining --clones DIR --releases DIR --out DIR [--since DATE] \
    [--until DATE] [PROJECT ...]"
 
+(* The result files never replace existing ones: the recorded tables carry
+   hand-filled classification columns. *)
 let write path contents =
-  Out_channel.with_open_bin path (fun oc ->
-      Out_channel.output_string oc contents);
+  Out_channel.with_open_gen [ Open_wronly; Open_creat; Open_excl; Open_binary ]
+    0o644 path (fun oc -> Out_channel.output_string oc contents);
   Printf.printf "wrote %s\n%!" path
 
+let bumps_file ~out ~until (p : Project.t) =
+  Filename.concat out (Printf.sprintf "%s-exp-13-%s-bumps.csv" until p.name)
+
+let per_release_file ~out ~until =
+  Filename.concat out (until ^ "-exp-13-per-release.csv")
+
+let summary_file ~out ~until =
+  Filename.concat out (until ^ "-exp-13-mining-summary.md")
+
 let main ~clones_dir ~releases_dir ~out ~since ~until names =
-  let tools = Hashtbl.create 8 in
-  let tool_of name =
-    match Hashtbl.find_opt tools name with
-    | Some t -> t
-    | None ->
-        let t =
-          match List.find_opt (fun (n, _, _) -> n = name) Projects.tools with
-          | Some (_, scheme, prefixes) ->
-              Tool.make ~name ~scheme ~prefixes ~until
-                (Release.load (Filename.concat releases_dir (name ^ ".tsv")))
-          | None -> failwith ("unknown tool " ^ name)
-        in
-        Hashtbl.add tools name t;
-        t
+  let tool_of =
+    Util.memo (fun name ->
+        match List.find_opt (fun (n, _, _) -> n = name) Projects.tools with
+        | Some (_, scheme, prefixes) ->
+            Tool.make ~name ~scheme ~prefixes ~until
+              (Release.load (Filename.concat releases_dir (name ^ ".tsv")))
+        | None -> failwith ("unknown tool " ^ name))
   in
   let projects =
     match names with
@@ -41,36 +45,43 @@ let main ~clones_dir ~releases_dir ~out ~since ~until names =
             | None -> failwith ("unknown project " ^ n))
           names
   in
-  let repos = Hashtbl.create 16 in
-  let clones name =
-    match Hashtbl.find_opt repos name with
-    | Some r -> r
-    | None ->
+  (match
+     List.filter Sys.file_exists
+       (per_release_file ~out ~until
+       :: summary_file ~out ~until
+       :: List.map (bumps_file ~out ~until) projects)
+   with
+  | [] -> ()
+  | existing ->
+      failwith
+        (Printf.sprintf
+           "%s already exist; result files are never overwritten (they may \
+            hold manual classification): choose another --out directory"
+           (String.concat ", " existing)));
+  let clones =
+    Util.memo (fun name ->
         let dir = Filename.concat clones_dir name in
         if not (Sys.file_exists dir) then failwith ("missing clone " ^ dir);
-        let r = Repo.git dir in
-        Hashtbl.add repos name r;
-        r
+        Repo.git dir)
   in
   let results =
     List.map
       (fun (p : Project.t) ->
         Printf.printf "mining %s\n%!" p.name;
         let tool = tool_of p.tool in
+        let missing = Mine.missing_paths p ~clones ~since ~until in
+        List.iter
+          (fun (m : Mine.missing) ->
+            Printf.printf "warning: %s: %s\n%!" p.name
+              (Mine.missing_to_string m))
+          missing;
         let rows = Mine.run p ~tool ~clones ~since ~until in
-        write
-          (Filename.concat out
-             (Printf.sprintf "%s-exp-13-%s-bumps.csv" until p.name))
-          (Report.rows_csv rows);
-        { Report.project = p.name; tool; rows })
+        write (bumps_file ~out ~until p) (Report.rows_csv rows);
+        { Report.project = p.name; tool; rows; missing })
       projects
   in
-  write
-    (Filename.concat out (until ^ "-exp-13-per-release.csv"))
-    (Report.per_release_csv results);
-  write
-    (Filename.concat out (until ^ "-exp-13-mining-summary.md"))
-    (Report.summary_md ~since ~until results)
+  write (per_release_file ~out ~until) (Report.per_release_csv results);
+  write (summary_file ~out ~until) (Report.summary_md ~since ~until results)
 
 let () =
   let clones = ref "" and releases = ref "" and out = ref "" in
@@ -82,7 +93,10 @@ let () =
       ( "--releases",
         Arg.Set_string releases,
         "DIR directory holding <tool>.tsv release lists" );
-      ("--out", Arg.Set_string out, "DIR directory for the result files");
+      ( "--out",
+        Arg.Set_string out,
+        "DIR directory for the result files (existing ones are never \
+         overwritten)" );
       ("--since", Arg.Set_string since, "DATE start of the window (included)");
       ("--until", Arg.Set_string until, "DATE snapshot date (included)");
     ]
@@ -99,6 +113,10 @@ let () =
   try
     main ~clones_dir:!clones ~releases_dir:!releases ~out:!out ~since:!since
       ~until:!until (List.rev !names)
-  with Repo.Git_error msg | Failure msg | Sys_error msg ->
-    prerr_endline ("upgrade_mining: " ^ msg);
-    exit 1
+  with
+  | Repo.Git_error msg | Failure msg | Sys_error msg ->
+      prerr_endline ("upgrade_mining: " ^ msg);
+      exit 1
+  | Fun.Finally_raised e ->
+      prerr_endline ("upgrade_mining: " ^ Printexc.to_string e);
+      exit 1

@@ -2,12 +2,15 @@
 
     A pin reads values from the files matching its patterns. A value is a
     version, a commit, or an opaque constraint, depending on how the pin
-    {!resolve}s. A project's tool version changes when the set of values read by
-    one of its pins changes. *)
+    {!resolve}s. A project's tool version changes when the values read by one of
+    its pins change (see {!Mine}). *)
 
 (** How to read values from one file. Lines are trimmed. In the line-based
-    formats, lines starting with [#] are ignored, and so is a trailing comment:
-    a [#] after a blank, outside quotes. *)
+    formats, lines starting with [#] are ignored, and so is a comment after the
+    key: a [#] that starts the value or follows a blank, outside a quoted
+    string. A quote opens a quoted string only where a scalar starts: at the
+    start of the value, or after a blank, [\[] or [,]. A key whose value is
+    empty, or only a comment, has no value. *)
 type format =
   | Whole_file  (** The trimmed contents, e.g. [lean-toolchain]. *)
   | Make_var of string
@@ -25,7 +28,8 @@ type format =
           [{>= "9.0" & < "9.2"}] (possibly over several lines) as
           [>= 9.0 & < 9.2], and a package without constraint as the empty
           string. Comments and the other fields ([conflicts], [depopts], ...)
-          are ignored. *)
+          are ignored. Strings are ["..."] or ["""..."""], with backslash
+          escapes, as in opam. *)
   | Toml_string of string
       (** [key = "value"]; an inline table [key = { ... }] reads as its whole
           text. *)

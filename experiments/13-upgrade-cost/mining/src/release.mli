@@ -19,4 +19,7 @@ val parse_tsv : string -> t list
     @raise Failure on a malformed header or line. *)
 
 val load : string -> t list
-(** [load file] is [parse_tsv] of the contents of [file]. *)
+(** [load file] is [parse_tsv] of the contents of [file].
+
+    @raise Failure as {!parse_tsv} does, with [file] in the message.
+    @raise Sys_error if [file] cannot be read. *)

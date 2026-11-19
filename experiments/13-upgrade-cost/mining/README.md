@@ -5,6 +5,9 @@ Two command-line tools for experiment #13 (upgrade cost), see
 
 - `upgrade_mining` (library `src/`, `bin/upgrade_mining.ml`): Part C,
   mines the history of the projects for tool bumps and their diffs.
+  It never overwrites a result file, since the recorded tables carry
+  hand-filled classification columns: write a new run to an empty
+  `--out` directory and merge the classification by hand.
 - `upgrade_builds` (library `builds/`, `bin/upgrade_builds.ml`): Part A,
   installs the toolchains, prepares and runs the timed builds, and
   records one CSV row per run. `upgrade_builds --help` lists the commands.

@@ -24,17 +24,22 @@ let unquote s =
   then String.sub s 1 (n - 2)
   else s
 
-(* Drops a trailing comment from a value: a [#] that follows a blank and lies
-   outside quotes. *)
+(* Drops a comment from a trimmed value: a [#] that starts the value or
+   follows a blank, outside quotes. A quote opens a quoted string only where a
+   scalar starts (at the start, or after a blank, '[' or ','), so that the
+   apostrophe of "don't" opens nothing. *)
 let uncomment s =
   let n = String.length s in
+  let scalar_start i =
+    i = 0 || match s.[i - 1] with ' ' | '\t' | '[' | ',' -> true | _ -> false
+  in
   let rec go i quote =
     if i >= n then s
     else
       match (s.[i], quote) with
-      | ('"' | '\''), None -> go (i + 1) (Some s.[i])
+      | (('"' | '\'') as q), None when scalar_start i -> go (i + 1) (Some q)
       | c, Some q when c = q -> go (i + 1) None
-      | '#', None when i > 0 && (s.[i - 1] = ' ' || s.[i - 1] = '\t') ->
+      | '#', None when i = 0 || s.[i - 1] = ' ' || s.[i - 1] = '\t' ->
           String.trim (String.sub s 0 i)
       | _ -> go (i + 1) quote
   in
@@ -44,7 +49,8 @@ let lines contents = Util.lines contents |> List.map String.trim
 let is_comment l = String.starts_with ~prefix:"#" l
 
 (* [key_value ~seps key line] is the text after [key], optional blanks and
-   one of the separators [seps], if [line] has that shape. *)
+   one of the separators [seps], without its comment, if [line] has that
+   shape. *)
 let key_value ~seps key line =
   if not (String.starts_with ~prefix:key line) then None
   else
@@ -52,20 +58,27 @@ let key_value ~seps key line =
     List.find_map
       (fun sep ->
         if String.starts_with ~prefix:sep rest then
-          Some (String.trim (Util.after ~prefix:sep rest))
+          Some (uncomment (String.trim (Util.after ~prefix:sep rest)))
         else None)
       seps
 
-let make_var name contents =
+(* The non-empty values of [key] on the lines of [contents] that are not
+   comments, each line first passed through [prepare]. *)
+let key_values ?(prepare = Fun.id) ~seps key contents =
   lines contents
   |> List.filter (fun l -> not (is_comment l))
   |> List.filter_map (fun l ->
-      let l =
-        if String.starts_with ~prefix:"export " l then
-          String.trim (Util.after ~prefix:"export " l)
-        else l
-      in
-      key_value ~seps:[ ":="; "?="; "=" ] name l |> Option.map uncomment)
+      match key_value ~seps key (prepare l) with
+      | Some "" | None -> None
+      | Some v -> Some v)
+
+let make_var name contents =
+  let prepare l =
+    if String.starts_with ~prefix:"export " l then
+      String.trim (Util.after ~prefix:"export " l)
+    else l
+  in
+  key_values ~prepare ~seps:[ ":="; "?="; "=" ] name contents
 
 let yaml_list key contents =
   let rec go acc = function
@@ -73,8 +86,19 @@ let yaml_list key contents =
     | l :: rest when is_comment l -> go acc rest
     | l :: rest -> (
         match key_value ~seps:[ ":" ] key l with
-        | Some v when v <> "" ->
-            let v = uncomment v in
+        | Some "" ->
+            let rec items acc = function
+              | l :: rest when is_comment l -> items acc rest
+              | l :: rest when String.starts_with ~prefix:"- " l ->
+                  let item =
+                    uncomment (String.trim (Util.after ~prefix:"- " l))
+                  in
+                  items (unquote item :: acc) rest
+              | rest -> (acc, rest)
+            in
+            let acc, rest = items acc rest in
+            go acc rest
+        | Some v ->
             let n = String.length v in
             if n >= 2 && v.[0] = '[' && v.[n - 1] = ']' then
               let items =
@@ -84,28 +108,13 @@ let yaml_list key contents =
               in
               go (List.rev_append items acc) rest
             else go acc rest
-        | Some _ ->
-            let rec items acc = function
-              | l :: rest when is_comment l -> items acc rest
-              | l :: rest when String.starts_with ~prefix:"- " l ->
-                  items
-                    (unquote (uncomment (Util.after ~prefix:"- " l)) :: acc)
-                    rest
-              | rest -> (acc, rest)
-            in
-            let acc, rest = items acc rest in
-            go acc rest
         | None -> go acc rest)
   in
   go [] (lines contents)
 
 let yaml_scalar key contents =
-  lines contents
-  |> List.filter (fun l -> not (is_comment l))
-  |> List.filter_map (fun l ->
-      match key_value ~seps:[ ":" ] key l with
-      | Some v when v <> "" && v.[0] <> '[' -> Some (unquote (uncomment v))
-      | _ -> None)
+  key_values ~seps:[ ":" ] key contents
+  |> List.filter_map (fun v -> if v.[0] = '[' then None else Some (unquote v))
 
 (* The opam file format, as far as the [depends] field needs it. *)
 module Opam = struct
@@ -128,13 +137,19 @@ module Opam = struct
       else if s.[i] = '*' && s.[i + 1] = ')' then i + 2
       else skip_block (i + 1)
     in
-    let string_end i =
+    let triple_quote i =
+      i + 2 < n && s.[i] = '"' && s.[i + 1] = '"' && s.[i + 2] = '"'
+    in
+    (* The contents of the string that starts at [i] and ends with one double
+       quote, or three if [triple], and the index after its end. *)
+    let string_end ~triple i =
       let b = Buffer.create 16 in
       let rec go i =
         if i >= n then failwith "opam: unterminated string"
         else
           match s.[i] with
-          | '"' -> (Buffer.contents b, i + 1)
+          | '"' when not triple -> (Buffer.contents b, i + 1)
+          | '"' when triple_quote i -> (Buffer.contents b, i + 3)
           | '\\' when i + 1 < n ->
               Buffer.add_char b s.[i + 1];
               go (i + 2)
@@ -157,8 +172,11 @@ module Opam = struct
         | c when is_space c -> go acc (i + 1)
         | '#' -> go acc (skip_to_eol i)
         | '(' when i + 1 < n && s.[i + 1] = '*' -> go acc (skip_block (i + 2))
+        | '"' when triple_quote i ->
+            let str, j = string_end ~triple:true (i + 3) in
+            go (Str str :: acc) j
         | '"' ->
-            let str, j = string_end (i + 1) in
+            let str, j = string_end ~triple:false (i + 1) in
             go (Str str :: acc) j
         | '[' -> go (Lbrack :: acc) (i + 1)
         | ']' -> go (Rbrack :: acc) (i + 1)
@@ -207,12 +225,7 @@ module Opam = struct
 end
 
 let toml_string key contents =
-  lines contents
-  |> List.filter (fun l -> not (is_comment l))
-  |> List.filter_map (fun l ->
-      match key_value ~seps:[ "=" ] key l with
-      | Some v when v <> "" -> Some (unquote (uncomment v))
-      | _ -> None)
+  key_values ~seps:[ "=" ] key contents |> List.map unquote
 
 let read format contents =
   match format with

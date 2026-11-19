@@ -65,9 +65,14 @@ type summary = {
           that no release contains, is reached. *)
   from_found : Release.t list;
   to_found : Release.t list;
+  to_release : bool;
+      (** Whether some file of a resolvable pin moves to a value that resolves
+          to a release. *)
   introduced : string list;
       (** Keys of the resolvable values that some file did not hold before. *)
-  resolvable_after : string list;  (** Keys of the resolvable values after. *)
+  landed : string list;
+      (** Keys of all the values that the changed files of resolvable pins hold
+          after the unit. *)
   moves : (string list * string list) list;
       (** For each file of a resolvable pin whose values change: the keys of its
           new values, and of all its values after. *)
@@ -87,32 +92,149 @@ let contains_any ~words text =
       k > 0 && at 0)
     words
 
+(* Whether the values read by the pins differ between [before] and [after]
+   (per pin, per file): the values of a pin change, or a file that holds
+   values both before and after changes them. The second case is an upgrade
+   split over three or more files, whose middle steps leave the values of the
+   pin unchanged. A pin file that appears or disappears without values is no
+   change. *)
+let pins_changed before after =
+  List.map Pin.union before <> List.map Pin.union after
+  || List.exists2
+       (fun before after ->
+         List.exists
+           (fun (path, b) ->
+             match List.assoc_opt path after with
+             | Some a -> b <> [] && a <> [] && a <> b
+             | None -> false)
+           before)
+       before after
+
+(* [summarise ~resolve ~key pins u] resolves the values of [u]. *)
+let summarise ~resolve ~key pins (u : unit_) =
+  let resolutions values =
+    List.concat
+      (List.map2 (fun pin vs -> List.map (resolve pin) vs) pins values)
+  in
+  let before = List.map Pin.union u.before
+  and after = List.map Pin.union u.after in
+  let from_found = found (resolutions before) in
+  let already (r : Release.t) =
+    List.exists (fun (f : Release.t) -> f.version = r.version) from_found
+  in
+  let reached =
+    resolutions (List.map2 minus after before)
+    |> List.filter (function Found r -> not (already r) | _ -> true)
+  in
+  (* Per file of a resolvable pin whose values change: the pin, the file's
+     new values and all its values after. *)
+  let changed_files =
+    List.combine pins (List.combine u.before u.after)
+    |> List.concat_map (fun ((pin : Pin.t), (before, after)) ->
+        if pin.resolve = Pin.Opaque then []
+        else
+          let paths =
+            List.sort_uniq compare (List.map fst before @ List.map fst after)
+          in
+          List.filter_map
+            (fun path ->
+              let get l = Option.value (List.assoc_opt path l) ~default:[] in
+              let b = get before and a = get after in
+              if a = b then None else Some (pin, minus a b, a))
+            paths)
+  in
+  let moves =
+    List.map
+      (fun (pin, news, afters) ->
+        (List.map (key pin) news, List.map (key pin) afters))
+      changed_files
+  in
+  {
+    kind = u.kind;
+    commits = [ u.commit ];
+    last = u.commit;
+    from_ = Util.dedup (List.concat before);
+    to_ = Util.dedup (List.concat after);
+    reached = List.filter_map label reached;
+    new_release =
+      List.exists (function Found _ | Unreleased -> true | _ -> false) reached;
+    from_found;
+    to_found = found (resolutions after);
+    to_release =
+      List.exists
+        (fun (pin, news, _) ->
+          List.exists
+            (fun v -> match resolve pin v with Found _ -> true | _ -> false)
+            news)
+        changed_files;
+    introduced = List.concat_map fst moves;
+    landed = List.concat_map snd moves;
+    moves;
+    totals = u.totals;
+  }
+
+(* [completes prev u]: [u] is the second half of the bump [prev], an upgrade
+   split over several pin files. It reaches no new release, moves some file of
+   a resolvable pin to a value that [prev] introduced, and every such file it
+   changes ends on values that the files changed by [prev] hold after it. *)
+let completes prev u =
+  prev.kind = Bump && u.kind = Bump && (not u.new_release)
+  && List.exists
+       (fun (news, _) -> List.exists (fun k -> List.mem k prev.introduced) news)
+       u.moves
+  && List.for_all
+       (fun (_, afters) ->
+         afters <> [] && List.for_all (fun k -> List.mem k prev.landed) afters)
+       u.moves
+
+let merge prev u =
+  {
+    prev with
+    commits = prev.commits @ u.commits;
+    last = u.last;
+    to_ = u.to_;
+    reached = prev.reached @ minus u.reached prev.reached;
+    to_found = u.to_found;
+    to_release = prev.to_release || u.to_release;
+    introduced = prev.introduced @ u.introduced;
+    landed = prev.landed @ u.landed;
+    totals = Numstat.add prev.totals u.totals;
+  }
+
+let group summaries =
+  List.fold_left
+    (fun acc u ->
+      match acc with
+      | prev :: rest when completes prev u -> merge prev u :: rest
+      | _ -> u :: acc)
+    [] summaries
+  |> List.rev
+
+let pin_patterns (h : Project.history) =
+  List.concat_map (fun (pin : Pin.t) -> pin.files) h.pins
+
+(* Patterns of the files that commit mode does not measure. *)
+let history_exclude (h : Project.history) = h.exclude @ pin_patterns h
+
 let history (p : Project.t) (h : Project.history) ~tool ~clones ~since ~until =
   let repo : Repo.t = clones p.clone in
-  let pin_patterns = List.concat_map (fun (pin : Pin.t) -> pin.files) h.pins in
-  let values_cache = Hashtbl.create 64 in
-  let values_at commit =
-    match Hashtbl.find_opt values_cache commit with
-    | Some v -> v
-    | None ->
+  let pin_patterns = pin_patterns h in
+  let values_at =
+    Util.memo (fun commit ->
         let files =
           repo.files commit
           |> List.filter (fun path ->
               List.exists (fun pin -> Pin.matches_file pin path) h.pins)
           |> List.map (fun path -> (path, repo.show commit path))
         in
-        let v = List.map (fun pin -> Pin.file_values pin files) h.pins in
-        Hashtbl.add values_cache commit v;
-        v
+        try List.map (fun pin -> Pin.file_values pin files) h.pins
+        with Failure msg ->
+          failwith
+            (Printf.sprintf "%s, commit %s: %s" p.name (short commit) msg))
   in
-  let tags_cache = Hashtbl.create 64 in
-  let tags_containing clone value =
-    match Hashtbl.find_opt tags_cache (clone, value) with
-    | Some tags -> tags
-    | None ->
-        let tags = (clones clone : Repo.t).tags_containing value in
-        Hashtbl.add tags_cache (clone, value) tags;
-        tags
+  let tags_containing =
+    Util.memo (fun (clone, value) ->
+        (clones clone : Repo.t).tags_containing value)
   in
   let resolve (pin : Pin.t) value =
     match pin.resolve with
@@ -122,7 +244,7 @@ let history (p : Project.t) (h : Project.history) ~tool ~clones ~since ~until =
         | Some r -> Found r
         | None -> Unresolved value)
     | Pin.Commit clone -> (
-        match tags_containing clone value with
+        match tags_containing (clone, value) with
         | None -> Unknown_commit
         | Some tags -> (
             match Tool.earliest tool tags with
@@ -137,22 +259,28 @@ let history (p : Project.t) (h : Project.history) ~tool ~clones ~since ~until =
           (Tool.find tool value)
     | Pin.Commit _ | Pin.Opaque -> value
   in
-  let measure (c : Repo.commit) parent =
-    repo.numstat parent c.hash
-    |> List.filter
-         (Numstat.keep ~under:h.under ~exclude:(h.exclude @ pin_patterns))
-    |> Numstat.totals
+  let keep =
+    Numstat.keep
+      ~under:(Project.measured_dirs h.under)
+      ~only:h.only ~exclude:(history_exclude h)
   in
-  let all = repo.first_parent_log ~head:p.head ~since ~until ~paths:[] in
+  let measure (c : Repo.commit) parent =
+    match repo.numstat parent c.hash with
+    | entries -> List.filter keep entries |> Numstat.totals
+    | exception Failure msg ->
+        failwith
+          (Printf.sprintf "%s, diff %s..%s: %s" p.name (short parent)
+             (short c.hash) msg)
+  in
+  let all = repo.first_parent_log ~head:h.head ~since ~until ~paths:[] in
   let bumps =
-    repo.first_parent_log ~head:p.head ~since ~until ~paths:pin_patterns
+    repo.first_parent_log ~head:h.head ~since ~until ~paths:pin_patterns
     |> List.filter_map (fun (c : Repo.commit) ->
         match c.parents with
         | [] -> None
         | parent :: _ ->
             let before = values_at parent and after = values_at c.hash in
-            if List.map Pin.union before = List.map Pin.union after then None
-            else
+            if pins_changed before after then
               Some
                 {
                   kind = Bump;
@@ -160,7 +288,8 @@ let history (p : Project.t) (h : Project.history) ~tool ~clones ~since ~until =
                   before;
                   after;
                   totals = measure c parent;
-                })
+                }
+            else None)
   in
   let is_bump (c : Repo.commit) =
     List.exists (fun (u : unit_) -> u.commit.hash = c.hash) bumps
@@ -194,113 +323,10 @@ let history (p : Project.t) (h : Project.history) ~tool ~clones ~since ~until =
   let pos (u : unit_) =
     Option.value (Hashtbl.find_opt position u.commit.hash) ~default:max_int
   in
-  let ordered =
-    List.stable_sort (fun a b -> compare (pos a) (pos b)) (bumps @ keyword_units)
-  in
-  let resolutions values =
-    List.concat
-      (List.map2 (fun pin vs -> List.map (resolve pin) vs) h.pins values)
-  in
-  let per_resolvable_pin f before after =
-    List.concat
-      (List.map2
-         (fun ((pin : Pin.t), before) after ->
-           if pin.resolve = Pin.Opaque then [] else f pin before after)
-         (List.combine h.pins before)
-         after)
-  in
-  let summarise (u : unit_) =
-    let before = List.map Pin.union u.before
-    and after = List.map Pin.union u.after in
-    let from_found = found (resolutions before) in
-    let already (r : Release.t) =
-      List.exists (fun (f : Release.t) -> f.version = r.version) from_found
-    in
-    let reached =
-      resolutions (List.map2 minus after before)
-      |> List.filter (function Found r -> not (already r) | _ -> true)
-    in
-    (* Per file of a resolvable pin: its values before and after. *)
-    let file_changes =
-      per_resolvable_pin
-        (fun pin before after ->
-          let paths =
-            List.sort_uniq compare (List.map fst before @ List.map fst after)
-          in
-          List.filter_map
-            (fun path ->
-              let get l = Option.value (List.assoc_opt path l) ~default:[] in
-              let b = get before and a = get after in
-              if a = b then None
-              else
-                let keys = List.map (key pin) in
-                Some (keys (minus a b), keys a))
-            paths)
-        u.before u.after
-    in
-    {
-      kind = u.kind;
-      commits = [ u.commit ];
-      last = u.commit;
-      from_ = List.concat before;
-      to_ = List.concat after;
-      reached = List.filter_map label reached;
-      new_release =
-        List.exists
-          (function Found _ | Unreleased -> true | _ -> false)
-          reached;
-      from_found;
-      to_found = found (resolutions after);
-      introduced = List.concat_map fst file_changes;
-      resolvable_after =
-        List.combine h.pins after
-        |> List.concat_map (fun ((pin : Pin.t), vs) ->
-            if pin.resolve = Pin.Opaque then [] else List.map (key pin) vs);
-      moves = file_changes;
-      totals = u.totals;
-    }
-  in
-  (* [u] completes the bump [prev] (an upgrade split over several pin files)
-     when it reaches no new release, moves some file of a resolvable pin to a
-     value that [prev] introduced, and every such file it changes ends on
-     values that [prev] reached. *)
-  let completes prev u =
-    prev.kind = Bump && u.kind = Bump && (not u.new_release)
-    && List.exists
-         (fun (news, _) ->
-           List.exists (fun k -> List.mem k prev.introduced) news)
-         u.moves
-    && List.for_all
-         (fun (_, afters) ->
-           afters <> []
-           && List.for_all (fun k -> List.mem k prev.resolvable_after) afters)
-         u.moves
-  in
-  let merge prev u =
-    {
-      prev with
-      commits = prev.commits @ u.commits;
-      last = u.last;
-      to_ = u.to_;
-      reached = prev.reached @ minus u.reached prev.reached;
-      to_found = u.to_found;
-      introduced = prev.introduced @ u.introduced;
-      resolvable_after = u.resolvable_after;
-      totals = Numstat.add prev.totals u.totals;
-    }
-  in
-  let grouped =
-    List.fold_left
-      (fun acc u ->
-        match acc with
-        | prev :: rest when completes prev u -> merge prev u :: rest
-        | _ -> u :: acc)
-      []
-      (List.map summarise ordered)
-    |> List.rev
-  in
-  List.map
-    (fun s ->
+  List.stable_sort (fun a b -> compare (pos a) (pos b)) (bumps @ keyword_units)
+  |> List.map (summarise ~resolve ~key h.pins)
+  |> group
+  |> List.map (fun s ->
       let bump = s.kind = Bump in
       {
         project = p.name;
@@ -311,14 +337,15 @@ let history (p : Project.t) (h : Project.history) ~tool ~clones ~since ~until =
         from_ = s.from_;
         to_ = s.to_;
         reached = s.reached;
-        to_series = (if bump then Tool.newest_series tool s.to_found else None);
+        to_series =
+          (if bump && s.to_release then Tool.newest_series tool s.to_found
+           else None);
         spanned =
           (if bump then Tool.spanned tool ~from:s.from_found ~to_:s.to_found
            else None);
         totals = s.totals;
         authors = [];
       })
-    grouped
 
 let snapshots (p : Project.t) (s : Project.snapshots) ~tool ~clones =
   let repo : Repo.t = clones p.clone in
@@ -353,7 +380,8 @@ let snapshots (p : Project.t) (s : Project.snapshots) ~tool ~clones =
             spanned = Tool.spanned tool ~from:[ ra ] ~to_:[ rb ];
             totals =
               List.filter
-                (Numstat.keep ~under:[ path ] ~exclude:s.exclude_snapshot)
+                (Numstat.keep ~under:[ path ] ~only:[]
+                   ~exclude:s.exclude_snapshot)
                 entries
               |> Numstat.totals;
             authors =
@@ -370,3 +398,64 @@ let run (p : Project.t) ~tool ~clones ~since ~until =
   match p.mode with
   | Project.History h -> history p h ~tool ~clones ~since ~until
   | Project.Snapshots s -> snapshots p s ~tool ~clones
+
+type missing = { path : string; where : string; commit : string }
+
+let missing_paths (p : Project.t) ~clones ~since ~until =
+  let repo : Repo.t = clones p.clone in
+  let files = Util.memo repo.files in
+  (* [measured ~only ~exclude commit path] holds iff the tree of [commit] has a
+     file under [path] that the rows would measure. *)
+  let measured ~only ~exclude commit path =
+    List.exists
+      (fun file ->
+        Numstat.keep ~under:[ path ] ~only ~exclude
+          { Numstat.path = file; added = None; removed = None })
+      (files commit)
+  in
+  match p.mode with
+  | Project.History { under = []; _ } -> []
+  | Project.History h -> (
+      match repo.first_parent_log ~head:h.head ~since ~until ~paths:[] with
+      | [] -> []
+      | first :: _ ->
+          let start =
+            match first.parents with parent :: _ -> parent | [] -> first.hash
+          in
+          let measured = measured ~only:h.only ~exclude:(history_exclude h) in
+          let report ~where commit paths =
+            List.filter_map
+              (fun path ->
+                if measured commit path then None
+                else Some { path; where; commit = short commit })
+              paths
+          in
+          List.concat_map
+            (fun (d : Project.dir) ->
+              (* Before a move, each former path must hold files: one that
+                 does not is a wrong entry, whatever the other ones hold. *)
+              (if measured start d.path then []
+               else
+                 report ~where:"window start" start
+                   (match d.formerly with [] -> [ d.path ] | f -> f))
+              @ report ~where:"head" h.head [ d.path ])
+            h.under)
+  | Project.Snapshots s -> (
+      match (s.refs, List.rev s.refs) with
+      | (first_tag, first_ref) :: _, (last_tag, last_ref) :: _ ->
+          let report (where, commit) path =
+            if measured ~only:[] ~exclude:s.exclude_snapshot commit path then
+              None
+            else Some { path; where; commit }
+          in
+          List.concat_map
+            (fun path ->
+              List.filter_map
+                (fun release -> report release path)
+                [ (first_tag, first_ref); (last_tag, last_ref) ])
+            s.paths
+          |> Util.dedup
+      | _ -> [])
+
+let missing_to_string m =
+  Printf.sprintf "%s missing at %s (%s)" m.path m.where m.commit

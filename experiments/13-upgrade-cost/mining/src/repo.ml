@@ -26,18 +26,55 @@ exception Git_error of string
    unquoted, no signature lines in [git log] output. *)
 let config = [ "-c"; "core.quotePath=false"; "-c"; "log.showSignature=false" ]
 
+(* Variables that point git at another repository or object store, as printed
+   by [git rev-parse --local-env-vars]. Inherited values would override
+   [-C dir]. *)
+let local_repo_env =
+  [
+    "GIT_ALTERNATE_OBJECT_DIRECTORIES";
+    "GIT_CONFIG";
+    "GIT_CONFIG_PARAMETERS";
+    "GIT_CONFIG_COUNT";
+    "GIT_OBJECT_DIRECTORY";
+    "GIT_DIR";
+    "GIT_WORK_TREE";
+    "GIT_IMPLICIT_WORK_TREE";
+    "GIT_GRAFT_FILE";
+    "GIT_INDEX_FILE";
+    "GIT_NO_REPLACE_OBJECTS";
+    "GIT_REPLACE_REF_BASE";
+    "GIT_PREFIX";
+    "GIT_SHALLOW_FILE";
+    "GIT_COMMON_DIR";
+  ]
+
+let variable_name binding =
+  match String.index_opt binding '=' with
+  | Some i -> String.sub binding 0 i
+  | None -> binding
+
+let environment ~inherited env =
+  let dropped = local_repo_env @ List.map variable_name env in
+  Array.to_list inherited
+  |> List.filter (fun b -> not (List.mem (variable_name b) dropped))
+  |> fun kept -> Array.of_list (kept @ env)
+
 (* Runs [git -C dir args], with [env] added to the environment; returns its
-   exit status, its output, and a function giving its error message. Standard
-   error goes to a temporary file, read back on failure. *)
+   exit status, its output, and on failure its error message. Standard error
+   goes to a temporary file, read back on failure before the file is
+   removed. *)
 let run ?(env = []) dir args =
   let command = Printf.sprintf "git %s" (String.concat " " args) in
   let err = Filename.temp_file "upgrade-mining" ".err" in
-  Fun.protect
-    ~finally:(fun () -> Sys.remove err)
-    (fun () ->
+  let remove_err () =
+    try Sys.remove err
+    with Sys_error msg ->
+      Printf.eprintf "upgrade_mining: warning: cannot remove %s: %s\n%!" err msg
+  in
+  Fun.protect ~finally:remove_err (fun () ->
       try
         let argv = Array.of_list (("git" :: "-C" :: dir :: config) @ args) in
-        let env = Array.append (Unix.environment ()) (Array.of_list env) in
+        let env = environment ~inherited:(Unix.environment ()) env in
         let out_r, out_w = Unix.pipe ~cloexec:true () in
         let err_fd =
           Unix.openfile err
@@ -59,9 +96,11 @@ let run ?(env = []) dir args =
         in
         let _, status = Unix.waitpid [] pid in
         let code = match status with Unix.WEXITED c -> c | _ -> 255 in
-        let error () =
-          Printf.sprintf "%s (in %s): %s" command dir
-            (String.trim (In_channel.with_open_bin err In_channel.input_all))
+        let error =
+          if code = 0 then ""
+          else
+            Printf.sprintf "%s (in %s): %s" command dir
+              (String.trim (In_channel.with_open_bin err In_channel.input_all))
         in
         (code, output, error)
       with Unix.Unix_error (e, f, _) ->
@@ -73,7 +112,7 @@ let run ?(env = []) dir args =
 let run_ok ?env dir args =
   match run ?env dir args with
   | 0, output, _ -> output
-  | _, _, error -> raise (Git_error (error ()))
+  | _, _, error -> raise (Git_error error)
 
 let nul_separated s = String.split_on_char '\000' s |> List.filter (( <> ) "")
 
@@ -129,14 +168,16 @@ let numstat dir a b =
 let tags_containing dir c =
   match
     run ~env:no_lazy_fetch dir
-      [ "rev-parse"; "--verify"; "--quiet"; c ^ "^{commit}" ]
+      [
+        "rev-parse"; "--verify"; "--quiet"; "--end-of-options"; c ^ "^{commit}";
+      ]
   with
   | 0, hash, _ ->
       Some
         (run_ok ~env:no_lazy_fetch dir [ "tag"; "--contains"; String.trim hash ]
         |> Util.lines |> List.map String.trim)
   | 1, _, _ -> None
-  | _, _, error -> raise (Git_error (error ()))
+  | _, _, error -> raise (Git_error error)
 
 let authors dir ~since ~until path =
   run_ok dir [ "log"; "--format=%cs%x1f%an"; "--"; path ]

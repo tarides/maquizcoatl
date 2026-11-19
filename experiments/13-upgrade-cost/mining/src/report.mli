@@ -5,12 +5,19 @@
     one series: a release candidate, then the stable release, or several pinned
     commits of one release. A group's lines are the sum of its rows, and it
     spans the largest span of its rows ({!Mine.row.spanned}). Rows that go back
-    to an older series, and rows that reach no series, belong to no group. *)
+    to an older series, and rows that reach no series (for example a bump of an
+    opaque pin only), belong to no group.
+
+    In the tables, a field that lists several values separates them with [; ],
+    since values can contain blanks. *)
 
 type result = {
   project : string;  (** Label of the project. *)
   tool : Tool.t;
   rows : Mine.row list;  (** The project's rows, in history order. *)
+  missing : Mine.missing list;
+      (** Measured directories missing where they must exist (see
+          {!Mine.missing_paths}). *)
 }
 
 val csv_field : string -> string
@@ -33,4 +40,5 @@ val summary_md : since:string -> until:string -> result list -> string
     kind, releases reached (summed over the groups that span at least one
     release), lines changed in bumps and snapshots, median of the groups' lines
     per release, unattributed lines (bump and snapshot lines outside those
-    groups), largest row. *)
+    groups), largest row. After the table, the measured directories that are
+    missing where they must exist, or a line saying that none is. *)

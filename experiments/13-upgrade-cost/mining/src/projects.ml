@@ -30,10 +30,12 @@ let rocq_pins =
     pin workflows (Pin.Yaml_list "coq") Pin.Release;
   ]
 
-let rocq_history =
+let rocq_history head =
   {
-    Project.pins = rocq_pins;
+    Project.head;
+    pins = rocq_pins;
     under = [];
+    only = [];
     exclude = [];
     (* The plan's pattern rocq|coq|9\.[0-9]|stdlib|compat, as substrings. *)
     keywords =
@@ -47,8 +49,8 @@ let warblre =
     Project.name = "warblre";
     tool = "rocq";
     clone = "Warblre";
-    head = "d4b0e226464650d6854987f6d64364a301659ea0";
-    mode = Project.History rocq_history;
+    mode =
+      Project.History (rocq_history "d4b0e226464650d6854987f6d64364a301659ea0");
   }
 
 let linden =
@@ -56,8 +58,8 @@ let linden =
     Project.name = "linden";
     tool = "rocq";
     clone = "Linden";
-    head = "3ef2cb4573f86e57a25245f84dd6a13402f418fd";
-    mode = Project.History rocq_history;
+    mode =
+      Project.History (rocq_history "3ef2cb4573f86e57a25245f84dd6a13402f418fd");
   }
 
 let lean_regex =
@@ -65,10 +67,10 @@ let lean_regex =
     Project.name = "lean-regex";
     tool = "lean";
     clone = "lean-regex";
-    head = "32af6f33d80e1dad2b072da6981da58e92b08b9e";
     mode =
       Project.History
         {
+          head = "32af6f33d80e1dad2b072da6981da58e92b08b9e";
           pins =
             [
               pin
@@ -81,6 +83,7 @@ let lean_regex =
                 Pin.Whole_file Pin.Release;
             ];
           under = [];
+          only = [];
           (* The lakefiles only carry dependency revisions (mathlib). *)
           exclude =
             [ "**/lake-manifest.json"; "**/lakefile.toml"; "**/lakefile.lean" ];
@@ -94,16 +97,24 @@ let everparse =
     Project.name = "everparse-cbor";
     tool = "fstar";
     clone = "everparse";
-    head = "270f5aab699ac284d8777d4f01be20a5d91ea47c";
     mode =
       Project.History
         {
+          head = "270f5aab699ac284d8777d4f01be20a5d91ea47c";
           pins =
             [
               pin [ "opt/hashes.Makefile" ] (Pin.Make_var "FStar_hash")
                 (Pin.Commit "FStar");
             ];
-          under = [ "lib/everparse/cbor"; "lib/everparse/lowparse" ];
+          (* EverParse PR 343 (3d13096c, 2026-10-18) moved the sources from src/ to
+             lib/everparse/; four test modules stay in src/cbor/pulse. *)
+          under =
+            [
+              Project.dir "lib/everparse/cbor"
+                ~formerly:[ "src/cbor/spec"; "src/cbor/pulse" ];
+              Project.dir "lib/everparse/lowparse" ~formerly:[ "src/lowparse" ];
+            ];
+          only = [ "**/*.fst"; "**/*.fsti" ];
           exclude = [];
           keywords = [];
           keyword_periods = [];
@@ -115,10 +126,10 @@ let creusot =
     Project.name = "creusot";
     tool = "why3";
     clone = "creusot";
-    head = "601d97891bb0bc0b569686cc946ef4980560b5d8";
     mode =
       Project.History
         {
+          head = "601d97891bb0bc0b569686cc946ef4980560b5d8";
           pins =
             [
               pin ~strip:[ "= git-"; "=" ] [ "creusot-deps.opam" ]
@@ -128,6 +139,7 @@ let creusot =
                 (Pin.Opam_dep "why3find") Pin.Opaque;
             ];
           under = [];
+          only = [];
           exclude = [ "**/Cargo.lock" ];
           keywords = [];
           keyword_periods = [];
@@ -139,10 +151,10 @@ let anvil =
     Project.name = "anvil";
     tool = "verus";
     clone = "anvil";
-    head = "e83ea0f5516ce2ece26740266165180018741e66";
     mode =
       Project.History
         {
+          head = "e83ea0f5516ce2ece26740266165180018741e66";
           pins =
             [
               pin workflows (Pin.Yaml_scalar "verus_release") Pin.Release;
@@ -153,6 +165,7 @@ let anvil =
                 Pin.Opaque;
             ];
           under = [];
+          only = [];
           exclude = [ "**/Cargo.lock" ];
           keywords =
             [
@@ -178,7 +191,6 @@ let why3_gallery =
     Project.name = "why3-gallery";
     tool = "why3";
     clone = "why3";
-    head = "1.9.0";
     mode =
       Project.Snapshots
         {
@@ -194,7 +206,6 @@ let afp =
     Project.name = "afp-regex";
     tool = "isabelle";
     clone = "afp-releases";
-    head = "afp-2026/master";
     mode =
       Project.Snapshots
         {

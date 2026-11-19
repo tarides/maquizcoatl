@@ -1,10 +1,22 @@
 (** What to mine in one project. *)
 
+type dir = {
+  path : string;  (** Path at the head. *)
+  formerly : string list;
+      (** Earlier paths of the same files, before a move; they are measured too,
+          at any commit. *)
+}
+(** A directory whose changes are measured. *)
+
 type history = {
-  pins : Pin.t list;
-  under : string list;
+  head : string;  (** Commit at the snapshot date. *)
+  pins : Pin.t list;  (** Where the project records the tool version. *)
+  under : dir list;
       (** Directories whose changes are measured; [[]] for the whole repository.
       *)
+  only : string list;
+      (** Patterns; when non-empty, only the files that match one of them are
+          measured (for example the F* sources). *)
   exclude : string list;
       (** Patterns of files not measured (lockfiles, generated files). Pin files
           are never measured. *)
@@ -35,6 +47,12 @@ type t = {
   name : string;  (** Label in the results. *)
   tool : string;  (** Name of the tool, as in [releases/<tool>.tsv]. *)
   clone : string;  (** Directory of the clone, under the clones directory. *)
-  head : string;  (** Commit at the snapshot date. *)
   mode : mode;
 }
+
+val dir : ?formerly:string list -> string -> dir
+(** [dir ?formerly path] is the directory [path], with its earlier paths
+    [formerly] (none by default). *)
+
+val measured_dirs : dir list -> string list
+(** [measured_dirs dirs] is every path of [dirs], current and former. *)

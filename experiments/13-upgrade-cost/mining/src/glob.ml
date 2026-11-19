@@ -5,7 +5,11 @@ let matches pattern path =
     else
       match pattern.[i] with
       | '*' when i + 1 < n && pattern.[i + 1] = '*' ->
-          if i + 2 < n && pattern.[i + 2] = '/' then
+          let at_start = i = 0 || pattern.[i - 1] = '/' in
+          if at_start && i + 2 = n then
+            (* Trailing "**": anything, slashes included. *)
+            true
+          else if at_start && pattern.[i + 2] = '/' then
             (* "**/": zero or more whole directories. *)
             let rec from k =
               go (i + 3) k
@@ -15,17 +19,12 @@ let matches pattern path =
               | None -> false
             in
             from j
-          else
-            let rec from k = go (i + 2) k || (k < m && from (k + 1)) in
-            from j
-      | '*' ->
-          let rec from k =
-            go (i + 1) k || (k < m && path.[k] <> '/' && from (k + 1))
-          in
-          from j
+          else star (i + 2) j
+      | '*' -> star (i + 1) j
       | '?' -> j < m && path.[j] <> '/' && go (i + 1) (j + 1)
       | c -> j < m && path.[j] = c && go (i + 1) (j + 1)
-  in
+  (* A star that ends before pattern index [i]: any characters but [/]. *)
+  and star i j = go i j || (j < m && path.[j] <> '/' && star i (j + 1)) in
   go 0 0
 
 let under dir path =

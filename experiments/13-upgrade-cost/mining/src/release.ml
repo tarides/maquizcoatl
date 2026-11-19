@@ -24,4 +24,7 @@ let parse_tsv contents =
       | _ -> failwith (Printf.sprintf "releases: bad header %S" header))
   | [] -> failwith "releases: empty file"
 
-let load file = parse_tsv (In_channel.with_open_bin file In_channel.input_all)
+let load file =
+  match parse_tsv (In_channel.with_open_bin file In_channel.input_all) with
+  | releases -> releases
+  | exception Failure msg -> failwith (file ^ ": " ^ msg)

@@ -29,7 +29,18 @@ let test_glob () =
   check_bool "trailing double star needs the slash" false
     (Glob.matches "lib/**" "lib");
   check_bool "double star alone" true (Glob.matches "**" "a/b/c");
-  check_bool "double star inside a name" true (Glob.matches "a**z" "a/b/z")
+  check_bool "double star inside a name is a star" false
+    (Glob.matches "a**z" "a/b/z");
+  check_bool "double star inside a name, one segment" true
+    (Glob.matches "a**z" "abz");
+  check_bool "double star after a name is a star" false
+    (Glob.matches "a**/b" "a/x/b");
+  check_bool "inner double star, zero dirs" true (Glob.matches "a/**/b" "a/b");
+  check_bool "inner double star, dirs" true (Glob.matches "a/**/b" "a/x/y/b");
+  check_bool "F* sources" true (Glob.matches "**/*.fst" "src/lowparse/A.fst");
+  check_bool "F* sources, top level" true (Glob.matches "**/*.fst" "A.fst");
+  check_bool "F* interfaces are another pattern" false
+    (Glob.matches "**/*.fst" "A.fsti")
 
 (* Numstat *)
 
@@ -50,12 +61,20 @@ let test_numstat () =
     [ t.files; t.added; t.removed ];
   let kept =
     List.filter
-      (Numstat.keep ~under:[] ~exclude:[ "**/lake-manifest.json" ])
+      (Numstat.keep ~under:[] ~only:[] ~exclude:[ "**/lake-manifest.json" ])
       entries
   in
   Alcotest.(check int) "excluded" 2 (List.length kept);
-  let under = List.filter (Numstat.keep ~under:[ "src" ] ~exclude:[]) entries in
+  let under =
+    List.filter (Numstat.keep ~under:[ "src" ] ~only:[] ~exclude:[]) entries
+  in
   Alcotest.(check int) "under" 1 (List.length under);
+  let only =
+    List.filter
+      (Numstat.keep ~under:[] ~only:[ "**/*.lean"; "*.png" ] ~exclude:[])
+      entries
+  in
+  Alcotest.(check int) "only" 2 (List.length only);
   check_bool "bad record" true
     (raises_failure (fun () -> Numstat.parse "1\t2\000"))
 
@@ -329,19 +348,20 @@ let lean_pin =
     resolve = Pin.Release;
   }
 
-let history ?(keywords = []) ?(periods = []) pins =
+let history ?(keywords = []) ?(periods = []) ?(under = []) ?(only = [])
+    ?(head = "c5") pins =
   Project.History
     {
+      head;
       pins;
-      under = [];
+      under;
+      only;
       exclude = [ "**/lake-manifest.json" ];
       keywords;
       keyword_periods = periods;
     }
 
-let project mode =
-  { Project.name = "p"; tool = "lean"; clone = "p"; head = "c5"; mode }
-
+let project mode = { Project.name = "p"; tool = "lean"; clone = "p"; mode }
 let tc v = "leanprover/lean4:" ^ v
 
 let lean_history =
@@ -383,9 +403,9 @@ let lean_history =
       ];
   ]
 
-let mine ?keywords ?periods ?(pins = [ lean_pin ]) commits =
+let mine ?keywords ?periods ?under ?only ?(pins = [ lean_pin ]) commits =
   Mine.run
-    (project (history ?keywords ?periods pins))
+    (project (history ?keywords ?periods ?under ?only pins))
     ~tool:(lean ())
     ~clones:(fun _ -> fake commits)
     ~since:"2025-11-19" ~until:"2025-12-31"
@@ -510,7 +530,10 @@ let test_mine_matrix_shrink () =
     "units" [ [ "c1" ]; [ "c2" ] ] (units rows);
   Alcotest.(check (list (list string)))
     "reached" [ [ "v4.25.0" ]; [] ]
-    (List.map (fun (r : Mine.row) -> r.reached) rows)
+    (List.map (fun (r : Mine.row) -> r.reached) rows);
+  Alcotest.(check (list (option string)))
+    "a shrink reaches no series" [ Some "4.25"; None ]
+    (List.map (fun (r : Mine.row) -> r.to_series) rows)
 
 (* A file that is rewritten with the same pin value is not a bump; a pin
    removed after a release was reached does not join that release's row. *)
@@ -640,7 +663,7 @@ let test_mine_snapshots () =
     (String.split_on_char '\n'
        (String.trim
           (Report.per_release_csv
-             [ { Report.project = "p"; tool = lean (); rows } ])));
+             [ { Report.project = "p"; tool = lean (); rows; missing = [] } ])));
   check_bool "missing release" true
     (raises_failure (fun () ->
          Mine.run
@@ -672,7 +695,7 @@ let test_rows_csv () =
     "lines"
     [
       "project,kind,units,date,subject,from,to,reached,releases_spanned,files,added,removed,authors,class";
-      "p,bump,c1 c2,2025-11-21,bump the \
+      "p,bump,c1; c2,2025-11-21,bump the \
        rest,leanprover/lean4:v4.24.0,leanprover/lean4:v4.25.0,v4.25.0,1,1,2,1,,";
       "p,bump,c4,2025-12-14,v4.26.0,leanprover/lean4:v4.25.0,leanprover/lean4:v4.26.0,v4.26.0,1,0,0,0,,";
     ]
@@ -681,13 +704,14 @@ let test_rows_csv () =
 let test_per_release () =
   let rows = mine lean_history in
   let csv =
-    Report.per_release_csv [ { Report.project = "p"; tool = lean (); rows } ]
+    Report.per_release_csv
+      [ { Report.project = "p"; tool = lean (); rows; missing = [] } ]
   in
   Alcotest.(check (list string))
     "lines"
     [
       "project,tool,series,units,date,reached,releases_spanned,files,added,removed,lines_per_release";
-      "p,lean,4.25,c1 c2,2025-11-21,v4.25.0,1,1,2,1,3.0";
+      "p,lean,4.25,c1; c2,2025-11-21,v4.25.0,1,1,2,1,3.0";
       "p,lean,4.26,c4,2025-12-14,v4.26.0,1,0,0,0,0.0";
     ]
     (csv_lines csv)
@@ -727,24 +751,44 @@ let test_series_groups () =
     "per release"
     [
       "project,tool,series,units,date,reached,releases_spanned,files,added,removed,lines_per_release";
-      "q,lean,4.26,rc stable,2025-12-13,,1,2,14,0,14.0";
+      "q,lean,4.26,rc; stable,2025-12-13,,1,2,14,0,14.0";
       "q,lean,4.27,same,2025-12-01,,0,1,3,0,";
     ]
     (csv_lines
        (Report.per_release_csv
-          [ { Report.project = "q"; tool = lean (); rows = series_rows } ]))
+          [
+            {
+              Report.project = "q";
+              tool = lean ();
+              rows = series_rows;
+              missing = [];
+            };
+          ]))
 
 let test_summary () =
   let summary =
     Report.summary_md ~since:"2025-11-19" ~until:"2025-12-31"
       [
-        { Report.project = "q"; tool = lean (); rows = series_rows };
-        { Report.project = "p"; tool = lean (); rows = mine lean_history };
-        { Report.project = "empty"; tool = lean (); rows = [] };
+        {
+          Report.project = "q";
+          tool = lean ();
+          rows = series_rows;
+          missing = [];
+        };
+        {
+          Report.project = "p";
+          tool = lean ();
+          rows = mine lean_history;
+          missing = [];
+        };
+        { Report.project = "empty"; tool = lean (); rows = []; missing = [] };
       ]
   in
   match List.rev (csv_lines summary) with
-  | empty :: p :: q :: _ ->
+  | check :: "" :: empty :: p :: q :: _ ->
+      check_bool "no missing directory" true
+        (String.starts_with
+           ~prefix:"Every measured directory holds measured files" check);
       Alcotest.(check string)
         "q"
         "| q | lean | 1 | 5 | 1 | 0 | 1 | 29 | 14.0 | 15 | rc (10 lines, 1 \
@@ -752,13 +796,522 @@ let test_summary () =
         q;
       Alcotest.(check string)
         "p"
-        "| p | lean | 1 | 2 | 0 | 0 | 2 | 3 | 1.5 | 0 | c1 c2 (3 lines, 1 \
+        "| p | lean | 1 | 2 | 0 | 0 | 2 | 3 | 1.5 | 0 | c1; c2 (3 lines, 1 \
          files) |"
         p;
       Alcotest.(check string)
         "a project without rows keeps its name"
         "| empty | lean | 1 | 0 | 0 | 0 | 0 | 0 |  | 0 |  |" empty
   | _ -> Alcotest.fail "three lines expected"
+
+(* Review fixes: pins *)
+
+let test_pin_comments () =
+  Alcotest.check strings "comment right after the key" [ "9.0.1"; "9.1.1" ]
+    (Pin.read (Pin.Yaml_list "rocq")
+       "rocq: # tested versions\n  - 9.0.1\n  - 9.1.1\n");
+  Alcotest.check strings "scalar that is only a comment" []
+    (Pin.read (Pin.Yaml_scalar "VERUS_TAG") "VERUS_TAG: # unpinned\n");
+  Alcotest.check strings "make variable that is only a comment" []
+    (Pin.read (Pin.Make_var "X") "X := # none\nY := 1\n");
+  Alcotest.check strings "empty make variable" []
+    (Pin.read (Pin.Make_var "X") "X :=\n");
+  Alcotest.check strings "apostrophe opens no quoted string" [ "don't" ]
+    (Pin.read (Pin.Yaml_scalar "k") "k: don't # comment\n");
+  Alcotest.check strings "quoted item in a flow list" [ "a #b"; "c" ]
+    (Pin.read (Pin.Yaml_list "rocq") "rocq: [ \"a #b\", c ] # x\n")
+
+let test_opam_triple_quotes () =
+  Alcotest.check strings "triple-quoted description" [ "= 9.1.1" ]
+    (Pin.read (Pin.Opam_dep "rocq-core")
+       "opam-version: \"2.0\"\n\
+        description: \"\"\"It's 6\" long.\"\"\"\n\
+        depends: [ \"rocq-core\" {= \"9.1.1\"} ]\n");
+  Alcotest.check strings "escape in a triple-quoted string" [ "= 9.1.1" ]
+    (Pin.read (Pin.Opam_dep "rocq-core")
+       "synopsis: \"\"\"a \\\"\"\" b\"\"\"\n\
+        depends: [ \"rocq-core\" {= \"9.1.1\"} ]\n");
+  check_bool "unterminated triple-quoted string" true
+    (raises_failure (fun () ->
+         Pin.read (Pin.Opam_dep "rocq-core") "description: \"\"\"abc\" \"\n"))
+
+(* Review fixes: mining *)
+
+let lean_files = { lean_pin with files = [ "*/lean-toolchain" ] }
+
+(* An upgrade over three pin files: the middle step leaves the values of the
+   pin unchanged, but is still a bump, and joins the row. A pin file that
+   appears without values is no bump. *)
+let test_mine_three_files () =
+  let tree a b c extra =
+    [
+      ("a/lean-toolchain", tc a);
+      ("b/lean-toolchain", tc b);
+      ("c/lean-toolchain", tc c);
+    ]
+    @ extra
+  in
+  let commits =
+    [
+      commit "c0" ~date:"2025-10-01" ~subject:"init"
+        (tree "v4.24.0" "v4.24.0" "v4.24.0" [ ("b.lean", "x") ]);
+      commit "c1" ~parent:"c0" ~date:"2025-11-20" ~subject:"a"
+        (tree "v4.25.0" "v4.24.0" "v4.24.0" [ ("b.lean", "x") ]);
+      commit "c2" ~parent:"c1" ~date:"2025-11-21" ~subject:"b"
+        (tree "v4.25.0" "v4.25.0" "v4.24.0" [ ("b.lean", "y") ]);
+      commit "c3" ~parent:"c2" ~date:"2025-11-22" ~subject:"c"
+        (tree "v4.25.0" "v4.25.0" "v4.25.0" [ ("b.lean", "y") ]);
+      commit "c4" ~parent:"c3" ~date:"2025-11-23" ~subject:"empty pin file"
+        (tree "v4.25.0" "v4.25.0" "v4.25.0"
+           [ ("b.lean", "y"); ("d/lean-toolchain", "") ]);
+    ]
+  in
+  let rows = mine ~pins:[ lean_files ] commits in
+  Alcotest.(check (list (list string)))
+    "units"
+    [ [ "c1"; "c2"; "c3" ] ]
+    (units rows);
+  Alcotest.(check (list int))
+    "the middle step's changes are measured" [ 2 ]
+    (List.map (fun (r : Mine.row) -> r.totals.added + r.totals.removed) rows)
+
+(* A bump that moves one file to the new version and another back to a
+   version that only an untouched file held does not complete the bump
+   before it. *)
+let test_mine_no_completion_backwards () =
+  let tree a b c =
+    [
+      ("a/lean-toolchain", tc a);
+      ("b/lean-toolchain", tc b);
+      ("c/lean-toolchain", tc c);
+    ]
+  in
+  let commits =
+    [
+      commit "c0" ~date:"2025-10-01" ~subject:"init"
+        (tree "v4.24.0" "v4.24.0" "v4.25.0-rc1");
+      commit "c1" ~parent:"c0" ~date:"2025-11-20" ~subject:"a"
+        (tree "v4.25.1" "v4.24.0" "v4.25.0-rc1");
+      commit "c2" ~parent:"c1" ~date:"2025-11-21" ~subject:"b, c back"
+        (tree "v4.25.1" "v4.25.1" "v4.24.0");
+    ]
+  in
+  Alcotest.(check (list (list string)))
+    "units" [ [ "c1" ]; [ "c2" ] ]
+    (units (mine ~pins:[ lean_files ] commits))
+
+(* A bump of an opaque pin only reaches no series: its lines are not added to
+   the series of the release reached before it. *)
+let test_mine_attribution () =
+  let pins =
+    [
+      {
+        Pin.files = [ "ci.yml" ];
+        format = Pin.Yaml_scalar "lean";
+        strip = [];
+        resolve = Pin.Release;
+      };
+      {
+        Pin.files = [ "rust-toolchain.toml" ];
+        format = Pin.Toml_string "channel";
+        strip = [];
+        resolve = Pin.Opaque;
+      };
+    ]
+  in
+  let tree lean channel extra =
+    [
+      ("ci.yml", "lean: " ^ lean);
+      ("rust-toolchain.toml", "channel = \"" ^ channel ^ "\"");
+    ]
+    @ extra
+  in
+  let ten = String.concat "\n" (List.init 10 string_of_int) in
+  let commits =
+    [
+      commit "c0" ~date:"2025-10-01" ~subject:"init"
+        (tree "v4.24.0" "1.0" [ ("a.lean", "x") ]);
+      commit "c1" ~parent:"c0" ~date:"2025-11-20" ~subject:"bump"
+        (tree "v4.25.0" "1.0" [ ("a.lean", "y") ]);
+      commit "c2" ~parent:"c1" ~date:"2025-12-30" ~subject:"rust"
+        (tree "v4.25.0" "1.1" [ ("a.lean", "y"); ("b.lean", ten) ]);
+    ]
+  in
+  let rows = mine ~pins commits in
+  Alcotest.(check (list (option string)))
+    "series" [ Some "4.25"; None ]
+    (List.map (fun (r : Mine.row) -> r.to_series) rows);
+  let result = { Report.project = "p"; tool = lean (); rows; missing = [] } in
+  Alcotest.(check (list string))
+    "per release"
+    [
+      "project,tool,series,units,date,reached,releases_spanned,files,added,removed,lines_per_release";
+      "p,lean,4.25,c1,2025-11-20,v4.25.0,1,1,1,1,2.0";
+    ]
+    (csv_lines (Report.per_release_csv [ result ]));
+  match
+    List.rev
+      (csv_lines
+         (Report.summary_md ~since:"2025-11-19" ~until:"2025-12-31" [ result ]))
+  with
+  | _ :: _ :: line :: _ ->
+      Alcotest.(check string)
+        "ten unattributed lines"
+        "| p | lean | 1 | 2 | 0 | 0 | 1 | 12 | 2.0 | 10 | c2 (10 lines, 1 \
+         files) |"
+        line
+  | _ -> Alcotest.fail "summary"
+
+(* A value read by two pins appears once in the rows. *)
+let test_mine_dedup_values () =
+  let scalar key =
+    {
+      Pin.files = [ "ci.yml" ];
+      format = Pin.Yaml_scalar key;
+      strip = [];
+      resolve = Pin.Release;
+    }
+  in
+  let tree v = [ ("ci.yml", "lean: " ^ v ^ "\nlean_version: " ^ v) ] in
+  let commits =
+    [
+      commit "c0" ~date:"2025-10-01" ~subject:"init" (tree "v4.24.0");
+      commit "c1" ~parent:"c0" ~date:"2025-11-20" ~subject:"bump"
+        (tree "v4.25.0");
+    ]
+  in
+  match mine ~pins:[ scalar "lean"; scalar "lean_version" ] commits with
+  | [ r ] ->
+      Alcotest.check strings "from" [ "v4.24.0" ] r.from_;
+      Alcotest.check strings "to" [ "v4.25.0" ] r.to_
+  | _ -> Alcotest.fail "one row expected"
+
+let test_errors_located () =
+  let opam =
+    {
+      Pin.files = [ "*.opam" ];
+      format = Pin.Opam_dep "rocq-core";
+      strip = [];
+      resolve = Pin.Release;
+    }
+  in
+  let commits =
+    [
+      commit "c0" ~date:"2025-10-01" ~subject:"init"
+        [ ("x.opam", "depends: [ \"rocq-core\" ]") ];
+      commit "c1" ~parent:"c0" ~date:"2025-11-20" ~subject:"broken"
+        [ ("x.opam", "depends: [ \"rocq-core\"") ];
+    ]
+  in
+  Alcotest.(check string)
+    "pin error names the project and the commit"
+    "p, commit c1: x.opam: opam: unterminated depends field"
+    (match mine ~pins:[ opam ] commits with
+    | _ -> ""
+    | exception Failure msg -> msg);
+  let file = Filename.temp_file "releases" ".tsv" in
+  Fun.protect
+    ~finally:(fun () -> Sys.remove file)
+    (fun () ->
+      Out_channel.with_open_bin file (fun oc ->
+          Out_channel.output_string oc "tag\tdate\n");
+      check_bool "release list error names the file" true
+        (match Release.load file with
+        | _ -> false
+        | exception Failure msg -> String.starts_with ~prefix:(file ^ ": ") msg))
+
+let test_tool_prefix_case () =
+  let t =
+    Tool.make ~name:"lean" ~scheme:Tool.Minor ~prefixes:[ "LeanProver/Lean4:" ]
+      ~until:"2025-12-31"
+      (Release.parse_tsv releases_tsv)
+  in
+  check_bool "prefixes ignore case" true
+    (Tool.find t "leanprover/lean4:v4.25.0" <> None)
+
+(* Measured directories: former paths and file patterns, and the check that
+   they exist. *)
+
+let moved_history =
+  [
+    commit "c0" ~date:"2025-10-01" ~subject:"init"
+      [
+        ("ci.yml", "lean: v4.24.0");
+        ("src/x/A.fst", "a");
+        ("src/x/notes.md", "n");
+      ];
+    commit "c1" ~parent:"c0" ~date:"2025-11-20" ~subject:"bump"
+      [
+        ("ci.yml", "lean: v4.25.0");
+        ("src/x/A.fst", "b");
+        ("src/x/notes.md", "m");
+        ("other/B.fst", "z");
+      ];
+    commit "c2" ~parent:"c1" ~date:"2025-11-21" ~subject:"move"
+      [
+        ("ci.yml", "lean: v4.25.0");
+        ("lib/x/A.fst", "b");
+        ("lib/x/notes.md", "m");
+        ("other/B.fst", "z");
+      ];
+    commit "c3" ~parent:"c2" ~date:"2025-12-14" ~subject:"bump again"
+      [
+        ("ci.yml", "lean: v4.26.0");
+        ("lib/x/A.fst", "c");
+        ("lib/x/A.fsti", "i");
+        ("lib/x/notes.md", "o");
+        ("other/B.fst", "z");
+      ];
+  ]
+
+let ci_pin =
+  {
+    Pin.files = [ "ci.yml" ];
+    format = Pin.Yaml_scalar "lean";
+    strip = [];
+    resolve = Pin.Release;
+  }
+
+let test_mine_moved_dirs () =
+  let rows =
+    mine ~pins:[ ci_pin ]
+      ~under:[ Project.dir "lib/x" ~formerly:[ "src/x" ] ]
+      ~only:[ "**/*.fst"; "**/*.fsti" ]
+      moved_history
+  in
+  Alcotest.(check (list (list int)))
+    "F* files under the old and the new path"
+    [ [ 1; 1; 1 ]; [ 2; 2; 1 ] ]
+    (List.map
+       (fun (r : Mine.row) ->
+         [ r.totals.files; r.totals.added; r.totals.removed ])
+       rows)
+
+let test_missing_paths () =
+  let missing ?only ?(since = "2025-11-19") ?(until = "2025-12-31") under =
+    Mine.missing_paths
+      (project (history ~head:"c3" ~under ?only [ ci_pin ]))
+      ~clones:(fun _ -> fake moved_history)
+      ~since ~until
+    |> List.map (fun (m : Mine.missing) -> (m.path, m.where, m.commit))
+  in
+  let triples = Alcotest.(list (triple string string string)) in
+  Alcotest.check triples "former path at the start" []
+    (missing [ Project.dir "lib/x" ~formerly:[ "src/x" ] ]);
+  Alcotest.check triples "new path only"
+    [ ("lib/x", "window start", "c0") ]
+    (missing [ Project.dir "lib/x" ]);
+  Alcotest.check triples "wrong path at the head"
+    [ ("lib/y", "head", "c3") ]
+    (missing [ Project.dir "lib/y" ~formerly:[ "src/x" ] ]);
+  Alcotest.check triples "each former path is checked"
+    [ ("src/typo", "window start", "c0") ]
+    (missing [ Project.dir "lib/x" ~formerly:[ "src/x"; "src/typo" ] ]);
+  Alcotest.check triples "a path without measured files"
+    [ ("src/x", "window start", "c0"); ("lib/x", "head", "c3") ]
+    (missing ~only:[ "**/*.v" ] [ Project.dir "lib/x" ~formerly:[ "src/x" ] ]);
+  Alcotest.check triples "measured files at the head only"
+    [ ("src/x", "window start", "c0") ]
+    (missing ~only:[ "**/*.fsti" ]
+       [ Project.dir "lib/x" ~formerly:[ "src/x" ] ]);
+  Alcotest.check triples "no commit in the window" []
+    (missing ~since:"2026-01-01" ~until:"2026-12-31" [ Project.dir "lib/y" ]);
+  Alcotest.check triples "a root commit starts the window"
+    [ ("lib/x", "window start", "c0") ]
+    (missing ~since:"2025-01-01" ~until:"2025-10-31" [ Project.dir "lib/x" ]);
+  Alcotest.check triples "whole repository" [] (missing []);
+  let snapshot_commits =
+    [
+      commit "r1" ~date:"2025-10-14" ~subject:""
+        [ ("thys/A/a.thy", "x"); ("thys/C/c.thy", "y") ];
+      commit "r2" ~date:"2025-11-14" ~subject:"" [ ("thys/A/a.thy", "x") ];
+    ]
+  in
+  let snapshot_missing =
+    Mine.missing_paths
+      (project
+         (Project.Snapshots
+            {
+              refs = [ ("v4.24.0", "r1"); ("v4.25.0", "r2") ];
+              paths = [ "thys/A"; "thys/C" ];
+              exclude_snapshot = [];
+              authors_from = None;
+            }))
+      ~clones:(fun _ -> fake snapshot_commits)
+      ~since:"2025-01-01" ~until:"2025-12-31"
+  in
+  Alcotest.check triples "snapshot path missing in the last release"
+    [ ("thys/C", "v4.25.0", "r2") ]
+    (List.map
+       (fun (m : Mine.missing) -> (m.path, m.where, m.commit))
+       snapshot_missing);
+  let summary =
+    Report.summary_md ~since:"2025-11-19" ~until:"2025-12-31"
+      [
+        {
+          Report.project = "q";
+          tool = lean ();
+          rows = [];
+          missing = snapshot_missing;
+        };
+      ]
+  in
+  check_bool "the summary lists it" true
+    (List.mem "- q: thys/C missing at v4.25.0 (r2)" (csv_lines summary))
+
+(* Repo, on a real repository built with git *)
+
+let git_available () =
+  match
+    Unix.create_process "git" [| "git"; "--version" |] Unix.stdin Unix.stdout
+      Unix.stderr
+  with
+  | pid -> (
+      match Unix.waitpid [] pid with _, Unix.WEXITED 0 -> true | _ -> false)
+  | exception Unix.Unix_error (Unix.ENOENT, _, _) -> false
+
+let is_git_variable binding = String.starts_with ~prefix:"GIT_" binding
+
+(* Runs git in [dir], with a fixed identity and date and without the user's
+   configuration. *)
+let git_in ?(author = "New") ~date dir args =
+  let env =
+    Array.of_list
+      ([
+         "GIT_CONFIG_GLOBAL=/dev/null";
+         "GIT_CONFIG_NOSYSTEM=1";
+         "GIT_AUTHOR_NAME=" ^ author;
+         "GIT_AUTHOR_EMAIL=author@example.org";
+         "GIT_COMMITTER_NAME=" ^ author;
+         "GIT_COMMITTER_EMAIL=author@example.org";
+         "GIT_AUTHOR_DATE=" ^ date ^ "T12:00:00+00:00";
+         "GIT_COMMITTER_DATE=" ^ date ^ "T12:00:00+00:00";
+       ]
+      @ List.filter
+          (fun b -> not (is_git_variable b))
+          (Array.to_list (Unix.environment ())))
+  in
+  let null = Unix.openfile "/dev/null" [ Unix.O_WRONLY ] 0 in
+  let pid =
+    Fun.protect
+      ~finally:(fun () -> Unix.close null)
+      (fun () ->
+        Unix.create_process_env "git"
+          (Array.of_list ("git" :: "-C" :: dir :: args))
+          env Unix.stdin null null)
+  in
+  match Unix.waitpid [] pid with
+  | _, Unix.WEXITED 0 -> ()
+  | _ -> Alcotest.failf "git %s failed" (String.concat " " args)
+
+let write_file dir path contents =
+  Out_channel.with_open_bin (Filename.concat dir path) (fun oc ->
+      Out_channel.output_string oc contents)
+
+let rec remove_tree path =
+  if Sys.is_directory path then (
+    Array.iter
+      (fun f -> remove_tree (Filename.concat path f))
+      (Sys.readdir path);
+    Sys.rmdir path)
+  else Sys.remove path
+
+let raises_git_error f =
+  match f () with _ -> false | exception Repo.Git_error _ -> true
+
+let test_environment () =
+  Alcotest.check strings "repository variables and overridden keys dropped"
+    [ "HOME=/home/u"; "GIT_AUTHOR_NAME=A"; "GIT_NO_LAZY_FETCH=1" ]
+    (Array.to_list
+       (Repo.environment
+          ~inherited:
+            [|
+              "HOME=/home/u";
+              "GIT_DIR=/elsewhere";
+              "GIT_WORK_TREE=/elsewhere";
+              "GIT_AUTHOR_NAME=A";
+              "GIT_NO_LAZY_FETCH=0";
+            |]
+          [ "GIT_NO_LAZY_FETCH=1" ]))
+
+let test_git_repo () =
+  if not (git_available ()) then Alcotest.skip ();
+  let dir = Filename.temp_dir "upgrade-mining" "" in
+  Fun.protect
+    ~finally:(fun () -> remove_tree dir)
+    (fun () ->
+      let commit ?author ~date msg =
+        git_in ?author ~date dir [ "add"; "." ];
+        git_in ?author ~date dir [ "commit"; "-q"; "-m"; msg ]
+      in
+      git_in ~date:"2025-01-01" dir
+        [ "-c"; "init.defaultBranch=main"; "init"; "-q" ];
+      write_file dir "lean-toolchain" "v4.24.0\n";
+      write_file dir "a.lean" "x\n";
+      commit ~author:"Old" ~date:"2025-01-01" "old";
+      write_file dir "tab\tname.lean" "t\n";
+      commit ~date:"2025-11-20" "tab file";
+      git_in ~date:"2025-11-20" dir [ "tag"; "v1" ];
+      git_in ~date:"2025-11-20" dir [ "checkout"; "-q"; "-b"; "feature" ];
+      write_file dir "lean-toolchain" "v4.25.0\n";
+      commit ~date:"2025-11-21" "bump";
+      git_in ~date:"2025-11-21" dir [ "checkout"; "-q"; "main" ];
+      write_file dir "a.lean" "y\n";
+      commit ~date:"2025-11-22" "main work";
+      git_in ~date:"2025-11-23" dir
+        [ "merge"; "-q"; "--no-ff"; "-m"; "Merge feature"; "feature" ];
+      git_in ~date:"2025-11-23" dir [ "tag"; "v2" ];
+      let repo = Repo.git dir in
+      let log paths =
+        repo.first_parent_log ~head:"main" ~since:"2025-11-19"
+          ~until:"2025-12-31" ~paths
+      in
+      let subjects l = List.map (fun (c : Repo.commit) -> c.subject) l in
+      Alcotest.check strings "first-parent line in the window"
+        [ "tab file"; "main work"; "Merge feature" ]
+        (subjects (log []));
+      Alcotest.check strings "a merge that touches a pin file"
+        [ "Merge feature" ]
+        (subjects (log [ "lean-toolchain" ]));
+      Alcotest.check strings "glob pathspec"
+        [ "tab file"; "main work" ]
+        (subjects (log [ "**/*.lean" ]));
+      Alcotest.check strings "window end included" [ "tab file" ]
+        (subjects
+           (repo.first_parent_log ~head:"main" ~since:"2025-11-20"
+              ~until:"2025-11-20" ~paths:[]));
+      let tab_commit =
+        match log [] with c :: _ -> c.hash | [] -> Alcotest.fail "no commit"
+      in
+      check_bool "file with a tab" true
+        (List.mem "tab\tname.lean" (repo.files tab_commit));
+      Alcotest.(check string)
+        "show" "t\n"
+        (repo.show tab_commit "tab\tname.lean");
+      check_bool "show a missing file" true
+        (raises_git_error (fun () -> repo.show tab_commit "missing"));
+      Alcotest.(check (list string))
+        "numstat" [ "tab\tname.lean" ]
+        (List.map
+           (fun (e : Numstat.entry) -> e.path)
+           (repo.numstat (tab_commit ^ "^") tab_commit));
+      Alcotest.(check (option strings))
+        "tags containing"
+        (Some [ "v1"; "v2" ])
+        (Option.map (List.sort compare) (repo.tags_containing tab_commit));
+      Alcotest.(check (option strings))
+        "unknown commit" None
+        (repo.tags_containing "0123456789abcdef0123456789abcdef01234567");
+      Alcotest.(check (option strings))
+        "a value that looks like an option" None
+        (repo.tags_containing "--all");
+      check_bool "other git failures raise" true
+        (raises_git_error (fun () ->
+             (Repo.git (Filename.concat dir "absent")).tags_containing "v1"));
+      Alcotest.check strings "authors in the window" [ "New" ]
+        (repo.authors ~since:"2025-11-19" ~until:"2025-12-31" "a.lean");
+      Alcotest.check strings "authors before the window" [ "Old" ]
+        (repo.authors ~since:"2025-01-01" ~until:"2025-01-01" "a.lean"))
 
 (* Configuration of the experiment *)
 
@@ -780,17 +1333,25 @@ let () =
     [
       ("glob", [ Alcotest.test_case "patterns" `Quick test_glob ]);
       ("numstat", [ Alcotest.test_case "parse and filter" `Quick test_numstat ]);
-      ("repo", [ Alcotest.test_case "log parsing" `Quick test_parse_log ]);
+      ( "repo",
+        [
+          Alcotest.test_case "log parsing" `Quick test_parse_log;
+          Alcotest.test_case "git environment" `Quick test_environment;
+          Alcotest.test_case "git repository" `Quick test_git_repo;
+        ] );
       ( "tool",
         [
           Alcotest.test_case "release list" `Quick test_release_parse;
           Alcotest.test_case "minor series" `Quick test_tool;
           Alcotest.test_case "exact series" `Quick test_tool_exact;
+          Alcotest.test_case "prefix case" `Quick test_tool_prefix_case;
         ] );
       ( "pin",
         [
           Alcotest.test_case "formats" `Quick test_pin_formats;
           Alcotest.test_case "values" `Quick test_pin_values;
+          Alcotest.test_case "comments" `Quick test_pin_comments;
+          Alcotest.test_case "opam triple quotes" `Quick test_opam_triple_quotes;
         ] );
       ( "mine",
         [
@@ -803,6 +1364,15 @@ let () =
           Alcotest.test_case "no change, unpin" `Quick test_mine_no_change;
           Alcotest.test_case "commit pins" `Quick test_mine_commit_pin;
           Alcotest.test_case "snapshots" `Quick test_mine_snapshots;
+          Alcotest.test_case "three pin files" `Quick test_mine_three_files;
+          Alcotest.test_case "no completion backwards" `Quick
+            test_mine_no_completion_backwards;
+          Alcotest.test_case "attribution" `Quick test_mine_attribution;
+          Alcotest.test_case "values without repeats" `Quick
+            test_mine_dedup_values;
+          Alcotest.test_case "errors located" `Quick test_errors_located;
+          Alcotest.test_case "moved directories" `Quick test_mine_moved_dirs;
+          Alcotest.test_case "missing directories" `Quick test_missing_paths;
         ] );
       ( "report",
         [

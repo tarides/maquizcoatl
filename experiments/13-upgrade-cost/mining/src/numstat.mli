@@ -6,7 +6,11 @@ type entry = {
   path : string;  (** Unquoted; it may contain any character but NUL. *)
 }
 
-type totals = { files : int; added : int; removed : int }
+type totals = {
+  files : int;  (** Files changed. *)
+  added : int;  (** Lines added. *)
+  removed : int;  (** Lines removed. *)
+}
 (** Binary files count as files, with no lines. *)
 
 val parse : string -> entry list
@@ -16,9 +20,11 @@ val parse : string -> entry list
 
     @raise Failure on a record of another shape. *)
 
-val keep : under:string list -> exclude:string list -> entry -> bool
-(** [keep ~under ~exclude e] is [true] iff [e.path] lies below one of the
-    directories [under] (any path if [under] is empty) and matches none of the
+val keep :
+  under:string list -> only:string list -> exclude:string list -> entry -> bool
+(** [keep ~under ~only ~exclude e] is [true] iff [e.path] lies below one of the
+    directories [under] (any path if [under] is empty), matches one of the
+    patterns [only] (any path if [only] is empty), and matches none of the
     patterns [exclude] (see {!Glob.matches}). *)
 
 val totals : entry list -> totals

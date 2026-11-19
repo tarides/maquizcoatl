@@ -21,9 +21,11 @@ val make :
   Release.t list ->
   t
 (** [make ~name ~scheme ~prefixes ~until releases] is the tool [name] with the
-    releases of [releases] published on or before the date [until]. *)
+    releases of [releases] published on or before the date [until]. The
+    [prefixes] are compared ignoring case, like versions. *)
 
 val name : t -> string
+(** [name t] is the name given to {!make}. *)
 
 val normalise : t -> string -> string
 (** [normalise t v] is [v] normalised as described above. *)

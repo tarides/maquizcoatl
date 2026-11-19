@@ -24,12 +24,9 @@ let normalise_with prefixes v =
 (* [major.minor] prefix of a normalised version, e.g. "4.34.0-rc1" -> "4.34",
    "9.2+rc1" -> "9.2", "8.4pl5" -> "8.4". *)
 let minor v =
-  let digits_from i =
-    let j = ref i in
-    while !j < String.length v && v.[!j] >= '0' && v.[!j] <= '9' do
-      incr j
-    done;
-    !j
+  let rec digits_from i =
+    if i < String.length v && Char.Ascii.is_digit v.[i] then digits_from (i + 1)
+    else i
   in
   let a = digits_from 0 in
   if a = 0 || a >= String.length v || v.[a] <> '.' then v
@@ -44,6 +41,7 @@ let series_of scheme prefixes (r : Release.t) =
   | Exact -> if r.prerelease then None else Some v
 
 let make ~name ~scheme ~prefixes ~until releases =
+  let prefixes = List.map String.lowercase_ascii prefixes in
   let releases =
     List.filter (fun (r : Release.t) -> r.date <= until) releases
     |> List.stable_sort (fun (a : Release.t) b -> compare a.date b.date)
@@ -76,13 +74,7 @@ let earliest t tags =
   | r :: _ -> Some r
   | [] -> None
 
-let index t s =
-  let rec go i = function
-    | [] -> None
-    | x :: _ when x = s -> Some i
-    | _ :: l -> go (i + 1) l
-  in
-  go 0 t.series
+let index t s = List.find_index (String.equal s) t.series
 
 let newest t rs =
   List.filter_map (fun r -> Option.bind (series t r) (index t)) rs

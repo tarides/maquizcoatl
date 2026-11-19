@@ -1,4 +1,9 @@
-type result = { project : string; tool : Tool.t; rows : Mine.row list }
+type result = {
+  project : string;
+  tool : Tool.t;
+  rows : Mine.row list;
+  missing : Mine.missing list;
+}
 
 let csv_field s =
   if String.exists (function ',' | '"' | '\n' | '\r' -> true | _ -> false) s
@@ -6,7 +11,7 @@ let csv_field s =
   else s
 
 let csv_line fields = String.concat "," (List.map csv_field fields) ^ "\n"
-let words = String.concat " "
+let joined = String.concat "; "
 let opt_int = function Some n -> string_of_int n | None -> ""
 let lines (t : Numstat.totals) = t.added + t.removed
 
@@ -35,17 +40,17 @@ let rows_csv rows =
              [
                r.project;
                Mine.kind_to_string r.kind;
-               words r.units;
+               joined r.units;
                r.date;
                r.subject;
-               words r.from_;
-               words r.to_;
-               words r.reached;
+               joined r.from_;
+               joined r.to_;
+               joined r.reached;
                opt_int r.spanned;
                string_of_int r.totals.files;
                string_of_int r.totals.added;
                string_of_int r.totals.removed;
-               String.concat "; " r.authors;
+               joined r.authors;
                "";
              ])
          rows)
@@ -57,10 +62,6 @@ type series_group = {
   totals : Numstat.totals;
 }
 
-let union l =
-  List.fold_left (fun acc x -> if List.mem x acc then acc else x :: acc) [] l
-  |> List.rev
-
 (* Bump and snapshot rows that move the project to a series, not back, grouped
    by that series, in the order the series are first reached. *)
 let series_groups rows =
@@ -70,7 +71,7 @@ let series_groups rows =
     | _, Some _, Some n when n < 0 -> None
     | _, Some s, _ -> Some s
   in
-  let series = union (List.filter_map attributable rows) in
+  let series = Util.dedup (List.filter_map attributable rows) in
   List.map
     (fun s ->
       let rows = List.filter (fun r -> attributable r = Some s) rows in
@@ -113,10 +114,10 @@ let per_release_csv results =
     ]
   ^ String.concat ""
       (List.concat_map
-         (fun { project; tool; rows } ->
+         (fun { project; tool; rows; missing = _ } ->
            List.map
              (fun g ->
-               let field f = words (union (List.concat_map f g.rows)) in
+               let field f = joined (Util.dedup (List.concat_map f g.rows)) in
                csv_line
                  [
                    project;
@@ -153,16 +154,18 @@ let summary_md ~since ~until results =
        and generated files excluded, before manual classification. Bump and \
        snapshot rows are summed per tool series they reach; a series' lines \
        are divided by the releases it spans. Unattributed lines are those of \
-       rows that reach no release, go back to an older series, or belong to a \
-       series that spans no release (for example a pinned commit that is \
-       already in the latest release).\n\n\
+       rows that move no resolvable pin to a release (only opaque pins \
+       changed, a pin removed, versions dropped from a matrix, a pinned commit \
+       in no release), go back to an older series, or belong to a series that \
+       spans no release (for example a pinned commit that is already in the \
+       latest release).\n\n\
        | Project | Tool | Tool series in window | Bumps | Keyword rows | \
        Snapshot rows | Releases reached | Lines (bumps, snapshots) | Median \
        lines per release | Unattributed lines | Largest row |\n\
        | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |\n"
       since until
   in
-  let line { project; tool; rows } =
+  let line { project; tool; rows; missing = _ } =
     let count k =
       List.length (List.filter (fun (r : Mine.row) -> r.kind = k) rows)
     in
@@ -197,8 +200,30 @@ let summary_md ~since ~until results =
       - List.fold_left (fun acc g -> acc + lines g.totals) 0 groups)
       (match largest with
       | Some r ->
-          Printf.sprintf "%s (%d lines, %d files)" (words r.units)
+          Printf.sprintf "%s (%d lines, %d files)" (joined r.units)
             (lines r.totals) r.totals.files
       | None -> "")
   in
-  header ^ String.concat "" (List.map line results)
+  let missing =
+    List.concat_map
+      (fun { project; missing; _ } ->
+        List.map
+          (fun (m : Mine.missing) ->
+            Printf.sprintf "- %s: %s\n" project (Mine.missing_to_string m))
+          missing)
+      results
+  in
+  let check =
+    match missing with
+    | [] ->
+        "\n\
+         Every measured directory holds measured files at the start of the \
+         window and at the head (snapshot mode: in the first and last release \
+         trees).\n"
+    | lines ->
+        "\n\
+         **Measured directories missing** (no measured file) where they must \
+         exist. Check the configuration: changes made under another path are \
+         not measured.\n\n" ^ String.concat "" lines
+  in
+  header ^ String.concat "" (List.map line results) ^ check

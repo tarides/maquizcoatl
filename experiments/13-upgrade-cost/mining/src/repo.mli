@@ -34,7 +34,8 @@ type t = {
   tags_containing : string -> string list option;
       (** [tags_containing c] is the tags whose history contains the commit [c],
           or [None] if the repository has no commit [c] (the tool's clone is not
-          fetched from its remote for that). *)
+          fetched from its remote for that) or [c] is an ambiguous abbreviation.
+      *)
   authors : since:string -> until:string -> string -> string list;
       (** [authors ~since ~until path] is the distinct author names of the
           commits of the current branch that touch [path], committed between the
@@ -47,7 +48,15 @@ exception Git_error of string
 
 val git : string -> t
 (** [git dir] reads the repository at [dir]. Git runs with [core.quotePath] and
-    [log.showSignature] turned off, whatever the user's configuration. *)
+    [log.showSignature] turned off, whatever the user's configuration, and
+    without the inherited variables that would select another repository
+    ([GIT_DIR], [GIT_WORK_TREE], ...: see [git rev-parse --local-env-vars]). *)
+
+val environment : inherited:string array -> string list -> string array
+(** [environment ~inherited env] is the environment git runs with: [inherited]
+    without the variables that would select another repository (see {!git}) and
+    without the variables that [env] sets, followed by the bindings [env] (each
+    [NAME=value]). *)
 
 val parse_log : string -> commit list
 (** [parse_log output] is the commits of [output], printed by [git log] with the
