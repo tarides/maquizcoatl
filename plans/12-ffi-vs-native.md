@@ -97,9 +97,9 @@ All actively maintained. `setup.sh` pins every version in
 | opam | 2.6.1 | `<cache>/bin` (existing) |
 | OCaml | 5.4.1 (`ocaml-base-compiler`), switch `ffi` | opam |
 | OCaml with flambda | 5.4.1 (`ocaml-variants.5.4.1+options` + `ocaml-option-flambda`), switch `ffi-flambda`, built with `-O3` | opam |
-| dune | 3.25.0 | opam |
+| dune | 3.25.0 (after `opam update`; otherwise the version the cache offers, recorded) | opam |
 | ctypes, ctypes-foreign | 0.24.0 | opam |
-| libffi | system package (3.4.6 on Ubuntu 24.04; version recorded) | system, via `conf-libffi` |
+| libffi | system package (3.4.6 on Ubuntu 24.04; the issue says 3.5.2; actual version recorded) | system, via `conf-libffi`, pre-checked with `pkg-config --exists libffi`; fallback built into `<cache>` |
 | re (`ocaml-re`) | 1.14.0 (as experiment #11) | opam |
 | mtime | 2.2.0 (`Mtime_clock`, monotonic) | opam |
 | GCC | Ubuntu 24.04 package (13.3.0) | system |
@@ -110,7 +110,10 @@ OCaml is 5.4.1 rather than the latest 5.5.2 so that the follow-up
 (issue #22) can link Why3- and F\*-extracted OCaml, which is compiled
 by the shared `provers` switch (OCaml 5.4.1, see experiment #7's
 `toolchains` entry), with the same compiler as the columns measured
-here. The reason is recorded beside the pin.
+here. The reason is recorded beside the pin. A consequence: the
+`ocaml-re` column (OCaml 5.4.1) is not directly comparable with
+experiment #11's `ocaml-re` figures (OCaml 5.5.2); the notebook says
+so next to any such comparison.
 
 `bechamel` is not used: the C driver cannot use it, and criterion 2
 needs the same protocol on all columns. The harness mirrors experiment
@@ -170,20 +173,43 @@ The classifier, `subset/`, is the VM's own parser run in strict mode:
 a triple (pattern, syntax, options) is in the subset if and only if it
 parses with only these constructs and options, and anything else is
 rejected with the first construct it met (logged, so the coverage table
-can say why patterns fall out).
+can say why patterns fall out). The classifier is three-valued: *out of
+subset* (a construct or option outside the list below), *in subset but
+invalid* (only subset constructs, but Oniguruma reports a compile error,
+for example `{3,2}` under Perl_NG or an unmatched `)`), with the
+expected `ONIGERR_*` code, and *valid*. The second value is what lets
+the `e` cases of `test_utf8.c` be counted (step 6).
 
 - Encoding UTF-8; syntaxes `ONIG_SYNTAX_ONIGURUMA`, `RUBY` and
   `PERL_NG` (the three used by the workloads; `test_utf8.c` uses
-  `ONIG_SYNTAX_DEFAULT`, which is Ruby's), with each syntax's own
-  meaning of `^`, `$` and `.` (Ruby and Oniguruma: `^`/`$` at line
-  boundaries; Perl_NG: `ONIG_OPTION_SINGLELINE` set by the syntax, `$`
-  at the end or before a final newline).
+  `ONIG_SYNTAX_DEFAULT`, which is `ONIG_SYNTAX_ONIGURUMA`,
+  `upstream/src/regparse.c:165`, so step 6 runs its cases under the
+  Oniguruma syntax), with each syntax's own meaning of `^` and `$`
+  (Ruby and Oniguruma: `^`/`$` at line boundaries; Perl_NG:
+  `ONIG_OPTION_SINGLELINE` set by the syntax, `$` at the end or before
+  a final newline). `.` does not depend on the syntax: it matches a
+  newline only under `ONIG_OPTION_MULTILINE`; `SINGLELINE` changes
+  only `^` and `$`.
 - Literals (including escaped metacharacters, `\t \n \r \f \v \e`,
   `\xHH` and `\x{H..}` for one code point); `.`; bracket classes with
   ranges and negation, possibly containing `\d \w \s` and their
   negations; `\d \w \s \D \W \S` outside classes; `^ $ \A \z`;
   capturing `( )` and non-capturing `(?: )` groups; alternation;
-  `* + ? {n,m} {n,} {n}` greedy and lazy.
+  `* + ? {n,m} {n,} {n}` greedy and lazy, with these per-syntax
+  readings:
+  - `{n,m}` with `n > m` is a possessive `{m,n}+` under Ruby and
+    Oniguruma (`upstream/src/regparse.c:4713-4722`, `doc/RE:166`), so
+    the classifier rejects it there (possessive is out); under Perl_NG
+    (which has `ONIG_SYN_OP2_PLUS_POSSESSIVE_INTERVAL`) it is a compile
+    error, which the VM must reproduce.
+  - `{n}?` (and `{n,n}?`) is lazy only under Perl_NG. Under Ruby and
+    Oniguruma (`ONIG_SYN_FIXED_INTERVAL_IS_GREEDY_ONLY`,
+    `upstream/src/regparse.c:5668-5672` and `6235`) it means
+    `(?:x{n})?`; the VM implements this reading per syntax (with a test
+    for each), or the classifier rejects `{n}?`/`{n,n}?` under Ruby and
+    Oniguruma if that proves simpler, and the choice is recorded.
+  - `{,n}` is rejected by the classifier (out of subset).
+  - A lone `{` that does not start a valid interval is a literal.
 - `\d \w \s` are in the subset in their ASCII meaning only. In UTF-8
   Oniguruma gives them their Unicode meaning unless
   `ONIG_OPTION_WORD_IS_ASCII`, `DIGIT_IS_ASCII` or `SPACE_IS_ASCII` is
@@ -192,7 +218,7 @@ can say why patterns fall out).
   option is set or the subject is ASCII-only; otherwise it is out.
   This reading of "ASCII `\d`, `\w`, `\s`" is recorded in the notebook.
 - Options admitted: `CAPTURE_GROUP`, `MULTILINE` (`.` matches
-  newline), `SINGLELINE`, `NEGATE_SINGLE_LINE`, the three `*_IS_ASCII`
+  newline), `SINGLELINE`, `NEGATE_SINGLELINE`, the three `*_IS_ASCII`
   options; search options `NOTBOL`, `NOTEOL`; anything else (case
   folding, `FIND_LONGEST`, `FIND_NOT_EMPTY`, …) is out.
 - Out by construction: case folding, Unicode properties, lookaround,
@@ -203,8 +229,7 @@ The VM copies Oniguruma's semantics on the points where a naive
 backtracker differs, each with a test: leftmost-first alternation;
 the capture of the last iteration of a repeated group; the empty-loop
 check of `(a*)*` style loops (experiment #2's notes on empty iterations
-are the reference); `{n,m}` with `n > m` and lone `{` as literals
-where the syntax says so.
+are the reference); the per-syntax interval readings above.
 
 ## FFI binding design
 
@@ -221,21 +246,28 @@ As fixed in the issue:
   by `[@@noalloc]` accessors `region_beg : region -> (int [@untagged]) -> (int [@untagged])`
   and `region_end`. These stubs neither allocate, raise nor release the
   runtime lock.
-- ctypes: `Foreign.foreign` (libffi) on `onig_search_with_param`, with
-  the subject passed as `ocaml_string` (no copy) and offsets as
-  pointer arithmetic on `ocaml_string_start`; the region read through
+- ctypes: `Foreign.foreign` (libffi, `release_runtime_lock` left
+  false) on `onig_search_with_param`, with the subject passed as
+  `ocaml_string` (no copy) and offsets as `(+@)` pointer arithmetic on
+  `ocaml_string_start`; the region read through
   ctypes `getf`. Measured as its own column.
 - C side, all three columns: `onig_search_with_param` with an
   `OnigMatchParam` set by `onig_set_retry_limit_in_match_of_match_param`
   (10,000,000) and `onig_set_retry_limit_in_search_of_match_param` (0,
-  unlimited), the defaults of `upstream/src/regint.h:111-112`; the same
+  unlimited), the defaults of `upstream/src/regint.h:111-112`. A
+  retry-limit error (-17) at one start position aborts the whole
+  `onig_search`: `MATCH_AND_RETURN_CHECK` jumps to `finish` on any
+  negative result other than `ONIG_MISMATCH`
+  (`upstream/src/regexec.c:5720-5727`), so later start positions are
+  not tried; the same
   shared `libonig.so` from the Release build for stubs, ctypes and the C
   driver, so the engine code is identical across the three.
 - OCaml VM: one retry counted per backtrack to a choice point, counter
   reset per start position, per-match limit clamped to the remaining
   search-wide budget (issue, "Retry budget semantics"); it returns
   Oniguruma's `ONIGERR_RETRY_LIMIT_IN_MATCH_OVER` (-17) code when the
-  limit is hit. Its search loop tries each start position in turn
+  limit is hit, and like Oniguruma it then stops the whole search (no
+  further start positions). Its search loop tries each start position in turn
   (advancing by one UTF-8 character), with no search optimiser; this
   is the point of the C-only baseline.
 
@@ -269,10 +301,12 @@ there is modified.
     every `.ml`, `.mli`, `.c` and `.h` file, sorted by path, whole
     files concatenated until the size is reached;
   - *log files*: a full log from the Loghub collection (logpai,
-    Zenodo; the archive and record id pinned with sha256 in
-    `pins.json` at step 1, a real system log of at least 16 MiB, for
-    example OpenSSH or Linux). If the download fails, the log rows are
-    recorded as missing with the reason; no synthetic log stands in.
+    Zenodo record 8196385): `SSH.tar.gz` (OpenSSH, about 70 MiB), or
+    HPC (about 32 MiB) if that one is unavailable; the Linux log
+    (2.25 MiB) is too small for the 16 MiB cut. The archive, record id
+    and sha256 are pinned in `pins.json` at step 1, on the workstation.
+    If the download fails, the log rows are recorded as missing with
+    the reason; no synthetic log stands in.
   - Patterns: the subset triples of the three families ranked by call
     count (VS Code by frequency profile), the top 16 per source after
     removing anchored-at-start patterns that cannot scan (`\A`), ties
@@ -286,8 +320,9 @@ there is modified.
   family, all in the subset: jq `(a+)+$` (`PERL_NG`, options 256), PHP
   `(a|aa)+$` (`RUBY`, options 12), VS Code `(\w+\s?)+$` (`ONIGURUMA`,
   options 256), on subjects `"a"*n "!"` for n = 16, 32, …, 4096
-  (doubling), the same set as experiment #11 so the "time to reach the
-  budget" column reads against its baselines. Experiment #11's files
+  (doubling, 9 lengths), the same set as experiment #11 so the "time to
+  reach the budget" column reads against its baselines. All 9 lengths
+  are budgeted (experiment #11 saw no `cap` on any of them). Experiment #11's files
   are read from branch `exp/11-perf-baselines`, read only.
 
 ## Approach
@@ -302,8 +337,16 @@ there is modified.
 
 2. **Setup** (bench host, about 45 min, 4 jobs). Clone the repository
    branch with `--recurse-submodules` into `<exp>/repo` and check
-   `upstream/` is at `f95747b`. Create switches `ffi` and `ffi-flambda`
-   in `<cache>/opam` with the pins above and install dune, ctypes,
+   `upstream/` is at `f95747b`. Pre-check the libffi headers
+   (`pkg-config --exists libffi`, needed by `conf-libffi`); if they are
+   missing, build libffi from source into `<cache>` (no root) and point
+   `PKG_CONFIG_PATH` at it. Record the libffi version actually used (the
+   issue says 3.5.2, the Ubuntu 24.04 package is 3.4.6). Run
+   `opam update` on `<cache>/opam` first (the workstation's copy of the
+   repository stops at dune 3.24.2, 3.25.0 is upstream) and record the
+   opam-repository commit; if the cache cannot be updated, pin the dune
+   version it offers and record it. Then create switches `ffi` and
+   `ffi-flambda` in `<cache>/opam` with the pins above and install dune, ctypes,
    ctypes-foreign, re, mtime (the two switch builds run one after the
    other, `--jobs=4`). Build libonig twice out of tree:
    `cmake -S <exp>/repo/upstream -B <exp>/build/onig-release
@@ -337,10 +380,12 @@ there is modified.
 6. **Regular-subset test cases** (criterion 1, about 5 min).
    `select_tests.py` extracts every `x2`, `x3`, `n` and `e` case of
    `upstream/test/test_utf8.c` (1554 cases, with their line numbers),
-   runs the classifier on each pattern, and writes the selected set.
+   runs the classifier on each pattern under `ONIG_SYNTAX_ONIGURUMA`
+   (the test file's `ONIG_SYNTAX_DEFAULT`), and writes the selected set.
    The VM runs it; the result is passed/total with each failure listed.
-   `e` cases in the subset (patterns Oniguruma rejects) count as passed
-   only if the VM also rejects them.
+   `e` cases classified *in subset but invalid* count as passed only if
+   the VM also rejects them with the same error code as the one the
+   case expects (the code is compared, not just the failure).
 
 7. **Workload agreement** (criterion 7, about 5 min). On every
    in-subset case of step 5, the C driver, the stubs, ctypes and the VM
@@ -390,8 +435,9 @@ there is modified.
 12. **Catastrophic patterns** (criterion 3). Columns as above (`ocaml-re`
     has no backtracking, so its time is a reference only). Each (engine,
     pattern, length) point is one process under `timeout 60`, 10
-    interleaved runs, recording outcome (match, no match, -17 or the
-    VM's equivalent, or `cap`) and time. A row stops at the first length
+    interleaved runs, recording outcome (match, no match, -17, or
+    `cap`) and time. `cap` means the 60 s timeout was hit, as in
+    experiment #11's `worst.sh`. A row stops at the first length
     where every run reaches `cap`. Agreement on the outcome with the C
     driver is checked per point.
 
@@ -422,8 +468,9 @@ hostname, addresses, user names or absolute paths.
 
 ## Lab notebook
 
-With the lab-notebook skill: `lab/notebook.md` (index, one line per
-recorded run, under a new "Experiment #12" heading) and
+With the lab-notebook skill: `lab/notebook.md` (the single
+append-only index table on `main`; one row added per recorded run, no
+new heading) and
 `lab/results/<date>-exp-12-<topic>.md` (append-only), with raw data in
 CSV beside it. Planned entries:
 
@@ -490,11 +537,13 @@ entry they explain. The maintainer decides on any further entry.
   package's power budget; L3 complex 0 also takes most interrupts. The
   10 interleaved runs, the IQR gate, and the recorded load average and
   running experiments bound this; CPU 2 is used, not CPU 0.
-- **ctypes `ocaml_string` with libffi**: if passing an OCaml string
-  without copy is refused in `ctypes-foreign` mode on OCaml 5.4.1, the
-  ctypes column copies the subject into a preallocated C buffer once per
-  subject (outside the timed region for large subjects, inside it for
-  short ones), and the notebook says so.
+- **ctypes `ocaml_string` with libffi** (narrow): ctypes 0.24.0
+  supports `(+@)` on `ocaml_string` pointers, and `Foreign.foreign`
+  accepts `ocaml_string` arguments as long as `release_runtime_lock` is
+  false (the default, used here). Only if this still fails in practice
+  on OCaml 5.4.1 does the ctypes column copy the subject into a
+  preallocated C buffer once per subject (outside the timed region for
+  large subjects, inside it for short ones), and the notebook says so.
 - **Loghub download** may be unavailable or smaller than expected; the
   log rows are then missing with the reason (no synthetic substitute).
 - **Flambda switch build time** may exceed the estimate; it runs first,
