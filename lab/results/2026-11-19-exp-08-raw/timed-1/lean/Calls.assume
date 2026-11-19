@@ -1,0 +1,7 @@
+grep -nE 'sorry|native_decide|ofReduceBool|axiom ' Calls.lean:
+(no match)
+kernel output (Print Assumptions / #print axioms):
+'Calls.depth_bound' depends on axioms: [propext, Quot.sound]
+'Calls.depth_bound_top' depends on axioms: [propext, Quot.sound]
+'Calls.ca04' depends on axioms: [propext]
+'Calls.nc03' depends on axioms: [propext]

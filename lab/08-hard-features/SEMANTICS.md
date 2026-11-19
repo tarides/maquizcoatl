@@ -93,8 +93,8 @@ accepts `decreases f`.
 every result is produced with nest depth at most the limit at every step.
 Corollary at the top level: `d = mx = 0`.
 
-**Cases.** `cases/calls.tsv` (ca01-ca05, four from `test_utf8.c`) and
-`cases/nest.tsv` (nc01-nc04 and the scan points ns01@3, ns01@4, ns02@1,
+**Cases.** `cases/calls.tsv` (ca01-ca06, four from `test_utf8.c`) and
+`cases/nest.tsv` (ca06 is in calls.tsv; nc01-nc04 and the scan points ns01@3, ns01@4, ns02@1,
 ns02@6, ns02@7).
 
 ## 2. Absent operator (`Absent`)

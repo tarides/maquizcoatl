@@ -1,0 +1,11 @@
+id	options	pattern	subject	debug	asan	asan_same	sanitizer
+cf21	NONE	(?i)ss	\xDF	M 0-1	M 0-1	yes	none
+cf22	NONE	(?i)\xDF	ss	M 0-2	M 0-2	yes	none
+if01	NONE	(?i)\xDF	SS	M 0-2	M 0-2	yes	none
+if02	NONE	(?i)\xDF	sS	M 0-2	M 0-2	yes	none
+if03	NONE	(?i)\xDF	Ss	M 0-2	M 0-2	yes	none
+if04	NONE	(?i)SS	\xDF	M 0-1	M 0-1	yes	none
+if05	NONE	(?i)sS	\xDF	M 0-1	M 0-1	yes	none
+if06	NONE	(?i)Ss	\xDF	M 0-1	M 0-1	yes	none
+if07	IGNORECASE	SSb\xDFssc	a\xDFbSS\xDFcd	M 1-7	M 1-7	yes	none
+if08	IGNORECASE	is	iss	M 0-2	M 0-2	yes	none

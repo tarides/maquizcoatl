@@ -1,0 +1,5 @@
+grep -nE 'sorry|native_decide|ofReduceBool|axiom ' Fold.lean:
+(no match)
+kernel output (Print Assumptions / #print axioms):
+'Fold.sharp_s' depends on axioms: [propext]
+'Fold.if07' depends on axioms: [propext]

@@ -1,0 +1,12 @@
+id	options	pattern	subject	debug	asan	asan_same	sanitizer
+ab01	NONE	(?~ab)	abc	M 0-0	M 0-0	yes	none
+ab02	NONE	(?~abc)	abc	M 0-0	M 0-0	yes	none
+ab03	NONE	(?~abc|ab)	abc	M 0-0	M 0-0	yes	none
+ab04	NONE	aaaaa(?~)	aaaaaaaaaa	M 0-5	M 0-5	yes	none
+ab05	NONE	(?~|abc|\O*)	abc	M 0-0	M 0-0	yes	none
+ab06	NONE	(?~abc)	xabcx	M 0-1	M 0-1	yes	none
+ab07	NONE	(?~|abc|\O*)	xabcx	M 0-1	M 0-1	yes	none
+ab08	NONE	(?~abc)z	xabz	M 0-4	M 0-4	yes	none
+ab09	NONE	(?~|abc|\O*)z	xabz	M 0-4	M 0-4	yes	none
+ab10	NONE	(?~|abc).*	xxabcyy	M 0-2	M 0-2	yes	none
+ab11	NONE	(?~|abc)(?~|).*	xxabcyy	M 0-7	M 0-7	yes	none

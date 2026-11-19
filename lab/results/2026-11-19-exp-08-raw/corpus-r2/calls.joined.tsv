@@ -1,0 +1,7 @@
+id	options	pattern	subject	debug	asan	asan_same	sanitizer
+ca01	NONE	(a)\g<1>	aa	M 0-2 | 1=1-2	M 0-2 | 1=1-2	yes	none
+ca02	NONE	(?<name_2>ab)\g<name_2>	abab	M 0-4 | 1=2-4	M 0-4 | 1=2-4	yes	none
+ca03	NONE	\A(?<n>(a\g<n>)|)\z	aaaa	M 0-4 | 1=0-4	M 0-4 | 1=0-4	yes	none
+ca04	NONE	(?<foo>a|\(\g<foo>\))	((((((a))))))	M 0-13 | 1=0-13	M 0-13 | 1=0-13	yes	none
+ca05	NONE	\A(?<n>a\g<n>|b)\z	aaab	M 0-4 | 1=0-4	M 0-4 | 1=0-4	yes	none
+ca06	NONE	(?<foo>a|\(\g<foo>\))	((((((((((((((((((((((((a))))))))))))))))))))))))	M 5-44 | 1=5-44	M 5-44 | 1=5-44	yes	none
