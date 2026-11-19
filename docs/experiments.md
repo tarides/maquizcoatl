@@ -17,7 +17,7 @@ Always say "experiment #N" or "issue #N", never a bare "#N".
 | 8 | Hard-feature spec probe | [#12](https://github.com/tarides/maquizcoatl/issues/12) | — | pipeline |
 | 9 | Representative proof | [#4](https://github.com/tarides/maquizcoatl/issues/4) | — | pipeline |
 | 10 | Generated code quality | [#8](https://github.com/tarides/maquizcoatl/issues/8) | — | pipeline |
-| 11 | Performance baselines | [#2](https://github.com/tarides/maquizcoatl/issues/2) | [#17](https://github.com/tarides/maquizcoatl/pull/17) | Vincent Balat (review fixes) |
+| 11 | Performance baselines | [#2](https://github.com/tarides/maquizcoatl/issues/2) | [#17](https://github.com/tarides/maquizcoatl/pull/17) | pipeline (review fixes by Vincent Balat) |
 | 12 | FFI versus native OCaml | [#10](https://github.com/tarides/maquizcoatl/issues/10) | — | pipeline |
 | 12 (follow-up) | Cost of Why3- and Pulse-generated OCaml | [#22](https://github.com/tarides/maquizcoatl/issues/22) | — | pipeline, after experiment #10 |
 | 13 | Upgrade cost | [#3](https://github.com/tarides/maquizcoatl/issues/3) | [#20](https://github.com/tarides/maquizcoatl/pull/20) | pipeline (Part C done by Vincent Balat) |
