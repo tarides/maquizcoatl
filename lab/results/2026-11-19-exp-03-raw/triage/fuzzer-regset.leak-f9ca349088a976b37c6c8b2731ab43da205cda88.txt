@@ -1,0 +1,52 @@
+
+=================================================================
+==373219==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x62de6017ae84 in malloc <llvm-build>/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:67:3
+    #1 0x62de6021f92f in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7746:21
+    #2 0x62de601beae1 in exec <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:201:9
+    #3 0x62de601beae1 in LLVMFuzzerTestOneInput <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:346:7
+    #4 0x62de601bff2c in main <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:388:3
+    #5 0x7bef1462a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #6 0x7bef1462a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #7 0x62de600d6394 in _start (<hostdir>/harness/read-regset+0xc0394)
+
+Indirect leak of 264 byte(s) in 1 object(s) allocated from:
+    #0 0x62de6017b27c in realloc <llvm-build>/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:81:3
+    #1 0x62de6021dee1 in ops_resize <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:95:20
+    #2 0x62de60214a89 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7601:9
+    #3 0x62de6021fa0e in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #4 0x62de601beae1 in exec <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:201:9
+    #5 0x62de601beae1 in LLVMFuzzerTestOneInput <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:346:7
+    #6 0x62de601bff2c in main <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:388:3
+    #7 0x7bef1462a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #8 0x7bef1462a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #9 0x62de600d6394 in _start (<hostdir>/harness/read-regset+0xc0394)
+
+Indirect leak of 44 byte(s) in 1 object(s) allocated from:
+    #0 0x62de6017b27c in realloc <llvm-build>/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:81:3
+    #1 0x62de6021df2d in ops_resize <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:101:23
+    #2 0x62de60214a89 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7601:9
+    #3 0x62de6021fa0e in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #4 0x62de601beae1 in exec <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:201:9
+    #5 0x62de601beae1 in LLVMFuzzerTestOneInput <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:346:7
+    #6 0x62de601bff2c in main <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:388:3
+    #7 0x7bef1462a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #8 0x7bef1462a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #9 0x62de600d6394 in _start (<hostdir>/harness/read-regset+0xc0394)
+
+Indirect leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x62de6017ae84 in malloc <llvm-build>/llvm-project/compiler-rt/lib/asan/asan_malloc_linux.cpp:67:3
+    #1 0x62de602139de in set_optimize_exact <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:6947:25
+    #2 0x62de602139de in set_optimize_info_from_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7044:11
+    #3 0x62de602139de in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7563:7
+    #4 0x62de6021fa0e in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #5 0x62de601beae1 in exec <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:201:9
+    #6 0x62de601beae1 in LLVMFuzzerTestOneInput <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:346:7
+    #7 0x62de601bff2c in main <hostdir>/src/maquizcoatl/upstream/harnesses/regset.c:388:3
+    #8 0x7bef1462a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #9 0x7bef1462a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #10 0x62de600d6394 in _start (<hostdir>/harness/read-regset+0xc0394)
+
+SUMMARY: AddressSanitizer: 765 byte(s) leaked in 4 allocation(s).
