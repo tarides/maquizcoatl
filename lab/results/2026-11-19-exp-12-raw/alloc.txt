@@ -1,0 +1,4 @@
+engine=vm n=1000000 minor_delta=0 major_delta=0 empty_minor=24 empty_major=0 minor_per_call=0.0000 major_per_call=0.0000 result=9 span=9-15
+engine=vm n=1000000 minor_delta=0 major_delta=0 empty_minor=24 empty_major=0 minor_per_call=0.0000 major_per_call=0.0000 result=9 span=9-15
+engine=stubs n=1000000 minor_delta=0 major_delta=0 empty_minor=24 empty_major=0 minor_per_call=0.0000 major_per_call=0.0000 result=9 span=9-15
+engine=ctypes n=1000000 minor_delta=329000000 major_delta=123004 empty_minor=24 empty_major=0 minor_per_call=329.0000 major_per_call=0.1230 result=9 span=9-15

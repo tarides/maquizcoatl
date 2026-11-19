@@ -1,0 +1,4 @@
+(library
+ (name onig_ctypes)
+ (wrapped false)
+ (libraries onig ctypes ctypes-foreign))
