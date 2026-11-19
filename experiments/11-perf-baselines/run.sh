@@ -16,8 +16,9 @@
 # after the search), so that the compile loop cannot change the state
 # the search is timed in. A cell with subject bytes is repeated once
 # when the range of its repetition times (max - min over median)
-# exceeds 10% (spread.py decides); a time file with fewer than two
-# repetitions is logged as a WARNING line and not repeated.
+# exceeds 10% (spread.py decides). A harness that exits with an error,
+# or a time file with fewer than two repetitions, is logged as a
+# WARNING line and the run goes on.
 #
 # The time phase also writes raw-times.tsv: every C, W, T and S line of
 # every cell, prefixed by the run label and the cell name (the time or
@@ -102,24 +103,28 @@ keep_raw() { # time-or-compile-file: append its C, W, T and S lines to raw-times
   awk -v p="$LABEL\t$(basename "$1" .txt)\t" '/^(C|W|T|S)\t/ { print p $0 }' "$1" >> raw-times.tsv
 }
 
+harness() { # mode engine workload only-file outfile: one pinned harness process, stderr appended to the cell's .err
+  local m=$1 e=$2 w=$3 only=$4 o=$5 err="${5%.txt}.err" st=0
+  case $o in *.repeat.txt) err="${o%.repeat.txt}.err";; esac
+  taskset -c $CPU "$BIN/$e" $m "$WL/$w" "$only" > "$o" 2>> "$err" || st=$?
+  [ $st = 0 ] || echo "WARNING: $e $m $w exited with status $st; see $err"
+  keep_raw "$o"
+}
+
 run_cell() { # engine workload only-file outfile: search timing, repeated once by the rule of spread.py
   local e=$1 w=$2 only=$3 o=$4 med iqr sp rng rep
-  taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "$o" 2> "${o%.txt}.err"
-  keep_raw "$o"
+  harness time $e $w "$only" "$o"
   read med iqr sp rng rep < <(python3 -I -S "$HERE/spread.py" "$o")
   case $rep in
     no) ;;
     yes) echo "repeat $e $w range $rng"
-         taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "${o%.txt}.repeat.txt" 2>> "${o%.txt}.err"
-         keep_raw "${o%.txt}.repeat.txt" ;;
+         harness time $e $w "$only" "${o%.txt}.repeat.txt" ;;
     *) echo "WARNING: $o has fewer than two repetitions; not repeated" ;;
   esac
 }
 
 compile_cell() { # engine workload only-file outfile: compile timing, in its own process
-  local e=$1 w=$2 only=$3 o=$4
-  taskset -c $CPU "$BIN/$e" compile "$WL/$w" "$only" > "$o" 2> "${o%.txt}.err"
-  keep_raw "$o"
+  harness compile "$@"
 }
 
 if [ "$PHASE" = time ] || [ "$PHASE" = all ]; then
