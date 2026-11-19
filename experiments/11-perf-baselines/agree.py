@@ -36,9 +36,49 @@ def load_wl(name):
         f = l.rstrip('\n').split('\t'); subs[int(f[0])] = bytes.fromhex(f[1])
     return pats, subs
 
+POSIX_RE = re.compile(rb'\[:\^?[a-z]+:\]')   # [:alpha:], meaningful inside a bracket expression
+# Syntax facts at f95747b (syntax definitions in upstream/src/regparse.c
+# and upstream/src/regsyntax.c):
+# ONIG_SYN_OP2_CCLASS_SET_OP: '[' opens a class inside a class
+# (upstream/src/regparse.c:5542-5549).
+CCLASS_SET_OP = ('ONIGURUMA', 'RUBY', 'JAVA')
+# ONIG_SYN_ALLOW_INTERVAL_LOW_ABBREV: {,n} means {0,n}
+# (upstream/src/regparse.c:4670-4677).
+INTERVAL_LOW_ABBREV = ('ONIGURUMA', 'RUBY', 'PYTHON')
+
+def outside_classes(pat, syntax):
+    """(bare, posix): bare is the pattern without its bracket
+    expressions, with every escape except \\z and \\Z replaced by the
+    neutral text '_', so that a '^', '$' or '{' that is escaped or
+    inside [...] is not taken for an operator; posix tells whether a
+    POSIX bracket such as [:alpha:] appears inside a bracket expression.
+    A heuristic: \\Q...\\E, (?#...) and extended-mode comments are read
+    as ordinary pattern text."""
+    out, depth, i, posix = bytearray(), 0, 0, False
+    while i < len(pat):
+        c = pat[i:i + 1]
+        if c == b'\\':
+            if depth == 0: out += pat[i:i + 2] if pat[i + 1:i + 2] in (b'z', b'Z') else b'_'
+            i += 2; continue
+        if depth:
+            m = POSIX_RE.match(pat, i)
+            if m: posix = True; i = m.end(); continue
+        if c == b'[' and (depth == 0 or syntax in CCLASS_SET_OP):
+            depth += 1; i += 1
+            if pat.startswith(b'^', i): i += 1
+            if pat.startswith(b']', i): i += 1   # a leading ']' is literal
+            continue
+        if c == b']' and depth: depth -= 1
+        elif depth == 0: out += c
+        i += 1
+    return bytes(out), posix
+
 def classify(engine, p, subj, ref, got):
     pat = p['pat']
+    bare, posix = outside_classes(pat, p['syntax'])
     nonascii = any(b >= 0x80 for b in pat) or any(b >= 0x80 for b in subj)
+    # Last match is an empty match at the very end of the subject.
+    def ends_empty(r): return r.split()[-1:] == ['%d-%d' % (len(subj), len(subj))]
     if '!' in got: return 'search error (resource limit)'
     try: subj.decode('utf-8'); valid = True
     except UnicodeDecodeError: valid = False
@@ -48,15 +88,22 @@ def classify(engine, p, subj, ref, got):
     if re.search(rb'\\[1-9][0-9]', pat): return 'syntax: \\NN is a backreference in Oniguruma, an octal escape elsewhere'
     if engine == 'ocaml-re' and nonascii: return 'semantic: ocaml-re matches bytes, not code points'
     if re.search(rb'\\[hH]', pat): return 'syntax: \\h is a hex digit in Oniguruma, horizontal space elsewhere'
+    if engine == 're2' and p['syntax'] in INTERVAL_LOW_ABBREV and re.search(rb'\{,[0-9]+\}', bare):
+        return 'syntax: {,n} is literal text in RE2, {0,n} in Oniguruma'
     if p['options'] & 1: return 'semantic: case folding differs'
-    if engine == 're2' and nonascii and re.search(rb'\\[wWbBdDsS]|\[\[:', pat):
+    # Class and {,n} tests come before the anchor tests: a '$' or '^'
+    # in the pattern says nothing when the difference is elsewhere.
+    if engine == 're2' and nonascii and (re.search(rb'\\[wWbBdDsS]', pat) or posix):
         return 'semantic: RE2 \\w \\b \\d \\s and POSIX classes are ASCII-only'
-    if pat.startswith(b'^') and subj.endswith(b'\n') and got.endswith('%d-%d' % (len(subj), len(subj))):
+    if engine == 'rust-regex' and nonascii and posix:
+        return 'semantic: Rust regex POSIX classes are ASCII-only'
+    if re.search(rb'\^', bare) and subj.endswith(b'\n') and ends_empty(got) and not ends_empty(ref):
         return 'semantic: ^ after a final newline (Oniguruma does not match there)'
-    if re.search(rb'\\[zZ]|\$', pat) and subj.endswith(b'\n'):
+    if re.search(rb'\\[zZ]|\$', bare) and subj.endswith(b'\n'):
         return 'semantic: end anchor before a final newline'
     if re.search(rb'\\G', pat): return 'semantic: \\G is the search start in Oniguruma'
-    if re.search(rb'\\[pP]\{|\[\[:', pat): return 'semantic: property or POSIX class definitions differ'
+    if re.search(rb'\\[pP]\{', pat) or posix:
+        return 'semantic: property or POSIX class definitions differ'
     if re.search(rb'\(\?[a-z]*x', pat) or p['options'] & 2: return 'syntax: extended-mode details differ'
     if re.search(rb'\|', pat): return 'semantic: alternation or longest-match order'
     return 'unexplained'
