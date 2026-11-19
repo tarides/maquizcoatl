@@ -26,8 +26,10 @@ not occurrences.
 
 ## Raw data
 
-60 reports, 14 distinct locations (15 location+column pairs), all in
-`upstream/src/`; none in `upstream/test/`.
+60 reports, 13 distinct `file:line` locations (14 location+column
+pairs; `regcomp.c:2579` has two columns), all in `upstream/src/`;
+none in `upstream/test/`. The table has one row per location+column
+pair.
 
 | Location | Function (caller) | Check, first value seen | Binaries | Class |
 |---|---|---|---|---|
@@ -53,7 +55,7 @@ Raw logs (paths rewritten to `<hostdir>`):
 
 Classification, by reading the code at `f95747b`:
 
-- **Intended (10 locations).** `regparse.c:595,687` are multiplicative
+- **Intended (9 locations).** `regparse.c:595,687` are multiplicative
   string hashes (`val * 997 + c`) whose wrap-around is the point.
   `regparse.c:1713,7305,7614,8979` and `regcomp.c:7704`,
   `regparse.c:7868` clear flag bits with `x &= ~FLAG` or
@@ -79,3 +81,13 @@ For the spec: lengths and offsets should be modelled as naturals with an
 explicit "infinite" constructor, not as wrapped 32-bit values, so the
 four suspicious locations disappear by construction. Not a deviation from
 `f95747b` (the observable behaviour is the same).
+
+## Correction (2026-11-19, results review)
+
+The first version of this entry said "14 distinct locations (15
+location+column pairs)" and "Intended (10 locations)". Recounted from
+the raw logs (`grep -h 'runtime error' raw/arith/*.ubsan`, then unique
+`file:line`): 13 locations, 14 location+column pairs, of which 9
+intended and 4 suspicious (`regcomp.c:2579` counted once). The raw data,
+the classification of each row and the conclusion (0 bugs) are
+unchanged.

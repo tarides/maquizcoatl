@@ -31,6 +31,8 @@ repository), or `<cache>` and `<exp>` on the bench host
 | 2026-11-19 | exp-03 tests arithmetic | 14 library locations (0 in `upstream/test/`) flagged by unsigned-overflow/implicit-conversion checks; 10 intended, 4 suspicious, 0 bugs | [results](results/2026-11-19-exp-03-tests-arith.md) |
 | 2026-11-19 | exp-03 fuzzing campaign | 9 targets, 40 workers × 110 min = 3.06 CPU-days, 510 M executions: no library crash, UB or timeout; 6 leaks (fuzzer-regset); fuzzer-deep never grew past depth 36 | [results](results/2026-11-19-exp-03-fuzz-campaign.md) |
 | 2026-11-19 | exp-03 triage and depth probe | The 6 leaks are one harness bug (`regset.c:223-229`); no confirmed library bug. Depth probe: no plain-build overflow within the 4096 limit at 8 MiB; `(?~` nesting overflows under ASan only (resource finding), plain needs ~5.6 MiB | [results](results/2026-11-19-exp-03-triage.md) |
+| 2026-11-19 | exp-03 correction (results review) | Corrects the rows above: arithmetic pass has 13 library locations (14 location+column pairs), 9 intended + 4 suspicious, 0 bugs; the 6 regset leaks are 513-1,325 bytes in 4-6 allocations (minimised: 484 in 3); "depth 36" counts `(` after the 8 control bytes (pattern-only: 18); 48 CPUs pinned, at most 40 workers. Corrections appended to the three entries | [arith](results/2026-11-19-exp-03-tests-arith.md), [triage](results/2026-11-19-exp-03-triage.md), [campaign](results/2026-11-19-exp-03-fuzz-campaign.md) |
+| 2026-11-19 | exp-03 depth probe re-run (workstation) | Scripted `read-deep-ns` replay and `ulimit -s` bisection reproduce the triage tables on a second machine; plain-build stack needs within one 14 KiB step (`absent-2047` 5756-5770 KiB) | [results](results/2026-11-19-exp-03-depth-probe-rerun.md) |
 
 ## Experiment #7
 

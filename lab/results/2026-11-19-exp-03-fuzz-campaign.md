@@ -98,3 +98,27 @@ per-target log excerpts (header, every 20th status line, tail) in
   example a CPU-week) seeded with these corpora, with `fuzzer-deep`
   seeded by the probe inputs and run with `-len_control=0`, so that it
   actually explores deep patterns.
+
+## Correction (2026-11-19, results review)
+
+The nesting figure "36" above was computed without stating its
+convention. It is the maximum, over the 10,855 files of the
+`fuzzer-deep` corpus, of the running count of `(` minus `)` (never
+below 0) over all bytes after the 8 control bytes, i.e. pattern and
+subject together; `[` is not counted. Counted over the pattern field
+only (size = 2-byte control field modulo the remaining length, as in
+`base-deep.c`), the figure is 18; counting `(` over the whole file it
+is 37, and counting `(` and `[` in the pattern field it is 62. Script:
+`python3 -I experiments/03-sanitizers-fuzzing/corpus-nesting.py
+<corpus-dir>` (commit `6b9a908`) prints the first two. The conclusion
+(nowhere near the 4096 limit) holds under every convention.
+
+Two further clarifications from the same review. The fork parent's
+`cov` / `ft` exceed the `-runs=0` figures for `fuzzer-regset` (4996 vs
+4982) and `libfuzzer-onig` (4468 vs 4405): the parent accumulates
+features reported by its child jobs, including features of inputs that
+were not kept in the merged corpus (for `fuzzer-regset`, the six leak
+inputs among them), while `-runs=0` measures only the saved corpus; the
+exact inputs behind the `libfuzzer-onig` gap were not identified. The
+notebook's "40 CPUs pinned" means at most 40 workers on the 48 pinned
+CPUs (`8-31,40-63`), as in the provenance entry.

@@ -1,0 +1,60 @@
+group	2047	4095	read-deep-plain	ok
+group	2047	4095	read-deep	sanitizer-report
+group	2047	4095	read-deep-ns	ok
+group	2048	4097	read-deep-plain	onig-error: parse depth limit over
+group	2048	4097	read-deep	sanitizer-report
+group	2048	4097	read-deep-ns	onig-error: parse depth limit over
+noncap	2047	8189	read-deep-plain	ok
+noncap	2047	8189	read-deep	sanitizer-report
+noncap	2047	8189	read-deep-ns	ok
+noncap	2048	8193	read-deep-plain	onig-error: parse depth limit over
+noncap	2048	8193	read-deep	sanitizer-report
+noncap	2048	8193	read-deep-ns	onig-error: parse depth limit over
+cclass	4094	8189	read-deep-plain	ok
+cclass	4094	8189	read-deep	sanitizer-report
+cclass	4094	8189	read-deep-ns	ok
+cclass	4095	8191	read-deep-plain	onig-error: parse depth limit over
+cclass	4095	8191	read-deep	sanitizer-report
+cclass	4095	8191	read-deep-ns	onig-error: parse depth limit over
+lookbehind	2047	10236	read-deep-plain	onig-error: retry-limit-in-search over
+lookbehind	2047	10236	read-deep	sanitizer-report
+lookbehind	2047	10236	read-deep-ns	onig-error: retry-limit-in-search over
+lookbehind	2048	10241	read-deep-plain	onig-error: parse depth limit over
+lookbehind	2048	10241	read-deep	sanitizer-report
+lookbehind	2048	10241	read-deep-ns	onig-error: parse depth limit over
+lookahead	2047	8189	read-deep-plain	ok
+lookahead	2047	8189	read-deep	sanitizer-report
+lookahead	2047	8189	read-deep-ns	ok
+lookahead	2048	8193	read-deep-plain	onig-error: parse depth limit over
+lookahead	2048	8193	read-deep	sanitizer-report
+lookahead	2048	8193	read-deep-ns	onig-error: parse depth limit over
+quant	2047	10236	read-deep-plain	ok
+quant	2047	10236	read-deep	sanitizer-report
+quant	2047	10236	read-deep-ns	ok
+quant	2048	10241	read-deep-plain	onig-error: parse depth limit over
+quant	2048	10241	read-deep	sanitizer-report
+quant	2048	10241	read-deep-ns	onig-error: parse depth limit over
+alt	2047	12283	read-deep-plain	ok
+alt	2047	12283	read-deep	sanitizer-report
+alt	2047	12283	read-deep-ns	ok
+alt	2048	12289	read-deep-plain	onig-error: parse depth limit over
+alt	2048	12289	read-deep	sanitizer-report
+alt	2048	12289	read-deep-ns	onig-error: parse depth limit over
+absent	2047	8189	read-deep-plain	onig-error: retry-limit-in-search over
+absent	2047	8189	read-deep	sanitizer-report
+absent	2047	8189	read-deep-ns	asan-stack-overflow
+absent	2048	8193	read-deep-plain	onig-error: parse depth limit over
+absent	2048	8193	read-deep	sanitizer-report
+absent	2048	8193	read-deep-ns	onig-error: parse depth limit over
+option	2047	10236	read-deep-plain	ok
+option	2047	10236	read-deep	sanitizer-report
+option	2047	10236	read-deep-ns	ok
+option	2048	10241	read-deep-plain	onig-error: parse depth limit over
+option	2048	10241	read-deep	sanitizer-report
+option	2048	10241	read-deep-ns	onig-error: parse depth limit over
+atomic	2047	8189	read-deep-plain	ok
+atomic	2047	8189	read-deep	sanitizer-report
+atomic	2047	8189	read-deep-ns	ok
+atomic	2048	8193	read-deep-plain	onig-error: parse depth limit over
+atomic	2048	8193	read-deep	sanitizer-report
+atomic	2048	8193	read-deep-ns	onig-error: parse depth limit over
