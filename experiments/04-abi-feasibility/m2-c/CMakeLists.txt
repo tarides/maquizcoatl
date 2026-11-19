@@ -14,6 +14,20 @@ if(ENABLE_POSIX_API)
   list(APPEND hdrs ${ONIG_INCLUDE}/onigposix.h)
 endif()
 add_library(onig ${srcs})
+# Export only the public API (spec/deviations.md, DEV-005): an
+# anonymous version script (no symbol versions, like upstream) listing
+# the public names; everything else becomes local. No -Bsymbolic and no
+# protected visibility: public data symbols stay preemptible.
+set(EXPORT_MAP "" CACHE FILEPATH "version script from exports.sh (empty: export everything)")
+if(EXPORT_MAP)
+  target_link_options(onig PRIVATE "-Wl,--version-script=${EXPORT_MAP}")
+  set_target_properties(onig PROPERTIES LINK_DEPENDS ${EXPORT_MAP})
+endif()
+set(EXTRA_LINK_FLAGS "" CACHE STRING "negative controls only (exports.sh: -Wl,-Bsymbolic)")
+if(EXTRA_LINK_FLAGS)
+  separate_arguments(xlf UNIX_COMMAND "${EXTRA_LINK_FLAGS}")
+  target_link_options(onig PRIVATE ${xlf})
+endif()
 target_include_directories(onig PRIVATE ${ONIG_INCLUDE} ${CMAKE_CURRENT_SOURCE_DIR})
 if(NOT EMSCRIPTEN)
   # soname libonig.so.5, file libonig.so.5.5.0 (upstream/CMakeLists.txt:99-108)

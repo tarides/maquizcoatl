@@ -21,6 +21,8 @@ notebook: `lab/results/2026-11-19-exp-04-*.md`, summary table in
 | `m2-why3/` | mechanism 2, Why3: WhyML ABI constructs extracted with `why3 extract -D c` |
 | `m3-rust/` | mechanism 3: Rust `cdylib` stub, generator, naked trampoline, layout example, cbindgen check |
 | `m1-pulse/` | mechanism 1: construct probe, F\* + Pulse stub generator, C shells for 1a (KaRaMeL) and 1b (Custard), CMake, generated-layout check |
+| `exports.sh` | export control: relinks the C stubs (and builds two Rust variants) with a version script of the public names from `symbols.tsv`; checks exports, visibility, data preemption (`-Bsymbolic` control) |
+| `posix_syntax_size.c` | `onig_copy_syntax` into the `OnigSyntaxType` an `onigposix.h`-only client sees |
 
 ## Replay
 
@@ -42,5 +44,6 @@ Python 3; `<w>` is a work directory outside the repository and
     m1-pulse/probe.sh <w>; m1-pulse/build.sh <upstream> <w> 12   # fstar.exe and krml on PATH
     m1-pulse/layout_gen.sh <w>
 
-then `check-stub.sh` on `<w>/stubs/{m3,m1a,m1b}/{default,posix}`. The
-lab entries give the exact tool versions used.
+then `check-stub.sh` on `<w>/stubs/{m3,m1a,m1b}/{default,posix}`, and
+`exports.sh <upstream> <w> 8` (after both builds above). The lab entries
+give the exact tool versions used.

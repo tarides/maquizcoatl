@@ -1,0 +1,9 @@
+m2-vs/default	fail	oracle=322 stub=208 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0	binaries 22/22	layout 10/10	extra-vs-public 0
+m2-vs/posix	fail	oracle=330 stub=216 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0	binaries 24/24	layout 12/12	extra-vs-public 0
+m1a-vs/default	fail	oracle=322 stub=208 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0	binaries 22/22	layout 10/10	extra-vs-public 0
+m1a-vs/posix	fail	oracle=330 stub=216 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0	binaries 24/24	layout 12/12	extra-vs-public 0
+m1b-vs/default	fail	oracle=322 stub=208 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0	binaries 22/22	layout 10/10	extra-vs-public 0
+m1b-vs/posix	fail	oracle=330 stub=216 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0	binaries 24/24	layout 12/12	extra-vs-public 0
+m1b-vs-bsymbolic/default	fail	oracle=322 stub=208 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0	binaries 22/22	layout 10/10	extra-vs-public 0
+m3-vs/default	fail	oracle=322 stub=208 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0	binaries 22/22	layout 10/10	extra-vs-public 0
+m3-vs/shim	fail	oracle=322 stub=208 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0	binaries 22/22	layout 10/10	extra-vs-public 0

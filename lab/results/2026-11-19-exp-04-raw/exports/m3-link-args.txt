@@ -1,0 +1,8 @@
+== m3-vs/default: version scripts on the cdylib link line
+version-script=<bench-workdir>/exp/04-abi-feasibility/w/stubs/m3-vs/target-default/release/deps/rustcXXXXXX/list (rustc-generated)
+== m3-vs/shim: version scripts on the cdylib link line
+version-script=<bench-workdir>/exp/04-abi-feasibility/w/stubs/m3-vs/target-shim/release/deps/rustcXXXXXX/list (rustc-generated)
+version-script=<bench-workdir>/exp/04-abi-feasibility/w/exports/onig-default.map
+== warning/error lines in the cargo logs: 0
+== ld version
+GNU ld (GNU Binutils for Ubuntu) 2.42

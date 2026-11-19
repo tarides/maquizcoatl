@@ -1,0 +1,23 @@
+== exported not public: 
+== public not exported: 
+== binding/visibility of defined dynamic symbols
+      1 Bind Vis
+    208 GLOBAL DEFAULT
+== dynamic flags
+ 0x000000000000000e (SONAME)             Library soname: [libonig.so.5]
+== relocations against OnigEncodingUTF8 / OnigEncodingASCII in the library
+0000000000008e10  000000ac00000006 R_X86_64_GLOB_DAT      000000000000a580 OnigEncodingASCII + 0
+0000000000008f38  000000d300000006 R_X86_64_GLOB_DAT      0000000000009360 OnigEncodingUTF8 + 0
+== stub-private names still in the full symbol table (local)
+0000000000004d50 t custard_init_globals
+0000000000004080 t onig_stub_custard_init
+00000000000042f0 t s_init
+0000000000004220 t s_mbc_enc_len
+== data_init
+UTF8 max_enc_len=1 min_enc_len=1 mbc_enc_len=set is_valid=set
+ASCII mbc_enc_len=set
+OnigDefaultSyntax==&OnigSyntaxOniguruma: 1
+OnigDefaultCaseFoldFlag=0x40000000
+== variadic_call
+without einfo: 13 [stub error -5]
+with einfo:    27 [stub error -217 (with name)]
