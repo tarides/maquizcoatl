@@ -1,8 +1,9 @@
 #!/bin/bash
 # Provenance for experiment #7: CPU model, cores, RAM, kernel, OS, tool
 # versions, commits.  No hostname, address, user name or absolute path.
-EXP=${EXP:-$HOME/maquizcoatl-work/exp/07-large-tables}
-. "$HOME/maquizcoatl-work/cache/env.sh"
+: "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory, <bench-workdir>}"
+EXP=${EXP:-$BENCH_WORKDIR/exp/07-large-tables}
+. "$BENCH_WORKDIR/cache/env.sh"
 X="opam exec --switch=provers --"
 echo "cpu: $(lscpu | sed -n 's/^Model name: *//p'), $(nproc) hardware threads"
 echo "ram: $(free -g | awk '/Mem:/{print $2}') GB"

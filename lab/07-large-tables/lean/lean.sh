@@ -1,9 +1,10 @@
 #!/bin/bash
 # Experiment #7, Lean 4.  Usage: lean.sh <run-id>  (RUN=1..3 for timed runs)
 set -uo pipefail
-EXP=${EXP:-$HOME/maquizcoatl-work/exp/07-large-tables}
+: "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory, <bench-workdir>}"
+EXP=${EXP:-$BENCH_WORKDIR/exp/07-large-tables}
 L=$(cd "$(dirname "$0")/.." && pwd)
-. "$HOME/maquizcoatl-work/cache/env.sh"; . "$L/queries.env"
+. "$BENCH_WORKDIR/cache/env.sh"; . "$L/queries.env"
 export OUT=$EXP/out/$1/lean; . "$L/tm.sh"
 B=$EXP/build/lean/$1.$RUN; rm -rf "$B"; mkdir -p "$B"; cd "$B"
 cp "${EMIT:-$EXP/emit}/lean/Table.lean" "$L"/lean/Mem.lean "$L"/lean/Main.lean .

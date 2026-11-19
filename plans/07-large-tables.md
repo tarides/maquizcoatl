@@ -35,7 +35,7 @@ unverified runtime data checked by the generator or a separate check.
    entry; nothing is re-run unless tool versions differ.
 2. **Execution host**, from the maintainer's
    [comment](https://github.com/tarides/maquizcoatl/issues/11#issuecomment-7007356627):
-   the run happens on the blocksci bench host (64 hardware threads,
+   the run happens on the bench host (64 hardware threads,
    about 500 GB RAM, about 160 GB free disk, no root). The workstation
    RAM and disk limits of the original issue no longer apply. Public
    provenance of that host is its CPU model, kernel and tool versions
@@ -54,7 +54,7 @@ unverified runtime data checked by the generator or a separate check.
 
 - **Bench host.** Nothing is installed system-wide and the account's
   existing opam root (opam 2.1.5) is not touched.
-  - `~/maquizcoatl-work/cache/` (written `<cache>`): shared toolchains,
+  - `<bench-workdir>/cache/` (written `<cache>`): shared toolchains,
     reusable by later experiments (experiment #13 on issue #3, experiment #5 on issue #13):
     `<cache>/bin/opam` (a pinned current opam binary),
     `<cache>/opam/` (`OPAMROOT`, one switch `provers` holding OCaml,
@@ -63,7 +63,7 @@ unverified runtime data checked by the generator or a separate check.
     `<cache>/z3/` (the Z3 versions F\* asks for), `<cache>/env.sh`
     (sets `OPAMROOT`, `ELAN_HOME`, `PATH`; every later command runs
     through it).
-  - `~/maquizcoatl-work/exp/07-large-tables/` (written `<exp>`): a
+  - `<bench-workdir>/exp/07-large-tables/` (written `<exp>`): a
     clone of `tarides/maquizcoatl` at the branch's commit with the
     `upstream/` submodule at `f95747b` (`<exp>/repo/`, read only for
     `upstream/`), the out-of-tree C build (`<exp>/build/onig/`), the
@@ -75,8 +75,9 @@ unverified runtime data checked by the generator or a separate check.
 - **Repository** (branch `exp/07-large-tables`):
   - `lab/07-large-tables/`: `setup.sh` (toolchains), `emit.py` (parser
     and per-tool emitters), `fidelity.py`, `oracle.c` (C oracle),
-    `sample.py` (query sample), `run.sh` (timed runs), `provenance.sh`,
-    `summarise.py`, `pins.json` (versions, URLs, sha256), and the
+    `sample.py` (query sample), `timed.sh` and `tm.sh` (timed runs),
+    `provenance.sh`, `summarise.py`, `pins.json` (versions, URLs,
+    sha256), and the
     hand-written per-tool parts under `rocq/`, `lean/`, `why3/`,
     `fstar/` (membership function, queries, sanity lemma, extraction
     driver). Generated table sources are not committed (they are
@@ -194,8 +195,8 @@ represented as an association list sorted by name.
 ## Approach
 
 1. **Push the scripts** (workstation). Write `emit.py`, `fidelity.py`,
-   `oracle.c`, `sample.py`, `run.sh`, `provenance.sh`, `setup.sh` and
-   the hand-written per-tool parts; smoke-test `emit.py` and
+   `oracle.c`, `sample.py`, `timed.sh`, `tm.sh`, `provenance.sh`,
+   `setup.sh` and the hand-written per-tool parts; smoke-test `emit.py` and
    `fidelity.py` on the workstation (Python only, no prover); commit
    and push the branch. Fill `pins.json` with URLs and sha256.
 
@@ -350,7 +351,7 @@ represented as an association list sorted by name.
 ## Provenance
 
 `provenance.sh` records, per run: CPU model and kernel version of the
-blocksci bench host, the CPU lists used for pinning, load average
+bench host, the CPU lists used for pinning, load average
 before and after, versions of every tool in the table above (and the
 KaRaMeL commit), compiler flags, the repository commit and the
 `upstream/` commit, start time and duration. It does not record the
@@ -431,4 +432,4 @@ For each of the four tools, recorded in the lab notebook:
 - **Old opam on the host (2.1.5).** A current opam binary in `<cache>`
   is used; the system one is not upgraded.
 - **Leaking host details.** Raw outputs pass a redaction check before
-  they are committed; the host is named only as the blocksci bench host.
+  they are committed; the host is named only as the bench host.

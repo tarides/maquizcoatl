@@ -14,7 +14,7 @@ without re-running unless the tool versions differ.
 
 ## Provenance
 
-Entries 3, 4 and 5 (commit `2072e9c`, the blocksci bench host: AMD EPYC
+Entries 3, 4 and 5 (commit `2072e9c`, the bench host: AMD EPYC
 7502P, Linux 6.8.0-100-generic; Rocq 9.3.0, Lean 4.36.0, Why3 1.9.0,
 F\* 2026.11.15, OCaml 5.4.1, GCC 13.3.0), under a background load average
 of about 42-45.

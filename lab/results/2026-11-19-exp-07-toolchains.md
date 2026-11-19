@@ -2,11 +2,11 @@
 
 **What.** Installation of the four provers and their extraction back
 ends for experiment #7 (issue #11) into a shared, reusable cache on the
-blocksci bench host, with what was installed, how long it took and how
+bench host, with what was installed, how long it took and how
 much disk it uses.
 
 **Why.** Criterion 2 needs stated tool versions, and the cache
-(`~/maquizcoatl-work/cache/` on that host, written `<cache>`) is meant to
+(`<bench-workdir>/cache/` on that host, written `<cache>`) is meant to
 be reused by experiments #13 (issue #3) and #5 (issue #13).
 
 ## Provenance

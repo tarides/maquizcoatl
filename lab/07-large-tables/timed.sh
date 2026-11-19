@@ -2,7 +2,8 @@
 # Timed runs (criterion 2) for one tool: three clean runs one after another,
 # serialised across tools by a lock (Decision 3), pinned to the timing CPUs.
 # Usage: timed.sh <tool> [<script>]   (lean|rocq|why3|fstar; pulse uses fstar/pulse.sh)
-EXP=${EXP:-$HOME/maquizcoatl-work/exp/07-large-tables}
+: "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory, <bench-workdir>}"
+EXP=${EXP:-$BENCH_WORKDIR/exp/07-large-tables}
 L=$(cd "$(dirname "$0")" && pwd)
 exec 9> "$EXP/timed.lock"; flock 9
 for r in 1 2 3; do

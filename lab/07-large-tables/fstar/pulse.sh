@@ -2,9 +2,10 @@
 # Experiment #7, F*/Pulse static-array representation, KaRaMeL and direct C
 # targets.  Usage: RUN=<n> pulse.sh <run-id>
 set -uo pipefail
-EXP=${EXP:-$HOME/maquizcoatl-work/exp/07-large-tables}
+: "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory, <bench-workdir>}"
+EXP=${EXP:-$BENCH_WORKDIR/exp/07-large-tables}
 L=$(cd "$(dirname "$0")/.." && pwd)
-CACHE=$HOME/maquizcoatl-work/cache
+CACHE=$BENCH_WORKDIR/cache
 . "$CACHE/env.sh"; . "$L/queries.env"
 export OUT=$EXP/out/$1/pulse; . "$L/tm.sh"
 B=$EXP/build/pulse/$1.$RUN; rm -rf "$B"; mkdir -p "$B/cache"; cd "$B"

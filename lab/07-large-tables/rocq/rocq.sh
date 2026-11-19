@@ -1,9 +1,10 @@
 #!/bin/bash
 # Experiment #7, Rocq.  Usage: RUN=<n> rocq.sh <run-id>
 set -uo pipefail
-EXP=${EXP:-$HOME/maquizcoatl-work/exp/07-large-tables}
+: "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory, <bench-workdir>}"
+EXP=${EXP:-$BENCH_WORKDIR/exp/07-large-tables}
 L=$(cd "$(dirname "$0")/.." && pwd)
-. "$HOME/maquizcoatl-work/cache/env.sh"; . "$L/queries.env"
+. "$BENCH_WORKDIR/cache/env.sh"; . "$L/queries.env"
 export OUT=$EXP/out/$1/rocq; . "$L/tm.sh"
 B=$EXP/build/rocq/$1.$RUN; rm -rf "$B"; mkdir -p "$B"; cd "$B"
 cp "${EMIT:-$EXP/emit}/rocq/Table.v" "$L"/rocq/Mem.v "$L"/rocq/Extract.v .

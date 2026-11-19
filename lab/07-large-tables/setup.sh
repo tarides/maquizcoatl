@@ -1,10 +1,11 @@
 #!/bin/bash
 # Toolchains for experiment #7 on the bench host. Idempotent.
-# CACHE and EXP default to ~/maquizcoatl-work/{cache,exp/07-large-tables}.
+# CACHE and EXP default to $BENCH_WORKDIR/{cache,exp/07-large-tables}.
 # Usage: setup.sh opam|lean|fstar|karamel|onig
 set -euo pipefail
-CACHE=${CACHE:-$HOME/maquizcoatl-work/cache}
-EXP=${EXP:-$HOME/maquizcoatl-work/exp/07-large-tables}
+: "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory, <bench-workdir>}"
+CACHE=${CACHE:-$BENCH_WORKDIR/cache}
+EXP=${EXP:-$BENCH_WORKDIR/exp/07-large-tables}
 JOBS=${JOBS:-12}
 mkdir -p "$CACHE/bin" "$CACHE/dl" "$EXP"
 cat > "$CACHE/env.sh" <<EOS

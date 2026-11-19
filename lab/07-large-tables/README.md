@@ -7,7 +7,8 @@ committed; `emit.py` regenerates them from
 notebook entries).
 
 - `setup.sh` toolchains on the bench host (`<cache>` =
-  `~/maquizcoatl-work/cache`), `pins.json` versions and checksums.
+  `<bench-workdir>/cache`; every script reads `<bench-workdir>` from
+  `BENCH_WORKDIR`), `pins.json` versions and checksums.
 - `emit.py` parser and per-tool emitters; `fidelity.py`, `fidelity.sh`
   fidelity check against the generator on UCD 16.0.0; `oracle.c`,
   `latin1diff.c` C oracle; `sample.py` query sample and comparison.

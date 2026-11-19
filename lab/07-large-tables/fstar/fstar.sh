@@ -1,10 +1,11 @@
 #!/bin/bash
 # Experiment #7, F*.  Usage: RUN=<n> fstar.sh <run-id>
 set -uo pipefail
-EXP=${EXP:-$HOME/maquizcoatl-work/exp/07-large-tables}
+: "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory, <bench-workdir>}"
+EXP=${EXP:-$BENCH_WORKDIR/exp/07-large-tables}
 L=$(cd "$(dirname "$0")/.." && pwd)
-CACHE=$HOME/maquizcoatl-work/cache
-. "$HOME/maquizcoatl-work/cache/env.sh"; . "$L/queries.env"
+CACHE=$BENCH_WORKDIR/cache
+. "$BENCH_WORKDIR/cache/env.sh"; . "$L/queries.env"
 export OUT=$EXP/out/$1/fstar; . "$L/tm.sh"
 B=$EXP/build/fstar/$1.$RUN; rm -rf "$B"; mkdir -p "$B"; cd "$B"
 cp "${EMIT:-$EXP/emit}"/fstar/Table.fst "${EMIT:-$EXP/emit}"/fstar/TableC.fst "$L"/fstar/Mem.fst "$L"/fstar/*.c .
