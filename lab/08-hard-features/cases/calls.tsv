@@ -5,3 +5,4 @@ ca02	Oniguruma	UTF-8		(?<name_2>ab)\g<name_2>	abab		test_utf8.c:707
 ca03	Oniguruma	UTF-8		\A(?<n>(a\g<n>)|)\z	aaaa		test_utf8.c:714
 ca04	Oniguruma	UTF-8		(?<foo>a|\(\g<foo>\))	((((((a))))))		test_utf8.c:729
 ca05	Oniguruma	UTF-8		\A(?<n>a\g<n>|b)\z	aaab		written: 4 live frames, within the default limit
+ca06	Oniguruma	UTF-8		(?<foo>a|\(\g<foo>\))	((((((((((((((((((((((((a))))))))))))))))))))))))		written: 24-deep nesting at the default limit (doc/API:1020 says 24, regint.h:115 says 20)
