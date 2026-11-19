@@ -1,0 +1,44 @@
+(* Experiment #7: membership and sanity checker over Table. *)
+module Mem
+  use int.Int
+  use list.List
+  use table.Table
+
+  let rec function mem (c: int) (l: list (int, int)) : bool variant { l } =
+    match l with
+    | Nil -> false
+    | Cons (lo, hi) t -> if c < lo then false else if c <= hi then true else mem c t
+    end
+
+  let rec function nth_or_nil (n: int) (l: list (list (int, int))) : list (int, int) variant { l } =
+    match l with
+    | Nil -> Nil
+    | Cons x t -> if n = 0 then x else nth_or_nil (n - 1) t
+    end
+
+  let function ctype_mem (ct c: int) : bool = mem c (nth_or_nil ct code_ranges)
+
+  (* Sorted, disjoint, non-adjacent: lo <= hi and hi + 1 < next lo. *)
+  let rec function ok_list (l: list (int, int)) : bool variant { l } =
+    match l with
+    | Nil -> true
+    | Cons (lo, hi) tl ->
+      (if lo <= hi then
+        match tl with Nil -> true | Cons (lo', _) _ -> hi + 1 < lo' end
+       else false)
+      && ok_list tl
+    end
+
+  let rec function all_ok (l: list (list (int, int))) : bool variant { l } =
+    match l with
+    | Nil -> true
+    | Cons x t -> ok_list x && all_ok t
+    end
+
+  let function table_ok : bool = all_ok code_ranges
+end
+
+module Sanity
+  use Mem
+  goal table_ok_true: table_ok = True
+end
