@@ -28,6 +28,20 @@ Sources: `vscode` is the form Oniguruma compiles (after vscode-textmate's
 `\z` rewrite), `vscode-grammar-text` the text as written in the grammars,
 `jq`, `php` (php-src tests and the manual; `origins` tells them apart).
 
+VS Code scope: the `extensions/*/syntaxes/*.tmLanguage.json` grammars (the
+issue's scope). One registered grammar is outside it: the plist grammar
+`extensions/javascript/syntaxes/Regular Expressions (JavaScript).tmLanguage`,
+declared in that extension's `package.json`, is not extracted. None of its
+patterns appeared among the dynamic-only triples, so the colorize fixtures
+do not seem to reach it either.
+
+Encoding names are Oniguruma's own (`OnigEncodingType.name`, e.g.
+`Shift_JIS`, `US-ASCII`, `Big5`) in every file, as the shims log them.
+Until the review fixes, `classify.c` and `extract_php.py` used `SJIS`
+(and `ASCII`, `BIG5`): the 6 Shift_JIS dynamic-only PHP triples were not
+compiled (`bad-input`). They now compile; the PHP dynamic-only row of
+`tables.md` changed from 125 to 131 compiled triples (captures 21 to 27).
+
 ## Reproducing
 
     WORKDIR=/some/dir/outside/the/repo sh workloads/fetch.sh
@@ -84,6 +98,57 @@ stress tests that loop over large strings.
 
 **`data/summary.json`** — counts, dynamic-only triples, and the searches
 where stock `f95747b` and vscode-oniguruma 1.7.0 disagree.
+
+`data/summary.json` describes the complete PHP capture, not the committed
+`data/php.jsonl`: its `distinct_triples_compiled` (194) counts every triple
+compiled during the 15,424 logged calls, while the 421 committed calls use
+189 distinct triples; of the four calls with non-default match limits in
+the full capture, one (retry limit 100,000) is in `data/php.jsonl`, the
+others had subjects over 4 KiB (see the long-subject files below).
+
+## Additions after #11 started
+
+Experiment #11 runs from the files above. The following files were added
+afterwards, for the review follow-ups; none of the workload files above
+changed.
+`workloads/build_followups.sh` regenerates them (run it after `fetch.sh`
+and `build.sh`, same `WORKDIR`).
+
+**Long subjects, for #12** (`workloads/shim_long.c`, `workloads/long_subjects.py`).
+The main PHP capture drops subjects over 4 KiB. `shim_long.c` logs only
+those calls, at most the first 5 per process (one process per test), with
+subjects up to 4 MiB, and counts the rest. `long_subjects.py` keeps at most
+100 calls and 1 MiB of stored subject text.
+
+- `data/php.long-subjects.jsonl`: one call per line, as `data/php.jsonl`
+  but with `subject_id` instead of `subject` / `subject_hex`, and `origin`
+  (the test script).
+- `data/php.long-subjects.subjects.jsonl`: each subject once: `subject_id`,
+  `bytes`, `sha1`, and either `subject` / `subject_hex` or, for a short unit
+  repeated, `repeat: {unit, count}` (the subject is `unit` × `count`).
+- `data/php.long-subjects.summary.json`: counts, caps, calls not logged.
+
+The PHP tests give little here: 18 calls from 4 tests over 2 synthetic
+subjects (30,000 spaces in `mbregex_stack_limit.phpt`, which hits the
+stack limit, -15; 2 MiB of `a` in the three `oom_*` tests). #11 and #12
+must add their own large, realistic subjects.
+
+**Frequency profile, for #11** (`workloads/freq_vscode.js`, `workloads/freq_profile.py`).
+`replay_vscode.js` logs each distinct search once. `freq_vscode.js` runs
+the same replay and counts how often vscode-textmate issues each search:
+1,486,388 calls for the 473,134 distinct searches.
+
+- `data/vscode.frequency.jsonl`: one line per line of `data/vscode.jsonl`,
+  same order: `line` (0-based line number there), `scanner`, `start`,
+  `count`. `freq_profile.py` writes the same file for the complete set in
+  `$WORKDIR/out/workloads-full`.
+- `data/vscode.frequency-summary.json`: totals, count distribution, the
+  scanners with most calls.
+
+**npm pin** (`workloads/package-lock.json`). The lock file `fetch.sh`'s
+`npm install` produced, with the tarball integrity hashes of
+vscode-textmate 9.3.2 and vscode-oniguruma 1.7.0. To install exactly these,
+copy it into `$WORKDIR/node` after `fetch.sh` and run `npm ci --ignore-scripts`.
 
 ## Host versions
 

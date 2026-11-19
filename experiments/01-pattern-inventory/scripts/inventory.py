@@ -30,12 +30,15 @@ def main():
     outdir = pathlib.Path(sys.argv[1]); clf, stock = sys.argv[2], sys.argv[3]
     by_source = collections.defaultdict(dict)
     occ_stats = collections.defaultdict(collections.Counter)
+    z_occ, z_pats = 0, set()  # VS Code occurrences changed by the \z rewrite
     for occ_file in sys.argv[4:]:
         for line in open(occ_file, encoding='utf-8'):
             r = json.loads(line)
             srcs = [r['source']]
             src = 'php' if r['source'].startswith('php') else r['source']
             occ_stats[src][r['status']] += 1
+            if r.get('rewritten_z'):
+                z_occ += 1; z_pats.add(r['pattern'])
             if r['status'] not in COMPILABLE:
                 continue
             hx = r.get('pattern_hex') or r['pattern'].encode('utf-8').hex()
@@ -55,7 +58,8 @@ def main():
                 if r['source'] not in t['origins']: t['origins'].append(r['source'])
                 if t['first_seen'] is None:
                     t['first_seen'] = f"{r['file']}:{r.get('line', r.get('loc'))}"
-    report = {'occurrences': {k: dict(v) for k, v in occ_stats.items()}, 'sources': {}}
+    report = {'occurrences': {k: dict(v) for k, v in occ_stats.items()}, 'sources': {},
+              'vscode_z_rewrite': {'occurrences': z_occ, 'distinct_patterns': len(z_pats)}}
     for s, d in sorted(by_source.items()):
         triples = sorted(d.values(), key=lambda t: t['id'])
         a, b = run(clf, triples), run(stock, triples)

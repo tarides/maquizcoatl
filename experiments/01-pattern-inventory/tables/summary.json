@@ -1,4 +1,8 @@
 {
+ "vscode_z_rewrite": {
+  "occurrences": 10,
+  "distinct_patterns": 7
+ },
  "vscode": {
   "triples": 5870,
   "compiled": 5865,
@@ -155,7 +159,7 @@
  },
  "php-dynamic-only": {
   "triples": 131,
-  "compiled": 125
+  "compiled": 131
  },
  "subsets": {
   "S0: UTF-8; Oniguruma/Perl_NG/Ruby syntax; linear tier": {

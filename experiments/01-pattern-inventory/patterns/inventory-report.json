@@ -48,5 +48,9 @@
    },
    "stock_vs_instrumented_mismatches": []
   }
+ },
+ "vscode_z_rewrite": {
+  "occurrences": 10,
+  "distinct_patterns": 7
  }
 }

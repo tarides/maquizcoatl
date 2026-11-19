@@ -1,0 +1,23 @@
+{
+ "calls_logged": 18,
+ "calls_kept": 18,
+ "calls_dropped_by_caps": 0,
+ "distinct_subjects": 2,
+ "stored_subject_bytes": 2,
+ "caps": {
+  "per_process": "first 5 long calls (shim_long.c)",
+  "max_calls": 100,
+  "max_stored_bytes": 1048576
+ },
+ "calls_per_test": {
+  "ext/mbstring/tests/mbregex_stack_limit.php": 3,
+  "ext/mbstring/tests/oom_mb_ereg_replace.php": 5,
+  "ext/mbstring/tests/oom_mb_eregi_replace.php": 5,
+  "ext/mbstring/tests/oom_mb_split.php": 5
+ },
+ "long_calls_not_logged_per_test": {
+  "ext/mbstring/tests/oom_mb_ereg_replace.php": 2097148,
+  "ext/mbstring/tests/oom_mb_eregi_replace.php": 2097148,
+  "ext/mbstring/tests/oom_mb_split.php": 65532
+ }
+}

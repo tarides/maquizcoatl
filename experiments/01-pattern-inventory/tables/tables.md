@@ -13,6 +13,7 @@ reported separately and never pooled silently.
 ## VS Code TextMate grammars (compiled form)
 
 5870 distinct triples (17367 occurrences); 5865 compile, 5 fail (error: 5).
+The `\z` rewrite (vscode-textmate replaces `\z` with `$(?!\n)(?<!\n)`) changes 10 occurrences, 7 distinct patterns. The other differences with the grammar-text table come from the host-substituted `end`/`while` patterns (back-references to `begin` captures).
 
 | Feature | triples | share | occ. share |
 |---|---:|---:|---:|
@@ -338,5 +339,5 @@ substituted `begin` captures into `end`/`while`. Not included in the tables abov
 |---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
 | vscode | 381 | 381 | 321 | 0 | 5 | 253 | 214 | 101 | 190 | 105 | 38 | 0 | 0 | 0 | 4 | 62 | 16 | 39 |
 | jq | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
-| php | 131 | 125 | 21 | 3 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 1 | 0 | 0 | 70 | 1 | 1 |
+| php | 131 | 131 | 27 | 3 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 1 | 0 | 0 | 70 | 1 | 1 |
 

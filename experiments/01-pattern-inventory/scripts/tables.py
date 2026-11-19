@@ -60,6 +60,14 @@ def main():
                f'{len(ts)} distinct triples ({sum(t["occurrences"] for t in ts)} occurrences); '
                f'{n} compile, {len(bad)} fail ({", ".join(f"{k}: {v}" for k, v in collections.Counter(t["compile"]["status"] for t in bad).items()) or "none"}).', '',
                '| Feature | triples | share | occ. share |', '|---|---:|---:|---:|']
+        if s == 'vscode' and (pdir / 'inventory-report.json').exists():
+            z = json.loads((pdir / 'inventory-report.json').read_text()).get('vscode_z_rewrite')
+            if z:
+                md[-3:-3] = [f'The `\\z` rewrite (vscode-textmate replaces `\\z` with `$(?!\\n)(?<!\\n)`) '
+                             f'changes {z["occurrences"]} occurrences, {z["distinct_patterns"]} distinct patterns. '
+                             'The other differences with the grammar-text table come from the '
+                             'host-substituted `end`/`while` patterns (back-references to `begin` captures).']
+                summary['vscode_z_rewrite'] = z
         fs = {}
         for c in COLS:
             k = sum(1 for t in ok if t['compile']['features'][c])

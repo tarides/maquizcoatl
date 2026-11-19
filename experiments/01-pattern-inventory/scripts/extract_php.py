@@ -30,16 +30,18 @@ FUNCS = {
     'mb_ereg_search': (0, 1, False), 'mb_ereg_search_pos': (0, 1, False),
     'mb_ereg_search_regs': (0, 1, False),
 }
+# Canonical names are Oniguruma's own (OnigEncodingType.name, e.g. Shift_JIS in
+# upstream/src/sjis.c:292), the names the shim logs from enc->name.
 ENC_ALIASES = {}
 for canon, names in {
     'EUC-JP': 'EUC-JP EUCJP X-EUC-JP UJIS EUCJP-WIN', 'UTF-8': 'UTF-8 UTF8',
     'UTF-16BE': 'UTF-16 UTF-16BE', 'UTF-16LE': 'UTF-16LE',
     'UTF-32BE': 'UCS-4 UTF-32 UTF-32BE', 'UTF-32LE': 'UCS-4LE UTF-32LE',
-    'SJIS': 'SJIS CP932 MS932 SHIFT_JIS SJIS-WIN WINDOWS-31J',
-    'BIG5': 'BIG5 BIG-5 BIGFIVE CN-BIG5 BIG-FIVE',
+    'Shift_JIS': 'SJIS CP932 MS932 SHIFT_JIS SJIS-WIN WINDOWS-31J',
+    'Big5': 'BIG5 BIG-5 BIGFIVE CN-BIG5 BIG-FIVE',
     'EUC-CN': 'EUC-CN EUCCN EUC_CN GB-2312 GB2312', 'EUC-TW': 'EUC-TW EUCTW EUC_TW',
     'EUC-KR': 'EUC-KR EUCKR EUC_KR', 'KOI8-R': 'KOI8R KOI8-R KOI-8R',
-    'CP1251': 'CP1251 WIN-1251 WINDOWS-1251', 'ASCII': 'ASCII US-ASCII',
+    'CP1251': 'CP1251 WIN-1251 WINDOWS-1251', 'US-ASCII': 'ASCII US-ASCII',
     'GB18030': 'GB18030 GB-18030',
 }.items():
     for n in names.split():

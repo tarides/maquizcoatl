@@ -50,7 +50,7 @@ static OnigSyntaxType* syntax_of(const char* s) {
 
 static OnigEncoding encoding_of(const char* s) {
   struct { const char* n; OnigEncoding e; } t[] = {
-    {"ASCII", ONIG_ENCODING_ASCII}, {"UTF-8", ONIG_ENCODING_UTF8},
+    {"US-ASCII", ONIG_ENCODING_ASCII}, {"UTF-8", ONIG_ENCODING_UTF8},
     {"UTF-16BE", ONIG_ENCODING_UTF16_BE}, {"UTF-16LE", ONIG_ENCODING_UTF16_LE},
     {"UTF-32BE", ONIG_ENCODING_UTF32_BE}, {"UTF-32LE", ONIG_ENCODING_UTF32_LE},
     {"ISO-8859-1", ONIG_ENCODING_ISO_8859_1}, {"ISO-8859-2", ONIG_ENCODING_ISO_8859_2},
@@ -62,9 +62,9 @@ static OnigEncoding encoding_of(const char* s) {
     {"ISO-8859-14", ONIG_ENCODING_ISO_8859_14}, {"ISO-8859-15", ONIG_ENCODING_ISO_8859_15},
     {"ISO-8859-16", ONIG_ENCODING_ISO_8859_16}, {"EUC-JP", ONIG_ENCODING_EUC_JP},
     {"EUC-TW", ONIG_ENCODING_EUC_TW}, {"EUC-KR", ONIG_ENCODING_EUC_KR},
-    {"EUC-CN", ONIG_ENCODING_EUC_CN}, {"SJIS", ONIG_ENCODING_SJIS},
+    {"EUC-CN", ONIG_ENCODING_EUC_CN}, {"Shift_JIS", ONIG_ENCODING_SJIS},
     {"KOI8-R", ONIG_ENCODING_KOI8_R}, {"CP1251", ONIG_ENCODING_CP1251},
-    {"BIG5", ONIG_ENCODING_BIG5}, {"GB18030", ONIG_ENCODING_GB18030},
+    {"Big5", ONIG_ENCODING_BIG5}, {"GB18030", ONIG_ENCODING_GB18030},
   };
   for (size_t i = 0; i < sizeof t / sizeof t[0]; i++)
     if (strcmp(t[i].n, s) == 0) return t[i].e;
