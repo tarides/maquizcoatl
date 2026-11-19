@@ -87,6 +87,18 @@ provenance at run time.
 
 ## Machine budget
 
+**Revision at execution time.** The bench host is shared with
+experiments #7 and #11, so this run uses at most 40 parallel jobs,
+pinned with `taskset` to CPUs 8-31 and 40-63 (#11 pins CPUs 4-7 and
+their SMT siblings 36-39). The campaign therefore runs 40 workers for
+110 min (73.3 CPU-hours, still above the 72 required); `split.tsv` holds
+the actual split (encode 4, syntax 4, utf16-be 3, utf16-le 3, regset 6,
+deluxe 6, onig 3, onig-full 3, deep 8). The figures below are the
+reviewed 48-worker plan, kept for reference. The `fuzzer-deep` patch
+also makes the 4 MB input buffer of the `STANDALONE` `main` static, so
+that `read-deep-plain` measures the library's stack use under the
+default `ulimit -s` and not the harness's.
+
 Bench host: at most 48 parallel jobs and at most 3 hours of wall-clock
 for the whole run. 3 CPU-days is 72 CPU-hours, i.e. 1 h 30 min at 48
 workers. Planned timeline:
