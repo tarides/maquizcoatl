@@ -193,10 +193,16 @@ step_why3() {
   z3=$(find_why3_z3) || vu_die "no Z3 4.15.3 or 4.13.3 in the F* bundle: run setup.sh 1 fstar"
   ln -sfn "$z3" "$VU_WHY3_Z3"
   echo "z3 for why3: $("$VU_WHY3_Z3" --version)"
+  # Detection takes the first z3 on PATH; Verus's directory, also on
+  # PATH, holds a Z3 that Why3 1.9.0 does not know.
   if [ ! -f "$WHY3CONFIG" ]; then
-    why3 config detect
+    PATH="$(dirname "$VU_WHY3_Z3"):$PATH" why3 config detect
   fi
   why3 config list-provers
+  local want
+  want=$("$VU_WHY3_Z3" --version | awk '{ print $3 }')
+  why3 config list-provers | grep -qx "Z3 $want" ||
+    vu_die "Why3's Z3 is not $want: remove <cache>/why3/why3.conf and rerun"
 }
 
 step_rust() {
@@ -283,7 +289,9 @@ EOF
   (cd "$d" && "${fstar[@]}" --codegen KrmlC --custard_entry Smoke.add1 \
     Smoke.fst --odir krml)
   (cd "$d" && krml -skip-compilation -tmpdir kc krml/Custard.krml)
-  (cd "$d" && cc -std=c11 -c -I kc -I "$VU_FSTAR_HOME/include/krml" \
+  # gnu11: krmllib's endianness macros use htole64 and friends, which
+  # glibc declares only outside strict ISO C.
+  (cd "$d" && cc -std=gnu11 -c -I kc -I "$VU_FSTAR_HOME/include/krml" \
     -I "$VU_FSTAR_HOME/lib/krml/dist/minimal" kc/Custard.c -o smoke.o)
   grep -n 'add1' "$d/kc/Custard.c"
   echo "pulse smoke: ok"
