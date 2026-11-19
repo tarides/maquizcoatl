@@ -1,3 +1,9 @@
 (executable
  (name upgrade_mining)
+ (modules upgrade_mining)
  (libraries upgrade_mining))
+
+(executable
+ (name upgrade_builds)
+ (modules upgrade_builds)
+ (libraries upgrade_builds cmdliner unix))
