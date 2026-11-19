@@ -99,7 +99,7 @@ All actively maintained, and identical to experiment #7's so that
 |------|---------|------|
 | OCaml | 5.4.1, switch `provers` | stack G, extracted OCaml, drivers |
 | Rocq | rocq-core 9.3.0, rocq-stdlib 9.2.0, rocq-native | spec; `vm_compute`, `native_compute`, extraction |
-| Lean 4 | 4.36.0 (elan 4.4.0) | spec; `#eval`, native via `lake build` |
+| Lean 4 | 4.36.0 (elan 4.4.0) | spec; `#eval`; `lean -c` and `leanc` for `T_spec` (as experiment #7); `lake build` for the throughput executable |
 | Why3 | 1.9.0 (Alt-Ergo 2.6.5) | spec; `why3 execute`, `why3 extract -D ocaml64` |
 | F\* | 2026.11.15 (Z3 5.3.0) | spec; `--codegen OCaml` (Custard) |
 | GCC, CMake | 13.3.0, 3.28.3 (system) | C library and oracle |
@@ -107,7 +107,10 @@ All actively maintained, and identical to experiment #7's so that
 
 Verus and Isabelle/HOL: only if still standing after experiment #5;
 their latest releases on the day are then pinned in `pins.json` and
-installed into `<cache>` (follow-up, see Machine budget). If a pinned
+installed into the same `<cache>` the way experiment #7's `setup.sh`
+installed the others (follow-up, see Machine budget). If they stand,
+their rows are part of the done condition: the issue's criteria apply
+to every surviving tool. If a pinned
 version above has been superseded when the run starts, the pin is kept
 for comparability with experiment #7 and the newer release is noted.
 
@@ -120,8 +123,10 @@ for comparability with experiment #7 and the newer release is noted.
    UTF-16BE bytes, `test_syntax`'s global `Syntax` tracked through its
    helper functions, `test_regset` emitted as regset cases. One line per
    case: suite, line, kind, encoding, syntax, options, direction,
-   pattern and subject in hex, expected values. The total is checked
-   against 4,565, and per suite against the counts in the issue.
+   pattern and subject in hex, expected values. The extractor handles
+   multi-line macro calls (experiment #12's `select_tests.py` skipped
+   the two-line call at `upstream/test/test_utf8.c:1379`). The total is
+   checked against 4,565, and per suite against the counts in the issue.
 2. **Classification** (workstation). `classify` runs experiment #12's
    strict parser, narrowed to experiment #9's subset, on each case;
    anything with another encoding, syntax, options or direction, or a
@@ -129,18 +134,41 @@ for comparability with experiment #7 and the newer release is noted.
    non-capturing groups, lookaround, backreferences, properties, and
    so on), is out, with the reason. Output: the in-subset case file
    and a table of out-of-subset reasons. Informational only: how many
-   more cases `+`, `?` and `(?:...)` would add.
+   more cases `+`, `?` and `(?:...)` would add. Expected order of
+   magnitude, from experiment #12's raw verdicts
+   (`lab/results/2026-11-19-exp-12-raw/tests.out`): about 164
+   `test_utf8` cases in the subset (107 `x2`, 33 `x3`, 22 `n`, 2 `e`,
+   an upper bound), and `+` and `?` would add 245.
 3. **C reference and stack G** (bench host, before the gate).
    Out-of-tree Release build of `upstream/`, `test_utf8` as a sanity
    check. `oracle/` runs every in-subset case, records the C result
    (region, group region, no match, or error code) and times the set
    (C throughput). Stack G: a reference interpreter in direct style
    (backtracking in priority order: greedy star, left alternative
-   first; captures with the last iteration kept; Oniguruma's
-   empty-iteration rule as found by experiment #2; explicit fuel set
+   first; captures with the last iteration kept; explicit fuel set
    to the C retry limit of 10,000,000), compiled with `ocamlopt`, run
    on the cases, agreement counted per kind (done-criterion 2), and
    timed with parse and search separated.
+   - *Empty-iteration rule.* Stack G and the provers implement
+     experiment #2 run 2's rule
+     (`lab/results/02-semantic-probes-2026-11-19-r2/README.md`):
+     `OP_EMPTY_CHECK_END_MEMST` only when the quantifier carries
+     `EMPTY_STATUS_CHECK` with a non-empty `empty_status_mem`
+     (`upstream/src/regcomp.c:980-990`), otherwise the plain check.
+     This is the interim C-compatible behaviour; D3 (documentation
+     versus behaviour) is a pending deviation awaiting the maintainer.
+   - *Fuel is not Oniguruma's retry count.* Experiment #12 found that
+     the retry count differs from the C library's because of
+     `OP_PUSH_OR_JUMP_EXACT1` / `PUSH_IF_PEEK_NEXT`
+     (`upstream/src/regcomp.c:1430-1460`). Any disagreement whose C
+     result is the retry limit (-17) is logged as a deviation with that
+     reason, not fixed by tuning the fuel.
+   - *Subjects are bytes.* Every row (stack G and the provers) receives
+     the subject as bytes, decodes UTF-8 itself (`upstream/src/utf8.c`
+     is the reference for lengths and invalid sequences; `test_utf8`
+     has invalid-UTF-8 subjects), and returns byte offsets, since
+     Oniguruma's regions are byte offsets. No case module pre-decodes
+     subjects to code points.
 4. **Prover semantics** (session work, after the gate). For each
    standing prover, transcribe stack G's definitions: the regex AST,
    character classes as sorted range lists, the interpreter with
@@ -149,23 +177,46 @@ for comparability with experiment #7 and the newer release is noted.
    milestone 1: cases are fed as ASTs produced by stack G's parser
    (printed by `classify`), so the measured time is search time, and
    the parse time of stack G and of the extracted code is reported
-   separately. Line counts per file (done-criterion 1).
+   separately. Line counts per file (done-criterion 1). Positions are
+   `nat` in the Rocq semantics, extracted with `ExtrOcamlNatInt` (the
+   case-module integers stay `Z` with `ExtrOcamlZInt` if any are used).
+   Step 4 is edited on the workstation, which has only Lean (via elan):
+   Rocq, Why3 and F\* are checked through the bench host's `<cache>`
+   (or, if needed, the four toolchains are installed locally, about
+   6 GB). Why3 `execute` is never run on the workstation (14 GB RSS in
+   experiment #7).
 5. **Agreement** (done-criterion 2). Each extracted or compiled
    artefact reads the case file and prints one verdict per case;
    `summarise.py` compares with the C oracle and counts `x2`, `x3`,
-   `n`, `e` separately, plus out-of-subset cases. Every disagreement
+   `n`, `e` separately, plus out-of-subset cases. For prover rows the
+   `e` count is inherited from stack G's parser (no parser in the
+   prover), identical to stack G's by construction, and is reported as
+   such, not as the prover's agreement; only `x2`, `x3` and `n` are the
+   prover's own. Every disagreement
    is either fixed in the spec, or logged as a deviation with its
    reason (in the deviation log started by experiments #2 and #3, not
    a per-experiment one).
 6. **In-prover throughput** (done-criterion 3, in-prover modes). A
-   generated module holds the in-subset cases as a list and a fold that
-   returns the number of agreements; timed as the evaluation command
-   minus an import-only baseline (experiment #7's Q0 method): Rocq
-   `Eval vm_compute` and `Eval native_compute`, Lean `#eval`, Why3
-   `why3 execute` (with a raised `--rac-timelimit`), F\* not applicable
-   (extracted only). Isabelle `value`, if standing. Each mode is
-   capped at 20 minutes; a mode that times out is recorded with the
-   number of cases reached.
+   generated module holds the in-subset cases and a fold that returns
+   the number of agreements, repeated a stated number of times so that
+   each in-prover fold runs at least 10 s (one pass over about 164
+   cases would last milliseconds, below the Q0-baseline noise of
+   0.36-0.82 s in experiment #7); the repetition count is reported.
+   Timed as the evaluation command minus an import-only baseline
+   (experiment #7's Q0 method): Rocq `Eval vm_compute` and `Eval
+   native_compute`, Lean `#eval`, Why3 `why3 execute` (with a raised
+   `--rac-timelimit`), F\* not applicable (extracted only). Isabelle
+   `value`, if standing. Each mode is capped at 20 minutes; a mode that
+   times out is recorded with the number of cases reached.
+   - *Rocq `native_compute`.* The semantics module is compiled
+     beforehand with `-native-compiler yes` (rocq-native installed), so
+     the timed run excludes the on-demand native compilation that
+     experiment #7 observed; the first `native_compute` call is
+     recorded separately.
+   - *Why3 `execute`.* The generated module has one function per case,
+     or a dispatch function on the case index, not a nested list
+     constant, to avoid the interpreter's type-mismatch bug on
+     `list (list (int, int))` constants found in experiment #7.
 7. **Extracted and compiled throughput** (done-criterion 3). Rocq
    `Extraction` to OCaml (`ExtrOcamlNativeString`, `ExtrOcamlZInt`,
    as in experiment #7), Lean `lake build` native executable, Why3
@@ -177,25 +228,41 @@ for comparability with experiment #7 and the newer release is noted.
    and parse and search separately where visible.
 8. **Extrapolation and verdict** (done-criterion 4). 10⁶ / (cases/s)
    per tool and mode, compared with 28,800 s; verdict "fast enough" if
-   at most 8 h. The C library's figure from step 3 is the reference
+   at most 8 h. Prover rows measure search only (step 4): their
+   end-to-end extrapolation is stack G's parse time plus the prover's
+   search time, with reading or holding the case module excluded, on
+   the assumption that the parser stays in OCaml for stacks A to F at
+   milestone 1. The C library's figure from step 3 is the reference
    point; experiments #11 and #12 figures are quoted for context.
 9. **`T_spec`** (done-criterion 5). For each prover and extraction
    target, clean build, check, extraction and compile timed
    separately with `/usr/bin/time -v` (wall-clock, peak RSS), median of
    three, `uptime` before each run, through experiment #7's `timed.sh`
    method (serialised by a lock, pinned with `taskset`). The case module
-   is excluded: `T_spec` is the semantics alone. Experiment #7's C
+   is excluded: `T_spec` is the semantics alone. The extracted driver
+   is also excluded: the compile step builds the extracted semantics
+   alone (to `.cmx` for OCaml targets), matching what experiment #7's
+   `T_table` covered. Lean's `T_spec` times `lean -c` and `leanc`
+   directly, as experiment #7 did, not `lake build`, so that `T_table
+   <= T_spec` is like for like. Timing complex: experiment #7's
+   `taskset -c 28-31,60-63` (L3 complex 7), checked at run time
+   against experiment #4's pinned CPUs (8-31, 40-63) and experiment
+   #12's (0-3, 32-35). Experiment #7's C
    targets (Why3 C, F\* KaRaMeL and direct C) have no spec counterpart
    if the semantics does not extract to C (lists, unbounded integers);
    the verdict entry then compares them with the same tool's spec
    check time plus its OCaml-target time, and says so.
 10. **Load comparability.** Experiment #7's timings were taken at a
-    1-minute load average of 41.7-45.2. If the load at step 9 lies in
-    a comparable band (32-55), the `T_spec` figures are compared with
-    experiment #7's directly. Otherwise, when the host is idle (load
-    below 8), experiment #7's `timed.sh` is rerun for its targets in
-    the same session, and both sets are compared at idle; the rerun is
-    recorded with experiment #7's scripts and commit.
+    1-minute load average of 41.7-45.2. Preferred: whenever an idle
+    window exists (load below 8; experiment #3's campaign has ended),
+    experiment #7's `timed.sh` is rerun for its targets in the same
+    session as step 9, and both sets are compared at idle; the rerun
+    is recorded with experiment #7's scripts and commit, and also
+    closes experiment #7's open question on loaded versus idle
+    figures. Fallback, only if the host never goes idle: compare with
+    experiment #7's figures directly when the load at step 9 lies in
+    32-55, and say that this band is a judgment call, not derived from
+    data.
 11. **Settle experiment #7** (new notebook entry). Per tool and
     target, `T_table` against `T_spec`: in-prover if `T_table <=
     T_spec`, else unverified runtime data checked by the generator.
@@ -221,12 +288,14 @@ Bench host, shared with other experiments. At most 4 parallel jobs,
 never on CPUs pinned by another experiment (checked with `lscpu -e`
 and the other plans at run time). Timed runs (throughput and `T_spec`)
 run one at a time, pinned with `taskset` to one L3 complex kept for
-timing, with the load average recorded per run. At most 3 hours of
-wall-clock for one run of the pipeline (steps 3 and 5-12); session time
+timing, with the load average recorded per run. At most about 4 hours of
+wall-clock for one run of the pipeline (steps 3 and 5-12, including
+the conditional idle rerun of experiment #7, about 41 min); session time
 spent writing the semantics (step 4) is engineering effort, recorded
 per tool, not machine time.
 
-**Milestone 1** (fits in 3 hours of machine time): experiment #9's
+**Milestone 1** (3 h 15 min, plus 45 min if the idle rerun runs, so
+at most about 4 h of machine time): experiment #9's
 subset; stack G and the standing provers among those already in
 `<cache>` (Rocq, Lean 4, Why3, F\*); done-criteria 1-5. Expected
 schedule:
@@ -235,15 +304,18 @@ schedule:
 |-------|-------|------|
 | C build, oracle, stack G | 3 | 15 min |
 | Agreement, all tools | 5 | 15 min |
-| In-prover throughput (serial, 20 min cap each) | 6 | 60 min |
+| In-prover throughput (serial, four modes, 20 min cap each) | 6 | 80 min |
 | Extracted throughput (serial) | 7 | 30 min |
-| `T_spec` (serial) and, if needed, experiment #7's idle rerun | 9-10 | 45 min |
+| `T_spec` (serial) | 9 | 40 min |
+| Conditional: experiment #7's idle rerun (41 min in experiment #7) | 10 | 45 min |
 | Fetch, summarise | 8, 11, 12 | 15 min |
 
 **Follow-up**, outside this budget: Verus and Isabelle/HOL rows if
 those stacks stand after experiment #5 (toolchain install plus their
 own run); milestone 2 (S2); throughput on the S2 cases and re-settling
-experiment #7's verdicts with milestone 2's `T_spec`.
+experiment #7's verdicts with milestone 2's `T_spec`. Sequencing only:
+if Verus or Isabelle/HOL stand, criteria 1-5 are met only once their
+rows exist (or experiment #5 has eliminated those stacks).
 
 ## Lab notebook
 
