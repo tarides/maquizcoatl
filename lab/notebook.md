@@ -6,3 +6,5 @@ append-only.
 | Date | Experiment | Finding | Link |
 |---|---|---|---|
 | 2026-11-19 | exp-01 workloads | VS Code, jq, PHP regex calls captured and packaged with stock `f95747b` expected results; 42 VS Code searches differ from the host's bundled Oniguruma (one grammar pattern rejected by `f95747b`) | [results](results/2026-11-19-exp-01-workloads.md) |
+| 2026-11-19 | exp-01 corpus | 17,367 VS Code, 69 jq and 144 PHP occurrences from pinned sources; 5,870 / 44 / 73 distinct triples; host configurations confirmed | [results](results/2026-11-19-exp-01-corpus.md) |
+| 2026-11-19 | exp-01 compile-and-classify | 96.5% of compiled triples in the linear ReDoS tier; no pattern callouts; absent operator in 2 triples; subexpression calls in 2% of triples but 18/82 VS Code grammars; proposed first subset S2 covers 97.9% | [results](results/2026-11-19-exp-01-compile-and-classify.md) |
