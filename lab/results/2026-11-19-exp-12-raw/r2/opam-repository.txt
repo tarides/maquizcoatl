@@ -1,0 +1,10 @@
+# Repository of the shared opam root used by switches ffi and ffi-flambda
+repository: default, https://opam.ocaml.org (HTTP index, not a git clone:
+  setup.sh's `git rev-parse` probe of <opamroot>/repo/default found nothing)
+index: <opamroot>/repo/default.tar.gz, fetched 2026-11-19 12:15 UTC,
+  sha256 d810ed6aebe24cfa941fb4f53dc7c315b1872e0040f92a11a4512613ee34cc1d
+index `repo` file: stamp: "5719d66ea0fbe260bfd1e245c4d608ab26a1afb2"
+  = ocaml/opam-repository commit 5719d66ea0fbe260bfd1e245c4d608ab26a1afb2,
+  2026-11-18T22:59:00Z, "Merge pull request #31273 from gares/release-elpi-v4.1.1"
+`opam update default` at switch creation (16:49 UTC): "[default] no changes"
+rocq-released repository: not selected by ffi or ffi-flambda (opam repo list --all)

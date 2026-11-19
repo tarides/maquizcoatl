@@ -1,5 +1,7 @@
 # Experiment #12, entry 1: provenance, subjects and subset coverage
 
+> Provenance addendum (opam-repository commit, package versions, `test_utf8`): [entry 8](2026-11-19-exp-12-provenance-addendum.md).
+
 **What.** Run conditions of experiment #12 (issue #10, "FFI versus native
 OCaml"): the two opam switches, the out-of-tree builds of `f95747b`, the
 large subjects, and how much of experiment #1's workloads the regular

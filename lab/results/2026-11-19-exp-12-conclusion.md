@@ -1,5 +1,7 @@
 # Experiment #12, entry 7: conclusion, FFI crossing cost versus engine cost
 
+> Erratum: items 2 and 4 of the conclusion are restated in [entry 10](2026-11-19-exp-12-review-fixes.md) (measured optimiser share, crossing as an upper bound, cost-only answer to the open question).
+
 **What.** Criterion 6: for each workload shape, the FFI crossing cost
 (stubs or ctypes minus the C-only driver) and the engine cost (OCaml VM
 minus the C-only driver), which option costs less, and which way the
