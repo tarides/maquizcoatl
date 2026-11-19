@@ -27,6 +27,18 @@ From the maintainer's
 2. A second Oniguruma column, built with
    `-DONIG_DISABLE_DIRECT_THREADING` (`upstream/src/regint.h:58-62`).
 
+From the maintainer's
+[comment](https://github.com/tarides/maquizcoatl/issues/2#issuecomment-7008103108)
+on the
+[question](https://github.com/tarides/maquizcoatl/issues/2#issuecomment-7007472892)
+about the frequency governor:
+
+3. No root on the bench host. The CPU frequency governor (`schedutil`)
+   is left as it is; nothing is run through sudo. Frequency noise is
+   handled by the warm-up pass and the 10% spread rule (step 7), the
+   governor and frequency range are recorded in provenance (step 10),
+   and the report treats ratios as the primary result (step 11).
+
 ## Where things live
 
 - **Bench host.** Everything is under `~/maquizcoatl-work/e11/` in the
@@ -221,6 +233,8 @@ spread rules invalidate too many cells.
      median pass time; spread = IQR / median of the pass times. Output:
      bytes/s, median pass time, min, max, IQR and spread, match count,
      rejected, resource-limited and unsupported pattern counts;
+   - the warm-up pass is untimed; it also lets the `schedutil`
+     governor raise the pinned core's frequency before timing starts;
    - a cell whose spread exceeds 10% is repeated once;
      if it still exceeds 10%, it is reported as invalid with its data.
 
@@ -248,26 +262,31 @@ spread rules invalidate too many cells.
 
 10. **Provenance** (each run). `provenance.sh` records only: CPU model
     and kernel version of the bench host; the CPU list used; the load
-    average before and after; the frequency governor and boost state of
-    the pinned CPU (read from `/sys`, no root needed); compiler, CMake,
+    average before and after; the frequency governor, boost state and
+    frequency range (`scaling_min_freq`, `scaling_max_freq`,
+    `cpuinfo_min_freq`, `cpuinfo_max_freq`) of the pinned CPU, and its
+    `scaling_cur_freq` sampled before and after each engine column (all
+    read from `/sys`, no root needed); compiler, CMake,
     rustc, OCaml versions and flags; `/proc/stat` counters of CPUs 4,
     36, 5-7 and 37-39 sampled before and after each engine column (since
     `taskset` cannot keep the siblings idle, this shows whether other
     work ran on them); engine versions and sha256; the
     repository and #1 workload commits; start time and duration. It
     does not record the hostname, addresses, user names or paths.
-    The governor is `schedutil` and cannot be changed without root; if
-    the maintainer approves a root command at run time, the governor is
-    set to `performance` for the timing runs and restored afterwards,
-    and the notebook says which one was in force. Without that, the
-    run uses the existing governor with the warm-up pass, and the spread
-    rule of step 7 decides validity. The run is not started if the load
+    The governor is left as it is (`schedutil`; Decision 3): no root
+    command is run on the bench host. The warm-up pass and the spread
+    rule of step 7 decide validity. The run is not started if the load
     average exceeds 2 (other users share the host); this is checked
     again before each engine column.
 
 11. **Report** (criterion 6). `summarise.py` builds the engine ×
     workload table (both Oniguruma builds as columns, invalid cells
-    marked) from the raw files. Commit the notebook entries, push, open
+    marked) from the raw files. Absolute bytes/s carry frequency noise
+    (the governor is not fixed, Decision 3), so the primary result is
+    the ratios: each engine column relative to Oniguruma threaded on
+    the same workload, and Oniguruma switch relative to Oniguruma
+    threaded; the report says so, and absolute bytes/s are given as
+    indicative. Commit the notebook entries, push, open
     the PR, and post the summary table on issue #2.
 
 ## Lab notebook
@@ -320,9 +339,10 @@ further entry.
 - **Shared host noise.** Other users may load the host, and boost and
   the `schedutil` governor add variance. Mitigation: load check before
   each column, pinning on an idle L3 complex, the 10% spread rule, and
-  recording governor and boost state.
-- **No root.** Governor and CPU isolation (`isolcpus`) cannot be
-  changed without root; the plan does not depend on them.
+  recording governor, boost state and frequency range. Absolute
+  bytes/s remain noisy; ratios are the primary result.
+- **No root.** Decided (Decision 3): the governor and CPU isolation
+  (`isolcpus`) are not changed; the plan does not depend on them.
 - **Old opam (2.1.5).** If it cannot build the switch, a current opam
   binary is downloaded into `<bench>/toolchains/` (pinned, checksum
   recorded) instead of upgrading the system one.
