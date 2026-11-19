@@ -1,0 +1,8 @@
+; -O3 when the compiler has flambda (switch ffi-flambda), nothing otherwise
+(rule
+ (targets oflags.sexp)
+ (action
+  (with-stdout-to
+   oflags.sexp
+   (system
+    "if [ %{ocaml-config:flambda} = true ]; then echo '(-O3)'; else echo '()'; fi"))))
