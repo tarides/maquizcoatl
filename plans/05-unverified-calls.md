@@ -41,7 +41,7 @@ comparison wave.
    "pending", which is not a verdict.
 3. **Execution host**
    ([comment](https://github.com/tarides/maquizcoatl/issues/13#issuecomment-7007356187)):
-   the blocksci bench host, not the workstation. The toolchains that
+   the bench host, not the workstation. The toolchains that
    experiment #7 installed there (Rocq, Lean, Why3, F\* with KaRaMeL)
    are reused, not reinstalled.
 
@@ -431,5 +431,5 @@ an interim verdict, Decision 2).
   cap and the CPUs reserved for experiment #11 are respected, and the
   start load is recorded.
 - **Leaking host details.** Raw outputs pass a redaction check before
-  they are committed; the host is named only as the blocksci bench
+  they are committed; the host is named only as the bench host bench
   host.
