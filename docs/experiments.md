@@ -21,3 +21,4 @@ Always say "experiment #N" or "issue #N", never a bare "#N".
 | 12 | FFI versus native OCaml | [#10](https://github.com/tarides/maquizcoatl/issues/10) | — | pipeline |
 | 12 (follow-up) | Cost of Why3- and Pulse-generated OCaml | [#22](https://github.com/tarides/maquizcoatl/issues/22) | — | pipeline, after experiment #10 |
 | 13 | Upgrade cost | [#3](https://github.com/tarides/maquizcoatl/issues/3) | [#20](https://github.com/tarides/maquizcoatl/pull/20) | pipeline (Part C done by Vincent Balat) |
+| 13 (follow-up) | Builds of sample projects on stacks D (Verus) and F (Isabelle) | [#25](https://github.com/tarides/maquizcoatl/issues/25) | — | pipeline, after experiments #4 and #5 |
