@@ -1,0 +1,52 @@
+OK: /a/ 'A'  #164
+OK(N): /a/ 'A'  #165
+OK: /K/ 'k'  #167
+OK: /k/ 'K'  #168
+OK(N): /K/ 'k'  #169
+OK(N): /k/ 'K'  #170
+OK: /a/ 'a'  #171
+OK: /A/ 'A'  #172
+OK: /a/ 'A'  #173
+OK: /A/ 'a'  #174
+OK: /ABCDEFGHIJKLMNOPQRSTUVWXYZ/ 'abcdefghijklmnopqrstuvwxyz'  #175
+OK: /abcdefghijklmnopqrstuvwxyz/ 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'  #176
+OK: /ABCDEFGHIJKLMNOPQRSTUVWXYZ/ 'ABCabcdefghijklmnopqrstuvwxyz'  #177
+OK: /abcdefghijklmnopqrstuvwxyz/ 'abcABCDEFGHIJKLMNOPQRSTUVWXYZ'  #178
+OK: /#%(a!;)(b&)/ '#%A!;B&'  #179
+OK: /ss/ 'ß'  #181
+OK: /ß/ 'SS'  #182
+OK(N): /ss/ 'ß'  #183
+OK(N): /ß/ 'ss'  #184
+OK: /ss/ 'SS'  #185
+OK: /Ss/ 'sS'  #186
+OK(N): /^ab/ 'ab'  #188
+OK(N): /\Aab/ 'ab'  #189
+OK(N): /ab$/ 'ab'  #190
+OK(N): /ab\z/ 'ab'  #191
+OK(N): /ab\Z/ 'ab'  #192
+OK(N): /ab\Z/ 'ab
+'  #193
+OK(N): /\Aab/ 'ab'  #195
+OK(N): /ab\z/ 'ab'  #196
+OK(N): /ab\Z/ 'ab'  #197
+OK(N): /ab\Z/ 'ab
+'  #198
+OK: /a|abc/ 'abc'  #200
+OK: /(a|abc)\Z/ 'abc'  #201
+OK: /a|abc/ 'abc'  #202
+OK: /a|abc/ 'a'  #203
+OK: /\w/ '@g'  #205
+OK(N): /\w/ 'あ'  #206
+OK: /\d/ '１'  #207
+OK(N): /\d/ '１'  #208
+OK: /\s/ ' '  #209
+OK: /\s/ '　'  #210
+OK(N): /\s/ '　'  #211
+OK: /\w\d\s/ 'c3 '  #213
+OK(N): /\w|\d|\s/ 'あ４　'  #214
+OK: / abc  
+ def/ 'abcdef'  #216
+OK: /\w+/ 'abc defg hij'  #217
+OK: /\w*/ '@@@ abc defg hij'  #218
+
+RESULT   SUCC:   47,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)

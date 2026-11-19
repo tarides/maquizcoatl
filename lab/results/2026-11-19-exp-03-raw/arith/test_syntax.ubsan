@@ -1,0 +1,93 @@
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:687:15: runtime error: unsigned integer overflow: 69645508 * 997 cannot be represented in type 'unsigned int'
+    #0 0x7f87eb5e522f in callout_name_table_hash <hostdir>/src/maquizcoatl/upstream/src/regparse.c:687:15
+    #1 0x7f87eb6298d4 in onig_st_insert <hostdir>/src/maquizcoatl/upstream/src/st.c:277:14
+    #2 0x7f87eb5e98aa in st_insert_callout_name_table <hostdir>/src/maquizcoatl/upstream/src/regparse.c:740:12
+    #3 0x7f87eb5e621e in callout_name_entry <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1566:9
+    #4 0x7f87eb5e5c53 in onig_set_callout_of_name <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1726:8
+    #5 0x7f87eb62f5aa in init <hostdir>/src/maquizcoatl/upstream/src/ascii.c:45:27
+    #6 0x7f87eb627338 in onig_initialize_encoding <hostdir>/src/maquizcoatl/upstream/src/regenc.c:118:11
+    #7 0x7f87eb604107 in onig_initialize <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7779:9
+    #8 0x598aea9aeee0 in main <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:315:3
+    #9 0x7f87eb22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #10 0x7f87eb22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #11 0x598aea982484 in _start (<hostdir>/build/arith/test/test_syntax+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:687:15 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:1713:19: runtime error: implicit conversion from type 'int' of value -2 (32-bit, signed) to type 'unsigned int' changed the value to 4294967294 (32-bit, unsigned)
+    #0 0x7f87eb5e5b2b in onig_set_callout_of_name <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1713:19
+    #1 0x7f87eb62f80f in init <hostdir>/src/maquizcoatl/upstream/src/ascii.c:55:5
+    #2 0x7f87eb627338 in onig_initialize_encoding <hostdir>/src/maquizcoatl/upstream/src/regenc.c:118:11
+    #3 0x7f87eb604107 in onig_initialize <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7779:9
+    #4 0x598aea9aeee0 in main <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:315:3
+    #5 0x7f87eb22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #6 0x7f87eb22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #7 0x598aea982484 in _start (<hostdir>/build/arith/test/test_syntax+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1713:19 
+<hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:13: runtime error: unsigned integer overflow: 0 - 1 cannot be represented in type 'unsigned int'
+    #0 0x7f87eb602f0c in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:13
+    #1 0x7f87eb6022c4 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7579:7
+    #2 0x7f87eb60426c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #3 0x598aea9afbd4 in xx <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:40:7
+    #4 0x598aea9af5d5 in x2 <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:123:3
+    #5 0x598aea9af781 in test_isolated_option <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:170:3
+    #6 0x598aea9aef1a in main <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:325:3
+    #7 0x7f87eb22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #8 0x7f87eb22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #9 0x598aea982484 in _start (<hostdir>/build/arith/test/test_syntax+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:13 
+<hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:34: runtime error: unsigned integer overflow: 4294967295 + 1 cannot be represented in type 'unsigned int'
+    #0 0x7f87eb602f52 in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:34
+    #1 0x7f87eb6022c4 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7579:7
+    #2 0x7f87eb60426c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #3 0x598aea9afbd4 in xx <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:40:7
+    #4 0x598aea9af5d5 in x2 <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:123:3
+    #5 0x598aea9af781 in test_isolated_option <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:170:3
+    #6 0x598aea9aef1a in main <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:325:3
+    #7 0x7f87eb22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #8 0x7f87eb22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #9 0x598aea982484 in _start (<hostdir>/build/arith/test/test_syntax+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:34 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:7305:5: runtime error: implicit conversion from type 'int' of value -2 (32-bit, signed) to type 'unsigned int' changed the value to 4294967294 (32-bit, unsigned)
+    #0 0x7f87eb5f6ca1 in prs_cc <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7305:5
+    #1 0x7f87eb5f1b8f in prs_exp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9060:11
+    #2 0x7f87eb5f118c in prs_branch <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9282:7
+    #3 0x7f87eb5edc25 in prs_alts <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9337:7
+    #4 0x7f87eb5e9438 in prs_regexp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9399:7
+    #5 0x7f87eb5e915e in onig_parse_tree <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9462:7
+    #6 0x7f87eb602756 in parse_and_tune <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7398:7
+    #7 0x7f87eb602165 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7526:7
+    #8 0x7f87eb60426c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #9 0x598aea9afbd4 in xx <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:40:7
+    #10 0x598aea9af5d5 in x2 <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:123:3
+    #11 0x598aea9afacd in test_char_class <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:228:3
+    #12 0x598aea9aef29 in main <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:328:3
+    #13 0x7f87eb22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #14 0x7f87eb22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #15 0x598aea982484 in _start (<hostdir>/build/arith/test/test_syntax+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7305:5 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:595:15: runtime error: unsigned integer overflow: 109437808 * 997 cannot be represented in type 'unsigned int'
+    #0 0x7f87eb5e4f1e in str_end_hash <hostdir>/src/maquizcoatl/upstream/src/regparse.c:595:15
+    #1 0x7f87eb6298d4 in onig_st_insert <hostdir>/src/maquizcoatl/upstream/src/st.c:277:14
+    #2 0x7f87eb5e504d in onig_st_insert_strend <hostdir>/src/maquizcoatl/upstream/src/regparse.c:636:12
+    #3 0x7f87eb5f8b18 in name_add <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1122:9
+    #4 0x7f87eb5f295c in prs_bag <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7968:15
+    #5 0x7f87eb5f147d in prs_exp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:8878:9
+    #6 0x7f87eb5f118c in prs_branch <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9282:7
+    #7 0x7f87eb5edc25 in prs_alts <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9337:7
+    #8 0x7f87eb5e9438 in prs_regexp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9399:7
+    #9 0x7f87eb5e915e in onig_parse_tree <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9462:7
+    #10 0x7f87eb602756 in parse_and_tune <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7398:7
+    #11 0x7f87eb602165 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7526:7
+    #12 0x7f87eb60426c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #13 0x598aea9afbd4 in xx <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:40:7
+    #14 0x598aea9af5d5 in x2 <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:123:3
+    #15 0x598aea9af07b in main <hostdir>/src/maquizcoatl/upstream/test/test_syntax.c:360:3
+    #16 0x7f87eb22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #17 0x7f87eb22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #18 0x598aea982484 in _start (<hostdir>/build/arith/test/test_syntax+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:595:15 
