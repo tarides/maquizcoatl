@@ -1,0 +1,33 @@
+project,tool,series,units,raw_lines,adaptation_lines,releases_spanned,adaptation_per_release,note
+warblre,rocq,9.1,a5a3120,2379,1633,3,544.3,"Rocq 9.0 migration; spans 8.20, 9.0 and 9.1, all released before the window; includes flake.lock (108 lines); about 790 adaptation lines with rename detection"
+warblre,rocq,9.2,a7fb967; 5d7b76e,103,103,1,103.0,keyword row 5d7b76e added: notation follow-up of the 9.2 port
+warblre,rocq,9.3,787f9e6,79,79,1,79.0,
+warblre,rocq,unattributed,f279063,19,0,,,
+linden,rocq,9.0,4312028,724,380,3,126.7,"Rocq 9.0 migration; spans 8.19, 8.20 and 9.0, all released before the window; whitespace cleanup excluded"
+linden,rocq,9.1,a8c1859; 2af06b3,44,12,1,12.4,"keyword row a8c1859 added (Stdlib 9.1 import, 2 lines); 2af06b3 from its share (0.8), no count in its reason"
+linden,rocq,9.2,31aa384; 117d534,77,74,1,74.0,
+linden,rocq,unattributed,9211b2b; b6396cb,6,2,,,b6396cb widens a version bound and reaches no release
+lean-regex,lean,4.25,e1600a1,732,481,1,481.0,
+lean-regex,lean,4.26,e2e33d6; a763ee1,7695,7607,1,7607.0,upper bound: deliberate migration to the new String API
+lean-regex,lean,4.27,153ed60; 6756b62,1181,1122,1,1122.2,"153ed60 from its share (0.95), no count in its reason"
+lean-regex,lean,4.28,70af083,5,5,1,5.0,
+lean-regex,lean,4.29,cdfe4c8,332,332,1,332.0,
+lean-regex,lean,4.31,3e43b33; f2b41e9,141,141,2,70.5,
+lean-regex,lean,4.32,e9dcea7,10,10,1,10.0,
+lean-regex,lean,4.34,30b7188,35,35,2,17.5,
+everparse-cbor,fstar,2026.03.24,77921d0; 9711939; 54b8fef,3180,2264,2,1132.0,
+everparse-cbor,fstar,2026.07.05,b3544a1; 77f3deb,762,0,11,0.0,
+everparse-cbor,fstar,2026.10.11,6c006b0; 0f5c004; ad9414b,1918,1918,0,,tool span 0: 6c006b0 starts from an F* commit in no release; 12 releases by hand (v2026.07.12 to v2026.10.11)
+everparse-cbor,fstar,2026.10.18,aa78f01,190,190,1,190.0,
+everparse-cbor,fstar,2026.10.25,e42f054; 5ac7cc3,0,0,1,0.0,
+everparse-cbor,fstar,2026.11.15,147ba6b; 01ed23b; 7e76a75; 749a701; 9e69ffd; cc5f99e; 8c4d28f; a991f58,33,33,1,33.0,
+everparse-cbor,fstar,unattributed,270f5aa; 56f47c8,781,180,,,pins in no F* release
+why3-gallery,why3,1.9,1.8.2..1.9.0,82849,515,1,515.0,upper bound of 473 to 515 forced lines; snapshot spans 1.8.1 to 1.9.0 on master
+creusot,why3,1.9,b22069f; e072997; 5ba3ac9; 7c3d1e8; a049fe8,1222,992,0,,tool span 0: every pin is a commit already in 1.9.0; one release step by the convention of open decision 5; lower bound: pins cover 2025-10-29 to 2026-09-22 of the 1.8.1 to 1.9.0 cycle; includes 60 lines of nix files
+creusot,why3,unattributed,12b57f8; 948ab5f; eef25e4,117369,0,,,"why3find-only bumps, not Why3"
+anvil,verus,0.2025.11.30.840fa61,a65d68c,10779,2299,,,no span: the pin moves from a Verus commit
+anvil,verus,0.2026.07.12.0b42f4c,3c95bbb,9,9,,,no span: the pin moves from a vstd version
+anvil,verus,unattributed,0cd9f9f; 114fda0; 2e25e80; 2edac69; 47a1bc3; 4fbff88; 52741e8; 5a94665; 6096278; 6a63fe3; 825d1f8; 8761fb1; 8982192; a597f9d; a5ccead; aa72ead; aa757c8; b1d8635; cc8ab6a; dd27242; df60d76; e83ea0f; eb0f700; f811038; f9cc8c0; febab3b,51072,5496,,,unpinned periods (keyword rows) and bumps of opaque pins
+afp-regex,isabelle,2025-1,Isabelle2025..Isabelle2025-1,1487,4,1,4.0,
+afp-regex,isabelle,2025-2,Isabelle2025-1..Isabelle2025-2,0,0,1,0.0,
+afp-regex,isabelle,2026,Isabelle2025-2..Isabelle2026,87,16,1,16.0,
