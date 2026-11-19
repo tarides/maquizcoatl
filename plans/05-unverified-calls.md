@@ -431,5 +431,4 @@ an interim verdict, Decision 2).
   cap and the CPUs reserved for experiment #11 are respected, and the
   start load is recorded.
 - **Leaking host details.** Raw outputs pass a redaction check before
-  they are committed; the host is named only as the bench host bench
-  host.
+  they are committed; the host is named only as "the bench host".
