@@ -14,7 +14,7 @@ HERE=$(cd "$(dirname "$0")" && pwd)
 BIN="$BENCH/bin"; CPU=${TIME_CPU:-4}
 ENGINES="onig-threaded onig-switch pcre2-interp pcre2-jit re2 rust-regex ocaml-re"
 echo "family,pattern,syntax,options,engine,length,outcome,seconds,code"
-while IFS='|' read -r fam pat syn opt; do
+while IFS=$'\t' read -r fam pat syn opt; do
   for e in $ENGINES; do
     n=16
     while [ $n -le 4096 ]; do
@@ -32,7 +32,7 @@ while IFS='|' read -r fam pat syn opt; do
     done
   done
 done <<'PATS'
-jq|(a+)+$|PERL_NG|256
-php|(a|aa)+$|RUBY|12
-vscode|(\w+\s?)+$|ONIGURUMA|256
+jq	(a+)+$	PERL_NG	256
+php	(a|aa)+$	RUBY	12
+vscode	(\w+\s?)+$	ONIGURUMA	256
 PATS
