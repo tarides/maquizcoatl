@@ -39,6 +39,14 @@ about the frequency governor:
    governor and frequency range are recorded in provenance (step 10),
    and the report treats ratios as the primary result (step 11).
 
+From the maintainer's
+[comment](https://github.com/tarides/maquizcoatl/issues/2#issuecomment-7019817702)
+on the review of the r2-r4 re-runs:
+
+4. Compilation is timed in a separate process from the search (the
+   harnesses' `compile` mode), so that it cannot slow Oniguruma's own
+   cells. A new series of three runs (r5, r6, r7) uses that protocol.
+
 ## Where things live
 
 - **Bench host.** Everything is under `~/maquizcoatl-work/e11/` in the
@@ -214,7 +222,8 @@ spread rules invalidate too many cells.
    `run.sh` first records the run conditions (step 10), then, for each
    engine column (Oniguruma threaded, Oniguruma switch, PCRE2
    interpreter, PCRE2 JIT, RE2, Rust `regex`, `ocaml-re`) and each
-   workload, runs the harness in `time` mode:
+   workload, runs the harness in `time` mode (search) and, in the
+   engine's own column, in `compile` mode (compile time):
    - CPU pinning: `taskset -c 4` (core 4 on the second L3 complex; core 0
      receives most interrupts), with its SMT sibling (CPU 36) and the
      rest of that L3 complex (CPUs 5-7, 37-39) left idle. The layout is
@@ -222,7 +231,10 @@ spread rules invalidate too many cells.
    - compile time: each pattern is compiled repeatedly until both at
      least N = 1000 compilations and at least 10 ms have elapsed, with a
      cap of 1 s per pattern; the compile time is the median per pattern,
-     and the N actually used is recorded;
+     and the N actually used is recorded. From r5 on (decision 4), this
+     runs in its own harness process, after the search of the same cell
+     and pinned to the same CPU; up to r4 it ran in the `time` process,
+     just before the search;
    - search: one warm-up pass, then at least 5 timed repetitions of the
      whole workload pass (compile excluded; each repetition lasts at
      least 0.5 s, by repeating the pass), with

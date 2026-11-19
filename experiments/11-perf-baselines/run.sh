@@ -10,11 +10,18 @@
 # run.sh refuses to overwrite an earlier run's timing or worst-case
 # outputs, or to redo the check under timing outputs of the same label.
 #
+# In the time phase, each cell's search is timed by one harness process
+# (`time` mode, output in time/) and, in the engine's own column, its
+# compilation by another one (`compile` mode, output in compile/, run
+# after the search), so that the compile loop cannot change the state
+# the search is timed in.
+#
 # The time phase also writes raw-times.tsv: every C, W, T and S line of
-# every cell, prefixed by the run label and the cell name (the time
-# file's name without .txt). It is meant to be committed with the
-# results: `cut -f3-` of one cell's rows gives back every line of that
-# cell that spread.py and summarise.py read.
+# every cell, prefixed by the run label and the cell name (the time or
+# compile file's name without .txt; both files of a cell share it). It
+# is meant to be committed with the results: `cut -f3-` of one cell's
+# rows gives back every line of that cell that spread.py and
+# summarise.py read.
 set -uo pipefail
 HERE=$(cd "$(dirname "$0")" && pwd)
 . "$HERE/env.sh"
@@ -26,12 +33,12 @@ ENGINES="onig-threaded onig-switch pcre2-interp pcre2-jit re2 rust-regex ocaml-r
 WORKLOADS="jq php php-legacy vscode vscode-subst"
 CPU=${TIME_CPU:-4}
 case $PHASE in check|time|worst|all) ;; *) echo "unknown phase $PHASE" >&2; exit 2;; esac
-mkdir -p "$RUN"/{check,time,worst}
+mkdir -p "$RUN"/{check,time,compile,worst}
 cd "$RUN"   # harness output never contains paths; relative names only
 # Never overwrite an earlier run's results, nor the check outputs they
 # were computed from; checked before any phase starts. raw-times.tsv
 # counts only once it has a cell row, not just its header.
-timed() { grep -q '^[^#]' raw-times.tsv 2>/dev/null || [ -n "$(ls time)" ]; }
+timed() { grep -q '^[^#]' raw-times.tsv 2>/dev/null || [ -n "$(ls time)$(ls compile)" ]; }
 case $PHASE in
   check|time) timed && { echo "STOP: run $LABEL already has timing outputs; use a new run label"; exit 1; } ;;
   worst) [ -s worst/worst.csv ] && { echo "STOP: run $LABEL already has worst-case outputs; use a new run label"; exit 1; } ;;
@@ -83,24 +90,31 @@ for r in rows:
     search = (t + (0.5 + t) * 5) * 2
     compile_ = n * 0.02                     # assumes about 20 ms per pattern (N=1000 or 10 ms)
     tot += search + compile_
-print('projected timed phase: %.0f s (%.1f min), plus possible repeats' % (tot, tot / 60))
+print('projected timed phase: %.0f s (%.1f min), plus possible repeats and the start of each process'
+      ' (workload load and one untimed compilation of every pattern, twice per own cell)' % (tot, tot / 60))
 PY
 fi
 
-keep_raw() { # time-file: append its C, W, T and S lines to raw-times.tsv
+keep_raw() { # time-or-compile-file: append its C, W, T and S lines to raw-times.tsv
   awk -v p="$LABEL\t$(basename "$1" .txt)\t" '/^(C|W|T|S)\t/ { print p $0 }' "$1" >> raw-times.tsv
 }
 
-run_cell() { # engine workload only-file outfile [extra env]
-  local e=$1 w=$2 only=$3 o=$4; shift 4
-  env "$@" taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "$o" 2> "${o%.txt}.err"
+run_cell() { # engine workload only-file outfile: search timing
+  local e=$1 w=$2 only=$3 o=$4
+  taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "$o" 2> "${o%.txt}.err"
   keep_raw "$o"
   read med iqr sp < <(python3 -I -S "$HERE/spread.py" "$o")
   if awk -v s="$sp" 'BEGIN{exit !(s > 0.10)}'; then
     echo "repeat $e $w spread $sp"
-    env "$@" taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "${o%.txt}.repeat.txt" 2>> "${o%.txt}.err"
+    taskset -c $CPU "$BIN/$e" time "$WL/$w" "$only" > "${o%.txt}.repeat.txt" 2>> "${o%.txt}.err"
     keep_raw "${o%.txt}.repeat.txt"
   fi
+}
+
+compile_cell() { # engine workload only-file outfile: compile timing, in its own process
+  local e=$1 w=$2 only=$3 o=$4
+  taskset -c $CPU "$BIN/$e" compile "$WL/$w" "$only" > "$o" 2> "${o%.txt}.err"
+  keep_raw "$o"
 }
 
 if [ "$PHASE" = time ] || [ "$PHASE" = all ]; then
@@ -114,9 +128,10 @@ if [ "$PHASE" = time ] || [ "$PHASE" = all ]; then
       [ -s "$only" ] || { echo "skip $e $w: no timed pattern"; continue; }
       echo "$(date -u +%H:%M:%S) time $e $w"
       run_cell $e $w "$only" "time/$e.$w.txt"
+      compile_cell $e $w "$only" "compile/$e.$w.txt"
       # Oniguruma threaded on this engine's subset (like-for-like ratio);
-      # its compile times are those of its own column.
-      case $e in onig-*) ;; *) run_cell onig-threaded $w "$only" "time/onig-threaded@$e.$w.txt" E11_NO_COMPILE=1 ;; esac
+      # search only: its compile times are those of its own column.
+      case $e in onig-*) ;; *) run_cell onig-threaded $w "$only" "time/onig-threaded@$e.$w.txt" ;; esac
     done
     "$HERE/provenance.sh" sample "after-$e" >> provenance.txt
   done

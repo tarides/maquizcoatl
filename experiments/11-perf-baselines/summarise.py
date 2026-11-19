@@ -6,6 +6,9 @@ Writes <out-prefix>-throughput.csv, <out-prefix>-compile.csv and prints
 a Markdown summary. A cell is valid when the spread (IQR / median of the
 repetition times) is at most 10%, on the first run or on its single
 repeat; otherwise it is reported as invalid with its data.
+Compile times are read from compile/<cell>.txt (written by a separate
+process since r5), or from the C lines of time/<cell>.txt in earlier
+runs.
 Ratios are speed ratios: Oniguruma-threaded time / engine time on the
 same pattern subset (> 1 means the engine is faster).
 passes_per_rep is the smallest number of passes in a repetition (each
@@ -41,6 +44,8 @@ def cell(name):
     if not os.path.exists(p): return None
     d = parse(p)
     if len(d['T']) < 2: return None
+    cp = os.path.join(run, 'compile', name + '.txt')
+    if os.path.exists(cp): d['C'] = parse(cp)['C']
     s = stats(d['T']); used = 'first'
     if s[4] > 0.10:
         r = os.path.join(run, 'time', name + '.repeat.txt')
@@ -48,7 +53,7 @@ def cell(name):
             d2 = parse(r)
             if len(d2['T']) >= 2:
                 s2 = stats(d2['T'])
-                d2['C'] = d['C']  # compile times come from the first run
+                d2['C'] = d['C']  # compile times are not repeated
                 d, s, used = d2, s2, 'repeat'
     return d, s, used, s[4] <= 0.10
 

@@ -81,7 +81,9 @@ let () =
         let r = Re.exec_opt re s in
         Printf.printf "result\t%d\t%.6f\n" (Bool.to_int (Option.is_some r)) (now () -. t0)
   end
-  else if mode <> "check" && mode <> "time" then (prerr_endline "usage: ocaml_bench check|time|worst ..."; exit 2)
+  else if not (List.mem mode [ "check"; "compile"; "time" ]) then (
+    prerr_endline "usage: ocaml_bench check|compile|time|worst ...";
+    exit 2)
   else begin
     let dir = a.(2) in
     let pats =
@@ -101,7 +103,7 @@ let () =
     in
     let res = Array.map compile pats in
     let incl = Array.map Result.is_ok res in
-    if mode = "time" && Array.length a > 3 then begin
+    if mode <> "check" && Array.length a > 3 then begin
       Array.fill incl 0 (Array.length incl) false;
       List.iter
         (fun l -> match int_of_string_opt (String.trim l) with
@@ -138,30 +140,33 @@ let () =
       let t, _, _ = pass () in
       Printf.printf "PASS\t%.6f\n" t
     end
-    else begin
+    (* Compile timing and search timing run in separate processes (see
+       driver.h); both compiled every pattern once above, untimed. *)
+    else if mode = "compile" then begin
       let cmin_n = int_of_float (env_f "E11_COMPILE_N" 1000.) and cmin_t = env_f "E11_COMPILE_MIN" 0.010
-      and ccap = env_f "E11_COMPILE_CAP" 1.0 and rep_min = env_f "E11_REP_MIN" 0.5
-      and nrep = int_of_float (env_f "E11_REPS" 5.) in
-      if Sys.getenv_opt "E11_NO_COMPILE" = None then
-        Array.iteri
-          (fun i p ->
-            if incl.(i) then begin
-              let start = now () in
-              let ct = ref [] and n = ref 0 in
-              let continue = ref true in
-              while !continue do
-                let a0 = now () in
-                ignore (Sys.opaque_identity (compile p));
-                ct := (now () -. a0) :: !ct;
-                incr n;
-                let el = now () -. start in
-                if (!n >= cmin_n && el >= cmin_t) || el >= ccap then continue := false
-              done;
-              let arr = Array.of_list !ct in
-              Array.sort compare arr;
-              Printf.printf "C\t%d\t%.1f\t%d\n" i (arr.(!n / 2) *. 1e9) !n
-            end)
-          pats;
+      and ccap = env_f "E11_COMPILE_CAP" 1.0 in
+      Array.iteri
+        (fun i p ->
+          if incl.(i) then begin
+            let start = now () in
+            let ct = ref [] and n = ref 0 in
+            let continue = ref true in
+            while !continue do
+              let a0 = now () in
+              ignore (Sys.opaque_identity (compile p));
+              ct := (now () -. a0) :: !ct;
+              incr n;
+              let el = now () -. start in
+              if (!n >= cmin_n && el >= cmin_t) || el >= ccap then continue := false
+            done;
+            let arr = Array.of_list !ct in
+            Array.sort compare arr;
+            Printf.printf "C\t%d\t%.1f\t%d\n" i (arr.(!n / 2) *. 1e9) !n
+          end)
+        pats
+    end
+    else begin
+      let rep_min = env_f "E11_REP_MIN" 0.5 and nrep = int_of_float (env_f "E11_REPS" 5.) in
       (* Warm-up pass, then repetitions of whole passes lasting at least
          rep_min seconds each (see driver.h); one pass when it has no byte. *)
       let t, matches, bytes = pass () in

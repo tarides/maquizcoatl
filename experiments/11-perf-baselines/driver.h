@@ -3,14 +3,22 @@
  * An engine file defines ENGINE_NAME and the functions below, then
  * includes this file. Usage of the resulting binary:
  *
- *   <bin> check <workload-dir>                 agreement listing (stdout)
- *   <bin> time  <workload-dir> [<only-file>]   compile and search timing
- *   <bin> worst <pattern> <syntax> <options> <n>   one search of "a"*n "!"
+ *   <bin> check   <workload-dir>                 agreement listing (stdout)
+ *   <bin> compile <workload-dir> [<only-file>]   compile timing
+ *   <bin> time    <workload-dir> [<only-file>]   search timing
+ *   <bin> worst   <pattern> <syntax> <options> <n>   one search of "a"*n "!"
  *
  * <only-file> lists the pattern ids to include (one per line); without
  * it every pattern the engine compiles is included.
  *
- * `time` prints, after the per-pattern compile lines C:
+ * Compile and search timing run in separate processes, so that the
+ * compile loop cannot change the state (heap, caches, branch
+ * predictors) the search is timed in. Both modes first compile every
+ * pattern once, untimed, to know which ones the engine accepts.
+ *
+ * `compile` prints one line per included pattern:
+ *   C <pid> <median compile nanoseconds> <compilations>
+ * `time` prints:
  *   W <warm-up pass seconds> <minimum repetition seconds, 0 for no byte>
  *   T <rep> <seconds per pass> <passes in this repetition>   (nrep lines)
  *   S bytes_per_pass=... matches_per_pass=... included_patterns=...
@@ -199,17 +207,13 @@ static int do_check(const char *dir)
   return 0;
 }
 
-static int do_time(const char *dir, const char *only)
+/* Loads the workload, compiles every pattern once (untimed) and sets
+ * include[]: the patterns listed in <only> that compile, or every
+ * pattern that compiles when <only> is NULL. Returns 0, or 2 when the
+ * only-file cannot be read. */
+static int setup(const char *dir, const char *only)
 {
-  int i, rep, k, npass, nrep;
-  long matches;
-  double bytes, t, *ts;
-  /* Protocol parameters (plan step 7), overridable for the projection. */
-  long cmin_n = getenv("E11_COMPILE_N") ? atol(getenv("E11_COMPILE_N")) : 1000;
-  double cmin_t = getenv("E11_COMPILE_MIN") ? atof(getenv("E11_COMPILE_MIN")) : 0.010;
-  double ccap = getenv("E11_COMPILE_CAP") ? atof(getenv("E11_COMPILE_CAP")) : 1.0;
-  double rep_min = getenv("E11_REP_MIN") ? atof(getenv("E11_REP_MIN")) : 0.5;
-  nrep = getenv("E11_REPS") ? atoi(getenv("E11_REPS")) : 5;
+  int i;
   load(dir);
   compile_all();
   include = (char *)malloc(npats);
@@ -221,32 +225,55 @@ static int do_time(const char *dir, const char *only)
     while ((l = read_line(f))) { int p = atoi(l); if (p >= 0 && p < npats && status[p] == ST_OK) include[p] = 1; }
     fclose(f);
   }
-  /* Compile time per pattern. */
-  if (!getenv("E11_NO_COMPILE")) {
-    double *ct = (double *)malloc(sizeof(double) * 1024);
-    size_t ccap_n = 1024;
-    for (i = 0; i < npats; i++) {
-      long n = 0;
-      double start, el;
-      char why[128];
-      if (!include[i]) continue;
-      start = now();
-      for (;;) {
-        void *re = NULL;
-        double a = now(), d;
-        eng_compile(&pats[i], &re, why);
-        d = now() - a;
-        eng_free(re);
-        if ((size_t)n == ccap_n) { ccap_n *= 2; ct = (double *)realloc(ct, ccap_n * sizeof(double)); }
-        ct[n++] = d;
-        el = now() - start;
-        if ((n >= cmin_n && el >= cmin_t) || el >= ccap) break;
-      }
-      qsort(ct, n, sizeof(double), cmpd);
-      printf("C\t%d\t%.1f\t%ld\n", i, ct[n / 2] * 1e9, n);
+  return 0;
+}
+
+static int do_compile(const char *dir, const char *only)
+{
+  int i, r;
+  /* Protocol parameters (plan step 7), overridable for the projection. */
+  long cmin_n = getenv("E11_COMPILE_N") ? atol(getenv("E11_COMPILE_N")) : 1000;
+  double cmin_t = getenv("E11_COMPILE_MIN") ? atof(getenv("E11_COMPILE_MIN")) : 0.010;
+  double ccap = getenv("E11_COMPILE_CAP") ? atof(getenv("E11_COMPILE_CAP")) : 1.0;
+  size_t ccap_n = 1024;
+  double *ct;
+  if ((r = setup(dir, only))) return r;
+  ct = (double *)malloc(sizeof(double) * ccap_n);
+  /* Compile time per pattern: compilations until at least cmin_n of
+   * them and cmin_t seconds, or ccap seconds; their median. */
+  for (i = 0; i < npats; i++) {
+    long n = 0;
+    double start, el;
+    char why[128];
+    if (!include[i]) continue;
+    start = now();
+    for (;;) {
+      void *re = NULL;
+      double a = now(), d;
+      eng_compile(&pats[i], &re, why);
+      d = now() - a;
+      eng_free(re);
+      if ((size_t)n == ccap_n) { ccap_n *= 2; ct = (double *)realloc(ct, ccap_n * sizeof(double)); }
+      ct[n++] = d;
+      el = now() - start;
+      if ((n >= cmin_n && el >= cmin_t) || el >= ccap) break;
     }
-    free(ct);
+    qsort(ct, n, sizeof(double), cmpd);
+    printf("C\t%d\t%.1f\t%ld\n", i, ct[n / 2] * 1e9, n);
   }
+  free(ct);
+  fflush(stdout);
+  return 0;
+}
+
+static int do_time(const char *dir, const char *only)
+{
+  int i, r, rep, k, npass, nrep;
+  long matches;
+  double bytes, t, *ts;
+  double rep_min = getenv("E11_REP_MIN") ? atof(getenv("E11_REP_MIN")) : 0.5;
+  nrep = getenv("E11_REPS") ? atoi(getenv("E11_REPS")) : 5;
+  if ((r = setup(dir, only))) return r;
   /* Search: one untimed warm-up pass, then nrep repetitions. Each
    * repetition repeats whole passes until at least rep_min seconds
    * have elapsed, so its length does not depend on an estimate taken
@@ -298,11 +325,12 @@ static int do_worst(const char *pat, const char *syntax, const char *opts, int n
 int main(int argc, char **argv)
 {
   if (argc >= 3 && !strcmp(argv[1], "check")) return do_check(argv[2]);
+  if (argc >= 3 && !strcmp(argv[1], "compile")) return do_compile(argv[2], argc > 3 ? argv[3] : NULL);
   if (argc >= 3 && !strcmp(argv[1], "time")) return do_time(argv[2], argc > 3 ? argv[3] : NULL);
   if (argc >= 6 && !strcmp(argv[1], "worst")) return do_worst(argv[2], argv[3], argv[4], atoi(argv[5]));
 #ifdef ENG_EXTRA_MAIN
   ENG_EXTRA_MAIN
 #endif
-  fprintf(stderr, "usage: %s check|time|worst ...\n", argv[0]);
+  fprintf(stderr, "usage: %s check|compile|time|worst ...\n", argv[0]);
   return 2;
 }

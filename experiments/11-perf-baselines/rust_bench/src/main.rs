@@ -100,7 +100,7 @@ fn main() {
         }
         return;
     }
-    if mode != "check" && mode != "time" { eprintln!("usage: rust_bench check|time|worst ..."); std::process::exit(2); }
+    if !matches!(mode, "check" | "compile" | "time") { eprintln!("usage: rust_bench check|compile|time|worst ..."); std::process::exit(2); }
     let dir = &a[2];
     let pats: Vec<Pat> = lines(dir, "patterns.tsv").iter().map(|l| {
         let f: Vec<&str> = l.split('\t').collect();
@@ -112,7 +112,7 @@ fn main() {
     }).collect();
     let res: Vec<Result<Regex, (u8, String)>> = pats.iter().map(compile).collect();
     let mut include: Vec<bool> = res.iter().map(|r| r.is_ok()).collect();
-    if mode == "time" {
+    if mode != "check" {
         if let Some(only) = a.get(3) {
             include = vec![false; pats.len()];
             for l in std::fs::read_to_string(only).unwrap().lines() {
@@ -152,13 +152,12 @@ fn main() {
         writeln!(w, "PASS\t{:.6}", t).unwrap();
         return;
     }
-    // time
-    let cmin_n = env_f("E11_COMPILE_N", 1000.0) as usize;
-    let cmin_t = env_f("E11_COMPILE_MIN", 0.010);
-    let ccap = env_f("E11_COMPILE_CAP", 1.0);
-    let rep_min = env_f("E11_REP_MIN", 0.5);
-    let nrep = env_f("E11_REPS", 5.0) as usize;
-    if std::env::var("E11_NO_COMPILE").is_err() {
+    // Compile timing and search timing run in separate processes (see
+    // driver.h); both compiled every pattern once above, untimed.
+    if mode == "compile" {
+        let cmin_n = env_f("E11_COMPILE_N", 1000.0) as usize;
+        let cmin_t = env_f("E11_COMPILE_MIN", 0.010);
+        let ccap = env_f("E11_COMPILE_CAP", 1.0);
         for (i, p) in pats.iter().enumerate() {
             if !include[i] { continue; }
             let start = Instant::now();
@@ -174,7 +173,11 @@ fn main() {
             ct.sort_by(|x, y| x.partial_cmp(y).unwrap());
             writeln!(w, "C\t{}\t{:.1}\t{}", i, ct[ct.len() / 2] * 1e9, ct.len()).unwrap();
         }
+        return;
     }
+    // time
+    let rep_min = env_f("E11_REP_MIN", 0.5);
+    let nrep = env_f("E11_REPS", 5.0) as usize;
     // Warm-up pass, then repetitions of whole passes lasting at least
     // rep_min seconds each (see driver.h); one pass when it has no byte.
     let (t, matches, bytes) = pass(&include);
