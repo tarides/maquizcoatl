@@ -248,7 +248,7 @@ recorded again in the notebook's provenance at run time.
    winning index; expected result from the stock build) with `fetch.sh`
    and `build.sh` that
    recreate them from the pins. Workloads are published first (separate
-   commit, notebook entry) so #11 is not blocked on criteria 3-5.
+   commit, notebook entry) so experiment #11 is not blocked on criteria 3-5.
 
 8. **Tables and proposal** (about 20 min; criteria 3-5). Generate the
    per-source tables, the tier shares, and a first subset (encodings,
@@ -333,7 +333,7 @@ into `lab/results/`.
    `ONIG_SYN_OP2_QMARK_BRACE_CALLOUT_CONTENTS`, set in the Oniguruma,
    Ruby, Perl and Perl_NG syntaxes); API-level callouts are invisible to
    a pattern inventory.
-6. Workloads packaged for #11/#12: patterns plus representative subjects
+6. Workloads packaged for experiments #11/#12: patterns plus representative subjects
    for each source, with a fixed format and fetch/build script.
 7. Results recorded in the lab notebook; summary comment on this issue.
 

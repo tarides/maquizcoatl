@@ -2,7 +2,7 @@
 
 Issue: [#6](https://github.com/tarides/maquizcoatl/issues/6).
 Source: maintainer's state-of-the-art report, "Experiments before
-deciding", row #2 (https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc).
+deciding", row of experiment #2 (https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc).
 
 ## Objective
 
@@ -21,7 +21,7 @@ inconsistencies.
   mode ([comment](https://github.com/tarides/maquizcoatl/issues/6#issuecomment-7006954899)).
   The case-folding area gets one or two extra probes under
   `ONIG_ENCODING_ISO_8859_1`, default syntax, default case-fold flag.
-  No other legacy encoding, no flag variants; the rest stays with #8.
+  No other legacy encoding, no flag variants; the rest stays with experiment #8.
 
 ## Approach
 
@@ -135,7 +135,7 @@ inconsistencies.
    (naming the change, e.g. "do not reset captures at iteration
    start") or needs rewriting, citing the probes that force it.
 8. **Record and report.** Lab-notebook entry (below); results summary
-   posted on #6.
+   posted on issue #6.
 
 ## Tools and versions
 
@@ -173,7 +173,7 @@ All actively maintained, all already installed on the machine:
   the ISO-8859-1 case-folding probes, both builds, and the verdicts.
   Follow-up beyond that (not required for done): widening the corpus
   from all `upstream/test/*.c` macros, and replacing Node.js by the
-  Warblre extraction if #13 builds it.
+  Warblre extraction if experiment #13 builds it.
 
 ## Lab notebook
 
@@ -200,7 +200,7 @@ Recorded with the lab-notebook skill, append-only:
   characterisation corpus in the report's Methodology section).
 - Lab-notebook entry and results directory as above.
 - Per-area verdicts and the candidate deviation-log entries, summarised
-  in a comment on #6.
+  in a comment on issue #6.
 - A draft PR from `exp/02-semantic-probes`, opened with this plan;
   results are pushed to the same branch. The PR also adds `probes/` and
   `lab/` to the Layout section of `CLAUDE.md`.
@@ -248,7 +248,7 @@ Recorded with the lab-notebook skill, append-only:
 - **Node.js is an engine, not the spec.** V8 could deviate from
   ECMA-262 on an edge case. Mitigation: for each "different" verdict
   that drives an area verdict, check the ECMA-262 clause by hand and
-  note it; Warblre can replace Node later (#13).
+  note it; Warblre can replace Node later (experiment #13).
 - **Sanitizer build noise.** UBSan may report benign issues unrelated to
   the probes. Mitigation: record only reports raised while running a
   probe, attribute each to its probe id, and keep the baseline

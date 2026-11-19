@@ -32,7 +32,7 @@ decisions and open questions so far.
 ## 2026-11-19 — From report to experiments
 
 1. **"What are the 12 tests to conduct?"** The report's experiment table had
-   grown to 13 (#13, upgrade cost, was added later). Claude listed them from
+   grown to 13 (experiment #13, upgrade cost, was added later). Claude listed them from
    the doc.
 2. **Repository published.** `gh repo create tarides/maquizcoatl --public`,
    after checking that no tracked file leaks local paths or host details.
@@ -92,9 +92,10 @@ decisions and open questions so far.
 
 5. **Setup.** Labels created (`experiment`, `stage:issue`, `stage:plan`,
    `stage:run`, `stage:done`, `needs-decision`, `blocked`). A dashboard
-   artifact tracks the 13 experiments. #13 had no place in the order, so it
-   joins the first wave with #7, as the report suggests ("#7 and #13
-   (cheap)"). #11 uses the #1 workloads, so it runs after #1 like #12.
+   artifact tracks the 13 experiments. Experiment #13 had no place in the
+   order, so it joins the first wave with experiment #7, as the report
+   suggests ("#7 and #13 (cheap)"). Experiment #11 uses the experiment #1
+   workloads, so it runs after experiment #1 like experiment #12.
    The machine has 16 CPUs but little free memory and disk, so at most two
    experiments execute at once.
 
@@ -112,13 +113,13 @@ any plan was written: 25 questions in total. The recurring themes:
 
 - **Thresholds.** What "fast enough", "acceptable table cost" or "reaching
   the speed target" means, which the report left open.
-- **Tool choice.** Which provers #5, #8 and #9 cover, and who picks them
+- **Tool choice.** Which provers experiments #5, #8 and #9 cover, and who picks them
   after the eliminators.
 - **Benchmark hygiene.** Where timing runs happen (shared workstation versus
   a dedicated machine) and how they avoid noise from fuzzing.
-- **Scope edges.** Corpus sources and licences (#1), legacy-encoding probes
-  (#2), sanitizer and fuzzer configurations (#3), splitting #12's dependency
-  on #10.
+- **Scope edges.** Corpus sources and licences (experiment #1), legacy-encoding
+  probes (experiment #2), sanitizer and fuzzer configurations
+  (experiment #3), splitting experiment #12's dependency on experiment #10.
 
 Issue numbers on GitHub do not match experiment numbers, since the issues
 were opened in parallel.
@@ -127,9 +128,9 @@ were opened in parallel.
 
 The maintainer answered on the issues; a monitor in the session picked up
 each answer within a minute and resumed that experiment from its plan.
-Plan reviews raised two more decisions (#4: F\* to C through KaRaMeL,
-Custard or both; #11: root on the bench host for the CPU governor). The
-maintainer moved #3, #5, #7 and #11 to a dedicated bench host and raised the
+Plan reviews raised two more decisions (experiment #4: F\* to C through KaRaMeL,
+Custard or both; experiment #11: root on the bench host for the CPU governor). The
+maintainer moved experiments #3, #5, #7 and #11 to a dedicated bench host and raised the
 cap on concurrent runs from 2 to 4.
 
 **Experiment #2 (semantic probes) is the first one done**, about 25 minutes
@@ -163,5 +164,5 @@ upstream behaviours became the first entries of `spec/deviations.md`
 captures forbidden in negative lookbehind, and an empty-loop rule narrower
 than the documentation.
 
-#11 (performance baselines) now runs on the bench host with #1's workloads;
-#3 and #7 run there too.
+Experiment #11 (performance baselines) now runs on the bench host with
+experiment #1's workloads; experiments #3 and #7 run there too.
