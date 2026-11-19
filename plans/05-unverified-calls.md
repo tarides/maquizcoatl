@@ -116,20 +116,37 @@ Verified functions each tool implements and exports with C linkage:
    call. This is the place where upstream trusts the encoding blindly
    (`enclen`, `upstream/src/regenc.h:83`); the record says what the
    caller demands of the callee.
-2. `vu_callout_step(f, args, ud)`: calls the callout and branches like
-   `match_at`: `ONIG_CALLOUT_SUCCESS` (0) continues, `ONIG_CALLOUT_FAIL`
-   (1) backtracks, a negative value is returned as an error, any other
-   value is treated as stated by upstream at
-   `upstream/src/regexec.c` (the exact handling is read from the
-   `OP_CALLOUT_*` cases before coding and cited in the record).
-   Proven postconditions: the returned action is determined by the
-   callee's result as above; the verified-side state in `args` is
-   unchanged except for the data slots.
+2. `vu_callout_step(dir, f, args, ud)`: calls the callout and branches
+   like `match_at`. Upstream's rules, read from `regexec.c` at
+   `f95747b`:
+   - progress direction (`upstream/src/regexec.c:4616-4631`):
+     `ONIG_CALLOUT_FAIL` (1) backtracks (`goto fail`),
+     `ONIG_CALLOUT_SUCCESS` (0) continues, any other positive value
+     becomes the error `ONIGERR_INVALID_ARGUMENT`, a negative value is
+     returned as an error;
+   - retraction direction (`RETRACTION_CALLOUT`,
+     `upstream/src/regexec.c:1218-1234`, invoked when the stack is
+     popped through `POP_CALLOUT_CASE`, `:2287-2291`):
+     `ONIG_CALLOUT_FAIL` and `ONIG_CALLOUT_SUCCESS` both continue (there
+     is nothing left to backtrack), any other positive value becomes
+     `ONIGERR_INVALID_ARGUMENT`, a negative value is returned as an
+     error;
+   - each-match callback (`upstream/src/regexec.c:3387-3400`): a
+     negative value is returned as an error; any other value sets the
+     result to `ONIG_MISMATCH` and fails, so the search goes on.
+
+   `dir` selects the progress or retraction rules (the each-match rule
+   is modelled the same way if the tool's prototype covers it; if a
+   tool models only the progress direction, the record says so).
+   Proven postconditions: the returned action is determined by `dir`
+   and the callee's result as above; the verified-side state in `args`
+   is unchanged except for the data slots.
 3. `vu_i_apply(from, to, to_len, arg)`: a verified function with its
    own specification (for example, it increments a counter in `arg` and
    records `from` only when `to_len` is in range), and
    `vu_fold_all(client_apply_all, arg)`, which passes `vu_i_apply` to the
-   client as a C pointer: re-entrancy shape (a).
+   client as a C pointer: re-entrancy shape (a), modelled on
+   `i_apply_case_fold` (`upstream/src/regparse.c:8739`).
 4. `vu_get_slot(args, k)` and `vu_set_slot(args, k, v)`: exported
    verified accessors, the analogue of
    `onig_get_callout_data_by_callout_args` and
@@ -140,9 +157,13 @@ Verified functions each tool implements and exports with C linkage:
 
 `caller/caller.c` supplies the pointers and checks the results against
 `caller/expected.txt`: a well-behaved encoding (`mbc_enc_len` of UTF-8,
-copied with its notice from `upstream/src/utf8.c`) and a misbehaving
-one returning 0, -5 and 100 (clamping); callouts returning 0, 1 and -2,
-one of which calls `vu_get_slot`/`vu_set_slot`; and an
+`upstream/src/utf8.c:70-74`, copied with its notice together with the
+`EncLen_UTF8` table it reads, `:47-68`, keeping only the
+`USE_RFC3629_RANGE` arm since `:33` defines that macro) and a
+misbehaving one returning 0, -5 and 100 (clamping); callouts returning
+0, 1, 2 (a positive value other than `ONIG_CALLOUT_FAIL`, which must
+become `ONIGERR_INVALID_ARGUMENT`) and -2, in both directions, one of
+which calls `vu_get_slot`/`vu_set_slot`; and an
 `apply_all_case_fold` that calls back through the pointer it receives.
 The same caller is linked against each tool's object. If experiment #4
 has published `client_encoding.c` on its branch by then, the encoding
@@ -151,7 +172,10 @@ part is taken from it instead of being rewritten.
 **Negative control, per tool:** removing the clamp from `vu_char_len`
 must make the proof fail. This shows the proof depends on the callee's
 contract and that the run is not "compiles but proves nothing"
-(done-criterion 1).
+(done-criterion 1). The control also checks that the external
+declaration listed in `TRUSTED` gives the callee's result no range
+(only "returns an `int`"), so an over-strong axiom cannot make the
+clamp-free proof pass.
 
 ## Tools and versions
 
@@ -162,23 +186,32 @@ releases), and the notebook records the versions actually installed.
 
 | Tool | Version | Source on the bench host | Stack | Milestone |
 |------|---------|--------------------------|-------|-----------|
-| Why3 (C extraction) | 1.9.0, Alt-Ergo 2.6.5; Z3 from `<cache>/fstar` registered in `why3.conf` | already in switch `provers` | E | 1 |
+| Why3 (C extraction) | 1.9.0, Alt-Ergo 2.6.5; Z3 4.15.3 (or 4.13.3) from the F\* bundle in `<cache>/fstar` registered in `why3.conf` (Why3 1.9.0's `provers-detection-data.conf` accepts Z3 4.8.x-4.15.x only, so not Z3 5.3.0) | already in switch `provers` | E | 1 |
 | F\* + Pulse, KaRaMeL | F\* v2026.11.15 with its bundled `krml` | already in `<cache>/fstar` | C | 1 |
-| Verus | 0.2026.11.02.8bf68ee (latest non-rolling release) plus the Rust toolchain it names | release binary, rustup in `<cache>` | D | 1 |
-| Charon + Aeneas | nightly tags of 2026-11-19 (commits recorded); Lean toolchain named by Aeneas's `lean-toolchain` (v4.36.0 is already in `<cache>/elan`; elan fetches another if needed) | release binaries if published for Linux x86_64, else source build | B | 2 |
-| VST + CompCert | VST 2.17, CompCert 3.18 (`clightgen`) | opam, `rocq-released` repository; in `provers` if compatible with Rocq 9.3.0, otherwise a switch `vst` on the Rocq version VST 2.17 requires | A | 2 |
-| Isabelle-LLVM | Isabelle2026, `lammich/isabelle_llvm` branch `2026` (commit recorded) | release tarball, git clone | F | 2 |
-| hax | cargo-hax v0.5.0 (repository `pereq-dev/hax`, formerly `cryspen/hax`); F\* backend uses `<cache>/fstar`, Rocq backend uses `provers` | cargo install from the tag | A (and B via its Lean backend) | 3 |
-| Creusot | v0.14.0, with the Why3 and solvers its `cargo creusot setup` pins | cargo install from the tag | E | 3 |
-| RefinedRust | `lgaeher/refinedrust-dev` (MPI-SWS GitLab), commit recorded | its documented opam + rustup setup, in a switch `refinedrust` if its Rocq/Iris pins differ | A | 3 |
+| Verus | 0.2026.11.02.8bf68ee (latest non-rolling release), Rust 1.99.1 (the toolchain it names) | release binary, rustup in `<cache>` | D | 1 |
+| Charon + Aeneas | nightly tags of 2026-11-19 (commits recorded); Charon's Rust `nightly-2026-09-17`; Lean v4.36.0-rc2 from Aeneas's `lean-toolchain` (elan fetches it into `<cache>/elan`) | linux-x86_64 release binaries (both nightlies ship them) | B | 2 |
+| VST + CompCert | opam packages `coq-vst.2.17` and `coq-compcert.3.18` (`clightgen`) | opam, `rocq-released` repository, in a switch `vst`: `coq-compcert.3.18` requires `coq < 9.3~` and `coq-vst.2.17` requires it, while `provers` has Rocq 9.3.0 | A | 2 |
+| Isabelle-LLVM | Isabelle2026, `lammich/isabelle_llvm` branch `2026` (last pushed 2026-10-19; commit recorded) | release tarball, git clone | F | 2 |
+| hax | cargo-hax v0.5.0 (repository `pereq-dev/hax`, formerly `cryspen/hax`), which pins F\* v2025.10.06 (`flake.nix` at tag `cargo-hax-v0.5.0`): the F\* backend tries `<cache>/fstar` first, else uses the F\* v2025.10.06 binary installed beside it, and the record says which; the Rocq backend uses `provers`; backends in scope: see the open question on issue #13 | cargo install from the tag | A (and B via its Lean backend) | 3 |
+| Creusot | v0.14.0, Rust `nightly-2026-08-03`, with the Why3 and solvers its `cargo creusot setup` pins (run with `XDG_DATA_HOME` and `XDG_CONFIG_HOME` under `<cache>/creusot/`, so the account's home is untouched) | cargo install from the tag | E | 3 |
+| RefinedRust | `lgaeher/refinedrust-dev` (MPI-SWS GitLab), commit recorded | its documented opam + rustup setup, in a switch `refinedrust` on OCaml 4.14.2 (as its README requires) | A | 3 |
 | Bedrock2 | `mit-plv/bedrock2` master, commit recorded | source build against Rocq in `provers` (or the Rocq its submodules require, recorded) | A | 4 |
-| CN (Cerberus) | `rems-project/cerberus` master, commit recorded (opam package `cn` if current) | opam pin | A | 4 |
-| RefinedC | `iris/refinedc` (MPI-SWS GitLab), commit recorded | opam, in a switch `refinedc` if its Rocq/Iris pins differ | A | 4 |
+| CN (Cerberus) | `rems-project/cerberus` master, commit recorded (there is no `cn` package in opam-repository) | opam pin of a Cerberus checkout at master | A | 4 |
+| RefinedC | `iris/refinedc` (MPI-SWS GitLab), commit recorded | opam, in a switch `refinedc` on Coq 9.1.0 with the `iris-dev` repository and `cerberus-lib` pinned at `f11e6b3` (a second Cerberus checkout, separate from CN's) | A | 4 |
 | GCC | 13.3 (Ubuntu 24.04) | system (C caller, linking, Why3/KaRaMeL/CN output) | | all |
 | CMake | system | out-of-tree build of `upstream/` | | all |
 
 No tool is installed from an abandoned fork. Isabelle-LLVM's `master`
-branch (last pushed 2022) is not used.
+branch (last pushed 2022-09-29) is not used.
+
+The versions above that are already known (Verus and its Rust 1.99.1,
+Charon's `nightly-2026-09-17`, Creusot's `nightly-2026-08-03`, Aeneas's
+Lean v4.36.0-rc2, `coq-vst.2.17` / `coq-compcert.3.18`, hax's F\*
+v2025.10.06, RefinedC's `cerberus-lib` at `f11e6b3`, the
+Isabelle-LLVM branch) go into `pins.json` from the start; `setup.sh`
+adds commits and sha256 as it fetches. Opam package names in
+`pins.json` are the real ones (`coq-vst`, `coq-compcert`; there is no
+`rocq-vst.2.17`).
 
 ## Machine budget
 
@@ -189,9 +222,11 @@ Bench host, shared with other experiments: at most 4 parallel jobs
 notes before starting). At most 3 hours of wall-clock per run, setup
 included. Long jobs run under `tmux` (or `nohup`), with logs in
 `<exp>/out/`. Each proof check runs under a `timeout` (20 min) and
-`ulimit -v 64G`; hitting either is recorded as the result for that
-check. Nothing here is a timing measurement, so no CPU pinning or load
-threshold is needed. Disk: about 142 GB free; the extra switches and
+`ulimit -v 64G`, except `isabelle build`, whose JVM reserves large
+virtual ranges: it runs under `timeout` and Isabelle's own options,
+with peak RSS recorded by `/usr/bin/time -v`. Hitting a limit is
+recorded as the result for that check. Nothing here is a timing
+measurement, so no CPU pinning or load threshold is needed. Disk: about 142 GB free; the extra switches and
 Rust toolchains are expected to add 15-25 GB, recorded per tool.
 
 All twelve tools do not fit in 3 hours, so the experiment runs in four
@@ -228,10 +263,10 @@ binary releases (Verus).
    `caller/expected.txt`, `run.sh`, `count-trusted.sh`,
    `provenance.sh`, `setup.sh`; a pure-C reference implementation of
    the four verified functions (`caller/reference.c`, unverified)
-   checks that caller and expected output agree. Read the `OP_CALLOUT_*`
-   handling in `upstream/src/regexec.c` and
-   `upstream/src/regexec.c:3387-3400` (each-match callback) and record
-   the branch rules with citations. Commit and push.
+   checks that caller and expected output agree. Re-check the branch
+   rules of the prototype section against `upstream/src/regexec.c`
+   (progress, retraction, each-match) and copy them, with citations,
+   into the `harness` notebook entry. Commit and push.
 
 2. **Clone and build upstream** (bench host, about 5 min). Clone the
    branch with `--recurse-submodules` into `<exp>/repo`, check
@@ -246,9 +281,9 @@ binary releases (Verus).
 
 3. **Toolchains for the milestone** (in parallel with step 2).
    `setup.sh 1`: check `<cache>` and that the switch `provers`, F\*,
-   `krml` and Z3 answer with the versions of experiment #7; register Z3
-   with Why3; install rustup into `<cache>`, the Verus release and the
-   Rust toolchain it names; smoke-test each tool on its own hello-world
+   `krml` and Z3 answer with the versions of experiment #7; register the
+   bundled Z3 4.15.3 (or 4.13.3) with Why3; install rustup into
+   `<cache>`, the Verus release and the Rust toolchain it names; smoke-test each tool on its own hello-world
    (a Why3 module extracted to C, a `#lang-pulse` function extracted
    through `krml`, a Verus function verified and built). Record
    versions and disk use.
@@ -284,14 +319,22 @@ binary releases (Verus).
 
 7. **Count and table** (criteria 2 and 4). `count-trusted.sh` counts
    non-blank, non-comment lines of the files and ranges in each
-   `TRUSTED` (shims, axioms, driver entries, glue). `table.md` gets one
+   `TRUSTED` (shims, axioms, driver entries, glue), with the comment
+   syntax stated per language in the script (C and Rust `//`, `/* */`;
+   WhyML, F\*, Rocq and Isabelle `(* *)`; Lean `--`, `/- -/`; Why3
+   drivers `(* *)`); where a language is not covered it counts raw
+   non-blank lines and says so. It also records the sha256 of each
+   file listed in `TRUSTED`. `table.md` gets one
    row per tool with the issue's columns: tool, version, verdict,
    modelling style, trusted lines, callee assumptions, re-entrancy (a),
    re-entrancy (b); tools of later milestones appear as "pending".
    Verdicts: *works* (no trusted code beyond the declaration of the
    external call's type and specification), *works with trusted shim*
    (shim size stated), *does not work* (reason stated), or "deferred"
-   (Decision 2).
+   (Decision 2). Next to any *does not work* verdict, the record cites
+   experiment #1's numbers (0 callouts and UTF-8 only across its 5,870
+   triples), so the weight of the missing feature is visible; the
+   eliminator itself is unchanged.
 
 8. **Fetch back and record.** `rsync` `<exp>/out/<run-id>/` to
    `<workdir>/e05/out/`, run the redaction check (absolute paths,
