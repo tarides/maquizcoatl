@@ -25,7 +25,13 @@ static OnigSyntaxType *syntax_of(int s) {
 static unsigned char *unhex(const char *h, size_t *len) {
   size_t n = strlen(h) / 2;
   unsigned char *r = malloc(n + 1);
-  for (size_t i = 0; i < n; i++) { unsigned v; sscanf(h + 2 * i, "%2x", &v); r[i] = (unsigned char) v; }
+  /* manual decode: sscanf would rescan the whole string (strlen) per byte */
+  for (size_t i = 0; i < n; i++) {
+    int a = h[2 * i], b = h[2 * i + 1];
+    a = a <= '9' ? a - '0' : (a | 32) - 'a' + 10;
+    b = b <= '9' ? b - '0' : (b | 32) - 'a' + 10;
+    r[i] = (unsigned char) (a * 16 + b);
+  }
   r[n] = 0; *len = n; return r;
 }
 
