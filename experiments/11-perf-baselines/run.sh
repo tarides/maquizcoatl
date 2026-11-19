@@ -12,12 +12,27 @@ CPU=${TIME_CPU:-4}
 mkdir -p "$RUN"/{check,time,worst}
 cd "$RUN"   # harness output never contains paths; relative names only
 
-wait_load() { # the run is not started while the 1-min load average exceeds 2
-  local i=0
-  while awk '{exit !($1 > 2)}' /proc/loadavg; do
-    [ $i -ge 20 ] && { echo "load still above 2 after 10 min: $(cut -d' ' -f1-3 /proc/loadavg)"; return 0; }
-    sleep 30; i=$((i+1))
+# Gate before each column. The plan's gate (1-min load average <= 2)
+# assumed an idle host; experiment #3's fuzzers share it, pinned to CPUs
+# 8-31,40-63, which keeps the global load average far above 2. The gate
+# is therefore on the CPUs that matter: the timing CPU, its SMT sibling
+# and its L3 complex (4-7, 36-39) must be under 10% busy over 5 s; the
+# global load average is still recorded with every sample.
+GATE_CPUS="4 5 6 7 36 37 38 39"
+busy() { # percent busy of GATE_CPUS over 5 s
+  local a b
+  a=$(for c in $GATE_CPUS; do grep "^cpu$c " /proc/stat; done)
+  sleep 5
+  b=$(for c in $GATE_CPUS; do grep "^cpu$c " /proc/stat; done)
+  paste <(echo "$a") <(echo "$b") | awk '{n=NF/2; t0=0; t1=0; for(i=2;i<=n;i++){t0+=$i; t1+=$(i+n)}; i0=$5+$6; i1=$(5+n)+$(6+n); T+=t1-t0; I+=i1-i0} END{printf "%d", T? 100*(T-I)/T : 0}'
+}
+wait_load() {
+  local i=0 b
+  while b=$(busy); [ "$b" -ge 10 ]; do
+    [ $i -ge 20 ] && { echo "gate CPUs still ${b}% busy after 10 min"; return 0; }
+    sleep 25; i=$((i+1))
   done
+  echo "gate: CPUs $GATE_CPUS ${b}% busy; load $(cut -d' ' -f1-3 /proc/loadavg)"
 }
 
 if [ "$PHASE" = check ] || [ "$PHASE" = all ]; then
