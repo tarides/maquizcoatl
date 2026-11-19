@@ -4,7 +4,7 @@ Issue: [#13](https://github.com/tarides/maquizcoatl/issues/13) (the
 issue body is the reference for scope, inputs and done-criteria; this
 plan says how).
 Source: maintainer's state-of-the-art report, "Experiments before
-deciding", row #5, and the stacks of "Option matrix and open questions"
+deciding", row of experiment #5, and the stacks of "Option matrix and open questions"
 (https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc).
 
 ## Objective
