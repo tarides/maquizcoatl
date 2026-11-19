@@ -110,7 +110,9 @@ spread rules invalidate too many cells.
    machine time). Write the harnesses and scripts in
    `experiments/11-perf-baselines/`, commit and push the branch. Build
    and test the harnesses on the workstation only as a compile check
-   (no timing there). Fill `pins.json` with URLs and sha256 of every
+   (no timing there). This check may use the workstation's system
+   packages (distribution PCRE2, RE2, and so on); only the bench-host
+   builds of steps 3-4, from pinned sources, count for criterion 1. Fill `pins.json` with URLs and sha256 of every
    tarball.
 
 2. **Reproducible setup on the bench host** (about 40 min, mostly the
@@ -143,8 +145,10 @@ spread rules invalidate too many cells.
 
 4. **Build the other engines** (about 15 min). PCRE2 10.49 with CMake
    (`PCRE2_SUPPORT_JIT=ON`, 8-bit library only, static); Abseil then
-   RE2 with CMake, `CMAKE_CXX_STANDARD=17`, static, installed into
-   `<bench>/prefix`; the Rust harness with `cargo build --release
+   RE2 with CMake, static, installed into `<bench>/prefix`, both with
+   `-DCMAKE_PREFIX_PATH=<bench>/prefix -DCMAKE_CXX_STANDARD=17
+   -DABSL_PROPAGATE_CXX_STD=ON` (so RE2 finds the Abseil just installed
+   and both use the same C++ standard); the Rust harness with `cargo build --release
    --locked`; the OCaml harness with `dune build --release`. The C and
    C++ harnesses are compiled with the same `-O3 -DNDEBUG`. All build
    commands are logged (criterion 1).
@@ -153,23 +157,46 @@ spread rules invalidate too many cells.
    its branch (or `main`, once merged) at a recorded commit, into
    `<bench>/workloads/`. `prep_workloads.py` turns
    `workloads/<source>.jsonl` into one simple format read by every
-   harness: one line per pattern (id, syntax, options, encoding, pattern
-   bytes in hex) and one file per subject; it splits out the rows that
+   harness: one line per pattern and one file per subject. Each pattern
+   line carries #1's per-record fields unchanged: record id, syntax,
+   compile-time options, search-time options (kept separate from the
+   compile options), encoding, non-default match-param limits (such
+   records are counted and reported), pattern bytes in hex, and #1's
+   expected result, which `agree.py` uses as a cross-check of the
+   Oniguruma reference. It splits out the rows that
    are Oniguruma-only by construction (non-UTF-8 encodings) and the
    `host-substituted` TextMate patterns. Workloads are translated once,
    never per engine. Until #1 publishes, the same script builds the
-   smoke corpus from the `x2`/`x3`/`n` cases of `upstream/test/test_utf8.c`.
+   smoke corpus from the `x2`/`x3`/`n` cases of `upstream/test/test_utf8.c`:
+   it decodes the C escapes of the string literals (`\xHH`, octal,
+   `\\`, `\"`, adjacent-literal concatenation) into bytes, and excludes
+   the `e(...)` (expected compile error) cases.
 
 6. **Agreement check** (criterion 3; about 10 min, up to 4 jobs in
    parallel since nothing is timed). Each harness has a `check` mode
    that prints, per (pattern, subject), the compile status (accepted,
-   rejected with error, or unsupported feature) and the list of
-   non-overlapping matches with group 0 bounds. Oniguruma threaded is
+   rejected with error, unsupported syntax or feature, or rejected by a
+   resource limit) and the list of non-overlapping matches with group 0
+   bounds. Matches are enumerated the same way in every engine, never
+   with an engine's own iterator: search from a start offset in the
+   whole subject (so anchors and look-behind see the full subject),
+   starting at 0; after a match `[s, e)` the next search starts at `e`,
+   or, if the match is empty (`s = e`), at `e` plus one character
+   (one code point in UTF-8, one byte for byte-oriented rows). The
+   timed passes of step 7 use the same loop. Oniguruma threaded is
    the reference. `agree.py` lists every disagreement and classifies it
    as syntax difference, semantic difference (e.g. byte versus code
-   point in `ocaml-re`), or unexplained; disagreeing patterns are
+   point in `ocaml-re`), or unexplained. Patterns rejected by a
+   resource limit (RE2 `max_mem`, Rust `regex` `size_limit`) are counted
+   separately from unsupported syntax, in `agree.py` and in the
+   criterion 2 counts; both limits stay at their defaults, and the
+   notebook says so; disagreeing patterns are
    excluded from the timing tables of that engine. The switch build must
    agree exactly with the threaded build; any difference stops the run.
+   The check also records the duration of one search pass per (engine,
+   workload); from these, `run.sh` prints the projected duration of
+   step 7 (warm-up, repetitions, possible repeats) before launching the
+   timed runs, so the 3-hour budget is checked before it is spent.
 
 7. **Throughput and compile time** (criterion 2; about 40 min).
    `run.sh` first records the run conditions (step 10), then, for each
@@ -180,16 +207,21 @@ spread rules invalidate too many cells.
      receives most interrupts), with its SMT sibling (CPU 36) and the
      rest of that L3 complex (CPUs 5-7, 37-39) left idle. The layout is
      re-checked with `lscpu -e` at setup;
-   - compile time: each pattern compiled 1000 times (or for at least
-     10 ms), median per pattern;
+   - compile time: each pattern is compiled repeatedly until both at
+     least N = 1000 compilations and at least 10 ms have elapsed, with a
+     cap of 1 s per pattern; the compile time is the median per pattern,
+     and the N actually used is recorded;
    - search: one warm-up pass, then at least 5 timed repetitions of the
      whole workload pass (compile excluded; each repetition lasts at
      least 0.5 s, by repeating the pass), with
      `clock_gettime(CLOCK_MONOTONIC)` (C, C++), `std::time::Instant`
-     (Rust) and `Mtime_clock` (OCaml). Output: bytes/s, median and
-     spread (min, max, and IQR), match count, rejected and unsupported
-     pattern counts;
-   - a cell whose spread exceeds 10% of the median is repeated once;
+     (Rust) and `Mtime_clock` (OCaml). Definitions: a pass runs every
+     (pattern, subject) pair of the workload once; bytes/s = sum of the
+     subject lengths over all (pattern, subject) pairs of the pass /
+     median pass time; spread = IQR / median of the pass times. Output:
+     bytes/s, median pass time, min, max, IQR and spread, match count,
+     rejected, resource-limited and unsupported pattern counts;
+   - a cell whose spread exceeds 10% is repeated once;
      if it still exceeds 10%, it is reported as invalid with its data.
 
 8. **Worst case** (criterion 4; at most 30 min). Per workload family,
@@ -197,10 +229,16 @@ spread rules invalidate too many cells.
    one, else a labelled synthetic one (for example `(a+)+$`), on
    subjects of growing length (16 to 4096 bytes, doubling), on each
    engine, with Oniguruma's default retry limit and PCRE2's default
-   match limit. Each run has a 60 s wall-clock cap. Record time, or the
-   error (`ONIGERR_RETRY_LIMIT_IN_MATCH_OVER` −17,
-   `PCRE2_ERROR_MATCHLIMIT`, JIT limit errors), and the subject length.
-   Rows that reach the cap are stopped at that length.
+   match limit. The 60 s cap is enforced from outside: each (engine,
+   pattern, length) point runs in its own process under `timeout 60`,
+   and reaching it is recorded as a distinct outcome, `cap`. Record
+   time, or the error (`ONIGERR_RETRY_LIMIT_IN_MATCH_OVER` −17,
+   `PCRE2_ERROR_MATCHLIMIT`, `PCRE2_ERROR_DEPTHLIMIT`,
+   `PCRE2_ERROR_HEAPLIMIT`, `PCRE2_ERROR_JIT_STACKLIMIT`), or `cap`, and
+   the subject length; the JIT stack size used is recorded. Oniguruma's
+   default retry limit is high (10,000,000, `upstream/src/regint.h:111`), so its
+   rows are expected to hit `cap` mostly, not −17. Rows that reach the
+   cap are stopped at that length.
 
 9. **Fetch results back** (about 5 min). `rsync` `<bench>/out/<run-id>/`
    to `<workdir>/e11/out/` on the workstation, check the files for
@@ -212,7 +250,10 @@ spread rules invalidate too many cells.
     and kernel version of the bench host; the CPU list used; the load
     average before and after; the frequency governor and boost state of
     the pinned CPU (read from `/sys`, no root needed); compiler, CMake,
-    rustc, OCaml versions and flags; engine versions and sha256; the
+    rustc, OCaml versions and flags; `/proc/stat` counters of CPUs 4,
+    36, 5-7 and 37-39 sampled before and after each engine column (since
+    `taskset` cannot keep the siblings idle, this shows whether other
+    work ran on them); engine versions and sha256; the
     repository and #1 workload commits; start time and duration. It
     does not record the hostname, addresses, user names or paths.
     The governor is `schedutil` and cannot be changed without root; if
@@ -246,9 +287,11 @@ recorded run, linking to its file) and
 4. `worst-case` — per family, pattern, subject lengths, times or errors
    (criterion 4).
 
-Smoke-corpus runs are recorded only as part of milestone 1 if #1's
-workloads are not available; exploratory runs are not recorded. The
-maintainer decides on any further entry.
+Smoke-corpus timing is a pipeline test and is not recorded in the
+notebook by default; if #1's workloads are not available, the
+maintainer decides whether the milestone 1 smoke-corpus results get an
+entry. Exploratory runs are not recorded. The maintainer decides on any
+further entry.
 
 ## Outputs
 
