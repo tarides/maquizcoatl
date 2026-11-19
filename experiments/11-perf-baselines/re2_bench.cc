@@ -26,6 +26,16 @@ static int perl_like(const pattern_t *p)
     || !strcmp(p->syntax, "PERL") || !strcmp(p->syntax, "JAVA") || !strcmp(p->syntax, "PYTHON");
 }
 
+// A compiled pattern with its submatch array, sized like PCRE2's match
+// data: the overall match plus every capture group. Requesting the
+// groups makes RE2 run its submatch engines (one-pass, bit-state or
+// NFA) after the DFA, as Oniguruma and PCRE2 fill every group.
+struct re2_re {
+  RE2 *re;
+  int nsub;
+  absl::string_view *sub;
+};
+
 static int eng_compile(const pattern_t *p, void **out, char *why)
 {
   if (strcmp(p->encoding, "UTF-8") || !perl_like(p)) { snprintf(why, 128, "syntax or encoding"); return ST_UNSUP; }
@@ -46,18 +56,29 @@ static int eng_compile(const pattern_t *p, void **out, char *why)
     delete re;
     return (c == RE2::ErrorPatternTooLarge) ? ST_LIMIT : ST_ERR;
   }
-  *out = re;
+  re2_re *r = new re2_re;
+  r->re = re;
+  r->nsub = 1 + re->NumberOfCapturingGroups();
+  r->sub = new absl::string_view[r->nsub];
+  *out = r;
   return ST_OK;
 }
 
-static void eng_free(void *p) { delete (RE2 *)p; }
+static void eng_free(void *p)
+{
+  re2_re *r = (re2_re *)p;
+  if (!r) return;
+  delete[] r->sub;
+  delete r->re;
+  delete r;
+}
 
 static int eng_search(void *p, const unsigned char *s, size_t len, size_t start, size_t *ms, size_t *me)
 {
-  RE2 *re = (RE2 *)p;
-  absl::string_view text((const char *)s, len), m;
-  if (!re->Match(text, start, len, RE2::UNANCHORED, &m, 1)) return 0;
-  *ms = m.data() - (const char *)s; *me = *ms + m.size();
+  re2_re *r = (re2_re *)p;
+  absl::string_view text((const char *)s, len);
+  if (!r->re->Match(text, start, len, RE2::UNANCHORED, r->sub, r->nsub)) return 0;
+  *ms = r->sub[0].data() - (const char *)s; *me = *ms + r->sub[0].size();
   return 1;
 }
 

@@ -1,6 +1,9 @@
 // Experiment #11: Rust `regex` harness. Same modes, output format and
-// enumeration loop as driver.h (see there).
-use regex::bytes::{Regex, RegexBuilder};
+// enumeration loop as driver.h (see there). Searches extract every
+// capture group (captures_read_at with one CaptureLocations per pattern,
+// reused across searches), as Oniguruma and PCRE2 fill every group.
+use regex::bytes::{CaptureLocations, Regex, RegexBuilder};
+use std::cell::RefCell;
 use std::io::{BufRead, BufReader, Write};
 use std::time::Instant;
 
@@ -57,12 +60,12 @@ fn utf8_advance(s: &[u8], at: usize) -> usize {
     if at + n > s.len() { s.len() - at } else { n }
 }
 
-fn enum_pair(re: &Regex, s: &[u8], out: Option<&mut String>) -> u64 {
+fn enum_pair(re: &Regex, locs: &mut CaptureLocations, s: &[u8], out: Option<&mut String>) -> u64 {
     let mut pos = 0usize;
     let mut n = 0u64;
     let mut out = out;
     while pos <= s.len() {
-        match re.find_at(s, pos) {
+        match re.captures_read_at(locs, s, pos) {
             None => break,
             Some(m) => {
                 n += 1;
@@ -89,8 +92,9 @@ fn main() {
             Err((c, why)) => { writeln!(w, "compile\t{}\t{}", c, why).unwrap(); }
             Ok(re) => {
                 let mut s = vec![b'a'; n]; s.push(b'!');
+                let mut locs = re.capture_locations();
                 let t0 = Instant::now();
-                let r = re.find_at(&s, 0).is_some();
+                let r = re.captures_read_at(&mut locs, &s, 0).is_some();
                 writeln!(w, "result\t{}\t{:.6}", r as i32, t0.elapsed().as_secs_f64()).unwrap();
             }
         }
@@ -116,12 +120,17 @@ fn main() {
             }
         }
     }
+    let locs: Vec<Option<RefCell<CaptureLocations>>> =
+        res.iter().map(|r| r.as_ref().ok().map(|re| RefCell::new(re.capture_locations()))).collect();
     let pass = |include: &Vec<bool>| -> (f64, u64, f64) {
         let t0 = Instant::now();
         let (mut m, mut b) = (0u64, 0f64);
         for &(p, s) in &pairs {
             if !include[p] { continue; }
-            if let Ok(re) = &res[p] { m += enum_pair(re, &subs[s], None); b += subs[s].len() as f64; }
+            if let (Ok(re), Some(l)) = (&res[p], &locs[p]) {
+                m += enum_pair(re, &mut l.borrow_mut(), &subs[s], None);
+                b += subs[s].len() as f64;
+            }
         }
         (t0.elapsed().as_secs_f64(), m, b)
     };
@@ -133,9 +142,9 @@ fn main() {
             }
         }
         for &(p, s) in &pairs {
-            if let Ok(re) = &res[p] {
+            if let (Ok(re), Some(l)) = (&res[p], &locs[p]) {
                 let mut o = String::new();
-                enum_pair(re, &subs[s], Some(&mut o));
+                enum_pair(re, &mut l.borrow_mut(), &subs[s], Some(&mut o));
                 writeln!(w, "M\t{}\t{}\t{}", p, s, o).unwrap();
             }
         }

@@ -10,6 +10,9 @@
  * <only-file> lists the pattern ids to include (one per line); without
  * it every pattern the engine compiles is included.
  *
+ * eng_search extracts every capture group of the match, as a caller
+ * that needs the groups would; only the overall match is reported.
+ *
  * Matches are enumerated identically in every engine: search from a
  * start offset in the whole subject, starting at 0; after a match
  * [s, e) the next search starts at e, or, when s == e, at e plus one
