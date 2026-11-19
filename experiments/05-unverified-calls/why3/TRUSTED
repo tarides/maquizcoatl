@@ -1,0 +1,15 @@
+# Trusted files of the Why3 prototype (format: see count-trusted.sh).
+#
+# Module Client of vu.mlw: the abstract types standing for the C objects
+# of proto.h, the vals without bodies that read and write their fields
+# and make the indirect calls, and the client contracts of those calls
+# (call_enc_len, call_callout, call_apply_all) with the predicate they
+# use (evolves). Why3 assumes all of it.
+vu.mlw:13-186
+# The C driver of module Client: one C expression per type and val.
+# Why3 does not check these strings against the model.
+vu.drv
+#
+# Not counted: Why3's own C extraction (its printer, the driver
+# extraction_drivers/c.drv and the model stdlib/mach/c.mlw), trusted as
+# part of the toolchain, like the C compiler.
