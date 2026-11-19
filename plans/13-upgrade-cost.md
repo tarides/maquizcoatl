@@ -27,6 +27,11 @@ Scope follows the decisions on the issue
 Part C runs first: it needs no toolchain and no large machine, and it
 gives the per-release figures that Part A only samples once.
 
+**Naming.** By decision on the issue, the two halves are now called
+**mining** (Part C) and **builds** (Part A); the letters A, B and C
+denote only the baseline options. This plan keeps the old names where it
+was written with them.
+
 ## Snapshot
 
 Date D = 2026-11-19. Releases published after D are ignored. The mining
@@ -350,7 +355,11 @@ For each of the five projects of the issue:
   release step, in line with option C). The whole gallery is replayed
   (every `why3session.xml` under `examples/`) with the prover versions
   each release documents; if the time box does not allow it, a fixed
-  subset is chosen before the run and recorded.
+  subset is chosen before the run and recorded. As run: the fixed subset
+  is the sessions named in the gallery's own `reduced_regtests.list`
+  files at tag 1.8.2 (11 sessions); the whole gallery (453 sessions) was
+  replayed within a 3-hour budget. The prover versions deviate (see
+  "Deviations of the builds").
 - "Builds and checks" is as defined in criterion 2 of the issue
   (`dune build` plus `rocqchk`; `lake build` in `regex/` and
   `correctness/`; the project's Pulse verification target, identified
@@ -369,10 +378,13 @@ For each of the five projects of the issue:
   2026-11-19 at 13:20 UTC, #3 was fuzzing on CPUs 8-31 and 40-63 (a
   campaign of about 110 minutes); #11, done, no longer pinned CPUs 4-7
   and 36-39; #7 runs its timed runs one at a time on one L3 complex.
-  - Part A uses at most 8 parallel jobs (`opam --jobs=8`, `make -j8`,
-    `lake` with 8 threads), under `nice`, never on a complex where
-    another experiment times, and starts only after the CPU set has been
-    agreed with the maintainer on the issue.
+  - Part A was first planned with at most 8 parallel jobs, starting
+    once the CPU set had been agreed with the maintainer. The decision
+    on the issue became: the pipeline picks whichever cores are free at
+    run time, away from any timed run, and records the set it used. As
+    run: cores 16-31 (four L3 complexes of 4 cores, SMT siblings 48-63
+    left idle), one complex per project, `-j 4` per project, at most 16
+    jobs at once, every command under `nice -n 10` and `taskset`.
   - Criterion 4 timings run on one L3 complex left idle, pinned with
     `taskset`, never at the same time as another experiment's timed runs.
   - Disk budget: 60 GB under `<workdir>/exp13/` (opam switches for two
@@ -410,7 +422,8 @@ Within the report's "days":
 
 ## Lab notebook
 
-One entry per run. Every entry records the commit of this repository,
+One entry per run, and for the builds one row per project (criterion
+"for each of the five projects"). Every entry records the commit of this repository,
 the commands, the machine (CPU model, `nproc`, load before and after),
 and the inputs' revisions. Part C entries add the window, the
 configuration (`projects.ml` at the recorded commit) and the
@@ -440,8 +453,15 @@ In `lab/results/`:
 - `2026-11-19-exp-13-builds.csv`: Part A, one row per (project, side);
 - `2026-11-19-exp-13-part-c-summary-v2.md` (it replaces
   `-part-c-summary.md`): the summary table across projects, Verus and
-  Isabelle included. The final summary with Part A,
-  `2026-11-19-exp-13-summary.md`, is still to come.
+  Isabelle included;
+- `2026-11-19-exp-13-mining-v3.md` and its CSVs: the mining figures with
+  the maintainer's methodology decisions;
+- `2026-11-19-exp-13-builds.md`, `-builds-files/`: the builds, patches
+  and per-run provenance;
+- `2026-11-19-exp-13-summary.md`: the final summary, mining and builds,
+  one line per tool;
+- `2026-11-19-exp-13-correction.md`, `-correction-2.md`: corrections
+  after the maintainer's decisions and the results review.
 
 ## Steps
 
@@ -451,8 +471,11 @@ In `lab/results/`:
 3. Clone the projects at D; write the configurations; run Part C.
 4. Classify; write the Part C notebook entry; post Part C results on the
    issue.
-5. Agree the CPU set on the bench host with the maintainer; run Part A,
-   one notebook entry per project.
+5. Run Part A on cores the pipeline picks (decision on the issue), one
+   notebook entry per project. As run: one notebook row for the five
+   projects, then, after the results review, one row per project
+   (criterion "for each of the five projects, a lab-notebook entry"),
+   appended.
 6. Summary table, results comment on the issue, follow-up issue for D and
    F builds, independent review of the results.
 
@@ -482,16 +505,52 @@ Raised by the plan review, decided by the experiment owner on
 
 ## Open points
 
-1. **CPU set on the bench host** for Part A, to agree with the
-   maintainer on the issue before step 5.
-2. **Normalisation by project size** (results review, problem 4): the
-   sizes are in the Part C summary v2; whether to report lines per kLOC
-   is for the maintainer.
-3. **Verus division** (results review, problem 7): Anvil's last commit
-   precedes the last 3 releases, and its first bump may pay for releases
-   before the window.
-4. **Human spot check** of the agent-estimated shares, and the open
-   decisions of the classification file.
+All closed by decisions on the issue:
+
+1. **CPU set on the bench host**: the pipeline picks free cores and
+   records them (cores 16-31 were used).
+2. **Normalisation by project size**: raw lines and lines per kLOC are
+   both reported (decision of 2026-11-19, 18:06 UTC).
+3. **Verus division**: Anvil is divided by the 49 Verus releases of its
+   active window (same decision).
+4. **Human spot check**: waived (decision of 2026-11-19, 19:29 UTC); the
+   results state that the shares of lean-regex `e2e33d6` (0.99), Anvil
+   `cc8ab6a` (0.05) and the Why3 gallery (0.006) were estimated by
+   Claude agents and not checked by a human. The other open decisions of
+   the classification file were taken in the 18:06 decision.
+
+## Deviations of the builds
+
+The builds ([`2026-11-19-exp-13-builds.md`](../lab/results/2026-11-19-exp-13-builds.md))
+differ from this plan as follows:
+
+1. **Why3 prover versions.** The plan, then the maintainer's decision,
+   asked for each project's pinned prover versions, then each prover's
+   latest release. The replays used one installed version per prover on
+   both sides (Alt-Ergo 2.6.2, CVC5 1.2.1, Z3 4.13.4), reached through a
+   Why3 prover upgrade policy from the about 90 versions recorded in the
+   1.8.2 sessions. Accepted by the maintainer, no rerun.
+2. **CVC4 replayed with CVC5.** Through the same policy, the five
+   recorded CVC4 versions (1.4 to 1.8) were replayed with CVC5 1.2.1, a
+   different prover.
+3. **Full gallery on two complexes at once.** To fit the 3-hour budget,
+   the full gallery's two sides ran at the same time (pinned on cores
+   28-31, latest on 16-19), not back to back; its latest / pinned ratio
+   is indicative only.
+4. **`prover/Prover` stopped.** That session alone would have exceeded
+   the budget; it was stopped on both sides, and both drivers were
+   stopped at the end of the budget. The comparison covers the 316
+   sessions finished on both sides, out of 453.
+5. **Reduced list.** The fixed subset is the sessions named in the
+   gallery's own `reduced_regtests.list` files (11 sessions), not a
+   subset chosen for this experiment.
+6. **Two driver fixes during the run**, both committed: F\* archives are
+   unpacked with two path components stripped (`24b8223`), and Warblre
+   builds `@mechanization/all @engines/all` rather than its default
+   targets, whose webpack rules need `npm install` (`6aecf11`).
+7. **Parallelism and core set**: `-j 4` per project, up to 16 jobs, on
+   cores picked by the pipeline (see "Machine budget"), instead of at
+   most 8 jobs on an agreed set.
 
 ## Risks
 
