@@ -1,0 +1,21 @@
+# Area 2: backreferences to groups that did not participate (ECMA-262:
+# an unset group's backreference matches the empty string, 22.2.2.7.2
+# BackreferenceMatcher step 2.d).
+# Columns: see probes/README.md. Subjects: UTF-8 text; \xHH = one byte
+# (one code point on the JS side); \u{H..} = code point.
+id	syntax	encoding	options	pattern	subject	js	note
+br01	Oniguruma	UTF-8		(a)$|\1	az		issue anchor
+br02	Oniguruma	UTF-8		\1(a)	aa		forward reference
+br03	Oniguruma	UTF-8		(a)?\1b	b		optional group skipped
+br04	Oniguruma	UTF-8		(a)|b\1	b		other alternative
+br05	Oniguruma	UTF-8		(?:(a)|b)\1c	bc		
+br06	Oniguruma	UTF-8		(?:(?<n>a)|(?<n>b))\k<n>	bb		duplicate name, second alternative set
+br07	Oniguruma	UTF-8		(?:(?<n>a)|(?<n>b))\k<n>	aa		duplicate name, first alternative set
+br08	Oniguruma	UTF-8		(?<n>a)(?<n>x)?\k<n>	aa	n/a: ECMA-262 2025 22.2.1.1 Early Errors (duplicate GroupSpecifier names must be in different alternatives)	multi-group continue path: second n unset, first set
+br09	Oniguruma	UTF-8		(?<n>a)(?<n>x)?\k<n>	ax	n/a: ECMA-262 2025 22.2.1.1 Early Errors (duplicate GroupSpecifier names must be in different alternatives)	multi-group: second n set to x, subject has no second x
+br10	Oniguruma+STRICT_BACKREF	UTF-8		(a)$|\1	az		strict
+br11	Oniguruma+STRICT_BACKREF	UTF-8		\1(a)	aa		strict, forward reference
+br12	Oniguruma+STRICT_BACKREF	UTF-8		(a)?\1b	b		strict
+br13	Oniguruma+STRICT_BACKREF	UTF-8		(?:(?<n>a)|(?<n>b))\k<n>	bb		strict, duplicate name
+br14	Ruby	UTF-8		(a)$|\1	az		Ruby syntax control
+br15	Perl	UTF-8		(a)$|\1	az		Perl syntax control

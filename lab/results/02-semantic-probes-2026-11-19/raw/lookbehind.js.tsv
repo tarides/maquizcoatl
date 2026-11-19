@@ -1,0 +1,70 @@
+id	js_pattern	js_flags	js_marks	js_result	js_result_u
+lb01o	(?<=az*)abc	-	-	M 3-6	M 3-6
+lb01r	(?<=az*)abc	-	-	M 3-6	M 3-6
+lb01p	(?<=az*)abc	-	-	M 3-6	M 3-6
+lb02o	(?<=ta+|tb+|tc+|td+)zz	-	-	M 4-6	M 4-6
+lb02r	(?<=ta+|tb+|tc+|td+)zz	-	-	M 4-6	M 4-6
+lb02p	(?<=ta+|tb+|tc+|td+)zz	-	-	M 4-6	M 4-6
+lb03o	(?<=a.*\w)z	-	-	M 3-4	M 3-4
+lb03r	(?<=a.*\w)z	-	-	M 3-4	M 3-4
+lb03p	(?<=a.*\w)z	-	-	M 3-4	M 3-4
+lb04o	(?<=a|bc)x	-	-	M 2-3	M 2-3
+lb04r	(?<=a|bc)x	-	-	M 2-3	M 2-3
+lb04p	(?<=a|bc)x	-	-	M 2-3	M 2-3
+lb05o	(?<!(a))b	-	-	M 1-2 | 1=-	M 1-2 | 1=-
+lb05r	(?<!(a))b	-	-	M 1-2 | 1=-	M 1-2 | 1=-
+lb05p	(?<!(a))b	-	-	M 1-2 | 1=-	M 1-2 | 1=-
+lb06o	(?<!(a))b	-	-	N	N
+lb06r	(?<!(a))b	-	-	N	N
+lb06p	(?<!(a))b	-	-	N	N
+lb07o	(?i:(a)(?<=\1))	-	js-flagged	M 0-1 | 1=0-1	M 0-1 | 1=0-1
+lb07r	(?i:(a)(?<=\1))	-	js-flagged	M 0-1 | 1=0-1	M 0-1 | 1=0-1
+lb07p	(?i:(a)(?<=\1))	-	js-flagged	M 0-1 | 1=0-1	M 0-1 | 1=0-1
+lb08o	(?<=(a+))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2
+lb08r	(?<=(a+))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2
+lb08p	(?<=(a+))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2
+lb09o	(?<=a+b)x	-	-	M 3-4	M 3-4
+lb09r	(?<=a+b)x	-	-	M 3-4	M 3-4
+lb09p	(?<=a+b)x	-	-	M 3-4	M 3-4
+lb10o	(?<!a+b)x	-	-	M 2-3	M 2-3
+lb10r	(?<!a+b)x	-	-	M 2-3	M 2-3
+lb10p	(?<!a+b)x	-	-	M 2-3	M 2-3
+lb11o	(?<=a*b)x	-	-	M 1-2	M 1-2
+lb11r	(?<=a*b)x	-	-	M 1-2	M 1-2
+lb11p	(?<=a*b)x	-	-	M 1-2	M 1-2
+lb12o	(?<=ba+)x	-	-	M 3-4	M 3-4
+lb12r	(?<=ba+)x	-	-	M 3-4	M 3-4
+lb12p	(?<=ba+)x	-	-	M 3-4	M 3-4
+lb13o	(?<!ba+)x	-	-	N	N
+lb13r	(?<!ba+)x	-	-	N	N
+lb13p	(?<!ba+)x	-	-	N	N
+lb14o	(?<=a+b*c)x	-	-	M 4-5	M 4-5
+lb14r	(?<=a+b*c)x	-	-	M 4-5	M 4-5
+lb14p	(?<=a+b*c)x	-	-	M 4-5	M 4-5
+lb15o	y(?<=a+b)	-	-	N	N
+lb15r	y(?<=a+b)	-	-	N	N
+lb15p	y(?<=a+b)	-	-	N	N
+lb16o	(?<=a+)x	-	-	M 2-3	M 2-3
+lb16r	(?<=a+)x	-	-	M 2-3	M 2-3
+lb16p	(?<=a+)x	-	-	M 2-3	M 2-3
+lb17o	(?<=a+a)x	-	-	M 3-4	M 3-4
+lb17r	(?<=a+a)x	-	-	M 3-4	M 3-4
+lb17p	(?<=a+a)x	-	-	M 3-4	M 3-4
+lb18o	(?<=\w+b)x	-	-	M 2-3	M 2-3
+lb18r	(?<=\w+b)x	-	-	M 2-3	M 2-3
+lb18p	(?<=\w+b)x	-	-	M 2-3	M 2-3
+lb19o	(?<!a+)x	-	-	M 1-2	M 1-2
+lb19r	(?<!a+)x	-	-	M 1-2	M 1-2
+lb19p	(?<!a+)x	-	-	M 1-2	M 1-2
+lb20o	(?<!a+b)x	-	-	N	N
+lb20r	(?<!a+b)x	-	-	N	N
+lb20p	(?<!a+b)x	-	-	N	N
+lb21o	(?<=(a|aa))b	-	-	M 2-3 | 1=1-2	M 2-3 | 1=1-2
+lb21r	(?<=(a|aa))b	-	-	M 2-3 | 1=1-2	M 2-3 | 1=1-2
+lb21p	(?<=(a|aa))b	-	-	M 2-3 | 1=1-2	M 2-3 | 1=1-2
+lb22o	(?<=(a*))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2
+lb22r	(?<=(a*))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2
+lb22p	(?<=(a*))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2
+lb23o	(?<=a+|b)x	-	-	M 2-3	M 2-3
+lb23r	(?<=a+|b)x	-	-	M 2-3	M 2-3
+lb23p	(?<=a+|b)x	-	-	M 2-3	M 2-3

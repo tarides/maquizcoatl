@@ -1,0 +1,17 @@
+# Area 1: captures inside quantified groups (are captures reset at the
+# start of each iteration, as in ECMA-262 22.2.2.3.1 RepeatMatcher step 4?).
+# Columns: see probes/README.md. Subjects: UTF-8 text; \xHH = one byte
+# (one code point on the JS side); \u{H..} = code point.
+id	syntax	encoding	options	pattern	subject	js	note
+cl01	Oniguruma	UTF-8		(?:(a)|b)+	ab		issue anchor
+cl02	Oniguruma	UTF-8		(?:(a)|b)+\1	aba		issue anchor
+cl03	Oniguruma	UTF-8		(?:(a)|b)+\1	abb		issue anchor
+cl04	Oniguruma	UTF-8		(?:(a)|(b))+	ab		both alternatives capture
+cl05	Oniguruma	UTF-8		((a)|b)+	ab		nested group
+cl06	Oniguruma	UTF-8		(?:(a)(b)?)+	aba		nested optional group, last iteration skips it
+cl07	Oniguruma	UTF-8		(z)((a+)?(b+)?(c))*	zaacbbbcac		ECMA-262 22.2.2.3.1 NOTE 3 example
+cl08	Oniguruma	UTF-8		(?:(a)|b)+?c	abc		lazy quantifier
+cl09	Oniguruma	UTF-8		(?:(a)|b)*?\1c	abac		lazy quantifier with backref
+cl10	Oniguruma	UTF-8		(?:(a)|b){2}	ab		fixed count
+cl11	Oniguruma	UTF-8		(?:(?<n>a)|b)+	ab		named group
+cl12	Oniguruma	UTF-8		(a|b)*	ab		control: same group in every iteration

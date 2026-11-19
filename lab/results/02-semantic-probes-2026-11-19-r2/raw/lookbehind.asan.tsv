@@ -1,0 +1,76 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+lb01o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=az*)abc	azzabc	M 3-6	M 3-6
+lb01r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=az*)abc	azzabc	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb01p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=az*)abc	azzabc	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb02o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=ta+|tb+|tc+|td+)zz	tbbbzz	M 4-6	M 4-6
+lb02r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=ta+|tb+|tc+|td+)zz	tbbbzz	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb02p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=ta+|tb+|tc+|td+)zz	tbbbzz	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb03o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a.*\w)z	abcz	M 3-4	M 3-4
+lb03r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a.*\w)z	abcz	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb03p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a.*\w)z	abcz	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb04o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a|bc)x	bcx	M 2-3	M 2-3
+lb04r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a|bc)x	bcx	M 2-3	M 2-3
+lb04p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a|bc)x	bcx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb05o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!(a))b	cb	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb05r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!(a))b	cb	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb05p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!(a))b	cb	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb06o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!(a))b	ab	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb06r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!(a))b	ab	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb06p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!(a))b	ab	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb07o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:(a)(?<=\1))	A	M 0-1 | 1=0-1	M 0-1 | 1=0-1
+lb07r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:(a)(?<=\1))	A	M 0-1 | 1=0-1	M 0-1 | 1=0-1
+lb07p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:(a)(?<=\1))	A	M 0-1 | 1=0-1	M 0-1 | 1=0-1
+lb08o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=(a+))b	aab	M 2-3 | 1=1-2	M 2-3 | 1=1-2
+lb08r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=(a+))b	aab	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb08p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=(a+))b	aab	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb09o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+b)x	aabx	M 3-4	M 3-4
+lb09r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+b)x	aabx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb09p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+b)x	aabx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb10o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!a+b)x	cbx	M 2-3	M 2-3
+lb10r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!a+b)x	cbx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb10p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!a+b)x	cbx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb11o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a*b)x	bx	M 1-2	M 1-2
+lb11r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a*b)x	bx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb11p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a*b)x	bx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb12o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=ba+)x	baax	M 3-4	M 3-4
+lb12r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=ba+)x	baax	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb12p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=ba+)x	baax	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb13o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!ba+)x	bax	N	N
+lb13r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!ba+)x	bax	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb13p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!ba+)x	bax	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb14o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+b*c)x	abbcx	M 4-5	M 4-5
+lb14r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+b*c)x	abbcx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb14p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+b*c)x	abbcx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb15o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	y(?<=a+b)	aaby	N	N
+lb15r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	y(?<=a+b)	aaby	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb15p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	y(?<=a+b)	aaby	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb16o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+)x	aax	M 2-3	M 2-3
+lb16r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+)x	aax	M 2-3	M 2-3
+lb16p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+)x	aax	M 2-3	M 2-3
+lb17o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+a)x	aaax	M 3-4	M 3-4
+lb17r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+a)x	aaax	M 3-4	M 3-4
+lb17p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+a)x	aaax	M 3-4	M 3-4
+lb18o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=\w+b)x	abx	M 2-3	M 2-3
+lb18r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=\w+b)x	abx	M 2-3	M 2-3
+lb18p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=\w+b)x	abx	M 2-3	M 2-3
+lb19o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!a+)x	bx	M 1-2	M 1-2
+lb19r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!a+)x	bx	M 1-2	M 1-2
+lb19p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!a+)x	bx	M 1-2	M 1-2
+lb20o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!a+b)x	aabx	N	N
+lb20r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!a+b)x	aabx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb20p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<!a+b)x	aabx	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb21o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=(a|aa))b	aab	M 2-3 | 1=1-2	M 2-3 | 1=1-2
+lb21r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=(a|aa))b	aab	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb21p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=(a|aa))b	aab	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb22o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=(a*))b	aab	M 2-3 | 1=2-2	M 2-3 | 1=2-2
+lb22r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=(a*))b	aab	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb22p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=(a*))b	aab	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb23o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+|b)x	aax	M 2-3	M 2-3
+lb23r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+|b)x	aax	M 2-3	M 2-3
+lb23p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a+|b)x	aax	M 2-3	M 2-3
+lb24o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a{65536})x	x	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb24r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a{65536})x	x	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb24p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a{65536})x	x	E -122 invalid pattern in look-behind	E -122 invalid pattern in look-behind
+lb25o	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a{65535})x	x	N	N
+lb25r	Ruby	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a{65535})x	x	N	N
+lb25p	Perl	UTF-8	NONE	0x40000000	6.9.10	asan	(?<=a{65535})x	x	N	N

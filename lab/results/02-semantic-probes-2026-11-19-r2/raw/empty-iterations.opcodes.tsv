@@ -1,0 +1,21 @@
+id	result	empty_check	lookbehind
+ei01	M 0-0 | 1=0-0	empty-check-end-memst	-
+ei02	M 0-0 | 1=0-0 2=0-0	empty-check-end-memst	-
+ei03	M 0-1 | 1=0-0 2=0-0 3=- 4=- 5=0-0 6=-	empty-check-end-memst	-
+ei04	M 0-2 | 1=2-2	empty-check-end	-
+ei05	M 0-0 | 1=0-0	empty-check-end	-
+ei06	M 0-3	-	-
+ei07	M 0-0 | 1=0-0	empty-check-end	-
+ei08	M 0-0 | 1=0-0	empty-check-end	-
+ei09	M 0-2 | 1=0-1	empty-check-end	-
+ei10	M 0-2 | 1=2-2	empty-check-end-memst	-
+ei11	M 0-1 | 1=0-1 2=1-1	empty-check-end	-
+ei17	N	empty-check-end-memst	-
+ei18	M 0-2 | 1=0-1 2=1-1	empty-check-end-memst	-
+ei12	E -221 never ending recursion	-	-
+ei13	M 0-4 | 1=0-3	-	-
+ei14	M 0-7 | 1=6-6	empty-check-end-memst-push	-
+ei15	M 0-1 | 1=0-0	empty-check-end-memst-push	-
+ei16	M 0-0 | 1=0-0	empty-check-end	-
+ei19	M 0-1 | 1=1-1	empty-check-end-memst	-
+ei20	M 0-1 | 1=1-1	empty-check-end-memst	-
