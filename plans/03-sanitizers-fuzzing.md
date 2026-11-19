@@ -21,6 +21,14 @@ Each confirmed bug becomes a candidate entry for the deviation log
 (#2): the spec will state the correct behaviour and record why it departs
 from `f95747b`. The experiment chooses no stack.
 
+Stack exhaustion (maintainer decision (a), issue comment 7008670586): a
+`fuzzer-deep` stack overflow at a parse depth within the library default
+(4096) is a confirmed bug and deviation-log candidate only if it
+reproduces with `read-deep-plain` (non-sanitized) under the default
+`ulimit -s`; it is recorded with the pattern depth and the stack size.
+An overflow seen only under ASan is a resource finding, recorded in the
+notebook and not listed as a deviation candidate.
+
 Prior (issue, "Prior"): these harnesses already ran under OSS-Fuzz for
 years, so a low fuzzing yield is expected and is itself a result. The
 less-fuzzed surface is the test suite under UBSan, `testp`, the
@@ -233,7 +241,8 @@ split, including restarts, is recorded.
    fuzz binary with the artifact path as argument. Each stack-overflow
    representative of `fuzzer-deep` is also replayed with
    `read-deep-plain` under the default `ulimit -s`, and the outcome and
-   pattern depth are recorded. Group by the top 3
+   pattern depth are recorded; this outcome decides between confirmed
+   bug and resource finding (decision 3). Group by the top 3
    symbolised frames of the sanitizer report; group `exit(-2)` artifacts
    ("fuzz target exited") by ONIG error code plus input, as criterion 3
    says; group timeouts by the top frames of the timeout stack. Minimise
@@ -315,7 +324,11 @@ in a new entry, not an overwrite.
    exited" with an identical stack, so they are deduplicated by error
    code plus minimised input and listed as internal-consistency bugs.
 4. Each confirmed bug is listed as a candidate deviation-log entry:
-   input, observed behaviour, correct behaviour, location.
+   input, observed behaviour, correct behaviour, location. A
+   `fuzzer-deep` stack exhaustion within the default depth limit counts
+   as a confirmed bug only if it reproduces in the plain, non-sanitized
+   build (decision 3), and is listed with its depth and stack size;
+   ASan-only exhaustions are listed in the notebook as resource findings.
 5. `upstream/` is unchanged (`git -C upstream status` is clean) at the
    end.
 
