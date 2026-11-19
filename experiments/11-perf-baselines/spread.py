@@ -12,7 +12,8 @@ Usage:
         mb_per_s                bytes per pass / median_s, in MB/s
         within_spread_max       largest per-run IQR / median
         within_range_max        largest per-run (max - min) / median
-        between_spread          (max - min) / median of the per-run medians
+        between_spread          (max - min) / median of the per-run medians;
+                                empty with fewer than two runs
         ratio_median, ratio_min, ratio_max
                                 speed ratio vs Oniguruma threaded on the
                                 same subset (the reference cell of
@@ -21,13 +22,17 @@ Usage:
                                 summarise.py
         ref_between_spread      between_spread of that reference cell
         distinguishable_from_1  yes when every run's ratio is on the same
-                                side of 1 and |ratio_median - 1| exceeds
-                                both between-run spreads, no otherwise;
-                                empty with fewer than two runs
+                                side of 1 and |ln ratio_median| exceeds
+                                the sum of the between-run spreads of the
+                                cell and of its reference, both over the
+                                runs that have the two (the relative
+                                errors of the two medians add up in their
+                                ratio), no otherwise; empty with fewer
+                                than two runs with the reference cell
 A cell that run.sh repeated (spread over 10%) is taken from its repeat,
 as summarise.py does.
 """
-import csv, statistics, sys
+import csv, math, statistics, sys
 
 ENGINES = ['onig-threaded', 'onig-switch', 'pcre2-interp', 'pcre2-jit', 're2', 'rust-regex', 'ocaml-re']
 WORKLOADS = ['jq', 'php', 'php-legacy', 'vscode', 'vscode-subst']
@@ -65,8 +70,12 @@ def ref_cell(e, w):
     return 'onig-threaded.%s' % w if e in ('onig-threaded', 'onig-switch') else 'onig-threaded@%s.%s' % (e, w)
 
 def between(meds):
+    """(median, (max - min) / median), the spread None for a single run"""
     m = statistics.median(meds)
-    return m, (max(meds) - min(meds)) / m
+    return m, (max(meds) - min(meds)) / m if len(meds) >= 2 else None
+
+def fmt(x):
+    return '' if x is None else '%.4f' % x
 
 def runs_table(paths):
     runs = [load_run(p) for p in paths]
@@ -83,16 +92,17 @@ def runs_table(paths):
             med, bsp = between([s[0] for s in st])
             nbytes = have[0][c][1]
             row = [e, w, len(have), '%.9g' % med, '%.6g' % (nbytes / med / 1e6) if nbytes else '',
-                   '%.4f' % max(s[2] for s in st), '%.4f' % max(s[3] for s in st), '%.4f' % bsp]
+                   '%.4f' % max(s[2] for s in st), '%.4f' % max(s[3] for s in st), fmt(bsp)]
             paired = [r for r in have if rc in r]
             if nbytes and paired:
                 ratios = [spread(r[rc][0])[0] / spread(r[c][0])[0] for r in paired]
                 rbsp = between([spread(r[rc][0])[0] for r in paired])[1]
+                psp = between([spread(r[c][0])[0] for r in paired])[1]
                 rmed = statistics.median(ratios)
                 same_side = all(x > 1 for x in ratios) or all(x < 1 for x in ratios)
                 dist = '' if e == 'onig-threaded' or len(paired) < 2 else \
-                    'yes' if same_side and abs(rmed - 1) > max(bsp, rbsp) else 'no'
-                row += ['%.4f' % rmed, '%.4f' % min(ratios), '%.4f' % max(ratios), '%.4f' % rbsp, dist]
+                    'yes' if same_side and abs(math.log(rmed)) > psp + rbsp else 'no'
+                row += ['%.4f' % rmed, '%.4f' % min(ratios), '%.4f' % max(ratios), fmt(rbsp), dist]
             else:
                 row += ['', '', '', '', '']
             W.writerow(row)
