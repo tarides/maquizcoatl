@@ -192,7 +192,8 @@ let tar_x l ~archive ~into ~strip =
   once ~dir:into ("unpack " ^ archive)
     (Command.v ~cwd:into "tar"
        ([ "-xzf"; Layout.downloads l / archive; "-C"; into ]
-       @ if strip then [ "--strip-components=1" ] else []))
+       @ if strip > 0 then [ Printf.sprintf "--strip-components=%d" strip ]
+         else []))
 
 let unzip l ~archive ~into =
   once ~dir:into ("unpack " ^ archive)
@@ -226,7 +227,7 @@ let install l lim t =
       let init_dir = Layout.switches l / "elan-init-v4.2.4" in
       Ok
         (download l elan
-        @ tar_x l ~archive:elan.file ~into:init_dir ~strip:false
+        @ tar_x l ~archive:elan.file ~into:init_dir ~strip:0
         @ once ~dir:(elan_home l) "elan-init"
             (Command.v ~env:(lean_env l) ~cwd:init_dir (init_dir / "elan-init")
                [ "-y"; "--no-modify-path"; "--default-toolchain"; "none" ])
@@ -242,7 +243,8 @@ let install l lim t =
       | Some sha256 ->
           let d = fstar_download v sha256 in
           Ok
-            (download l d @ tar_x l ~archive:d.file ~into:(home l t) ~strip:true)
+            (* The archive's entries are ./fstar/...: two components. *)
+            (download l d @ tar_x l ~archive:d.file ~into:(home l t) ~strip:2)
       )
   | Why3 v ->
       Ok

@@ -1,0 +1,7 @@
+project,unit,renamed_pairs,renamed_paths,lines_no_renames,lines_with_renames
+warblre,a5a3120,2,examples/coq_proof/Example.v->examples/rocq_proof/Example.v | specification_check/coq_parser.py->specification_check/rocq_parser.py,950,106
+creusot,eef25e4,4176,tests/creusot-std/verif/creusot_std_rlib/cell/pcell/impl_PCell_T/take/proof.json->tests/why3find.proofs/creusot-std.verif.creusot_std_rlib.cell.pcell.impl_PCell_T.take.json | tests/creusot-std/verif/creusot_std_rlib/ghost/fn_ghost/impl_Clone_for_FnGhostWrapper_F/clone/proof.json->tests/why3find.proofs/creusot-std.verif.creusot_std_rlib.ghost.fn_ghost.impl_Clone_for_FnGhostWrapper_F.clone.json | tests/creusot-std/verif/creusot_std_rlib/ghost/fn_ghost/impl_Clone_for_FnGhostWrapper_F/clone__refines/proof.json->tests/why3find.proofs/creusot-std.verif.creusot_std_rlib.ghost.fn_ghost.impl_Clone_for_,115161,299
+anvil,a65d68c,1,docker/controller/Dockerfile.local->docker/controller/Dockerfile,16,0
+anvil,0cd9f9f,4,src/deps_hack/Cargo.lock->Cargo.lock | src/vdeployment_admission_controller.rs->src/bin/vdeployment_admission_controller.rs | src/vreplicaset_admission_controller.rs->src/bin/vreplicaset_admission_controller.rs | src/vstatefulset_admission_controller.rs->src/bin/vstatefulset_admission_controller.rs,6486,308
+anvil,b1d8635,1,docker/controller/Dockerfile.local->docker/controller/Dockerfile,16,0
+anvil,aa757c8,2,deploy.sh->tools/deploy.sh | local-test.sh->tools/local-test.sh,264,4

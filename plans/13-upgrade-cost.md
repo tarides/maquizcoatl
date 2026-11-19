@@ -365,7 +365,7 @@ For each of the five projects of the issue:
 - **Part C** runs on the local workstation: clones and `git` only.
 - **Part A** runs on the shared bench host (64 threads, 503 GB
   of memory, about 140 GB of free disk on 2026-11-19), shared with the
-  argostrace production server and with the other experiments. On
+  a production service and with the other experiments. On
   2026-11-19 at 13:20 UTC, #3 was fuzzing on CPUs 8-31 and 40-63 (a
   campaign of about 110 minutes); #11, done, no longer pinned CPUs 4-7
   and 36-39; #7 runs its timed runs one at a time on one L3 complex.
