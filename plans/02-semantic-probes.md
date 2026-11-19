@@ -31,10 +31,22 @@ inconsistencies.
      -DCMAKE_BUILD_TYPE=Debug`, then `make -j4`.
    - `build-asan`: same, with `-DCMAKE_C_FLAGS="-fsanitize=address,undefined
      -fno-omit-frame-pointer"`, so that "crash or sanitizer report" in
-     the done-criteria is actually checked.
+     the done-criteria is actually checked. Upstream CMake builds libonig
+     as a shared library by default (`upstream/CMakeLists.txt:9`), so the
+     harness's ASan variant is compiled *and linked* with the same
+     `-fsanitize=address,undefined -fno-omit-frame-pointer` flags, and
+     each harness variant is linked with an rpath to its own build
+     directory (with `LD_LIBRARY_PATH` set to the same directory at run
+     time as a guard), so the Debug harness never loads the ASan library
+     or the reverse. Runs set
+     `ASAN_OPTIONS=detect_leaks=1:abort_on_error=0` and
+     `UBSAN_OPTIONS=print_stacktrace=1:halt_on_error=0`; the exact values
+     are recorded in the notebook command lines.
    Sanity check: run `test_utf8` on the Debug build and record its
    `RESULT` line (expected 1554 SUCC). `upstream/` is never written to;
-   `git -C upstream status` must stay clean.
+   `git -C upstream status` must stay clean. The exact `cmake` command
+   lines and the effective `CMAKE_C_FLAGS` of each build are recorded in
+   the notebook.
 2. **Write the probe harness** (`probes/harness.c` in this repository,
    built against `<workdir>/e02/build-*`). It reads a probe data file
    and, for each line, compiles the pattern with `onig_new` under the
@@ -45,17 +57,24 @@ inconsistencies.
    and the result (match range and all capture ranges, no-match, or the
    error code and message from `onig_error_code_to_str`). Output is
    TSV, one line per probe, so the run can be diffed and replayed.
+   Before the first `onig_new`, the harness calls `onig_initialize` with
+   `ONIG_ENCODING_UTF8` and `ONIG_ENCODING_ISO_8859_1`, and it calls
+   `onig_end` at exit.
    Syntax names map to the built-in `OnigSyntax*` objects; a special
    `Oniguruma+STRICT_BACKREF` name copies `OnigSyntaxOniguruma` with
    `onig_copy_syntax` and adds `ONIG_SYN_STRICT_CHECK_BACKREF` via
    `onig_set_syntax_behavior`. Subjects are given as escaped strings
    (`\xHH` for ISO-8859-1 bytes).
 3. **Write the JavaScript oracle** (`probes/oracle.mjs`, run with
-   Node.js). It reads the same data files, translates each pattern to a
+   Node.js 22 and the V8 flags `--js-regexp-modifiers
+   --js-regexp-duplicate-named-groups`, so that inline modifier groups
+   `(?i:…)` and duplicate named groups, both in ECMA-262 2025, are
+   expressible; rows that rely on either flag are marked `js-flagged`,
+   and the flags are recorded with `node --version`). It reads the same data files, translates each pattern to a
    JavaScript `RegExp` where the syntax is expressible (a per-probe
    `js` column holds the JavaScript spelling when it differs, or
-   `n/a` with an ECMA-262 clause reference when the engine cannot
-   express the probe), runs it with and without the `u` flag where the
+   `n/a` with an ECMA-262 clause reference, citing the edition, only
+   when ECMA-262 itself cannot express the probe), runs it with and without the `u` flag where the
    area asks for both, and prints the same TSV schema. Capture ranges
    come from the `d` (indices) flag. For ISO-8859-1 probes, the
    JavaScript side runs on the same code points as a UTF-16 string and
@@ -72,15 +91,31 @@ inconsistencies.
      `Oniguruma+STRICT_BACKREF`;
    - empty iterations: `()*\1`, `(?:()|())*\1\2`,
      `(?:()|()|()|(x)|()|())*\2b\5`, `(a|)*` and `(?:a?)*?b`,
-     plus one loop containing a subexpression call (`_PUSH` variant);
+     plus one loop whose body may be empty through a recursive call,
+     which is what selects the `_PUSH` variant
+     (`OP_EMPTY_CHECK_END_MEMST_PUSH`, `upstream/src/regcomp.c:993-994`,
+     taken only when the body is `ND_IS_RECURSION`,
+     `upstream/src/regcomp.c:5076`, `:5098`): a self-calling quantified
+     group such as `(?<r>a?\g<r>?)*b`, JavaScript column `n/a` (no
+     subexpression calls in ECMA-262 2025);
    - lookbehind: `(?<=az*)abc`, `(?<=ta+|tb+|tc+|td+)zz`,
      `(?<=a.*\w)z`, `(?<=a|bc)x`, `(?<!(a))b`, `(?i:(a)(?<=\1))`, and
      the `alt_reduce_in_look_behind` rewrite: `(?<=a+b)`, `(?<=a*b)`,
-     `(?<=ba+)`, positive and negative, head and non-head. Every
+     `(?<=ba+)`, `(?<=a+b*c)`, positive and negative, head and non-head.
+     The rewrite runs before `node_char_len`
+     (`upstream/src/regcomp.c:4628-4631`), so its observable effect is on
+     compile acceptance under the Ruby and Perl syntaxes (which reject
+     variable-length lookbehind), not on match results. `(?<=a+b*c)`
+     reduces to `ab*c` (reduction continues only after a removal), so it
+     stays variable-length. The data file records the expected
+     compile/error outcome per syntax for each of these probes. Every
      lookbehind probe is run under the Oniguruma, Ruby and Perl
      syntaxes;
    - case folding (UTF-8): `(?i:ss)` against `ß`, `ẞ`, `ſ`;
-     `(?i)(?<!ss)z`; `ǰ`; the same with
+     `ǰ`; the lookbehind limitation of `upstream/doc/RE:313-316`
+     (single-character conversions only; cf. `upstream/test/test_utf8.c:1575-1578`,
+     where the cross cases are commented out): `(?i)(?<!ss)z` on `ssz`,
+     `SSz`, `ßz`, and `(?i)(?<=ss)v` and `(?i)(?<=ß)v` on `ssv` and `ßv`; the same with
      `ONIG_OPTION_IGNORECASE_IS_ASCII`; JavaScript with and without
      `u`. Case folding (ISO-8859-1, single mode): `(?i)ss` against
      `\xDF` and `(?i)\xDF` against `ss`.
@@ -108,8 +143,9 @@ All actively maintained, all already installed on the machine:
 
 - GCC 15.2 and Clang 21.1 (Clang for the sanitizer build if GCC's
   UBSan output proves noisy), CMake 4.2.
-- Node.js v22.22.1 (JavaScript oracle; the exact `node --version` is
-  recorded with every run).
+- Node.js v22.22.1 (JavaScript oracle, with `--js-regexp-modifiers
+  --js-regexp-duplicate-named-groups`; the exact `node --version` and V8
+  flags are recorded with every run).
 - No spec or proof tool is used or chosen by this experiment.
 
 ## Where things live
@@ -146,7 +182,11 @@ Recorded with the lab-notebook skill, append-only:
 - `lab/notebook.md`: one index entry for the run (date, commit of this
   branch, upstream `f95747b`, `onig_version()`, build types, compiler
   and Node.js versions, CPU model and OS version for provenance, the
-  command lines to replay it), pointing at its results files.
+  exact `cmake` command lines and `CMAKE_C_FLAGS` per build, the V8
+  flags, the `ASAN_OPTIONS`/`UBSAN_OPTIONS` values, and the command
+  lines to replay it), pointing at its results files. Hostnames and
+  absolute paths are kept out (paths written as `<workdir>/...` or
+  repository-relative).
 - `lab/results/02-semantic-probes-<date>/`: the joined TSV per area
   (Oniguruma Debug, ASan, JavaScript, same/different), the
   `test_utf8` sanity line, the candidate deviation-log table, and the
@@ -161,7 +201,9 @@ Recorded with the lab-notebook skill, append-only:
 - Lab-notebook entry and results directory as above.
 - Per-area verdicts and the candidate deviation-log entries, summarised
   in a comment on #6.
-- A PR from `exp/02-semantic-probes` (opened at the run stage, not now).
+- A draft PR from `exp/02-semantic-probes`, opened with this plan;
+  results are pushed to the same branch. The PR also adds `probes/` and
+  `lab/` to the Layout section of `CLAUDE.md`.
 
 ## Done-criteria (from the issue)
 
@@ -173,7 +215,9 @@ Recorded with the lab-notebook skill, append-only:
   lab-notebook entry can replay the run.
 - At least 5 probes per area for each of the five areas, each run and
   recorded; each probe states the JavaScript (ECMA-262) result
-  alongside Oniguruma's, marked same/different.
+  alongside Oniguruma's, marked same/different. Counting rule: each area
+  has at least 5 probes with a concrete JavaScript result; `n/a` probes
+  are extra and do not count toward the 5.
 - Each lookbehind probe runs under at least the Oniguruma, Ruby and
   Perl syntaxes, and records the syntax.
 - The case-folding area also has ISO-8859-1 probes (one or two, single
@@ -198,8 +242,9 @@ Recorded with the lab-notebook skill, append-only:
   with duplicate names, `(?i:…)` inline groups, subexpression calls)
   has no direct JavaScript spelling in some probes. Mitigation: the
   per-probe `js` column, and `n/a` with the ECMA-262 clause when
-  inexpressible; such probes do not count toward the "5 compared"
-  minimum unless another probe in the area covers the same point.
+  inexpressible in ECMA-262 2025. V8 flags make `(?i:…)` and duplicate
+  named groups expressible. `n/a` probes do not count toward the 5
+  compared probes per area; they are extra.
 - **Node.js is an engine, not the spec.** V8 could deviate from
   ECMA-262 on an edge case. Mitigation: for each "different" verdict
   that drives an area verdict, check the ECMA-262 clause by hand and

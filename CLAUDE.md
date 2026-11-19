@@ -41,6 +41,10 @@ of the art" (https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc).
   never build inside it (that dirties the submodule).
 - `spec/` — the specification being written. `spec/SOURCES.md` records
   provenance (commit, SWHID, BSD-2-Clause licence).
+- `probes/` — probe harness, JavaScript oracle and probe data files
+  that characterise the C library's behaviour (experiment #2).
+- `lab/` — append-only lab notebook (`lab/notebook.md`) and recorded
+  results (`lab/results/`).
 
 ## Citing the original code
 
