@@ -19,3 +19,7 @@ Replay of run `r1`: `setup.sh switches; setup.sh clone; setup.sh cbuild;
 setup.sh engines; subjects.sh; run.py prepare r1; run.py pilot r1;
 run.py short r1 10; run.py large r1 10 16; run.py cata r1 10;
 summarise.py <exp>/out/r1 <out>`.
+
+Review-fix run `r2` (optimiser share): `setup.sh cbuild-noopt`, copy
+`<exp>/out/r1/work` to `<exp>/out/r2/work`, then
+`ENGINES_ONLY=c,c-noopt,vm run.py large r2 10 16`.

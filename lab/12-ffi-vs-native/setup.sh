@@ -1,6 +1,6 @@
 #!/bin/sh
 # Setup for experiment #12 on the bench host.
-# Usage: CACHE=<cache> EXP=<exp> setup.sh {switches|clone|cbuild}
+# Usage: CACHE=<cache> EXP=<exp> setup.sh {switches|clone|cbuild|engines|cbuild-noopt}
 # All jobs run under taskset -c 0-3,32-35 with at most 4 parallel jobs.
 set -eu
 : "${CACHE:?}" "${EXP:?}"
@@ -51,5 +51,15 @@ engines)
   done
   $TS gcc -O2 -Wall -I"$EXP/repo/upstream/src" "$EXP/repo/lab/12-ffi-vs-native/bench/cdriver.c" \
     -L"$L" -lonig -Wl,-rpath,"$L" -o "$EXP/bin/cdriver"
+  ;;
+cbuild-noopt)
+  # review fix (run r2): Release build with the search optimiser compiled
+  # out (upstream/src/regint.h:39), and the C driver linked against it
+  d="$EXP/build/onig-noopt"
+  $TS cmake -S "$EXP/repo/upstream" -B "$d" -DCMAKE_BUILD_TYPE=Release \
+    -DBUILD_SHARED_LIBS=ON -DCMAKE_C_FLAGS=-DONIG_DONT_OPTIMIZE
+  $TS make -C "$d" -j4
+  $TS gcc -O2 -Wall -I"$EXP/repo/upstream/src" "$EXP/repo/lab/12-ffi-vs-native/bench/cdriver.c" \
+    -L"$d" -lonig -Wl,-rpath,"$d" -o "$EXP/bin/cdriver-noopt"
   ;;
 esac
