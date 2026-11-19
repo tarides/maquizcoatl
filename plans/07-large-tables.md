@@ -40,6 +40,15 @@ unverified runtime data checked by the generator or a separate check.
    RAM and disk limits of the original issue no longer apply. Public
    provenance of that host is its CPU model, kernel and tool versions
    only.
+3. **Concurrency of timed runs: (c)**, from the maintainer's
+   [comment](https://github.com/tarides/maquizcoatl/issues/11#issuecomment-7008749724):
+   exploratory and bisection runs may run concurrently; the three timed
+   runs that enter the notebook run one after another (see Machine
+   budget).
+4. **F\* C backends: (b), both**, same comment, as decided for
+   experiment #4: KaRaMeL (`--codegen KrmlC` + `krml`) and the direct C
+   backend (`--codegen C`) are two separate targets, each recorded under
+   criteria 2 and 5.
 
 ## Where things live
 
@@ -121,19 +130,27 @@ setup, a one-line `#lang-pulse` module is checked as a smoke test.
 
 ## Machine budget
 
-Bench host: up to 32 parallel jobs (`opam --jobs=32`, `make -j32`),
+Bench host: experiments #3 (fuzzing, up to 40 jobs) and #11 (timing,
+pinned to the L3 complex of CPUs 4-7 and SMT siblings 36-39) run there
+at the same time, so this run uses at most 12 parallel jobs
+(`opam --jobs=12`, `make -j12`) and never uses CPUs 4-7 or 36-39. Up
+to 32 jobs would be allowed on an otherwise idle host,
 and at most 3 hours of wall-clock for the whole run, setup included.
 Long jobs run under `tmux` (or `nohup`), with logs in `<exp>/out/`.
 Each tool check runs under `ulimit -v 64G` and a `timeout`; hitting
 either counts as the documented failure of criterion 1 for that tool
 and representation, with the size reached.
 
-Timed runs (criterion 2) of different tools run concurrently, each
-pinned with `taskset` to its own L3 complex (the EPYC 7502P has eight
-complexes of four cores; one complex and its SMT siblings per tool,
-avoiding complex 0, which takes most interrupts; layout re-checked with
-`lscpu -e`). Runs of the same tool are sequential. Timed runs are not
-started when the load average exceeds 8. Per-run cap: 20 minutes;
+Timed runs (criterion 2) that enter the notebook run one after
+another (Decision 3), never two at a time, each pinned with `taskset`
+to one L3 complex kept for timing (the EPYC 7502P has eight complexes
+of four cores; avoiding complex 0, which takes most interrupts, and
+complex 1, pinned by #11; layout re-checked with `lscpu -e`).
+Exploratory and bisection runs may run concurrently with each other,
+on other cores. `uptime` is checked before each timed run and its load
+average is recorded with the run; timed runs are not started when the
+load average exceeds 8 (the background load of #3 is recorded, not
+avoided). Per-run cap: 20 minutes;
 if the first clean run of a step exceeds 10 minutes, that step is run
 once and flagged "single run" instead of the median of three.
 
@@ -276,9 +293,11 @@ represented as an association list sorted by name.
    - Why3 to OCaml (`why3 extract -D ocaml64`) and to C
      (`why3 extract -D c`), compiled with `ocamlopt` and `gcc -O2`;
    - F\* to OCaml (`--codegen OCaml`, the Custard extraction path;
-     legacy ML extraction is removed; compiled against `fstar.lib`)
-     and to C via KaRaMeL (`--codegen KrmlC`, then `krml`, compiled
-     with `gcc -O2`), with the command lines validated at setup.
+     legacy ML extraction is removed; compiled against `fstar.lib`),
+     to C via KaRaMeL (`--codegen KrmlC`, then `krml`, compiled
+     with `gcc -O2`), and to C via the direct backend (`--codegen C`,
+     compiled with `gcc -O2`), KaRaMeL and direct C being two separate
+     targets (Decision 4), with the command lines validated at setup.
    The size of each extracted source and binary is recorded. Compile
    steps that take the 24k-element nested `Cons` literals run under
    `ulimit -s unlimited`; a stack overflow is recorded as such, not as
