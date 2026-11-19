@@ -1,0 +1,23 @@
+id	syntax	encoding	options	pattern	subject	onig	asan_same	sanitizer	js_pattern	js_flags	js_marks	js	js_nou	cmp
+cf01	Oniguruma	UTF-8	NONE	(?i:ss)	ß	M 0-1	yes	clean	(?i:ss)	-	js-flagged	N	N	different
+cf02	Oniguruma	UTF-8	NONE	(?i:ss)	ẞ	M 0-1	yes	clean	(?i:ss)	-	js-flagged	N	N	different
+cf03	Oniguruma	UTF-8	NONE	(?i:ss)	ſs	M 0-2	yes	clean	(?i:ss)	-	js-flagged	M 0-2	N	same
+cf04	Oniguruma	UTF-8	NONE	(?i:ß)	ss	M 0-2	yes	clean	(?i:ß)	-	js-flagged	N	N	different
+cf05	Oniguruma	UTF-8	NONE	(?i:ß)	SS	M 0-2	yes	clean	(?i:ß)	-	js-flagged	N	N	different
+cf06	Oniguruma	UTF-8	NONE	(?i:ǰ)	ǰ	M 0-1	yes	clean	(?i:ǰ)	-	js-flagged	M 0-1	M 0-1	same
+cf07	Oniguruma	UTF-8	NONE	(?i:ǰ)	J̌	M 0-2	yes	clean	(?i:ǰ)	-	js-flagged	N	N	different
+cf08	Oniguruma	UTF-8	NONE	(?i)(?<!ss)z	ssz	N	yes	clean	(?<!ss)z	i	translated	N	N	same
+cf09	Oniguruma	UTF-8	NONE	(?i)(?<!ss)z	SSz	N	yes	clean	(?<!ss)z	i	translated	N	N	same
+cf10	Oniguruma	UTF-8	NONE	(?i)(?<!ss)z	ßz	M 1-2	yes	clean	(?<!ss)z	i	translated	M 1-2	M 1-2	same
+cf11	Oniguruma	UTF-8	NONE	(?i)(?<=ss)v	ssv	M 2-3	yes	clean	(?<=ss)v	i	translated	M 2-3	M 2-3	same
+cf12	Oniguruma	UTF-8	NONE	(?i)(?<=ss)v	ßv	N	yes	clean	(?<=ss)v	i	translated	N	N	same
+cf13	Oniguruma	UTF-8	NONE	(?i)(?<=ß)v	ssv	N	yes	clean	(?<=ß)v	i	translated	N	N	same
+cf14	Oniguruma	UTF-8	NONE	(?i)(?<=ß)v	ßv	M 1-2	yes	clean	(?<=ß)v	i	translated	M 1-2	M 1-2	same
+cf15	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i:ss)	ß	N	yes	clean	(?i:ss)	-	js-flagged	N	N	same
+cf16	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i:ß)	ss	N	yes	clean	(?i:ß)	-	js-flagged	N	N	same
+cf17	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i)(?<!ss)z	ßz	M 1-2	yes	clean	(?<!ss)z	i	translated	M 1-2	M 1-2	same
+cf18	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i:ss)	SS	M 0-2	yes	clean	(?i:ss)	-	js-flagged	M 0-2	M 0-2	same
+cf19	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i:k)	K	N	yes	clean	(?i:k)	-	js-flagged	M 0-1	N	different
+cf20	Oniguruma	UTF-8	NONE	(?i:k)	K	M 0-1	yes	clean	(?i:k)	-	js-flagged	M 0-1	N	same
+cf21	Oniguruma	ISO-8859-1	NONE	(?i)ss	\xDF	M 0-1	yes	clean	ss	i	translated,js-on-codepoints	N	N	different
+cf22	Oniguruma	ISO-8859-1	NONE	(?i)\xDF	ss	M 0-2	yes	clean	\xDF	i	translated,js-on-codepoints	N	N	different

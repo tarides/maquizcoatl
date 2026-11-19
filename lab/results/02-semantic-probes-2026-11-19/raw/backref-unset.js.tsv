@@ -1,0 +1,16 @@
+id	js_pattern	js_flags	js_marks	js_result	js_result_u
+br01	(a)$|\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-
+br02	\1(a)	-	-	M 0-1 | 1=0-1	M 0-1 | 1=0-1
+br03	(a)?\1b	-	-	M 0-1 | 1=-	M 0-1 | 1=-
+br04	(a)|b\1	-	-	M 0-1 | 1=-	M 0-1 | 1=-
+br05	(?:(a)|b)\1c	-	-	M 0-2 | 1=-	M 0-2 | 1=-
+br06	(?:(?<n>a)|(?<n>b))\k<n>	-	js-flagged	M 0-2 | 1=- 2=0-1	M 0-2 | 1=- 2=0-1
+br07	(?:(?<n>a)|(?<n>b))\k<n>	-	js-flagged	M 0-2 | 1=0-1 2=-	M 0-2 | 1=0-1 2=-
+br08	n/a: ECMA-262 2025 22.2.1.1 Early Errors (duplicate GroupSpecifier names must be in different alternatives)	-	n/a	n/a	n/a
+br09	n/a: ECMA-262 2025 22.2.1.1 Early Errors (duplicate GroupSpecifier names must be in different alternatives)	-	n/a	n/a	n/a
+br10	(a)$|\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-
+br11	\1(a)	-	-	M 0-1 | 1=0-1	M 0-1 | 1=0-1
+br12	(a)?\1b	-	-	M 0-1 | 1=-	M 0-1 | 1=-
+br13	(?:(?<n>a)|(?<n>b))\k<n>	-	js-flagged	M 0-2 | 1=- 2=0-1	M 0-2 | 1=- 2=0-1
+br14	(a)$|\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-
+br15	(a)$|\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-

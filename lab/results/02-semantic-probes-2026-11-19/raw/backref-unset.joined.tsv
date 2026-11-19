@@ -1,0 +1,16 @@
+id	syntax	encoding	options	pattern	subject	onig	asan_same	sanitizer	js_pattern	js_flags	js_marks	js	js_nou	cmp
+br01	Oniguruma	UTF-8	NONE	(a)$|\1	az	N	yes	clean	(a)$|\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-	different
+br02	Oniguruma	UTF-8	NONE	\1(a)	aa	N	yes	clean	\1(a)	-	-	M 0-1 | 1=0-1	M 0-1 | 1=0-1	different
+br03	Oniguruma	UTF-8	NONE	(a)?\1b	b	N	yes	clean	(a)?\1b	-	-	M 0-1 | 1=-	M 0-1 | 1=-	different
+br04	Oniguruma	UTF-8	NONE	(a)|b\1	b	N	yes	clean	(a)|b\1	-	-	M 0-1 | 1=-	M 0-1 | 1=-	different
+br05	Oniguruma	UTF-8	NONE	(?:(a)|b)\1c	bc	N	yes	clean	(?:(a)|b)\1c	-	-	M 0-2 | 1=-	M 0-2 | 1=-	different
+br06	Oniguruma	UTF-8	NONE	(?:(?<n>a)|(?<n>b))\k<n>	bb	M 0-2 | 1=- 2=0-1	yes	clean	(?:(?<n>a)|(?<n>b))\k<n>	-	js-flagged	M 0-2 | 1=- 2=0-1	M 0-2 | 1=- 2=0-1	same
+br07	Oniguruma	UTF-8	NONE	(?:(?<n>a)|(?<n>b))\k<n>	aa	M 0-2 | 1=0-1 2=-	yes	clean	(?:(?<n>a)|(?<n>b))\k<n>	-	js-flagged	M 0-2 | 1=0-1 2=-	M 0-2 | 1=0-1 2=-	same
+br08	Oniguruma	UTF-8	NONE	(?<n>a)(?<n>x)?\k<n>	aa	M 0-2 | 1=0-1 2=-	yes	clean	n/a: ECMA-262 2025 22.2.1.1 Early Errors (duplicate GroupSpecifier names must be in different alternatives)	-	n/a	n/a	n/a	n/a
+br09	Oniguruma	UTF-8	NONE	(?<n>a)(?<n>x)?\k<n>	ax	N	yes	clean	n/a: ECMA-262 2025 22.2.1.1 Early Errors (duplicate GroupSpecifier names must be in different alternatives)	-	n/a	n/a	n/a	n/a
+br10	Oniguruma+STRICT_BACKREF	UTF-8	NONE	(a)$|\1	az	N	yes	clean	(a)$|\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-	different
+br11	Oniguruma+STRICT_BACKREF	UTF-8	NONE	\1(a)	aa	E -208 invalid backref number/name	yes	clean	\1(a)	-	-	M 0-1 | 1=0-1	M 0-1 | 1=0-1	different
+br12	Oniguruma+STRICT_BACKREF	UTF-8	NONE	(a)?\1b	b	N	yes	clean	(a)?\1b	-	-	M 0-1 | 1=-	M 0-1 | 1=-	different
+br13	Oniguruma+STRICT_BACKREF	UTF-8	NONE	(?:(?<n>a)|(?<n>b))\k<n>	bb	M 0-2 | 1=- 2=0-1	yes	clean	(?:(?<n>a)|(?<n>b))\k<n>	-	js-flagged	M 0-2 | 1=- 2=0-1	M 0-2 | 1=- 2=0-1	same
+br14	Ruby	UTF-8	NONE	(a)$|\1	az	N	yes	clean	(a)$|\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-	different
+br15	Perl	UTF-8	NONE	(a)$|\1	az	N	yes	clean	(a)$|\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-	different
