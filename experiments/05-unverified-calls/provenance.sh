@@ -94,13 +94,14 @@ emit() {
     emit pins_sha256 "$(vu_sha256 "$VU_HARNESS/pins.json")"
     emit gcc "$(first_line gcc --version)"
     emit cmake "$(first_line cmake --version)"
-    emit opam "$(first_line opam --version)"
+    # The opam that setup.sh uses (VST and later switches), not the host's.
+    emit opam "$(first_line "${VU_CACHE:-}/bin/opam" --version)"
     emit why3 "$(first_line why3 --version)"
     emit alt-ergo "$(first_line alt-ergo --version)"
     emit z3_for_why3 "$(first_line "${VU_WHY3_Z3:-z3}" --version)"
     emit fstar "$(first_line fstar.exe --version)"
     emit krml "$(first_line krml -version)"
-    emit verus "$(first_line verus --version)"
+    emit verus "$(verus --version 2>/dev/null | awk '/Version:/ { print $2; f = 1 } END { if (!f) print "absent" }')"
     emit rustup "$(first_line rustup --version)"
     if command -v rustup >/dev/null 2>&1; then
       emit rust_toolchains "$(rustup toolchain list 2>/dev/null | tr '\n' ' ')"
