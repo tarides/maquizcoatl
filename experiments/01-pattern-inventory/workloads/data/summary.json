@@ -1,0 +1,264 @@
+{
+ "vscode": {
+  "scanners": 1492,
+  "searches": 473134,
+  "searches_written": 11263,
+  "distinct_compiled_patterns": 4221,
+  "dynamic_only_triples": 381,
+  "dynamic_only_examples": [
+   "\\￿",
+   "\\￿(#!).*(?=$)",
+   "(?!\\￿)([ \\t]*$\\n?)?",
+   "(?!\\￿)",
+   "\\￿.{0,50}(.{0,22}(.*))$",
+   "(?<=^-{3,}\\s*+)\\￿$",
+   "\\￿\\x{FEFF}++",
+   "(?>^|\\￿)(%)(YAML)([\t ]+)([0-9]+\\.[0-9]*)",
+   "(?>^|\\￿)(%)(TAG)(?>([\t ]++)((!)(?>[0-9A-Za-z-]*+(!))?+))?+",
+   "(?>^|\\￿)(%)([\\x{85}[^ \\p{Cntrl}\\p{Surrogate}\\x{FEFF FFFE FFFF}]]++)"
+  ],
+  "stock_vs_vscode_oniguruma_disagreements": 42,
+  "disagreement_kinds": {
+   "stock-compile-error": 42
+  },
+  "disagreement_files": {
+   "extensions/vscode-colorize-tests/test/colorize-fixtures/test.log": 42
+  },
+  "disagreement_examples": [
+   {
+    "query": 12700,
+    "scanner": 1059,
+    "origin": "extensions/vscode-colorize-tests/test/colorize-fixtures/test.log:1",
+    "subject": "[2017-12-21 12:47:29.584] [renderer1] [trace] CommandService#executeCommand workbench.view.explorer\n",
+    "start": 0,
+    "stock": {
+     "index": -2,
+     "match": null
+    },
+    "vscode-oniguruma": {
+     "index": 15,
+     "match": [
+      1,
+      11
+     ]
+    }
+   },
+   {
+    "query": 12701,
+    "scanner": 1059,
+    "origin": "extensions/vscode-colorize-tests/test/colorize-fixtures/test.log:1",
+    "subject": "[2017-12-21 12:47:29.584] [renderer1] [trace] CommandService#executeCommand workbench.view.explorer\n",
+    "start": 11,
+    "stock": {
+     "index": -2,
+     "match": null
+    },
+    "vscode-oniguruma": {
+     "index": 17,
+     "match": [
+      12,
+      24
+     ]
+    }
+   },
+   {
+    "query": 12702,
+    "scanner": 1059,
+    "origin": "extensions/vscode-colorize-tests/test/colorize-fixtures/test.log:1",
+    "subject": "[2017-12-21 12:47:29.584] [renderer1] [trace] CommandService#executeCommand workbench.view.explorer\n",
+    "start": 24,
+    "stock": {
+     "index": -2,
+     "match": null
+    },
+    "vscode-oniguruma": {
+     "index": 0,
+     "match": [
+      39,
+      44
+     ]
+    }
+   },
+   {
+    "query": 12703,
+    "scanner": 1059,
+    "origin": "extensions/vscode-colorize-tests/test/colorize-fixtures/test.log:1",
+    "subject": "[2017-12-21 12:47:29.584] [renderer1] [trace] CommandService#executeCommand workbench.view.explorer\n",
+    "start": 44,
+    "stock": {
+     "index": -2,
+     "match": null
+    },
+    "vscode-oniguruma": {
+     "index": 29,
+     "match": [
+      76,
+      99
+     ]
+    }
+   },
+   {
+    "query": 12704,
+    "scanner": 1059,
+    "origin": "extensions/vscode-colorize-tests/test/colorize-fixtures/test.log:1",
+    "subject": "[2017-12-21 12:47:29.584] [renderer1] [trace] CommandService#executeCommand workbench.view.explorer\n",
+    "start": 99,
+    "stock": {
+     "index": -2,
+     "match": null
+    },
+    "vscode-oniguruma": {
+     "index": -1,
+     "match": null
+    }
+   }
+  ]
+ },
+ "jq": {
+  "calls": 217,
+  "calls_with_subject_over_cap_skipped": 0,
+  "distinct_triples_compiled": 44,
+  "dynamic_only_triples": 0,
+  "dynamic_only": []
+ },
+ "sample_per_scanner": 20,
+ "php": {
+  "calls": 421,
+  "calls_with_subject_over_cap_skipped": 15003,
+  "distinct_triples_compiled": 194,
+  "dynamic_only_triples": 131,
+  "dynamic_only": [
+   "[[[[[[[I*[Δk\\K]\\k\\K]\\K]\u001cΰK]\u001cΰzsq~K\u001cRRRRRRRRRRRRRRRRRRRRRRRRRI*[Δk\\K]\\k\\K]\\K]\u001cΰK]\u001cΰzsq~K\u001c\u001cΰK]\u001cΰzsq~K\u001c0,6000ΰ{{ҡ\\0\\0f?Conte\\R8Ag\u0011\b{6000,6000ΰ{{{{{{{6000,6000ΰ{{{{{{{J\u0001",
+   "abc ([a-z]+) ([a-z]+) ([a-z]+)$",
+   null,
+   "abc ([a-z]+) ([a-z]+) ([a-z]+)$",
+   null,
+   "abc ([a-z]+) ([a-z]+) ([a-z]+)$",
+   "([ａ-ｚ]+) ([ あ-か]+)([か-な]+) ([わ-ん]+)$",
+   "1",
+   "-1",
+   "-1",
+   "(.*is)+.*\\.[[:blank:]][0-9]{9}",
+   ".*is+",
+   "(日本語).*?([1-9]+)",
+   "世界",
+   "\\w+((?<punct>？)|(?<punct>！))",
+   "日本語(.*)?[1-9]+",
+   "0",
+   "1",
+   "12345",
+   "-2345",
+   "10.5",
+   "-10.5",
+   "123456789000",
+   "1.23456789E-9",
+   "0.5",
+   "UTF-8",
+   "(?<name>a)",
+   "(?<name>a)",
+   null,
+   "(ab[a-z]+)",
+   null,
+   "(ab[a-z]+)",
+   null,
+   "(ab[a-z]+)",
+   null,
+   "(ab[a-z]+)",
+   " (・?∀・?)[[:space:]]",
+   "(ab[a-z]+)",
+   " (・?∀・?)[[:space:]]",
+   "(ab[a-z]+)",
+   "[[:alnum:]]+",
+   "[[:alpha:]]+",
+   "[[:ascii:]]+",
+   "[[:blank:]]+",
+   "[[:digit:]]+",
+   "[[:graph:]]+",
+   "[[:lower:]]+",
+   "[[:print:]]+",
+   "[[:punct:]]+",
+   "[[:space:]]+",
+   "[[:upper:]]+",
+   "[[:xdigit:]]+",
+   "[[:cntrl:]]+",
+   "^.*?[[:blank:]]?[[:punct:][:digit:]]+\\.?$",
+   "\\W+",
+   "\\s+",
+   "\\S+",
+   "\\d+",
+   "\\D+",
+   "\\b",
+   "\\B",
+   "([A-Z]\\w{1,4}is( [aeiou]|h)) ?.*\\.\\s[0-9]+(5([6-9][79]){2})[[:punct:]]$",
+   "[Α-Ω](\\w+ )+ε[α-ω\\s]+κ.*(ό|ο).*\\.\\s[0-9]+(5([6-9][79]){2})[[:punct:]]$",
+   "й",
+   "ц",
+   "у",
+   "к",
+   "е",
+   "н",
+   "г",
+   "ш",
+   "щ",
+   "з",
+   "х",
+   "ъ",
+   "ф",
+   "ы",
+   "в",
+   "а",
+   "п",
+   "р",
+   "о",
+   "л",
+   "д",
+   "ж",
+   "э",
+   "ё",
+   "я",
+   "ч",
+   "с",
+   "м",
+   "и",
+   "т",
+   "ь",
+   "б",
+   "ю",
+   "Й",
+   "Ц",
+   "У",
+   "К",
+   "Е",
+   "Н",
+   "Г",
+   "Ш",
+   "Щ",
+   "З",
+   "Х",
+   "Ъ",
+   "Ф",
+   "Ы",
+   "В",
+   "А",
+   "П",
+   "Р",
+   "О",
+   "Л",
+   "Д",
+   "Ж",
+   "Э",
+   "Ё",
+   "Я",
+   "Ч",
+   "С",
+   "М",
+   "И",
+   "Т",
+   "Ь",
+   "Б",
+   "Ю",
+   null,
+   "A(B|C+)+D|AC+X"
+  ]
+ }
+}

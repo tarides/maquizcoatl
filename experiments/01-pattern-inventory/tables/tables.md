@@ -327,3 +327,16 @@ triple with the feature; a grammar with one unsupported pattern cannot be fully 
 | backreferences | 15/82 (cpp, handlebars, latex, markdown-basics, perl, php, ruby, shellscript, sql, swift, xml) | 0/2 | 1/59 (mb_ereg_replace_named_subpatterns.phpt) |
 | multichar_casefold | 17/82 (bat, css, docker, handlebars, hlsl, html, latex, less, markdown-basics, php, powershell, razor, shaderlab, sql, vb) | 0/2 | 1/59 (bug78633.phpt) |
 
+## Dynamic-only triples
+
+Triples compiled at run time (workload capture) that the static extraction
+did not produce: computed or interpolated patterns (jq, PHP), and for VS Code
+the scanner variants in which vscode-textmate replaced `\A`/`\G` by U+FFFF or
+substituted `begin` captures into `end`/`while`. Not included in the tables above.
+
+| Source | triples | compile | captures | named groups | backreferences | lookahead | lookbehind | atomic groups | possessive | bounded repetition | subexp calls | absent | conditionals | callouts | unicode properties | case insensitive | multichar casefold | fuel tier |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| vscode | 381 | 381 | 321 | 0 | 5 | 253 | 214 | 101 | 190 | 105 | 38 | 0 | 0 | 0 | 4 | 62 | 16 | 39 |
+| jq | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 | 0 |
+| php | 131 | 125 | 21 | 3 | 0 | 0 | 0 | 0 | 0 | 3 | 0 | 0 | 1 | 0 | 0 | 70 | 1 | 1 |
+

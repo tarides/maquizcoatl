@@ -1,0 +1,131 @@
+{"syntax": "RUBY", "options": 13, "encoding": "UTF-8", "id": "70ecb34d27be", "pattern": "[[[[[[[I*[Δk\\K]\\k\\K]\\K]\u001cΰK]\u001cΰzsq~K\u001cRRRRRRRRRRRRRRRRRRRRRRRRRI*[Δk\\K]\\k\\K]\\K]\u001cΰK]\u001cΰzsq~K\u001c\u001cΰK]\u001cΰzsq~K\u001c0,6000ΰ{{ҡ\\0\\0f?Conte\\R8Ag\u0011\b{6000,6000ΰ{{{{{{{6000,6000ΰ{{{{{{{J\u0001"}
+{"syntax": "RUBY", "options": 0, "encoding": "EUC-JP", "id": "a4dfd773e033", "pattern": "abc ([a-z]+) ([a-z]+) ([a-z]+)$"}
+{"pattern_hex": "285ba3e12da3fa5d2b2920285b20a4a22da4ab5d2b29285ba4ab2da4ca5d2b2920285ba4ef2da4f35d2b2924", "syntax": "RUBY", "options": 0, "encoding": "EUC-JP", "id": "b9d0fdbd93b6", "pattern": null}
+{"syntax": "RUBY", "options": 0, "encoding": "Shift_JIS", "id": "cce669552f9e", "pattern": "abc ([a-z]+) ([a-z]+) ([a-z]+)$"}
+{"pattern_hex": "285b82812d829a5d2b2920285b2082a02d82a95d2b29285b82a92d82c85d2b2920285b82ed2d82f15d2b2924", "syntax": "RUBY", "options": 0, "encoding": "Shift_JIS", "id": "7d337a296034", "pattern": null}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "aaf45489971e", "pattern": "abc ([a-z]+) ([a-z]+) ([a-z]+)$"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "33c87912d0de", "pattern": "([ａ-ｚ]+) ([ あ-か]+)([か-な]+) ([わ-ん]+)$"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "729023116891", "pattern": "1"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "a322898d4f6b", "pattern": "-1"}
+{"syntax": "RUBY", "options": 13, "encoding": "UTF-8", "id": "5dfebcc89687", "pattern": "-1"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "9b47c949a6fb", "pattern": "(.*is)+.*\\.[[:blank:]][0-9]{9}"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "739ad1a3cb85", "pattern": ".*is+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "251e3a16c8eb", "pattern": "(日本語).*?([1-9]+)"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "db38a16d953e", "pattern": "世界"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "3b1ed0411a19", "pattern": "\\w+((?<punct>？)|(?<punct>！))"}
+{"syntax": "RUBY", "options": 1, "encoding": "UTF-8", "id": "3847adf20102", "pattern": "日本語(.*)?[1-9]+"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "31a859bab6a7", "pattern": "0"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "dd5a543803c1", "pattern": "1"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "868457c360b4", "pattern": "12345"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "fd706b4f3139", "pattern": "-2345"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "38eb884d0a95", "pattern": "10.5"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "633d7c90e34c", "pattern": "-10.5"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "2a202b862871", "pattern": "123456789000"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "0944af93b7b5", "pattern": "1.23456789E-9"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "c0a178ced64c", "pattern": "0.5"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "7acbe0e6e743", "pattern": "UTF-8"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "96c59cd72ca4", "pattern": "(?<name>a)"}
+{"syntax": "RUBY", "options": 13, "encoding": "UTF-8", "id": "5898af85ff32", "pattern": "(?<name>a)"}
+{"pattern_hex": "2028a1a63fa2cfa1a63f295b5b3a73706163653a5d5d", "syntax": "RUBY", "options": 0, "encoding": "EUC-JP", "id": "41e50ad5845e", "pattern": null}
+{"syntax": "RUBY", "options": 0, "encoding": "EUC-JP", "id": "8ef5b7f0ac82", "pattern": "(ab[a-z]+)"}
+{"pattern_hex": "2028a1a63fa2cfa1a63f295b5b3a73706163653a5d5d", "syntax": "RUBY", "options": 2, "encoding": "EUC-JP", "id": "5b9fcae3e3fd", "pattern": null}
+{"syntax": "RUBY", "options": 2, "encoding": "EUC-JP", "id": "ebe923d221ee", "pattern": "(ab[a-z]+)"}
+{"pattern_hex": "202881453f81cd81453f295b5b3a73706163653a5d5d", "syntax": "RUBY", "options": 0, "encoding": "Shift_JIS", "id": "ecebf142c391", "pattern": null}
+{"syntax": "RUBY", "options": 0, "encoding": "Shift_JIS", "id": "c90ce7d9e3be", "pattern": "(ab[a-z]+)"}
+{"pattern_hex": "202881453f81cd81453f295b5b3a73706163653a5d5d", "syntax": "RUBY", "options": 2, "encoding": "Shift_JIS", "id": "a6d8b58b49d5", "pattern": null}
+{"syntax": "RUBY", "options": 2, "encoding": "Shift_JIS", "id": "9dc1b00c74c4", "pattern": "(ab[a-z]+)"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "3f0914e998e6", "pattern": " (・?∀・?)[[:space:]]"}
+{"syntax": "RUBY", "options": 0, "encoding": "UTF-8", "id": "c44fc30ec967", "pattern": "(ab[a-z]+)"}
+{"syntax": "RUBY", "options": 2, "encoding": "UTF-8", "id": "f03ef028ca6b", "pattern": " (・?∀・?)[[:space:]]"}
+{"syntax": "RUBY", "options": 2, "encoding": "UTF-8", "id": "70b110976225", "pattern": "(ab[a-z]+)"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "8654b180ac6e", "pattern": "[[:alnum:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "4c7500e4733b", "pattern": "[[:alpha:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "0e875580a893", "pattern": "[[:ascii:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "171e66dbca59", "pattern": "[[:blank:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "494c9e0b4d55", "pattern": "[[:digit:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "ccf7bddb2dd1", "pattern": "[[:graph:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "3f0b510f8b2c", "pattern": "[[:lower:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "3611206edd63", "pattern": "[[:print:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "bba029d53d2f", "pattern": "[[:punct:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "71f2f51f1703", "pattern": "[[:space:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "61c54406474a", "pattern": "[[:upper:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "5a56a83e29d5", "pattern": "[[:xdigit:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "0312714d43fd", "pattern": "[[:cntrl:]]+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "c0fc21be4a94", "pattern": "^.*?[[:blank:]]?[[:punct:][:digit:]]+\\.?$"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "1913cfca7013", "pattern": "\\W+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "75465b903251", "pattern": "\\s+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "934c4641ff70", "pattern": "\\S+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "3654246e0373", "pattern": "\\d+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "de60fc6ea992", "pattern": "\\D+"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "7e55183af605", "pattern": "\\b"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "9da2cc18e659", "pattern": "\\B"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "15e9446543d0", "pattern": "([A-Z]\\w{1,4}is( [aeiou]|h)) ?.*\\.\\s[0-9]+(5([6-9][79]){2})[[:punct:]]$"}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "27edd41ce375", "pattern": "[Α-Ω](\\w+ )+ε[α-ω\\s]+κ.*(ό|ο).*\\.\\s[0-9]+(5([6-9][79]){2})[[:punct:]]$"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "6d7c71cd3c7b", "pattern": "й"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "18e75524c74c", "pattern": "ц"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "bd4b530fb1b2", "pattern": "у"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "4d6b721f9a75", "pattern": "к"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "9f44f8b23859", "pattern": "е"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "1346a6f7b71b", "pattern": "н"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "5780eb8bebe2", "pattern": "г"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "77e7ac28110f", "pattern": "ш"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "c9a9299a1f9e", "pattern": "щ"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "40f70138014c", "pattern": "з"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "a456698fdc27", "pattern": "х"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "95769094651c", "pattern": "ъ"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "3d9a9da6f938", "pattern": "ф"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "53929f7bd367", "pattern": "ы"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "c27358799730", "pattern": "в"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "9edd29573e94", "pattern": "а"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "92badb3c8502", "pattern": "п"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "bf3745e3ec96", "pattern": "р"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "4bbdcad4c9aa", "pattern": "о"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "2b6ecb3a19e5", "pattern": "л"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "bdf492701f52", "pattern": "д"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "9b95a19e150d", "pattern": "ж"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "290b54b14145", "pattern": "э"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "1f5c7e500954", "pattern": "ё"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "cd6bba6cab7a", "pattern": "я"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "770fcbebdc97", "pattern": "ч"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "2a9145a5ed4d", "pattern": "с"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "b25fb19b7c12", "pattern": "м"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "18b539a4201e", "pattern": "и"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "9b4d876911cb", "pattern": "т"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "ef994ec44986", "pattern": "ь"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "9ba5f0b38937", "pattern": "б"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "ce41480792c9", "pattern": "ю"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "5466658592c2", "pattern": "Й"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "1efc3756224e", "pattern": "Ц"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "6b41578809ae", "pattern": "У"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "370dc2c74d0b", "pattern": "К"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "87c3a714d63d", "pattern": "Е"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "704378a4381b", "pattern": "Н"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "f162b5797a94", "pattern": "Г"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "de448627e116", "pattern": "Ш"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "6ef3d46bf73f", "pattern": "Щ"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "b495f0105b3b", "pattern": "З"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "31005ae96f29", "pattern": "Х"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "2941af1d03ff", "pattern": "Ъ"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "1cceb992534d", "pattern": "Ф"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "8119eb0b3ca9", "pattern": "Ы"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "7074924108cf", "pattern": "В"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "7f325191c149", "pattern": "А"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "f77c38eb2b62", "pattern": "П"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "ae7cac48b783", "pattern": "Р"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "7d94bc8d23f7", "pattern": "О"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "35f90080067c", "pattern": "Л"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "b8c7c24d88cb", "pattern": "Д"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "e54f568807fc", "pattern": "Ж"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "4dbeebfe831b", "pattern": "Э"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "2ec950b6f8fd", "pattern": "Ё"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "31f4eac4c70a", "pattern": "Я"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "6fb6795ee9d5", "pattern": "Ч"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "cb85c9397a58", "pattern": "С"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "fc3a63880397", "pattern": "М"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "7315f356fb0f", "pattern": "И"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "2cd4cc833a66", "pattern": "Т"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "4ca446d83849", "pattern": "Ь"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "cf4c9cd9f7fe", "pattern": "Б"}
+{"syntax": "RUBY", "options": 13, "encoding": "ISO-8859-1", "id": "50c9c3c27955", "pattern": "Ю"}
+{"pattern_hex": "a1a12b", "syntax": "RUBY", "options": 0, "encoding": "EUC-JP", "id": "74d45f6c3c5b", "pattern": null}
+{"syntax": "RUBY", "options": 12, "encoding": "UTF-8", "id": "4245057812e0", "pattern": "A(B|C+)+D|AC+X"}
