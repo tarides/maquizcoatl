@@ -78,8 +78,8 @@ let () =
     | Ok re ->
         let s = String.make n 'a' ^ "!" in
         let t0 = now () in
-        let r = Re.execp re s in
-        Printf.printf "result\t%d\t%.6f\n" (Bool.to_int r) (now () -. t0)
+        let r = Re.exec_opt re s in
+        Printf.printf "result\t%d\t%.6f\n" (Bool.to_int (Option.is_some r)) (now () -. t0)
   end
   else if mode <> "check" && mode <> "time" then (prerr_endline "usage: ocaml_bench check|time|worst ..."; exit 2)
   else begin
