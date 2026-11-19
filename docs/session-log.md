@@ -142,3 +142,26 @@ deviation-log entries came out of it. The Fable review replayed the run
 byte for byte, then corrected one verdict by dumping the bytecode: the
 capture-status check on empty iterations applies only to groups referenced
 from outside the loop.
+
+## 2026-11-19 — Pattern inventory done; deviation log started
+
+**Experiment #1 (pattern inventory) is done**, about 70 minutes after the
+answer. From pinned sources it extracted 5,870 distinct VS Code grammar
+patterns, 44 jq and 73 PHP. Findings: 97.3% of patterns fall in the linear
+ReDoS tier (hosts weighted equally); lookahead appears in 41% of VS Code
+patterns and lookbehind in 24%; callouts never appear; the absent operator
+appears twice; subexpression calls are rare (2%) but spread across 18 of 82
+grammars. Proposed first subset: UTF-8, Oniguruma/Perl_NG/Ruby syntaxes,
+linear-tier features plus backreferences, covering 97.9% of compiling
+patterns. Five VS Code patterns that the older Oniguruma bundled in VS Code
+accepts are rejected by `f95747b`. One incident: an uncapped capture log
+filled the work disk for under a minute; the shim now caps it.
+
+**Experiment #2 follow-up.** The review's fixes were applied and three
+upstream behaviours became the first entries of `spec/deviations.md`
+(DEV-001 to DEV-003): lookbehind acceptance that depends on optimiser order,
+captures forbidden in negative lookbehind, and an empty-loop rule narrower
+than the documentation.
+
+#11 (performance baselines) now runs on the bench host with #1's workloads;
+#3 and #7 run there too.
