@@ -29,8 +29,8 @@ CPU split below weights them accordingly.
 
 ## Where things live
 
-The run happens on the blocksci bench host (maintainer decision, issue
-comment 7007355610). Nothing is built in the repository or in `upstream/`.
+The run happens on the bench host (maintainer decision, issue comment
+7007355610). Nothing is built in the repository or in `upstream/`.
 
 - `<hostdir>` = `~/maquizcoatl-work/exp/03-sanitizers-fuzzing/` on the
   bench host:
@@ -38,19 +38,24 @@ comment 7007355610). Nothing is built in the repository or in `upstream/`.
     the `upstream` submodule, checked out at the commit of branch
     `exp/03-sanitizers-fuzzing` that carries this plan and the scripts;
   - `<hostdir>/toolchain/` — user-local LLVM release (no root on the host);
-  - `<hostdir>/build/{fuzz,tests,arith}/` — three out-of-tree CMake
+  - `<hostdir>/build/{fuzz,tests,arith,plain}/` — four out-of-tree CMake
     builds of `src/maquizcoatl/upstream/` (see step 3);
   - `<hostdir>/harness/` — harness binaries, the `fuzzer-deep` copy of
-    `base.c`, the converted UTF-16 dictionaries;
+    `base.c`, the converted UTF-16 dictionaries, and the non-sanitized
+    `read-deep-plain`;
   - `<hostdir>/corpus/<target>/`, `<hostdir>/artifacts/<target>/`,
     `<hostdir>/logs/` — campaign state and output.
 - `<workdir>` (workstation, outside the repository): staging area for
-  results copied back from the host before they are selected into `lab/`.
+  results copied back from the host before they are selected into `lab/`,
+  including the corpus tarballs in `<workdir>/exp03-results/corpus/`.
 - In the repository (branch `exp/03-sanitizers-fuzzing`):
   - `experiments/03-sanitizers-fuzzing/` — the scripts (`setup.sh`,
     `build.sh`, `run-tests.sh`, `fuzz.sh`, `stats.sh`, `triage.sh`), the
     `fuzzer-deep` patch against `upstream/harnesses/base.c`, and
-    `split.tsv` (the CPU split);
+    `split.tsv` (the CPU split). They are committed and pushed to the
+    branch before step 1 (the branch held only this plan when it was
+    reviewed), and that commit is the one the host checks out and the one
+    recorded in `03-provenance.md`;
   - `lab/notebook.md` and `lab/results/` — the lab notebook (see
     "Recording").
 
@@ -64,6 +69,9 @@ provenance at run time.
   same version as checked on the workstation): clang, clang++,
   `libclang_rt.fuzzer`, ASan, UBSan, LeakSanitizer, `llvm-symbolizer`.
   Installed in `<hostdir>/toolchain/`; its SHA-256 is recorded.
+  Pre-checked on the workstation before the bench window (step 0): the
+  release asset exists (2,019,005,384 bytes, with a `.jsonl` attestation
+  alongside).
 - CMake 3.28 and GNU Make (host packages).
 - Python 3 (host package, standard library only, run with `-I`) for
   `upstream/harnesses/dict_conv.py` and the triage scripts.
@@ -78,7 +86,7 @@ workers. Planned timeline:
 | Phase | Wall-clock | Jobs |
 |---|---|---|
 | Setup: clone, toolchain download and check | 0:00–0:20 | 1–4 |
-| Builds (3 CMake trees + harnesses) | 0:20–0:30 | 3 × 16 |
+| Builds (4 CMake trees + harnesses) | 0:20–0:30 | 4 × 12 |
 | Test suite: ASan+UBSan pass and arithmetic pass | 0:30–0:45 | 16 |
 | Fuzzing campaign | 0:45–2:25 (100 min) | 48 |
 | Final stats, deduplication, minimisation, copy back | 2:25–3:00 | ≤ 48 |
@@ -110,11 +118,21 @@ split, including restarts, is recorded.
 | `fuzzer-deluxe` | `deluxe.c` | 7 | 11.7 |
 | `libfuzzer-onig` | `libfuzzer-onig.cpp` | 3 | 5.0 |
 | `libfuzzer-onig-full` | `libfuzzer-onig.cpp -DFULL_TEST` | 4 | 6.7 |
-| `fuzzer-deep` | patched copy of `base.c` | 9 | 15.0 |
+| `fuzzer-deep` | patched copy of `base.c` (own input format) | 9 | 15.0 |
 | **Total** | | **48** | **80.0** |
 
 ## Approach
 
+0. **Before the bench window (workstation).** Commit and push
+   `experiments/03-sanitizers-fuzzing/` (scripts, patch, `split.tsv`).
+   Download `LLVM-21.1.8-Linux-X64.tar.xz` into `<workdir>`, check its
+   size (2,019,005,384 bytes) and its `.jsonl` attestation, record its
+   SHA-256, and list the tarball (`tar -tJf`) to find
+   `libclang_rt.fuzzer*.a`. The release may use either runtime layout,
+   `lib/clang/21/lib/linux/libclang_rt.fuzzer-x86_64.a` or the
+   per-target `lib/clang/21/lib/x86_64-unknown-linux-gnu/libclang_rt.fuzzer.a`;
+   `build.sh` accepts both. The hash and the path found are recorded and
+   checked again on the host.
 1. **Host setup.** On the bench host, create `<hostdir>`, clone
    `tarides/maquizcoatl` with `--recurse-submodules`, check out the
    branch commit, and check that `upstream` is at `f95747b`. Record CPU
@@ -122,48 +140,73 @@ split, including restarts, is recorded.
    Nothing else about the host is recorded.
 2. **Toolchain.** Download the LLVM 21.1.8 release tarball into
    `<hostdir>/toolchain/`, record its SHA-256, extract it, and check that
-   `lib/clang/21/lib/x86_64-unknown-linux-gnu/libclang_rt.fuzzer.a` (or
-   the equivalent path) exists and that a trivial fuzz target links and
+   the `libclang_rt.fuzzer` found in step 0 exists (either layout) and that a trivial fuzz target links and
    runs with `-fsanitize=fuzzer,address,undefined`. Set
    `ASAN_SYMBOLIZER_PATH`/`UBSAN_SYMBOLIZER_PATH` to its
    `llvm-symbolizer`. If the release lacks the fuzzer runtime, see Risks.
 3. **Builds** (all `cmake -S src/maquizcoatl/upstream -B build/<name>`,
-   `CC`/`CXX` from the toolchain, `-DCMAKE_BUILD_TYPE=Debug`,
-   `-fno-omit-frame-pointer -g`):
-   - `build/fuzz`: `-DBUILD_SHARED_LIBS=OFF`, `CMAKE_C_FLAGS` with
+   `CC`/`CXX` from the toolchain, `-fno-omit-frame-pointer -g`):
+   - `build/fuzz`: `-DBUILD_SHARED_LIBS=OFF -DBUILD_TEST=OFF`, flags
+     `-O1 -g -fno-omit-frame-pointer` (no `CMAKE_BUILD_TYPE=Debug`, whose
+     `-O0` would cut throughput), `CMAKE_C_FLAGS` with
      `-fsanitize=fuzzer-no-link,address,undefined
      -fno-sanitize-recover=undefined`, so that libFuzzer's `cov`/`ft`
      measure the library.
-   - `build/tests`: `-DENABLE_POSIX_API=ON`, ASan + recoverable UBSan
-     (`-fsanitize=address,undefined`); builds the 7 default test binaries
+   - `build/tests`: `-DCMAKE_BUILD_TYPE=Debug -DENABLE_POSIX_API=ON`,
+     ASan + recoverable UBSan (`-fsanitize=address,undefined
+     -fsanitize-recover=address`); builds the 7 default test binaries
      and `testp`.
-   - `build/arith`: `-DENABLE_POSIX_API=ON`,
+   - `build/arith`: `-DCMAKE_BUILD_TYPE=Debug -DENABLE_POSIX_API=ON`,
      `-fsanitize=unsigned-integer-overflow,implicit-conversion`
      (recoverable), same 8 binaries (decision 1).
-   - Harnesses, in `<hostdir>/harness/`, each fuzz target linked with
+   - `build/plain`: `-DBUILD_SHARED_LIBS=OFF -DBUILD_TEST=OFF`, flags
+     `-O1 -g -fno-omit-frame-pointer`, no sanitizer. Only used to link
+     `read-deep-plain`, which confirms stack-overflow representatives
+     without ASan's enlarged frames, under the default `ulimit -s`.
+   - Harnesses, in `<hostdir>/harness/`, compiled with
+     `-O1 -g -fno-omit-frame-pointer`, each fuzz target linked with
      `-fsanitize=fuzzer,address,undefined -fno-sanitize-recover=undefined
      -I src/maquizcoatl/upstream/src` against `build/fuzz/libonig.a`,
      with the same `-D` flags as `upstream/harnesses/makefile:22-62`;
-     the `read-*` variants with `-fsanitize=fuzzer-no-link,...
-     -DSTANDALONE`.
+     the `read-*` variants of the `base.c`, `deluxe.c` and `regset.c`
+     targets with `-fsanitize=address,undefined -DSTANDALONE` (they read
+     the input from stdin, `base.c:752-757`). `libfuzzer-onig.cpp` has
+     no `STANDALONE` variant; its artifacts are replayed by running the
+     fuzz binary itself with the artifact path as argument.
    - `fuzzer-deep`: copy `upstream/harnesses/base.c` to
-     `<hostdir>/harness/base-deep.c` and apply the committed patch
-     (`PARSE_DEPTH_LIMIT` 8 → 4096, `MAX_SUBEXP_CALL_NEST_LEVEL` 8 → 20;
-     other limits unchanged). The copy keeps Oniguruma's copyright
-     notice. Build it like `fuzzer-encode`, plus `read-deep`.
+     `<hostdir>/harness/base-deep.c` and apply the committed patch:
+     `PARSE_DEPTH_LIMIT` 8 → 4096, `MAX_SUBEXP_CALL_NEST_LEVEL` 8 → 20,
+     and a two-byte pattern-size field (`NUM_CONTROL_BYTES` 7 → 8). In
+     upstream the size is one byte (`pattern_size_choice`,
+     `base.c:639-653`), which caps the pattern at 255 bytes; since depth
+     grows by about 2 per `(`, the reachable depth would be about 510,
+     far from 4096. Other limits are unchanged. `fuzzer-deep` therefore
+     has its own input format, and its own corpus (no sharing with
+     `fuzzer-encode`). The copy keeps Oniguruma's copyright notice.
+     Build `fuzzer-deep` like `fuzzer-encode`, and from the same patched
+     copy `read-deep` (ASan + UBSan) and `read-deep-plain` (against
+     `build/plain`).
    - Dictionaries: `upstream/harnesses/ascii_compatible.dict` as is, and
-     UTF-16 BE/LE versions produced by `python3 -I
-     upstream/harnesses/dict_conv.py` into `<hostdir>/harness/`.
+     UTF-16 BE/LE versions written by `build.sh` as
+     `python3 -I upstream/harnesses/dict_conv.py utf16_be
+     < upstream/harnesses/ascii_compatible.dict
+     > <hostdir>/harness/utf16_be.dict` (and `utf16_le` likewise): one
+     argument, dictionary on stdin.
 4. **Test suite, ASan + UBSan pass.** Run the 8 binaries of
    `build/tests` in parallel, each with
-   `ASAN_OPTIONS=detect_leaks=1:log_path=<logs>/tests/<bin>` and
-   `UBSAN_OPTIONS=halt_on_error=0:print_stacktrace=1:log_path=...`.
-   Keep stdout (the `RESULT` line) and every sanitizer log. Compare the
+   `ASAN_OPTIONS=halt_on_error=0:detect_leaks=1:log_path=<logs>/tests/<bin>`
+   and `UBSAN_OPTIONS=halt_on_error=0:print_stacktrace=1:log_path=...`,
+   so that a binary keeps running after a report and both every report
+   and the `RESULT` line are collected. Keep stdout (the `RESULT` line)
+   and every sanitizer log. If a binary still stops early (for example
+   on a SEGV), the truncated run is recorded explicitly as such. Compare the
    SUCC/FAIL/ERROR counts with the unsanitized expectations listed in the
    issue. Attribute each leak to the library or the test program.
 5. **Test suite, arithmetic pass.** Same for `build/arith`. Deduplicate
    reports by source location (`file:line:col` plus check kind) and
-   count occurrences.
+   count occurrences. Split the table into library locations
+   (`upstream/src/`) and test-program locations (`upstream/test/`); only
+   the library locations are classified.
 6. **Fuzzing campaign.** For each target, in its own tmux window under
    `nohup`, run libFuzzer in fork mode with the worker count of the
    split table: `-fork=N -ignore_crashes=1 -ignore_timeouts=1
@@ -172,17 +215,25 @@ split, including restarts, is recorded.
    `-dict=` the ASCII or UTF-16 dictionary, empty starting corpus in
    `<hostdir>/corpus/<target>/` (raw test patterns do not follow the
    control-byte format of `base.c:476-482`). `fuzzer-deep` gets
-   `-max_len=16384` so a 4096-deep pattern fits; the others keep
-   libFuzzer's default. ASan options: `detect_leaks=1`,
+   `-max_len=16384` so a 4096-deep pattern fits (with the two-byte size
+   field of step 3); the others keep libFuzzer's default. ASan options: `detect_leaks=1`,
    `print_stacktrace=1` for UBSan. Check the load and the logs at
    least every 20 minutes.
 7. **Final statistics.** For each target, one non-fork pass over the
-   final corpus with `-runs=0 -print_final_stats=1` to get the end
-   `cov`/`ft`; record executions and time from the fork-mode logs, and
-   corpus file count and total bytes. Archive each corpus as a tarball
-   on the host and record its SHA-256 and size.
+   final corpus with `-runs=0`; the end `cov`/`ft` are taken from its
+   `INITED`/`DONE` status line (`-print_final_stats=1` does not print
+   them), with the fork parent's last `#N: cov: ... ft: ...` line as a
+   cross-check. `stats.sh` parses those lines. Record executions and
+   time from the fork-mode logs, and corpus file count and total bytes.
+   Archive each corpus as a tarball on the host and record its SHA-256
+   and size.
 8. **Deduplication and minimisation.** Symbolise every artifact by
-   running the matching `read-*` binary on it. Group by the top 3
+   replaying it: `triage.sh` pipes it into the matching `read-*` binary
+   on stdin, or, for `libfuzzer-onig` and `libfuzzer-onig-full`, runs the
+   fuzz binary with the artifact path as argument. Each stack-overflow
+   representative of `fuzzer-deep` is also replayed with
+   `read-deep-plain` under the default `ulimit -s`, and the outcome and
+   pattern depth are recorded. Group by the top 3
    symbolised frames of the sanitizer report; group `exit(-2)` artifacts
    ("fuzz target exited") by ONIG error code plus input, as criterion 3
    says; group timeouts by the top frames of the timeout stack. Minimise
@@ -192,8 +243,9 @@ split, including restarts, is recorded.
 9. **Copy back.** `rsync` the logs, statistics, minimised reproducers
    (with their unminimised originals), group summaries and the
    arithmetic-pass table to `<workdir>/exp03-results/` on the
-   workstation. Corpora stay on the host (only their sizes and hashes are
-   copied).
+   workstation, and the per-target corpus tarballs to
+   `<workdir>/exp03-results/corpus/` (outside the repository; only their
+   sizes and hashes go into `lab/`).
 10. **Triage (desk work).** For each group: root cause at
     `upstream/<path>:<line>`, or "unexplained". Timeouts despite the
     harness limits are findings; `ONIGERR_*_LIMIT_OVER` results are not.
@@ -211,12 +263,15 @@ append-only, never overwritten. The maintainer decides what is worth
 keeping; candidates are:
 
 - `lab/results/03-provenance.md`: CPU model, kernel version, toolchain
-  version and SHA-256, CMake version, commit of the repository and of
-  `upstream`, exact build flags and sanitizer options.
+  version and SHA-256, path of `libclang_rt.fuzzer` in the release,
+  CMake version, commit of the repository (the one carrying the scripts,
+  step 0) and of `upstream`, exact build flags and sanitizer options,
+  and `ulimit -s` on the host.
 - `lab/results/03-tests-asan-ubsan.md`: per binary, the `RESULT` line,
   the sanitizer reports (deduplicated, with counts) and leak attribution.
-- `lab/results/03-tests-arith.md`: the location table with
-  classification.
+- `lab/results/03-tests-arith.md`: the location table, split into
+  `upstream/src/` and `upstream/test/`, with classification of the
+  library locations.
 - `lab/results/03-fuzz-campaign.md`: planned and actual CPU split; per
   target time, executions, final `cov`/`ft`, corpus files and bytes,
   corpus tarball hash; crash/timeout/oom counts.
