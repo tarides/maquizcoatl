@@ -3,6 +3,7 @@
 set -uo pipefail
 EXP=${EXP:-$HOME/maquizcoatl-work/exp/07-large-tables}
 L=$(cd "$(dirname "$0")/.." && pwd)
+CACHE=$HOME/maquizcoatl-work/cache
 . "$HOME/maquizcoatl-work/cache/env.sh"; . "$L/queries.env"
 export OUT=$EXP/out/$1/fstar; . "$L/tm.sh"
 B=$EXP/build/fstar/$1.$RUN; rm -rf "$B"; mkdir -p "$B"; cd "$B"
@@ -24,22 +25,22 @@ tm fstar-extract-ocaml $F --codegen OCaml --custard_entry Mem.ctype_mem --custar
 # extracted code uses (Prims) is compiled from its shipped source in the switch.
 cp "$CACHE/fstar/lib/fstar/lib/app/Prims.ml" ml/
 cd ml
-tm fstar-ocamlopt $X ocamlfind ocamlopt -package zarith -linkpkg Prims.ml Custard.ml main.ml -o fstar_e07
+tm fstar-ocamlopt $X ocamlfind ocamlopt -package zarith,yojson,ppx_deriving.show,ppx_deriving_yojson -linkpkg Prims.ml Custard.ml main.ml -o fstar_e07
 cd ..
 tm fstar-sample ml/fstar_e07 "$S/queries.txt" "$S/names.txt" answers-ocaml.txt
 python3 -I "$L/sample.py" compare "$S/oracle.txt" answers-ocaml.txt > "$OUT/sample-ocaml.$RUN.txt" 2>&1
 # KaRaMeL C target
-tm fstarc-extract-krml $F --codegen KrmlC --extract TableC TableC.fst --odir krml
+tm fstarc-extract-krml $F --codegen KrmlC --custard_entry TableC.ctype_mem TableC.fst --odir krml
 tm fstarc-krml krml -skip-compilation -tmpdir kc krml/*.krml
-tm fstarc-gcc-krml gcc -O2 -I kc -I "$CACHE/fstar/include/krml" -o krml_e07 kc/TableC.c driver_c.c -DTABLEC_KRML
+tm fstarc-gcc-krml gcc -O2 -I kc -I "$CACHE/fstar/include/krml" -I "$CACHE/fstar/lib/krml/dist/minimal" -o krml_e07 kc/Custard.c driver_c.c
 tm fstarc-sample-krml ./krml_e07 "$S/queries.txt" answers-krml.txt
 python3 -I "$L/sample.py" compare "$S/oracle.txt" answers-krml.txt 85772 > "$OUT/sample-krml.$RUN.txt" 2>&1
 # direct C target
-tm fstarc-extract-c $F --codegen C --extract TableC TableC.fst --odir dc
-tm fstarc-gcc-c gcc -O2 -I dc -o c_e07 dc/*.c driver_c.c -DTABLEC_DIRECT
+tm fstarc-extract-c $F --codegen C --custard_entry TableC.ctype_mem TableC.fst --odir dc
+tm fstarc-gcc-c gcc -O2 -I dc -o c_e07 dc/Custard.c driver_c.c
 tm fstarc-sample-c ./c_e07 "$S/queries.txt" answers-c.txt
 python3 -I "$L/sample.py" compare "$S/oracle.txt" answers-c.txt 85772 > "$OUT/sample-c.$RUN.txt" 2>&1
-ls -l Table.fst TableC.fst ml/Custard.ml ml/fstar_e07 kc/TableC.c krml_e07 dc/* c_e07 2>/dev/null | awk '{print $5"\t"$9}' > "$OUT/sizes.$RUN.tsv"
+ls -l Table.fst TableC.fst ml/Custard.ml ml/fstar_e07 kc/Custard.c krml_e07 dc/Custard.c c_e07 2>/dev/null | awk '{print $5"\t"$9}' > "$OUT/sizes.$RUN.tsv"
 [ "$RUN" = 1 ] || exit 0
 q() { printf 'module %s\nopen Mem\n%s\n' "$1" "$2" > "$1.fst"; tm "fstar-$1" $F "$1.fst"; }
 q Q0 ''

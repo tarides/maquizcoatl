@@ -8,7 +8,7 @@ EXP=${EXP:-$HOME/maquizcoatl-work/exp/07-large-tables}
 JOBS=${JOBS:-12}
 mkdir -p "$CACHE/bin" "$CACHE/dl" "$EXP"
 cat > "$CACHE/env.sh" <<EOS
-export OPAMROOT=$CACHE/opam ELAN_HOME=$CACHE/elan OPAMNOENVNOTICE=1 OPAMYES=1
+export OPAMROOT=$CACHE/opam ELAN_HOME=$CACHE/elan OPAMNOENVNOTICE=1 OPAMYES=1 WHY3CONFIG=$CACHE/why3.conf
 export PATH=$CACHE/bin:$CACHE/elan/bin:$CACHE/fstar/bin:\$PATH
 EOS
 . "$CACHE/env.sh"

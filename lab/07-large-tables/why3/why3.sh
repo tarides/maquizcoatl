@@ -19,8 +19,8 @@ tm why3-extract-ocaml $X why3 extract -D ocaml64 -L . --recursive mem.Mem -o why
 { cat driver.ml; sed -n '/^let () =/,$p' "$L/main_ml.ml"; } > main.ml
 tm why3-ocamlopt $X ocamlfind ocamlopt -package zarith -linkpkg why3_mem.ml main.ml -o why3_e07
 tm why3-sample ./why3_e07 "$S/queries.txt" "$S/names.txt" answers-ocaml.txt
-head -n 85772 answers-ocaml.txt > answers-ocaml-q.txt
-python3 -I "$L/sample.py" compare "$S/oracle.txt" answers-ocaml-q.txt 85772 > "$OUT/sample-ocaml.$RUN.txt" 2>&1
+
+python3 -I "$L/sample.py" compare "$S/oracle.txt" answers-ocaml.txt > "$OUT/sample-ocaml.$RUN.txt" 2>&1
 # C target (decision trees over uint32)
 tm why3c-extract-c $X why3 extract -D c -L . --recursive tablec.TableC -o tablec.c
 tm why3c-gcc gcc -O2 -I . -I "$($X why3 --print-datadir)/../../lib/why3" -o c_e07 tablec.c driver_c.c -DFN=ctype_mem
@@ -28,10 +28,12 @@ tm why3c-sample ./c_e07 "$S/queries.txt" answers-c.txt
 python3 -I "$L/sample.py" compare "$S/oracle.txt" answers-c.txt 85772 > "$OUT/sample-c.$RUN.txt" 2>&1
 ls -l table.mlw tablec.mlw why3_mem.ml why3_e07 tablec.c tablec.h c_e07 2>/dev/null | awk '{print $5"\t"$9}' > "$OUT/sizes.$RUN.tsv"
 [ "$RUN" = 1 ] || exit 0
-q() { tm "why3-$1" $X why3 execute -L . mem.mlw --use=Mem "$2"; }
+q() { tm "why3-$1" $X why3 execute -L . mem.mlw --use=Mem --rac-timelimit=1100 "$2"; }
 q Q1 "ctype_mem $LU 65"
 q Q2 "ctype_mem $LU 233"
 q Q3 "ctype_mem $GB 205743"
 q Q4 "ctype_mem $GB 205744"
 q Q0 "0"
-TMO=1800 tm why3-S1 $X why3 prove -L . -a compute_in_goal -T Sanity mem.mlw
+# criterion 4: compute_in_goal, then Alt-Ergo (5 s) on what remains; a goal
+# absent from the output was closed by the transformation alone
+TMO=1800 tm why3-S1 $X why3 prove -L . -a compute_in_goal -P alt-ergo -t 5 mem.mlw -T Sanity

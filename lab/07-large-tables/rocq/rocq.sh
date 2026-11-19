@@ -22,13 +22,13 @@ S=$EXP/sample
 tm rocq-sample ./rocq_e07 "$S/queries.txt" "$S/names.txt" answers.txt
 python3 -I "$L/sample.py" compare "$S/oracle.txt" answers.txt > "$OUT/sample.$RUN.txt" 2>&1
 [ "$RUN" = 1 ] || exit 0
-q() { printf 'From T Require Import Mem.\n%s\n' "$2" > "$1.v"; tm "rocq-$1" $RC "$1.v"; }
+q() { printf 'From Stdlib Require Import ZArith.\nFrom T Require Import Mem.\n%s\n' "$2" > "$1.v"; tm "rocq-$1" $RC "$1.v"; }
 q Q0 ''
 for ev in vm_compute native_compute; do
-  q "Q1_$ev" "Eval $ev in ctype_mem $LU 65."
-  q "Q2_$ev" "Eval $ev in ctype_mem $LU 233."
-  q "Q3_$ev" "Eval $ev in ctype_mem $GB 205743."
-  q "Q4_$ev" "Eval $ev in ctype_mem $GB 205744."
+  q "Q1_$ev" "Eval $ev in ctype_mem $LU%Z 65%Z."
+  q "Q2_$ev" "Eval $ev in ctype_mem $LU%Z 233%Z."
+  q "Q3_$ev" "Eval $ev in ctype_mem $GB%Z 205743%Z."
+  q "Q4_$ev" "Eval $ev in ctype_mem $GB%Z 205744%Z."
 done
 TMO=1800 q S1 "Lemma table_ok_true : table_ok = true. Proof. vm_compute. reflexivity. Qed."
 TMO=1800 q S2 "Lemma table_ok_true : table_ok = true. Proof. native_compute. reflexivity. Qed."
