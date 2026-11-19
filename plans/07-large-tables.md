@@ -4,7 +4,7 @@ Issue: [#11](https://github.com/tarides/maquizcoatl/issues/11) (the
 issue body is the reference for scope, inputs, measurement method and
 done-criteria; this plan says how).
 Source: maintainer's state-of-the-art report, "Experiments before
-deciding", row #7, and the "Generated tables" item
+deciding", row of experiment #7, and the "Generated tables" item
 (https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc).
 
 ## Objective
@@ -26,11 +26,11 @@ unverified runtime data checked by the generator or a separate check.
    maintainer's
    [comment](https://github.com/tarides/maquizcoatl/issues/11#issuecomment-7008343994):
    the table must not exceed the rest of the spec's build time, settled
-   after experiment #6 (issue #1). #6 has not run, so this run records
+   after experiment #6 (issue #1). Experiment #6 has not run, so this run records
    every number needed to apply the cap later (check, extraction and
    compile times and peak memory, per tool and per target), and states
    each verdict as **provisional**, with the threshold left symbolic
-   ("in-prover if T_table <= T_spec(#6)"). When #6 reports, the
+   ("in-prover if T_table <= T_spec(#6)"). When experiment #6 reports, the
    verdicts are settled from the recorded numbers in a new notebook
    entry; nothing is re-run unless tool versions differ.
 2. **Execution host**, from the maintainer's
@@ -55,7 +55,7 @@ unverified runtime data checked by the generator or a separate check.
 - **Bench host.** Nothing is installed system-wide and the account's
   existing opam root (opam 2.1.5) is not touched.
   - `~/maquizcoatl-work/cache/` (written `<cache>`): shared toolchains,
-    reusable by later experiments (#13 on issue #3, #5 on issue #13):
+    reusable by later experiments (experiment #13 on issue #3, experiment #5 on issue #13):
     `<cache>/bin/opam` (a pinned current opam binary),
     `<cache>/opam/` (`OPAMROOT`, one switch `provers` holding OCaml,
     Rocq, Why3, Alt-Ergo, F\*), `<cache>/karamel/` (KaRaMeL built from a
@@ -145,11 +145,11 @@ Timed runs (criterion 2) that enter the notebook run one after
 another (Decision 3), never two at a time, each pinned with `taskset`
 to one L3 complex kept for timing (the EPYC 7502P has eight complexes
 of four cores; avoiding complex 0, which takes most interrupts, and
-complex 1, pinned by #11; layout re-checked with `lscpu -e`).
+complex 1, pinned by experiment #11; layout re-checked with `lscpu -e`).
 Exploratory and bisection runs may run concurrently with each other,
 on other cores. `uptime` is checked before each timed run and its load
 average is recorded with the run; timed runs are not started when the
-load average exceeds 8 (the background load of #3 is recorded, not
+load average exceeds 8 (the background load of experiment #3 is recorded, not
 avoided). Per-run cap: 20 minutes;
 if the first clean run of a step exceeds 10 minutes, that step is run
 once and flagged "single run" instead of the median of three.
@@ -171,7 +171,7 @@ check cap per tool. **Follow-up**, outside this budget, listed on the
 issue if needed: the secondary representations; a structural
 (non-computational) proof of the sanity lemma within the issue's
 2-hour engineering budget per tool, for tools where reflection fails;
-settling the verdicts when #6 reports.
+settling the verdicts when experiment #6 reports.
 
 ## Representations
 
@@ -316,7 +316,7 @@ represented as an association list sorted by name.
 10. **Provisional verdict inputs.** For each tool and target, the
     run records `T_table` = check time + extraction + compile time
     of the table, and peak RSS, so the relative cap of Decision 1 can
-    be applied as soon as #6 gives `T_spec`.
+    be applied as soon as experiment #6 gives `T_spec`.
 
 11. **Sanity lemma** (criterion 4). Statement: in every `CR_*` array,
     ranges satisfy `lo <= hi` and `hi_i + 1 < lo_(i+1)` (sorted,
@@ -365,7 +365,7 @@ recorded run, linking to its file) and
 Planned entries:
 
 1. `toolchains`: installed versions, KaRaMeL commit, setup time and
-   disk use of `<cache>` (useful to #13 and #5).
+   disk use of `<cache>` (useful to experiments #13 and #5).
 2. `fidelity`: counts, generator-versus-file comparison, oracle build,
    and the 13 code points where `onigenc_unicode_is_code_ctype`
    disagrees with the `CR_*` tables (a finding for the deviation log).
@@ -375,11 +375,11 @@ Planned entries:
    timings and exact command lines, artefact sizes, and criterion 5 sample results.
 5. `sanity-lemma`: per tool, criterion 4 outcome.
 6. `verdicts`: the provisional per-tool verdicts (criterion 6) with
-   the numbers they rest on and the open threshold from #6.
+   the numbers they rest on and the open threshold from experiment #6.
 
 Exploratory and bisection runs are recorded only as part of the entry
 they explain. The maintainer decides on any further entry, including
-the one settling the verdicts after #6.
+the one settling the verdicts after experiment #6.
 
 ## Outputs
 
@@ -424,10 +424,10 @@ For each of the four tools, recorded in the lab notebook:
 - **Shared host noise.** Other users share the bench host. Mitigation:
   pinning on separate L3 complexes, load check before each timed run,
   medians of three, load average recorded.
-- **Verdict depends on #6.** By decision, the verdicts stay provisional
-  until #6 reports; the numbers recorded here are sufficient to settle
+- **Verdict depends on experiment #6.** By decision, the verdicts stay
+  provisional until experiment #6 reports; the numbers recorded here are sufficient to settle
   them without re-running, provided tool versions are compatible with
-  #6's.
+  experiment #6's.
 - **Old opam on the host (2.1.5).** A current opam binary in `<cache>`
   is used; the system one is not upgraded.
 - **Leaking host details.** Raw outputs pass a redaction check before
