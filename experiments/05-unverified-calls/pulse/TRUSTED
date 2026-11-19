@@ -1,0 +1,30 @@
+# Trusted lines of the F* + Pulse prototype (format: ../count-trusted.sh).
+#
+# Modelling style: client contract. Each client C function pointer is a
+# Pulse function-typed parameter; its type (pre, post) is assumed by the
+# verified code and checked nowhere, since the client is C. There is no
+# shim, no axiom and no assume val: KaRaMeL emits the indirect call.
+#
+# Contract of the encoding callee (vu_char_len's f): reads p's byte
+# through a fraction of its permission, returns any int32_t.
+VU.fst:196-196
+# Contract of the callout callee (vu_callout_step's f): gets the whole
+# args record, gives it back with the verified-side state unchanged.
+VU.fst:226-228
+# ... and the definition of "verified-side state unchanged".
+VU.fst:91-93
+# Contract of the client's apply_all_case_fold (vu_fold_all's g): given
+# vu_i_apply and a well-formed record, gives it back well formed.
+VU.fst:298-300
+# ... and the definition of "well formed", with its constant.
+VU.fst:33-33
+VU.fst:108-109
+# ABI mapping from proto.h to the generated C, written by hand: the
+# expected type of each generated function (void * written as uint8_t *
+# or vu_fold_rec *, int as int32_t). abi_check.c fails to compile when
+# the generated C differs from it; that this mapping matches proto.h is
+# trusted. The struct layouts are not trusted: layout.c compares them.
+abi_check.c:21-32
+#
+# Not counted: the toolchain (F*, Pulse, the Custard extraction, krml,
+# krmllib's headers, the C compiler), as for every tool.
