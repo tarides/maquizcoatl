@@ -29,13 +29,19 @@ measured.
   - `<workdir>/exp04/build/onig/` and `<workdir>/exp04/build/onig-posix/`
     — out-of-tree Release builds of upstream `f95747b`, default and
     `-DENABLE_POSIX_API=ON` (the symbol oracle);
-  - `<workdir>/exp04/harness/` — test binaries, `testp`, the 15 samples,
+  - `<workdir>/exp04/harness/` — test binaries, `testp`, the 15 samples
+    (15 of the 16 `sample/*.c`; `crnl.c` excluded, it needs
+    `USE_CRNL_AS_LINE_TERMINATOR`, which the CMake build sets to 0),
     the client-encoding test and the layout program, built against the
     upstream headers;
-  - `<workdir>/exp04/stubs/m{1,2,3,4}/` — one stub per mechanism, each
-    installed into its own prefix (`lib/`, `include/`, `lib/pkgconfig/`);
-  - `<workdir>/toolchains/` — emsdk, F\* + Pulse + KaRaMeL, Why3 and/or
-    CompCert's `clightgen` (opam switch), Isabelle + Isabelle-LLVM;
+  - `<workdir>/exp04/stubs/m{1,2,3,4}/{default,posix}/` — per mechanism a
+    default stub and a POSIX stub (the default one plus the 8
+    `onig_posix_*` functions and `onigposix.h`), each installed into its
+    own prefix (`lib/`, `include/`, `lib/pkgconfig/`) and diffed against
+    the matching oracle build;
+  - `<workdir>/toolchains/` — emsdk, the F\* release tarball (Pulse and
+    KaRaMeL included), Why3 and CompCert's `clightgen` (opam switch),
+    Isabelle + Isabelle-LLVM;
     shared with other experiments where they already exist.
 - In the repository (branch `exp/04-abi-feasibility`):
   - `experiments/04-abi-feasibility/` — scripts (`oracle.sh`,
@@ -53,12 +59,21 @@ release at run time with the exact version recorded:
 
 - `cbindgen` (via `cargo install`) — C header from the Rust stub's
   `#[repr(C)]` types, for mechanism 3's layout check;
-- CompCert `clightgen` (opam) for VST's front end, and Why3 (opam), for
-  mechanism 2's front-end check;
+- Why3 (opam, 1.9.0 in the default opam repository) for mechanism 2's
+  WhyML-to-C extraction check (`why3 extract -D c`);
+- CompCert `clightgen` for VST's front end: package `coq-compcert` from
+  the Rocq released opam repository (`rocq-released`,
+  https://rocq-prover.org/opam/released), which is not configured here
+  and must be added; it builds on `rocq-prover` (9.3.0 in the default
+  repository), tens of minutes and 2-3 GB on a fresh switch;
 - emsdk (latest emscripten) for criterion 4, mechanisms 1 and 2;
-- F\* release tarball with Pulse and KaRaMeL, for mechanism 1;
-- Isabelle release tarball plus Isabelle-LLVM from its repository, for
-  mechanism 4.
+- F\* Linux x86_64 release tarball (v2026.11.15 or later, about 250 MB),
+  which ships `bin/fstar.exe`, `bin/krml`, `share/pulse/` and
+  `share/krml/`, for mechanism 1; not the opam `karamel` package (1.0.0,
+  stale);
+- Isabelle release tarball (Isabelle2026) plus Isabelle-LLVM from
+  `lammich/isabelle_llvm`, branch `2026` (matching Isabelle2026; `master`
+  was last pushed in 2022-09 and is not used), for mechanism 4.
 
 ## Approach
 
@@ -69,14 +84,32 @@ release at run time with the exact version recorded:
    exported symbol as public (declared in `oniguruma.h`, `oniggnu.h`,
    `onigposix.h`) or leaked internal (`regenc.h`), by grepping the
    installed headers; write `symbols.tsv` (name, kind F/D, class,
-   header:line). Check the counts against the issue (270 functions,
-   54 data symbols in the default build; 30 `OnigEncoding*`, KOI8
-   declared-only).
+   header:line, build default/posix). The expected counts are derived
+   from `symbols.tsv`, never hard-coded; as a cross-check, the review
+   measured 270 functions and 52 data symbols in the default build
+   (44 public: 30 `OnigEncoding*`, KOI8 declared-only, 12 `OnigSyntax*`,
+   `OnigDefaultSyntax`, `OnigDefaultCaseFoldFlag`; plus 8 leaked
+   internals), and 278 functions (the 8 extra `onig_posix_*`) and the
+   same 52 data symbols in the POSIX build. The POSIX symbols at
+   `f95747b` are prefixed: `onig_posix_regcomp`, `onig_posix_regexec`,
+   `onig_posix_regfree`, `onig_posix_regerror`,
+   `onig_posix_reg_set_encoding`,
+   `onig_posix_reg_name_to_group_numbers`, `onig_posix_reg_foreach_name`,
+   `onig_posix_reg_number_of_names` (`upstream/src/onigposix.h:163-173`);
+   unprefixed `regcomp` etc. are macros (`:176-187`) and exist as symbols
+   only with `ENABLE_BINARY_COMPATIBLE_POSIX_API`, off by default and
+   not used here.
 
 2. **Harness** (about 30 min; criteria 2, 3). In `<workdir>/exp04/harness/`:
-   - the seven test binaries and `testp`, taken from the two builds and
-     relinked against any `libonig.so.5` via `LD_LIBRARY_PATH`;
-   - the 15 `sample/*.c` compiled directly against
+   - the seven test binaries taken from the default build and only
+     `testp` from the POSIX build (so no binary's `RUNPATH` points at
+     the other build), relinked against any `libonig.so.5` via
+     `LD_LIBRARY_PATH`. Upstream's CMake gives them a `DT_RUNPATH` to
+     the build tree, so a stub prefix lacking `libonig.so.5` would
+     silently resolve upstream; the copies in the harness have their
+     `RUNPATH` removed (`patchelf --remove-rpath`), and `check-stub.sh`
+     also asserts the resolved library path (below);
+   - the 15 of the 16 `sample/*.c` (`crnl.c` excluded) compiled directly against
      `upstream/src/oniguruma.h` with `-lonig` (`posix.c` against the
      POSIX build); golden outputs recorded from upstream (stdout, exit
      status) for later mechanisms that implement real behaviour;
@@ -84,41 +117,69 @@ release at run time with the exact version recorded:
      `OnigEncodingASCII`'s initialiser (`upstream/src/ascii.c:103`),
      every function pointer and data field set, used with `onig_new` /
      `onig_search`; shared with #5;
-   - `layout.c`: prints `sizeof` and every `offsetof` for each
-     non-opaque public struct listed in the issue's Inputs (POSIX
-     structs under `#ifdef`), compiled once against the upstream header
-     and once against a stub's shipped header; outputs diffed.
-   - `check-stub.sh <prefix>`: runs criteria 1-3 against a stub prefix
-     (symbol diff against the oracle with the public/internal split,
-     SONAME and the three names, layout diff, and per binary
-     `ldd -r` plus a run under `LD_BIND_NOW=1` with a timeout, scoring
-     only "no unresolved symbol"; exit status recorded, not scored).
-   Validate the harness on upstream itself: `check-stub.sh` on the
-   oracle build must report zero missing symbols and all passes.
+   - `layout.c` and `layout_posix.c`: print `sizeof` and every
+     `offsetof` for each non-opaque public struct listed in the issue's
+     Inputs, compiled once against the upstream header and once against
+     a stub's shipped header; outputs diffed. The POSIX part is a
+     separate translation unit using the real type names
+     `onig_posix_regex_t` and `onig_posix_regmatch_t`
+     (`upstream/src/onigposix.h:79-89`), because `oniguruma.h:716`
+     typedefs `regex_t` while `onigposix.h:176` defines it as a macro.
+   - `check-stub.sh <prefix> <default|posix>`: runs criteria 1-3
+     against a stub prefix and the matching oracle (symbol diff with the
+     public/internal split, SONAME and the three names, layout diff, and
+     per binary). Per binary it first asserts, with `ldd` (or
+     `LD_DEBUG=libs`), that the `libonig.so.5` actually resolved lives
+     under the stub prefix; a binary resolving it elsewhere fails. Then
+     pass = `ldd -r` reports no `undefined symbol` **and** the run under
+     `LD_BIND_NOW=1` (with a timeout) does not end with the loader's
+     `symbol lookup error` (exit status 127). Any other exit status
+     (abort or segfault at the first wrong result) is recorded, not
+     scored.
+   Validate the harness on upstream itself: `check-stub.sh` on each
+   oracle build must report zero missing symbols and all passes; and a
+   negative control, an empty prefix, must fail every binary.
 
 3. **Mechanism 2, hand-written C stub** (about 30 min; criteria 1-3, 5).
    A C stub generated mechanically from the public headers: every public
    function with a fixed return value, every data symbol as a file-scope
    initialised struct with function pointers, a genuinely variadic
    `onig_error_code_to_str` using `va_list`; linked with
-   `-Wl,-soname,libonig.so.5`, installed with the three names. Ship the
-   upstream headers. Run `check-stub.sh`. Then the front-end check:
-   run `clightgen` (VST) and Why3's C extraction target on the stub's
-   constructs (file-scope struct initialisers holding function pointers,
-   the variadic definition, `va_list`, `OnigCalloutArgs` layout) and
-   record accepted/rejected per construct. This stub is also the C shell
-   the other mechanisms can be compared against.
+   `-Wl,-soname,libonig.so.5`, installed with the three names; a
+   default and a POSIX variant. Ship the upstream headers. Run
+   `check-stub.sh` on both. Then the Why3 check: Why3 does not consume
+   C, its C route is WhyML to C (`why3 extract -D c`). Write a minimal
+   WhyML module and record, per construct, whether the C driver can emit
+   (a) a named file-scope struct initialised with function pointers
+   under an exact exported name (`OnigEncodingUTF8`), (b) an `extern`
+   data symbol with an exact C name, (c) a variadic definition
+   (expected: no, so a hand-written C layer, recorded under
+   criterion 5). For Why3 the C is generated, so its ABI boundary looks
+   like mechanism 1's (generated C plus a hand-written shell); for VST
+   the proof is about the hand-written C itself. The results table keeps
+   them as two rows of mechanism 2. The `clightgen` (VST) check on the
+   hand-written stub's constructs (file-scope struct initialisers
+   holding function pointers, the variadic definition, `va_list`,
+   `OnigCalloutArgs` layout) comes last in milestone 1, see below. This
+   stub is also the C shell the other mechanisms can be compared
+   against.
 
 4. **Mechanism 3, Rust `cdylib`** (about 40 min; criteria 1-3, 5).
-   `#[repr(C)]` types mirroring the headers, `#[no_mangle] pub static`
-   data symbols with function pointers, `extern "C"` functions; soname
-   via `-C link-arg=-Wl,-soname,libonig.so.5`. Layout checked twice: the
-   shipped upstream header against the Rust types (via `layout.c` and a
-   Rust program printing `size_of`/`offset_of!`), and a `cbindgen`
-   header. Record how `onig_error_code_to_str` is defined: stable Rust
-   cannot define a variadic function (`c_variadic` is unstable), so the
-   expected route is a small C shim linked into the `cdylib`; that shim
-   is outside any proof. Criterion 4: predicted verdict only.
+   Edition 2024, rustc 1.93.1 (version recorded). `#[repr(C)]` types
+   mirroring the headers, `#[unsafe(no_mangle)] pub static` data symbols
+   with function pointers, `extern "C"` functions; soname via
+   `-C link-arg=-Wl,-soname,libonig.so.5`. Cargo emits only
+   `libonig.so`; `libonig.so.5.5.0` is the installed file and
+   `libonig.so.5`, `libonig.so` are symlinks made by the install step.
+   Layout checked twice: the shipped upstream header against the Rust
+   types (via `layout.c` and a Rust program printing
+   `size_of`/`core::mem::offset_of!`, stable), and a `cbindgen` header.
+   Record how `onig_error_code_to_str` is defined: rustc 1.93.1 rejects
+   a variadic definition with `error[E0658]: C-variadic functions are
+   unstable` (rust-lang/rust#44930); keep that compiler error as the
+   criterion 5 evidence. The expected route is a small C shim linked
+   into the `cdylib`; that shim is outside any proof. Criterion 4:
+   predicted verdict only.
 
 5. **Mechanism 2 source level** (about 25 min; criterion 4). A CMake
    build and an `oniguruma.pc` for the mechanism 2 stub; `pkg-config
@@ -126,10 +187,14 @@ release at run time with the exact version recorded:
    prefix; install emsdk and build the stub with `emcmake cmake`.
 
 6. **Mechanism 1, KaRaMeL C from F\* + Pulse** (follow-up, see budget).
-   Install the F\* release with Pulse and KaRaMeL. Write the Pulse/F\*
-   source for a minimal stub (one encoding struct, one syntax struct,
-   `onig_new`/`onig_free`/`onig_search` returning fixed values), extract
-   with KaRaMeL, and check what the generated C looks like at the ABI:
+   Install the F\* release tarball (it ships Pulse and KaRaMeL). Write
+   the Pulse/F\* source for a minimal stub (one encoding struct, one
+   syntax struct, `onig_new`/`onig_free`/`onig_search` returning fixed
+   values), extract with KaRaMeL. Since F\* v2026.11.15, extraction goes
+   only through Custard: the KaRaMeL route is `--codegen KrmlC`, and
+   every extraction run needs an entry-point flag (`--custard_main`,
+   `--custard_entry` or `--custard_entry_module`); the exact flags are
+   recorded in the notebook. Check what the generated C looks like at the ABI:
    symbol names (KaRaMeL module prefixes, `-bundle`/`-no-prefix`
    options), struct layout and field order, static initialisers with
    function pointers, soname. Whatever KaRaMeL cannot emit (variadic
@@ -138,8 +203,8 @@ release at run time with the exact version recorded:
    set mechanically, run `check-stub.sh` and criterion 4 (CMake,
    pkg-config, emscripten on the generated C).
 
-7. **Mechanism 4, Isabelle-LLVM** (follow-up). Install Isabelle and
-   Isabelle-LLVM; export a minimal stub to LLVM IR, compile with Clang
+7. **Mechanism 4, Isabelle-LLVM** (follow-up). Install Isabelle2026 and
+   Isabelle-LLVM from its branch `2026`; export a minimal stub to LLVM IR, compile with Clang
    to a shared object with soname `libonig.so.5`; check which ABI
    constructs Isabelle-LLVM can express (named global structs with
    function pointers, C struct layout, variadic definition) and which
@@ -154,25 +219,33 @@ release at run time with the exact version recorded:
 ## Machine budget
 
 At most 4 parallel jobs (`make -j4`, `cargo -j4`, at most 4 concurrent
-test binaries) and at most 3 hours of wall clock for the run. About 6 GB
-of RAM is available and about 22 GB of disk on the shared drive.
-Toolchains are installed sequentially, never in parallel with a build.
+test binaries) and at most 3 hours of wall clock for the run. Plan with
+about 4 GB of RAM and about 20 GB of disk on the shared drive, with
+other experiments running in parallel. Toolchains are installed
+sequentially, never in parallel with a build.
 
 The four mechanisms together are "days per mechanism" in the report, so
 they do not fit in 3 hours. Milestones:
 
-- **Milestone 1 (this run, about 2 h 40 min):** steps 1-5 and 8 for
-  mechanisms 2 and 3: the oracle, the full harness, criteria 1-3 and 5
-  for mechanisms 2 and 3, criterion 4 for mechanism 2, the predicted
-  source-level verdict for mechanism 3, and the front-end check of
-  mechanism 2. Disk under 4 GB in `<workdir>` (emsdk about 1.5 GB). If
-  installing `clightgen` or Why3 overruns, record that construct check
-  as pending and move it to follow-up.
+- **Milestone 1 (this run, 3 h):** steps 1-5 and 8 for mechanisms 2
+  and 3: the oracle, the full harness, criteria 1-3 and 5 for
+  mechanisms 2 and 3, criterion 4 for mechanism 2, the predicted
+  source-level verdict for mechanism 3, and the Why3 check of
+  mechanism 2. The step estimates sum to 160 min with no install time,
+  so toolchain installs (cbindgen, emsdk, Why3) get an explicit
+  allowance of about 45 min inside the milestone; the two upstream
+  builds take about a minute each, so step 1 can absorb part of it. The
+  CompCert `clightgen` check (adding `rocq-released`, installing
+  `coq-compcert`, running `clightgen`) comes last, boxed at 30 min; if
+  it overruns, it is recorded as pending and moves to follow-up 1.
+  Disk under 4 GB in `<workdir>` (emsdk about 1.5 GB) plus 2-3 GB for
+  the Rocq/CompCert switch.
 - **Follow-up 1:** step 6, mechanism 1 (F\* + Pulse + KaRaMeL), its own
   3-hour run; reuses the harness and emsdk.
 - **Follow-up 2:** step 7, mechanism 4 (Isabelle-LLVM), its own run;
   Isabelle needs several GB of disk and its session builds most of the
-  free RAM, so it runs alone on the machine.
+  free RAM, so it runs alone on the machine. This scheduling constraint
+  is noted on issue #7 so other experiments' runs do not overlap it.
 
 If any step exceeds twice its estimate, stop, record where it stands in
 the notebook and report on the issue instead of continuing.
@@ -268,15 +341,18 @@ repository.
 - **KaRaMeL naming and layout.** KaRaMeL prefixes names with the module
   path and may rename fields; data symbols with exact names may need
   `-no-prefix`, `-bundle` or a C alias layer. That is a finding for criterion 5,
-  not a failure of the plan.
+  not a failure of the plan. Which F\* to C route mechanism 1 tests
+  (`--codegen KrmlC`, Custard's direct `--codegen C`, or both) is a
+  pending maintainer decision on issue #7.
 - **Front-end availability for mechanism 2.** `clightgen` comes with
   CompCert, whose licence is non-commercial for most of its sources;
-  fine for a feasibility check, recorded next to the result. If
-  CompCert or Why3 does not build within budget, the construct check
-  moves to follow-up.
+  fine for a feasibility check, recorded next to the result. It is not
+  in the configured opam repositories (needs `rocq-released`). If
+  CompCert or Why3 does not install within its box, the check moves to
+  follow-up 1.
 - **Isabelle resources.** Isabelle-LLVM session builds may exceed the
   free RAM. Mitigation: run follow-up 2 alone; if it still does not fit,
   record the blocker and report on the issue.
-- **Disk pressure.** About 22 GB free on the shared disk. Mitigation:
+- **Disk pressure.** About 20 GB free on the shared disk. Mitigation:
   binary releases, a 4 GB cap for milestone 1, build trees removed after
   the run (the pins make them reproducible).
