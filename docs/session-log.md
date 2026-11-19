@@ -122,3 +122,23 @@ any plan was written: 25 questions in total. The recurring themes:
 
 Issue numbers on GitHub do not match experiment numbers, since the issues
 were opened in parallel.
+
+## 2026-11-19 — Answers in the tracker; first experiment done
+
+The maintainer answered on the issues; a monitor in the session picked up
+each answer within a minute and resumed that experiment from its plan.
+Plan reviews raised two more decisions (#4: F\* to C through KaRaMeL,
+Custard or both; #11: root on the bench host for the CPU governor). The
+maintainer moved #3, #5, #7 and #11 to a dedicated bench host and raised the
+cap on concurrent runs from 2 to 4.
+
+**Experiment #2 (semantic probes) is the first one done**, about 25 minutes
+after the answer: 134 probes on the C library under Debug and
+ASan/UBSan builds, compared with JavaScript as Linden's reference. Verdicts:
+Linden's semantics adapts for captures in loops, unset backreferences, empty
+iterations and case folding; its lookbehind node must be rewritten (Oniguruma
+steps back then matches forward, so captures differ). Three candidate
+deviation-log entries came out of it. The Fable review replayed the run
+byte for byte, then corrected one verdict by dumping the bytecode: the
+capture-status check on empty iterations applies only to groups referenced
+from outside the loop.
