@@ -49,7 +49,9 @@ tot = 0
 for r in rows:
     t = float(r['one_pass_seconds'] or 0); n = int(r['timed_patterns'])
     if n == 0: continue
-    search = max(t, 0.5) * 6 * 2            # warm-up + 5 reps, x2 for the onig-on-subset run
+    # Warm-up, then 5 repetitions that stop on the first pass ending
+    # after 0.5 s (so at most 0.5 + t each); x2 for the onig-on-subset run.
+    search = (t + (0.5 + t) * 5) * 2
     compile_ = n * 0.02                     # assumes about 20 ms per pattern (N=1000 or 10 ms)
     tot += search + compile_
 print('projected timed phase: %.0f s (%.1f min), plus possible repeats' % (tot, tot / 60))

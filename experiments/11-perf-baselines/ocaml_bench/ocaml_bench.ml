@@ -162,13 +162,20 @@ let () =
               Printf.printf "C\t%d\t%.1f\t%d\n" i (arr.(!n / 2) *. 1e9) !n
             end)
           pats;
+      (* Warm-up pass, then repetitions of whole passes lasting at least
+         rep_min seconds each (see driver.h); one pass when it has no byte. *)
       let t, matches, bytes = pass () in
-      let npass = if t >= rep_min then 1 else int_of_float (rep_min /. Float.max t 1e-6) + 1 in
-      Printf.printf "W\t%.6f\t%d\n" t npass;
+      let rep_min = if bytes = 0. then 0. else rep_min in
+      Printf.printf "W\t%.6f\t%g\n" t rep_min;
       for rep = 0 to nrep - 1 do
         let t0 = now () in
-        for _ = 1 to npass do ignore (pass ()) done;
-        Printf.printf "T\t%d\t%.9f\t%d\n%!" rep ((now () -. t0) /. float npass) npass
+        let rec repeat npass =
+          ignore (pass ());
+          let el = now () -. t0 in
+          if el >= rep_min then (el, npass) else repeat (npass + 1)
+        in
+        let el, npass = repeat 1 in
+        Printf.printf "T\t%d\t%.9f\t%d\n%!" rep (el /. float npass) npass
       done;
       Printf.printf "S\tbytes_per_pass=%.0f\tmatches_per_pass=%d\tincluded_patterns=%d\n" bytes matches
         (Array.fold_left (fun k b -> if b then k + 1 else k) 0 incl)

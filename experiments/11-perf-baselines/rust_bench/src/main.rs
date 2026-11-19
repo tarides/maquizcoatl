@@ -175,13 +175,21 @@ fn main() {
             writeln!(w, "C\t{}\t{:.1}\t{}", i, ct[ct.len() / 2] * 1e9, ct.len()).unwrap();
         }
     }
+    // Warm-up pass, then repetitions of whole passes lasting at least
+    // rep_min seconds each (see driver.h); one pass when it has no byte.
     let (t, matches, bytes) = pass(&include);
-    let npass = if t >= rep_min { 1 } else { (rep_min / t.max(1e-6)) as usize + 1 };
-    writeln!(w, "W\t{:.6}\t{}", t, npass).unwrap();
+    let rep_min = if bytes == 0.0 { 0.0 } else { rep_min };
+    writeln!(w, "W\t{:.6}\t{}", t, rep_min).unwrap();
     for rep in 0..nrep {
         let t0 = Instant::now();
-        for _ in 0..npass { pass(&include); }
-        writeln!(w, "T\t{}\t{:.9}\t{}", rep, t0.elapsed().as_secs_f64() / npass as f64, npass).unwrap();
+        let mut npass = 0usize;
+        let el = loop {
+            pass(&include);
+            npass += 1;
+            let el = t0.elapsed().as_secs_f64();
+            if el >= rep_min { break el; }
+        };
+        writeln!(w, "T\t{}\t{:.9}\t{}", rep, el / npass as f64, npass).unwrap();
     }
     writeln!(w, "S\tbytes_per_pass={:.0}\tmatches_per_pass={}\tincluded_patterns={}", bytes, matches, include.iter().filter(|x| **x).count()).unwrap();
 }

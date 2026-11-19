@@ -10,6 +10,14 @@
  * <only-file> lists the pattern ids to include (one per line); without
  * it every pattern the engine compiles is included.
  *
+ * `time` prints, after the per-pattern compile lines C:
+ *   W <warm-up pass seconds> <minimum repetition seconds, 0 for no byte>
+ *   T <rep> <seconds per pass> <passes in this repetition>   (nrep lines)
+ *   S bytes_per_pass=... matches_per_pass=... included_patterns=...
+ * A repetition repeats whole passes until it has lasted at least the
+ * minimum (E11_REP_MIN, default 0.5 s); its time is its length divided
+ * by its number of passes. The Rust and OCaml harnesses do the same.
+ *
  * eng_search extracts every capture group of the match, as a caller
  * that needs the groups would; only the overall match is reported.
  *
@@ -239,15 +247,20 @@ static int do_time(const char *dir, const char *only)
     }
     free(ct);
   }
-  /* Search: one untimed warm-up pass, which also sizes the repetitions. */
+  /* Search: one untimed warm-up pass, then nrep repetitions. Each
+   * repetition repeats whole passes until at least rep_min seconds
+   * have elapsed, so its length does not depend on an estimate taken
+   * on the (slower) warm-up pass. A pass with no subject byte (every
+   * pair excluded) has nothing to time: one pass per repetition. */
   t = pass(&matches, &bytes);
-  npass = t >= rep_min ? 1 : (int)(rep_min / (t > 1e-6 ? t : 1e-6)) + 1;
-  printf("W\t%.6f\t%d\n", t, npass);
+  if (bytes == 0) rep_min = 0;
+  printf("W\t%.6f\t%g\n", t, rep_min);
   ts = (double *)malloc(nrep * sizeof(double));
   for (rep = 0; rep < nrep; rep++) {
-    double t0 = now();
-    for (k = 0; k < npass; k++) pass(NULL, NULL);
-    ts[rep] = (now() - t0) / npass;
+    double t0 = now(), el;
+    npass = 0;
+    do { pass(NULL, NULL); npass++; el = now() - t0; } while (el < rep_min);
+    ts[rep] = el / npass;
     printf("T\t%d\t%.9f\t%d\n", rep, ts[rep], npass);
   }
   printf("S\tbytes_per_pass=%.0f\tmatches_per_pass=%ld\tincluded_patterns=", bytes, matches);

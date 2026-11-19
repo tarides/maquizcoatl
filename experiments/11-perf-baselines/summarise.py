@@ -8,6 +8,8 @@ repetition times) is at most 10%, on the first run or on its single
 repeat; otherwise it is reported as invalid with its data.
 Ratios are speed ratios: Oniguruma-threaded time / engine time on the
 same pattern subset (> 1 means the engine is faster).
+passes_per_rep is the smallest number of passes in a repetition (each
+repetition repeats passes until it has lasted the minimum time).
 """
 import csv, os, statistics, sys
 
@@ -19,7 +21,8 @@ def parse(path):
     d = {'T': [], 'C': []}
     for l in open(path):
         f = l.rstrip('\n').split('\t')
-        if f[0] == 'T': d['T'].append(float(f[2])); d['npass'] = int(f[3])
+        if f[0] == 'T':
+            n = int(f[3]); d['T'].append(float(f[2])); d['npass'] = min(d.get('npass', n), n)
         elif f[0] == 'C': d['C'].append((int(f[1]), float(f[2]), int(f[3])))
         elif f[0] == 'S':
             for kv in f[1:]:
