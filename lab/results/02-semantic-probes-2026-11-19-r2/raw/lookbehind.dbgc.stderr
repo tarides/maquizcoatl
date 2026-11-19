@@ -1,0 +1,1103 @@
+@@probe lb01o
+
+PATTERN: /(?<=az*)abc/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [abc]: length: 3, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 18
+   0: save-val  RIGHT_RANGE id:0
+   1: update-var  RIGHT_RANGE_TO_S id:0
+   2: mark  id:1 save:0
+   3: push   +2 =>  5
+   4: jump   +3 =>  7
+   5: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   6: fail  
+   7: step-back-start  init:1 rem:-1  +2 =>  9
+   8: step-back-next  
+   9: str_1  a
+  10: push-or-jump-e1   +3 => 13 c:z
+  11: str_1  z
+  12: jump   -2 => 10
+  13: check-position  current-right-range
+  14: cut-to-mark  id:1 restore:0
+  15: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  16: str_3  abc
+  17: end  
+
+@@probe lb01r
+
+PATTERN: /(?<=az*)abc/
+OPTIONS:
+@@probe lb01p
+
+PATTERN: /(?<=az*)abc/
+OPTIONS: SINGLELINE
+@@probe lb02o
+
+PATTERN: /(?<=ta+|tb+|tc+|td+)zz/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [zz]: length: 2, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 40
+   0: save-val  RIGHT_RANGE id:0
+   1: update-var  RIGHT_RANGE_TO_S id:0
+   2: mark  id:1 save:0
+   3: push   +2 =>  5
+   4: jump   +3 =>  7
+   5: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   6: fail  
+   7: step-back-start  init:2 rem:-1  +2 =>  9
+   8: step-back-next  
+   9: push   +7 => 16
+  10: str_1  t
+  11: str_1  a
+  12: push-or-jump-e1   +3 => 15 c:a
+  13: str_1  a
+  14: jump   -2 => 12
+  15: jump  +20 => 35
+  16: push   +7 => 23
+  17: str_1  t
+  18: str_1  b
+  19: push-or-jump-e1   +3 => 22 c:b
+  20: str_1  b
+  21: jump   -2 => 19
+  22: jump  +13 => 35
+  23: push   +7 => 30
+  24: str_1  t
+  25: str_1  c
+  26: push-or-jump-e1   +3 => 29 c:c
+  27: str_1  c
+  28: jump   -2 => 26
+  29: jump   +6 => 35
+  30: str_1  t
+  31: str_1  d
+  32: push-or-jump-e1   +3 => 35 c:d
+  33: str_1  d
+  34: jump   -2 => 32
+  35: check-position  current-right-range
+  36: cut-to-mark  id:1 restore:0
+  37: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  38: str_2  zz
+  39: end  
+
+@@probe lb02r
+
+PATTERN: /(?<=ta+|tb+|tc+|td+)zz/
+OPTIONS:
+@@probe lb02p
+
+PATTERN: /(?<=ta+|tb+|tc+|td+)zz/
+OPTIONS: SINGLELINE
+@@probe lb03o
+
+PATTERN: /(?<=a.*\w)z/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [z]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 19
+   0: move  n:-1
+   1: word  
+   2: save-val  RIGHT_RANGE id:0
+   3: update-var  RIGHT_RANGE_TO_S id:0
+   4: mark  id:1 save:0
+   5: push   +2 =>  7
+   6: jump   +3 =>  9
+   7: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   8: fail  
+   9: step-back-start  init:2 rem:-1  +2 => 11
+  10: step-back-next  
+  11: str_1  a
+  12: anychar*  
+  13: word  
+  14: check-position  current-right-range
+  15: cut-to-mark  id:1 restore:0
+  16: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  17: str_1  z
+  18: end  
+
+@@probe lb03r
+
+PATTERN: /(?<=a.*\w)z/
+OPTIONS:
+@@probe lb03p
+
+PATTERN: /(?<=a.*\w)z/
+OPTIONS: SINGLELINE
+@@probe lb04o
+
+PATTERN: /(?<=a|bc)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 12
+   0: push   +6 =>  6
+   1: mark  id:0 save:0
+   2: step-back-start  init:1 rem:0  +1 =>  3
+   3: str_1  a
+   4: cut-to-mark  id:0 restore:0
+   5: jump   +5 => 10
+   6: mark  id:1 save:0
+   7: step-back-start  init:2 rem:0  +1 =>  8
+   8: str_2  bc
+   9: cut-to-mark  id:1 restore:0
+  10: str_1  x
+  11: end  
+
+@@probe lb04r
+
+PATTERN: /(?<=a|bc)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 12
+   0: push   +6 =>  6
+   1: mark  id:0 save:0
+   2: step-back-start  init:1 rem:0  +1 =>  3
+   3: str_1  a
+   4: cut-to-mark  id:0 restore:0
+   5: jump   +5 => 10
+   6: mark  id:1 save:0
+   7: step-back-start  init:2 rem:0  +1 =>  8
+   8: str_2  bc
+   9: cut-to-mark  id:1 restore:0
+  10: str_1  x
+  11: end  
+
+@@probe lb04p
+
+PATTERN: /(?<=a|bc)x/
+OPTIONS: SINGLELINE
+@@probe lb05o
+
+PATTERN: /(?<!(a))b/
+OPTIONS:
+@@probe lb05r
+
+PATTERN: /(?<!(a))b/
+OPTIONS:
+@@probe lb05p
+
+PATTERN: /(?<!(a))b/
+OPTIONS: SINGLELINE
+@@probe lb06o
+
+PATTERN: /(?<!(a))b/
+OPTIONS:
+@@probe lb06r
+
+PATTERN: /(?<!(a))b/
+OPTIONS:
+@@probe lb06p
+
+PATTERN: /(?<!(a))b/
+OPTIONS: SINGLELINE
+@@probe lb07o
+
+PATTERN: /(?i:(a)(?<=\1))/
+OPTIONS:
+optimize: MAP
+  anchor: []
+  sub anchor: []
+
+map: n=2, dmin: 0, dmax: 0
+[0x41, 0x61]
+push_mem_start: 0x2, push_mem_end: 0x2
+code-length: 8
+   0: mem-start-push  mem:1
+   1: cclass  n:2
+   2: mem-end-push  mem:1
+   3: mark  id:0 save:0
+   4: step-back-start  init:1 rem:0  +1 =>  5
+   5: backref-n-ic  n:1
+   6: cut-to-mark  id:0 restore:0
+   7: end  
+
+@@probe lb07r
+
+PATTERN: /(?i:(a)(?<=\1))/
+OPTIONS:
+optimize: MAP
+  anchor: []
+  sub anchor: []
+
+map: n=2, dmin: 0, dmax: 0
+[0x41, 0x61]
+push_mem_start: 0x2, push_mem_end: 0x2
+code-length: 8
+   0: mem-start-push  mem:1
+   1: cclass  n:2
+   2: mem-end-push  mem:1
+   3: mark  id:0 save:0
+   4: step-back-start  init:1 rem:0  +1 =>  5
+   5: backref-n-ic  n:1
+   6: cut-to-mark  id:0 restore:0
+   7: end  
+
+@@probe lb07p
+
+PATTERN: /(?i:(a)(?<=\1))/
+OPTIONS: SINGLELINE
+optimize: MAP
+  anchor: []
+  sub anchor: []
+
+map: n=2, dmin: 0, dmax: 0
+[0x41, 0x61]
+push_mem_start: 0x2, push_mem_end: 0x2
+code-length: 8
+   0: mem-start-push  mem:1
+   1: cclass  n:2
+   2: mem-end-push  mem:1
+   3: mark  id:0 save:0
+   4: step-back-start  init:1 rem:0  +1 =>  5
+   5: backref-n-ic  n:1
+   6: cut-to-mark  id:0 restore:0
+   7: end  
+
+@@probe lb08o
+
+PATTERN: /(?<=(a+))b/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [b]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 22
+   0: move  n:-1
+   1: str_1  a
+   2: save-val  RIGHT_RANGE id:0
+   3: update-var  RIGHT_RANGE_TO_S id:0
+   4: mark  id:1 save:0
+   5: push   +2 =>  7
+   6: jump   +3 =>  9
+   7: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   8: fail  
+   9: step-back-start  init:1 rem:-1  +2 => 11
+  10: step-back-next  
+  11: mem-start  mem:1
+  12: str_1  a
+  13: push-or-jump-e1   +3 => 16 c:a
+  14: str_1  a
+  15: jump   -2 => 13
+  16: mem-end  mem:1
+  17: check-position  current-right-range
+  18: cut-to-mark  id:1 restore:0
+  19: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  20: str_1  b
+  21: end  
+
+@@probe lb08r
+
+PATTERN: /(?<=(a+))b/
+OPTIONS:
+@@probe lb08p
+
+PATTERN: /(?<=(a+))b/
+OPTIONS: SINGLELINE
+@@probe lb09o
+
+PATTERN: /(?<=a+b)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 22
+   0: move  n:-1
+   1: str_1  b
+   2: save-val  RIGHT_RANGE id:0
+   3: update-var  RIGHT_RANGE_TO_S id:0
+   4: mark  id:1 save:0
+   5: push   +2 =>  7
+   6: jump   +3 =>  9
+   7: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   8: fail  
+   9: step-back-start  init:2 rem:-1  +2 => 11
+  10: step-back-next  
+  11: str_1  a
+  12: push   +4 => 16
+  13: str_1  a
+  14: pop  
+  15: jump   -3 => 12
+  16: str_1  b
+  17: check-position  current-right-range
+  18: cut-to-mark  id:1 restore:0
+  19: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  20: str_1  x
+  21: end  
+
+@@probe lb09r
+
+PATTERN: /(?<=a+b)x/
+OPTIONS:
+@@probe lb09p
+
+PATTERN: /(?<=a+b)x/
+OPTIONS: SINGLELINE
+@@probe lb10o
+
+PATTERN: /(?<!a+b)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 24
+   0: save-val  RIGHT_RANGE id:0
+   1: update-var  RIGHT_RANGE_TO_S id:0
+   2: mark  id:1 save:0
+   3: push  +16 => 19
+   4: move  n:-1
+   5: str_1  b
+   6: step-back-start  init:2 rem:-1  +2 =>  8
+   7: step-back-next  
+   8: str_1  a
+   9: push   +4 => 13
+  10: str_1  a
+  11: pop  
+  12: jump   -3 =>  9
+  13: str_1  b
+  14: check-position  current-right-range
+  15: pop-to-mark  id:1
+  16: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+  17: pop  
+  18: fail  
+  19: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+  20: pop  
+  21: pop  
+  22: str_1  x
+  23: end  
+
+@@probe lb10r
+
+PATTERN: /(?<!a+b)x/
+OPTIONS:
+@@probe lb10p
+
+PATTERN: /(?<!a+b)x/
+OPTIONS: SINGLELINE
+@@probe lb11o
+
+PATTERN: /(?<=a*b)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 21
+   0: move  n:-1
+   1: str_1  b
+   2: save-val  RIGHT_RANGE id:0
+   3: update-var  RIGHT_RANGE_TO_S id:0
+   4: mark  id:1 save:0
+   5: push   +2 =>  7
+   6: jump   +3 =>  9
+   7: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   8: fail  
+   9: step-back-start  init:1 rem:-1  +2 => 11
+  10: step-back-next  
+  11: push   +4 => 15
+  12: str_1  a
+  13: pop  
+  14: jump   -3 => 11
+  15: str_1  b
+  16: check-position  current-right-range
+  17: cut-to-mark  id:1 restore:0
+  18: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  19: str_1  x
+  20: end  
+
+@@probe lb11r
+
+PATTERN: /(?<=a*b)x/
+OPTIONS:
+@@probe lb11p
+
+PATTERN: /(?<=a*b)x/
+OPTIONS: SINGLELINE
+@@probe lb12o
+
+PATTERN: /(?<=ba+)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 21
+   0: move  n:-1
+   1: str_1  a
+   2: save-val  RIGHT_RANGE id:0
+   3: update-var  RIGHT_RANGE_TO_S id:0
+   4: mark  id:1 save:0
+   5: push   +2 =>  7
+   6: jump   +3 =>  9
+   7: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   8: fail  
+   9: step-back-start  init:2 rem:-1  +2 => 11
+  10: step-back-next  
+  11: str_1  b
+  12: str_1  a
+  13: push-or-jump-e1   +3 => 16 c:a
+  14: str_1  a
+  15: jump   -2 => 13
+  16: check-position  current-right-range
+  17: cut-to-mark  id:1 restore:0
+  18: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  19: str_1  x
+  20: end  
+
+@@probe lb12r
+
+PATTERN: /(?<=ba+)x/
+OPTIONS:
+@@probe lb12p
+
+PATTERN: /(?<=ba+)x/
+OPTIONS: SINGLELINE
+@@probe lb13o
+
+PATTERN: /(?<!ba+)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 23
+   0: save-val  RIGHT_RANGE id:0
+   1: update-var  RIGHT_RANGE_TO_S id:0
+   2: mark  id:1 save:0
+   3: push  +15 => 18
+   4: move  n:-1
+   5: str_1  a
+   6: step-back-start  init:2 rem:-1  +2 =>  8
+   7: step-back-next  
+   8: str_1  b
+   9: str_1  a
+  10: push-or-jump-e1   +3 => 13 c:a
+  11: str_1  a
+  12: jump   -2 => 10
+  13: check-position  current-right-range
+  14: pop-to-mark  id:1
+  15: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+  16: pop  
+  17: fail  
+  18: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+  19: pop  
+  20: pop  
+  21: str_1  x
+  22: end  
+
+@@probe lb13r
+
+PATTERN: /(?<!ba+)x/
+OPTIONS:
+@@probe lb13p
+
+PATTERN: /(?<!ba+)x/
+OPTIONS: SINGLELINE
+@@probe lb14o
+
+PATTERN: /(?<=a+b*c)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 22
+   0: move  n:-1
+   1: str_1  c
+   2: save-val  RIGHT_RANGE id:0
+   3: update-var  RIGHT_RANGE_TO_S id:0
+   4: mark  id:1 save:0
+   5: push   +2 =>  7
+   6: jump   +3 =>  9
+   7: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   8: fail  
+   9: step-back-start  init:2 rem:-1  +2 => 11
+  10: step-back-next  
+  11: str_1  a
+  12: push   +4 => 16
+  13: str_1  b
+  14: pop  
+  15: jump   -3 => 12
+  16: str_1  c
+  17: check-position  current-right-range
+  18: cut-to-mark  id:1 restore:0
+  19: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  20: str_1  x
+  21: end  
+
+@@probe lb14r
+
+PATTERN: /(?<=a+b*c)x/
+OPTIONS:
+@@probe lb14p
+
+PATTERN: /(?<=a+b*c)x/
+OPTIONS: SINGLELINE
+@@probe lb15o
+
+PATTERN: /y(?<=a+b)/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [y]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 22
+   0: str_1  y
+   1: move  n:-1
+   2: str_1  b
+   3: save-val  RIGHT_RANGE id:0
+   4: update-var  RIGHT_RANGE_TO_S id:0
+   5: mark  id:1 save:0
+   6: push   +2 =>  8
+   7: jump   +3 => 10
+   8: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   9: fail  
+  10: step-back-start  init:2 rem:-1  +2 => 12
+  11: step-back-next  
+  12: str_1  a
+  13: push   +4 => 17
+  14: str_1  a
+  15: pop  
+  16: jump   -3 => 13
+  17: str_1  b
+  18: check-position  current-right-range
+  19: cut-to-mark  id:1 restore:0
+  20: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  21: end  
+
+@@probe lb15r
+
+PATTERN: /y(?<=a+b)/
+OPTIONS:
+@@probe lb15p
+
+PATTERN: /y(?<=a+b)/
+OPTIONS: SINGLELINE
+@@probe lb16o
+
+PATTERN: /(?<=a+)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 6
+   0: mark  id:0 save:0
+   1: step-back-start  init:1 rem:0  +1 =>  2
+   2: str_1  a
+   3: cut-to-mark  id:0 restore:0
+   4: str_1  x
+   5: end  
+
+@@probe lb16r
+
+PATTERN: /(?<=a+)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 6
+   0: mark  id:0 save:0
+   1: step-back-start  init:1 rem:0  +1 =>  2
+   2: str_1  a
+   3: cut-to-mark  id:0 restore:0
+   4: str_1  x
+   5: end  
+
+@@probe lb16p
+
+PATTERN: /(?<=a+)x/
+OPTIONS: SINGLELINE
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 6
+   0: mark  id:0 save:0
+   1: step-back-start  init:1 rem:0  +1 =>  2
+   2: str_1  a
+   3: cut-to-mark  id:0 restore:0
+   4: str_1  x
+   5: end  
+
+@@probe lb17o
+
+PATTERN: /(?<=a+a)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 7
+   0: mark  id:0 save:0
+   1: step-back-start  init:2 rem:0  +1 =>  2
+   2: str_1  a
+   3: str_1  a
+   4: cut-to-mark  id:0 restore:0
+   5: str_1  x
+   6: end  
+
+@@probe lb17r
+
+PATTERN: /(?<=a+a)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 7
+   0: mark  id:0 save:0
+   1: step-back-start  init:2 rem:0  +1 =>  2
+   2: str_1  a
+   3: str_1  a
+   4: cut-to-mark  id:0 restore:0
+   5: str_1  x
+   6: end  
+
+@@probe lb17p
+
+PATTERN: /(?<=a+a)x/
+OPTIONS: SINGLELINE
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 7
+   0: mark  id:0 save:0
+   1: step-back-start  init:2 rem:0  +1 =>  2
+   2: str_1  a
+   3: str_1  a
+   4: cut-to-mark  id:0 restore:0
+   5: str_1  x
+   6: end  
+
+@@probe lb18o
+
+PATTERN: /(?<=\w+b)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 7
+   0: mark  id:0 save:0
+   1: step-back-start  init:2 rem:0  +1 =>  2
+   2: word  
+   3: str_1  b
+   4: cut-to-mark  id:0 restore:0
+   5: str_1  x
+   6: end  
+
+@@probe lb18r
+
+PATTERN: /(?<=\w+b)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 7
+   0: mark  id:0 save:0
+   1: step-back-start  init:2 rem:0  +1 =>  2
+   2: word  
+   3: str_1  b
+   4: cut-to-mark  id:0 restore:0
+   5: str_1  x
+   6: end  
+
+@@probe lb18p
+
+PATTERN: /(?<=\w+b)x/
+OPTIONS: SINGLELINE
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 7
+   0: mark  id:0 save:0
+   1: step-back-start  init:2 rem:0  +1 =>  2
+   2: word  
+   3: str_1  b
+   4: cut-to-mark  id:0 restore:0
+   5: str_1  x
+   6: end  
+
+@@probe lb19o
+
+PATTERN: /(?<!a+)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 9
+   0: mark  id:0 save:0
+   1: push   +5 =>  6
+   2: step-back-start  init:1 rem:0  +1 =>  3
+   3: str_1  a
+   4: pop-to-mark  id:0
+   5: fail  
+   6: pop  
+   7: str_1  x
+   8: end  
+
+@@probe lb19r
+
+PATTERN: /(?<!a+)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 9
+   0: mark  id:0 save:0
+   1: push   +5 =>  6
+   2: step-back-start  init:1 rem:0  +1 =>  3
+   3: str_1  a
+   4: pop-to-mark  id:0
+   5: fail  
+   6: pop  
+   7: str_1  x
+   8: end  
+
+@@probe lb19p
+
+PATTERN: /(?<!a+)x/
+OPTIONS: SINGLELINE
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 9
+   0: mark  id:0 save:0
+   1: push   +5 =>  6
+   2: step-back-start  init:1 rem:0  +1 =>  3
+   3: str_1  a
+   4: pop-to-mark  id:0
+   5: fail  
+   6: pop  
+   7: str_1  x
+   8: end  
+
+@@probe lb20o
+
+PATTERN: /(?<!a+b)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 24
+   0: save-val  RIGHT_RANGE id:0
+   1: update-var  RIGHT_RANGE_TO_S id:0
+   2: mark  id:1 save:0
+   3: push  +16 => 19
+   4: move  n:-1
+   5: str_1  b
+   6: step-back-start  init:2 rem:-1  +2 =>  8
+   7: step-back-next  
+   8: str_1  a
+   9: push   +4 => 13
+  10: str_1  a
+  11: pop  
+  12: jump   -3 =>  9
+  13: str_1  b
+  14: check-position  current-right-range
+  15: pop-to-mark  id:1
+  16: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+  17: pop  
+  18: fail  
+  19: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+  20: pop  
+  21: pop  
+  22: str_1  x
+  23: end  
+
+@@probe lb20r
+
+PATTERN: /(?<!a+b)x/
+OPTIONS:
+@@probe lb20p
+
+PATTERN: /(?<!a+b)x/
+OPTIONS: SINGLELINE
+@@probe lb21o
+
+PATTERN: /(?<=(a|aa))b/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [b]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 20
+   0: save-val  RIGHT_RANGE id:0
+   1: update-var  RIGHT_RANGE_TO_S id:0
+   2: mark  id:1 save:0
+   3: push   +2 =>  5
+   4: jump   +3 =>  7
+   5: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   6: fail  
+   7: step-back-start  init:1 rem:1  +2 =>  9
+   8: step-back-next  
+   9: mem-start  mem:1
+  10: push   +3 => 13
+  11: str_1  a
+  12: jump   +2 => 14
+  13: str_2  aa
+  14: mem-end  mem:1
+  15: check-position  current-right-range
+  16: cut-to-mark  id:1 restore:0
+  17: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  18: str_1  b
+  19: end  
+
+@@probe lb21r
+
+PATTERN: /(?<=(a|aa))b/
+OPTIONS:
+@@probe lb21p
+
+PATTERN: /(?<=(a|aa))b/
+OPTIONS: SINGLELINE
+@@probe lb22o
+
+PATTERN: /(?<=(a*))b/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [b]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 19
+   0: save-val  RIGHT_RANGE id:0
+   1: update-var  RIGHT_RANGE_TO_S id:0
+   2: mark  id:1 save:0
+   3: push   +2 =>  5
+   4: jump   +3 =>  7
+   5: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:0
+   6: fail  
+   7: step-back-start  init:0 rem:-1  +2 =>  9
+   8: step-back-next  
+   9: mem-start  mem:1
+  10: push-or-jump-e1   +3 => 13 c:a
+  11: str_1  a
+  12: jump   -2 => 10
+  13: mem-end  mem:1
+  14: check-position  current-right-range
+  15: cut-to-mark  id:1 restore:0
+  16: update-var  RIGHT_RANGE_FROM_STACK id:0 clear:1
+  17: str_1  b
+  18: end  
+
+@@probe lb22r
+
+PATTERN: /(?<=(a*))b/
+OPTIONS:
+@@probe lb22p
+
+PATTERN: /(?<=(a*))b/
+OPTIONS: SINGLELINE
+@@probe lb23o
+
+PATTERN: /(?<=a+|b)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 9
+   0: mark  id:0 save:0
+   1: step-back-start  init:1 rem:0  +1 =>  2
+   2: push   +3 =>  5
+   3: str_1  a
+   4: jump   +2 =>  6
+   5: str_1  b
+   6: cut-to-mark  id:0 restore:0
+   7: str_1  x
+   8: end  
+
+@@probe lb23r
+
+PATTERN: /(?<=a+|b)x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 9
+   0: mark  id:0 save:0
+   1: step-back-start  init:1 rem:0  +1 =>  2
+   2: push   +3 =>  5
+   3: str_1  a
+   4: jump   +2 =>  6
+   5: str_1  b
+   6: cut-to-mark  id:0 restore:0
+   7: str_1  x
+   8: end  
+
+@@probe lb23p
+
+PATTERN: /(?<=a+|b)x/
+OPTIONS: SINGLELINE
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 9
+   0: mark  id:0 save:0
+   1: step-back-start  init:1 rem:0  +1 =>  2
+   2: push   +3 =>  5
+   3: str_1  a
+   4: jump   +2 =>  6
+   5: str_1  b
+   6: cut-to-mark  id:0 restore:0
+   7: str_1  x
+   8: end  
+
+@@probe lb24o
+
+PATTERN: /(?<=a{65536})x/
+OPTIONS:
+@@probe lb24r
+
+PATTERN: /(?<=a{65536})x/
+OPTIONS:
+@@probe lb24p
+
+PATTERN: /(?<=a{65536})x/
+OPTIONS: SINGLELINE
+@@probe lb25o
+
+PATTERN: /(?<=a{65535})x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 8
+   0: mark  id:0 save:0
+   1: step-back-start  init:65535 rem:0  +1 =>  2
+   2: repeat  id:0  +3 =>  5
+   3: str_1  a
+   4: repeat-inc  id:0
+   5: cut-to-mark  id:0 restore:0
+   6: str_1  x
+   7: end  
+
+@@probe lb25r
+
+PATTERN: /(?<=a{65535})x/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 8
+   0: mark  id:0 save:0
+   1: step-back-start  init:65535 rem:0  +1 =>  2
+   2: repeat  id:0  +3 =>  5
+   3: str_1  a
+   4: repeat-inc  id:0
+   5: cut-to-mark  id:0 restore:0
+   6: str_1  x
+   7: end  
+
+@@probe lb25p
+
+PATTERN: /(?<=a{65535})x/
+OPTIONS: SINGLELINE
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [x]: length: 1, dmin: 0, dmax: 0
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 8
+   0: mark  id:0 save:0
+   1: step-back-start  init:65535 rem:0  +1 =>  2
+   2: repeat  id:0  +3 =>  5
+   3: str_1  a
+   4: repeat-inc  id:0
+   5: cut-to-mark  id:0 restore:0
+   6: str_1  x
+   7: end  
+
+@@probe <exit>

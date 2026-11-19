@@ -127,6 +127,14 @@ backreference matcher.
 
 ### 3. Empty iterations
 
+> **Erratum (2026-11-19, after review):** the capture-status check
+> described below is narrower than stated: `OP_EMPTY_CHECK_END_MEMST` is
+> emitted only for groups referenced by a backreference *outside* the
+> loop (`upstream/src/regcomp.c:984`, `:3941-3957`); ei04, ei11 and ei16
+> get the plain `OP_EMPTY_CHECK_END`. The corrected verdict and D3 are in
+> [run 2](../02-semantic-probes-2026-11-19-r2/README.md); the text below
+> is kept as recorded.
+
 ECMA-262 rejects an iteration that consumed nothing once the minimum
 count is reached (RepeatMatcher, ES2025 22.2.2.3.1, step 2.b: return
 failure), so the empty iteration and its captures are backtracked away.
@@ -278,6 +286,10 @@ lookbehind (lb08o, lb22o) is undocumented but consistent; it goes into
 the spec as confirmed behaviour.
 
 ## Open questions
+
+> **Update (run 2):** the first question is closed: the
+> `ONIG_DEBUG_COMPILE` dump shows `empty-check-end-memst-push` for
+> ei14/ei15 ([run 2](../02-semantic-probes-2026-11-19-r2/README.md)).
 
 - The opcode choice behind ei14/ei15 (`OP_EMPTY_CHECK_END_MEMST_PUSH`)
   is inferred from the source, not observed; a bytecode dump
