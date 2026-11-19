@@ -19,7 +19,7 @@ or a follow-up campaign has to start from the same conditions.
   `7cf12308278221f0a1e4120faa9d7b90e46086d4` on `exp/03-sanitizers-fuzzing`.
 - `upstream` at `f95747b` (checked by `setup.sh`); `git -C upstream status`
   clean after the builds.
-- Machine: the blocksci bench host, shared with experiments #7 and #11.
+- Machine: the bench host, shared with experiments #7 and #11.
   AMD EPYC 7502P 32-Core Processor (1 socket, 32 cores, 64 threads, 1
   NUMA node), 503 GiB RAM, Ubuntu 24.04.5 LTS, Linux 6.8.0-100-generic,
   glibc 2.39. `ulimit -s` = 8192 (KiB).

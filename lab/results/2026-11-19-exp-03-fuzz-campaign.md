@@ -17,8 +17,8 @@ OSS-Fuzz for years; a low yield is itself the result.
 ## Provenance
 
 - Same conditions as [provenance](2026-11-19-exp-03-provenance.md):
-  commit `7cf1230` of `exp/03-sanitizers-fuzzing`, the blocksci bench
-  host (AMD EPYC 7502P, Linux 6.8.0-100-generic), LLVM 21.1.8, `fuzz`
+  commit `7cf1230` of `exp/03-sanitizers-fuzzing`, the bench host
+  (AMD EPYC 7502P, Linux 6.8.0-100-generic), LLVM 21.1.8, `fuzz`
   build flags, every process pinned to CPUs 8-31,40-63.
 - Command: `sh experiments/03-sanitizers-fuzzing/fuzz.sh 6600`, i.e. per
   target `-fork=<workers> -ignore_crashes=1 -ignore_timeouts=1
