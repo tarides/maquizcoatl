@@ -13,6 +13,7 @@ joined per probe.
 | `oracle.mjs` | Runs the same probe file through JavaScript `RegExp`, with and without `u` (always with `d`). |
 | `compare.mjs` | Joins Debug, ASan and JavaScript outputs; adds `asan_same`, `sanitizer` and `cmp`. |
 | `run.sh` | Runs all five areas and writes raw and joined TSV into an output directory. |
+| `opcodes.sh` | Optional: dumps the bytecode with an `ONIG_DEBUG_COMPILE` build and extracts the empty-check and lookbehind opcodes per probe. |
 | `Makefile` | Builds `harness-debug` / `harness-asan` against an out-of-tree upstream build. |
 | `captures-in-loops.tsv`, `backref-unset.tsv`, `empty-iterations.tsv`, `lookbehind.tsv`, `case-folding.tsv` | Probe data, one file per area. |
 
@@ -65,3 +66,29 @@ UTF-16).
     make -C probes BUILD=$W/build      OUT=$W/probes-build harness
     make -C probes BUILD=$W/build-asan OUT=$W/probes-build harness
     probes/run.sh $W/probes-build <out-dir>
+
+All builds live under one work directory `<workdir>` outside the
+repository: `<workdir>/build` (Debug), `<workdir>/build-asan`
+(ASan/UBSan) and `<workdir>/probes-build` (both harness variants).
+
+### Optional: bytecode dump (`ONIG_DEBUG_COMPILE`)
+
+To observe which opcodes upstream emits (instead of inferring them from
+the source), build a third copy with `ONIG_DEBUG_COMPILE` (the macro is
+commented out at `upstream/src/regint.h:34`) and link a harness against
+it in its own output directory (the Makefile would otherwise name it
+`harness-debug` and overwrite the plain Debug one):
+
+    cmake -S upstream -B $W/build-dbgc -DCMAKE_BUILD_TYPE=Debug \
+      -DCMAKE_C_FLAGS=-DONIG_DEBUG_COMPILE
+    make -C $W/build-dbgc -j4 onig
+    make -C probes BUILD=$W/build-dbgc OUT=$W/probes-build-dbgc harness
+    probes/opcodes.sh $W/probes-build-dbgc/harness-debug <out-dir> \
+      empty-iterations lookbehind
+
+`opcodes.sh` keeps the raw dumps (`<area>.dbgc.stderr`, one block after
+each `@@probe <id>` line) and writes `<area>.opcodes.tsv`: per probe, the
+`empty-check-end*` opcodes and the lookbehind opcodes (`move`,
+`step-back-start`/`-next`, `mark`, `cut-to-mark`, `pop-to-mark`,
+`check-position`), `-` for none. It is meant for the empty-iteration and
+lookbehind areas; `mark` and `move` are also used by other constructs.

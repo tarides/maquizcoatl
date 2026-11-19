@@ -26,8 +26,8 @@ inconsistencies.
 ## Approach
 
 1. **Build upstream out of tree.** Two builds of `upstream/` at
-   `f95747b`, both under `<workdir>/e02/`:
-   - `build-debug`: `cmake -S upstream -B <workdir>/e02/build-debug
+   `f95747b`, both under `<workdir>/` (the layout `probes/README.md` replays):
+   - `build` (Debug): `cmake -S upstream -B <workdir>/build
      -DCMAKE_BUILD_TYPE=Debug`, then `make -j4`.
    - `build-asan`: same, with `-DCMAKE_C_FLAGS="-fsanitize=address,undefined
      -fno-omit-frame-pointer"`, so that "crash or sanitizer report" in
@@ -48,7 +48,7 @@ inconsistencies.
    lines and the effective `CMAKE_C_FLAGS` of each build are recorded in
    the notebook.
 2. **Write the probe harness** (`probes/harness.c` in this repository,
-   built against `<workdir>/e02/build-*`). It reads a probe data file
+   built against `<workdir>/build` and `<workdir>/build-asan`). It reads a probe data file
    and, for each line, compiles the pattern with `onig_new` under the
    named syntax, encoding and options, searches the subject with
    `onig_search`, and prints one record per probe: pattern, subject,
@@ -151,13 +151,13 @@ All actively maintained, all already installed on the machine:
 ## Where things live
 
 - Builds, toolchain caches, raw run outputs before recording:
-  `<workdir>/e02/` (outside the repository). Never inside the
+  `<workdir>/` (outside the repository). Never inside the
   repository and never inside `upstream/`.
 - In the repository (branch `exp/02-semantic-probes`): `probes/`
   (harness source, oracle, data files, a `Makefile` taking the build
   directory as a variable), `lab/notebook.md`, `lab/results/`, this
   plan.
-- The harness `Makefile` builds into `<workdir>/e02/probes-build/`,
+- The harness `Makefile` builds into `<workdir>/probes-build/`,
   not into the source tree.
 
 ## Machine budget
@@ -167,7 +167,7 @@ All actively maintained, all already installed on the machine:
 - Wall-clock for the whole run: at most 3 hours. Expected: two upstream
   builds at a few minutes each, probe runs in seconds; most of the time
   goes into writing probes, classifying and writing verdicts. Disk
-  under 500 MB in `<workdir>/e02/`.
+  under 500 MB in `<workdir>/`.
 - First milestone that fits the budget, if writing probes runs long:
   the five areas at 5 probes each (lookbehind under three syntaxes),
   the ISO-8859-1 case-folding probes, both builds, and the verdicts.

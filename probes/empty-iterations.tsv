@@ -15,8 +15,12 @@ ei08	Oniguruma	UTF-8		(a*)+	b		min 1: first iteration may be empty
 ei09	Oniguruma	UTF-8		(a?)*?b	ab		lazy, capture
 ei10	Oniguruma	UTF-8		(?:a|())*\1	aa		empty alternative after progress
 ei11	Oniguruma	UTF-8		(?:(a)|())*	ab		capture state after a rejected empty iteration
-ei12	Oniguruma	UTF-8		(?<r>a?\g<r>?)*b	aab	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	recursion selects OP_EMPTY_CHECK_END_MEMST_PUSH
+ei17	Oniguruma	UTF-8		(?:(a)|())*\1	ab		ei11 + backref outside the loop: group 1 gets the status check (OP_EMPTY_CHECK_END_MEMST)
+ei18	Oniguruma	UTF-8		(?:(a)|())*\1	aa		ei11 + backref outside the loop, two iterations possible
+ei12	Oniguruma	UTF-8		(?<r>a?\g<r>?)*b	aab	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	left-most recursion control: rejected at compile time (-221, doc/RE:474-477); ei14/ei15 exercise OP_EMPTY_CHECK_END_MEMST_PUSH
+ei13	Oniguruma	UTF-8		(?<r>a|\(\g<r>?\))*b	(a)b	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	recursion, body may be empty only via call
 ei14	Oniguruma	UTF-8		(?<r>a\g<r>?b|)*c	abaabbc	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	recursive group may be empty: OP_EMPTY_CHECK_END_MEMST_PUSH
 ei15	Oniguruma	UTF-8		(?<r>a\g<r>?b|)*c	c	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	recursive group may be empty, zero progress
-ei16	Oniguruma	UTF-8		(?:\1a|())*	a		doc/RE:592-595 example
-ei13	Oniguruma	UTF-8		(?<r>a|\(\g<r>?\))*b	(a)b	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	recursion, body may be empty only via call
+ei16	Oniguruma	UTF-8		(?:\1a|())*	a		doc/RE:592-595 example; backref only inside the loop: no status check
+ei19	Oniguruma	UTF-8		(?:\1a|())*\1	a		ei16 + backref to group 1 outside the loop: status check on, loop continues after the empty iteration
+ei20	Oniguruma	UTF-8		(?:a|())*\1	a		ei16 body with the backref moved outside the loop only
