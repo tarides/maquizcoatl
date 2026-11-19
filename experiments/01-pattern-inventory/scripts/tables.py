@@ -151,6 +151,23 @@ def main():
             cells.append(f'{len(hit)}/{len(allf)}' + (f' ({", ".join(sorted({h.split("/")[1] if s == "vscode" else h.rsplit("/", 1)[-1] for h in hit}))})' if hit and len(hit) <= 20 else ''))
         md.append(f'| {c} | ' + ' | '.join(cells) + ' |')
     md.append('')
+    # Dynamic-only triples (seen at run time, not in the static corpus).
+    dyn = {s: load(pdir, f'{s}.dynamic-only') for s in MAIN if (pdir / f'{s}.dynamic-only.jsonl').exists()}
+    if dyn:
+        md += ['## Dynamic-only triples', '',
+               'Triples compiled at run time (workload capture) that the static extraction',
+               'did not produce: computed or interpolated patterns (jq, PHP), and for VS Code',
+               'the scanner variants in which vscode-textmate replaced `\\A`/`\\G` by U+FFFF or',
+               'substituted `begin` captures into `end`/`while`. Not included in the tables above.', '',
+               '| Source | triples | compile | ' + ' | '.join(c.replace('_', ' ') for c in COLS) + ' | fuel tier |',
+               '|---|---:|---:|' + '---:|' * (len(COLS) + 1)]
+        for s, ts in dyn.items():
+            ok = [t for t in ts if t['compile']['status'] == 'ok']
+            md.append(f'| {s} | {len(ts)} | {len(ok)} | ' +
+                      ' | '.join(str(sum(1 for t in ok if t['compile']['features'][c])) for c in COLS) +
+                      f' | {sum(1 for t in ok if tier(t) == "fuel")} |')
+            summary[f'{s}-dynamic-only'] = {'triples': len(ts), 'compiled': len(ok)}
+        md.append('')
     (tdir / 'tables.md').write_text('\n'.join(md) + '\n', encoding='utf-8')
     with open(tdir / 'features.csv', 'w', newline='') as f:
         w = csv.DictWriter(f, fieldnames=['source', 'feature', 'triples', 'compiled', 'share', 'occ_share'])

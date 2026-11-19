@@ -145,6 +145,18 @@
    "ISO-8859-1": 1
   }
  },
+ "vscode-dynamic-only": {
+  "triples": 381,
+  "compiled": 381
+ },
+ "jq-dynamic-only": {
+  "triples": 0,
+  "compiled": 0
+ },
+ "php-dynamic-only": {
+  "triples": 131,
+  "compiled": 125
+ },
  "subsets": {
   "S0: UTF-8; Oniguruma/Perl_NG/Ruby syntax; linear tier": {
    "vscode": [
