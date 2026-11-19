@@ -7,6 +7,7 @@
 #      a client (sample/simple.c) built with those flags and run,
 #  (c) an emscripten build of the stub (emcmake cmake), static library,
 #      linked with sample/simple.c into a wasm program and run under node.
+# EXTRA_CMAKE: further -D options for the stub's CMakeLists.txt.
 # Prints TSV: criterion, item, result, detail.
 set -u
 SRC=$(cd "$1" && pwd); OUT=$(cd "$2" && pwd); S=$(cd "$3" && pwd)
@@ -28,7 +29,7 @@ emcc --version | head -1 >"$S/emcc.version"
 B=$S/build-wasm
 emcmake cmake -S "$CSRC" -B "$B" -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF \
   -DONIG_INCLUDE="$SRC/src" -DGEN_DIR="$GEN" -DCMAKE_INSTALL_PREFIX="$S/wasm" \
-  -DCMAKE_INSTALL_LIBDIR=lib >"$B.cmake.log" 2>&1 \
+  -DCMAKE_INSTALL_LIBDIR=lib ${EXTRA_CMAKE:-} >"$B.cmake.log" 2>&1 \
  && emmake make -C "$B" -j"${JOBS:-4}" >"$B.make.log" 2>&1 \
  && make -C "$B" install >"$B.install.log" 2>&1
 r=fail; [ -f "$S/wasm/lib/libonig.a" ] && r=pass
