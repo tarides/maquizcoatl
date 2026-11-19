@@ -700,7 +700,19 @@ let test_warblre () =
       let switch = dir / "switches/rocq-9.2.0" in
       let dune = run_labelled "dune build" measured in
       Alcotest.check strings "dune"
-        [ "opam"; "exec"; "--switch"; switch; "--"; "dune"; "build"; "-j"; "4" ]
+        [
+          "opam";
+          "exec";
+          "--switch";
+          switch;
+          "--";
+          "dune";
+          "build";
+          "-j";
+          "4";
+          "@mechanization/all";
+          "@engines/all";
+        ]
         (argv dune);
       Alcotest.(check bool)
         "no dune cache" true

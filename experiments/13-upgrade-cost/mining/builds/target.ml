@@ -12,7 +12,8 @@ type variant = {
 }
 
 type kind =
-  | Rocq of { rocqchk : Command.arg list }
+  | Rocq of { rocqchk : Command.arg list; dune_targets : string list }
+      (** [dune_targets]: what [dune build] builds; [[]] for its default. *)
   | Lean
   | Pulse
   | Why3_gallery
@@ -59,10 +60,14 @@ let warblre =
     latest_edits = [];
     variants = [];
     pins = [];
-    (* .github/workflows/ci.yml at d4b0e22. *)
+    (* .github/workflows/ci.yml at d4b0e22. Its CI runs [npm install] before
+       [dune build @all]; the rules that bundle JavaScript with webpack
+       (tests/test262, examples) are left out, so that the build measures
+       the Rocq mechanization and the extracted engines only. *)
     kind =
       Rocq
         {
+          dune_targets = [ "@mechanization/all"; "@engines/all" ];
           rocqchk =
             lits
               [
@@ -120,6 +125,7 @@ let linden =
     kind =
       Rocq
         {
+          dune_targets = [];
           rocqchk =
             lits
               [
@@ -380,13 +386,13 @@ let measured l lim t side v =
     Step.run ?on_failure label (Toolchain.command l tc ?env ~cwd prog args)
   in
   match t.kind with
-  | Rocq { rocqchk } ->
+  | Rocq { rocqchk; dune_targets } ->
       Ok
         [
           run "dune build"
             ~env:[ Command.Set ("DUNE_CACHE", "disabled") ]
             "dune"
-            (lits [ "build"; "-j"; jobs lim ]);
+            (lits ([ "build"; "-j"; jobs lim ] @ dune_targets));
           run "rocqchk" "rocqchk" rocqchk;
         ]
   | Lean ->
