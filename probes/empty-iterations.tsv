@@ -1,0 +1,22 @@
+# Area 3: iterations whose body matches the empty string (ECMA-262
+# 22.2.2.3.1 RepeatMatcher step 2.b rejects an empty iteration once min is
+# reached; Oniguruma uses OP_EMPTY_CHECK_* variants).
+# Columns: see probes/README.md. Subjects: UTF-8 text; \xHH = one byte
+# (one code point on the JS side); \u{H..} = code point.
+id	syntax	encoding	options	pattern	subject	js	note
+ei01	Oniguruma	UTF-8		()*\1	a		issue anchor
+ei02	Oniguruma	UTF-8		(?:()|())*\1\2	a		issue anchor
+ei03	Oniguruma	UTF-8		(?:()|()|()|(x)|()|())*\2b\5	b		issue anchor
+ei04	Oniguruma	UTF-8		(a|)*	aa		issue anchor
+ei05	Oniguruma	UTF-8		(a|)*	b		issue anchor, no a
+ei06	Oniguruma	UTF-8		(?:a?)*?b	aab		issue anchor
+ei07	Oniguruma	UTF-8		(a*)*	b		
+ei08	Oniguruma	UTF-8		(a*)+	b		min 1: first iteration may be empty
+ei09	Oniguruma	UTF-8		(a?)*?b	ab		lazy, capture
+ei10	Oniguruma	UTF-8		(?:a|())*\1	aa		empty alternative after progress
+ei11	Oniguruma	UTF-8		(?:(a)|())*	ab		capture state after a rejected empty iteration
+ei12	Oniguruma	UTF-8		(?<r>a?\g<r>?)*b	aab	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	recursion selects OP_EMPTY_CHECK_END_MEMST_PUSH
+ei14	Oniguruma	UTF-8		(?<r>a\g<r>?b|)*c	abaabbc	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	recursive group may be empty: OP_EMPTY_CHECK_END_MEMST_PUSH
+ei15	Oniguruma	UTF-8		(?<r>a\g<r>?b|)*c	c	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	recursive group may be empty, zero progress
+ei16	Oniguruma	UTF-8		(?:\1a|())*	a		doc/RE:592-595 example
+ei13	Oniguruma	UTF-8		(?<r>a|\(\g<r>?\))*b	(a)b	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	recursion, body may be empty only via call
