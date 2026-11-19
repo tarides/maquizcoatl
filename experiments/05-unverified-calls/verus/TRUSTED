@@ -1,0 +1,10 @@
+# Trusted code of the Verus prototype (see ../count-trusted.sh).
+#
+# shim.rs: the opaque types of the client's pointers and the three
+# external_body shims that do the indirect calls (the only items
+# `verus --no-cheating` rejects), with empty specifications.
+src/shim.rs
+# ffi.rs: the C entry points (outside verus!, not verified): NULL checks,
+# raw pointers turned into references, layout assertions against
+# proto.h, and the C function pointer types.
+src/ffi.rs
