@@ -3,7 +3,7 @@
 Issue: https://github.com/tarides/maquizcoatl/issues/7 (the issue body is
 the reference for scope, inputs and done-criteria; this plan says how).
 Source: maintainer's state-of-the-art report, section "Experiments before
-deciding", row #4: https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc
+deciding", row of experiment #4: https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc
 
 ## Objective
 
@@ -124,7 +124,7 @@ release at run time with the exact version recorded:
    - `client_encoding.c`: a caller-filled `OnigEncodingType` seeded from
      `OnigEncodingASCII`'s initialiser (`upstream/src/ascii.c:103`),
      every function pointer and data field set, used with `onig_new` /
-     `onig_search`; shared with #5;
+     `onig_search`; shared with experiment #5;
    - `layout.c` and `layout_posix.c`: print `sizeof` and every
      `offsetof` for each non-opaque public struct listed in the issue's
      Inputs, compiled once against the upstream header and once against
@@ -303,7 +303,7 @@ recorded.
 - Lab notebook entries as above.
 - A summary comment on issue #7 and a PR from `exp/04-abi-feasibility`.
 - Golden outputs of the samples and the client-encoding test are shared
-  with #5.
+  with experiment #5.
 
 ## Done-criteria (from the issue)
 
