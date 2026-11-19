@@ -159,9 +159,38 @@ vu_sha256() {
   sha256sum "$1" | cut -d' ' -f1
 }
 
+# jq reads pins.json, so its own pin lives here: the static release
+# binary of jq 1.8.2, sha256 from the release's sha256sum.txt. It is
+# used only when the host has no jq.
+VU_JQ_VERSION=1.8.2
+VU_JQ_URL=https://github.com/jqlang/jq/releases/download/jq-$VU_JQ_VERSION/jq-linux-amd64
+VU_JQ_SHA256=b1c22172dd303f3be49e935aa56aa48a8b7a46e0bc838b4997d3bb451495870f
+
+# vu_jq: the jq to use, the host's or the one in VU_CACHE/bin.
+vu_jq() {
+  if command -v jq >/dev/null; then
+    echo jq
+  elif [ -n "${VU_CACHE:-}" ] && [ -x "$VU_CACHE/bin/jq" ]; then
+    echo "$VU_CACHE/bin/jq"
+  else
+    vu_die "no jq: run setup.sh, which installs one into <cache>/bin"
+  fi
+}
+
+# vu_need_jq: installs jq into VU_CACHE/bin when the host has none.
+vu_need_jq() {
+  command -v jq >/dev/null && return 0
+  [ -x "$VU_CACHE/bin/jq" ] && return 0
+  mkdir -p "$VU_CACHE/bin" "$VU_CACHE/dl"
+  vu_fetch "$VU_JQ_URL" "$VU_JQ_SHA256" "$VU_CACHE/dl/jq-$VU_JQ_VERSION"
+  install -m 755 "$VU_CACHE/dl/jq-$VU_JQ_VERSION" "$VU_CACHE/bin/jq"
+}
+
 # vu_pin KEY: a value of pins.json (jq path, e.g. .verus.version).
 vu_pin() {
-  jq -er "$1" "$VU_HARNESS/pins.json"
+  local jq
+  jq=$(vu_jq) || exit 1
+  "$jq" -er "$1" "$VU_HARNESS/pins.json"
 }
 
 # vu_fetch URL SHA256 DEST: downloads URL to DEST unless DEST already has

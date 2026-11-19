@@ -58,6 +58,7 @@ taskset -pc "$VU_CPUS" $$ >/dev/null
 renice -n 10 -p $$ >/dev/null
 logdir=$VU_EXP/out/setup-m$milestone
 mkdir -p "$VU_CACHE/dl" "$VU_EXP/build" "$VU_EXP/out" "$logdir"
+vu_need_jq
 
 # step NAME FUNCTION: runs FUNCTION with its output in NAME.log
 # (redacted), then records its time and the disk use of the cache.
