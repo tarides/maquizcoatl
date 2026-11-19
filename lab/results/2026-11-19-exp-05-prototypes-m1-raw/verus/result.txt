@@ -1,0 +1,10 @@
+tool=verus
+run_id=m1-verus
+mode=normal
+jobs=4
+cpus=28-31
+build_seconds=1
+build_status=0
+link=ok
+caller_status=0
+caller_output=same
