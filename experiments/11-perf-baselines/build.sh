@@ -78,6 +78,7 @@ cp "$B/rust/release/rust_bench" "$BIN/rust-regex"
 
 # OCaml ocaml-re.
 ( cd "$HERE/ocaml_bench" && $J opam exec -- dune build --release --build-dir="$B/ocaml" ./ocaml_bench.exe )
-cp "$B/ocaml/default/ocaml_bench.exe" "$BIN/ocaml-re"
+# dune leaves its output read-only: replace, do not overwrite, the binary.
+install -m 755 "$B/ocaml/default/ocaml_bench.exe" "$BIN/ocaml-re"
 set +x
 echo build done
