@@ -27,7 +27,7 @@ on (`only/<engine>.<workload>.txt` in the run directory) come from here.
   `f64aa5feb6c3246cc614be1d329adadbb636779a` (branch
   `exp/01-pattern-inventory`, draft PR #15), the committed sample (VS Code:
   first 20 searches per scanner), converted by `prep_workloads.py`.
-- Machine and toolchains: as in `2026-11-19-exp-11-builds.md` (blocksci
+- Machine and toolchains: as in `2026-11-19-exp-11-builds.md` (the
   bench host, AMD EPYC 7502P, Linux 6.8.0-100-generic). Check runs: 4 in
   parallel on CPUs 16-19 (nothing timed).
 - Command: `run.sh r1 check` (2026-11-19 about 12:13 UTC), exit 0, 4 s.

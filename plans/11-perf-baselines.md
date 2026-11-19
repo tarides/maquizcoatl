@@ -21,7 +21,7 @@ agreement with Oniguruma, and worst-case behaviour.
 From the maintainer's
 [comment](https://github.com/tarides/maquizcoatl/issues/2#issuecomment-7007239442):
 
-1. Timing runs on the blocksci bench host (a dedicated machine), not on
+1. Timing runs on the bench host (a dedicated machine), not on
    the maintainer's laptop. Published provenance of that host is its
    CPU model and kernel version only.
 2. A second Oniguruma column, built with
@@ -327,7 +327,7 @@ further entry.
    - the number of patterns the engine rejects or does not support.
 3. Match results agree with Oniguruma (match position and length) on the patterns each engine supports. Every disagreement is listed, explained by a syntax or semantic difference, and those patterns are excluded from the timing comparison.
 4. Worst-case behaviour: at least one catastrophic-backtracking pattern per workload family is timed on each engine, with Oniguruma's default retry limit, and the outcome (time, or the retry-limit error) is recorded.
-5. Every run is recorded in the lab notebook with provenance: CPU model and kernel version of the blocksci bench host, compiler and flags, and engine versions.
+5. Every run is recorded in the lab notebook with provenance: CPU model and kernel version of the bench host, compiler and flags, and engine versions.
 6. A summary table (engine × workload, with both Oniguruma builds) is posted on this issue.
 
 ## Risks
@@ -357,4 +357,4 @@ further entry.
 - **Worst-case runs hog the core.** The 60 s cap and stopping a row at
   the first cap bound step 8 to 30 minutes.
 - **Leaking host details.** Raw outputs pass a redaction check before
-  they are committed; the host is named only as the blocksci bench host.
+  they are committed; the host is named only as the bench host.

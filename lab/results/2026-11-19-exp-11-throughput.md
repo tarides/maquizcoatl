@@ -25,7 +25,7 @@ direct-threaded on the same workloads).
   in `2026-11-19-exp-11-builds.md` (`ed41cf0`); `run.sh` at `0362044`
   (gate change, see below); `summarise.py` as committed with this entry.
 - Workloads: #1 at `f64aa5feb6c3246cc614be1d329adadbb636779a`, committed sample.
-- Machine: the blocksci bench host, AMD EPYC 7502P 32-Core Processor,
+- Machine: the bench host, AMD EPYC 7502P 32-Core Processor,
   Linux 6.8.0-100-generic, Ubuntu 24.04.5 LTS; governor `schedutil`,
   boost on, scaling and cpuinfo range 1.5-2.5 GHz (boost reached about
   3.0 GHz in the samples). No root (Decision 3).
