@@ -1,0 +1,28 @@
+# Area 5: multi-character case folding (UTF-8), plus two ISO-8859-1
+# probes (default syntax, default case-fold flag). JS `i` uses simple
+# folding only (22.2.2.7.3 Canonicalize).
+# Columns: see probes/README.md. Subjects: UTF-8 text; \xHH = one byte
+# (one code point on the JS side); \u{H..} = code point.
+id	syntax	encoding	options	pattern	subject	js	note
+cf01	Oniguruma	UTF-8		(?i:ss)	ß		multi-char fold
+cf02	Oniguruma	UTF-8		(?i:ss)	ẞ		U+1E9E
+cf03	Oniguruma	UTF-8		(?i:ss)	ſs		U+017F long s
+cf04	Oniguruma	UTF-8		(?i:ß)	ss		reverse direction
+cf05	Oniguruma	UTF-8		(?i:ß)	SS		reverse, upper
+cf06	Oniguruma	UTF-8		(?i:ǰ)	ǰ		U+01F0 control
+cf07	Oniguruma	UTF-8		(?i:ǰ)	J̌		U+01F0 vs J + U+030C (full fold j+030C)
+cf08	Oniguruma	UTF-8		(?i)(?<!ss)z	ssz	/(?<!ss)z/i	doc/RE:313-316 lookbehind
+cf09	Oniguruma	UTF-8		(?i)(?<!ss)z	SSz	/(?<!ss)z/i	
+cf10	Oniguruma	UTF-8		(?i)(?<!ss)z	ßz	/(?<!ss)z/i	cross case, test_utf8.c:1575-1578 commented out
+cf11	Oniguruma	UTF-8		(?i)(?<=ss)v	ssv	/(?<=ss)v/i	
+cf12	Oniguruma	UTF-8		(?i)(?<=ss)v	ßv	/(?<=ss)v/i	cross case
+cf13	Oniguruma	UTF-8		(?i)(?<=ß)v	ssv	/(?<=ß)v/i	cross case
+cf14	Oniguruma	UTF-8		(?i)(?<=ß)v	ßv	/(?<=ß)v/i	
+cf15	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i:ss)	ß		ASCII-only fold option
+cf16	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i:ß)	ss		ASCII-only fold option
+cf17	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i)(?<!ss)z	ßz	/(?<!ss)z/i	ASCII-only fold option
+cf18	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i:ss)	SS		ASCII-only fold option, ASCII control
+cf19	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	(?i:k)	K		Kelvin sign: non-ASCII fold to ASCII
+cf20	Oniguruma	UTF-8		(?i:k)	K		Kelvin sign, control
+cf21	Oniguruma	ISO-8859-1		(?i)ss	\xDF	/ss/i	ISO-8859-1
+cf22	Oniguruma	ISO-8859-1		(?i)\xDF	ss	/\xDF/i	ISO-8859-1

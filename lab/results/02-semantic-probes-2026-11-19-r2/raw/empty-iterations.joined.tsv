@@ -1,0 +1,21 @@
+id	syntax	encoding	options	pattern	subject	onig	asan_same	sanitizer	js_pattern	js_flags	js_marks	js	js_nou	cmp
+ei01	Oniguruma	UTF-8	NONE	()*\1	a	M 0-0 | 1=0-0	yes	clean	()*\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-	different
+ei02	Oniguruma	UTF-8	NONE	(?:()|())*\1\2	a	M 0-0 | 1=0-0 2=0-0	yes	clean	(?:()|())*\1\2	-	-	M 0-0 | 1=- 2=-	M 0-0 | 1=- 2=-	different
+ei03	Oniguruma	UTF-8	NONE	(?:()|()|()|(x)|()|())*\2b\5	b	M 0-1 | 1=0-0 2=0-0 3=- 4=- 5=0-0 6=-	yes	clean	(?:()|()|()|(x)|()|())*\2b\5	-	-	M 0-1 | 1=- 2=- 3=- 4=- 5=- 6=-	M 0-1 | 1=- 2=- 3=- 4=- 5=- 6=-	different
+ei04	Oniguruma	UTF-8	NONE	(a|)*	aa	M 0-2 | 1=2-2	yes	clean	(a|)*	-	-	M 0-2 | 1=1-2	M 0-2 | 1=1-2	different
+ei05	Oniguruma	UTF-8	NONE	(a|)*	b	M 0-0 | 1=0-0	yes	clean	(a|)*	-	-	M 0-0 | 1=-	M 0-0 | 1=-	different
+ei06	Oniguruma	UTF-8	NONE	(?:a?)*?b	aab	M 0-3	yes	clean	(?:a?)*?b	-	-	M 0-3	M 0-3	same
+ei07	Oniguruma	UTF-8	NONE	(a*)*	b	M 0-0 | 1=0-0	yes	clean	(a*)*	-	-	M 0-0 | 1=-	M 0-0 | 1=-	different
+ei08	Oniguruma	UTF-8	NONE	(a*)+	b	M 0-0 | 1=0-0	yes	clean	(a*)+	-	-	M 0-0 | 1=0-0	M 0-0 | 1=0-0	same
+ei09	Oniguruma	UTF-8	NONE	(a?)*?b	ab	M 0-2 | 1=0-1	yes	clean	(a?)*?b	-	-	M 0-2 | 1=0-1	M 0-2 | 1=0-1	same
+ei10	Oniguruma	UTF-8	NONE	(?:a|())*\1	aa	M 0-2 | 1=2-2	yes	clean	(?:a|())*\1	-	-	M 0-2 | 1=-	M 0-2 | 1=-	different
+ei11	Oniguruma	UTF-8	NONE	(?:(a)|())*	ab	M 0-1 | 1=0-1 2=1-1	yes	clean	(?:(a)|())*	-	-	M 0-1 | 1=0-1 2=-	M 0-1 | 1=0-1 2=-	different
+ei17	Oniguruma	UTF-8	NONE	(?:(a)|())*\1	ab	N	yes	clean	(?:(a)|())*\1	-	-	M 0-0 | 1=- 2=-	M 0-0 | 1=- 2=-	different
+ei18	Oniguruma	UTF-8	NONE	(?:(a)|())*\1	aa	M 0-2 | 1=0-1 2=1-1	yes	clean	(?:(a)|())*\1	-	-	M 0-2 | 1=0-1 2=-	M 0-2 | 1=0-1 2=-	different
+ei12	Oniguruma	UTF-8	NONE	(?<r>a?\g<r>?)*b	aab	E -221 never ending recursion	yes	clean	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	-	n/a	n/a	n/a	n/a
+ei13	Oniguruma	UTF-8	NONE	(?<r>a|\(\g<r>?\))*b	(a)b	M 0-4 | 1=0-3	yes	clean	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	-	n/a	n/a	n/a	n/a
+ei14	Oniguruma	UTF-8	NONE	(?<r>a\g<r>?b|)*c	abaabbc	M 0-7 | 1=6-6	yes	clean	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	-	n/a	n/a	n/a	n/a
+ei15	Oniguruma	UTF-8	NONE	(?<r>a\g<r>?b|)*c	c	M 0-1 | 1=0-0	yes	clean	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	-	n/a	n/a	n/a	n/a
+ei16	Oniguruma	UTF-8	NONE	(?:\1a|())*	a	M 0-0 | 1=0-0	yes	clean	(?:\1a|())*	-	-	M 0-1 | 1=-	M 0-1 | 1=-	different
+ei19	Oniguruma	UTF-8	NONE	(?:\1a|())*\1	a	M 0-1 | 1=1-1	yes	clean	(?:\1a|())*\1	-	-	M 0-1 | 1=-	M 0-1 | 1=-	different
+ei20	Oniguruma	UTF-8	NONE	(?:a|())*\1	a	M 0-1 | 1=1-1	yes	clean	(?:a|())*\1	-	-	M 0-1 | 1=-	M 0-1 | 1=-	different

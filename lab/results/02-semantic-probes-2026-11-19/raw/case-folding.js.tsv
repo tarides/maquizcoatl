@@ -1,0 +1,23 @@
+id	js_pattern	js_flags	js_marks	js_result	js_result_u
+cf01	(?i:ss)	-	js-flagged	N	N
+cf02	(?i:ss)	-	js-flagged	N	N
+cf03	(?i:ss)	-	js-flagged	N	M 0-2
+cf04	(?i:ß)	-	js-flagged	N	N
+cf05	(?i:ß)	-	js-flagged	N	N
+cf06	(?i:ǰ)	-	js-flagged	M 0-1	M 0-1
+cf07	(?i:ǰ)	-	js-flagged	N	N
+cf08	(?<!ss)z	i	translated	N	N
+cf09	(?<!ss)z	i	translated	N	N
+cf10	(?<!ss)z	i	translated	M 1-2	M 1-2
+cf11	(?<=ss)v	i	translated	M 2-3	M 2-3
+cf12	(?<=ss)v	i	translated	N	N
+cf13	(?<=ß)v	i	translated	N	N
+cf14	(?<=ß)v	i	translated	M 1-2	M 1-2
+cf15	(?i:ss)	-	js-flagged	N	N
+cf16	(?i:ß)	-	js-flagged	N	N
+cf17	(?<!ss)z	i	translated	M 1-2	M 1-2
+cf18	(?i:ss)	-	js-flagged	M 0-2	M 0-2
+cf19	(?i:k)	-	js-flagged	N	M 0-1
+cf20	(?i:k)	-	js-flagged	N	M 0-1
+cf21	ss	i	translated,js-on-codepoints	N	N
+cf22	\xDF	i	translated,js-on-codepoints	N	N

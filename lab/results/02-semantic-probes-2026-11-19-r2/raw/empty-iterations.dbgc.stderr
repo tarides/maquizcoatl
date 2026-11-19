@@ -1,0 +1,461 @@
+@@probe ei01
+
+PATTERN: /()*\1/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x2, push_mem_end: 0x2
+code-length: 8
+   0: push   +6 =>  6
+   1: empty-check-start  id:0
+   2: mem-start-push  mem:1
+   3: mem-end-push  mem:1
+   4: empty-check-end-memst  id:0
+   5: jump   -5 =>  0
+   6: backref1  
+   7: end  
+
+@@probe ei02
+
+PATTERN: /(?:()|())*\1\2/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x6, push_mem_end: 0x6
+code-length: 13
+   0: push  +10 => 10
+   1: empty-check-start  id:0
+   2: push   +4 =>  6
+   3: mem-start-push  mem:1
+   4: mem-end-push  mem:1
+   5: jump   +3 =>  8
+   6: mem-start-push  mem:2
+   7: mem-end-push  mem:2
+   8: empty-check-end-memst  id:0
+   9: jump   -9 =>  0
+  10: backref1  
+  11: backref2  
+  12: end  
+
+@@probe ei03
+
+PATTERN: /(?:()|()|()|(x)|()|())*\2b\5/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [b]: length: 1, dmin: 0, dmax: inf.
+push_mem_start: 0x7e, push_mem_end: 0x24
+code-length: 31
+   0: push  +27 => 27
+   1: empty-check-start  id:0
+   2: push   +4 =>  6
+   3: mem-start-push  mem:1
+   4: mem-end  mem:1
+   5: jump  +20 => 25
+   6: push   +4 => 10
+   7: mem-start-push  mem:2
+   8: mem-end-push  mem:2
+   9: jump  +16 => 25
+  10: push   +4 => 14
+  11: mem-start-push  mem:3
+  12: mem-end  mem:3
+  13: jump  +12 => 25
+  14: push   +5 => 19
+  15: mem-start-push  mem:4
+  16: str_1  x
+  17: mem-end  mem:4
+  18: jump   +7 => 25
+  19: push   +4 => 23
+  20: mem-start-push  mem:5
+  21: mem-end-push  mem:5
+  22: jump   +3 => 25
+  23: mem-start-push  mem:6
+  24: mem-end  mem:6
+  25: empty-check-end-memst  id:0
+  26: jump   -26 =>  0
+  27: backref2  
+  28: str_1  b
+  29: backref-n  n:5
+  30: end  
+
+@@probe ei04
+
+PATTERN: /(a|)*/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x2, push_mem_end: 0x0
+code-length: 10
+   0: push   +9 =>  9
+   1: empty-check-start  id:0
+   2: mem-start-push  mem:1
+   3: push   +3 =>  6
+   4: str_1  a
+   5: jump   +1 =>  6
+   6: mem-end  mem:1
+   7: empty-check-end  id:0
+   8: jump   -8 =>  0
+   9: end  
+
+@@probe ei05
+
+PATTERN: /(a|)*/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x2, push_mem_end: 0x0
+code-length: 10
+   0: push   +9 =>  9
+   1: empty-check-start  id:0
+   2: mem-start-push  mem:1
+   3: push   +3 =>  6
+   4: str_1  a
+   5: jump   +1 =>  6
+   6: mem-end  mem:1
+   7: empty-check-end  id:0
+   8: jump   -8 =>  0
+   9: end  
+
+@@probe ei06
+
+PATTERN: /(?:a?)*?b/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [b]: length: 1, dmin: 0, dmax: inf.
+push_mem_start: 0x0, push_mem_end: 0x0
+code-length: 5
+   0: jump   +2 =>  2
+   1: str_1  a
+   2: push   -1 =>  1
+   3: str_1  b
+   4: end  
+
+@@probe ei07
+
+PATTERN: /(a*)*/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x2, push_mem_end: 0x0
+code-length: 10
+   0: push   +9 =>  9
+   1: empty-check-start  id:0
+   2: mem-start-push  mem:1
+   3: push-or-jump-e1   +3 =>  6 c:a
+   4: str_1  a
+   5: jump   -2 =>  3
+   6: mem-end  mem:1
+   7: empty-check-end  id:0
+   8: jump   -8 =>  0
+   9: end  
+
+@@probe ei08
+
+PATTERN: /(a*)+/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x2, push_mem_end: 0x0
+code-length: 15
+   0: mem-start-push  mem:1
+   1: push-or-jump-e1   +3 =>  4 c:a
+   2: str_1  a
+   3: jump   -2 =>  1
+   4: mem-end  mem:1
+   5: push   +9 => 14
+   6: empty-check-start  id:0
+   7: mem-start-push  mem:1
+   8: push-or-jump-e1   +3 => 11 c:a
+   9: str_1  a
+  10: jump   -2 =>  8
+  11: mem-end  mem:1
+  12: empty-check-end  id:0
+  13: jump   -8 =>  5
+  14: end  
+
+@@probe ei09
+
+PATTERN: /(a?)*?b/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [b]: length: 1, dmin: 0, dmax: inf.
+push_mem_start: 0x2, push_mem_end: 0x0
+code-length: 10
+   0: jump   +7 =>  7
+   1: empty-check-start  id:0
+   2: mem-start-push  mem:1
+   3: push   +2 =>  5
+   4: str_1  a
+   5: mem-end  mem:1
+   6: empty-check-end  id:0
+   7: push   -6 =>  1
+   8: str_1  b
+   9: end  
+
+@@probe ei10
+
+PATTERN: /(?:a|())*\1/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x2, push_mem_end: 0x2
+code-length: 11
+   0: push   +9 =>  9
+   1: empty-check-start  id:0
+   2: push   +3 =>  5
+   3: str_1  a
+   4: jump   +3 =>  7
+   5: mem-start-push  mem:1
+   6: mem-end-push  mem:1
+   7: empty-check-end-memst  id:0
+   8: jump   -8 =>  0
+   9: backref1  
+  10: end  
+
+@@probe ei11
+
+PATTERN: /(?:(a)|())*/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x6, push_mem_end: 0x0
+code-length: 12
+   0: push  +11 => 11
+   1: empty-check-start  id:0
+   2: push   +5 =>  7
+   3: mem-start-push  mem:1
+   4: str_1  a
+   5: mem-end  mem:1
+   6: jump   +3 =>  9
+   7: mem-start-push  mem:2
+   8: mem-end  mem:2
+   9: empty-check-end  id:0
+  10: jump   -10 =>  0
+  11: end  
+
+@@probe ei17
+
+PATTERN: /(?:(a)|())*\1/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x6, push_mem_end: 0x2
+code-length: 13
+   0: push  +11 => 11
+   1: empty-check-start  id:0
+   2: push   +5 =>  7
+   3: mem-start-push  mem:1
+   4: str_1  a
+   5: mem-end-push  mem:1
+   6: jump   +3 =>  9
+   7: mem-start-push  mem:2
+   8: mem-end  mem:2
+   9: empty-check-end-memst  id:0
+  10: jump   -10 =>  0
+  11: backref1  
+  12: end  
+
+@@probe ei18
+
+PATTERN: /(?:(a)|())*\1/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x6, push_mem_end: 0x2
+code-length: 13
+   0: push  +11 => 11
+   1: empty-check-start  id:0
+   2: push   +5 =>  7
+   3: mem-start-push  mem:1
+   4: str_1  a
+   5: mem-end-push  mem:1
+   6: jump   +3 =>  9
+   7: mem-start-push  mem:2
+   8: mem-end  mem:2
+   9: empty-check-end-memst  id:0
+  10: jump   -10 =>  0
+  11: backref1  
+  12: end  
+
+@@probe ei12
+
+PATTERN: /(?<r>a?\g<r>?)*b/
+OPTIONS:
+@@probe ei13
+
+PATTERN: /(?<r>a|\(\g<r>?\))*b/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [b]: length: 1, dmin: 0, dmax: inf.
+name table
+r: 1
+
+push_mem_start: 0x2, push_mem_end: 0x0
+code-length: 16
+   0: push-if-peek-next  +14 => 14 c:b
+   1: call  => 3
+   2: jump  +11 => 13
+   3: mem-start-push  mem:1
+   4: push   +3 =>  7
+   5: str_1  a
+   6: jump   +5 => 11
+   7: str_1  (
+   8: push   +2 => 10
+   9: call  => 3
+  10: str_1  )
+  11: mem-end-rec  mem:1
+  12: return  
+  13: jump   -13 =>  0
+  14: str_1  b
+  15: end  
+
+@@probe ei14
+
+PATTERN: /(?<r>a\g<r>?b|)*c/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [c]: length: 1, dmin: 0, dmax: inf.
+name table
+r: 1
+
+push_mem_start: 0x2, push_mem_end: 0x0
+code-length: 17
+   0: push-if-peek-next  +15 => 15 c:c
+   1: empty-check-start  id:0
+   2: call  => 4
+   3: jump  +10 => 13
+   4: mem-start-push  mem:1
+   5: push   +6 => 11
+   6: str_1  a
+   7: push   +2 =>  9
+   8: call  => 4
+   9: str_1  b
+  10: jump   +1 => 11
+  11: mem-end-rec  mem:1
+  12: return  
+  13: empty-check-end-memst-push  id:0
+  14: jump   -14 =>  0
+  15: str_1  c
+  16: end  
+
+@@probe ei15
+
+PATTERN: /(?<r>a\g<r>?b|)*c/
+OPTIONS:
+optimize: STR_FAST
+  anchor: []
+  sub anchor: []
+
+exact: [c]: length: 1, dmin: 0, dmax: inf.
+name table
+r: 1
+
+push_mem_start: 0x2, push_mem_end: 0x0
+code-length: 17
+   0: push-if-peek-next  +15 => 15 c:c
+   1: empty-check-start  id:0
+   2: call  => 4
+   3: jump  +10 => 13
+   4: mem-start-push  mem:1
+   5: push   +6 => 11
+   6: str_1  a
+   7: push   +2 =>  9
+   8: call  => 4
+   9: str_1  b
+  10: jump   +1 => 11
+  11: mem-end-rec  mem:1
+  12: return  
+  13: empty-check-end-memst-push  id:0
+  14: jump   -14 =>  0
+  15: str_1  c
+  16: end  
+
+@@probe ei16
+
+PATTERN: /(?:\1a|())*/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x2, push_mem_end: 0x2
+code-length: 11
+   0: push  +10 => 10
+   1: empty-check-start  id:0
+   2: push   +4 =>  6
+   3: backref1  
+   4: str_1  a
+   5: jump   +3 =>  8
+   6: mem-start-push  mem:1
+   7: mem-end-push  mem:1
+   8: empty-check-end  id:0
+   9: jump   -9 =>  0
+  10: end  
+
+@@probe ei19
+
+PATTERN: /(?:\1a|())*\1/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x2, push_mem_end: 0x2
+code-length: 12
+   0: push  +10 => 10
+   1: empty-check-start  id:0
+   2: push   +4 =>  6
+   3: backref1  
+   4: str_1  a
+   5: jump   +3 =>  8
+   6: mem-start-push  mem:1
+   7: mem-end-push  mem:1
+   8: empty-check-end-memst  id:0
+   9: jump   -9 =>  0
+  10: backref1  
+  11: end  
+
+@@probe ei20
+
+PATTERN: /(?:a|())*\1/
+OPTIONS:
+optimize: NONE
+  anchor: []
+
+push_mem_start: 0x2, push_mem_end: 0x2
+code-length: 11
+   0: push   +9 =>  9
+   1: empty-check-start  id:0
+   2: push   +3 =>  5
+   3: str_1  a
+   4: jump   +3 =>  7
+   5: mem-start-push  mem:1
+   6: mem-end-push  mem:1
+   7: empty-check-end-memst  id:0
+   8: jump   -8 =>  0
+   9: backref1  
+  10: end  
+
+@@probe <exit>

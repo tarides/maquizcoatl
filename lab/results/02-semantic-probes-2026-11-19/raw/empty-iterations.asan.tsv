@@ -1,0 +1,17 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+ei01	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	()*\1	a	M 0-0 | 1=0-0	M 0-0 | 1=0-0
+ei02	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:()|())*\1\2	a	M 0-0 | 1=0-0 2=0-0	M 0-0 | 1=0-0 2=0-0
+ei03	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:()|()|()|(x)|()|())*\2b\5	b	M 0-1 | 1=0-0 2=0-0 3=- 4=- 5=0-0 6=-	M 0-1 | 1=0-0 2=0-0 3=- 4=- 5=0-0 6=-
+ei04	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(a|)*	aa	M 0-2 | 1=2-2	M 0-2 | 1=2-2
+ei05	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(a|)*	b	M 0-0 | 1=0-0	M 0-0 | 1=0-0
+ei06	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:a?)*?b	aab	M 0-3	M 0-3
+ei07	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(a*)*	b	M 0-0 | 1=0-0	M 0-0 | 1=0-0
+ei08	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(a*)+	b	M 0-0 | 1=0-0	M 0-0 | 1=0-0
+ei09	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(a?)*?b	ab	M 0-2 | 1=0-1	M 0-2 | 1=0-1
+ei10	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:a|())*\1	aa	M 0-2 | 1=2-2	M 0-2 | 1=2-2
+ei11	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:(a)|())*	ab	M 0-1 | 1=0-1 2=1-1	M 0-1 | 1=0-1 2=1-1
+ei12	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<r>a?\g<r>?)*b	aab	E -221 never ending recursion	E -221 never ending recursion
+ei14	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<r>a\g<r>?b|)*c	abaabbc	M 0-7 | 1=6-6	M 0-7 | 1=6-6
+ei15	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<r>a\g<r>?b|)*c	c	M 0-1 | 1=0-0	M 0-1 | 1=0-0
+ei16	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:\1a|())*	a	M 0-0 | 1=0-0	M 0-0 | 1=0-0
+ei13	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<r>a|\(\g<r>?\))*b	(a)b	M 0-4 | 1=0-3	M 0-4 | 1=0-3

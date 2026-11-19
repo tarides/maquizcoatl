@@ -1,0 +1,23 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+cf01	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:ss)	ß	M 0-1	M 0-2
+cf02	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:ss)	ẞ	M 0-1	M 0-3
+cf03	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:ss)	ſs	M 0-2	M 0-3
+cf04	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:ß)	ss	M 0-2	M 0-2
+cf05	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:ß)	SS	M 0-2	M 0-2
+cf06	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:ǰ)	ǰ	M 0-1	M 0-2
+cf07	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:ǰ)	J̌	M 0-2	M 0-3
+cf08	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i)(?<!ss)z	ssz	N	N
+cf09	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i)(?<!ss)z	SSz	N	N
+cf10	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i)(?<!ss)z	ßz	M 1-2	M 2-3
+cf11	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i)(?<=ss)v	ssv	M 2-3	M 2-3
+cf12	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i)(?<=ss)v	ßv	N	N
+cf13	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i)(?<=ß)v	ssv	N	N
+cf14	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i)(?<=ß)v	ßv	M 1-2	M 2-3
+cf15	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	0x40000000	6.9.10	asan	(?i:ss)	ß	N	N
+cf16	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	0x40000000	6.9.10	asan	(?i:ß)	ss	N	N
+cf17	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	0x40000000	6.9.10	asan	(?i)(?<!ss)z	ßz	M 1-2	M 2-3
+cf18	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	0x40000000	6.9.10	asan	(?i:ss)	SS	M 0-2	M 0-2
+cf19	Oniguruma	UTF-8	IGNORECASE_IS_ASCII	0x40000000	6.9.10	asan	(?i:k)	K	N	N
+cf20	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?i:k)	K	M 0-1	M 0-3
+cf21	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)ss	\xDF	M 0-1	M 0-1
+cf22	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)\xDF	ss	M 0-2	M 0-2

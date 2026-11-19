@@ -1,0 +1,13 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+cl01	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(a)|b)+	ab	M 0-2 | 1=0-1	M 0-2 | 1=0-1
+cl02	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(a)|b)+\1	aba	M 0-3 | 1=0-1	M 0-3 | 1=0-1
+cl03	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(a)|b)+\1	abb	N	N
+cl04	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(a)|(b))+	ab	M 0-2 | 1=0-1 2=1-2	M 0-2 | 1=0-1 2=1-2
+cl05	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	((a)|b)+	ab	M 0-2 | 1=1-2 2=0-1	M 0-2 | 1=1-2 2=0-1
+cl06	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(a)(b)?)+	aba	M 0-3 | 1=2-3 2=1-2	M 0-3 | 1=2-3 2=1-2
+cl07	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(z)((a+)?(b+)?(c))*	zaacbbbcac	M 0-10 | 1=0-1 2=8-10 3=8-9 4=4-7 5=9-10	M 0-10 | 1=0-1 2=8-10 3=8-9 4=4-7 5=9-10
+cl08	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(a)|b)+?c	abc	M 0-3 | 1=0-1	M 0-3 | 1=0-1
+cl09	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(a)|b)*?\1c	abac	M 0-4 | 1=0-1	M 0-4 | 1=0-1
+cl10	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(a)|b){2}	ab	M 0-2 | 1=0-1	M 0-2 | 1=0-1
+cl11	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(?<n>a)|b)+	ab	M 0-2 | 1=0-1	M 0-2 | 1=0-1
+cl12	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(a|b)*	ab	M 0-2 | 1=1-2	M 0-2 | 1=1-2

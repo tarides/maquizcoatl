@@ -1,0 +1,16 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+br01	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(a)$|\1	az	N	N
+br02	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	\1(a)	aa	N	N
+br03	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(a)?\1b	b	N	N
+br04	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(a)|b\1	b	N	N
+br05	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(a)|b)\1c	bc	N	N
+br06	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(?<n>a)|(?<n>b))\k<n>	bb	M 0-2 | 1=- 2=0-1	M 0-2 | 1=- 2=0-1
+br07	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(?<n>a)|(?<n>b))\k<n>	aa	M 0-2 | 1=0-1 2=-	M 0-2 | 1=0-1 2=-
+br08	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?<n>a)(?<n>x)?\k<n>	aa	M 0-2 | 1=0-1 2=-	M 0-2 | 1=0-1 2=-
+br09	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	debug	(?<n>a)(?<n>x)?\k<n>	ax	N	N
+br10	Oniguruma+STRICT_BACKREF	UTF-8	NONE	0x40000000	6.9.10	debug	(a)$|\1	az	N	N
+br11	Oniguruma+STRICT_BACKREF	UTF-8	NONE	0x40000000	6.9.10	debug	\1(a)	aa	E -208 invalid backref number/name	E -208 invalid backref number/name
+br12	Oniguruma+STRICT_BACKREF	UTF-8	NONE	0x40000000	6.9.10	debug	(a)?\1b	b	N	N
+br13	Oniguruma+STRICT_BACKREF	UTF-8	NONE	0x40000000	6.9.10	debug	(?:(?<n>a)|(?<n>b))\k<n>	bb	M 0-2 | 1=- 2=0-1	M 0-2 | 1=- 2=0-1
+br14	Ruby	UTF-8	NONE	0x40000000	6.9.10	debug	(a)$|\1	az	N	N
+br15	Perl	UTF-8	NONE	0x40000000	6.9.10	debug	(a)$|\1	az	N	N

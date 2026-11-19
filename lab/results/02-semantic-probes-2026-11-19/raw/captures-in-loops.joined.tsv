@@ -1,0 +1,13 @@
+id	syntax	encoding	options	pattern	subject	onig	asan_same	sanitizer	js_pattern	js_flags	js_marks	js	js_nou	cmp
+cl01	Oniguruma	UTF-8	NONE	(?:(a)|b)+	ab	M 0-2 | 1=0-1	yes	clean	(?:(a)|b)+	-	-	M 0-2 | 1=-	M 0-2 | 1=-	different
+cl02	Oniguruma	UTF-8	NONE	(?:(a)|b)+\1	aba	M 0-3 | 1=0-1	yes	clean	(?:(a)|b)+\1	-	-	M 0-2 | 1=-	M 0-2 | 1=-	different
+cl03	Oniguruma	UTF-8	NONE	(?:(a)|b)+\1	abb	N	yes	clean	(?:(a)|b)+\1	-	-	M 0-3 | 1=-	M 0-3 | 1=-	different
+cl04	Oniguruma	UTF-8	NONE	(?:(a)|(b))+	ab	M 0-2 | 1=0-1 2=1-2	yes	clean	(?:(a)|(b))+	-	-	M 0-2 | 1=- 2=1-2	M 0-2 | 1=- 2=1-2	different
+cl05	Oniguruma	UTF-8	NONE	((a)|b)+	ab	M 0-2 | 1=1-2 2=0-1	yes	clean	((a)|b)+	-	-	M 0-2 | 1=1-2 2=-	M 0-2 | 1=1-2 2=-	different
+cl06	Oniguruma	UTF-8	NONE	(?:(a)(b)?)+	aba	M 0-3 | 1=2-3 2=1-2	yes	clean	(?:(a)(b)?)+	-	-	M 0-3 | 1=2-3 2=-	M 0-3 | 1=2-3 2=-	different
+cl07	Oniguruma	UTF-8	NONE	(z)((a+)?(b+)?(c))*	zaacbbbcac	M 0-10 | 1=0-1 2=8-10 3=8-9 4=4-7 5=9-10	yes	clean	(z)((a+)?(b+)?(c))*	-	-	M 0-10 | 1=0-1 2=8-10 3=8-9 4=- 5=9-10	M 0-10 | 1=0-1 2=8-10 3=8-9 4=- 5=9-10	different
+cl08	Oniguruma	UTF-8	NONE	(?:(a)|b)+?c	abc	M 0-3 | 1=0-1	yes	clean	(?:(a)|b)+?c	-	-	M 0-3 | 1=-	M 0-3 | 1=-	different
+cl09	Oniguruma	UTF-8	NONE	(?:(a)|b)*?\1c	abac	M 0-4 | 1=0-1	yes	clean	(?:(a)|b)*?\1c	-	-	M 3-4 | 1=-	M 3-4 | 1=-	different
+cl10	Oniguruma	UTF-8	NONE	(?:(a)|b){2}	ab	M 0-2 | 1=0-1	yes	clean	(?:(a)|b){2}	-	-	M 0-2 | 1=-	M 0-2 | 1=-	different
+cl11	Oniguruma	UTF-8	NONE	(?:(?<n>a)|b)+	ab	M 0-2 | 1=0-1	yes	clean	(?:(?<n>a)|b)+	-	-	M 0-2 | 1=-	M 0-2 | 1=-	different
+cl12	Oniguruma	UTF-8	NONE	(a|b)*	ab	M 0-2 | 1=1-2	yes	clean	(a|b)*	-	-	M 0-2 | 1=1-2	M 0-2 | 1=1-2	same

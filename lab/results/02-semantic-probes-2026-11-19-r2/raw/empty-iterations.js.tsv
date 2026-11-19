@@ -1,0 +1,21 @@
+id	js_pattern	js_flags	js_marks	js_result	js_result_u
+ei01	()*\1	-	-	M 0-0 | 1=-	M 0-0 | 1=-
+ei02	(?:()|())*\1\2	-	-	M 0-0 | 1=- 2=-	M 0-0 | 1=- 2=-
+ei03	(?:()|()|()|(x)|()|())*\2b\5	-	-	M 0-1 | 1=- 2=- 3=- 4=- 5=- 6=-	M 0-1 | 1=- 2=- 3=- 4=- 5=- 6=-
+ei04	(a|)*	-	-	M 0-2 | 1=1-2	M 0-2 | 1=1-2
+ei05	(a|)*	-	-	M 0-0 | 1=-	M 0-0 | 1=-
+ei06	(?:a?)*?b	-	-	M 0-3	M 0-3
+ei07	(a*)*	-	-	M 0-0 | 1=-	M 0-0 | 1=-
+ei08	(a*)+	-	-	M 0-0 | 1=0-0	M 0-0 | 1=0-0
+ei09	(a?)*?b	-	-	M 0-2 | 1=0-1	M 0-2 | 1=0-1
+ei10	(?:a|())*\1	-	-	M 0-2 | 1=-	M 0-2 | 1=-
+ei11	(?:(a)|())*	-	-	M 0-1 | 1=0-1 2=-	M 0-1 | 1=0-1 2=-
+ei17	(?:(a)|())*\1	-	-	M 0-0 | 1=- 2=-	M 0-0 | 1=- 2=-
+ei18	(?:(a)|())*\1	-	-	M 0-2 | 1=0-1 2=-	M 0-2 | 1=0-1 2=-
+ei12	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	-	n/a	n/a	n/a
+ei13	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	-	n/a	n/a	n/a
+ei14	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	-	n/a	n/a	n/a
+ei15	n/a: ECMA-262 2025 has no subexpression calls (22.2.1 grammar)	-	n/a	n/a	n/a
+ei16	(?:\1a|())*	-	-	M 0-1 | 1=-	M 0-1 | 1=-
+ei19	(?:\1a|())*\1	-	-	M 0-1 | 1=-	M 0-1 | 1=-
+ei20	(?:a|())*\1	-	-	M 0-1 | 1=-	M 0-1 | 1=-
