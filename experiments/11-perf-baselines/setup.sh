@@ -36,6 +36,6 @@ if [ ! -d "$OPAMROOT/e11" ]; then
   opam init --bare --disable-sandboxing -n
   taskset -c "$BUILD_CPUS" opam switch create e11 ocaml-base-compiler.5.5.2 --jobs=4
 fi
-taskset -c "$BUILD_CPUS" opam install --jobs=4 re.1.14.0 mtime dune
+taskset -c "$BUILD_CPUS" opam install --jobs=4 re.1.14.0 mtime.2.2.0 dune.3.25.0
 opam exec -- ocamlfind list 2>/dev/null | grep -E '^(re|mtime) ' || opam list --columns=name,version re mtime dune ocaml
 echo setup done
