@@ -55,6 +55,11 @@ mk read-regset   "$CC" $RF "$HD/regset.c" "$LIB" &
 mk read-deluxe   "$CC" $RF "$HD/deluxe.c" "$LIB" &
 mk read-deep     "$CC" $RF "$H/base-deep.c" "$LIB" &
 mk read-deep-plain "$CC" -DSTANDALONE "$H/base-deep.c" "$B/plain/libonig.a" &
+# read-deep-ns: read-deep with the harness file compiled without the
+# shift-base check, because base.c:98 (to_binary, STANDALONE only) is a
+# signed 1 << 31 that aborts read-deep before parsing. The library keeps
+# the full fuzz-build checks.
+mk read-deep-ns  "$CC" $RF -fno-sanitize=shift-base "$H/base-deep.c" "$LIB" &
 wait
 cp "$HD/ascii_compatible.dict" "$H/ascii.dict"
 python3 -I "$HD/dict_conv.py" utf16_be < "$HD/ascii_compatible.dict" > "$H/utf16_be.dict"
