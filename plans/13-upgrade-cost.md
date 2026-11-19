@@ -135,16 +135,20 @@ added.
 
 Pin files per project:
 
-- Warblre, Linden: `*.opam` (`rocq-core`, `rocq-stdlib` constraints),
-  CI workflow matrices, `dune-project`;
+- Warblre, Linden: `*.opam` (constraints of `rocq-core`, `rocq-prover`
+  and `coq`: an exact `= X` resolves to release X, a range is reported as
+  `unresolved:<range>`; `rocq-stdlib` only shows a change), and the CI
+  matrix keys `rocq` and `coq`. `dune-project` is not a pin file: its
+  `(using rocq X)` is the version of the dune plugin, not of Rocq;
 - lean-regex: `regex/lean-toolchain`, `correctness/lean-toolchain`,
   `docbuild/lean-toolchain` (stable at these paths since 2025-01, before
   the window); the lakefiles' dependency revisions (mathlib) are counted
   as pin lines;
 - EverParse: `opt/hashes.Makefile` (`FStar_hash`);
 - Creusot: `creusot-deps.opam` (Why3 and why3find commits);
-- Anvil: CI workflows (Verus release), `Cargo.toml` (`vstd` version),
-  `rust-toolchain.toml`.
+- Anvil: CI workflows (`verus_release` and `VERUS_TAG` resolve to
+  releases, `verus_commit` only shows a change), `Cargo.toml` (`vstd`,
+  an inline git table, only shows a change), `rust-toolchain.toml`.
 
 Two further selections, whose rows are **all** classified by hand
 whatever their size, since a message pattern also catches unrelated
@@ -156,13 +160,25 @@ commits:
 - Anvil, in its two unpinned periods: units matching
   `upgrade|bump|update|stabiliz|broken proofs|fix proofs|verus|vstd|z3`.
 
-**Grouping.** Consecutive bumps whose pin files reach the same version
-form one group (lean-regex `a5c12a8` moves `regex/`, then `96f5cd0` moves
-`correctness/` and `docbuild/`, to the same Lean version).
+Keyword rows do not read pin values (their from and to are empty): the
+pins did not change, and reading them would cost one network fetch per
+commit in a blob-less clone.
+
+**Grouping.** A bump joins the bump just before it when the two halves
+of one upgrade are split over several pin files (lean-regex `a5c12a8`
+moves `regex/`, then `96f5cd0` moves `correctness/` and `docbuild/`, to
+the same Lean version). The rule is stricter than "same version", which
+merged two Anvil bumps four months apart. A bump joins the previous one
+only if no other selected unit lies in between, it reaches no new
+release, it moves at least one pin file to a version that the previous
+bump introduced, and every resolvable pin file it changes ends on
+versions that the previous bump reached. A bump that only removes a pin,
+only changes opaque pins (`rust-toolchain.toml`) or only drops versions
+from a CI matrix keeps its own row.
 
 **Commit pins.** EverParse and Creusot pin tool commits, not releases.
 A pinned commit is mapped to the first release tag that contains it
-(`git merge-base --is-ancestor`, in clones of F\* and Why3). A commit
+(`git tag --contains`, in clones of F\* and Why3). A commit
 contained in no release (EverParse sometimes pins an F\* pull-request
 branch) gets the label `unreleased`.
 
@@ -180,6 +196,17 @@ consecutive releases (`mirror-afp-2025` to `-2025-1`, and so on; Why3
 repository as remotes, at depth 1. Who made each AFP change comes from
 the history of `mirror-afp-devel` (`git log -- thys/<entry>` between
 release dates, blob-less clone), not from the depth-1 mirrors.
+Caveat: an AFP release branch is forked before the Isabelle release date,
+so authors and diffs can be misaligned by one release period (seen on
+`Formula_Derivatives`). The notebook states it for each affected entry.
+
+**Per release.** Several rows can reach one tool series (a release
+candidate then the stable release, several pinned commits of one F\*
+release, one row per AFP entry). The per-release table sums the rows by
+(project, series reached) and divides by the releases the group spans.
+Lines of rows that reach no release, go back to an older series, or
+belong to a group that spans no release are reported as unattributed in
+the summary.
 
 ### Tool
 
@@ -187,10 +214,11 @@ An OCaml executable, `upgrade_mining`, in
 `experiments/13-upgrade-cost/mining/` (own `dune-project`, like
 `experiments/11-perf-baselines/ocaml_bench/`), with a `.mli` per module
 and tests. It depends on the standard library and `unix` only, and runs
-`git` as a subprocess on local clones. One configuration file per
-project, in `experiments/13-upgrade-cost/projects/`, gives the clone, the
-commit at D, the window, the pin files and their format, the excluded and
-restricted paths, and the message pattern.
+`git` as a subprocess on local clones. The project configurations are
+typed OCaml values in `mining/src/projects.ml`, not separate
+configuration files: per project, the clone, the commit at D, the pin
+files and their format, the excluded and restricted paths, and the
+message pattern. The window is given on the command line.
 
 Tests (`dune test`) run on fixtures, with no network and no clone: a
 recorded first-parent `git log --numstat`, pin-file contents for each
@@ -313,8 +341,6 @@ Within the report's "days":
   mirrors), `switches/`, `build/` and `logs/`.
 - In the repository, branch `exp/13-upgrade-cost`:
   - `experiments/13-upgrade-cost/mining/`: the OCaml tool and its tests;
-  - `experiments/13-upgrade-cost/projects/`: one configuration per
-    project;
   - `experiments/13-upgrade-cost/releases/`: release lists;
   - `experiments/13-upgrade-cost/mining/`, second executable
     `upgrade_builds`: the Part A driver, in OCaml (decision 4 below). It
@@ -329,10 +355,11 @@ Within the report's "days":
 One entry per run. Every entry records the commit of this repository,
 the commands, the machine (CPU model, `nproc`, load before and after),
 and the inputs' revisions. Part C entries add the window, the
-configuration files and the classification decisions. Part A entries
-add, per project and side: tool and prover versions (Z3, Alt-Ergo, CVC5),
-KaRaMeL revision, `-j`, wall-clock time, outcome, and for a port: failing
-files, error categories, patch size, hands-on time against the time box.
+configuration (`projects.ml` at the recorded commit) and the
+classification decisions. Part A entries add, per project and side: tool
+and prover versions (Z3, Alt-Ergo, CVC5), KaRaMeL revision, `-j`,
+wall-clock time, outcome, and for a port: failing files, error
+categories, patch size, hands-on time against the time box.
 
 ## Outputs
 
