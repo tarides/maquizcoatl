@@ -97,3 +97,28 @@ decisions and open questions so far.
    (cheap)"). #11 uses the #1 workloads, so it runs after #1 like #12.
    The machine has 16 CPUs but little free memory and disk, so at most two
    experiments execute at once.
+
+## 2026-11-19 — First workflow run: 13 issues, 13 reviews, 13 decisions
+
+The workflow ran 39 agents in about 8 minutes (2.75 M subagent tokens, 515
+tool calls). For every experiment it opened an issue, had Claude Fable 5.1
+review it independently, posted the review as a comment, and applied the
+review's decision-free fixes (8 to 13 per issue, several of them correcting
+line citations into `upstream/`).
+
+All 13 reviews also raised at least one point that changes scope, cost, tool
+choice or done-criteria, so all 13 issues stopped at `needs-decision` before
+any plan was written: 25 questions in total. The recurring themes:
+
+- **Thresholds.** What "fast enough", "acceptable table cost" or "reaching
+  the speed target" means, which the report left open.
+- **Tool choice.** Which provers #5, #8 and #9 cover, and who picks them
+  after the eliminators.
+- **Benchmark hygiene.** Where timing runs happen (shared workstation versus
+  a dedicated machine) and how they avoid noise from fuzzing.
+- **Scope edges.** Corpus sources and licences (#1), legacy-encoding probes
+  (#2), sanitizer and fuzzer configurations (#3), splitting #12's dependency
+  on #10.
+
+Issue numbers on GitHub do not match experiment numbers, since the issues
+were opened in parallel.
