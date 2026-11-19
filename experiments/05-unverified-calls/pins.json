@@ -17,7 +17,7 @@
     "version": "v2026.11.15",
     "url": "https://github.com/FStarLang/FStar/releases/download/v2026.11.15/fstar-v2026.11.15-Linux-x86_64.tar.gz",
     "sha256": "375b811af042d36c38641995799c4d4146a521b1db4014efc9d018c713e5177b",
-    "source": "shared cache (experiment #7), read only; krml and Z3 bundled"
+    "source": "installed into this account's cache: the shared copy (experiment #7) is not usable read only, since its checked library files are readable only by their owner; krml and Z3 bundled"
   },
   "rustup": {
     "milestone": 1,
