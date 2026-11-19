@@ -290,3 +290,124 @@ review (https://github.com/tarides/maquizcoatl/issues/5#issuecomment-7008480225)
 
 **Status.** Decided by the maintainer 2026-11-19, option (c)
 (https://github.com/tarides/maquizcoatl/issues/5#issuecomment-7008852226).
+
+---
+
+## DEV-005: Only the public API is exported
+
+Origin: experiment #4, ABI feasibility (issue #7), leaked-internals
+question, proposal
+(https://github.com/tarides/maquizcoatl/issues/7#issuecomment-7016693095)
+and maintainer decision
+(https://github.com/tarides/maquizcoatl/issues/7#issuecomment-7019890064).
+
+**Upstream behaviour at `f95747b`.** Upstream's builds have no
+visibility control. `ONIG_EXTERN` is plain `extern` outside Windows
+(`upstream/src/oniguruma.h:55-71`). `upstream/CMakeLists.txt:90` builds
+the library with no `-fvisibility`, no version script and no export
+list, and `upstream/src/Makefile.am:59` does the same for libtool. So
+`libonig.so.5` exports every non-static symbol of every object.
+Besides the public API, which is 208 symbols in the default build
+(164 functions, 44 data) and 216 with POSIX (172 functions), it exports
+114 symbols that no installed header (`oniguruma.h`, `oniggnu.h`,
+`onigposix.h`) declares: 106 functions (`onig_st_*`, `onig_node_*`,
+`onigenc_*`, ...) and 8 data (`OnigAsciiLowerMap`,
+`OnigEncAsciiCtypeTable`, `OnigEncAsciiToLowerCaseTable`,
+`OnigEncDefaultCharEncoding`, `OnigEncISO_8859_1_ToLowerCaseTable`,
+`OnigUnicodeFolds1`, `OnigUnicodeFolds2`, `OnigUnicodeFolds3`). The
+full classification, with the declaring header line of each symbol, is
+in `experiments/04-abi-feasibility/symbols.tsv` (class `internal`).
+
+**Maquizcoatl behaviour.** `libonig.so.5` exports exactly the symbols
+that the installed headers declare: 208 in the default build, 216 with
+the POSIX API. Nothing else is exported, neither upstream's 114
+internals nor any symbol private to the implementation (for example
+the encoding callbacks of a generated stub, `s_init`,
+`s_mbc_enc_len`, ..., or `custard_init_globals`). Public data symbols
+keep default visibility and stay preemptible: no `-Bsymbolic`, no
+protected visibility, no symbol versions (an anonymous version script,
+as upstream has none). Client executables' copy relocations must keep
+working. The specification covers only the public API.
+
+**Alternatives considered.**
+
+- Export the 114 internals as upstream does. This turns upstream's
+  missing visibility control into API. The specification would have to
+  cover 114 functions and data objects with their exact layout and
+  behaviour, and the implementation could never change them. No known
+  client and no harness binary needs them.
+- Export a chosen subset (for example the 8 data tables). No client
+  that uses one was found, so there is nothing to choose it by.
+
+**Reason.** These symbols are not API. They are internals exposed only
+because the upstream build lacks an export list. Specifying them would
+fix upstream's implementation structure in the specification.
+
+**Evidence.** Vincent Balat's survey of five libonig clients, with the
+114 names searched as whole words in client code, finds 0 internal
+uses: jq `5c001b1` (9 public symbols used), PHP `ext/mbstring`
+`65d1418` (23), vscode-oniguruma `1e38f96` (9), Rust `onig` crate
+`73e63eb` (195), Python `onigurumacffi` `ff1e5f4` (14)
+(https://github.com/tarides/maquizcoatl/issues/7#issuecomment-7016693095).
+None of the 24 harness binaries of experiment #4 needs an internal
+symbol
+([oracle entry](../lab/results/2026-11-19-exp-04-oracle.md)).
+The stubs of mechanisms 1a, 1b and 2, rebuilt with a version script
+listing the public names, export exactly those names and still pass
+every layout and binary check, including the Custard constructor route
+([exports entry](../lab/results/2026-11-19-exp-04-exports.md)).
+
+**Status.** Decided by the maintainer 2026-11-19
+(https://github.com/tarides/maquizcoatl/issues/7#issuecomment-7019890064).
+
+---
+
+## DEV-006: `onigposix.h` declares a different `OnigSyntaxType` from the library's (candidate)
+
+Origin: experiment #4, oracle entry and results review (issue #7).
+
+**Upstream behaviour at `f95747b`.** When a client includes
+`onigposix.h` without `oniguruma.h`, as `upstream/sample/posix.c:5`
+does, it gets the header's own definition of `OnigSyntaxType`
+(`upstream/src/onigposix.h:118-127`, guarded by `#ifndef ONIGURUMA_H`).
+That definition has four `unsigned int` fields (`op`, `op2`,
+`behavior`, `options`), 16 bytes. The library is compiled with
+`oniguruma.h`'s definition (`upstream/src/oniguruma.h:413-419`), which
+adds `OnigMetaCharTableType meta_char_table`, six `OnigCodePoint`
+fields (`upstream/src/oniguruma.h:119-126`), so 40 bytes, alignment 4
+(`OnigSyntaxRuby` is 0x28 bytes in `nm -D -S`). `onigposix.h` still
+declares `onig_copy_syntax` and `onig_set_default_syntax` on that type
+(`upstream/src/onigposix.h:154-155`). `onig_copy_syntax` is `*to =
+*from` (`upstream/src/regsyntax.c:291-294`), so it writes 40 bytes into
+the client's 16-byte object, 24 bytes past its end (measured,
+`posix_syntax_size.c`). `onig_set_default_syntax` on a client-defined
+syntax reads 24 bytes past it. Linking is unaffected: the copy
+relocations of the predefined syntaxes take their size from the shared
+object.
+
+**Maquizcoatl behaviour (proposed).** The type a client sees has the
+library's layout whichever public header it includes. For example,
+`onigposix.h` would include the definition from `oniguruma.h`, or
+declare the same five-field struct. No API call writes or reads past
+an object of a type the client can declare. To be decided.
+
+**Alternatives considered.**
+
+- Keep upstream's headers and document the hazard. This keeps the
+  memory error for `onigposix.h`-only clients that copy or define a
+  syntax.
+- Drop `onig_copy_syntax` and `onig_set_default_syntax` from
+  `onigposix.h`. Source-incompatible for clients that use them through
+  that header.
+
+**Reason.** Bug-free goal: memory error (out-of-bounds write) through a
+documented header.
+
+**Evidence.** Oracle entry, layout of `OnigSyntaxType` (40 / 4)
+([oracle](../lab/results/2026-11-19-exp-04-oracle.md));
+[exports entry](../lab/results/2026-11-19-exp-04-exports.md),
+`posix_syntax_size.txt` (16 bytes seen, 24 bytes overwritten).
+
+**Status.** Candidate, not yet decided (recorded as a candidate by the
+maintainer 2026-11-19,
+https://github.com/tarides/maquizcoatl/issues/7#issuecomment-7019890064).

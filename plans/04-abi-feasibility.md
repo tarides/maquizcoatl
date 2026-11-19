@@ -235,6 +235,13 @@ release at run time with the exact version recorded:
 
 ## Machine budget
 
+*Note added after the run (results review, problem 5):* the run moved
+to the bench host (AMD EPYC 7502P, 503 GiB RAM), where it used at most
+12 parallel jobs pinned off experiment #11's cores and finished
+milestone 1 plus follow-up 1 in about 35 minutes; the export-control
+rerun used 8 jobs. The budget below is the one planned for the original,
+smaller machine; the lab entries record what each run actually used.
+
 At most 4 parallel jobs (`make -j4`, `cargo -j4`, at most 4 concurrent
 test binaries) and at most 3 hours of wall clock for the run. Plan with
 about 4 GB of RAM and about 20 GB of disk on the shared drive, with
