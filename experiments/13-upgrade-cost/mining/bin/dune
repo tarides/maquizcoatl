@@ -1,0 +1,3 @@
+(executable
+ (name upgrade_mining)
+ (libraries upgrade_mining))

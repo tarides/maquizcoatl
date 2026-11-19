@@ -1,0 +1,4 @@
+(library
+ (name upgrade_mining)
+ (private_modules util)
+ (libraries unix))
