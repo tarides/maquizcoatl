@@ -62,7 +62,7 @@ for e in ENGINES:
         ref_med = ''
         if ref:
             ref_med = ref[1][0]
-            ratio = ref_med / med if (valid and ref[3]) else ''
+            ratio = ref_med / med if (valid and ref[3] and d.get('bytes_per_pass', 0) > 0) else ''
         rows.append(dict(engine=e, workload=w, valid=valid, run_used=used, reps=len(d['T']), passes_per_rep=d.get('npass'),
                          median_pass_s=med, min_s=mn, max_s=mx, iqr_s=iqr, spread=sp,
                          bytes_per_pass=int(d.get('bytes_per_pass', 0)), bytes_per_s=d.get('bytes_per_pass', 0) / med,
@@ -89,6 +89,7 @@ for e in ENGINES:
     for w in WORKLOADS:
         r = by.get((e, w))
         if not r: cells.append('n/a'); continue
+        if r['bytes_per_pass'] == 0: cells.append('no pair (%d patterns compile-timed only)' % r['compile_patterns']); continue
         rt = r['speed_ratio_vs_onig_threaded']
         cells.append('%s%s, %s, %.1f%%' % ('×%.2f' % rt if rt != '' else '–', '' if r['valid'] else '*',
                                            fmt_bps(r['bytes_per_s']), 100 * r['spread']))
