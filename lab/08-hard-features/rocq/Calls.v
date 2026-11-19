@@ -111,6 +111,8 @@ Lemma ns01_3 : search 3 d5 m3 [97;97;97;98] = None. Proof. vm_compute. reflexivi
 Lemma ns01_4 : search 4 d5 m3 [97;97;97;98] = Some (0, 4). Proof. vm_compute. reflexivity. Qed.
 Lemma ns02_1 : search 1 d4 (Call 0) s4 = Some (6, 7). Proof. vm_compute. reflexivity. Qed.
 Lemma ns02_6 : search 6 d4 (Call 0) s4 = Some (1, 12). Proof. vm_compute. reflexivity. Qed.
+Definition s6 := repeat 40 24 ++ [97] ++ repeat 41 24.
+Lemma ca06 : search default_limit d4 (Call 0) s6 = Some (5, 44). Proof. vm_compute. reflexivity. Qed.
 Lemma ns02_7 : search 7 d4 (Call 0) s4 = Some (0, 13). Proof. vm_compute. reflexivity. Qed.
 
 Print Assumptions depth_bound.

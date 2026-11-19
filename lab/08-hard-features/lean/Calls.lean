@@ -143,6 +143,8 @@ theorem ns01_3 : search 3 p5.1 p5.2 [97,97,97,98] = none := by decide +kernel
 theorem ns01_4 : search 4 p5.1 p5.2 [97,97,97,98] = some (0, 4) := by decide +kernel
 theorem ns02_1 : search 1 p4.1 p4.2 s4 = some (6, 7) := by decide +kernel
 theorem ns02_6 : search 6 p4.1 p4.2 s4 = some (1, 12) := by decide +kernel
+def s6 : List Nat := List.replicate 24 40 ++ [97] ++ List.replicate 24 41
+theorem ca06 : search defaultLimit p4.1 p4.2 s6 = some (5, 44) := by decide +kernel
 theorem ns02_7 : search 7 p4.1 p4.2 s4 = some (0, 13) := by decide +kernel
 
 end Calls

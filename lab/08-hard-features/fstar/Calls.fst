@@ -114,4 +114,7 @@ let ns01_3 = assert_norm (search 3 d5 m3 [97;97;97;98] == None)
 let ns01_4 = assert_norm (search 4 d5 m3 [97;97;97;98] == Some (0, 4))
 let ns02_1 = assert_norm (search 1 d4 (Call 0) s4 == Some (6, 7))
 let ns02_6 = assert_norm (search 6 d4 (Call 0) s4 == Some (1, 12))
+let rec rep (n c:nat) : list nat = if n = 0 then [] else c :: rep (n - 1) c
+let s6 : list nat = rep 24 40 @ [97] @ rep 24 41
+let ca06 = assert_norm (search default_limit d4 (Call 0) s6 == Some (5, 44))
 let ns02_7 = assert_norm (search 7 d4 (Call 0) s4 == Some (0, 13))

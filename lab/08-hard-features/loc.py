@@ -101,7 +101,7 @@ def classify(path):
                     cur = "spec"
             elif TOP["fst"].match(line):
                 cur = "spec"
-            if cur == "spec" and re.search(r"^\s*(Lemma|\(requires|\(ensures)", line):
+            if cur == "spec" and re.search(r"^\s*:?\s*(Lemma|\(requires|\(ensures)", line):
                 cur = "proof"   # a let whose Lemma type is on the next line
             counts[cur] += 1
         else:  # rs

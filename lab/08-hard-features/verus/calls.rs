@@ -173,6 +173,7 @@ pub open spec fn s_abab() -> L<nat> { cons(97, cons(98, cons(97, cons(98, L::Nil
 pub open spec fn s_aaaa() -> L<nat> { cons(97, cons(97, cons(97, cons(97, L::Nil)))) }
 pub open spec fn s_aaab() -> L<nat> { cons(97, cons(97, cons(97, cons(98, L::Nil)))) }
 pub open spec fn s_s4() -> L<nat> { cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(97, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, L::Nil))))))))))))) }
+pub open spec fn s_s6() -> L<nat> { cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(40, cons(97, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, cons(41, L::Nil))))))))))))))))))))))))))))))))))))))))))))))))) }
 
 pub proof fn cases() {
     assert(search(default_limit(), d1(), m1(), s_aa()) == Some((0, 2))) by (compute_only); // ca01
@@ -188,6 +189,7 @@ pub proof fn cases() {
     assert(search(4, d5(), m3(), s_aaab()) == Some((0, 4))) by (compute_only); // ns01_4
     assert(search(1, d4(), Re::Call(0), s_s4()) == Some((6, 7))) by (compute_only); // ns02_1
     assert(search(6, d4(), Re::Call(0), s_s4()) == Some((1, 12))) by (compute_only); // ns02_6
+    assert(search(default_limit(), d4(), Re::Call(0), s_s6()) == Some((5, 44))) by (compute_only); // ca06
     assert(search(7, d4(), Re::Call(0), s_s4()) == Some((0, 13))) by (compute_only); // ns02_7
 }
 
