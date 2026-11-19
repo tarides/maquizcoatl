@@ -1,0 +1,149 @@
+1	missing:OnigAsciiLowerMap	fail	internal
+1	missing:OnigEncAsciiCtypeTable	fail	internal
+1	missing:OnigEncAsciiToLowerCaseTable	fail	internal
+1	missing:OnigEncDefaultCharEncoding	fail	internal
+1	missing:OnigEncISO_8859_1_ToLowerCaseTable	fail	internal
+1	missing:OnigUnicodeFolds1	fail	internal
+1	missing:OnigUnicodeFolds2	fail	internal
+1	missing:OnigUnicodeFolds3	fail	internal
+1	missing:onig_add_end_call	fail	internal
+1	missing:onig_callout_tag_table_free	fail	internal
+1	missing:onig_check_callout_data_and_clear_old_values	fail	internal
+1	missing:onig_codes_byte_at	fail	internal
+1	missing:onig_codes_cmp	fail	internal
+1	missing:onig_compile	fail	internal
+1	missing:onig_detect_can_be_slow_pattern	fail	internal
+1	missing:onig_error_code_to_format	fail	internal
+1	missing:onig_ext_set_pattern	fail	internal
+1	missing:onig_free_reg_callout_list	fail	internal
+1	missing:onig_get_callout_end_func_by_name_id	fail	internal
+1	missing:onig_get_callout_in_by_name_id	fail	internal
+1	missing:onig_get_callout_start_func	fail	internal
+1	missing:onig_get_callout_start_func_by_name_id	fail	internal
+1	missing:onig_get_callout_type_by_name_id	fail	internal
+1	missing:onig_get_regex_ext	fail	internal
+1	missing:onig_global_callout_names_free	fail	internal
+1	missing:onig_init_for_match_at	fail	internal
+1	missing:onig_is_code_in_cc	fail	internal
+1	missing:onig_is_code_in_cc_len	fail	internal
+1	missing:onig_is_in_code_range	fail	internal
+1	missing:onig_names_free	fail	internal
+1	missing:onig_new_cclass_with_code_list	fail	internal
+1	missing:onig_node_copy	fail	internal
+1	missing:onig_node_free	fail	internal
+1	missing:onig_node_new_alt	fail	internal
+1	missing:onig_node_new_bag	fail	internal
+1	missing:onig_node_new_list	fail	internal
+1	missing:onig_node_new_str	fail	internal
+1	missing:onig_node_reset_empty	fail	internal
+1	missing:onig_node_reset_fail	fail	internal
+1	missing:onig_node_str_cat	fail	internal
+1	missing:onig_node_str_clear	fail	internal
+1	missing:onig_node_str_set	fail	internal
+1	missing:onig_parse_tree	fail	internal
+1	missing:onig_positive_int_multiply	fail	internal
+1	missing:onig_reduce_nested_quantifier	fail	internal
+1	missing:onig_reg_callout_list_at	fail	internal
+1	missing:onig_renumber_name_table	fail	internal
+1	missing:onig_scan_env_set_error_string	fail	internal
+1	missing:onig_snprintf_with_pattern	fail	internal
+1	missing:onig_st_add_direct	fail	internal
+1	missing:onig_st_cleanup_safe	fail	internal
+1	missing:onig_st_copy	fail	internal
+1	missing:onig_st_delete	fail	internal
+1	missing:onig_st_delete_safe	fail	internal
+1	missing:onig_st_foreach	fail	internal
+1	missing:onig_st_free_table	fail	internal
+1	missing:onig_st_init_callout_name_table_with_size	fail	internal
+1	missing:onig_st_init_numtable	fail	internal
+1	missing:onig_st_init_numtable_with_size	fail	internal
+1	missing:onig_st_init_strend_table_with_size	fail	internal
+1	missing:onig_st_init_strtable	fail	internal
+1	missing:onig_st_init_strtable_with_size	fail	internal
+1	missing:onig_st_init_table	fail	internal
+1	missing:onig_st_init_table_with_size	fail	internal
+1	missing:onig_st_insert	fail	internal
+1	missing:onig_st_insert_strend	fail	internal
+1	missing:onig_st_lookup	fail	internal
+1	missing:onig_st_lookup_callout_name_table	fail	internal
+1	missing:onig_st_lookup_strend	fail	internal
+1	missing:onig_strcpy	fail	internal
+1	missing:onig_strncmp	fail	internal
+1	missing:onig_warning	fail	internal
+1	missing:onigenc_always_false_is_allowed_reverse_match	fail	internal
+1	missing:onigenc_always_true_is_allowed_reverse_match	fail	internal
+1	missing:onigenc_always_true_is_valid_mbc_string	fail	internal
+1	missing:onigenc_apply_all_case_fold_with_map	fail	internal
+1	missing:onigenc_ascii_apply_all_case_fold	fail	internal
+1	missing:onigenc_ascii_get_case_fold_codes_by_str	fail	internal
+1	missing:onigenc_ascii_mbc_case_fold	fail	internal
+1	missing:onigenc_egcb_is_break_position	fail	internal
+1	missing:onigenc_end	fail	internal
+1	missing:onigenc_euc_jp_lookup_property_name	fail	internal
+1	missing:onigenc_get_case_fold_codes_by_str_with_map	fail	internal
+1	missing:onigenc_is_mbc_newline_0x0a	fail	internal
+1	missing:onigenc_is_mbc_word_ascii	fail	internal
+1	missing:onigenc_length_check_is_valid_mbc_string	fail	internal
+1	missing:onigenc_mb2_code_to_mbc	fail	internal
+1	missing:onigenc_mb2_is_code_ctype	fail	internal
+1	missing:onigenc_mb4_code_to_mbc	fail	internal
+1	missing:onigenc_mb4_is_code_ctype	fail	internal
+1	missing:onigenc_mbn_mbc_case_fold	fail	internal
+1	missing:onigenc_mbn_mbc_to_code	fail	internal
+1	missing:onigenc_minimum_property_name_to_ctype	fail	internal
+1	missing:onigenc_not_support_get_ctype_code_range	fail	internal
+1	missing:onigenc_single_byte_code_to_mbc	fail	internal
+1	missing:onigenc_single_byte_code_to_mbclen	fail	internal
+1	missing:onigenc_single_byte_left_adjust_char_head	fail	internal
+1	missing:onigenc_single_byte_mbc_enc_len	fail	internal
+1	missing:onigenc_single_byte_mbc_to_code	fail	internal
+1	missing:onigenc_sjis_lookup_property_name	fail	internal
+1	missing:onigenc_step	fail	internal
+1	missing:onigenc_unicode_apply_all_case_fold	fail	internal
+1	missing:onigenc_unicode_ctype_code_range	fail	internal
+1	missing:onigenc_unicode_fold1_key	fail	internal
+1	missing:onigenc_unicode_fold2_key	fail	internal
+1	missing:onigenc_unicode_fold3_key	fail	internal
+1	missing:onigenc_unicode_get_case_fold_codes_by_str	fail	internal
+1	missing:onigenc_unicode_is_code_ctype	fail	internal
+1	missing:onigenc_unicode_mbc_case_fold	fail	internal
+1	missing:onigenc_unicode_property_name_to_ctype	fail	internal
+1	missing:onigenc_unicode_unfold_key	fail	internal
+1	missing:onigenc_utf16_32_get_ctype_code_range	fail	internal
+1	missing:onigenc_wb_is_break_position	fail	internal
+1	missing:onigenc_with_ascii_strncmp	fail	internal
+1	symbols	fail	oracle=322 stub=208 missing=114 (public 0) extra=0 kind_mismatch=0 data_size_mismatch=0
+1	soname	pass	libonig.so.5
+1	file-names	pass	libonig.so.5.5.0 <- libonig.so.5 <- libonig.so
+2	OnigCaseFoldCodeItem	pass	-
+2	OnigMetaCharTableType	pass	-
+2	OnigEncodingType	pass	-
+2	OnigSyntaxType	pass	-
+2	OnigCaptureTreeNode	pass	-
+2	OnigRegion	pass	-
+2	OnigErrorInfo	pass	-
+2	OnigRepeatRange	pass	-
+2	OnigCompileInfo	pass	-
+2	OnigValue	pass	-
+3	test_utf8	pass	undefined=0 exit=139
+3	test_back	pass	undefined=0 exit=139
+3	testc	pass	undefined=0 exit=139
+3	testcu	pass	undefined=0 exit=139
+3	test_syntax	pass	undefined=0 exit=139
+3	test_options	pass	undefined=0 exit=139
+3	test_regset	pass	undefined=0 exit=255
+3	bug_fix	pass	undefined=0 exit=139
+3	callback_each_match	pass	undefined=0 exit=0
+3	callout	pass	undefined=0 exit=139
+3	count	pass	undefined=0 exit=0
+3	echo	pass	undefined=0 exit=139
+3	encode	pass	undefined=0 exit=139
+3	listcap	pass	undefined=0 exit=139
+3	names	pass	undefined=0 exit=0
+3	regset	pass	undefined=0 exit=139
+3	scan	pass	undefined=0 exit=0
+3	simple	pass	undefined=0 exit=139
+3	sql	pass	undefined=0 exit=139
+3	syntax	pass	undefined=0 exit=139
+3	user_property	pass	undefined=0 exit=139
+3	client_encoding	pass	undefined=0 exit=139

@@ -1,0 +1,46 @@
+(* abi.mlw: the ABI constructs of libonig, written in WhyML, one module
+   per construct, each extracted separately with `why3 extract -D c`
+   (Why3's C route is WhyML to C; Why3 does not consume C). *)
+
+(* (0) control: an exported function with a fixed C name and int32
+   arguments, the shape of most of the libonig API. *)
+module Fun
+  use mach.int.Int32
+  let onig_version_num (x: int32) : int32 = x
+end
+
+(* (a) a file-scope struct initialised with function pointers,
+   exported under an exact name (OnigEncodingUTF8). WhyML value names
+   must start with a lower-case letter, hence onigEncodingUTF8. *)
+module EncStruct
+  use mach.int.Int32
+  type enc = { mbc_enc_len : int32 -> int32; max_enc_len : int32 }
+  let s_mbc_enc_len (x: int32) : int32 = x
+  let onigEncodingUTF8 () : enc = { mbc_enc_len = s_mbc_enc_len; max_enc_len = 1 }
+end
+
+(* (a') the same struct without the function pointer, as a global
+   constant: does a top-level record value become C data? *)
+module DataStruct
+  use mach.int.Int32
+  type syn = { op : int32; op2 : int32 }
+  let constant onigSyntaxRuby : syn = { op = 1; op2 = 2 }
+  let get_op () : int32 = onigSyntaxRuby.op
+end
+
+(* (b) an exported scalar data symbol with an exact name
+   (OnigDefaultCaseFoldFlag), as a mutable global. *)
+module DataScalar
+  use mach.int.Int32
+  use ref.Ref
+  val onigDefaultCaseFoldFlag : ref int32
+  let set_flag (x: int32) : unit writes { onigDefaultCaseFoldFlag } =
+    onigDefaultCaseFoldFlag := x
+end
+
+(* (b') a top-level mutable global defined (not declared) in WhyML. *)
+module DataScalarDef
+  use mach.int.Int32
+  use ref.Ref
+  let onigDefaultCaseFoldFlag : ref int32 = ref 1
+end

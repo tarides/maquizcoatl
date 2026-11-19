@@ -1,0 +1,31 @@
+# Mechanism 2 stub: CMake build (criterion 4) producing the three
+# library names and an oniguruma.pc, like upstream's CMakeLists.txt.
+cmake_minimum_required(VERSION 3.16)
+project(onig_stub VERSION 6.9.10 LANGUAGES C)
+option(BUILD_SHARED_LIBS "Build shared libraries" ON)
+option(ENABLE_POSIX_API "Include POSIX API" OFF)
+set(ONIG_INCLUDE "" CACHE PATH "directory holding upstream's public headers")
+set(GEN_DIR "" CACHE PATH "directory holding the generated stub.c and stub_posix.c")
+
+set(srcs ${GEN_DIR}/stub.c ${CMAKE_CURRENT_SOURCE_DIR}/stub_shell.c)
+set(hdrs ${ONIG_INCLUDE}/oniguruma.h ${ONIG_INCLUDE}/oniggnu.h)
+if(ENABLE_POSIX_API)
+  list(APPEND srcs ${GEN_DIR}/stub_posix.c)
+  list(APPEND hdrs ${ONIG_INCLUDE}/onigposix.h)
+endif()
+add_library(onig ${srcs})
+target_include_directories(onig PRIVATE ${ONIG_INCLUDE} ${CMAKE_CURRENT_SOURCE_DIR})
+if(NOT EMSCRIPTEN)
+  # soname libonig.so.5, file libonig.so.5.5.0 (upstream/CMakeLists.txt:99-108)
+  set_target_properties(onig PROPERTIES SOVERSION 5 VERSION 5.5.0)
+endif()
+
+include(GNUInstallDirs)
+install(TARGETS onig LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+                     ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(FILES ${hdrs} DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+# upstream's own pkg-config template (upstream/oniguruma.pc.cmake.in)
+set(onig_pkgconfig_libdir ${CMAKE_INSTALL_FULL_LIBDIR})
+set(PACKAGE_VERSION ${PROJECT_VERSION})
+configure_file(${ONIG_INCLUDE}/../oniguruma.pc.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/oniguruma.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/oniguruma.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)

@@ -34,6 +34,17 @@ repository), or `<cache>` and `<exp>` on the bench host
 | 2026-11-19 | exp-03 correction (results review) | Corrects the rows above: arithmetic pass has 13 library locations (14 location+column pairs), 9 intended + 4 suspicious, 0 bugs; the 6 regset leaks are 513-1,325 bytes in 4-6 allocations (minimised: 484 in 3); "depth 36" counts `(` after the 8 control bytes (pattern-only: 18); 48 CPUs pinned, at most 40 workers. Corrections appended to the three entries | [arith](results/2026-11-19-exp-03-tests-arith.md), [triage](results/2026-11-19-exp-03-triage.md), [campaign](results/2026-11-19-exp-03-fuzz-campaign.md) |
 | 2026-11-19 | exp-03 depth probe re-run (workstation) | Scripted `read-deep-ns` replay and `ulimit -s` bisection reproduce the triage tables on a second machine; plain-build stack needs within one 14 KiB step (`absent-2047` 5756-5770 KiB) | [results](results/2026-11-19-exp-03-depth-probe-rerun.md) |
 
+## Experiment #4
+
+Paths on the bench host are `<bench-workdir>/exp/04-abi-feasibility/...`
+(`w/` for builds and stubs) and `<cache>` = `<bench-workdir>/cache`.
+
+| Date | Experiment | Upstream / tools | Finding | Link |
+|---|---|---|---|---|
+| 2026-11-19 | exp-04 oracle: Release builds (default, POSIX), symbol classification, harness of 24 binaries validated on upstream and an empty prefix | `f95747b`; GCC 13.3.0, CMake 3.28.3, binutils 2.42; AMD EPYC 7502P, Ubuntu 24.04.5, Linux 6.8.0-100 | 270/278 functions + 52 data; 164/172 public functions + 44 public data; 114 leaked internals (106 functions, 8 data). `OnigCalloutArgs` and `re_pattern_buffer` are opaque in the installed header. `onigposix.h` alone sees a 16-byte `OnigSyntaxType` (library: 40) | [results](results/2026-11-19-exp-04-oracle.md) |
+| 2026-11-19 | exp-04 m2-c-stub: mechanism 2, C stub generated from the headers (CMake, default and POSIX), criteria 1-4; Why3 WhyML-to-C extraction of the ABI constructs | as above; Emscripten 7.0.0, Node 24.19.0, Why3 1.9.0 | All public symbols, SONAME, names, 10/12 structs, 22/24 binaries, pkg-config, CMake, emscripten pass; only the 114 internals missing. Why3 C: function names exact, but value names lower-cased, record constants become functions, function-typed fields and `val` globals dropped, no variadics | [results](results/2026-11-19-exp-04-m2-c-stub.md) |
+| 2026-11-19 | exp-04 m3-rust-cdylib: mechanism 3, Rust `cdylib` stub, criteria 1-3, two layout checks (Rust, cbindgen), variadic routes | as above; rustc/cargo 1.96.0, cbindgen 0.29.4 | Same criteria 1-3 result as m2. Variadic: E0658 on stable; a C shim linked in is not exported (version script); a `#[unsafe(naked)]` Rust trampoline to the C body works. Layouts identical both ways | [results](results/2026-11-19-exp-04-m3-rust-cdylib.md) |
+
 ## Experiment #7
 
 | Date | Experiment | Upstream / tools | Finding | Results |

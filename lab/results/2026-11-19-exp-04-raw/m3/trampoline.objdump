@@ -1,0 +1,3 @@
+0000000000017d2c <onig_error_code_to_str>:
+   17d2c:	e9 0f 04 00 00       	jmp    18140 <onig_stub_error_code_to_str_c>
+   17d31:	cc                   	int3

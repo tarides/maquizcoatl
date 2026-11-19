@@ -1,0 +1,161 @@
+CONTENTS PROGRESS: contents: "foo bar baz...", start: "aaab", current: "b"
+user_data: something data
+stack: used_num: 3, used_bytes: 96
+CONTENTS RETRACTION: contents: "foo bar baz...", start: "aaab", current: "b"
+user_data: something data
+stack: used_num: 3, used_bytes: 96
+CONTENTS PROGRESS: contents: "foo bar baz...", start: "aaab", current: "ab"
+user_data: something data
+stack: used_num: 2, used_bytes: 64
+CONTENTS RETRACTION: contents: "foo bar baz...", start: "aaab", current: "ab"
+user_data: something data
+stack: used_num: 2, used_bytes: 64
+CONTENTS PROGRESS: contents: "foo bar baz...", start: "aaab", current: "aab"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+CONTENTS RETRACTION: contents: "foo bar baz...", start: "aaab", current: "aab"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+CONTENTS PROGRESS: contents: "foo bar baz...", start: "aab", current: "b"
+user_data: something data
+stack: used_num: 2, used_bytes: 64
+CONTENTS RETRACTION: contents: "foo bar baz...", start: "aab", current: "b"
+user_data: something data
+stack: used_num: 2, used_bytes: 64
+CONTENTS PROGRESS: contents: "foo bar baz...", start: "aab", current: "ab"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+CONTENTS RETRACTION: contents: "foo bar baz...", start: "aab", current: "ab"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+CONTENTS PROGRESS: contents: "foo bar baz...", start: "ab", current: "b"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+CONTENTS RETRACTION: contents: "foo bar baz...", start: "ab", current: "b"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+search fail
+CONTENTS PROGRESS: contents: "!{}#$%&'()=-~^|[_]`@*:+;<>?/.\,", start: "c", current: "c"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+match at 2
+0: (2-3)
+match at 0
+0: (0-3)
+1: (0-3)
+CONTENTS PROGRESS: contents: "in prec-read-not", start: "ac", current: "c"
+user_data: something data
+stack: used_num: 3, used_bytes: 96
+CONTENTS RETRACTION: contents: "in prec-read-not", start: "ac", current: "c"
+user_data: something data
+stack: used_num: 3, used_bytes: 96
+match at 0
+0: (0-0)
+CONTENTS PROGRESS: contents: "in look-behind-not", start: "c", current: "bc"
+user_data: something data
+stack: used_num: 3, used_bytes: 96
+CONTENTS RETRACTION: contents: "in look-behind-not", start: "c", current: "bc"
+user_data: something data
+stack: used_num: 3, used_bytes: 96
+match at 2
+0: (2-3)
+name: foo
+NAME PROGRESS: contents: "(null)", start: "abc", current: "abc"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+match at 0
+0: (0-3)
+match at 3
+0: (3-6)
+match at 3
+0: (3-6)
+SEARCH ERROR: -3: abort
+name: foo
+NAME PROGRESS: contents: "(null)", start: "abc", current: "c"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+name: foo
+NAME RETRACTION: contents: "(null)", start: "abc", current: "c"
+user_data: something data
+stack: used_num: 1, used_bytes: 32
+search fail
+SEARCH ERROR: -999: undefined error code
+search fail
+match at 0
+0: (0-2)
+match at 0
+0: (0-6)
+match at 0
+0: (0-6)
+match at 0
+0: (0-11)
+match at 0
+0: (0-6)
+match at 1
+0: (1-6)
+match at 7
+0: (7-15)
+match at 0
+0: (0-4)
+bar called.
+arg[0]: 372
+arg[1]: 'I am a bar's argument'
+arg[2]: 0x003042
+bar called.
+arg[0]: 1234567890
+arg[1]: 'I am a option argument's default value.'
+arg[2]: 0x004422
+CONTENTS PROGRESS: contents: "in condition", start: "then", current: "then"
+user_data: something data
+stack: used_num: 3, used_bytes: 96
+match at 0
+0: (0-4)
+match at 0
+0: (0-4)
+ONIG-MONITOR: #1   => at: 0 [0 - 11] len: 11
+ONIG-MONITOR: #1   <= at: 0 [0 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 3 [0 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 2 [0 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 1 [0 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 0 [0 - 11] len: 11
+ONIG-MONITOR: #1   => at: 1 [1 - 11] len: 11
+ONIG-MONITOR: #1   <= at: 1 [1 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 4 [1 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 3 [1 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 2 [1 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 1 [1 - 11] len: 11
+ONIG-MONITOR: #1   => at: 2 [2 - 11] len: 11
+ONIG-MONITOR: #1   <= at: 2 [2 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 5 [2 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 4 [2 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 3 [2 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 2 [2 - 11] len: 11
+ONIG-MONITOR: #1   => at: 3 [3 - 11] len: 11
+ONIG-MONITOR: #1   <= at: 3 [3 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 6 [3 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 5 [3 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 4 [3 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 3 [3 - 11] len: 11
+ONIG-MONITOR: #1   => at: 4 [4 - 11] len: 11
+ONIG-MONITOR: #1   <= at: 4 [4 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 7 [4 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 6 [4 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 5 [4 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 4 [4 - 11] len: 11
+ONIG-MONITOR: #1   => at: 5 [5 - 11] len: 11
+ONIG-MONITOR: #1   <= at: 5 [5 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 8 [5 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 7 [5 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 6 [5 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 5 [5 - 11] len: 11
+ONIG-MONITOR: #1   => at: 6 [6 - 11] len: 11
+ONIG-MONITOR: #1   <= at: 6 [6 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 9 [6 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 8 [6 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 7 [6 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 6 [6 - 11] len: 11
+ONIG-MONITOR: #1   => at: 7 [7 - 11] len: 11
+ONIG-MONITOR: #1   <= at: 7 [7 - 11] len: 11
+ONIG-MONITOR: FOO  => at: 10 [7 - 11] len: 11
+match at 7
+0: (7-11)
