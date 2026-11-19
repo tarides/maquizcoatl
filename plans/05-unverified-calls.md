@@ -74,6 +74,22 @@ These override the rest of the plan where they disagree.
 - **hax backends:** F\*, Rocq and Lean (milestone 3).
 - **Disk:** about 100 GB free, not 142 GB; use is recorded per tool.
 
+## Deviations found during milestone 1
+
+Recorded in the `toolchains-m1` notebook entry.
+
+- **F\* comes from `<cache>`, not from `<shared-cache>`.** The shared
+  F\*'s `.checked` library files are readable only by their owner, so
+  F\* cannot extract from this account. The same release (pinned
+  sha256) is installed into `<cache>/fstar`, with its `krml` and Z3;
+  Why3's Z3 is taken from it. `<shared-cache>` is used only for the
+  switch `provers` (Why3, Alt-Ergo).
+- **jq** is missing on the bench host: `setup.sh` installs the jq
+  release binary into `<cache>/bin`.
+- **F\* commands.** F\* v2026.11.15 extracts with `--codegen KrmlC
+  --custard_entry M.f` after a check pass, then `krml
+  -skip-compilation`; krmllib compiles with `-std=gnu11`.
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own
