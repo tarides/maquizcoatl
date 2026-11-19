@@ -45,6 +45,35 @@ comparison wave.
    experiment #7 installed there (Rocq, Lean, Why3, F\* with KaRaMeL)
    are reused, not reinstalled.
 
+## Deviations decided on issue #13 before the run
+
+These override the rest of the plan where they disagree.
+
+- **Two caches.** Experiment #7's cache (in another account's home on the
+  bench host) is readable but not writable from
+  the account that runs this experiment. Its tools are used read only
+  where they work (F\* with `krml` and Z3, elan and Lean, the opam switch
+  `provers` with Why3 and Alt-Ergo); the scripts call it
+  `VU_SHARED_CACHE` (`<shared-cache>`). Everything that must be installed
+  or written goes into this account's own cache, which is what `<cache>`
+  means below (`VU_CACHE`, same layout and `env.sh`), and into `<exp>`
+  (`VU_EXP`). The VST switch is in an opam root of `<cache>`, not in
+  `provers`'s root; the Why3 configuration (with its Z3 registration) is
+  in `<cache>/why3`.
+- **Jobs and CPUs.** Up to 12 jobs for the VST, Isabelle-LLVM and
+  RefinedRust installs, 4 otherwise. Every heavy job runs under `nice`,
+  pinned with `taskset` to free CPUs: never 4-7 and 36-39
+  (experiment #11), nor a CPU another experiment pins (checked before
+  each heavy job). This replaces "no CPU pinning is needed" below.
+- **Isabelle-LLVM** is shared with experiment #4's mechanism 4, which
+  must run alone on the bench host: it is not installed or built while
+  that mechanism runs; coordination goes through issue #7.
+- **Verdicts.** A toolchain that cannot be installed gives the interim
+  verdict "deferred"; an install that does not finish in time gives
+  "pending".
+- **hax backends:** F\*, Rocq and Lean (milestone 3).
+- **Disk:** about 100 GB free, not 142 GB; use is recorded per tool.
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own
