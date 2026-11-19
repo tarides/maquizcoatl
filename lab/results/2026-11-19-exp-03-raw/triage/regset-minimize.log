@@ -1,0 +1,882 @@
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1303871305
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x61a9b1e41658, 0x61a9b1e44dda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x61a9b1e44de0,0x61a9b1e7c600), 
+CRASH_MIN: minimizing crash input: '../artifacts/fuzzer-regset/leak-f9ca349088a976b37c6c8b2731ab43da205cda88' (40 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 ../artifacts/fuzzer-regset/leak-f9ca349088a976b37c6c8b2731ab43da205cda88 2>&1
+CRASH_MIN: '../artifacts/fuzzer-regset/leak-f9ca349088a976b37c6c8b2731ab43da205cda88' (40 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 ../artifacts/fuzzer-regset/leak-f9ca349088a976b37c6c8b2731ab43da205cda88 -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1303958086
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x55bf5717f658, 0x55bf57182dda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x55bf57182de0,0x55bf571ba600), 
+INFO: Starting MinimizeCrashInputInternalStep: 40
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 40 bytes
+
+=================================================================
+==374986==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x55bf56f6a224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x55bf5700b72f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x55bf56fadc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x55bf56e47f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x55bf56e4a0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x55bf56e3505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x55bf56e388e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x55bf56e64772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x7a1963c2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x7a1963c2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x55bf56e2bc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 264 byte(s) in 1 object(s) allocated from:
+    #0 0x55bf56f6a61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x55bf57009ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x55bf57000889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x55bf5700b80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x55bf56fadc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x55bf56e47f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x55bf56e4a0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x55bf56e3505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x55bf56e388e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x55bf56e64772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7a1963c2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7a1963c2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x55bf56e2bc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 44 byte(s) in 1 object(s) allocated from:
+    #0 0x55bf56f6a61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x55bf57009d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x55bf57000889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x55bf5700b80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x55bf56fadc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x55bf56e47f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x55bf56e4a0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x55bf56e3505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x55bf56e388e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x55bf56e64772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7a1963c2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7a1963c2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x55bf56e2bc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x55bf56f6a224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x55bf56fff7de  (<hostdir>/harness/fuzzer-regset+0x2a27de)
+    #2 0x55bf5700b80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #3 0x55bf56fadc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #4 0x55bf56e47f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #5 0x55bf56e4a0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #6 0x55bf56e3505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #7 0x55bf56e388e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #8 0x55bf56e64772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #9 0x7a1963c2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x7a1963c2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x55bf56e2bc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 765 byte(s) leaked in 4 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 EraseBytes-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x3a,0x0,0x2b,0x1,0x5e,0x0,0x58,0x5c,0xc5,0xaa,0x24,0x29,0x7b,0x31,0x7d,0x0,0x0,0x5d,0x5d,0x0,0x0,0x0,0x6b,0x31,0x0,0xff,0xff,0xff,0xff,0xff,0x3f,0x3d,0x0,
+.\000=(?L:\000+\001^\000X\\\305\252$){1}\000\000]]\000\000\000k1\000\377\377\377\377\377?=\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MOgArAV4AWFzFqiQpezF9AABdXQAAAGsxAP//////Pz0A
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (39 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (39 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1304077166
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x56ee2f0df658, 0x56ee2f0e2dda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x56ee2f0e2de0,0x56ee2f11a600), 
+INFO: Starting MinimizeCrashInputInternalStep: 39
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 39 bytes
+
+=================================================================
+==374998==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x56ee2eeca224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x56ee2ef6b72f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x56ee2ef0dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x56ee2eda7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x56ee2edaa0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x56ee2ed9505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x56ee2ed988e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x56ee2edc4772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x7ab16c82a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x7ab16c82a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x56ee2ed8bc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 264 byte(s) in 1 object(s) allocated from:
+    #0 0x56ee2eeca61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x56ee2ef69ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x56ee2ef60889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x56ee2ef6b80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x56ee2ef0dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x56ee2eda7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x56ee2edaa0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x56ee2ed9505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x56ee2ed988e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x56ee2edc4772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7ab16c82a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7ab16c82a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x56ee2ed8bc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 44 byte(s) in 1 object(s) allocated from:
+    #0 0x56ee2eeca61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x56ee2ef69d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x56ee2ef60889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x56ee2ef6b80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x56ee2ef0dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x56ee2eda7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x56ee2edaa0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x56ee2ed9505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x56ee2ed988e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x56ee2edc4772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7ab16c82a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7ab16c82a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x56ee2ed8bc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x56ee2eeca224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x56ee2ef5f7de  (<hostdir>/harness/fuzzer-regset+0x2a27de)
+    #2 0x56ee2ef6b80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #3 0x56ee2ef0dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #4 0x56ee2eda7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #5 0x56ee2edaa0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #6 0x56ee2ed9505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #7 0x56ee2ed988e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #8 0x56ee2edc4772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #9 0x7ab16c82a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x7ab16c82a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x56ee2ed8bc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 765 byte(s) leaked in 4 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 EraseBytes-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x3a,0x0,0x2b,0x1,0x5e,0x0,0x58,0x5c,0xc5,0xaa,0x24,0x29,0x7b,0x31,0x7d,0x0,0x0,0x5d,0x5d,0x0,0xff,0xff,0xff,0xff,0xff,0x3f,0x3d,0x0,
+.\000=(?L:\000+\001^\000X\\\305\252$){1}\000\000]]\000\377\377\377\377\377?=\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MOgArAV4AWFzFqiQpezF9AABdXQD//////z89AA==
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (34 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (34 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1304196378
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x5c22f1a2f658, 0x5c22f1a32dda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x5c22f1a32de0,0x5c22f1a6a600), 
+INFO: Starting MinimizeCrashInputInternalStep: 34
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 34 bytes
+
+=================================================================
+==375006==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x5c22f181a224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x5c22f18bb72f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x5c22f185dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x5c22f16f7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x5c22f16fa0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x5c22f16e505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x5c22f16e88e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x5c22f1714772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x73f05882a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x73f05882a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x5c22f16dbc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 96 byte(s) in 1 object(s) allocated from:
+    #0 0x5c22f181a61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5c22f18b9ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x5c22f18b0889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5c22f18bb80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5c22f185dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5c22f16f7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5c22f16fa0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5c22f16e505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5c22f16e88e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5c22f1714772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x73f05882a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x73f05882a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5c22f16dbc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 16 byte(s) in 1 object(s) allocated from:
+    #0 0x5c22f181a61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5c22f18b9d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x5c22f18b0889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5c22f18bb80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5c22f185dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5c22f16f7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5c22f16fa0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5c22f16e505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5c22f16e88e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5c22f1714772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x73f05882a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x73f05882a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5c22f16dbc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 3 byte(s) in 1 object(s) allocated from:
+    #0 0x5c22f181a224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x5c22f18af7de  (<hostdir>/harness/fuzzer-regset+0x2a27de)
+    #2 0x5c22f18bb80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #3 0x5c22f185dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #4 0x5c22f16f7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #5 0x5c22f16fa0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #6 0x5c22f16e505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #7 0x5c22f16e88e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #8 0x5c22f1714772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #9 0x73f05882a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x73f05882a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x5c22f16dbc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 571 byte(s) leaked in 4 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 2 EraseBytes-EraseBytes- DE: "\377\010"-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x3a,0x0,0x5c,0xc5,0xaa,0x24,0x29,0x7b,0x31,0x7d,0x0,0xff,0x8,0x5d,0x0,0xff,0xff,0x3f,0x3d,0x0,0x3f,0x3d,0x0,
+.\000=(?L:\000\\\305\252$){1}\000\377\010]\000\377\377?=\000?=\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MOgBcxaokKXsxfQD/CF0A//8/PQA/PQA=
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (29 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (29 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1304318913
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x60b19a217658, 0x60b19a21adda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x60b19a21ade0,0x60b19a252600), 
+INFO: Starting MinimizeCrashInputInternalStep: 29
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 29 bytes
+
+=================================================================
+==375014==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x60b19a002224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x60b19a0a372f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x60b19a045c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x60b199edff5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x60b199ee20ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x60b199ecd05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x60b199ed08e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x60b199efc772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x74e5d162a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x74e5d162a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x60b199ec3c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 96 byte(s) in 1 object(s) allocated from:
+    #0 0x60b19a00261c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x60b19a0a1ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x60b19a098889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x60b19a0a380e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x60b19a045c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x60b199edff5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x60b199ee20ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x60b199ecd05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x60b199ed08e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x60b199efc772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x74e5d162a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x74e5d162a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x60b199ec3c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 20 byte(s) in 1 object(s) allocated from:
+    #0 0x60b19a002224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x60b19a09bbb8  (<hostdir>/harness/fuzzer-regset+0x2a6bb8)
+    #2 0x60b19a09a36d  (<hostdir>/harness/fuzzer-regset+0x2a536d)
+    #3 0x60b19a09a36d  (<hostdir>/harness/fuzzer-regset+0x2a536d)
+    #4 0x60b19a0984d2  (<hostdir>/harness/fuzzer-regset+0x2a34d2)
+    #5 0x60b19a0a380e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #6 0x60b19a045c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #7 0x60b199edff5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #8 0x60b199ee20ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #9 0x60b199ecd05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #10 0x60b199ed08e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #11 0x60b199efc772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #12 0x74e5d162a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #13 0x74e5d162a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #14 0x60b199ec3c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 16 byte(s) in 1 object(s) allocated from:
+    #0 0x60b19a00261c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x60b19a0a1d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x60b19a098889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x60b19a0a380e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x60b19a045c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x60b199edff5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x60b199ee20ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x60b199ecd05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x60b199ed08e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x60b199efc772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x74e5d162a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x74e5d162a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x60b199ec3c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 1 byte(s) in 1 object(s) allocated from:
+    #0 0x60b19a002224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x60b19a0977de  (<hostdir>/harness/fuzzer-regset+0x2a27de)
+    #2 0x60b19a0a380e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #3 0x60b19a045c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #4 0x60b199edff5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #5 0x60b199ee20ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #6 0x60b199ecd05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #7 0x60b199ed08e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #8 0x60b199efc772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #9 0x74e5d162a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x74e5d162a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x60b199ec3c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 589 byte(s) leaked in 5 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 EraseBytes-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x3a,0x0,0x5c,0xc5,0xaa,0x24,0x29,0x7b,0x5d,0x0,0xff,0xff,0x3f,0x3d,0x0,0x3f,0x3d,0x0,
+.\000=(?L:\000\\\305\252$){]\000\377\377?=\000?=\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MOgBcxaokKXtdAP//Pz0APz0A
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (24 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (24 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1304442331
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x63fd8fd48658, 0x63fd8fd4bdda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x63fd8fd4bde0,0x63fd8fd83600), 
+INFO: Starting MinimizeCrashInputInternalStep: 24
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 24 bytes
+
+=================================================================
+==375022==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x63fd8fb33224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x63fd8fbd472f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x63fd8fb76c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x63fd8fa10f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x63fd8fa130ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x63fd8f9fe05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x63fd8fa018e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x63fd8fa2d772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x707ab202a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x707ab202a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x63fd8f9f4c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x63fd8fb3361c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x63fd8fbd2ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x63fd8fbc9889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x63fd8fbd480e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x63fd8fb76c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x63fd8fa10f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x63fd8fa130ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x63fd8f9fe05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x63fd8fa018e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x63fd8fa2d772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x707ab202a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x707ab202a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x63fd8f9f4c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 12 byte(s) in 1 object(s) allocated from:
+    #0 0x63fd8fb3361c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x63fd8fbd2d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x63fd8fbc9889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x63fd8fbd480e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x63fd8fb76c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x63fd8fa10f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x63fd8fa130ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x63fd8f9fe05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x63fd8fa018e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x63fd8fa2d772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x707ab202a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x707ab202a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x63fd8f9f4c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 540 byte(s) leaked in 3 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 2 EraseBytes-EraseBytes- DE: "\002\000"-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x3a,0x5c,0x2,0x0,0x24,0x29,0x7b,0x5d,0x0,0xff,0xff,0x0,0x3f,0x3d,0x0,0x0,
+.\000=(?L:\\\002\000$){]\000\377\377\000?=\000\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MOlwCACQpe10A//8APz0AAA==
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (22 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (22 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1304554073
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x60252b85c658, 0x60252b85fdda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x60252b85fde0,0x60252b897600), 
+INFO: Starting MinimizeCrashInputInternalStep: 22
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 22 bytes
+
+=================================================================
+==375030==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x60252b647224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x60252b6e872f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x60252b68ac18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x60252b524f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x60252b5270ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x60252b51205f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x60252b5158e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x60252b541772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x72e152a2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x72e152a2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x60252b508c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x60252b64761c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x60252b6e6ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x60252b6dd889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x60252b6e880e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x60252b68ac18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x60252b524f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x60252b5270ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x60252b51205f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x60252b5158e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x60252b541772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x72e152a2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x72e152a2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x60252b508c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 12 byte(s) in 1 object(s) allocated from:
+    #0 0x60252b64761c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x60252b6e6d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x60252b6dd889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x60252b6e880e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x60252b68ac18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x60252b524f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x60252b5270ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x60252b51205f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x60252b5158e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x60252b541772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x72e152a2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x72e152a2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x60252b508c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 540 byte(s) leaked in 3 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 EraseBytes-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x3a,0x5c,0x2,0x0,0x24,0x29,0x7b,0x5d,0x0,0xff,0x0,0x3f,0x3d,0x0,0x0,
+.\000=(?L:\\\002\000$){]\000\377\000?=\000\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MOlwCACQpe10A/wA/PQAA
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (21 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (21 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1304665490
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x5ee2c799e658, 0x5ee2c79a1dda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x5ee2c79a1de0,0x5ee2c79d9600), 
+INFO: Starting MinimizeCrashInputInternalStep: 21
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 21 bytes
+
+=================================================================
+==375038==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x5ee2c7789224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x5ee2c782a72f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x5ee2c77ccc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x5ee2c7666f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x5ee2c76690ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x5ee2c765405f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x5ee2c76578e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x5ee2c7683772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x7154b582a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x7154b582a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x5ee2c764ac94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x5ee2c778961c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5ee2c7828ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x5ee2c781f889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5ee2c782a80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5ee2c77ccc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5ee2c7666f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5ee2c76690ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5ee2c765405f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5ee2c76578e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5ee2c7683772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7154b582a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7154b582a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5ee2c764ac94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 12 byte(s) in 1 object(s) allocated from:
+    #0 0x5ee2c778961c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5ee2c7828d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x5ee2c781f889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5ee2c782a80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5ee2c77ccc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5ee2c7666f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5ee2c76690ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5ee2c765405f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5ee2c76578e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5ee2c7683772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7154b582a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7154b582a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5ee2c764ac94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 540 byte(s) leaked in 3 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 4 EraseBytes-EraseBytes-EraseBytes-EraseBytes-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x3a,0x5c,0x2,0x24,0x29,0x0,0x0,0x0,0xff,0x3f,0x3d,0x0,0x0,0x0,
+.\000=(?L:\\\002$)\000\000\000\377?=\000\000\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MOlwCJCkAAAD/Pz0AAAA=
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (20 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (20 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1304777215
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x5819fdb99658, 0x5819fdb9cdda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x5819fdb9cde0,0x5819fdbd4600), 
+INFO: Starting MinimizeCrashInputInternalStep: 20
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 20 bytes
+
+=================================================================
+==375047==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x5819fd984224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x5819fda2572f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x5819fd9c7c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x5819fd861f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x5819fd8640ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x5819fd84f05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x5819fd8528e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x5819fd87e772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x7c44aa82a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x7c44aa82a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x5819fd845c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x5819fd98461c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5819fda23ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x5819fda1a889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5819fda2580e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5819fd9c7c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5819fd861f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5819fd8640ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5819fd84f05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5819fd8528e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5819fd87e772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7c44aa82a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7c44aa82a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5819fd845c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 12 byte(s) in 1 object(s) allocated from:
+    #0 0x5819fd98461c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5819fda23d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x5819fda1a889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5819fda2580e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5819fd9c7c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5819fd861f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5819fd8640ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5819fd84f05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5819fd8528e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5819fd87e772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7c44aa82a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7c44aa82a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5819fd845c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 540 byte(s) leaked in 3 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 2 EraseBytes-EraseBytes-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x3a,0x5c,0x2,0x24,0x29,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+.\000=(?L:\\\002$)\000\000\000\000\000\000\000\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MOlwCJCkAAAAAAAAAAA==
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (19 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (19 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1304887340
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x62ad5a8a7658, 0x62ad5a8aadda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x62ad5a8aade0,0x62ad5a8e2600), 
+INFO: Starting MinimizeCrashInputInternalStep: 19
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 19 bytes
+
+=================================================================
+==375055==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x62ad5a692224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x62ad5a73372f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x62ad5a6d5c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x62ad5a56ff5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x62ad5a5720ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x62ad5a55d05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x62ad5a5608e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x62ad5a58c772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x7f465842a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x7f465842a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x62ad5a553c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 72 byte(s) in 1 object(s) allocated from:
+    #0 0x62ad5a69261c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x62ad5a731ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x62ad5a728889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x62ad5a73380e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x62ad5a6d5c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x62ad5a56ff5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x62ad5a5720ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x62ad5a55d05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x62ad5a5608e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x62ad5a58c772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7f465842a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7f465842a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x62ad5a553c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 12 byte(s) in 1 object(s) allocated from:
+    #0 0x62ad5a69261c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x62ad5a731d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x62ad5a728889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x62ad5a73380e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x62ad5a6d5c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x62ad5a56ff5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x62ad5a5720ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x62ad5a55d05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x62ad5a5608e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x62ad5a58c772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7f465842a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7f465842a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x62ad5a553c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 540 byte(s) leaked in 3 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 EraseBytes- DE: "\007\000\000\000"-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x3a,0x2,0x24,0x29,0x7,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+.\000=(?L:\002$)\007\000\000\000\000\000\000\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MOgIkKQcAAAAAAAAA
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (18 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (18 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1305013289
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x613b9bc1f658, 0x613b9bc22dda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x613b9bc22de0,0x613b9bc5a600), 
+INFO: Starting MinimizeCrashInputInternalStep: 18
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 18 bytes
+
+=================================================================
+==375065==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x613b9ba0a224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x613b9baab72f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x613b9ba4dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x613b9b8e7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x613b9b8ea0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x613b9b8d505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x613b9b8d88e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x613b9b904772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x7a5b6402a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x7a5b6402a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x613b9b8cbc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 48 byte(s) in 1 object(s) allocated from:
+    #0 0x613b9ba0a61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x613b9baa9ce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x613b9baa0889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x613b9baab80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x613b9ba4dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x613b9b8e7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x613b9b8ea0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x613b9b8d505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x613b9b8d88e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x613b9b904772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7a5b6402a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7a5b6402a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x613b9b8cbc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 8 byte(s) in 1 object(s) allocated from:
+    #0 0x613b9ba0a61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x613b9baa9d2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x613b9baa0889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x613b9baab80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x613b9ba4dc18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x613b9b8e7f5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x613b9b8ea0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x613b9b8d505f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x613b9b8d88e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x613b9b904772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x7a5b6402a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x7a5b6402a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x613b9b8cbc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 512 byte(s) leaked in 3 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 EraseBytes-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x29,0x7,0x0,0x0,0x0,0x0,0x0,0x0,0x0,
+.\000=(?L)\007\000\000\000\000\000\000\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MKQcAAAAAAAAA
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (15 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (15 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1305129015
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x5871b7d75658, 0x5871b7d78dda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x5871b7d78de0,0x5871b7db0600), 
+INFO: Starting MinimizeCrashInputInternalStep: 15
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 15 bytes
+
+=================================================================
+==375074==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x5871b7b60224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x5871b7c0172f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x5871b7ba3c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x5871b7a3df5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x5871b7a400ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x5871b7a2b05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x5871b7a2e8e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x5871b7a5a772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x794504a2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x794504a2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x5871b7a21c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 24 byte(s) in 1 object(s) allocated from:
+    #0 0x5871b7b6061c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5871b7bffce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x5871b7bf6889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5871b7c0180e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5871b7ba3c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5871b7a3df5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5871b7a400ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5871b7a2b05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5871b7a2e8e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5871b7a5a772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x794504a2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x794504a2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5871b7a21c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 4 byte(s) in 1 object(s) allocated from:
+    #0 0x5871b7b6061c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5871b7bffd2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x5871b7bf6889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5871b7c0180e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5871b7ba3c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5871b7a3df5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5871b7a400ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5871b7a2b05f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5871b7a2e8e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5871b7a5a772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x794504a2a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x794504a2a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5871b7a21c94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 484 byte(s) leaked in 3 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 EraseBytes-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x29,0x7,0x0,0x0,0x0,0x0,
+.\000=(?L)\007\000\000\000\000
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MKQcAAAAA
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (12 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (12 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1305237182
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x5dd232503658, 0x5dd232506dda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x5dd232506de0,0x5dd23253e600), 
+INFO: Starting MinimizeCrashInputInternalStep: 12
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 12 bytes
+
+=================================================================
+==375082==ERROR: LeakSanitizer: detected memory leaks
+
+Direct leak of 456 byte(s) in 1 object(s) allocated from:
+    #0 0x5dd2322ee224  (<hostdir>/harness/fuzzer-regset+0x20d224)
+    #1 0x5dd23238f72f  (<hostdir>/harness/fuzzer-regset+0x2ae72f)
+    #2 0x5dd232331c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #3 0x5dd2321cbf5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #4 0x5dd2321ce0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #5 0x5dd2321b905f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #6 0x5dd2321bc8e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #7 0x5dd2321e8772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #8 0x736e3e42a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #9 0x736e3e42a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #10 0x5dd2321afc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 24 byte(s) in 1 object(s) allocated from:
+    #0 0x5dd2322ee61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5dd23238dce1  (<hostdir>/harness/fuzzer-regset+0x2acce1)
+    #2 0x5dd232384889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5dd23238f80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5dd232331c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5dd2321cbf5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5dd2321ce0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5dd2321b905f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5dd2321bc8e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5dd2321e8772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x736e3e42a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x736e3e42a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5dd2321afc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+Indirect leak of 4 byte(s) in 1 object(s) allocated from:
+    #0 0x5dd2322ee61c  (<hostdir>/harness/fuzzer-regset+0x20d61c)
+    #1 0x5dd23238dd2d  (<hostdir>/harness/fuzzer-regset+0x2acd2d)
+    #2 0x5dd232384889  (<hostdir>/harness/fuzzer-regset+0x2a3889)
+    #3 0x5dd23238f80e  (<hostdir>/harness/fuzzer-regset+0x2ae80e)
+    #4 0x5dd232331c18  (<hostdir>/harness/fuzzer-regset+0x250c18)
+    #5 0x5dd2321cbf5b  (<hostdir>/harness/fuzzer-regset+0xeaf5b)
+    #6 0x5dd2321ce0ee  (<hostdir>/harness/fuzzer-regset+0xed0ee)
+    #7 0x5dd2321b905f  (<hostdir>/harness/fuzzer-regset+0xd805f)
+    #8 0x5dd2321bc8e7  (<hostdir>/harness/fuzzer-regset+0xdb8e7)
+    #9 0x5dd2321e8772  (<hostdir>/harness/fuzzer-regset+0x107772)
+    #10 0x736e3e42a1c9  (/lib/x86_64-linux-gnu/libc.so.6+0x2a1c9) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #11 0x736e3e42a28a  (/lib/x86_64-linux-gnu/libc.so.6+0x2a28a) (BuildId: 8cebda42d140fc2b09639f8b13a5d5f2e617ef09)
+    #12 0x5dd2321afc94  (<hostdir>/harness/fuzzer-regset+0xcec94)
+
+SUMMARY: AddressSanitizer: 484 byte(s) leaked in 3 allocation(s).
+INFO: to ignore leaks on libFuzzer side use -detect_leaks=0.
+
+MS: 1 EraseBytes- DE: "\377\377"-; base unit: 0000000000000000000000000000000000000000
+0x2e,0x0,0x3d,0x28,0x3f,0x4c,0x29,0x7,0x0,0xff,0xff,
+.\000=(?L)\007\000\377\377
+artifact_prefix='./'; Test unit written to regset-leak.min
+Base64: LgA9KD9MKQcA//8=
+*********************************
+CRASH_MIN: minimizing crash input: 'regset-leak.min' (11 bytes)
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min 2>&1
+CRASH_MIN: 'regset-leak.min' (11 bytes) caused a crash. Will try to minimize it further
+CRASH_MIN: executing: ../harness/fuzzer-regset -runs=10000 -max_total_time=120 regset-leak.min -minimize_crash_internal_step=1 -exact_artifact_path=regset-leak.min 2>&1
+INFO: Running with entropic power schedule (0xFF, 100).
+INFO: Seed: 1305357258
+INFO: Loaded 1 modules   (14210 inline 8-bit counters): 14210 [0x603a8accd658, 0x603a8acd0dda), 
+INFO: Loaded 1 PC tables (14210 PCs): 14210 [0x603a8acd0de0,0x603a8ad08600), 
+INFO: Starting MinimizeCrashInputInternalStep: 11
+INFO: -max_len is not provided; libFuzzer will not generate inputs larger than 11 bytes
+INFO: Done MinimizeCrashInputInternalStep, no crashes found
+11/19 14:54:26: ------------ START ------------
+CRASH_MIN: failed to minimize beyond regset-leak.min (11 bytes), exiting
