@@ -44,6 +44,15 @@ From the maintainer's
    run, same tool versions and host as experiment #7; comparable load
    or both rerun idle (see Machine budget); a new notebook entry
    settles experiment #7's verdicts.
+5. **Settling experiment #7: option (c).** From the maintainer's
+   [comment](https://github.com/tarides/maquizcoatl/issues/1#issuecomment-7022660635):
+   experiment #7's table verdicts are settled on milestone 1's
+   `T_spec`, worded as a lower bound. Milestone 1's subset is smaller
+   than the full spec, so its `T_spec` underestimates the full spec's
+   build time. A table with `T_table <= T_spec` (milestone 1) is
+   settled "in-prover" for good; otherwise its verdict stays open
+   (experiment #7's provisional verdict stands) until a larger spec's
+   `T_spec` is measured.
 
 ## Gate: execution waits for experiment #5
 
@@ -263,11 +272,16 @@ for comparability with experiment #7 and the newer release is noted.
     experiment #7's figures directly when the load at step 9 lies in
     32-55, and say that this band is a judgment call, not derived from
     data.
-11. **Settle experiment #7** (new notebook entry). Per tool and
-    target, `T_table` against `T_spec`: in-prover if `T_table <=
-    T_spec`, else unverified runtime data checked by the generator.
-    The entry states that `T_spec` is milestone 1's (the smallest
-    subset), so the verdicts are revisited at milestone 2.
+11. **Settle experiment #7** (new notebook entry; Decision 5). Per
+    tool and target, `T_table` against milestone 1's `T_spec`, read
+    as a lower bound on the full spec's build time: if `T_table <=
+    T_spec`, the table is settled "in-prover" for good; otherwise the
+    verdict is recorded as open, not as "unverified runtime data":
+    experiment #7's provisional verdict stands until a larger spec
+    (milestone 2 or later) is measured. The entry states that `T_spec`
+    is milestone 1's, lists the settled and the open verdicts
+    separately, and for each open one gives the ratio `T_table /
+    T_spec` that a larger spec would have to close.
 12. **Fetch back and report.** `rsync` raw outputs to
     `<workdir>/e06/out/`, redaction check (paths, hostnames,
     addresses), copy the files that back notebook entries into
@@ -312,8 +326,9 @@ schedule:
 
 **Follow-up**, outside this budget: Verus and Isabelle/HOL rows if
 those stacks stand after experiment #5 (toolchain install plus their
-own run); milestone 2 (S2); throughput on the S2 cases and re-settling
-experiment #7's verdicts with milestone 2's `T_spec`. Sequencing only:
+own run); milestone 2 (S2); throughput on the S2 cases and settling
+the verdicts that milestone 1 left open with milestone 2's `T_spec`
+(verdicts already settled "in-prover" are not revisited). Sequencing only:
 if Verus or Isabelle/HOL stand, criteria 1-5 are met only once their
 rows exist (or experiment #5 has eliminated those stacks).
 
@@ -336,7 +351,9 @@ recorded run) and `lab/results/<date>-exp-06-<topic>.md`
    times and peak RSS, line counts.
 6. `exp-07-verdicts-settled` (named
    `<date>-exp-07-verdicts-settled.md`): experiment #7's verdicts
-   settled against `T_spec`, with the load comparison or idle rerun.
+   against milestone 1's `T_spec` as a lower bound (Decision 5):
+   settled "in-prover" or left open, with the load comparison or idle
+   rerun.
 
 Exploratory runs are recorded only inside the entry they explain. The
 maintainer decides on any further entry.
@@ -370,9 +387,9 @@ For each surviving tool and for stack G:
    - Verus: compiled Rust (spec fns are ghost, so only compiled exec code is measurable). The proof that the exec fns refine the spec fns is not required here; it belongs to experiment #9;
    - stack G: native OCaml (`ocamlopt`).
 4. An extrapolated wall-clock time for 10⁶ differential cases, and a verdict against Decision 1: fast enough if 10⁶ cases take at most 8 hours on one core (at least about 35 cases/s). The extrapolation assumes fuzz cases of size comparable to the upstream cases. Compile (parse) and search throughput are reported separately where the tool makes the split visible.
-5. For each prover and extraction target, `T_spec` = check + extraction + compile time of the spec (each reported separately, median of 3 clean runs, load average per run), with experiment #7's protocol and tool versions; and a new notebook entry that settles experiment #7's provisional verdicts (in-prover if `T_table <= T_spec`), stating which milestone's spec the `T_spec` comes from.
+5. For each prover and extraction target, `T_spec` = check + extraction + compile time of the spec (each reported separately, median of 3 clean runs, load average per run), with experiment #7's protocol and tool versions; and a new notebook entry that settles experiment #7's provisional verdicts against milestone 1's `T_spec` taken as a lower bound (see Decisions): "in-prover" for good if `T_table <= T_spec`, otherwise left open until a larger spec is measured; the entry states which milestone's spec the `T_spec` comes from.
 
-Milestone 1 meets criteria 1-5 on experiment #9's subset; milestone 2 repeats criteria 1-4 (and updates criterion 5) on S2.
+Milestone 1 meets criteria 1-5 on experiment #9's subset; milestone 2 repeats criteria 1-4 on S2 and, for criterion 5, settles the verdicts milestone 1 left open.
 
 Results recorded in the lab notebook; a summary comment on issue #1 compares the tools.
 
@@ -392,9 +409,11 @@ Results recorded in the lab notebook; a summary comment on issue #1 compares the
   14 GB loading experiment #7's table; a case list may behave alike.
   The 20-minute cap bounds it, and a timeout is a result.
 - **`T_spec` is small for milestone 1.** A fragment this size will
-  likely build in seconds, so most of experiment #7's verdicts would
-  come out "unverified runtime data". The settled entry says the
-  `T_spec` is milestone 1's and the verdicts are revisited with S2.
+  likely build in seconds, so most of experiment #7's verdicts may
+  stay open after milestone 1. Decision 5 handles this: milestone 1's
+  `T_spec` is a lower bound, so it only settles "in-prover" verdicts,
+  and the others wait for a larger spec rather than being settled as
+  "unverified runtime data" on a tiny semantics.
 - **Load not comparable.** If the bench host is neither at experiment
   #7's load nor idle when step 9 runs, `T_spec` is recorded but the
   settling entry waits for an idle window (both rerun), rather than
