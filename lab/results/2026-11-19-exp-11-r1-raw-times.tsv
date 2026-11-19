@@ -1,0 +1,352 @@
+# run r1 (harness before 5ea951c): W warmup_s passes_per_rep | T rep s_per_pass passes | S key=value...
+# C lines (per-pattern compile medians) are in 2026-11-19-exp-11-compile.csv
+r1	onig-threaded.jq	W	0.000061	8150
+r1	onig-threaded.jq	T	0	0.000027888	8150
+r1	onig-threaded.jq	T	1	0.000027752	8150
+r1	onig-threaded.jq	T	2	0.000027757	8150
+r1	onig-threaded.jq	T	3	0.000027725	8150
+r1	onig-threaded.jq	T	4	0.000027753	8150
+r1	onig-threaded.jq	S	bytes_per_pass=450	matches_per_pass=134	included_patterns=44
+r1	onig-threaded.php	W	0.009757	52
+r1	onig-threaded.php	T	0	0.009733980	52
+r1	onig-threaded.php	T	1	0.009745247	52
+r1	onig-threaded.php	T	2	0.010239605	52
+r1	onig-threaded.php	T	3	0.009748437	52
+r1	onig-threaded.php	T	4	0.009750663	52
+r1	onig-threaded.php	S	bytes_per_pass=2993	matches_per_pass=247	included_patterns=106
+r1	onig-threaded.php-legacy	W	0.000039	12714
+r1	onig-threaded.php-legacy	T	0	0.000016211	12714
+r1	onig-threaded.php-legacy	T	1	0.000016249	12714
+r1	onig-threaded.php-legacy	T	2	0.000016299	12714
+r1	onig-threaded.php-legacy	T	3	0.000016276	12714
+r1	onig-threaded.php-legacy	T	4	0.000016251	12714
+r1	onig-threaded.php-legacy	S	bytes_per_pass=737	matches_per_pass=53	included_patterns=83
+r1	onig-threaded.vscode	W	0.113781	5
+r1	onig-threaded.vscode	T	0	0.114282998	5
+r1	onig-threaded.vscode	T	1	0.114314836	5
+r1	onig-threaded.vscode	T	2	0.114049941	5
+r1	onig-threaded.vscode	T	3	0.114294746	5
+r1	onig-threaded.vscode	T	4	0.117479752	5
+r1	onig-threaded.vscode	S	bytes_per_pass=3816964	matches_per_pass=46999	included_patterns=3856
+r1	onig-threaded.vscode-subst	W	0.120709	5
+r1	onig-threaded.vscode-subst	T	0	0.119394724	5
+r1	onig-threaded.vscode-subst	T	1	0.118665865	5
+r1	onig-threaded.vscode-subst	T	2	0.117486760	5
+r1	onig-threaded.vscode-subst	T	3	0.117613590	5
+r1	onig-threaded.vscode-subst	T	4	0.117131092	5
+r1	onig-threaded.vscode-subst	S	bytes_per_pass=288411	matches_per_pass=3327	included_patterns=1544
+r1	onig-switch.jq	W	0.000062	8094
+r1	onig-switch.jq	T	0	0.000035043	8094
+r1	onig-switch.jq	T	1	0.000035203	8094
+r1	onig-switch.jq	T	2	0.000034998	8094
+r1	onig-switch.jq	T	3	0.000034995	8094
+r1	onig-switch.jq	T	4	0.000034994	8094
+r1	onig-switch.jq	S	bytes_per_pass=450	matches_per_pass=134	included_patterns=44
+r1	onig-switch.php	W	0.016053	32
+r1	onig-switch.php	T	0	0.015928617	32
+r1	onig-switch.php	T	1	0.016112105	32
+r1	onig-switch.php	T	2	0.016360637	32
+r1	onig-switch.php	T	3	0.016413992	32
+r1	onig-switch.php	T	4	0.016300716	32
+r1	onig-switch.php	S	bytes_per_pass=2993	matches_per_pass=247	included_patterns=106
+r1	onig-switch.php-legacy	W	0.000046	10938
+r1	onig-switch.php-legacy	T	0	0.000020164	10938
+r1	onig-switch.php-legacy	T	1	0.000017667	10938
+r1	onig-switch.php-legacy	T	2	0.000017731	10938
+r1	onig-switch.php-legacy	T	3	0.000017616	10938
+r1	onig-switch.php-legacy	T	4	0.000017689	10938
+r1	onig-switch.php-legacy	S	bytes_per_pass=737	matches_per_pass=53	included_patterns=83
+r1	onig-switch.vscode	W	0.142707	4
+r1	onig-switch.vscode	T	0	0.141295453	4
+r1	onig-switch.vscode	T	1	0.141903524	4
+r1	onig-switch.vscode	T	2	0.142955265	4
+r1	onig-switch.vscode	T	3	0.142772314	4
+r1	onig-switch.vscode	T	4	0.143385520	4
+r1	onig-switch.vscode	S	bytes_per_pass=3816964	matches_per_pass=46999	included_patterns=3856
+r1	onig-switch.vscode-subst	W	0.158366	4
+r1	onig-switch.vscode-subst	T	0	0.158647081	4
+r1	onig-switch.vscode-subst	T	1	0.158139169	4
+r1	onig-switch.vscode-subst	T	2	0.158051671	4
+r1	onig-switch.vscode-subst	T	3	0.158041165	4
+r1	onig-switch.vscode-subst	T	4	0.159246260	4
+r1	onig-switch.vscode-subst	S	bytes_per_pass=288411	matches_per_pass=3327	included_patterns=1544
+r1	pcre2-interp.jq	W	0.000168	2984
+r1	pcre2-interp.jq	T	0	0.000026040	2984
+r1	pcre2-interp.jq	T	1	0.000025868	2984
+r1	pcre2-interp.jq	T	2	0.000025629	2984
+r1	pcre2-interp.jq	T	3	0.000025667	2984
+r1	pcre2-interp.jq	T	4	0.000025713	2984
+r1	pcre2-interp.jq	S	bytes_per_pass=450	matches_per_pass=134	included_patterns=44
+r1	onig-threaded@pcre2-interp.jq	W	0.000051	9827
+r1	onig-threaded@pcre2-interp.jq	T	0	0.000026545	9827
+r1	onig-threaded@pcre2-interp.jq	T	1	0.000026614	9827
+r1	onig-threaded@pcre2-interp.jq	T	2	0.000026651	9827
+r1	onig-threaded@pcre2-interp.jq	T	3	0.000026612	9827
+r1	onig-threaded@pcre2-interp.jq	T	4	0.000026624	9827
+r1	onig-threaded@pcre2-interp.jq	S	bytes_per_pass=450	matches_per_pass=134	included_patterns=44
+r1	pcre2-interp.php	W	0.044225	12
+r1	pcre2-interp.php	T	0	0.044004265	12
+r1	pcre2-interp.php	T	1	0.044354291	12
+r1	pcre2-interp.php	T	2	0.043943252	12
+r1	pcre2-interp.php	T	3	0.044109674	12
+r1	pcre2-interp.php	T	4	0.043793562	12
+r1	pcre2-interp.php	S	bytes_per_pass=2749	matches_per_pass=242	included_patterns=102
+r1	onig-threaded@pcre2-interp.php	W	0.009503	53
+r1	onig-threaded@pcre2-interp.php	T	0	0.009963198	53
+r1	onig-threaded@pcre2-interp.php	T	1	0.009675698	53
+r1	onig-threaded@pcre2-interp.php	T	2	0.009666583	53
+r1	onig-threaded@pcre2-interp.php	T	3	0.009765426	53
+r1	onig-threaded@pcre2-interp.php	T	4	0.009909232	53
+r1	onig-threaded@pcre2-interp.php	S	bytes_per_pass=2749	matches_per_pass=242	included_patterns=102
+r1	pcre2-interp.vscode	W	0.233033	3
+r1	pcre2-interp.vscode	T	0	0.216714879	3
+r1	pcre2-interp.vscode	T	1	0.217327680	3
+r1	pcre2-interp.vscode	T	2	0.217777402	3
+r1	pcre2-interp.vscode	T	3	0.217587844	3
+r1	pcre2-interp.vscode	T	4	0.217385476	3
+r1	pcre2-interp.vscode	S	bytes_per_pass=3802934	matches_per_pass=45970	included_patterns=3823
+r1	onig-threaded@pcre2-interp.vscode	W	0.112407	5
+r1	onig-threaded@pcre2-interp.vscode	T	0	0.112568264	5
+r1	onig-threaded@pcre2-interp.vscode	T	1	0.112196114	5
+r1	onig-threaded@pcre2-interp.vscode	T	2	0.112133671	5
+r1	onig-threaded@pcre2-interp.vscode	T	3	0.112147330	5
+r1	onig-threaded@pcre2-interp.vscode	T	4	0.112122454	5
+r1	onig-threaded@pcre2-interp.vscode	S	bytes_per_pass=3802934	matches_per_pass=45970	included_patterns=3823
+r1	pcre2-interp.vscode-subst	W	0.268132	2
+r1	pcre2-interp.vscode-subst	T	0	0.262131931	2
+r1	pcre2-interp.vscode-subst	T	1	0.261663498	2
+r1	pcre2-interp.vscode-subst	T	2	0.261848008	2
+r1	pcre2-interp.vscode-subst	T	3	0.261092078	2
+r1	pcre2-interp.vscode-subst	T	4	0.261983804	2
+r1	pcre2-interp.vscode-subst	S	bytes_per_pass=286163	matches_per_pass=3323	included_patterns=1525
+r1	onig-threaded@pcre2-interp.vscode-subst	W	0.114553	5
+r1	onig-threaded@pcre2-interp.vscode-subst	T	0	0.115976409	5
+r1	onig-threaded@pcre2-interp.vscode-subst	T	1	0.115898635	5
+r1	onig-threaded@pcre2-interp.vscode-subst	T	2	0.115610898	5
+r1	onig-threaded@pcre2-interp.vscode-subst	T	3	0.115492248	5
+r1	onig-threaded@pcre2-interp.vscode-subst	T	4	0.115374442	5
+r1	onig-threaded@pcre2-interp.vscode-subst	S	bytes_per_pass=286163	matches_per_pass=3323	included_patterns=1525
+r1	pcre2-jit.jq	W	0.000035	14377
+r1	pcre2-jit.jq	T	0	0.000009933	14377
+r1	pcre2-jit.jq	T	1	0.000009891	14377
+r1	pcre2-jit.jq	T	2	0.000009884	14377
+r1	pcre2-jit.jq	T	3	0.000009925	14377
+r1	pcre2-jit.jq	T	4	0.000009937	14377
+r1	pcre2-jit.jq	S	bytes_per_pass=450	matches_per_pass=134	included_patterns=44
+r1	onig-threaded@pcre2-jit.jq	W	0.000051	9743
+r1	onig-threaded@pcre2-jit.jq	T	0	0.000027565	9743
+r1	onig-threaded@pcre2-jit.jq	T	1	0.000026865	9743
+r1	onig-threaded@pcre2-jit.jq	T	2	0.000026796	9743
+r1	onig-threaded@pcre2-jit.jq	T	3	0.000026943	9743
+r1	onig-threaded@pcre2-jit.jq	T	4	0.000026990	9743
+r1	onig-threaded@pcre2-jit.jq	S	bytes_per_pass=450	matches_per_pass=134	included_patterns=44
+r1	pcre2-jit.php	W	0.003543	142
+r1	pcre2-jit.php	T	0	0.003472070	142
+r1	pcre2-jit.php	T	1	0.003474265	142
+r1	pcre2-jit.php	T	2	0.003507174	142
+r1	pcre2-jit.php	T	3	0.003485789	142
+r1	pcre2-jit.php	T	4	0.003486276	142
+r1	pcre2-jit.php	S	bytes_per_pass=2749	matches_per_pass=242	included_patterns=102
+r1	onig-threaded@pcre2-jit.php	W	0.019764	26
+r1	onig-threaded@pcre2-jit.php	T	0	0.010152289	26
+r1	onig-threaded@pcre2-jit.php	T	1	0.009735370	26
+r1	onig-threaded@pcre2-jit.php	T	2	0.009783784	26
+r1	onig-threaded@pcre2-jit.php	T	3	0.010238241	26
+r1	onig-threaded@pcre2-jit.php	T	4	0.009980557	26
+r1	onig-threaded@pcre2-jit.php	S	bytes_per_pass=2749	matches_per_pass=242	included_patterns=102
+r1	pcre2-jit.vscode	W	0.047300	11
+r1	pcre2-jit.vscode	T	0	0.046524857	11
+r1	pcre2-jit.vscode	T	1	0.047062611	11
+r1	pcre2-jit.vscode	T	2	0.046387205	11
+r1	pcre2-jit.vscode	T	3	0.046415712	11
+r1	pcre2-jit.vscode	T	4	0.046379951	11
+r1	pcre2-jit.vscode	S	bytes_per_pass=3802934	matches_per_pass=45970	included_patterns=3823
+r1	onig-threaded@pcre2-jit.vscode	W	0.113090	5
+r1	onig-threaded@pcre2-jit.vscode	T	0	0.111624311	5
+r1	onig-threaded@pcre2-jit.vscode	T	1	0.111319476	5
+r1	onig-threaded@pcre2-jit.vscode	T	2	0.111086907	5
+r1	onig-threaded@pcre2-jit.vscode	T	3	0.111684512	5
+r1	onig-threaded@pcre2-jit.vscode	T	4	0.111778597	5
+r1	onig-threaded@pcre2-jit.vscode	S	bytes_per_pass=3802934	matches_per_pass=45970	included_patterns=3823
+r1	pcre2-jit.vscode-subst	W	0.061497	9
+r1	pcre2-jit.vscode-subst	T	0	0.046852436	9
+r1	pcre2-jit.vscode-subst	T	1	0.046106083	9
+r1	pcre2-jit.vscode-subst	T	2	0.045710600	9
+r1	pcre2-jit.vscode-subst	T	3	0.045811213	9
+r1	pcre2-jit.vscode-subst	T	4	0.045567233	9
+r1	pcre2-jit.vscode-subst	S	bytes_per_pass=286163	matches_per_pass=3323	included_patterns=1525
+r1	onig-threaded@pcre2-jit.vscode-subst	W	0.117026	5
+r1	onig-threaded@pcre2-jit.vscode-subst	T	0	0.117154668	5
+r1	onig-threaded@pcre2-jit.vscode-subst	T	1	0.116804926	5
+r1	onig-threaded@pcre2-jit.vscode-subst	T	2	0.117068706	5
+r1	onig-threaded@pcre2-jit.vscode-subst	T	3	0.117177401	5
+r1	onig-threaded@pcre2-jit.vscode-subst	T	4	0.116882192	5
+r1	onig-threaded@pcre2-jit.vscode-subst	S	bytes_per_pass=286163	matches_per_pass=3323	included_patterns=1525
+r1	re2.jq	W	0.000309	1620
+r1	re2.jq	T	0	0.000016231	1620
+r1	re2.jq	T	1	0.000016085	1620
+r1	re2.jq	T	2	0.000016051	1620
+r1	re2.jq	T	3	0.000016164	1620
+r1	re2.jq	T	4	0.000016225	1620
+r1	re2.jq	S	bytes_per_pass=397	matches_per_pass=120	included_patterns=38
+r1	onig-threaded@re2.jq	W	0.000037	13598
+r1	onig-threaded@re2.jq	T	0	0.000024798	13598
+r1	onig-threaded@re2.jq	T	1	0.000022998	13598
+r1	onig-threaded@re2.jq	T	2	0.000023030	13598
+r1	onig-threaded@re2.jq	T	3	0.000022988	13598
+r1	onig-threaded@re2.jq	T	4	0.000023194	13598
+r1	onig-threaded@re2.jq	S	bytes_per_pass=397	matches_per_pass=120	included_patterns=38
+r1	re2.php	W	0.000816	613
+r1	re2.php	T	0	0.000023081	613
+r1	re2.php	T	1	0.000023224	613
+r1	re2.php	T	2	0.000023183	613
+r1	re2.php	T	3	0.000023160	613
+r1	re2.php	T	4	0.000023107	613
+r1	re2.php	S	bytes_per_pass=1614	matches_per_pass=121	included_patterns=79
+r1	onig-threaded@re2.php	W	0.009062	56
+r1	onig-threaded@re2.php	T	0	0.009092334	56
+r1	onig-threaded@re2.php	T	1	0.009322556	56
+r1	onig-threaded@re2.php	T	2	0.009400877	56
+r1	onig-threaded@re2.php	T	3	0.009275728	56
+r1	onig-threaded@re2.php	T	4	0.009444621	56
+r1	onig-threaded@re2.php	S	bytes_per_pass=1614	matches_per_pass=121	included_patterns=79
+r1	re2.vscode	W	0.059098	9
+r1	re2.vscode	T	0	0.005937719	9
+r1	re2.vscode	T	1	0.005870926	9
+r1	re2.vscode	T	2	0.005874015	9
+r1	re2.vscode	T	3	0.005895030	9
+r1	re2.vscode	T	4	0.005872472	9
+r1	re2.vscode	S	bytes_per_pass=1531171	matches_per_pass=13412	included_patterns=1684
+r1	onig-threaded@re2.vscode	W	0.015850	32
+r1	onig-threaded@re2.vscode	T	0	0.015112694	32
+r1	onig-threaded@re2.vscode	T	1	0.015098386	32
+r1	onig-threaded@re2.vscode	T	2	0.015133869	32
+r1	onig-threaded@re2.vscode	T	3	0.015201740	32
+r1	onig-threaded@re2.vscode	T	4	0.015250838	32
+r1	onig-threaded@re2.vscode	S	bytes_per_pass=1531171	matches_per_pass=13412	included_patterns=1684
+r1	re2.vscode-subst	W	0.000007	67514
+r1	re2.vscode-subst	T	0	0.000008548	67514
+r1	re2.vscode-subst	T	1	0.000008516	67514
+r1	re2.vscode-subst	T	2	0.000008528	67514
+r1	re2.vscode-subst	T	3	0.000008582	67514
+r1	re2.vscode-subst	T	4	0.000008616	67514
+r1	re2.vscode-subst	S	bytes_per_pass=0	matches_per_pass=0	included_patterns=422
+r1	onig-threaded@re2.vscode-subst	W	0.000015	33463
+r1	onig-threaded@re2.vscode-subst	T	0	0.000007628	33463
+r1	onig-threaded@re2.vscode-subst	T	1	0.000005840	33463
+r1	onig-threaded@re2.vscode-subst	T	2	0.000005785	33463
+r1	onig-threaded@re2.vscode-subst	T	3	0.000005784	33463
+r1	onig-threaded@re2.vscode-subst	T	4	0.000005756	33463
+r1	onig-threaded@re2.vscode-subst	S	bytes_per_pass=0	matches_per_pass=0	included_patterns=422
+r1	rust-regex.jq	W	0.000316	1582
+r1	rust-regex.jq	T	0	0.000010424	1582
+r1	rust-regex.jq	T	1	0.000010393	1582
+r1	rust-regex.jq	T	2	0.000010392	1582
+r1	rust-regex.jq	T	3	0.000010457	1582
+r1	rust-regex.jq	T	4	0.000010426	1582
+r1	rust-regex.jq	S	bytes_per_pass=431	matches_per_pass=130	included_patterns=41
+r1	onig-threaded@rust-regex.jq	W	0.000047	10615
+r1	onig-threaded@rust-regex.jq	T	0	0.000027530	10615
+r1	onig-threaded@rust-regex.jq	T	1	0.000025444	10615
+r1	onig-threaded@rust-regex.jq	T	2	0.000025492	10615
+r1	onig-threaded@rust-regex.jq	T	3	0.000025366	10615
+r1	onig-threaded@rust-regex.jq	T	4	0.000025336	10615
+r1	onig-threaded@rust-regex.jq	S	bytes_per_pass=431	matches_per_pass=130	included_patterns=41
+r1	rust-regex.php	W	0.002184	229
+r1	rust-regex.php	T	0	0.000030700	229
+r1	rust-regex.php	T	1	0.000030534	229
+r1	rust-regex.php	T	2	0.000030959	229
+r1	rust-regex.php	T	3	0.000030839	229
+r1	rust-regex.php	T	4	0.000030779	229
+r1	rust-regex.php	S	bytes_per_pass=2360	matches_per_pass=226	included_patterns=92
+r1	onig-threaded@rust-regex.php	W	0.009180	55
+r1	onig-threaded@rust-regex.php	T	0	0.009120268	55
+r1	onig-threaded@rust-regex.php	T	1	0.009172521	55
+r1	onig-threaded@rust-regex.php	T	2	0.009218481	55
+r1	onig-threaded@rust-regex.php	T	3	0.009229994	55
+r1	onig-threaded@rust-regex.php	T	4	0.009207461	55
+r1	onig-threaded@rust-regex.php	S	bytes_per_pass=2360	matches_per_pass=226	included_patterns=92
+r1	rust-regex.vscode	W	0.040049	13
+r1	rust-regex.vscode	T	0	0.004266549	13
+r1	rust-regex.vscode	T	1	0.004170661	13
+r1	rust-regex.vscode	T	2	0.004126747	13
+r1	rust-regex.vscode	T	3	0.004151799	13
+r1	rust-regex.vscode	T	4	0.004138679	13
+r1	rust-regex.vscode	S	bytes_per_pass=1584022	matches_per_pass=13895	included_patterns=1798
+r1	onig-threaded@rust-regex.vscode	W	0.017294	29
+r1	onig-threaded@rust-regex.vscode	T	0	0.016387474	29
+r1	onig-threaded@rust-regex.vscode	T	1	0.016385723	29
+r1	onig-threaded@rust-regex.vscode	T	2	0.016382478	29
+r1	onig-threaded@rust-regex.vscode	T	3	0.016378417	29
+r1	onig-threaded@rust-regex.vscode	T	4	0.016388757	29
+r1	onig-threaded@rust-regex.vscode	S	bytes_per_pass=1584022	matches_per_pass=13895	included_patterns=1798
+r1	rust-regex.vscode-subst	W	0.000010	47706
+r1	rust-regex.vscode-subst	T	0	0.000004356	47706
+r1	rust-regex.vscode-subst	T	1	0.000004352	47706
+r1	rust-regex.vscode-subst	T	2	0.000004344	47706
+r1	rust-regex.vscode-subst	T	3	0.000004344	47706
+r1	rust-regex.vscode-subst	T	4	0.000004349	47706
+r1	rust-regex.vscode-subst	S	bytes_per_pass=0	matches_per_pass=0	included_patterns=429
+r1	onig-threaded@rust-regex.vscode-subst	W	0.000010	49309
+r1	onig-threaded@rust-regex.vscode-subst	T	0	0.000005681	49309
+r1	onig-threaded@rust-regex.vscode-subst	T	1	0.000005683	49309
+r1	onig-threaded@rust-regex.vscode-subst	T	2	0.000005672	49309
+r1	onig-threaded@rust-regex.vscode-subst	T	3	0.000005675	49309
+r1	onig-threaded@rust-regex.vscode-subst	T	4	0.000005694	49309
+r1	onig-threaded@rust-regex.vscode-subst	S	bytes_per_pass=0	matches_per_pass=0	included_patterns=429
+r1	ocaml-re.jq	W	0.000296	1690
+r1	ocaml-re.jq	T	0	0.000015161	1690
+r1	ocaml-re.jq	T	1	0.000014909	1690
+r1	ocaml-re.jq	T	2	0.000014994	1690
+r1	ocaml-re.jq	T	3	0.000015142	1690
+r1	ocaml-re.jq	T	4	0.000014746	1690
+r1	ocaml-re.jq	S	bytes_per_pass=394	matches_per_pass=119	included_patterns=37
+r1	onig-threaded@ocaml-re.jq	W	0.000037	13657
+r1	onig-threaded@ocaml-re.jq	T	0	0.000022692	13657
+r1	onig-threaded@ocaml-re.jq	T	1	0.000022542	13657
+r1	onig-threaded@ocaml-re.jq	T	2	0.000022493	13657
+r1	onig-threaded@ocaml-re.jq	T	3	0.000022507	13657
+r1	onig-threaded@ocaml-re.jq	T	4	0.000022475	13657
+r1	onig-threaded@ocaml-re.jq	S	bytes_per_pass=394	matches_per_pass=119	included_patterns=37
+r1	ocaml-re.php	W	0.000848	590
+r1	ocaml-re.php	T	0	0.000023741	590
+r1	ocaml-re.php	T	1	0.000022400	590
+r1	ocaml-re.php	T	2	0.000022277	590
+r1	ocaml-re.php	T	3	0.000022244	590
+r1	ocaml-re.php	T	4	0.000022374	590
+r1	ocaml-re.php	S	bytes_per_pass=1494	matches_per_pass=120	included_patterns=77
+r1	onig-threaded@ocaml-re.php	W	0.021022	24
+r1	onig-threaded@ocaml-re.php	T	0	0.009845782	24
+r1	onig-threaded@ocaml-re.php	T	1	0.009220689	24
+r1	onig-threaded@ocaml-re.php	T	2	0.009258261	24
+r1	onig-threaded@ocaml-re.php	T	3	0.009215401	24
+r1	onig-threaded@ocaml-re.php	T	4	0.009283218	24
+r1	onig-threaded@ocaml-re.php	S	bytes_per_pass=1494	matches_per_pass=120	included_patterns=77
+r1	ocaml-re.vscode	W	0.054503	10
+r1	ocaml-re.vscode	T	0	0.009949421	10
+r1	ocaml-re.vscode	T	1	0.009826566	10
+r1	ocaml-re.vscode	T	2	0.009819328	10
+r1	ocaml-re.vscode	T	3	0.010041244	10
+r1	ocaml-re.vscode	T	4	0.009915655	10
+r1	ocaml-re.vscode	S	bytes_per_pass=1442726	matches_per_pass=15647	included_patterns=1469
+r1	onig-threaded@ocaml-re.vscode	W	0.013328	38
+r1	onig-threaded@ocaml-re.vscode	T	0	0.012164144	38
+r1	onig-threaded@ocaml-re.vscode	T	1	0.012210856	38
+r1	onig-threaded@ocaml-re.vscode	T	2	0.012173970	38
+r1	onig-threaded@ocaml-re.vscode	T	3	0.012222791	38
+r1	onig-threaded@ocaml-re.vscode	T	4	0.012167762	38
+r1	onig-threaded@ocaml-re.vscode	S	bytes_per_pass=1442726	matches_per_pass=15647	included_patterns=1469
+r1	ocaml-re.vscode-subst	W	0.000303	1653
+r1	ocaml-re.vscode-subst	T	0	0.000077354	1653
+r1	ocaml-re.vscode-subst	T	1	0.000077786	1653
+r1	ocaml-re.vscode-subst	T	2	0.000077704	1653
+r1	ocaml-re.vscode-subst	T	3	0.000077771	1653
+r1	ocaml-re.vscode-subst	T	4	0.000077830	1653
+r1	ocaml-re.vscode-subst	S	bytes_per_pass=7659	matches_per_pass=11	included_patterns=438
+r1	onig-threaded@ocaml-re.vscode-subst	W	0.000079	6364
+r1	onig-threaded@ocaml-re.vscode-subst	T	0	0.000047951	6364
+r1	onig-threaded@ocaml-re.vscode-subst	T	1	0.000047873	6364
+r1	onig-threaded@ocaml-re.vscode-subst	T	2	0.000047877	6364
+r1	onig-threaded@ocaml-re.vscode-subst	T	3	0.000047829	6364
+r1	onig-threaded@ocaml-re.vscode-subst	T	4	0.000047890	6364
+r1	onig-threaded@ocaml-re.vscode-subst	S	bytes_per_pass=7659	matches_per_pass=11	included_patterns=438
