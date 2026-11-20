@@ -31,7 +31,8 @@
 # other non-zero status for any other failure (missing tool, compilation
 # error, out of memory...). Its output is logged.
 #
-# Outputs, in VU_EXP/out/RUN_ID/TOOL (TOOL-control for -n): build.log,
+# Outputs, in VU_EXP/out/RUN_ID/TOOL (TOOL-control for -n): build.log
+# (headed by the sha256 of every harness file the run reads),
 # build.time (from /usr/bin/time -v when present), caller.out,
 # caller.diff and result.txt (key=value lines). Logs are redacted. The
 # build directory is VU_EXP/build/RUN_ID/TOOL (or TOOL-control).
@@ -113,6 +114,22 @@ build_cmd() {
 export -f build_cmd
 export tool build control jobs VU_HARNESS
 
+# The sha256 of every harness file the run reads (the shared scripts,
+# proto.h, the caller and the tool's directory), at the head of
+# build.log, so that the log ties the run to committed files.
+sources() {
+  local dirs=(caller)
+  [ "$tool" != reference ] && dirs+=("$tool")
+  (cd "$VU_HARNESS" &&
+    { printf '%s\0' run.sh lib.sh proto.h && find "${dirs[@]}" -type f -print0; } |
+    LC_ALL=C sort -z | xargs -0 sha256sum)
+}
+{
+  echo "== harness sources (sha256)"
+  sources
+  echo "== build"
+} >"$build/build.raw"
+
 limit=""
 [ "$tool" != isabelle-llvm ] && limit="ulimit -v $vmem_kb;"
 timer=()
@@ -120,7 +137,7 @@ timer=()
 start=$(date +%s)
 set +e
 vu_pinned "${timer[@]}" timeout "$timeout_s" \
-  bash -c "$limit build_cmd" >"$build/build.raw" 2>&1
+  bash -c "$limit build_cmd" >>"$build/build.raw" 2>&1
 status=$?
 set -e
 record build_seconds "$(($(date +%s) - start))"
