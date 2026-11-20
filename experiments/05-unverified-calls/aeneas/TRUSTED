@@ -1,0 +1,30 @@
+# Trusted lines of the Charon + Aeneas prototype (format: ../count-trusted.sh).
+#
+# Modelling style: trusted shim. Aeneas has no function-pointer type, so
+# each client C function is a trait of src/lib.rs that the verified
+# functions are generic over; the Lean theorems quantify over every
+# implementation, so the trait declarations carry no assumption and are
+# not listed. The one implementation per trait is the shim below, in
+# src/ffi.rs, which Charon does not translate (build.sh: --exclude
+# crate::ffi).
+#
+# The shims: one implementation per client trait, each doing only the
+# indirect call, and c_apply, the C entry point handed to the client of
+# vu_fold_all (one instance per verified Apply type).
+src/ffi.rs:41-80
+# The C glue: the function pointer types of proto.h, the layout
+# assertions, the NULL checks and the six exported functions, which turn
+# raw pointers into the references the verified functions take.
+src/ffi.rs:17-39
+src/ffi.rs:82-132
+# The client contract of re-entrancy shape (a), a hypothesis of
+# fold_all_rec_ok: the client's apply-all function reaches the record
+# only through the function it is given. Assumed of the C client,
+# checked nowhere (tableClient_respects shows a model of caller.c's
+# client meets it).
+proofs/Proofs.lean:173-180
+#
+# Not counted: the toolchain (Charon, Aeneas, the Aeneas Lean library,
+# Lean, rustc, the C compiler), as for every tool. With Aeneas this
+# includes the claim that the Lean model is a faithful translation of
+# src/lib.rs, which is the code rustc compiles.
