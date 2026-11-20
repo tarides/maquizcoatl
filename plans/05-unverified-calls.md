@@ -119,6 +119,22 @@ Recorded in the `toolchains-m2` notebook entry.
   #4's account cannot read (the home directory is not traversable).
   Mechanism 4's reuse of it (issue #7) needs a decision: read access or
   a copy.
+- **Prototype runs** (recorded in the `prototypes-m2` entry). As in
+  milestone 1, each tool ran from its own harness copy. `provenance.sh`
+  was run with the VST and Isabelle-LLVM runs only; its versions cover
+  Charon and Aeneas, and Lean's version is taken from the Aeneas build
+  log (Lean comes from the Aeneas library's `lean-toolchain`, not an
+  elan default).
+- **Aeneas** emits only the Lean model; the library is rustc's build of
+  the same `src/lib.rs`, with overflow checks on. Aeneas has no
+  function-pointer type, so the client functions are traits whose one
+  implementation, in unverified Rust, does the indirect call.
+- **VST** proves `vu.c` itself, which stays in VST's Clight subset (no
+  `switch`); `clightgen` stays in the trusted toolchain.
+- **Isabelle-LLVM** has no function-pointer type: an 8-line C shim does
+  the indirect calls. Its arrays become nested pair structs, its
+  exported symbols are renamed with `objcopy`, and clang 23 reads its
+  typed-pointer IR.
 
 ## Where things live
 
