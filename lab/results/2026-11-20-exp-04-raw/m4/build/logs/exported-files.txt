@@ -1,0 +1,4 @@
+<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4/gen/OnigStub.h
+<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4/gen/OnigStub.ll
+<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4/gen/OnigStubPosix.h
+<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4/gen/OnigStubPosix.ll

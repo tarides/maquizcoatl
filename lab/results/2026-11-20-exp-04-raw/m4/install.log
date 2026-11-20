@@ -1,0 +1,45 @@
+== isabelle
+fetched Isabelle2026_linux.tar.gz sha256 ok
+Isabelle2026
+fetched afp-2026-11-19.tar.gz sha256 ok
+afp release: afp-2026-11-19
+isabelle_llvm commit: e42f478118988ff38676ff01215be26f3018f015
+Building Automatic_Refinement ...
+Finished Automatic_Refinement (0:00:32 elapsed time, 0:01:36 cpu time, factor 2.97)
+Building Refine_Monadic ...
+Finished Refine_Monadic (0:00:52 elapsed time, 0:02:20 cpu time, factor 2.70)
+Building Isabelle_LLVM ...
+Finished Isabelle_LLVM (0:04:06 elapsed time, 0:13:37 cpu time, factor 3.32)
+0:05:52 elapsed time, 0:17:35 cpu time, factor 2.99
+	Command being timed: "<cache>/isabelle/bin/isabelle build -b -j 4 -o threads=4 -d <cache>/isabelle/afp-2026-11-19/afp-2026-11-19/thys -d <cache>/isabelle/isabelle_llvm/thys Isabelle_LLVM"
+	User time (seconds): 1275.36
+	System time (seconds): 89.42
+	Percent of CPU this job got: 383%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 5:56.21
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4961560
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 3
+	Minor (reclaiming a frame) page faults: 8103325
+	Voluntary context switches: 2729573
+	Involuntary context switches: 8618
+	Swaps: 0
+	File system inputs: 0
+	File system outputs: 734976
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+isabelle tree: 3.9G
+== isabelle done in 443 s; cache 16G; free 61G
+== llvm
+fetched LLVM-23.1.5-Linux-X64.tar.xz sha256 ok
+clang version 23.1.5 (https://github.com/llvm/llvm-project 392dfff97d29b59d77e5cac6d4b6ef2585fe7117)
+  LLVM version 23.1.5
+llvm: 12G
+== llvm done in 161 s; cache 29G; free 48G
+INSTALL-END status=0

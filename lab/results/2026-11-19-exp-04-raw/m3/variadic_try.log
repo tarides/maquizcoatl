@@ -1,0 +1,24 @@
+error[E0658]: C-variadic functions are unstable
+  --> <bench-workdir>/exp/04-abi-feasibility/scripts/m3-rust/variadic_try.rs:7:1
+   |
+ 7 | / pub unsafe extern "C" fn onig_error_code_to_str(s: *mut c_uchar, code: c_int, mut args: ...) -> c_int {
+ 8 | |     let _einfo: *mut core::ffi::c_void = unsafe { args.arg() };
+ 9 | |     let _ = (s, code);
+10 | |     0
+11 | | }
+   | |_^
+   |
+   = note: see issue #44930 <https://github.com/rust-lang/rust/issues/44930> for more information
+
+error[E0658]: use of unstable library feature `c_variadic`: the `c_variadic` feature has not been properly tested on all supported platforms
+ --> <bench-workdir>/exp/04-abi-feasibility/scripts/m3-rust/variadic_try.rs:8:56
+  |
+8 |     let _einfo: *mut core::ffi::c_void = unsafe { args.arg() };
+  |                                                        ^^^
+  |
+  = note: see issue #44930 <https://github.com/rust-lang/rust/issues/44930> for more information
+
+error: aborting due to 2 previous errors
+
+For more information about this error, try `rustc --explain E0658`.
+rejected (exit 1)

@@ -1,0 +1,16 @@
+[package]
+name = "onig-stub"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[lib]
+name = "onig"
+crate-type = ["cdylib", "rlib"]
+path = "src/lib.rs"
+
+[profile.release]
+panic = "abort"
+
+[profile.dev]
+panic = "abort"

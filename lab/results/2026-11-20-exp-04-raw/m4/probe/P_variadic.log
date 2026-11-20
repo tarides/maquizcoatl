@@ -1,0 +1,7 @@
+Cleaned Probe_P_variadic
+Running Probe_P_variadic ...
+Probe_P_variadic FAILED (see also "isabelle build_log -H Error Probe_P_variadic")
+*** Outer lexical error: bad input (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_variadic/P_variadic.thy") at ...)
+*** At command "export_llvm" (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_variadic/P_variadic.thy")
+Unfinished session(s): Probe_P_variadic
+0:00:15 elapsed time

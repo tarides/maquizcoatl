@@ -1,0 +1,7 @@
+onig_posix_regmatch_t - 0 8 4
+onig_posix_regmatch_t rm_so 0 4 4
+onig_posix_regmatch_t rm_eo 4 4 4
+onig_posix_regex_t - 0 24 8
+onig_posix_regex_t onig 0 8 8
+onig_posix_regex_t re_nsub 8 8 8
+onig_posix_regex_t comp_options 16 4 4
