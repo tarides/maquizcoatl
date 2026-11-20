@@ -7,7 +7,8 @@
 # Steps, each timed in the log:
 #   1. copy VU.fst to VU_OUT/src; with VU_NEGATIVE_CONTROL=1, replace the
 #      lines between CLAMP-BEGIN and CLAMP-END (the clamp of vu_char_len)
-#      by "r", the callee's raw result;
+#      by "r", the callee's raw result; refuse admit, assume, magic,
+#      unsafe_coerce, --admit_smt_queries and --lax;
 #   2. F* check (writes the .checked file extraction needs); a rejection
 #      made only of failed proof obligations (F* error 19) exits with
 #      VU_PROOF_REJECTED, any other error with 1;
@@ -46,6 +47,14 @@ if [ "$VU_NEGATIVE_CONTROL" = 1 ]; then
 else
   cp VU.fst "$src/VU.fst"
 fi
+# No proof escape: the client contracts are function-typed parameters,
+# so the module needs no admit, assume, magic or admitted SMT query.
+if grep -nE '\b(admit|admit_|assume|assume_|magic|unsafe_coerce)\b|admit_smt_queries|--lax' \
+  "$src/VU.fst"; then
+  echo "VU.fst admits or assumes a proof obligation, refused"
+  exit 1
+fi
+echo "proof escapes: none"
 cd "$src"
 fstar=(fstar.exe --cache_checked_modules --cache_dir cache)
 

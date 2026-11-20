@@ -9,7 +9,8 @@
 #   1. copy ROOT and VU.thy to VU_OUT/src; with VU_NEGATIVE_CONTROL=1,
 #      replace the lines between CLAMP-BEGIN and CLAMP-END (the clamp of
 #      vu_char_len) by a definition that returns the callee's raw
-#      result;
+#      result; refuse sorry, axiomatization, oracles and
+#      quick_and_dirty;
 #   2. isabelle build of the session VU (a clean build, -c, so that
 #      export_llvm writes vu.ll again). A failed build whose errors are
 #      all failed proofs exits with VU_PROOF_REJECTED, any other failure
@@ -59,6 +60,15 @@ definition vu_clamp :: "32 word \\<Rightarrow> 32 word \\<Rightarrow> 32 word \\
 else
   cp VU.thy "$src/VU.thy"
 fi
+# No proof escape: the theory and the session may not skip or assume a
+# proof. The shim functions are constants with no definition, and their
+# contracts are theorem hypotheses, so none of this is needed.
+if grep -nwE 'sorry|axiomatization|oracle|quick_and_dirty|skip_proofs' \
+  "$src/VU.thy" "$src/ROOT"; then
+  echo "VU.thy or ROOT skips or assumes a proof, refused"
+  exit 1
+fi
+echo "proof escapes: none"
 
 step "2. isabelle build (proofs and export_llvm)"
 set +e

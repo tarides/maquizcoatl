@@ -6,7 +6,8 @@
 #
 # 1. Copies vu.mlw and vu.drv into VU_OUT/src. With VU_NEGATIVE_CONTROL=1,
 #    the clamp of vu_char_len (the lines from CLAMP-BEGIN to CLAMP-END)
-#    is replaced by "r", the callee's raw result.
+#    is replaced by "r", the callee's raw result. Module Vu may hold no
+#    val, axiom or assume.
 # 2. Splits every verification condition of vu.mlw into its goals
 #    (transformation split_vc) and proves each goal with Alt-Ergo, then
 #    with Z3 (Why3's registered provers). Every goal must be valid for
@@ -61,6 +62,15 @@ if [ "$control" = 1 ]; then
     "$src/vu.mlw" || true
 fi
 sha256sum "$src/vu.mlw" "$src/vu.drv" | sed 's#  .*/#  #'
+# No proof escape in module Vu, the verified part: no val (a declaration
+# without body), axiom or assume. What Why3 assumes is all in module
+# Client, which TRUSTED lists.
+vu_module=$(awk '/^module Vu$/ { f = 1 } f; f && /^end$/ { exit }' "$src/vu.mlw")
+[ -n "$vu_module" ] || fail "no module Vu in vu.mlw"
+if printf '%s\n' "$vu_module" | grep -nwE 'val|axiom|assume'; then
+  fail "module Vu holds a val, axiom or assume"
+fi
+echo "proof escapes in module Vu: none"
 
 # prove PROVER: proves every goal of vu.mlw with PROVER, logs to
 # VU_OUT/prove-PROVER.log and prints one summary line. Returns 0 when

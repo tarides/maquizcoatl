@@ -2,10 +2,12 @@
 # build.sh: checks and builds the Verus prototype (contract in ../run.sh).
 #
 # Copies src/ into VU_OUT/src (with the clamp of char_len replaced by
-# the callee's raw result when VU_NEGATIVE_CONTROL=1), verifies it with
-# Verus and, for a normal run, compiles it in the same Verus run into
-# the static library VU_OUT/libvu.a. VU_OUT/ldflags gets the native
-# libraries the Rust standard library needs, as rustc prints them.
+# the callee's raw result when VU_NEGATIVE_CONTROL=1), checks with
+# --no-cheating that the only proof escapes are the shims of
+# src/shim.rs, verifies it with Verus and, for a normal run, compiles it
+# in the same Verus run into the static library VU_OUT/libvu.a.
+# VU_OUT/ldflags gets the native libraries the Rust standard library
+# needs, as rustc prints them.
 #
 # Exit status: 0 when verified and built; VU_PROOF_REJECTED when Verus
 # reports verification errors; 1 for anything else.
@@ -32,6 +34,26 @@ if [ "$control" = 1 ]; then
   fi
   echo "negative control: clamp removed"
   diff -u --label src/lib.rs --label control/lib.rs src/lib.rs "$VU_OUT/src/lib.rs" | sed 's/^/  /' || true
+fi
+
+# No proof escape outside the shims: with --no-cheating, Verus refuses
+# every external_body, assume_specification, assume and admit. Each
+# error must point into src/shim.rs, whose three external_body shims
+# TRUSTED lists; an error anywhere else fails the build.
+set +e
+verus --no-cheating --crate-type=staticlib --crate-name=vu --edition=2021 \
+  "$VU_OUT/src/lib.rs" >"$VU_OUT/no-cheating.log" 2>&1
+set -e
+cat "$VU_OUT/no-cheating.log"
+# The location line after each refusal.
+locs=$(awk '/^error/ { e = /not allowed with `--no-cheating`/; next }
+  e && /^ *--> / { print $2; e = 0 }' "$VU_OUT/no-cheating.log")
+in_shim=$(printf '%s\n' "$locs" | grep -c '/src/shim\.rs:' || true)
+elsewhere=$(printf '%s\n' "$locs" | grep -v '/src/shim\.rs:' | grep -c . || true)
+echo "no-cheating: $in_shim refusals in src/shim.rs, $elsewhere elsewhere"
+if [ "$elsewhere" != 0 ]; then
+  echo "build.sh: a proof escape outside src/shim.rs, refused" >&2
+  exit 1
 fi
 
 args=(--num-threads "$VU_JOBS" --time --crate-type=staticlib --crate-name=vu
