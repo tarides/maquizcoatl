@@ -197,3 +197,11 @@ free on the bench host.
 - Why3 (C extraction): **works with trusted shim** (124 lines).
 - F\* + Pulse with KaRaMeL: **works**.
 - Verus: **works with trusted shim** (87 lines).
+
+## Later
+
+The `review-fixes` entry
+([2026-11-20-exp-05-review-fixes.md](2026-11-20-exp-05-review-fixes.md))
+re-runs these prototypes after the independent review. Its trusted-line
+counts supersede the ones above: Why3 128 and Verus 102, after the
+Why3 `(void)to` change and the Verus offset assertions.

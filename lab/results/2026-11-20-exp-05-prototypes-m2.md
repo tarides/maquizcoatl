@@ -281,3 +281,11 @@ there (`<cache>/isabelle/home`, with the session heaps) is 287 MB.
 - Charon + Aeneas: **works with trusted shim** (94 lines).
 - VST + CompCert: **works**.
 - Isabelle-LLVM: **works with trusted shim** (100 lines).
+
+## Later
+
+The `review-fixes` entry
+([2026-11-20-exp-05-review-fixes.md](2026-11-20-exp-05-review-fixes.md))
+re-runs these prototypes after the independent review. Its trusted-line
+count for Aeneas (109, with offset assertions) supersedes the one above,
+and VST now also proves `semax_func` over the six bodies (`vu_funcs`).

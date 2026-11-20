@@ -1,0 +1,10 @@
+tool=pulse
+run_id=m2-review
+mode=normal
+jobs=4
+cpus=48-51
+build_seconds=6
+build_status=0
+link=ok
+caller_status=0
+caller_output=same
