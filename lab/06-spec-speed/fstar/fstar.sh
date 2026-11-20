@@ -31,7 +31,11 @@ inp)
   # not in the plan (F*: extracted only); the normaliser is F*'s
   # in-prover evaluation, recorded as an extra mode
   cd "$EXP/build/fstar/full"
-  q() { printf 'module %s\nopen Spec\nopen Cases\n%s\n' "$1" "$2" > "$1.fst"; tm "fstar-$1" $F "$1.fst"; }
+  # labels Q0c/QNc: the checked files of Q0 and QN are removed first, so
+  # F* cannot reuse a cached check (labels Q0/QN of the first series
+  # reused the calibration run's cache and measured nothing)
+  q() { printf 'module %s\nopen Spec\nopen Cases\n%s\n' "$1" "$2" > "$1.fst"
+        rm -f "cache/$1.fst.checked"; tm "fstar-${1}c" $F "$1.fst"; }
   q Q0 ''
   q QN "let _ = assert_norm (passes ${REPS_NORM:?} cases 0 = $(( REPS_NORM * ${NCASES:-149} )))" ;;
 esac

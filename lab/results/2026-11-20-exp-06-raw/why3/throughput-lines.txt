@@ -1,0 +1,3 @@
+why3-extracted.1.log:cases=149 reps=35000 agree=5215000 search_s=11.424 search_cps=456509
+why3-extracted.3.log:cases=149 reps=35000 agree=5215000 search_s=11.499 search_cps=453536
+why3-extracted.2.log:cases=149 reps=35000 agree=5215000 search_s=11.163 search_cps=467180

@@ -1,0 +1,3 @@
+rocq-extracted.3.log:cases=149 reps=60000 agree=8940000 search_s=11.600 search_cps=770667
+rocq-extracted.1.log:cases=149 reps=60000 agree=8940000 search_s=11.649 search_cps=767480
+rocq-extracted.2.log:cases=149 reps=60000 agree=8940000 search_s=11.847 search_cps=754595

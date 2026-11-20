@@ -1,0 +1,3 @@
+isabelle-export-code-exe.3.log:cases=149 reps=150000 agree=22350000 search_s=13.428 search_cps=1664482
+isabelle-export-code-exe.2.log:cases=149 reps=150000 agree=22350000 search_s=13.612 search_cps=1641907
+isabelle-export-code-exe.1.log:cases=149 reps=150000 agree=22350000 search_s=13.548 search_cps=1649722

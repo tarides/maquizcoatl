@@ -10,7 +10,7 @@ usage: python3 -I summarise.py DATA OUT
 import sys, os, re, statistics
 from collections import Counter, defaultdict
 
-TOOLS = ["rocq", "lean", "why3", "fstar"]
+TOOLS = ["rocq", "lean", "why3", "fstar", "verus", "isabelle"]
 
 
 def rows(path):
@@ -159,7 +159,9 @@ def main():
             ("rocq", "rocq-extracted", "Rocq, extracted OCaml"),
             ("lean", "lean-lake-exe", "Lean 4, lake native build"),
             ("why3", "why3-extracted", "Why3, extracted OCaml"),
-            ("fstar", "fstar-extracted", "F*, extracted OCaml")]
+            ("fstar", "fstar-extracted", "F*, extracted OCaml"),
+            ("verus", "verus-compiled", "Verus, compiled Rust"),
+            ("isabelle", "isabelle-export-code-exe", "Isabelle/HOL, export_code OCaml")]
     gparse = None
     for d, lab, name in labs:
         tt = times(f"{out}/{d}/times.tsv").get(lab, {})
@@ -177,10 +179,11 @@ def main():
         ec = med(vals.get("e2e_cps", []))
         if lab == "g-ocamlopt":
             gparse = pc
-        if d not in ("g",) and gparse:
+        if d != "g" and gparse:
             ec = 1 / (1 / gparse + 1 / sc)   # stack G parse + prover search
         e6 = 1e6 / ec
-        P(f"| {name} | {'native' if d == 'g' else 'extracted'} | {reps} | "
+        mode = {"g": "native", "verus": "compiled"}.get(d, "extracted")
+        P(f"| {name} | {mode} | {reps} | "
           f"{'%.0f' % pc if pc == pc else '(stack G)'} | {sc:.0f} | {ec:.0f} | {e6:.1f} | "
           f"{med([x[1] for x in tt.values()]):.2f} | {max(x[2] for x in tt.values()) / 1024:.0f} | "
           f"{', '.join(x[3] for _, x in sorted(tt.items()))} |")
@@ -198,11 +201,14 @@ def main():
            ("rocq", "rocq-QN1", "native_compute, first call (1 pass)", None),
            ("lean", "lean-QE", "#eval", "REPS_EVAL"),
            ("why3", "why3-QX", "why3 execute", "REPS_EXEC"),
-           ("fstar", "fstar-QN", "assert_norm (normaliser; extra mode)", "REPS_NORM")]
+           ("fstar", "fstar-QNc", "assert_norm (normaliser; extra mode)", "REPS_NORM"),
+           ("isabelle", "isabelle-QV", "value [code] (fold under 10 s, see QVL)", "REPS_VALUE"),
+           ("isabelle", "isabelle-QVL", "value [code]", "REPS_VALUE_L")]
     nc = len(ids)
     for d, lab, mode, rk in inp:
         tt = times(f"{out}/{d}/times.tsv")
-        q = tt.get(lab, {}); q0 = tt.get(f"{d}-Q0", {})
+        q = tt.get(lab, {})
+        q0 = tt.get(f"{d}-Q0" + ("c" if lab.endswith("c") else "L" if lab.endswith("L") else ""), {})
         if not q:
             continue
         r = int(reps[rk]) if rk else 1
@@ -223,7 +229,10 @@ def main():
     steps = {"rocq": ["rocq-check", "rocq-extract", "rocq-ocamlopt"],
              "lean": ["lean-check", "lean-emit-c", "lean-cc"],
              "why3": ["why3-typecheck", "why3-vcgen", "why3-extract-ocaml", "why3-ocamlopt"],
-             "fstar": ["fstar-check", "fstar-extract-ocaml", "fstar-ocamlopt"]}
+             "fstar": ["fstar-check", "fstar-extract-ocaml", "fstar-ocamlopt"],
+             "verus": ["verus-check", "verus-rustc"],
+             "isabelle": ["isabelle-check-base", "isabelle-check", "isabelle-export-code",
+                          "isabelle-ocamlopt"]}
     totals = {}
     for d, ls in steps.items():
         tt = times(f"{out}/{d}/times.tsv")
@@ -233,14 +242,16 @@ def main():
             if not q:
                 continue
             m = med([x[1] for x in q.values()])
-            if lab != "lean-check":   # lean-emit-c re-elaborates: check is included in it
+            if lab not in ("lean-check", "isabelle-check-base"):   # lean-emit-c re-elaborates: check is included in it
                 tot += m
             P(f"| {d} | {lab} | {m:.2f} | {', '.join('%.2f' % x[1] for _, x in sorted(q.items()))} | "
               f"{max(x[2] for x in q.values()) / 1024:.0f} | {', '.join(x[3] for _, x in sorted(q.items()))} | "
               f"{','.join(str(x[0]) for _, x in sorted(q.items()))} |")
         totals[d] = tot
     P("\nT_spec (sum of medians; Lean: emit-c includes elaboration, as experiment #7 counted it; "
-      "Why3: type check + extraction + compile, VC generation listed apart):\n")
+      "Why3: type check + extraction + compile, VC generation listed apart; Verus: verification "
+      "+ rustc, no extraction step; Isabelle: session builds include JVM start and HOL-Library "
+      "loading, isabelle-check-base is that overhead alone and is excluded from the sum):\n")
     for d, v in totals.items():
         if d == "why3":
             tt = times(f"{out}/why3/times.tsv")
@@ -265,5 +276,51 @@ def main():
                   f"{','.join(str(x[0]) for _, x in sorted(q.items()))} |")
 
 
+
+
+# ---- experiment #7's verdicts against milestone 1's T_spec -------------
+# T_table per target as experiment #7 defined it
+# (lab/results/2026-11-19-exp-07-extraction.md), loaded figures from there
+E07_TARGETS = [
+    ("Rocq -> OCaml", "rocq", ["rocq-check", "rocq-extract", "rocq-ocamlopt"], 85.97, "rocq"),
+    ("Lean -> C -> native", "lean", ["lean-emit-c", "lean-cc", "lean-link"], 95.38, "lean"),
+    ("Why3 -> OCaml", "why3", ["why3-typecheck", "why3-extract-ocaml", "why3-ocamlopt"], 24.45, "why3"),
+    ("Why3 -> C (decision trees)", "why3", ["why3c-typecheck", "why3c-extract-c", "why3c-gcc"], 20.19, "why3"),
+    ("F* -> OCaml", "fstar", ["fstar-check", "fstar-extract-ocaml", "fstar-ocamlopt"], 60.32, "fstar"),
+    ("F* -> KaRaMeL C (decision trees)", "fstar",
+     ["fstarc-check", "fstarc-extract-krml", "fstarc-krml", "fstarc-gcc-krml"], 73.99, "fstar"),
+    ("F* -> direct C (decision trees)", "fstar", ["fstarc-check", "fstarc-extract-c", "fstarc-gcc-c"], 65.49, "fstar"),
+    ("F*/Pulse -> KaRaMeL C (static arrays)", "pulse",
+     ["pulse-check", "pulse-extract-krml", "pulse-krml", "pulse-gcc-krml"], 175.31, "fstar"),
+    ("F*/Pulse -> direct C (static arrays)", "pulse", ["pulse-check", "pulse-extract-c", "pulse-gcc-c"], 172.78, "fstar"),
+]
+TSPEC_STEPS = {"rocq": ["rocq-check", "rocq-extract", "rocq-ocamlopt"],
+               "lean": ["lean-emit-c", "lean-cc"],
+               "why3": ["why3-typecheck", "why3-extract-ocaml", "why3-ocamlopt"],
+               "fstar": ["fstar-check", "fstar-extract-ocaml", "fstar-ocamlopt"]}
+
+
+def settle(out):
+    P = print
+    e7 = f"{out}/e07"
+    P("## Experiment #7's T_table at idle against milestone 1's T_spec\n")
+    P("| Target | T_table loaded s (#7) | T_table idle s (runs 11-13) | Idle / loaded | "
+      "Load (1 min) idle runs | T_spec s (milestone 1) | T_table idle / T_spec | Verdict |")
+    P("|--------|------:|------:|------:|------|------:|------:|------|")
+    for name, d, labs, loaded, sp in E07_TARGETS:
+        tt = times(f"{e7}/{d}/times.tsv")
+        idle = sum(med([x[1] for r, x in tt.get(l, {}).items()]) for l in labs)
+        loads = sorted({x[3] for l in labs for x in tt.get(l, {}).values()})
+        ts = times(f"{out}/{sp}/times.tsv")
+        tspec = sum(med([x[1] for r, x in ts.get(l, {}).items() if r in ("1", "2", "3")])
+                    for l in TSPEC_STEPS[sp])
+        verdict = "in-prover (settled)" if idle <= tspec else "open (#7's provisional verdict stands)"
+        P(f"| {name} | {loaded:.2f} | {idle:.2f} | {idle / loaded:.2f} | {loads[0]}-{loads[-1]} | "
+          f"{tspec:.2f} | {idle / tspec:.0f} | {verdict} |")
+
+
 if __name__ == "__main__":
     main()
+    if os.path.isdir(f"{sys.argv[2]}/e07"):
+        print()
+        settle(sys.argv[2])

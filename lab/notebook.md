@@ -34,6 +34,17 @@ repository), or `<cache>` and `<exp>` on the bench host
 | 2026-11-19 | exp-03 correction (results review) | Corrects the rows above: arithmetic pass has 13 library locations (14 location+column pairs), 9 intended + 4 suspicious, 0 bugs; the 6 regset leaks are 513-1,325 bytes in 4-6 allocations (minimised: 484 in 3); "depth 36" counts `(` after the 8 control bytes (pattern-only: 18); 48 CPUs pinned, at most 40 workers. Corrections appended to the three entries | [arith](results/2026-11-19-exp-03-tests-arith.md), [triage](results/2026-11-19-exp-03-triage.md), [campaign](results/2026-11-19-exp-03-fuzz-campaign.md) |
 | 2026-11-19 | exp-03 depth probe re-run (workstation) | Scripted `read-deep-ns` replay and `ulimit -s` bisection reproduce the triage tables on a second machine; plain-build stack needs within one 14 KiB step (`absent-2047` 5756-5770 KiB) | [results](results/2026-11-19-exp-03-depth-probe-rerun.md) |
 
+## Experiment #6
+
+| Date | Experiment | Upstream / tools | Finding | Results |
+|------|------------|------------------|---------|---------|
+| 2026-11-20 | #6 provenance, milestone 1 (gate on #5 lifted; `series.sh`, `series2-4.sh`, pinned 28-31,60-63) | `f95747b` Release; OCaml 5.4.1, Rocq 9.3.0, Lean 4.36.0, Why3 1.9.0, F\* 2026.11.15 (as #7), Verus 0.2026.11.02, Isabelle2026; AMD EPYC 7502P, Linux 6.8.0-100 | Host idle (load 0.1-3.1); Verus and Isabelle/HOL rows added since the budget left room | [results/2026-11-20-exp-06-provenance.md](results/2026-11-20-exp-06-provenance.md) |
+| 2026-11-20 | #6 cases: seven suites extracted (`cases/extract.py`), classified against #9's subset (stack G's parser) | as above | 4,565 cases (all suite counts match); 152 in subset (103 x2, 33 x3, 13 n, 3 e), 151 of them `test_utf8`; `+`, `?`, `(?:` would add 136 | [results/2026-11-20-exp-06-cases.md](results/2026-11-20-exp-06-cases.md) |
+| 2026-11-20 | #6 semantics and agreement (criteria 1, 2): stack G plus Rocq, Lean, Why3, F\*, Verus, Isabelle/HOL | as above | Every row agrees with C on all 152 cases, every group; 117-306 code lines per prover; Why3 `execute` fails on polymorphic constructors holding lists, so its spec is monomorphic | [results/2026-11-20-exp-06-agreement.md](results/2026-11-20-exp-06-agreement.md) |
+| 2026-11-20 | #6 throughput and 10^6-case extrapolation (criteria 3, 4) | as above | All fast enough: extracted/compiled 0.39-1.5 M cases/s end to end (C 0.68 M/s); in-prover Isabelle `value`, Lean `#eval`, Rocq native/vm 17 k-2.2 M/s; `why3 execute` and F\* normaliser 62-63/s, 10^6 in 4.4-4.5 h | [results/2026-11-20-exp-06-throughput.md](results/2026-11-20-exp-06-throughput.md) |
+| 2026-11-20 | #6 `T_spec` of milestone 1 (criterion 5) | as above | 0.47 s (Why3) to 2.4 s (Verus); Isabelle 34 s, about 18 s of it session overhead | [results/2026-11-20-exp-06-t-spec.md](results/2026-11-20-exp-06-t-spec.md) |
+| 2026-11-20 | #7 verdicts settled against #6's milestone 1 `T_spec`, with #7's tables rerun at idle (runs 11-13) | #7's scripts at `2db5715`, same tools | No target settled in-prover; all nine stay open (T_table / T_spec 27-101x). Idle T_table is 0.62-0.73 of #7's loaded figures | [results/2026-11-20-exp-07-verdicts-settled.md](results/2026-11-20-exp-07-verdicts-settled.md) |
+
 ## Experiment #7
 
 | Date | Experiment | Upstream / tools | Finding | Results |
