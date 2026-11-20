@@ -136,6 +136,24 @@ Recorded in the `toolchains-m2` notebook entry.
   exported symbols are renamed with `objcopy`, and clang 23 reads its
   typed-pointer IR.
 
+## Deviations found during the review fixes
+
+Recorded in the `review-fixes` notebook entry.
+
+- **Runs from the clone.** The re-run of the six prototypes used
+  `<exp>/repo` at the pushed commit instead of harness copies, so
+  provenance records the commit; `run.sh` also writes the sha256 of
+  every harness source at the head of each `build.log`.
+- **Why3 `(void)to`.** The trusted no-op is a val that returns the 0 of
+  `vu_i_apply` (`((void)to, 0)`), not a unit statement, which Why3's
+  extraction erases; 4 trusted lines instead of the 2 expected.
+- **Struct mirrors of Verus and Aeneas** are checked by member offset in
+  their trusted glue, against `proto.h`'s LP64 layout written as
+  numbers (15 counted lines each), rather than compared with `proto.h`
+  by compiling C as Pulse and Isabelle-LLVM do.
+- **Not applied:** the review's point on the `oniguruma.h:738`
+  citation; the line is correct at `f95747b`.
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own
