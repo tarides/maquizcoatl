@@ -44,16 +44,17 @@
   },
   "charon": {
     "milestone": 2,
-    "tag": "nightly-2026.11.19",
-    "commit": "9b0ee438f05b59b5ec4c5272cc1de8a480ffc207",
-    "url": "https://github.com/AeneasVerif/charon/releases/download/nightly-2026.11.19/charon-linux-x86_64.tar.gz",
-    "sha256": "34bfbb72963c7dffd4e36aca09fd21e753dfa5e4f8a3c43acbdea00bc53f90b5",
+    "version": "0.1.321",
+    "commit": "61c67516e7752daf6b4dd403a030d90efbb0b8eb",
+    "source": "bundled in the Aeneas release tarball (charon, charon-driver and its rust-toolchain file)",
     "rust": "nightly-2026-09-17",
     "rust_components": [
       "rustc-dev",
       "llvm-tools",
-      "rust-src"
-    ]
+      "rust-src",
+      "miri"
+    ],
+    "note": "the standalone release nightly-2026.11.19 (commit 9b0ee438f05b59b5ec4c5272cc1de8a480ffc207, same version 0.1.321) is not used: the bundled Charon is the one this Aeneas nightly is built and tested with, so its LLBC matches what Aeneas reads; miri is in the bundled rust-toolchain file, and Charon falls back to a slower sysroot without it"
   },
   "aeneas": {
     "milestone": 2,
@@ -85,9 +86,10 @@
   "isabelle": {
     "milestone": 2,
     "version": "Isabelle2026",
-    "url": "https://isabelle.in.tum.de/dist/Isabelle2026_linux.tar.gz",
-    "sha256": "",
-    "sha256_note": "not published by the Isabelle site and not computable from the workstation (mirror unreachable): recorded on first fetch on the bench host"
+    "url": "https://www.cl.cam.ac.uk/research/hvg/Isabelle/dist/Isabelle2026_linux.tar.gz",
+    "sha256": "858c995b32216b3876bf395c3be843147d1f1eee404bc6c958d7534ee335e48d",
+    "sha256_note": "not published by the Isabelle site: recorded on the first fetch on the bench host (2026-11-19) and pinned since",
+    "url_note": "the University of Cambridge mirror of the Isabelle distribution: the TUM URL redirects to a plain-HTTP host that does not answer from the bench host"
   },
   "afp": {
     "milestone": 2,
@@ -102,6 +104,13 @@
     "branch": "2026",
     "commit": "e42f478118988ff38676ff01215be26f3018f015",
     "session": "Isabelle_LLVM"
+  },
+  "llvm": {
+    "milestone": 2,
+    "version": "23.1.5",
+    "url": "https://github.com/llvm/llvm-project/releases/download/llvmorg-23.1.5/LLVM-23.1.5-Linux-X64.tar.xz",
+    "sha256": "f72edb0b36580ece7f52e23858f00c18fad4e87395ea7ad05d7e55c39f8fc78a",
+    "note": "release binaries into <cache>/llvm: the bench host has no clang or llc, and Isabelle-LLVM emits textual LLVM IR that must be compiled to link with the C caller; 23.1.5 rather than 23.1.6 (2026-11-17), the latest release older than two weeks; sha256 from the GitHub release asset digest"
   },
   "hax": {
     "milestone": 3,

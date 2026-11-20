@@ -7,7 +7,8 @@
 #
 #   Milestone 1 components: base fstar why3 rust verus smoke-why3
 #                           smoke-pulse smoke-verus
-#   Milestone 2 components: base aeneas vst isabelle-llvm
+#   Milestone 2 components: base aeneas aeneas-lean vst isabelle-llvm llvm
+#                           smoke-aeneas smoke-vst smoke-isabelle-llvm
 #   (default: all of the milestone, in that order; "base" always runs)
 #
 # Environment:
@@ -45,7 +46,8 @@ milestone=$1
 shift
 case "$milestone" in
 1) all=(fstar why3 rust verus smoke-why3 smoke-pulse smoke-verus) ;;
-2) all=(aeneas vst isabelle-llvm) ;;
+2) all=(aeneas aeneas-lean vst isabelle-llvm llvm smoke-aeneas smoke-vst
+  smoke-isabelle-llvm) ;;
 3 | 4) vu_die "milestone $milestone is not written yet" ;;
 *) vu_die "unknown milestone: $milestone" ;;
 esac
@@ -135,6 +137,7 @@ write_env() {
     echo '_vu_path "$ELAN_HOME/bin"'
     echo '_vu_path "$VU_CACHE/verus/current"'
     echo '_vu_path "$VU_CACHE/aeneas/current/bin"'
+    echo '_vu_path "$VU_CACHE/llvm/current"'
     echo '_vu_path "$VU_CACHE/isabelle/bin"'
     echo 'export PATH'
   } >"$VU_CACHE/env.sh.new"
@@ -328,22 +331,25 @@ EOF
 
 # ------------------------------------------------------------ milestone 2
 
+# Aeneas release binaries, with the Charon they bundle (see pins.json:
+# the standalone Charon release is not used).
 step_aeneas() {
   local root tag f
   tag=$(vu_pin .aeneas.tag)
   root=$VU_CACHE/aeneas/$tag
   mkdir -p "$root" "$VU_CACHE/aeneas/current/bin"
-  untar "$(vu_pin .charon.url)" "$(vu_pin .charon.sha256)" \
-    "charon-$(vu_pin .charon.tag).tar.gz" "$root/charon"
   untar "$(vu_pin .aeneas.url)" "$(vu_pin .aeneas.sha256)" \
     "aeneas-$tag.tar.gz" "$root/aeneas"
   untar "$(vu_pin .aeneas.lean_build_url)" "$(vu_pin .aeneas.lean_build_sha256)" \
     "lean-build-aeneas-$tag.tar.gz" "$root/lean-build"
   for f in charon charon-driver aeneas; do
-    local exe
-    exe=$(find_exe "$root" "$f")
-    [ -n "$exe" ] && ln -sfn "$exe" "$VU_CACHE/aeneas/current/bin/$f"
+    [ -x "$root/aeneas/$f" ] || vu_die "no $f in the Aeneas release"
+    ln -sfn "$root/aeneas/$f" "$VU_CACHE/aeneas/current/bin/$f"
   done
+  case "$(charon version)" in
+  *"($(vu_pin .charon.commit))"*) ;;
+  *) vu_die "the bundled Charon is not commit $(vu_pin .charon.commit)" ;;
+  esac
   # Charon's Rust toolchain.
   [ -x "$CARGO_HOME/bin/rustup" ] || vu_die "rustup missing: run setup.sh 1 rust"
   vu_pinned rustup toolchain install "$(vu_pin .charon.rust)" --profile minimal \
@@ -358,11 +364,72 @@ step_aeneas() {
   fi
   elan --version
   elan toolchain install "$(vu_pin .aeneas.lean)"
-  charon version || charon --version
-  aeneas -help | head -n 3 || true
+  echo "charon $(charon version) toolchain $(charon toolchain-version)"
+  # sed, not head: head would close the pipe early and pipefail would
+  # turn the SIGPIPE into a failure of the step.
+  aeneas -help 2>&1 | sed -n 1p
   echo "aeneas tree: $(vu_du "$root") elan: $(vu_du "$ELAN_HOME")"
-  echo "lean-build contents:"
-  find "$root/lean-build" -maxdepth 3 | sed "s#$root#<aeneas>#" | head -n 40
+}
+
+# Aeneas's Lean library, ready for `lake env lean`: a writable copy of
+# the release's backends/lean (the release tree is left as fetched), its
+# Lake dependencies at the commits of its lake-manifest.json, Mathlib's
+# prebuilt oleans (`lake exe cache get`) and the release's prebuilt
+# build of Aeneas itself (lean-build), so that nothing is rebuilt.
+step_aeneas_lean() {
+  local root lean
+  root=$VU_CACHE/aeneas/$(vu_pin .aeneas.tag)
+  lean=$root/lean
+  [ -d "$root/aeneas/backends/lean" ] || vu_die "run setup.sh 2 aeneas first"
+  if [ ! -d "$lean" ]; then
+    rm -rf "$lean.tmp"
+    cp -r "$root/aeneas/backends/lean" "$lean.tmp"
+    mv "$lean.tmp" "$lean"
+  fi
+  cd "$lean"
+  [ "$(cat lean-toolchain)" = "$(vu_pin .aeneas.lean)" ] ||
+    vu_die "lean-toolchain is not $(vu_pin .aeneas.lean)"
+  if [ ! -d .lake/build/lib ]; then
+    mkdir -p .lake
+    rm -rf .lake/build.tmp
+    cp -r "$root/lean-build" .lake/build.tmp
+    mv .lake/build.tmp .lake/build
+  fi
+  vu_pinned lake exe cache get
+  vu_pinned lake build Aeneas AeneasMeta
+  echo "mathlib commit: $(git -C .lake/packages/mathlib rev-parse HEAD)"
+  echo "aeneas lean: $(vu_du "$lean")"
+}
+
+smoke_aeneas() {
+  local d=$VU_EXP/build/smoke/aeneas lean
+  lean=$VU_CACHE/aeneas/$(vu_pin .aeneas.tag)/lean
+  rm -rf "$d"
+  mkdir -p "$d"
+  cat >"$d/smoke.rs" <<'EOF'
+pub fn add1(x: u32) -> u32 {
+    if x < 100 { x + 1 } else { x }
+}
+EOF
+  (cd "$d" && charon rustc --preset=aeneas --dest-file smoke.llbc -- \
+    --crate-type=lib smoke.rs)
+  (cd "$d" && aeneas -backend lean -dest out smoke.llbc)
+  # The proof goes after the generated definitions, in the same file.
+  cat "$d/out/Smoke.lean" - >"$d/SmokeProof.lean" <<'EOF'
+
+namespace smoke
+
+theorem add1_spec (x : Std.U32) (h : x.val < 100) :
+    add1 x ⦃ y => y.val = x.val + 1 ⦄ := by
+  unfold add1
+  simp only [show x < 100#u32 from by scalar_tac, ite_true]
+  step as ⟨y, hy⟩
+  scalar_tac
+
+end smoke
+EOF
+  (cd "$lean" && vu_pinned lake env lean "$d/SmokeProof.lean")
+  echo "aeneas smoke: ok"
 }
 
 step_vst() {
@@ -397,6 +464,43 @@ step_vst() {
   "$opam" exec --switch vst -- coqc --version
   "$opam" exec --switch vst -- clightgen -version
   echo "opam root: $(vu_du "$OPAMROOT")"
+}
+
+# A C function translated by clightgen and proved against a VST funspec.
+smoke_vst() {
+  local d=$VU_EXP/build/smoke/vst
+  export OPAMROOT=$VU_OWN_OPAMROOT OPAMCOLOR=never
+  local run=("$VU_CACHE/bin/opam" exec --switch vst --)
+  rm -rf "$d"
+  mkdir -p "$d"
+  cat >"$d/smoke.c" <<'EOF'
+int add1(int x) { return x + 1; }
+EOF
+  cat >"$d/verif_smoke.v" <<'EOF'
+Require Import VST.floyd.proofauto.
+Require Import Smoke.smoke.
+#[export] Instance CompSpecs : compspecs. make_compspecs prog. Defined.
+Definition Vprog : varspecs. mk_varspecs prog. Defined.
+
+Definition add1_spec : ident * funspec :=
+  DECLARE _add1
+  WITH x : Z
+  PRE [ tint ]
+    PROP (Int.min_signed <= x < Int.max_signed)
+    PARAMS (Vint (Int.repr x))
+    SEP ()
+  POST [ tint ]
+    PROP () RETURN (Vint (Int.repr (x + 1))) SEP ().
+
+Definition Gprog : funspecs := [add1_spec].
+
+Lemma body_add1 : semax_body Vprog Gprog f_add1 add1_spec.
+Proof. start_function. forward. Qed.
+EOF
+  (cd "$d" && "${run[@]}" clightgen -normalize smoke.c)
+  (cd "$d" && vu_pinned "${run[@]}" coqc -Q . Smoke smoke.v)
+  (cd "$d" && vu_pinned "${run[@]}" coqc -Q . Smoke verif_smoke.v)
+  echo "vst smoke: ok"
 }
 
 isabelle_llvm_guard() {
@@ -451,6 +555,71 @@ WRAPPER
   echo "isabelle tree: $(vu_du "$root")"
 }
 
+# LLVM release binaries (clang, llc), to compile the LLVM IR that
+# Isabelle-LLVM emits: the bench host has no LLVM.
+step_llvm() {
+  local v dir bin
+  v=$(vu_pin .llvm.version)
+  dir=$VU_CACHE/llvm/$v
+  mkdir -p "$VU_CACHE/llvm"
+  untar "$(vu_pin .llvm.url)" "$(vu_pin .llvm.sha256)" "LLVM-$v-Linux-X64.tar.xz" "$dir"
+  bin=$(find_exe "$dir" llc)
+  [ -n "$bin" ] || vu_die "no llc in the LLVM release"
+  ln -sfn "$(dirname "$bin")" "$VU_CACHE/llvm/current"
+  clang --version | sed -n 1p
+  llc --version | sed -n 2p
+  echo "llvm: $(vu_du "$dir")"
+}
+
+# An Isabelle-LLVM function with a VCG proof, exported by export_llvm,
+# compiled with clang and called from C.
+smoke_isabelle_llvm() {
+  need_cpus
+  isabelle_llvm_guard
+  local d=$VU_EXP/build/smoke/isabelle-llvm root afp jobs
+  jobs=$(vu_jobs isabelle-llvm)
+  root=$VU_CACHE/isabelle
+  afp=$root/$(vu_pin .afp.version)/$(vu_pin .afp.version)
+  rm -rf "$d"
+  mkdir -p "$d"
+  cat >"$d/ROOT" <<'EOF2'
+session Smoke = Isabelle_LLVM +
+  theories Smoke
+EOF2
+  cat >"$d/Smoke.thy" <<'EOF2'
+theory Smoke
+  imports Isabelle_LLVM.LLVM_DS_All
+begin
+
+definition add1 :: "32 word \<Rightarrow> 32 word llM" where [llvm_code]:
+  "add1 x \<equiv> Mreturn (x + unsigned 1)"
+
+lemma add1_correct:
+  "llvm_htriple (\<upharpoonleft>uint.assn n x ** \<up>(n + 1 \<in> uints 32))
+     (add1 x) (\<lambda>r. \<upharpoonleft>uint.assn (n + 1) r ** \<upharpoonleft>uint.assn n x)"
+  unfolding add1_def
+  apply vcg_monadify
+  apply vcg'
+  done
+
+export_llvm add1 is "uint32_t add1 (uint32_t)" file "smoke.ll"
+
+end
+EOF2
+  cat >"$d/main.c" <<'EOF2'
+#include <stdint.h>
+#include <stdio.h>
+uint32_t add1(uint32_t);
+int main(void) { printf("%u\n", add1(41)); return add1(41) != 42; }
+EOF2
+  # -c: export_llvm writes smoke.ll only when the theory is processed,
+  # and an unchanged session would otherwise be skipped.
+  vu_pinned isabelle build -c -j 1 -o threads="$jobs" -d "$afp/thys" \
+    -d "$root/isabelle_llvm/thys" -D "$d"
+  (cd "$d" && clang -c smoke.ll -o smoke.o && cc main.c smoke.o -o smoke && ./smoke)
+  echo "isabelle-llvm smoke: ok"
+}
+
 # ----------------------------------------------------------------- main
 
 step base step_base
@@ -467,8 +636,13 @@ for c in "${components[@]}"; do
   1:smoke-pulse) step smoke-pulse smoke_pulse ;;
   1:smoke-verus) step smoke-verus smoke_verus ;;
   2:aeneas) step aeneas step_aeneas ;;
+  2:aeneas-lean) step aeneas-lean step_aeneas_lean ;;
   2:vst) step vst step_vst ;;
   2:isabelle-llvm) step isabelle-llvm step_isabelle_llvm ;;
+  2:llvm) step llvm step_llvm ;;
+  2:smoke-aeneas) step smoke-aeneas smoke_aeneas ;;
+  2:smoke-vst) step smoke-vst smoke_vst ;;
+  2:smoke-isabelle-llvm) step smoke-isabelle-llvm smoke_isabelle_llvm ;;
   *) vu_die "unknown component for milestone $milestone: $c" ;;
   esac
 done

@@ -110,6 +110,9 @@ emit() {
     emit aeneas "$(first_line aeneas -version)"
     emit lean "$(first_line lean --version)"
     emit isabelle "$(first_line isabelle version)"
+    emit clang "$(first_line clang --version)"
+    emit coqc_vst "$(first_line env OPAMROOT="${VU_OWN_OPAMROOT:-}" "${VU_CACHE:-}/bin/opam" exec --switch vst -- coqc --version)"
+    emit clightgen_vst "$(first_line env OPAMROOT="${VU_OWN_OPAMROOT:-}" "${VU_CACHE:-}/bin/opam" exec --switch vst -- clightgen -version)"
     for root in ${OPAMROOT:-} ${VU_OWN_OPAMROOT:-}; do
       [ -d "$root" ] || continue
       emit "opam_switches($root)" \
