@@ -97,6 +97,29 @@ Recorded in the `toolchains-m1` notebook entry.
   `run.sh` layout). `provenance.sh` was run with the Pulse run only, and
   its tool versions cover the three tools.
 
+## Deviations found during milestone 2
+
+Recorded in the `toolchains-m2` notebook entry.
+
+- **Isabelle mirror.** The TUM download URL redirects to a host that
+  does not answer from the bench host; Isabelle2026 comes from the
+  University of Cambridge mirror, with its sha256 pinned after the first
+  fetch.
+- **Charon** is the one bundled in the Aeneas release (`61c67516`), not
+  the standalone nightly, so that Charon's output matches what Aeneas
+  reads; `miri` is added to its Rust components.
+- **Aeneas's Lean library** needs Mathlib: a component `aeneas-lean`
+  sets up a copy of the release's `backends/lean` in `<cache>` with
+  Mathlib's prebuilt files and the release's prebuilt Aeneas build
+  (7.8 GB).
+- **LLVM 23.1.5** release binaries are installed in `<cache>/llvm`
+  (12 GB): the bench host has no `clang` or `llc`, which Isabelle-LLVM's
+  output needs.
+- **Isabelle-LLVM is in this account's `<cache>`**, which experiment
+  #4's account cannot read (the home directory is not traversable).
+  Mechanism 4's reuse of it (issue #7) needs a decision: read access or
+  a copy.
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own
