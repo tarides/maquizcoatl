@@ -6,5 +6,7 @@
 src/shim.rs
 # ffi.rs: the C entry points (outside verus!, not verified): NULL checks,
 # raw pointers turned into references, layout assertions against
-# proto.h, and the C function pointer types.
+# proto.h (size, alignment and member offsets, which check the
+# #[repr(C)] mirrors of its structs in src/lib.rs), and the C function
+# pointer types.
 src/ffi.rs

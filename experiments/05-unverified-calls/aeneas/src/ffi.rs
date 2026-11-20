@@ -15,7 +15,7 @@
 // reference as a raw pointer.
 
 use core::ffi::{c_int, c_uint, c_void};
-use core::mem::{align_of, size_of};
+use core::mem::{align_of, offset_of, size_of};
 
 use crate::{Apply, ApplyAll, Callout, EncLen, IApply, VuArgs, VuEncState, VuFoldRec};
 
@@ -30,6 +30,23 @@ pub type VuApplyAllFn = Option<unsafe extern "C" fn(VuApplyFn, *mut c_void) -> c
 const _: () = assert!(size_of::<VuEncState>() == 8 && align_of::<VuEncState>() == 4);
 const _: () = assert!(size_of::<VuArgs>() == 64 && align_of::<VuArgs>() == 8);
 const _: () = assert!(size_of::<VuFoldRec>() == 40 && align_of::<VuFoldRec>() == 4);
+// The member offsets, so that the mirrors of lib.rs are checked field by
+// field (an array member is checked at its start).
+const _: () = assert!(
+    offset_of!(VuEncState, min_enc_len) == 0 && offset_of!(VuEncState, max_enc_len) == 4
+);
+const _: () = assert!(
+    offset_of!(VuArgs, subject) == 0
+        && offset_of!(VuArgs, subject_len) == 8
+        && offset_of!(VuArgs, pos) == 12
+        && offset_of!(VuArgs, num) == 16
+        && offset_of!(VuArgs, slot) == 24
+);
+const _: () = assert!(
+    offset_of!(VuFoldRec, calls) == 0
+        && offset_of!(VuFoldRec, recorded) == 4
+        && offset_of!(VuFoldRec, from) == 8
+);
 
 fn some<T>(x: Option<T>) -> T {
     match x {
