@@ -1,0 +1,42 @@
+== versions (0 s)
+charon 0.1.321 (61c67516e7752daf6b4dd403a030d90efbb0b8eb)
+aeneas nightly-2026.11.19-8f4466d
+rustc 1.100.0-nightly (923c95cdf 2026-09-16)
+Lean (version 4.36.0-rc2, x86_64-unknown-linux-gnu, commit b35cb10cf2ced51a2fd1880cfdbf75c71ab7a35a, Release)
+== 1. source (negative control: 0) (1 s)
+== 2. Charon (1 s)
+== 3. Aeneas (2 s)
+[[92mInfo[39m ] Imported: vu.llbc
+[[92mInfo[39m ] Creating missing directory: lean
+[[92mInfo[39m ] Generated: lean/Vu.lean
+[[93mWarn[39m ] The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files.
+[[92mInfo[39m ] Total execution time: 0.871815 seconds
+model lean/Vu.lean: 339 lines, sha256 66cde72cb516f8ad35c1d63f64d5b822867e2812d7823fdab8860185582cf597
+== 4. Lean, model alone (3 s)
+== 5. Lean, proofs (6 s)
+'vu.char_len_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.char_len_in_bounds' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.callout_step_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.callout_step_invalid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.i_apply_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.i_apply_rec_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.fold_all_rec_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.tableClient_respects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.get_slot_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.set_slot_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+proofs: status=0 errors_in_model=0 errors_in_proofs=0 theorems=10 axiom_reports=10 nonstandard_axioms=0
+proofs: all 10 theorems checked, standard axioms only
+== 6. rustc (17 s)
+note: link against the following native artifacts when linking against this static library. The order and any duplication can be significant on some platforms
+
+note: native-static-libs: -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc
+
+ldflags: -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc
+libvu.a: 23389594 bytes, sha256 5d2872be26c08b2270190cff2f58634ac557b87f92cd68592b8d5933256bbb25
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_i_apply
+exported: vu_set_slot
+== done (17 s)

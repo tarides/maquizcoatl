@@ -1,0 +1,48 @@
+== versions (0 s)
+Isabelle2026
+isabelle_llvm commit: e42f478118988ff38676ff01215be26f3018f015
+afp: afp-2026-11-19
+clang version 23.1.5 (https://github.com/llvm/llvm-project 392dfff97d29b59d77e5cac6d4b6ef2585fe7117)
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 1) (0 s)
+92d91
+< (* CLAMP-BEGIN *)
+94,101c93
+<   "vu_clamp r mn mx \<equiv> doM {
+<     lt \<leftarrow> ll_icmp_slt r mn;
+<     llc_if lt (Mreturn mn) (doM {
+<       gt \<leftarrow> ll_icmp_slt mx r;
+<       llc_if gt (Mreturn mx) (Mreturn r)
+<     })
+<   }"
+< (* CLAMP-END *)
+---
+>   "vu_clamp r mn mx \<equiv> Mreturn r"
+== 2. isabelle build (proofs and export_llvm) (0 s)
+Cleaned VU
+Running VU ...
+VU FAILED (see also "isabelle build_log -H Error VU")
+*** Failed to finish proof (line 114 of "<exp>/build/m2-isabelle-llvm/isabelle-llvm-control/src/VU.thy"):
+*** goal (1 subgoal):
+***  1. ⋀r. ⟦1 ≤ sint mn; sint mn ≤ sint mx; abase st; abase p⟧
+***         ⟹ sint mn ≤ sint r ∧
+***            sint r
+***            ≤ sint
+***               mx
+*** At command "by" (line 114 of "<exp>/build/m2-isabelle-llvm/isabelle-llvm-control/src/VU.thy")
+Unfinished session(s): VU
+0:00:37 elapsed time, 0:00:35 cpu time, factor 0.97
+-- errors of session VU
+
+Build errors:
+*** Failed to finish proof (line 114 of "<exp>/build/m2-isabelle-llvm/isabelle-llvm-control/src/VU.thy"):
+*** goal (1 subgoal):
+***  1. \<And>r. \<lbrakk>1 \<le> sint mn; sint mn \<le> sint mx; abase st; abase p\<rbrakk>
+***         \<Longrightarrow> sint mn \<le> sint r \<and>
+***            sint r
+***            \<le> sint
+***               mx
+*** At command "by" (line 114 of "<exp>/build/m2-isabelle-llvm/isabelle-llvm-control/src/VU.thy")
+
+Return code: 1 (ERROR)
+proof rejected: 1 failed proof(s), no other error
