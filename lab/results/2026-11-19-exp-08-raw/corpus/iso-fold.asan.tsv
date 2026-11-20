@@ -1,0 +1,11 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+cf21	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)ss	\xDF	M 0-1	M 0-1
+cf22	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)\xDF	ss	M 0-2	M 0-2
+if01	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)\xDF	SS	M 0-2	M 0-2
+if02	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)\xDF	sS	M 0-2	M 0-2
+if03	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)\xDF	Ss	M 0-2	M 0-2
+if04	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)SS	\xDF	M 0-1	M 0-1
+if05	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)sS	\xDF	M 0-1	M 0-1
+if06	Oniguruma	ISO-8859-1	NONE	0x40000000	6.9.10	asan	(?i)Ss	\xDF	M 0-1	M 0-1
+if07	Oniguruma	ISO-8859-1	IGNORECASE	0x40000000	6.9.10	asan	SSb\xDFssc	a\xDFbSS\xDFcd	M 1-7	M 1-7
+if08	Oniguruma	ISO-8859-1	IGNORECASE	0x40000000	6.9.10	asan	is	iss	M 0-2	M 0-2

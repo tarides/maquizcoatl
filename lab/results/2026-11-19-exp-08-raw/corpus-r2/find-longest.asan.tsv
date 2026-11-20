@@ -1,0 +1,7 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+fl01	Oniguruma	UTF-8	FIND_LONGEST	0x40000000	6.9.10	asan	\w+	abc defg hij	M 4-8	M 4-8
+fl02	Oniguruma	UTF-8	FIND_LONGEST	0x40000000	6.9.10	asan	\w+	ab cd ef	M 0-2	M 0-2
+fl03	Oniguruma	UTF-8	FIND_LONGEST	0x40000000	6.9.10	asan	a|bcd	abcd	M 1-4	M 1-4
+fl04	Oniguruma	UTF-8	FIND_LONGEST	0x40000000	6.9.10	asan	a|ab	ab	M 0-2	M 0-2
+fl05	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	a|bcd	abcd	M 0-1	M 0-1
+fl06	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	a|ab	ab	M 0-1	M 0-1

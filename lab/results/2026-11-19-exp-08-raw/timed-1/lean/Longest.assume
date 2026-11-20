@@ -1,0 +1,5 @@
+grep -nE 'sorry|native_decide|ofReduceBool|axiom ' Longest.lean:
+(no match)
+kernel output (Print Assumptions / #print axioms):
+'Longest.longest_no_shorter' depends on axioms: [propext, Quot.sound]
+'Longest.fl01' depends on axioms: [propext]

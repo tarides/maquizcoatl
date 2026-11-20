@@ -1,0 +1,4 @@
+m1-calls	rocq	Calls	rc=0	wall=1.16s	maxrss_kb=413892
+m1-calls	lean	Calls	rc=0	wall=1.29s	maxrss_kb=519404
+m1-calls	fstar	Calls	rc=0	wall=1.22s	maxrss_kb=125880
+m1-calls	verus	Calls	rc=0	wall=1.60s	maxrss_kb=336032

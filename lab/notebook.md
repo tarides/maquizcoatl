@@ -46,6 +46,21 @@ repository), or `<cache>` and `<exp>` on the bench host
 | 2026-11-19 | #7 provisional verdicts against the relative cap (Decision 1) | as above | All four: in-prover definition if T_table <= T_spec(#6), with T_table per target above; Why3 cannot compute with or prove over the table, so its table is data for anything stated over its contents | [results/2026-11-19-exp-07-verdicts.md](results/2026-11-19-exp-07-verdicts.md) |
 | 2026-11-19 | #7 review fixes: corrections to entries 2, 4, 5, 6 after the results review; no new run | as above | Why3 verdict narrowed to provisional on T_spec and on the structural-proof follow-up; comparison with #6 needs #6 timed at comparable load on the same host, or both rerun idle; T_table excludes compiling the `Mem` modules; Rocq `Mem.v` logs added (empty), Lean/F\* `Sound` run output not kept | [results/2026-11-19-exp-07-review-fixes.md](results/2026-11-19-exp-07-review-fixes.md) |
 
+## Experiment #8
+
+All four tools kept (maintainer decision: run before experiment #5 reports; a tool whose stack #5 eliminates keeps its results, marked as concerning an eliminated stack).
+
+| Date | Experiment | Upstream / tools | Finding | Results |
+|------|------------|------------------|---------|---------|
+| 2026-11-19 | #8 setup: Verus installed into the shared cache, two C builds, smoke tests under a cgroup memory cap (`lab/08-hard-features/setup.sh`) | `f95747b`; Rocq 9.3.0, Lean 4.36.0, F\* 2026.11.15 (Z3 5.3.0), Verus 0.2026.11.02.8bf68ee (Rust 1.99.1, Z3 4.16.0); AMD EPYC 7502P, Linux 6.8.0-100 | Verus and its toolchain in about 2 min; `test_utf8` 1554/0/0 on Debug and ASan/UBSan | [results/2026-11-19-exp-08-setup.md](results/2026-11-19-exp-08-setup.md) |
+| 2026-11-19 | #8 corpus: 37 cases and 62 nest-limit scan points on Debug and ASan/UBSan (`cases/run-cases.sh`) | as above | All agree, no sanitizer report. Definition site of a called group takes a frame. D-08-1: `doc/API` says default nest limit 24, code and ca06 say 20 | [results/2026-11-19-exp-08-corpus.md](results/2026-11-19-exp-08-corpus.md) |
+| 2026-11-19 | #8 calls with nest limit, four tools (`check.sh <tool> Calls`) | as above | 15/15 cases in each; lemma C (depth never exceeds the limit) proved in all four, kernel-checked in Rocq/Lean; 1.2-3.3 s | [results/2026-11-19-exp-08-calls.md](results/2026-11-19-exp-08-calls.md) |
+| 2026-11-19 | #8 absent operator, four tools | as above | 11/11 cases; lemma A proved in all four; Rocq kernel unfolded the fuel at `Qed` (fixed by abstraction) | [results/2026-11-19-exp-08-absent.md](results/2026-11-19-exp-08-absent.md) |
+| 2026-11-19 | #8 FIND_LONGEST, four tools | as above | 6/6 cases; lemma L (no shorter than first match) proved in all four; F\* and Verus first try, Rocq fuel leak again | [results/2026-11-19-exp-08-find-longest.md](results/2026-11-19-exp-08-find-longest.md) |
+| 2026-11-19 | #8 ISO-8859-1 folding, four tools | as above | 10/10 cases; lemma F (0xDF vs ss/SS/sS/Ss and back) by computation in all four; Lean needed a structural rewrite of the expansion | [results/2026-11-19-exp-08-iso-fold.md](results/2026-11-19-exp-08-iso-fold.md) |
+| 2026-11-19 | #8 comparison, three timed runs per (tool, feature) (`timed.sh`) | as above | All 16 pairs done, 42 cases per tool agree with C, no admits, no native computation; F\* most economical, Lean smoothest interactive, Rocq's two failures from fuel in conversion | [results/2026-11-19-exp-08-comparison.md](results/2026-11-19-exp-08-comparison.md) |
+| 2026-11-20 | #8 review fixes: corrections to entries 2-7, no rerun | as above | `doc/RE:368` (not 367); Rocq `Qed` timeout stated once (over 60 s, killed twice); Calls rows from reruns `timed-calls2` at `d66233b`, `timed-*` Calls rows superseded, command recorded; peak RSS is the maximum of three runs in all 16 cells (rule now stated) | [results/2026-11-20-exp-08-review-fixes.md](results/2026-11-20-exp-08-review-fixes.md) |
+
 ## Experiment #12
 
 | Date | Experiment | Upstream / tools | Finding | Results |
