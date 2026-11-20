@@ -501,10 +501,40 @@ Proof.
   entailer!.
 Qed.
 
-(* The axioms the six proofs rest on: build.sh checks that the list
-   holds only the logical axioms of Rocq's library and VST's own, and
-   no assumption about the client. *)
-Definition vu_bodies :=
-  (@body_vu_char_len, @body_vu_callout_step, @body_vu_i_apply,
-   @body_vu_fold_all, @body_vu_get_slot, @body_vu_set_slot).
-Print Assumptions vu_bodies.
+(* ------------------------------------------------------------------
+   The six bodies together *)
+
+#[local] Existing Instance NullExtension.Espec.
+
+(* Gprog extended to every function of the program: CompCert's runtime
+   functions and builtins get VST's vacuous funspec (precondition
+   False), which assumes nothing. *)
+Definition Gfull : funspecs :=
+  ltac:(let pr := eval unfold prog in prog in
+        let x := old_with_library' pr Gprog in exact x).
+
+(* Every function of vu.c meets its funspec in Gprog, and each body is
+   checked against Gprog. This closes the loop that vu_fold_all relies
+   on: the funspec of vu_i_apply it hands to the client is the one
+   body_vu_i_apply proves. *)
+Lemma vu_funcs :
+  semax_func Vprog Gprog (Genv.globalenv prog) (prog_funct prog) Gfull.
+Proof.
+  match goal with |- semax_func ?V ?G ?g ?D ?G2 =>
+    let Gp := fresh "Gprog" in
+    pose (Gp := @abbreviate _ G); change (semax_func V Gp g D G2)
+  end.
+  prove_semax_prog_setup_globalenv.
+  unfold prog, prog_funct, Gfull; simpl.
+  semax_func_cons body_vu_char_len.
+  semax_func_cons body_vu_callout_step.
+  semax_func_cons body_vu_i_apply.
+  semax_func_cons body_vu_fold_all.
+  semax_func_cons body_vu_get_slot.
+  semax_func_cons body_vu_set_slot.
+Qed.
+
+(* The axioms the proofs rest on: build.sh checks that the list holds
+   only the logical axioms of Rocq's library and VST's own, and no
+   assumption about the client. *)
+Print Assumptions vu_funcs.
