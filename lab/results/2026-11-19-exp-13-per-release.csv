@@ -1,0 +1,28 @@
+project,tool,series,units,date,reached,releases_spanned,files,added,removed,lines_per_release
+warblre,rocq,9.1,a5a3120,2026-03-02,unresolved:>= 9.0.0 V9.0.0 V9.1.0,3,55,1304,1075,793.0
+warblre,rocq,9.2,a7fb967,2026-05-07,unresolved:>= 9.0.0 V9.0.1 V9.1.1 V9.2.0,1,9,22,14,36.0
+warblre,rocq,9.3,787f9e6,2026-10-23,V9.3.0,1,11,40,39,79.0
+linden,rocq,9.0,4312028,2026-03-02,V9.0.0,3,56,362,362,241.3
+linden,rocq,9.1,2af06b3,2026-05-19,V9.1.1,1,3,8,5,13.0
+linden,rocq,9.2,31aa384 117d534 b6396cb,2026-06-15,unresolved:>= 9.2.0 V9.2.0 unresolved:>= 9.1.1 V9.1.1,1,16,47,32,79.0
+lean-regex,lean,4.25,e1600a1,2025-11-24,v4.25.1,1,33,306,426,732.0
+lean-regex,lean,4.26,e2e33d6 a763ee1,2025-12-16,v4.26.0-rc2 v4.26.0,1,67,3404,4291,7695.0
+lean-regex,lean,4.27,153ed60 6756b62,2026-01-25,v4.27.0-rc1 v4.27.0,1,60,556,625,1181.0
+lean-regex,lean,4.28,70af083,2026-02-23,v4.28.0,1,1,2,3,5.0
+lean-regex,lean,4.29,cdfe4c8,2026-04-12,v4.29.0,1,20,218,114,332.0
+lean-regex,lean,4.31,3e43b33 f2b41e9,2026-06-17,v4.31.0,2,12,92,49,70.5
+lean-regex,lean,4.32,e9dcea7,2026-07-30,v4.32.0,1,3,6,4,10.0
+lean-regex,lean,4.34,30b7188,2026-08-14,v4.34.0-rc1,2,8,21,14,17.5
+everparse-cbor,fstar,2026.03.24,77921d0 9711939 54b8fef,2026-06-25,v2026.03.24,2,0,0,0,0.0
+everparse-cbor,fstar,2026.07.05,b3544a1 77f3deb,2026-07-03,v2026.07.05,11,0,0,0,0.0
+everparse-cbor,fstar,2026.10.11,6c006b0 0f5c004 ad9414b,2026-10-12,v2026.10.11,0,0,0,0,
+everparse-cbor,fstar,2026.10.18,aa78f01,2026-10-17,v2026.10.18,1,0,0,0,0.0
+everparse-cbor,fstar,2026.10.25,e42f054 5ac7cc3,2026-10-22,v2026.10.25,1,0,0,0,0.0
+everparse-cbor,fstar,2026.11.15,147ba6b 01ed23b 7e76a75 749a701 9e69ffd cc5f99e 8c4d28f a991f58,2026-11-05,v2026.11.15,1,7,23,10,33.0
+why3-gallery,why3,1.9,1.8.2..1.9.0,2026-10-19,1.9.0,1,735,48508,34341,82849.0
+creusot,why3,1.9,b22069f e072997 948ab5f 5ba3ac9 7c3d1e8 a049fe8 12b57f8 eef25e4,2026-11-09,,0,8425,59387,59204,
+anvil,verus,0.2025.11.30.840fa61,a65d68c,2025-12-10,release/0.2025.11.30.840fa61,,111,5430,5349,
+anvil,verus,0.2026.07.12.0b42f4c,3c95bbb,2026-07-23,release/0.2026.07.12.0b42f4c,,1,5,4,
+afp-regex,isabelle,2025-1,Isabelle2025..Isabelle2025-1,2025-12-17,Isabelle2025-1,1,10,686,801,1487.0
+afp-regex,isabelle,2025-2,Isabelle2025-1..Isabelle2025-2,2026-01-18,Isabelle2025-2,1,0,0,0,0.0
+afp-regex,isabelle,2026,Isabelle2025-2..Isabelle2026,2026-10-24,Isabelle2026,1,8,78,9,87.0
