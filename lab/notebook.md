@@ -59,6 +59,7 @@ All four tools kept (maintainer decision: run before experiment #5 reports; a to
 | 2026-11-19 | #8 FIND_LONGEST, four tools | as above | 6/6 cases; lemma L (no shorter than first match) proved in all four; F\* and Verus first try, Rocq fuel leak again | [results/2026-11-19-exp-08-find-longest.md](results/2026-11-19-exp-08-find-longest.md) |
 | 2026-11-19 | #8 ISO-8859-1 folding, four tools | as above | 10/10 cases; lemma F (0xDF vs ss/SS/sS/Ss and back) by computation in all four; Lean needed a structural rewrite of the expansion | [results/2026-11-19-exp-08-iso-fold.md](results/2026-11-19-exp-08-iso-fold.md) |
 | 2026-11-19 | #8 comparison, three timed runs per (tool, feature) (`timed.sh`) | as above | All 16 pairs done, 42 cases per tool agree with C, no admits, no native computation; F\* most economical, Lean smoothest interactive, Rocq's two failures from fuel in conversion | [results/2026-11-19-exp-08-comparison.md](results/2026-11-19-exp-08-comparison.md) |
+| 2026-11-20 | #8 review fixes: corrections to entries 2-7, no rerun | as above | `doc/RE:368` (not 367); Rocq `Qed` timeout stated once (over 60 s, killed twice); Calls rows from reruns `timed-calls2` at `d66233b`, `timed-*` Calls rows superseded, command recorded; peak RSS is the maximum of three runs in all 16 cells (rule now stated) | [results/2026-11-20-exp-08-review-fixes.md](results/2026-11-20-exp-08-review-fixes.md) |
 
 ## Experiment #12
 

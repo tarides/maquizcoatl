@@ -108,7 +108,7 @@ is a greedy repeat of a one-character string or a character class
 (`is_simple_one_char_repeat`, `regparse.c:3185-3240`); `\O` is an
 `ND_CTYPE` any-char node (`node_new_true_anychar`, `regparse.c:2424-2432`),
 not a class, so `(?~|abc|\O*)` is *not* simple and goes through the
-general engine although `upstream/doc/RE:367` calls `(?~absent)` "a
+general engine although `upstream/doc/RE:368` calls `(?~absent)` "a
 written abbreviation of `(?~|(?:absent)|\O*)`". The two spellings
 therefore compile through different code paths, and their agreement on
 the cases is a finding (ab02/ab05, ab06/ab07, ab08/ab09 agree).

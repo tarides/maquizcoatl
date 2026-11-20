@@ -36,7 +36,7 @@ Definition fuel := 1000.
 
 (* help: the two searches are generic in the per-start results [res]; with
    m inlined, the kernel check (Qed) of the lemmas unfolded the 1000-step
-   fuel and did not finish in 5 minutes. *)
+   fuel and did not finish (killed after more than 60 s, twice). *)
 Variable res : nat -> list nat.
 
 (* First-match search. *)
