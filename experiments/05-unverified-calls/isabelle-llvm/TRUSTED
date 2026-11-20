@@ -1,0 +1,46 @@
+# Trusted lines of the Isabelle-LLVM prototype (format: ../count-trusted.sh).
+#
+# Modelling style: trusted shim. Isabelle-LLVM has no function-pointer
+# type and calls external functions by name only, so each indirect call
+# is made by a C shim. In VU.thy the shim functions are constants with
+# no definition and no axiom; the client's contract on each one is a
+# hypothesis of the theorem that uses it, so the theorems hold for any
+# shim and client that meet those hypotheses, and nothing else is
+# assumed. A client function pointer is an opaque "8 word ptr".
+#
+# The shim: three C functions that make the indirect calls and return
+# the callee's raw result; vu_call_apply_all also takes the address of
+# the verified vu_i_apply (re-entrancy shape (a)).
+shim.c
+# The shim's declaration in VU.thy: its types and its C names.
+VU.thy:80-87
+# Contract of the encoding callee (hypothesis of vu_char_len_correct):
+# reads the byte p points to and gives it back, returns any 32-bit
+# value (no range).
+VU.thy:114-115
+# Contract of the callout callee (hypothesis of
+# vu_callout_step_correct): gets the whole args record, gives it back
+# with the verified-side state unchanged, result in Q.
+VU.thy:191-193
+# ... and the definition of "verified-side state unchanged".
+VU.thy:51-52
+# Contract of the client's apply_all_case_fold (hypothesis of
+# vu_fold_all_correct): given the record well formed, gives it back
+# well formed.
+VU.thy:314-316
+# ... and the definition of "well formed", with the field it reads.
+VU.thy:59-59
+VU.thy:64-65
+# ABI mapping from proto.h to the LLVM that export_llvm emits, written
+# by hand: the declare and define lines vu.ll must contain (counted raw).
+abi.expected
+# The LLVM struct types of vu.ll written as C structs; layout.c checks
+# that they have proto.h's layout, but that they mirror the LLVM types
+# is trusted.
+layout.c:18-78
+# Renaming of the exported symbols (VU_<name> to <name>) in vu.o.
+build.sh:119-124
+#
+# Not counted: the toolchain (Isabelle2026, the AFP, Isabelle-LLVM's VCG
+# and code generator export_llvm, clang/LLVM 23, objcopy, the C
+# compiler), as for every tool.
