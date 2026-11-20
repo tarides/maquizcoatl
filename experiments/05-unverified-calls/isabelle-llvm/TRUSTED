@@ -39,7 +39,7 @@ abi.expected
 # is trusted.
 layout.c:18-78
 # Renaming of the exported symbols (VU_<name> to <name>) in vu.o.
-build.sh:119-124
+build.sh:129-134
 #
 # Not counted: the toolchain (Isabelle2026, the AFP, Isabelle-LLVM's VCG
 # and code generator export_llvm, clang/LLVM 23, objcopy, the C
