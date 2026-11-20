@@ -1,0 +1,27 @@
+# Trusted lines of the VST + CompCert prototype (format: ../count-trusted.sh).
+#
+# Modelling style: client contract. Each client C function pointer is a
+# parameter whose precondition holds func_ptr' SPEC f; SPEC (a VST
+# funspec) is assumed by the verified code and checked nowhere, since
+# the client is C. There is no shim, no axiom and no C glue: vu.c calls
+# the pointers itself, and VST checks the calls against SPEC.
+#
+# Value of struct vu_args, used by the callout contract ("the
+# verified-side state unchanged" is the same subj, len, pos, num).
+verif_vu.v:57-59
+# Value of vu_fold_rec and "well formed", used by the apply_all contract.
+verif_vu.v:62-63
+verif_vu.v:65-65
+# Contracts of the encoding callee (vu_char_len's f) and of the callout
+# callee (vu_callout_step's f).
+verif_vu.v:110-143
+# Contract of the client's apply_all_case_fold (vu_fold_all's g). It
+# refers to i_apply_fs, the proven spec of vu_i_apply, not counted.
+verif_vu.v:166-187
+#
+# Not counted: the toolchain (clightgen, which translates vu.c to Clight
+# without a proof; Rocq; VST; CompCert, whose compilation is proven; the
+# C compiler and linker for caller.c, and the ABI agreement between
+# CompCert's and GCC's objects), as for every tool. The axioms listed by
+# Print Assumptions (classical logic and extensionality, used by VST
+# itself) are checked by build.sh against a fixed list.
