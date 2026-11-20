@@ -35,6 +35,7 @@ module vu.Client
   syntax val call_enc_len "%1(%2)" prec 1 1 15
   syntax val call_callout "%1(%2, %3)" prec 1 1 15 15
   syntax val i_apply_ptr "vu_i_apply" prec 0
+  syntax val ignore_to "((void)%1, 0)" prec 0 2
   syntax val call_apply_all "%1(%2, %3)" prec 1 1 15 15
 
 end

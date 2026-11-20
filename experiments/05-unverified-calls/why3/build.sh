@@ -110,10 +110,7 @@ why3 extract -L "$src" -D c -D "$src/vu.drv" -o "$VU_OUT/vu.c" vu.Vu
 echo "vu.c: $(wc -l <"$VU_OUT/vu.c") lines, sha256 $(sha256sum "$VU_OUT/vu.c" | cut -d' ' -f1)"
 
 echo "== compilation"
-# The extracted vu_i_apply keeps proto.h's unused "to" parameter; the
-# warning stays in the log but does not fail the build.
-cc -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror \
-  -Wno-error=unused-parameter -I"$VU_HARNESS" \
+cc -std=c11 -O2 -Wall -Wextra -Wpedantic -Werror -I"$VU_HARNESS" \
   -c "$VU_OUT/vu.c" -o "$VU_OUT/vu.o"
 ar rcs "$VU_OUT/libvu.a" "$VU_OUT/vu.o"
 echo "libvu.a: ok"

@@ -17,6 +17,7 @@ module Client
   use mach.int.Int32
   use mach.int.UInt32
   use mach.int.Int64
+  use mach.c.C
 
   (** {2 Constants of proto.h} *)
 
@@ -176,6 +177,13 @@ module Client
   (* The pointer to vu_i_apply, handed to the client (re-entrancy (a)). *)
   val i_apply_ptr () : apply_fn
 
+  (* ((void)to, 0): vu_i_apply never reads its to parameter (proto.h).
+     This marks it used in the extracted C and is the 0 vu_i_apply
+     returns (extraction erases a call that returns unit and has no
+     effect). *)
+  val ignore_to (p: ptr uint32) : int32
+    ensures { result = 0 }
+
   (* g(vu_i_apply, rec). Client contract: g changes rec only by calling
      the vu_i_apply it receives, with rec as arg, any number of times. *)
   val call_apply_all (_g: apply_all_fn) (_f: apply_fn) (r: fold_rec) : int32
@@ -289,7 +297,7 @@ module Vu
       set_from arg n from;
       set_recorded arg (n + 1)
     end;
-    0
+    ignore_to _to
 
   (* Any number of calls of vu_i_apply evolves the record. *)
   lemma evolves_refl :
