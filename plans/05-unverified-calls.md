@@ -154,6 +154,60 @@ Recorded in the `review-fixes` notebook entry.
 - **Not applied:** the review's point on the `oniguruma.h:738`
   citation; the line is correct at `f95747b`.
 
+## Taken back by the pipeline (2026-11-21)
+
+Milestones 1 and 2 and the review fixes were run by @balat (branch head
+`1dcc3dc`; [results](https://github.com/tarides/maquizcoatl/issues/13#issuecomment-7039631438),
+[review](https://github.com/tarides/maquizcoatl/issues/13#issuecomment-7038827493)).
+On 2026-11-21 the maintainer took the experiment back into the
+experiment pipeline ([comment](https://github.com/tarides/maquizcoatl/issues/13#issuecomment-7060575635)).
+The pipeline continues on this branch and keeps the earlier commits and
+notebook entries as they are; corrections go in new entries.
+
+Decisions folded in:
+
+- **Isabelle-LLVM, shape (a):** compose the client hypothesis of
+  `vu_fold_all` with `vu_i_apply_correct` in a proof; the verdict is
+  unchanged, the table says the composition is proved
+  ([decision](https://github.com/tarides/maquizcoatl/issues/13#issuecomment-7059928154)).
+- **Read-only access through accessors:** option (b), one read accessor
+  (for example `vu_get_subject_byte`) added to `proto.h` and to the six
+  prototypes before milestone 3, whose proofs and negative controls are
+  then re-run; milestones 3 and 4 use the extended prototype (same
+  decision).
+- **Scheduled follow-ups**, with milestone 3 and before its new tools:
+  a Miri test of shape (b) for Verus and Aeneas, and the Aeneas warning
+  "extracted external, unknown definitions" (commit `Vu.lean`, add the
+  pure-function assumption)
+  ([decision](https://github.com/tarides/maquizcoatl/issues/13#issuecomment-7059943097);
+  "Scheduled follow-ups" in the issue body).
+- **F\* eta-reduction report:** tracked in issue #29, also taken back.
+
+Runs, each at most 3 hours and followed by an independent review on
+issue #13:
+
+- **Run A:** toolchains for milestones 1 and 2, then a replay of the six
+  milestone 1-2 prototypes with them, compared with the recorded raw
+  outputs of the `review-fixes` entry.
+- **Run B:** the two decisions above, the Miri test, the Aeneas warning,
+  and the F\* master check for issue #29.
+- **Run C:** milestone 3 (hax with its F\*, Rocq and Lean backends,
+  Creusot, RefinedRust).
+- **Run D:** milestone 4 (Bedrock2, CN, RefinedC), then the single
+  summary table on the issue.
+
+**Toolchains.** The earlier runs used a toolchain cache that the
+pipeline's account cannot read. The pipeline installs its own copies,
+with the same pins (`pins.json`, sha256 checked), into the project's
+shared toolchain cache on the bench host. `setup-pipeline.sh` gives
+`setup.sh` the cache layout it expects as a directory of links into the
+shared cache, so `setup.sh`, `run.sh` and the `build.sh` scripts run
+unchanged; every place where the shared cache differs is listed in that
+script and in the Run A notebook entry. Run A's status is "pending"
+for a tool only when its install did not finish; "deferred" keeps its
+meaning from the Decisions (a toolchain that cannot be installed at
+all).
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own
