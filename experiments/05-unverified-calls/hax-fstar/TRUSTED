@@ -23,6 +23,12 @@
 # through the verified function it is given). Assumed of the C client,
 # checked nowhere: the implementation is in ffi.rs.
 ../hax/src/lib.rs:113-117
+# The client contracts of the encoding function and the callout (run E):
+# requires(true), which F* needs to call them, obliges each
+# implementation to accept every argument; the implementations are in
+# ffi.rs, not extracted, so this is assumed of the C client.
+../hax/src/lib.rs:85-89
+../hax/src/lib.rs:93-97
 #
 # Not counted: the toolchain (hax's frontend and engine, F* and hax's F*
 # library, rustc, the C compiler), including the claim that the F*

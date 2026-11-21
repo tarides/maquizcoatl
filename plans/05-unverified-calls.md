@@ -306,6 +306,53 @@ Recorded in the `runC` notebook entry.
   (2026-11-16), retrieved with `git ls-remote` after the review of
   run D; its install is still not written.
 
+## Deviations found during run E
+
+Recorded in the `runE` notebook entry. Maintainer decisions of
+2026-11-21 before the run: disk freed (69 GB free; the 20 GB floor
+stays), hax's Rocq verdict final, hax's Lean backend not run ("same
+pipeline as Charon + Aeneas, with hax-lib specifications in front; not
+run"), the Isabelle-LLVM model client a recorded follow-up.
+
+- **Parallel installs.** `setup-pipeline.sh` locks per component list,
+  not per view, and `setup.sh` writes `env.sh` through a file of its own
+  process: the five installs ran side by side, each on its own CPU set.
+- **hax F\*.** The pinned F\* v2025.10.06 goes to
+  `<cache>/hax/fstar-v2025.10.06` (`hax-fstar/build.sh` sets
+  `VU_HAX_FSTAR` to it). With it, `Vu.fst` failed at the first call of a
+  client method: hax gives a trait method without `requires` an
+  abstract F\* precondition (`f_enc_len_pre`) that no caller can
+  establish. `EncLen` and `Callout` now carry `requires(true)`, which
+  assumes nothing of the callee; `ApplyAll`'s contract range in
+  `TRUSTED` moves from `lib.rs:105-109` to `:113-117`.
+- **Creusot.** The tag's `creusot-install`, with its data and
+  configuration directories in `<cache>/creusot`. `why3-ide` is left out
+  (opam variable `in-creusot-ci`): it needs GTK system libraries the
+  bench host lacks, and the first try stopped at opam's depext prompt.
+  `cargo-creusot` is in the cache's `CARGO_HOME/bin`. The build copies
+  `why3find.json` from the data directory, as `cargo creusot init`
+  does.
+- **CN** cannot call a client pointer: "Function pointer must be
+  provably equal to a defined function". The three indirect calls are
+  in `trusted` C shims, as for Isabelle-LLVM. In this CN version, C
+  integers are mathematical integers in specifications (no `i32`
+  suffixes), and array reads need `focus` and `instantiate`.
+  `count-trusted.sh` counts a `/*@ ... @*/` block as code (CN's
+  specifications are in comments).
+- **RefinedC** needs its struct annotations inside the struct
+  definitions, hence `refinedc/vu_rc.h`, a copy of `proto.h` with
+  `[[rc::...]]` attributes, which `build.sh` checks against `proto.h`.
+  `refinedc` and `coq-lithium` are pinned by URL at the commit: a path
+  pin has no `.git`, where `dune subst` fails. `count-trusted.sh`
+  counts `//@` lines (RefinedC's Rocq prelude) as code. The C tests are
+  written `y <= x` rather than `x >= y`, whose failed branch reaches
+  Lithium as `(x ?= y) = Lt`, which `lia` does not read.
+- **opam pins of the partial clones** (`--filter=blob:none`) cannot be
+  git pins (git upload-pack fails), so CN's and RefinedRust's checkouts
+  are pinned with `--kind=path`.
+- **Bedrock2**: installed, prototype not written within the cap
+  (pending).
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own

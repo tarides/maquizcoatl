@@ -78,9 +78,9 @@ pub fn rec_wf(rec: &VuFoldRec) -> bool {
 /// A client vu_enc_len_fn. p (the address of the byte) is passed
 /// through, never read here. requires(true) (run E): without it, hax
 /// gives the F* method an abstract precondition (f_enc_len_pre) that no
-/// caller can establish; with it, every implementation's precondition is
-/// implied by true, so the verified side may call it in any state. It
-/// assumes nothing of the callee.
+/// caller can establish; with it, each implementation must accept every
+/// argument. The only implementation is in ffi.rs, not extracted, so
+/// that is trusted (TRUSTED): the C callee accepts any argument.
 #[hax_lib::attributes]
 pub trait EncLen {
     #[hax_lib::requires(true)]
