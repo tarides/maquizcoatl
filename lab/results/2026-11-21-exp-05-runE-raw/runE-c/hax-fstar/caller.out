@@ -1,0 +1,58 @@
+char_len utf8 byte=0x41 bounds=[1,4] -> 1
+char_len utf8 byte=0x7f bounds=[1,4] -> 1
+char_len utf8 byte=0x80 bounds=[1,4] -> 1
+char_len utf8 byte=0xc2 bounds=[1,4] -> 2
+char_len utf8 byte=0xe3 bounds=[1,4] -> 3
+char_len utf8 byte=0xf0 bounds=[1,4] -> 4
+char_len utf8 byte=0xf4 bounds=[1,4] -> 4
+char_len utf8 byte=0xf5 bounds=[1,4] -> 1
+char_len utf8 byte=0xff bounds=[1,4] -> 1
+char_len client byte=0x41 bounds=[1,1] -> 1
+char_len client byte=0xe3 bounds=[1,1] -> 1
+char_len client calls=2
+char_len bad byte=0x00 bounds=[1,4] -> 1
+char_len bad byte=0x00 bounds=[2,3] -> 2
+char_len bad byte=0x01 bounds=[1,4] -> 1
+char_len bad byte=0x01 bounds=[2,3] -> 2
+char_len bad byte=0x02 bounds=[1,4] -> 4
+char_len bad byte=0x02 bounds=[2,3] -> 3
+char_len bad byte=0x03 bounds=[1,4] -> 1
+char_len bad byte=0x03 bounds=[2,3] -> 2
+char_len bad byte=0x04 bounds=[1,4] -> 4
+char_len bad byte=0x04 bounds=[2,3] -> 3
+callout dir=0:progress callee=0 -> 0 (continue) calls=1
+callout dir=0:progress callee=1 -> 1 (backtrack) calls=1
+callout dir=0:progress callee=2 -> -30 (error) calls=1
+callout dir=0:progress callee=-1 -> -1 (mismatch) calls=1
+callout dir=0:progress callee=-2 -> -2 (error) calls=1
+callout dir=0:progress callee=2147483647 -> -30 (error) calls=1
+callout dir=0:progress callee=-2147483648 -> -2147483648 (error) calls=1
+callout dir=1:retraction callee=0 -> 0 (continue) calls=1
+callout dir=1:retraction callee=1 -> 0 (continue) calls=1
+callout dir=1:retraction callee=2 -> -30 (error) calls=1
+callout dir=1:retraction callee=-1 -> -1 (mismatch) calls=1
+callout dir=1:retraction callee=-2 -> -2 (error) calls=1
+callout dir=1:retraction callee=2147483647 -> -30 (error) calls=1
+callout dir=1:retraction callee=-2147483648 -> -2147483648 (error) calls=1
+callout dir=2:each-match callee=0 -> 1 (backtrack) calls=1
+callout dir=2:each-match callee=1 -> 1 (backtrack) calls=1
+callout dir=2:each-match callee=2 -> 1 (backtrack) calls=1
+callout dir=2:each-match callee=-1 -> -1 (mismatch) calls=1
+callout dir=2:each-match callee=-2 -> -2 (error) calls=1
+callout dir=2:each-match callee=2147483647 -> 1 (backtrack) calls=1
+callout dir=2:each-match callee=-2147483648 -> -2147483648 (error) calls=1
+callout dir=3:invalid callee=0 -> -30 (error) calls=0
+callout dir=-1:invalid callee=0 -> -30 (error) calls=0
+slots dir=progress callee=0 slot0=41 -> 0 (continue) status=0,0,0,-30,-30,-30 slots=42,0,0,0,42
+slots dir=retraction callee=1 slot0=-9 -> 0 (continue) status=0,0,0,-30,-30,-30 slots=-8,0,0,0,-8
+slots dir=progress callee=2 slot0=0 -> -30 (error) status=0,0,0,-30,-30,-30 slots=1,0,0,0,1
+direct set=0 get=0 value=-9223372036854775808
+subject dir=progress callee=0 len=3 -> 0 (continue) read=97,98,99 probes=-30,-30,-30,-30 slots=97,98,99,0,0
+subject dir=each-match callee=5 len=2 -> 1 (backtrack) read=97,98,-30 probes=-30,-30,-30,-30 slots=97,98,0,0,0
+direct subject_byte 255,128,0,-30
+direct empty subject_byte -30
+fold table calls0=0 -> 0 calls=13 recorded=8 from=0x41,0x61,0xdf,0x390,0x101,0x103,0x105,0x107
+fold saturate calls0=2147483645 -> 0 calls=2147483647 recorded=8 from=0x41,0x61,0xdf,0x390,0x101,0x103,0x105,0x107
+fold stop calls0=0 -> -7 calls=1 recorded=1 from=0x41
+fold apply_all calls=2
+failures=0

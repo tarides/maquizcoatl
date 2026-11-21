@@ -1,0 +1,12 @@
+repo_commit: aab0536
+uptime:  17:52:34 up 208 days, 10:23,  8 users,  load average: 13.21, 12.86, 10.28
+disk_free_start: 57409M
+reference: caller output equals expected.txt
+refinedc: caller output equals expected.txt
+run.sh refinedc: status 0
+refinedc control: proof rejected, as required
+run.sh -n refinedc: status 0
+refinedc control: proof rejected, as required
+run.sh -r refinedc: status 0
+uptime end:  17:56:05 up 208 days, 10:26,  9 users,  load average: 15.62, 13.93, 11.21
+disk_free_end: 55265M

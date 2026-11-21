@@ -1,0 +1,271 @@
+teractive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_read_write_step.v", line 130, characters 49-58:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_read_write_step.v", line 135, characters 60-69:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_read_write_step.v", line 139, characters 61-70:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_read_write_step.v", line 220, characters 2-11:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000.v", line 53, characters 8-16:
+Warning: Use of "Notation" keyword for abbreviations is deprecated, use
+"Abbreviation" instead.
+[notation-for-abbreviation,deprecated-since-9.2,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 71, characters 8-16:
+Warning: Use of "Notation" keyword for abbreviations is deprecated, use
+"Abbreviation" instead.
+[notation-for-abbreviation,deprecated-since-9.2,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 74, characters 8-16:
+Warning: Use of "Notation" keyword for abbreviations is deprecated, use
+"Abbreviation" instead.
+[notation-for-abbreviation,deprecated-since-9.2,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 76, characters 8-16:
+Warning: Use of "Notation" keyword for abbreviations is deprecated, use
+"Abbreviation" instead.
+[notation-for-abbreviation,deprecated-since-9.2,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 97, characters 2-309:
+Warning:
+For backwards compatibility non left recursive notations declared at level 200
+are actually at level 10, with any right-recursion being at level 200.
+In the future level 200 will be treated as a normal level.
+To keep the current behaviour, use "at level 10",
+remove any "right associativity" annotation,
+and if right recursive add "x at level 200" where "x" is the last argument.
+[at-level-200-changed,deprecated-since-9.3,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 305, characters 50-59:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 307, characters 49-58:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 312, characters 50-59:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 316, characters 50-59:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 318, characters 49-58:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 323, characters 60-69:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.v", line 327, characters 61-70:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+ROCQ native-precompile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_stateless.vo
+ROCQ native-precompile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_read_write_step.vo
+ROCQ compile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_wp.v
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_wp.v", line 13, characters 15-33:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_wp.v", line 14, characters 15-32:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+ROCQ compile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 22, characters 15-43:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 23, characters 15-49:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 24, characters 15-29:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_wp.v", line 34, characters 8-16:
+Warning: Use of "Notation" keyword for abbreviations is deprecated, use
+"Abbreviation" instead.
+[notation-for-abbreviation,deprecated-since-9.2,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 95, characters 15-32:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+ROCQ native-precompile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000_wp.vo
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 132, characters 13-28:
+Warning: Notation rev_length is deprecated since 8.20.
+Use length_rev instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 132, characters 13-28:
+Warning: Notation rev_length is deprecated since 8.20.
+Use length_rev instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 132, characters 13-28:
+Warning: Notation rev_length is deprecated since 8.20.
+Use length_rev instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 152, characters 12-27:
+Warning: Notation map_length is deprecated since 8.20.
+Use length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 152, characters 12-27:
+Warning: Notation map_length is deprecated since 8.20.
+Use length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 152, characters 12-27:
+Warning: Notation map_length is deprecated since 8.20.
+Use length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 191, characters 10-25:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 191, characters 10-25:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 191, characters 10-25:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 233, characters 12-27:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 233, characters 12-27:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 233, characters 12-27:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 240, characters 9-27:
+Warning: Coq.Init.Byte.byte has been replaced by Corelib.Init.Byte.byte.
+[deprecated-dirpath-Coq,deprecated-since-9.0,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 240, characters 9-27:
+Warning: Coq.Init.Byte.byte has been replaced by Corelib.Init.Byte.byte.
+[deprecated-dirpath-Coq,deprecated-since-9.0,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 256, characters 0-8:
+Warning: Use of "Notation" keyword for abbreviations is deprecated, use
+"Abbreviation" instead.
+[notation-for-abbreviation,deprecated-since-9.2,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 261, characters 26-38:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 263, characters 38-45:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 266, characters 2-9:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 295, characters 34-46:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 309, characters 29-41:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 324, characters 28-40:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 333, characters 28-40:
+Warning: This interactive proof is not started by the "Proof" command.
+[missing-proof-command,fragile,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 348, characters 17-32:
+Warning: Notation map_length is deprecated since 8.20.
+Use length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 348, characters 17-32:
+Warning: Notation map_length is deprecated since 8.20.
+Use length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 348, characters 17-32:
+Warning: Notation map_length is deprecated since 8.20.
+Use length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 348, characters 17-32:
+Warning: Notation map_length is deprecated since 8.20.
+Use length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 348, characters 17-32:
+Warning: Notation map_length is deprecated since 8.20.
+Use length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 364, characters 18-33:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 364, characters 18-33:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 364, characters 18-33:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 364, characters 18-33:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 364, characters 18-33:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.v", line 364, characters 18-33:
+Warning: Notation app_length is deprecated since 8.20.
+Use length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+ROCQ native-precompile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/ByteListPredicates.vo
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000.v", line 172, characters 29-33:
+Warning: Cast types are ignored in patterns
+[cast-in-pattern,automation,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000.v", line 172, characters 54-58:
+Warning: Cast types are ignored in patterns
+[cast-in-pattern,automation,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000.v", line 203, characters 14-29:
+Warning: Notation List.map_length is deprecated since 8.20.
+Use List.length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000.v", line 203, characters 14-29:
+Warning: Notation List.map_length is deprecated since 8.20.
+Use List.length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000.v", line 203, characters 14-29:
+Warning: Notation List.map_length is deprecated since 8.20.
+Use List.length_map instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+ROCQ compile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_packet_trace.v
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_packet_trace.v", line 1, characters 15-32:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_packet_trace.v", line 2, characters 15-33:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_packet_trace.v", line 17, characters 8-16:
+Warning: Use of "Notation" keyword for abbreviations is deprecated, use
+"Abbreviation" instead.
+[notation-for-abbreviation,deprecated-since-9.2,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000.v", line 224, characters 29-33:
+Warning: Cast types are ignored in patterns
+[cast-in-pattern,automation,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000.v", line 224, characters 54-58:
+Warning: Cast types are ignored in patterns
+[cast-in-pattern,automation,default]
+ROCQ native-precompile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/e1000_packet_trace.vo
+ROCQ native-precompile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/old_dma/e1000.vo
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/HeapletwiseAutoSplitMerge.v", line 229, characters 16-31:
+Warning: Notation List.app_length is deprecated since 8.20.
+Use List.length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/HeapletwiseAutoSplitMerge.v", line 229, characters 16-31:
+Warning: Notation List.app_length is deprecated since 8.20.
+Use List.length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/HeapletwiseAutoSplitMerge.v", line 229, characters 16-31:
+Warning: Notation List.app_length is deprecated since 8.20.
+Use List.length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/HeapletwiseAutoSplitMerge.v", line 229, characters 16-31:
+Warning: Notation List.app_length is deprecated since 8.20.
+Use List.length_app instead.
+[deprecated-syntactic-definition-since-8.20,deprecated-since-8.20,deprecated-syntactic-definition,deprecated,default]
+File "<shared-cache>/bedrock2/src/bedrock2/src/bedrock2/HeapletwiseAutoSplitMerge.v", line 572, characters 0-192:
+Warning: Closed notations (i.e. starting and ending with a terminal symbol)
+should usually be at level 0 (default).
+[closed-notation-not-level-0,parsing,default]
+ROCQ native-precompile <shared-cache>/bedrock2/src/bedrock2/src/bedrock2/HeapletwiseAutoSplitMerge.vo
+make: Leaving directory '<shared-cache>/bedrock2/src/bedrock2'
+bedrock2: 0

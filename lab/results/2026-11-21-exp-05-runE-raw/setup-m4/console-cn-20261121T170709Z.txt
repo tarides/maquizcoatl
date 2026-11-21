@@ -1,0 +1,7 @@
+== base
+base: status=0 time=0s cache=48G free=69G
+== cn
+cn: status=40 time=347s cache=52G free=64G
+disk use: cache=32K exp=1.7G
+failed components: cn
+SETUP-END m4 status=1
