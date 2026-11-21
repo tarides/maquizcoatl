@@ -1,0 +1,74 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+f98d7a2ed11f826282fe9306f441e3ddeb94eb4c77c5288260d35408ab518aea  isabelle-llvm/ROOT
+4cb9e2f1a0aba9f9a62a13161041cb767fa47c79c8937dbbc06bbd1b591c04a1  isabelle-llvm/TRUSTED
+a309fac2e9a3ecc27894ede8f1cf0307a6955c7195e822a89b877566ab3fbbf6  isabelle-llvm/VU.thy
+a4e59d1fad51f21917d0267b15f095e364281adc266d4a74d54a8f99dbac079c  isabelle-llvm/abi.expected
+b3285d42c9c57245d795018ab775be7f07152eb03063068869b7c266f87c56f7  isabelle-llvm/build.sh
+344b71c32fa9b62f48e535fb1819a79fcb1c0f08e9fee1b411091e84497bba1d  isabelle-llvm/layout.c
+b2c1fb72b3d59f385544c81e069b39c1349da1f1f06da3d40fb3dd730b471fb7  isabelle-llvm/negative-control.txt
+4e213786a915675ce895b93ce79a4d7c62e9b4a97bf69e31cfe029658527c987  isabelle-llvm/shim.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+== build
+== versions (0 s)
+Isabelle2026
+isabelle_llvm commit: e42f478118988ff38676ff01215be26f3018f015
+afp: afp-2026-11-19
+clang version 23.1.5 (https://github.com/llvm/llvm-project 392dfff97d29b59d77e5cac6d4b6ef2585fe7117)
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 2) (0 s)
+491d490
+< (* READ-BEGIN *)
+493,497c492
+<   "in_subject i l \<equiv> doM {
+<     b \<leftarrow> ll_icmp_sle 0 i;
+<     llc_if b (ll_icmp_slt i l) (Mreturn 0)
+<   }"
+< (* READ-END *)
+---
+>   "in_subject i l \<equiv> ll_icmp_sle 0 i"
+proof escapes: none
+== 2. isabelle build (proofs and export_llvm) (0 s)
+Cleaned VU
+Running VU ...
+VU FAILED (see also "isabelle build_log -H Error VU")
+*** Failed to finish proof:
+*** goal (3 subgoals):
+***  1. ⋀asf sa.
+***        ⟦abase s; 0 ≤ sint i; abase args; abase s⟧
+***        ⟹ SOLVE_AUTO (s ~⇩a s ∧ (s +⇩a sint i) -⇩a s ∈ {0..<sint l})
+***  2. ⋀asf sa.
+***        ⟦abase s; 0 ≤ sint i; abase s; abase args⟧
+***        ⟹ SOLVE_AUTO (s +⇩a sint i ~⇩a s ∧ (s +⇩a sint i) -⇩a s ∈ {0..<sint l})
+***  3. ⟦abase s; 0 ≤ sint i; abase s; abase args⟧
+***     ⟹ if sint i < sint l
+***        then UCAST(8 → 32) (bs (sint i)) = UCAST(8 → 32) (bs (sint i))
+***        else UCAST(8 → 32) (bs (sint i)) =
+***             err_invalid_argument
+*** At command "done" (line 526 of "<exp>/build/runB/isabelle-llvm-control-read/src/VU.thy")
+Unfinished session(s): VU
+0:00:36 elapsed time, 0:00:38 cpu time, factor 1.04
+-- errors of session VU
+
+Build errors:
+*** Failed to finish proof:
+*** goal (3 subgoals):
+***  1. \<And>asf sa.
+***        \<lbrakk>abase s; 0 \<le> sint i; abase args; abase s\<rbrakk>
+***        \<Longrightarrow> SOLVE_AUTO (s ~\<^sub>a s \<and> (s +\<^sub>a sint i) -\<^sub>a s \<in> {0..<sint l})
+***  2. \<And>asf sa.
+***        \<lbrakk>abase s; 0 \<le> sint i; abase s; abase args\<rbrakk>
+***        \<Longrightarrow> SOLVE_AUTO (s +\<^sub>a sint i ~\<^sub>a s \<and> (s +\<^sub>a sint i) -\<^sub>a s \<in> {0..<sint l})
+***  3. \<lbrakk>abase s; 0 \<le> sint i; abase s; abase args\<rbrakk>
+***     \<Longrightarrow> if sint i < sint l
+***        then UCAST(8 \<rightarrow> 32) (bs (sint i)) = UCAST(8 \<rightarrow> 32) (bs (sint i))
+***        else UCAST(8 \<rightarrow> 32) (bs (sint i)) =
+***             err_invalid_argument
+*** At command "done" (line 526 of "<exp>/build/runB/isabelle-llvm-control-read/src/VU.thy")
+
+Return code: 1 (ERROR)
+proof rejected: 1 failed proof(s), no other error

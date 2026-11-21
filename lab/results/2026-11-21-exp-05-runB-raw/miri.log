@@ -1,0 +1,48 @@
+toolchain: nightly-2026-09-17
+cargo 1.100.0-nightly (495c385d0 2026-09-16)
+miri 0.1.0 (923c95cdf5 2026-09-16)
+sha256:
+f7f32829fab097357602ea441e189104308b40d1ddb6134fc0c24fb185aa612c  miri/client.rs
+67d5937c34dcf26292c6881a785d15d33682d2c64eaca1a02a8f71a3be4028af  miri/erase_verus.py
+62ae9c3623ae081197fa0d7e1d4d604ae4dca0b89d1086290dd1d4beed5fefcb  miri/miri.sh
+adfa088177fa2ffb9bf5e6ced898fa1b052bff63e9291aa428eb685d464dedce  verus/src/lib.rs
+f03bb2923b92568062ce22fe8be072753bdbc4929715cc245c26a2c816483e96  verus/src/shim.rs
+cc59cd403c3215c342d228167e5ebc819e3199e001a28b84029d3d8c6b338dcc  verus/src/ffi.rs
+55c8fc8ac726e0db4471f38a784fef31274af6bc13254be7c43834ab9ca54735  aeneas/src/lib.rs
+41863dbb9e61b7e1c1050de7d34faf4a45fd26a3e2a1c6da4b1dec54d8fb749b  aeneas/src/ffi.rs
+== aeneas, stacked borrows
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri aeneas stacked: status=0
+== aeneas, tree borrows
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri aeneas tree: status=0
+== verus, stacked borrows
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri verus stacked: status=0
+== verus, tree borrows
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri verus tree: status=0
