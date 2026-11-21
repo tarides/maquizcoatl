@@ -36,8 +36,9 @@
 #                    when less than this many GB would remain free after
 #                    the install, estimated by pins.json's disk_gb
 #
-# Logs go to VU_EXP/out/setup-m<MILESTONE>/<component>.log, disk use to
-# disk.txt there. Nothing printed names the host, a user or an absolute
+# Logs go to VU_EXP/out/setup-m<MILESTONE>/<component>.log, disk use
+# (through the links of a view) and free space to disk.txt there.
+# Nothing printed names the host, a user or an absolute
 # path. The last line printed is "SETUP-END m<N> status=<0|1>", also when
 # the arguments or the environment are refused.
 
@@ -93,9 +94,11 @@ step() {
   ( set -euo pipefail; step_header "$name"; "$fn" ) 2>&1 | vu_redact >"$logdir/$name.log"
   rc=${PIPESTATUS[0]}
   set -e
-  vu_log "$name: status=$rc time=$(($(date +%s) - start))s cache=$(vu_du "$VU_CACHE")"
-  printf '%s\t%s\t%s\n' "$name" "$(date -u +%FT%TZ)" "$(vu_du "$VU_CACHE")" \
-    >>"$logdir/disk.txt"
+  # The cache may be a view (a directory of links, see setup-pipeline.sh):
+  # vu_du_links measures through them (review of run C, problem 6).
+  vu_log "$name: status=$rc time=$(($(date +%s) - start))s cache=$(vu_du_links "$VU_CACHE") free=$(vu_free "$VU_CACHE")"
+  printf '%s\t%s\t%s\t%s\n' "$name" "$(date -u +%FT%TZ)" "$(vu_du_links "$VU_CACHE")" \
+    "$(vu_free "$VU_CACHE")" >>"$logdir/disk.txt"
   [ "$rc" = 0 ] || failed+=("$name")
 }
 
@@ -684,9 +687,15 @@ step_hax() {
   grep -q "^channel = \"$tc\"" "$src/rust-toolchain.toml" ||
     vu_die "the tag's rust-toolchain.toml is not $tc"
   comps=$(vu_pin '.hax.rust_components | join(",")')
+  # The disk check comes before anything is written: the Rust nightly
+  # (1.4 GB) is part of the estimate (review of run C, problem 1).
+  if [ ! -x "$dir/bin/hax-driver" ] ||
+    [ ! -d "$RUSTUP_HOME/toolchains/$tc-x86_64-unknown-linux-gnu" ] ||
+    ! opam switch list --short | grep -qx hax; then
+    need_disk hax "$(vu_pin '.hax.disk_gb.hax')"
+  fi
   vu_pinned rustup toolchain install "$tc" --profile minimal --component "$comps"
   if [ ! -x "$dir/bin/hax-driver" ]; then
-    need_disk hax "$(vu_pin '.hax.disk_gb.hax')"
     rm -rf "$dir/bin"
     for p in cli/driver cli/cargo-hax engine/names/extract rust-engine; do
       feat=()
@@ -734,10 +743,22 @@ step_hax_fstar() {
   echo "fstar for hax: $(vu_du "$dir")"
 }
 
-# smoke-hax: a one-function crate, extracted with each backend.
+# smoke-hax: a one-function crate, extracted with each backend. hax's
+# Lean backend is the Charon + Aeneas pipeline (hax's README at the tag:
+# "Lean (via Aeneas) ... Uses Charon + Aeneas"): on first use, `cargo
+# hax into lean` downloads its own Charon (nightly-2026.10.31, 43 MB)
+# and Aeneas build (build-2b9e3ea, 562 MB) into
+# XDG_CACHE_HOME/hax/tools (<shared-cache>/xdg under setup-pipeline.sh),
+# not into the cache's aeneas/. Both are in pins.json (.hax.lean_tools)
+# and in the disk estimate of this step.
 smoke_hax() {
-  local d
+  local d xdg
   export OPAMROOT=$VU_OWN_OPAMROOT OPAMYES=1 OPAMCOLOR=never
+  xdg=${XDG_CACHE_HOME:-$HOME/.cache}/hax/tools
+  if [ ! -d "$xdg/charon/$(vu_pin .hax.lean_tools.charon)" ] ||
+    [ ! -d "$xdg/aeneas/$(vu_pin .hax.lean_tools.aeneas)" ]; then
+    need_disk smoke-hax "$(vu_pin '.hax.disk_gb["smoke-hax"]')"
+  fi
   d=$VU_EXP/build/smoke-hax
   rm -rf "$d"
   mkdir -p "$d/src"
@@ -758,11 +779,16 @@ EOF2
     for b in fstar coq lean; do
     vu_pinned cargo "+$(vu_pin .hax.rust)" hax into "$b" || exit 1
   done && find proofs -type f | sort)
+  echo "hax Lean tools: charon $(ls "$xdg/charon" | tr '\n' ' ')($(vu_du "$xdg/charon"))" \
+    "aeneas $(ls "$xdg/aeneas" | tr '\n' ' ')($(vu_du "$xdg/aeneas"))"
   echo "hax smoke: ok"
 }
 
-# Lean backend, Creusot, RefinedRust: only the disk check is written;
-# each install is refused under the floor (run C, 2026-11-21).
+# Lean backend, Creusot, RefinedRust: only the disk check is written,
+# followed by vu_die "install not written". In run C (2026-11-21) none
+# of the three steps ran: setup-pipeline.sh refused them on its own
+# disk check first. Writing the three installs (and pinning
+# RefinedRust's commit in pins.json) is work for the next run.
 step_hax_lean() { need_disk hax-lean "$(vu_pin '.hax.disk_gb["hax-lean"]')"; vu_die "hax-lean install not written"; }
 step_creusot() { need_disk creusot "$(vu_pin .creusot.disk_gb)"; vu_die "creusot install not written"; }
 step_refinedrust() { need_disk refinedrust "$(vu_pin .refinedrust.disk_gb)"; vu_die "refinedrust install not written"; }

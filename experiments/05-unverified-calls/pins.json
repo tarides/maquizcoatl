@@ -132,19 +132,26 @@
     "fstar_url": "https://github.com/FStarLang/FStar/releases/download/v2025.10.06/fstar-v2025.10.06-Linux-x86_64.tar.gz",
     "fstar_sha256": "940c187d7a6dc3e95d17fd5159b5eaec17d62981c7f135a7e6c531ce3b59442d",
     "lean": "leanprover/lean4:v4.35.0",
-    "lean_note": "hax-lib/proof-libs/lean at the tag requires Aeneas's Lean library at 2b9e3ea4 (pereq-dev/aeneas) and Mathlib v4.35.0",
+    "lean_note": "hax-lib/proof-libs/lean at the tag requires Aeneas's Lean library at 2b9e3ea4 (pereq-dev/aeneas) and Mathlib v4.35.0; the Lean backend (cargo hax into lean) is the Charon + Aeneas pipeline, not the hax engine (README at the tag: \"Lean (via Aeneas) ... Uses Charon + Aeneas\"; smoke-hax.log of run C shows `Running charon` and `Running aeneas`), so its verdict would be Aeneas's model with hax-lib's specifications in front",
+    "lean_tools": {
+      "charon": "nightly-2026.10.31",
+      "aeneas": "build-2b9e3ea",
+      "dir": "XDG_CACHE_HOME/hax/tools (<shared-cache>/xdg under setup-pipeline.sh)",
+      "note": "downloaded by cargo-hax itself on the first `cargo hax into lean` (smoke-hax step), checked by cargo-hax, not by setup.sh: charon 43 MB, aeneas 562 MB (604 MB together, measured on the bench host after run C)"
+    },
     "backends": [
       "fstar",
       "rocq",
       "lean"
     ],
     "disk_gb": {
-      "hax": 3,
+      "hax": 4,
+      "smoke-hax": 1,
       "hax-fstar": 1,
       "hax-lean": 10
     },
     "source": "full toolchain built from the tag as its setup.sh does: cargo install --locked of cli/driver, cli/cargo-hax (feature legacy-engine), engine/names/extract and rust-engine, and opam install ./engine in a switch hax on OCaml 5.4.1; the release binary (sha256 above) is a standalone cargo-hax that runs only the Lean backend",
-    "disk_note": "hax: the opam switch hax (OCaml 5.4.1 with Jane Street core and ppx; about 2 GB) and the installed binaries; the cargo build directory (2-3 GB, transient) is removed after the install. Rust nightly-2025-11-08 with rustc-dev: 1.4 GB measured",
+    "disk_note": "hax: the opam switch hax (OCaml 5.4.1 with Jane Street core and ppx; 2.2 GB measured), the installed binaries (83 MB) and Rust nightly-2025-11-08 with rustc-dev (1.4 GB measured), 3.7 GB rounded up to 4; the cargo build directory (2-3 GB, transient) is removed after the install and is not counted. smoke-hax: the Charon and Aeneas downloads of the Lean backend (604 MB). Run C's estimate was 3 GB for hax and nothing for smoke-hax, against about 4.3 GB measured (review of run C, problem 1)",
     "rocq_record_update": {
       "repository": "https://github.com/tchajed/coq-record-update",
       "tag": "v0.3.7",
@@ -166,7 +173,8 @@
     "commit": "",
     "ocaml": "4.14.2",
     "disk_gb": 6,
-    "disk_note": "an opam switch on OCaml 4.14.2 with Rocq, Iris, std++ and the RefinedRust theories (about 4 GB, VST's switch is 1.2 GB before its proofs), and the Rust nightly with rustc-dev its frontend pins (about 1.6 GB)"
+    "disk_note": "an opam switch on OCaml 4.14.2 with Rocq, Iris, std++ and the RefinedRust theories (about 4 GB, VST's switch is 1.2 GB before its proofs), and the Rust nightly with rustc-dev its frontend pins (about 1.6 GB)",
+    "commit_note": "not pinned yet: the RefinedRust install is not written (setup.sh step_refinedrust is a disk check followed by vu_die); pinning the commit is work for the next run, with the install"
   },
   "bedrock2": {
     "milestone": 4,

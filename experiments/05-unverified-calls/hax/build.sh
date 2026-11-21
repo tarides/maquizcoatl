@@ -131,9 +131,14 @@ if [ "$backend" = fstar ]; then
   cache=$VU_EXP/build/hax-fstar-cache/$("$fstar" --version | sed -n 's/^F\* version: *//p' | head -n 1 | tr -c 'A-Za-z0-9.\n' _)
   mkdir -p "$cache"
   # hax's flags (examples/hax.fst.config.json), except --cmi when this F*
-  # does not know it (F* 2026.11.15 refuses it as unrecognized).
+  # does not know it (F* 2026.11.15's --help does not list it). The log
+  # says which, and prints the command line below.
   flags=()
-  "$fstar" --help 2>/dev/null | grep -q -- '--cmi' && flags+=(--cmi)
+  if "$fstar" --help 2>/dev/null | grep -q -- '--cmi'; then
+    flags+=(--cmi)
+  else
+    echo "flag --cmi dropped: not listed by this F*'s --help"
+  fi
   flags+=(--warn_error -331 --cache_checked_modules --cache_dir "$cache"
     --already_cached "+Prims+FStar+LowStar+C+Spec.Loops+TestLib")
   for d in "${incs[@]}"; do flags+=(--include "$d"); done
@@ -141,6 +146,7 @@ if [ "$backend" = fstar ]; then
   set +e
   for m in $(cd "$ext" && ls ./*.fst ./*.fsti 2>/dev/null | sed 's#^\./##'); do
     echo "-- $m"
+    echo "fstar.exe ${flags[*]} $ext/$m" | vu_redact
     rm -f "$cache/$m.checked"
     "$fstar" "${flags[@]}" "$ext/$m"
     rc=$?

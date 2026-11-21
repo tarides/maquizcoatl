@@ -233,3 +233,14 @@ vu_uint() {
 vu_du() {
   if [ -e "$1" ]; then du -sh "$1" 2>/dev/null | cut -f1; else echo 0; fi
 }
+
+# vu_du_links DIR: disk use of DIR following symbolic links (for a view
+# made of links to the real directories), human-readable.
+vu_du_links() {
+  if [ -e "$1" ]; then du -sLh "$1" 2>/dev/null | cut -f1; else echo 0; fi
+}
+
+# vu_free DIR: free space on the file system of DIR, in GB.
+vu_free() {
+  df -BG --output=avail "$1/" | tail -n 1 | tr -dc 0-9G
+}
