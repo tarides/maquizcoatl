@@ -1,0 +1,515 @@
+== harness sources (sha256)
+b713a624295b2fa776fa5458f1ffa4145a91c3eaff724022486ad25faacf44d6  caller/caller.c
+47d090a0603942ed4d292b0c520050e6b542024ee704cbbc20535f5474483d58  caller/expected.txt
+76d2d982ec26547b0e20ef5f31a7f8ea8e8acdddccf17b582e5a81cd3f8723e6  caller/reference.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+9871592930f511a8eed9133164c8ee5cc3370c95b9a60c9b3c663d4c24937ffd  proto.h
+da3e757566851dae737ee3f304da8a3f97b07056a2f0397be19140be01d44a70  run.sh
+d8709a295c8e30499fd29f98979264ddef12bf04b9d2e3bd981cc2b8b2d156dc  why3/TRUSTED
+7e60e7fb151f8c7cadf778c70a15a2ff1944589d466f99e3e031f9a7f9d0d005  why3/build.sh
+0db65362c5ab3971fca7be5ebd53e2ab4e2f2307f4d6d14910cb220923590ee3  why3/negative-control.txt
+d02dd9f3a3190f2927340e4d87537820bf81ae36f1f13821abc790e01de4e9d6  why3/vu.drv
+42fa7b32ec3ee1038508f27fa1b943e65cdb71d9e922086475ee2c59a19721a5  why3/vu.mlw
+== build
+== versions
+Why3 platform, version 1.9.0
+alt-ergo: v2.6.4-1-g997f541
+Z3 version 4.15.3 - 64 bit
+Alt-Ergo 
+Alt-Ergo  (BV)
+Alt-Ergo  (FPA)
+Alt-Ergo  (counterexamples)
+Isabelle 2026
+Z3 4.15.3
+Z3 4.15.3 (counterexamples)
+Z3 4.15.3 (noBV)
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== sources (negative control: 0)
+42fa7b32ec3ee1038508f27fa1b943e65cdb71d9e922086475ee2c59a19721a5  vu.mlw
+d02dd9f3a3190f2927340e4d87537820bf81ae36f1f13821abc790e01de4e9d6  vu.drv
+proof escapes in module Vu: none
+== proofs
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 165, characters 20-21: unused variable f
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 165, characters 36-37: unused variable p
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 172, characters 20-21: unused variable f
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 172, characters 46-48: unused variable ud
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 184, characters 17-18: unused variable p
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 191, character 14 to line 192, character 47: unused variable result
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 312, characters 14-36: unused variable result
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 217, characters 14-48:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Valid (0.01s, 29 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 218, characters 14-72:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Valid (0.01s, 20 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 219, characters 14-57:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Valid (0.02s, 20 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 220, characters 14-65:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Valid (0.02s, 115 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 253, character 16 to line 254, character 52:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.02s, 213 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 256, character 16 to line 257, character 70:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 62 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 258, character 14 to line 259, character 31:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.02s, 39 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 253, character 16 to line 254, character 52:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.02s, 205 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 256, character 16 to line 257, character 70:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.02s, 56 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 258, character 14 to line 259, character 31:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.02s, 41 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 253, character 16 to line 254, character 52:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.02s, 116 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 256, character 16 to line 257, character 70:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 53 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 258, character 14 to line 259, character 31:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 45 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 253, character 16 to line 254, character 52:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 36 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 256, character 16 to line 257, character 70:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 28 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 258, character 14 to line 259, character 31:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.02s, 28 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 294, characters 41-48:
+Sub-goal Integer overflow of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 21 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 297, characters 6-25:
+Sub-goal Precondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 24 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 298, characters 23-30:
+Sub-goal Integer overflow of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 39 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 281, characters 14-24:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 42 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 282, character 14 to line 283, character 70:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 47 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 284, character 14 to line 289, character 44:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 95 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 291, character 14 to line 292, character 56:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.03s, 310 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 281, characters 14-24:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 22 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 282, character 14 to line 283, character 70:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 25 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 284, character 14 to line 289, character 44:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 76 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 291, character 14 to line 292, character 56:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 108 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 297, characters 6-25:
+Sub-goal Precondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 18 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 298, characters 23-30:
+Sub-goal Integer overflow of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 31 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 281, characters 14-24:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 37 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 282, character 14 to line 283, character 70:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 42 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 284, character 14 to line 289, character 44:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 65 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 291, character 14 to line 292, character 56:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.03s, 235 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 281, characters 14-24:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 17 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 282, character 14 to line 283, character 70:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 18 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 284, character 14 to line 289, character 44:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 36 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 291, character 14 to line 292, character 56:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.02s, 34 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 304, characters 18-37:
+Goal evolves_refl.
+Prover result is: Valid (0.02s, 13 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 309, characters 6-31:
+Goal evolves_trans.
+Prover result is: Valid (0.02s, 58 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 312, characters 14-36:
+Sub-goal Postcondition of goal vu_fold_all'vc.
+Prover result is: Valid (0.02s, 22 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 313, characters 41-58:
+Sub-goal Postcondition of goal vu_fold_all'vc.
+Prover result is: Valid (0.02s, 27 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 314, characters 14-42:
+Sub-goal Postcondition of goal vu_fold_all'vc.
+Prover result is: Valid (0.02s, 25 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 315, characters 51-92:
+Sub-goal Postcondition of goal vu_fold_all'vc.
+Prover result is: Valid (0.02s, 86 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 324, character 35 to line 325, character 77:
+Sub-goal Postcondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.01s, 17 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 327, characters 16-70:
+Sub-goal Postcondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.01s, 14 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 330, characters 12-30:
+Sub-goal Precondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.02s, 20 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 330, characters 6-30:
+Sub-goal Precondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.01s, 20 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 330, characters 6-30:
+Sub-goal Precondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.02s, 20 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 324, character 35 to line 325, character 77:
+Sub-goal Postcondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.01s, 41 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 327, characters 16-70:
+Sub-goal Postcondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.02s, 40 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 335, character 35 to line 336, character 51:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.02s, 15 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 338, characters 16-70:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.02s, 12 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 339, character 14 to line 340, character 31:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.01s, 12 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 343, characters 6-24:
+Sub-goal Precondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.01s, 14 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 335, character 35 to line 336, character 51:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.01s, 24 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 338, characters 16-70:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.02s, 22 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 339, character 14 to line 340, character 31:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.02s, 23 steps).
+
+prover=alt-ergo exit=0 goals=57 valid=57 rejected=0 seconds=2
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 165, characters 20-21: unused variable f
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 165, characters 36-37: unused variable p
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 172, characters 20-21: unused variable f
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 172, characters 46-48: unused variable ud
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 184, characters 17-18: unused variable p
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 191, character 14 to line 192, character 47: unused variable result
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 312, characters 14-36: unused variable result
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 217, characters 14-48:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Valid (0.01s, 19420 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 218, characters 14-72:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Valid (0.01s, 1519 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 219, characters 14-57:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Valid (0.01s, 1532 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 220, characters 14-65:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Valid (0.01s, 20547 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 253, character 16 to line 254, character 52:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 23560 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 256, character 16 to line 257, character 70:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 27259 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 258, character 14 to line 259, character 31:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.00s, 3085 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 253, character 16 to line 254, character 52:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 23726 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 256, character 16 to line 257, character 70:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 27491 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 258, character 14 to line 259, character 31:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.00s, 3134 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 253, character 16 to line 254, character 52:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 23030 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 256, character 16 to line 257, character 70:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 26898 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 258, character 14 to line 259, character 31:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.00s, 3066 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 253, character 16 to line 254, character 52:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 20638 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 256, character 16 to line 257, character 70:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.01s, 1679 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 258, character 14 to line 259, character 31:
+Sub-goal Postcondition of goal vu_callout_step'vc.
+Prover result is: Valid (0.00s, 1673 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 294, characters 41-48:
+Sub-goal Integer overflow of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 17308 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 297, characters 6-25:
+Sub-goal Precondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 2532 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 298, characters 23-30:
+Sub-goal Integer overflow of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 22911 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 281, characters 14-24:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.00s, 1868 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 282, character 14 to line 283, character 70:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.00s, 12013 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 284, character 14 to line 289, character 44:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 25587 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 291, character 14 to line 292, character 56:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 28488 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 281, characters 14-24:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.00s, 1798 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 282, character 14 to line 283, character 70:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.00s, 2670 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 284, character 14 to line 289, character 44:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 24302 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 291, character 14 to line 292, character 56:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 26644 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 297, characters 6-25:
+Sub-goal Precondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.00s, 2137 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 298, characters 23-30:
+Sub-goal Integer overflow of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 21463 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 281, characters 14-24:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.00s, 1831 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 282, character 14 to line 283, character 70:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 11677 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 284, character 14 to line 289, character 44:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 24703 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 291, character 14 to line 292, character 56:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 27564 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 281, characters 14-24:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 1531 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 282, character 14 to line 283, character 70:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 1554 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 284, character 14 to line 289, character 44:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 22385 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 291, character 14 to line 292, character 56:
+Sub-goal Postcondition of goal vu_i_apply'vc.
+Prover result is: Valid (0.01s, 24639 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 304, characters 18-37:
+Goal evolves_refl.
+Prover result is: Valid (0.01s, 22091 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 309, characters 6-31:
+Goal evolves_trans.
+Prover result is: Valid (0.01s, 23315 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 312, characters 14-36:
+Sub-goal Postcondition of goal vu_fold_all'vc.
+Prover result is: Valid (0.01s, 23561 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 313, characters 41-58:
+Sub-goal Postcondition of goal vu_fold_all'vc.
+Prover result is: Valid (0.01s, 23765 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 314, characters 14-42:
+Sub-goal Postcondition of goal vu_fold_all'vc.
+Prover result is: Valid (0.01s, 23911 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 315, characters 51-92:
+Sub-goal Postcondition of goal vu_fold_all'vc.
+Prover result is: Valid (0.01s, 24700 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 324, character 35 to line 325, character 77:
+Sub-goal Postcondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.00s, 3352 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 327, characters 16-70:
+Sub-goal Postcondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.00s, 2358 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 330, characters 12-30:
+Sub-goal Precondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.00s, 3730 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 330, characters 6-30:
+Sub-goal Precondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.00s, 4662 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 330, characters 6-30:
+Sub-goal Precondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.00s, 3779 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 324, character 35 to line 325, character 77:
+Sub-goal Postcondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.01s, 2566 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 327, characters 16-70:
+Sub-goal Postcondition of goal vu_get_slot'vc.
+Prover result is: Valid (0.01s, 4905 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 335, character 35 to line 336, character 51:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.00s, 2875 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 338, characters 16-70:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.01s, 2019 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 339, character 14 to line 340, character 31:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.00s, 2011 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 343, characters 6-24:
+Sub-goal Precondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.00s, 3259 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 335, character 35 to line 336, character 51:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.00s, 2060 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 338, characters 16-70:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.00s, 3926 steps).
+
+File "<exp>/build/runA-m1/why3/src/vu.mlw", line 339, character 14 to line 340, character 31:
+Sub-goal Postcondition of goal vu_set_slot'vc.
+Prover result is: Valid (0.01s, 3102 steps).
+
+prover=z3 exit=0 goals=57 valid=57 rejected=0 seconds=3
+proof status: all goals valid for alt-ergo and z3
+== extraction
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 165, characters 20-21: unused variable f
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 165, characters 36-37: unused variable p
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 172, characters 20-21: unused variable f
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 172, characters 46-48: unused variable ud
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 184, characters 17-18: unused variable p
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 191, character 14 to line 192, character 47: unused variable result
+Warning, file "<exp>/build/runA-m1/why3/src/vu.mlw", line 312, characters 14-36: unused variable result
+vu.c: 101 lines, sha256 a5cc377a43227d542f2ea862c432dcc13727d490ddee70704509f5152932eb38
+== compilation
+libvu.a: ok
