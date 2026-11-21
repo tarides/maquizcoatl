@@ -12,7 +12,9 @@
 # syntax by extension:
 #   c    .c .h                 "//" to end of line, "/* */" (not nested);
 #                              a "/*@ ... @*/" block is a CN
-#                              specification and counts as code (run E)
+#                              specification and "//@" a line of
+#                              RefinedC's Rocq prelude: both count as
+#                              code (run E)
 #   rust .rs                   "//" to end of line, "/* */" (nested)
 #   fstar .fst .fsti           "//" to end of line, "(* *)" (nested):
 #                              F*, Pulse
@@ -63,6 +65,7 @@ count() {
           if (two == close_) { depth--; i += 2; continue }
           i++; continue
         }
+        if (lang == "c" && substr(line, i, 3) == "//@") { out = out substr(line, i); break }
         if (lc != "" && two == lc) break
         if (lang == "c" && substr(line, i, 3) == "/*@") { out = out "/*@"; i += 3; continue }
         if (open_ != "" && two == open_) { depth = 1; i += 2; continue }
