@@ -1,0 +1,6 @@
+lean-lake-exe.2.log:agree=7450000
+lean-lake-exe.2.log:cases=149 reps=50000 agree=7450000 search_s=8.447015 search_cps=881968.408347
+lean-lake-exe.3.log:agree=7450000
+lean-lake-exe.3.log:cases=149 reps=50000 agree=7450000 search_s=8.447369 search_cps=881931.405297
+lean-lake-exe.1.log:agree=7450000
+lean-lake-exe.1.log:cases=149 reps=50000 agree=7450000 search_s=8.420991 search_cps=884693.997442

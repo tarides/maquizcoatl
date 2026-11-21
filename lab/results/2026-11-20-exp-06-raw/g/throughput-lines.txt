@@ -1,0 +1,6 @@
+c-oracle.2.log:test_utf8:1791cases=152 reps=400000 parse_s=71.097 search_s=10.566 e2e_s=89.273 parse_cps=855169 search_cps=5754503 e2e_cps=681057 sink=9600000
+g-ocamlopt.2.log:cases=152 reps=400000 parse_s=23.690 search_s=11.089 e2e_s=71.264 parse_cps=2566443 search_cps=5482772 e2e_cps=853167 sink=10000000
+g-ocamlopt.3.log:cases=152 reps=400000 parse_s=23.817 search_s=11.119 e2e_s=70.981 parse_cps=2552768 search_cps=5468325 e2e_cps=856570 sink=10000000
+c-oracle.1.log:test_utf8:1791cases=152 reps=400000 parse_s=70.397 search_s=10.503 e2e_s=88.384 parse_cps=863670 search_cps=5788778 e2e_cps=687910 sink=9600000
+c-oracle.3.log:test_utf8:1791cases=152 reps=400000 parse_s=70.836 search_s=10.474 e2e_s=88.871 parse_cps=858317 search_cps=5804813 e2e_cps=684137 sink=9600000
+g-ocamlopt.1.log:cases=152 reps=400000 parse_s=23.400 search_s=10.963 e2e_s=72.263 parse_cps=2598248 search_cps=5546085 e2e_cps=841376 sink=10000000

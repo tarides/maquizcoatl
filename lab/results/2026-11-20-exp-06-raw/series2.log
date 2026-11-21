@@ -1,0 +1,41 @@
+2026-11-20T15:29:38Z
+series: thr run 1
+1.20 1.19 1.27
+busy timing CPUs: none
+2026-11-20T15:30:02Z
+series: thr run 2
+1.13 1.18 1.26
+busy timing CPUs: <user> 62 400 ps
+2026-11-20T15:31:02Z
+series: thr run 2
+0.41 0.96 1.18
+busy timing CPUs: none
+2026-11-20T15:31:27Z
+series: thr run 3
+0.61 0.96 1.18
+busy timing CPUs: none
+2026-11-20T15:31:51Z
+series: inp run 1
+0.88 1.00 1.18
+busy timing CPUs: none
+2026-11-20T15:32:12Z
+series: inp run 2
+1.92 1.23 1.25
+busy timing CPUs: none
+2026-11-20T15:32:34Z
+series: inp run 3
+2.30 1.37 1.30
+busy timing CPUs: none
+2026-11-20T15:32:56Z
+series: tspec run 1
+2.48 1.49 1.34
+busy timing CPUs: none
+2026-11-20T15:33:48Z
+series: tspec run 2
+2.23 1.59 1.38
+busy timing CPUs: none
+2026-11-20T15:34:41Z
+series: tspec run 3
+2.74 1.87 1.49
+busy timing CPUs: none
+done 2026-11-20T15:35:33Z

@@ -1,0 +1,230 @@
+(* Experiment #6, Why3: executable semantics of experiment #9's subset
+   of Oniguruma f95747b (concatenation, alternation, greedy star,
+   capture groups, character classes; UTF-8; forward search),
+   transcribed from stack G (lab/06-spec-speed/g/g.ml) as the same
+   small-step machine as rocq/Spec.v: stack G's pending items plus an
+   explicit list of backtracking points, one machine step per call of
+   stack G's [step], fuel as an int variant.  No ghost code or proofs
+   in the executable definitions.
+
+   Every sequence type is monomorphic (bytes, ranges, items, frames,
+   caps) and no [option] or tuple carries a list: Why3 1.9.0's
+   interpreter ([why3 execute]) fails with "Type mismatch between ...
+   and int" on any value of a polymorphic constructor ([Cons], [Some])
+   that contains a list (experiment #7 hit the same bug on nested list
+   constants).  The machine is otherwise the one of the other provers. *)
+
+module Spec
+
+  use int.Int
+  use int.EuclideanDivision
+  use bool.Bool
+
+  type bytes = BNil | BCons int bytes
+
+  type ranges = RNil | RCons int int ranges          (* lo, hi *)
+
+  type node =
+    | Eps
+    | Lit bytes                       (* bytes of one code point *)
+    | Cls bool ranges                 (* negated, sorted ranges *)
+    | Cat node node
+    | Alt node node
+    | Star node                       (* greedy *)
+    | Group int node
+
+  type item =
+    | INode node
+    | IClose int int                  (* group, start position *)
+    | ILoop node int                  (* star body, iteration start *)
+
+  type items = INil | ICons item items
+
+  type caps = CNil | CCons int int int caps         (* group, start, end *)
+
+  (* backtracking points: items, position, rest of the subject, captures *)
+  type frames = FNil | FCons items int bytes caps frames
+
+  type state =
+    | Run items int bytes caps frames
+    | Matched int caps
+    | Failed
+
+  (* UTF-8, as upstream/src/utf8.c (EncLen_UTF8, USE_RFC3629_RANGE) *)
+  let enc_len (b : int) : int =
+    if b < 194 then 1 else if b < 224 then 2 else if b < 240 then 3
+    else if b < 245 then 4 else 1
+
+  (* drop n bytes; [None] (here [Short]) past the end *)
+  type dropped = Short | Rest bytes
+
+  let rec drop (n : int) (l : bytes) : dropped
+    requires { n >= 0 } variant { n }
+  = if n = 0 then Rest l
+    else match l with
+      | BNil -> Short
+      | BCons _ t -> drop (n - 1) t
+      end
+
+  let lead_mod (l : int) : int =
+    if l = 2 then 32 else if l = 3 then 16 else 8
+
+  (* code point from the n trailing bytes of l *)
+  let rec fold_code (v : int) (n : int) (l : bytes) : int
+    requires { n >= 0 } variant { n }
+  = if n = 0 then v
+    else match l with
+      | BNil -> v
+      | BCons d t -> fold_code (v * 64 + mod d 64) (n - 1) t
+      end
+
+  (* code point, encoded length, rest; NoChar past the end (DATA_ENSURE) *)
+  type decoded = NoChar | Char int int bytes
+
+  let decode (rest : bytes) : decoded =
+    match rest with
+    | BNil -> NoChar
+    | BCons b t ->
+      let l = enc_len b in
+      if l = 1 then Char b 1 t
+      else match drop (l - 1) t with
+        | Rest r -> Char (fold_code (mod b (lead_mod l)) (l - 1) t) l r
+        | Short -> NoChar
+        end
+    end
+
+  let rec prefix (l rest : bytes) : dropped variant { l } =
+    match l, rest with
+    | BNil, _ -> Rest rest
+    | BCons x l', BCons y r -> if x = y then prefix l' r else Short
+    | _, BNil -> Short
+    end
+
+  let rec length (l : bytes) : int variant { l } =
+    match l with BNil -> 0 | BCons _ t -> 1 + length t end
+
+  let rec in_ranges (c : int) (rs : ranges) : bool variant { rs } =
+    match rs with
+    | RNil -> false
+    | RCons lo hi t -> (lo <= c && c <= hi) || in_ranges c t
+    end
+
+  let rec set_cap (k s e : int) (cs : caps) : caps variant { cs } =
+    match cs with
+    | CNil -> CCons k s e CNil
+    | CCons k' s' e' t -> if k' = k then CCons k s e t else CCons k' s' e' (set_cap k s e t)
+    end
+
+  let backtrack (bt : frames) : state =
+    match bt with
+    | FNil -> Failed
+    | FCons its pos rest cs bt' -> Run its pos rest cs bt'
+    end
+
+  let step (st : state) : state =
+    match st with
+    | Run its pos rest cs bt ->
+      match its with
+      | INil -> Matched pos cs
+      | ICons (INode Eps) k -> Run k pos rest cs bt
+      | ICons (INode (Lit l)) k ->
+        match prefix l rest with
+        | Rest r -> Run k (pos + length l) r cs bt
+        | Short -> backtrack bt
+        end
+      | ICons (INode (Cls ng rs)) k ->
+        match decode rest with
+        | Char c l r ->
+          if xorb (in_ranges c rs) ng then Run k (pos + l) r cs bt else backtrack bt
+        | NoChar -> backtrack bt
+        end
+      | ICons (INode (Cat a b)) k -> Run (ICons (INode a) (ICons (INode b) k)) pos rest cs bt
+      | ICons (INode (Alt a b)) k ->
+        Run (ICons (INode a) k) pos rest cs (FCons (ICons (INode b) k) pos rest cs bt)
+      | ICons (INode (Star a)) k ->
+        Run (ICons (INode a) (ICons (ILoop a pos) k)) pos rest cs (FCons k pos rest cs bt)
+      | ICons (ILoop a p0) k ->
+        if pos = p0 then Run k pos rest cs bt
+        else Run (ICons (INode (Star a)) k) pos rest cs bt
+      | ICons (INode (Group i a)) k -> Run (ICons (INode a) (ICons (IClose i pos) k)) pos rest cs bt
+      | ICons (IClose i p0) k -> Run k pos rest (set_cap i p0 pos cs) bt
+      end
+    | _ -> st
+    end
+
+  (* at most [fuel] steps *)
+  let rec run (fuel : int) (st : state) : state
+    requires { fuel >= 0 } variant { fuel }
+  = if fuel = 0 then st
+    else match st with
+      | Run _ _ _ _ _ -> run (fuel - 1) (step st)
+      | _ -> st
+      end
+
+  type result =
+    | RMatch int int caps
+    | RMismatch
+    | RLimit
+
+  (* forward search: start positions 0..length, advanced by enc_len *)
+  let rec search_from (n fuel : int) (re : node) (pos : int) (rest : bytes) : result
+    requires { n >= 0 && fuel >= 0 } variant { n }
+  = if n = 0 then RMismatch
+    else match run fuel (Run (ICons (INode re) INil) pos rest CNil FNil) with
+      | Matched e cs -> RMatch pos e cs
+      | Run _ _ _ _ _ -> RLimit
+      | Failed ->
+        match rest with
+        | BNil -> RMismatch
+        | BCons b _ ->
+          let l = enc_len b in
+          match drop l rest with
+          | Rest r -> search_from (n - 1) fuel re (pos + l) r
+          | Short -> RMismatch
+          end
+        end
+      end
+
+  let search (fuel : int) (re : node) (s : bytes) : result
+    requires { fuel >= 0 }
+  = search_from (length s + 1) fuel re 0 s
+
+  (* group k of the captures, encoded: [1; s; e] or [0] when unset *)
+  let rec lookup_enc (k : int) (cs : caps) (acc : bytes) : bytes variant { cs } =
+    match cs with
+    | CNil -> BCons 0 acc
+    | CCons k' s e t -> if k = k' then BCons 1 (BCons s (BCons e acc)) else lookup_enc k t acc
+    end
+
+  let rec groups (k : int) (cs : caps) (acc : bytes) : bytes variant { k } =
+    if k < 1 then acc else groups (k - 1) cs (lookup_enc k cs acc)
+
+  (* verdict as numbers: [0] no match, [2] limit, 1 :: s :: e :: groups *)
+  let encode (ncap : int) (r : result) : bytes =
+    match r with
+    | RMismatch -> BCons 0 BNil
+    | RLimit -> BCons 2 BNil
+    | RMatch s e cs -> BCons 1 (BCons s (BCons e (groups ncap cs BNil)))
+    end
+
+  let constant fuel0 : int = 10000000
+
+  let run_case (fuel ncap : int) (re : node) (s : bytes) : bytes
+    requires { fuel >= 0 }
+  = encode ncap (search fuel re s)
+
+  let rec eq_list (a b : bytes) : bool variant { a } =
+    match a, b with
+    | BNil, BNil -> true
+    | BCons x a', BCons y b' -> x = y && eq_list a' b'
+    | _, _ -> false
+    end
+
+  (* a case: number of groups, pattern, subject bytes, expected verdict *)
+  type case = Case int node bytes bytes
+
+  let agree (fuel : int) (c : case) : bool
+    requires { fuel >= 0 }
+  = let Case ncap re s exp = c in eq_list (run_case fuel ncap re s) exp
+
+end
