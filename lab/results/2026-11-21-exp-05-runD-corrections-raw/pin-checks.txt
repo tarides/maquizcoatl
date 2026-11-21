@@ -1,0 +1,14 @@
+# retrieved 2026-11-21T12:06:34Z from the local worktree (no bench host step)
+## gh api repos/rems-project/cn/contents/cn.opam?ref=f2e8eeb47103a2c9fdf2b73a996969f3da114613 (pin-depends lines)
+pin-depends: [
+  ["cerberus-lib.dev" "git+https://github.com/rems-project/cerberus.git#a0f7071"]
+]
+## rems-project/cerberus a0f7071: sha, committer date
+a0f7071dbfe0d3a204d7a6257b8de8bc4b0a202a 2026-11-13T18:36:14Z
+## commits from a0f7071 to e29a8ec9 (ahead_by)
+28
+## git ls-remote https://gitlab.mpi-sws.org/lgaeher/refinedrust-dev.git HEAD refs/heads/main
+2862b1d8044919d22330a9c8d5778fef85a47936	HEAD
+2862b1d8044919d22330a9c8d5778fef85a47936	refs/heads/main
+## committed_date of 2862b1d8 (GitLab API)
+2026-11-16T10:34:20.000+01:00

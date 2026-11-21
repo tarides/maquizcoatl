@@ -1,7 +1,7 @@
 {
   "retrieved": "2026-11-19",
   "oniguruma": "f95747b462de672b6f8dbdeb478245ddf061ca53",
-  "note": "Versions decided by plans/05-unverified-calls.md. An empty sha256 means the publisher gives no checksum and it could not be computed before the run: setup.sh records the hash of the first download in <cache>/dl/NAME.sha256, checks every later use against it, and logs it as UNPINNED; that value is then copied here and into the notebook. Empty commit fields belong to installs not written yet (RefinedRust).",
+  "note": "Versions decided by plans/05-unverified-calls.md. An empty sha256 means the publisher gives no checksum and it could not be computed before the run: setup.sh records the hash of the first download in <cache>/dl/NAME.sha256, checks every later use against it, and logs it as UNPINNED; that value is then copied here and into the notebook.",
   "why3": {
     "milestone": 1,
     "version": "1.9.0",
@@ -170,11 +170,12 @@
   "refinedrust": {
     "milestone": 3,
     "repository": "https://gitlab.mpi-sws.org/lgaeher/refinedrust-dev",
-    "commit": "",
+    "commit": "2862b1d8044919d22330a9c8d5778fef85a47936",
+    "commit_date": "2026-11-16",
     "ocaml": "4.14.2",
     "disk_gb": 6,
     "disk_note": "an opam switch on OCaml 4.14.2 with Rocq, Iris, std++ and the RefinedRust theories (about 4 GB, VST's switch is 1.2 GB before its proofs), and the Rust nightly with rustc-dev its frontend pins (about 1.6 GB)",
-    "commit_note": "not pinned yet: the RefinedRust install is not written (setup.sh step_refinedrust is a disk check followed by vu_die); pinning the commit is work for the next run, with the install"
+    "commit_note": "main HEAD, retrieved 2026-11-21 with git ls-remote (fix after the review of run D); the install is still not written (setup.sh step_refinedrust is a disk check followed by vu_die)"
   },
   "bedrock2": {
     "milestone": 4,
@@ -188,7 +189,7 @@
       "deps/kami (not needed for the bedrock2 directory)"
     ],
     "disk_gb": 3,
-    "disk_note": "estimate, not measured: source with submodules and the compiled coqutil and bedrock2 theories against provers's Rocq 9.3 (the compiler and kami are not built)",
+    "disk_note": "guess, not measured, to be replaced by du -sL of the installed tree: the source with its coqutil, riscv-coq and kami submodules (size not measured) and the compiled coqutil and bedrock2 theories against provers's Rocq 9.3 (the only compiled Rocq library measured so far is the vst switch, 1.2-1.3 GB); the compiler and kami are not built",
     "install_note": "install not written (run D of the pipeline): setup.sh step_bedrock2 is a disk check followed by vu_die"
   },
   "cn": {
@@ -196,10 +197,12 @@
     "repository": "https://github.com/rems-project/cn",
     "commit": "f2e8eeb47103a2c9fdf2b73a996969f3da114613",
     "cerberus_repository": "https://github.com/rems-project/cerberus",
-    "cerberus_commit": "e29a8ec9f247ef7e0fbc3a19141dfc8f0f9b902e",
+    "cerberus_commit": "a0f7071dbfe0d3a204d7a6257b8de8bc4b0a202a",
+    "cerberus_commit_date": "2026-11-13",
+    "cerberus_note": "the commit that cn.opam's pin-depends names at f2e8eeb4 (cerberus-lib.dev git+https://github.com/rems-project/cerberus.git#a0f7071), the one CN's own build uses; opam pin of the CN checkout applies it, so no separate cerberus-lib pin is made. Run D recorded Cerberus master e29a8ec9 (2026-11-16, 28 commits ahead) instead; corrected after the review of run D",
     "disk_gb": 3,
-    "disk_note": "estimate, not measured: an opam switch cn on OCaml 5.4.1 with cerberus-lib pinned to the Cerberus checkout and cn pinned to its own checkout (about 2 GB, as the hax switch's 2.2 GB), plus Z3 or cvc5",
-    "repository_note": "found in run D: CN is no longer in the Cerberus repository (its master has cerberus*.opam files and no cn package); it lives in rems-project/cn (pushed 2026-11-19, not archived), which uses cerberus-lib; the plan's 'opam pin of a Cerberus checkout at master' becomes two pins",
+    "disk_note": "guess, not measured, to be replaced by du -sL of the installed switch: an opam switch cn on OCaml 5.4.1 with cn pinned to its checkout and cerberus-lib at a0f7071 through its pin-depends (about 2 GB, by analogy with the hax switch, 2.2 GB measured on the same OCaml), plus Z3 or cvc5 (about 1 GB, not measured)",
+    "repository_note": "found in run D: CN is no longer in the Cerberus repository (its master has cerberus*.opam files and no cn package); it lives in rems-project/cn (pushed 2026-11-19, not archived), which uses cerberus-lib; the plan's 'opam pin of a Cerberus checkout at master' becomes one opam pin of the cn checkout, whose pin-depends brings cerberus-lib at a0f7071",
     "install_note": "install not written (run D of the pipeline): setup.sh step_cn is a disk check followed by vu_die"
   },
   "refinedc": {
@@ -209,7 +212,7 @@
     "coq": "9.1.0",
     "cerberus-lib": "f11e6b3",
     "disk_gb": 5,
-    "disk_note": "estimate, not measured: an opam switch refinedc on Coq 9.1.0 with Iris, std++, Lithium and the RefinedC theories (as RefinedRust's 4 GB switch) and its own cerberus-lib at f11e6b3",
+    "disk_note": "guess, not measured, to be replaced by du -sL of the installed switch: an opam switch refinedc on Coq 9.1.0 with Iris, std++, Lithium and the RefinedC theories (about 4 GB, as RefinedRust's switch, itself an estimate) and its own cerberus-lib at f11e6b3 (about 1 GB, not measured)",
     "install_note": "install not written (run D of the pipeline): setup.sh step_refinedc is a disk check followed by vu_die"
   }
 }

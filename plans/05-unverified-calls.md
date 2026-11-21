@@ -290,11 +290,21 @@ Recorded in the `runC` notebook entry.
 - **CN's repository.** The tools table says "opam pin of a Cerberus
   checkout at master". CN has since moved to its own repository,
   `rems-project/cn` (Cerberus master has `cerberus*.opam` files and no
-  `cn` package); the install will pin `cerberus-lib` from Cerberus and
-  `cn` from that repository (`pins.json`).
-- **Disk estimates** for the three tools are in `pins.json`
-  (`disk_gb`: Bedrock2 3, CN 3, RefinedC 5), estimates from the
-  measured sizes of the hax and VST switches, not measurements.
+  `cn` package). At the pinned CN commit `f2e8eeb4`, `cn.opam` has a
+  `pin-depends` on `cerberus-lib` at Cerberus `a0f7071` (2026-11-13),
+  the commit CN's own build uses; the install pins the CN checkout and
+  lets that `pin-depends` bring `cerberus-lib`, with no separate pin.
+  Run D first recorded Cerberus master `e29a8ec9` (28 commits ahead);
+  corrected after the review of run D (`pins.json`).
+- **Disk sizes** for the three tools are in `pins.json`
+  (`disk_gb`: Bedrock2 3, CN 3, RefinedC 5). They are guesses, not
+  measurements: each `disk_note` says what it adds up from (the hax
+  switch, 2.2 GB, and the VST switch, 1.2-1.3 GB, are the only
+  measured sizes it leans on). Each is replaced by the `du -sL` of the
+  install once it runs.
+- **RefinedRust's commit** is pinned at `main` `2862b1d8`
+  (2026-11-16), retrieved with `git ls-remote` after the review of
+  run D; its install is still not written.
 
 ## Where things live
 
