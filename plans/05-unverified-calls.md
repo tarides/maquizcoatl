@@ -279,6 +279,23 @@ Recorded in the `runC` notebook entry.
   The check now comes first and the estimates are 4 GB (hax) and 1 GB
   (smoke-hax). `disk.txt` measures the view through its links.
 
+## Deviations found during run D
+
+- **No milestone 4 install.** The bench host had 19 GB free when run D
+  started, under the 20 GB floor, and the disk-floor decision asked
+  since run A is still open; `setup-pipeline.sh 4` refused each of the
+  three installs, and an install of 0 GB too. The installs were not
+  written and no prototype was written: Bedrock2, CN and RefinedC stay
+  "pending" (not "deferred": no install failed).
+- **CN's repository.** The tools table says "opam pin of a Cerberus
+  checkout at master". CN has since moved to its own repository,
+  `rems-project/cn` (Cerberus master has `cerberus*.opam` files and no
+  `cn` package); the install will pin `cerberus-lib` from Cerberus and
+  `cn` from that repository (`pins.json`).
+- **Disk estimates** for the three tools are in `pins.json`
+  (`disk_gb`: Bedrock2 3, CN 3, RefinedC 5), estimates from the
+  measured sizes of the hax and VST switches, not measurements.
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own

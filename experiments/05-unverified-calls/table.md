@@ -7,7 +7,14 @@ tool's `TRUSTED` file. Details and raw outputs: the `prototypes-m<N>`
 entries of `lab/notebook.md`, and the `review-fixes` entry for the re-run
 of milestones 1 and 2 after the independent review.
 
-Last update: run C of the pipeline (run id `runC`, milestone 3,
+Last update: run D of the pipeline (run id `runD`, milestone 4,
+entry `2026-11-21-exp-05-runD`): Bedrock2, CN and RefinedC pinned
+(commits, disk estimates) but still pending: the disk was under the
+20 GB floor before the run started (19 GB free), so their installs
+were refused by `setup-pipeline.sh` and are not written; no milestone 4
+prototype was written, since none could be checked. The single summary
+table of the experiment (all tools of milestones 1-4) is posted on
+issue #13 under "Results". Before that: run C of the pipeline (run id `runC`, milestone 3,
 entry `2026-11-21-exp-05-runC`, corrected by
 `2026-11-21-exp-05-runC-corrections`): the hax rows; the other
 milestone 3 tools stay pending (the pinned F\* for hax is refused by
@@ -32,11 +39,21 @@ callee assumptions, how two read controls fail).
 | hax (Lean backend) | cargo-hax v0.5.0, which runs Charon `nightly-2026.10.31` + Aeneas `build-2b9e3ea` (the Charon + Aeneas pipeline, not the hax engine) | pending (milestone 3, run C): its Lean library needs Lean v4.35.0, Mathlib and Aeneas's Lean library at `2b9e3ea4` (about 10 GB); the install is not written yet (`setup.sh` has only its disk check) and the disk floor refuses it; a verdict would be Aeneas's model with hax-lib's specifications in front, not a third hax model | | | | | |
 | Creusot | v0.14.0 | pending (milestone 3, run C): install (about 7 GB) not written yet (`setup.sh` has only its disk check), and refused by the disk floor | | | | | |
 | RefinedRust | commit not pinned yet | pending (milestone 3, run C): install (about 6 GB) not written yet (`setup.sh` has only its disk check), and refused by the disk floor | | | | | |
-| Bedrock2 | | pending (milestone 4) | | | | | |
-| CN | | pending (milestone 4) | | | | | |
-| RefinedC | | pending (milestone 4) | | | | | |
+| Bedrock2 | `mit-plv/bedrock2` `67b682a5` (2026-11-19), Rocq 9.2 or 9.3 (its CI) | pending (milestone 4, run D): install (about 3 GB, estimate) not written, and refused by the disk floor (19 GB free, 23 GB needed) | | | | | |
+| CN | `rems-project/cn` `f2e8eeb4`, `cerberus-lib` from `rems-project/cerberus` `e29a8ec9` | pending (milestone 4, run D): install (about 3 GB, estimate) not written, and refused by the disk floor (19 GB free, 23 GB needed); CN has moved out of the Cerberus repository into its own | | | | | |
+| RefinedC | `iris/refinedc` `d0575839`, Coq 9.1.0, `cerberus-lib` `f11e6b3` | pending (milestone 4, run D): install (about 5 GB, estimate) not written, and refused by the disk floor (19 GB free, 25 GB needed) | | | | | |
 
 ## Notes
+
+- **Milestone 4 (run D).** Nothing was measured: the bench host had
+  19 GB free before the run, under the 20 GB floor, so
+  `setup-pipeline.sh` refused each install, and even an install of
+  0 GB (`install-refusals.txt` of the `runD` raw outputs). The three
+  tools are pinned in `pins.json`; their installs are disk checks
+  followed by `vu_die`, as for milestone 3's last three tools. CN and
+  RefinedC would check C source like VST's `vu.c` (annotations added),
+  Bedrock2 its own source language compiled to C; none of the three
+  prototypes was written, since none could be checked.
 
 - **hax (run C).** The prototype is Aeneas's, with hax-lib
   specifications. `callout_step` returns the callee's raw result as a
