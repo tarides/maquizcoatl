@@ -1,0 +1,14 @@
+File "mem.mlw", line 49, characters 22-37:
+Goal table_ok_true.
+Prover result is: Timeout (5.00s, 40724 steps).
+
+File "mem.mlw", line 50, characters 20-40:
+Goal all_ok_true.
+Prover result is: Timeout (5.00s, 39814 steps).
+
+Warning: term reduction aborted (term size blows up from 5 to 5233, after 3913 steps).
+
+File "mem.mlw", line 51, characters 14-34:
+Goal lu_ok.
+Prover result is: Timeout (5.00s, 16820 steps).
+

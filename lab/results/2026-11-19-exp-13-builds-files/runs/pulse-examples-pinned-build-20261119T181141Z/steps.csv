@@ -1,0 +1,2 @@
+index,label,outcome,start,wall_s,user_s,sys_s,log,command
+1,make verify,interrupted TERM,2026-11-19T18:11:41Z,122.2,230.2,14.0,<bench-workdir>/work/logs/pulse-examples-pinned-build-20261119T181141Z/01-make_verify.log,"(cd <bench-workdir>/work/build/pulse-examples-pinned && PATH=<bench-workdir>/work/switches/fstar-v2026.10.25/bin:""$PATH"" FSTAR_EXE=<bench-workdir>/work/switches/fstar-v2026.10.25/bin/fstar.exe timeout --kill-after=60 4500 taskset --cpu-list 20-23 nice -n 10 make -C pulse/share/pulse/examples -j 4 verify)"

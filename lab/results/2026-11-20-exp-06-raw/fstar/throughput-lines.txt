@@ -1,0 +1,3 @@
+fstar-extracted.1.log:cases=149 reps=120000 agree=17880000 search_s=11.390 search_cps=1569794
+fstar-extracted.2.log:cases=149 reps=120000 agree=17880000 search_s=11.517 search_cps=1552551
+fstar-extracted.3.log:cases=149 reps=120000 agree=17880000 search_s=11.410 search_cps=1567045

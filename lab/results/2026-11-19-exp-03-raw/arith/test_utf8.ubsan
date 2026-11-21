@@ -1,0 +1,208 @@
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:687:15: runtime error: unsigned integer overflow: 69645508 * 997 cannot be represented in type 'unsigned int'
+    #0 0x741ffa5f922f in callout_name_table_hash <hostdir>/src/maquizcoatl/upstream/src/regparse.c:687:15
+    #1 0x741ffa63d8d4 in onig_st_insert <hostdir>/src/maquizcoatl/upstream/src/st.c:277:14
+    #2 0x741ffa5fd8aa in st_insert_callout_name_table <hostdir>/src/maquizcoatl/upstream/src/regparse.c:740:12
+    #3 0x741ffa5fa21e in callout_name_entry <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1566:9
+    #4 0x741ffa5f9c53 in onig_set_callout_of_name <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1726:8
+    #5 0x741ffa6435aa in init <hostdir>/src/maquizcoatl/upstream/src/ascii.c:45:27
+    #6 0x741ffa63b338 in onig_initialize_encoding <hostdir>/src/maquizcoatl/upstream/src/regenc.c:118:11
+    #7 0x741ffa618107 in onig_initialize <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7779:9
+    #8 0x633b7a4f0ee0 in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:151:3
+    #9 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #10 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #11 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:687:15 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:1713:19: runtime error: implicit conversion from type 'int' of value -2 (32-bit, signed) to type 'unsigned int' changed the value to 4294967294 (32-bit, unsigned)
+    #0 0x741ffa5f9b2b in onig_set_callout_of_name <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1713:19
+    #1 0x741ffa64380f in init <hostdir>/src/maquizcoatl/upstream/src/ascii.c:55:5
+    #2 0x741ffa63b338 in onig_initialize_encoding <hostdir>/src/maquizcoatl/upstream/src/regenc.c:118:11
+    #3 0x741ffa618107 in onig_initialize <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7779:9
+    #4 0x633b7a4f0ee0 in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:151:3
+    #5 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #6 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #7 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1713:19 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:7305:5: runtime error: implicit conversion from type 'int' of value -2 (32-bit, signed) to type 'unsigned int' changed the value to 4294967294 (32-bit, unsigned)
+    #0 0x741ffa60aca1 in prs_cc <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7305:5
+    #1 0x741ffa605b8f in prs_exp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9060:11
+    #2 0x741ffa605267 in prs_branch <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9301:11
+    #3 0x741ffa601c25 in prs_alts <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9337:7
+    #4 0x741ffa5fd438 in prs_regexp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9399:7
+    #5 0x741ffa5fd15e in onig_parse_tree <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9462:7
+    #6 0x741ffa616756 in parse_and_tune <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7398:7
+    #7 0x741ffa616165 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7526:7
+    #8 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #9 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #10 0x633b7a4fcaa0 in xx2 <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:123:3
+    #11 0x633b7a4f10a7 in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:170:3
+    #12 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #13 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #14 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7305:5 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:8979:7: runtime error: implicit conversion from type 'int' of value -2 (32-bit, signed) to type 'unsigned int' changed the value to 4294967294 (32-bit, unsigned)
+    #0 0x741ffa6058ba in prs_exp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:8979:7
+    #1 0x741ffa60518c in prs_branch <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9282:7
+    #2 0x741ffa601c25 in prs_alts <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9337:7
+    #3 0x741ffa5fd438 in prs_regexp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9399:7
+    #4 0x741ffa5fd15e in onig_parse_tree <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9462:7
+    #5 0x741ffa616756 in parse_and_tune <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7398:7
+    #6 0x741ffa616165 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7526:7
+    #7 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #8 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #9 0x633b7a4fcaa0 in xx2 <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:123:3
+    #10 0x633b7a4f1100 in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:173:3
+    #11 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #12 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #13 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:8979:7 
+<hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:13: runtime error: unsigned integer overflow: 0 - 1 cannot be represented in type 'unsigned int'
+    #0 0x741ffa616f0c in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:13
+    #1 0x741ffa627d48 in compile_option_node <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:1583:7
+    #2 0x741ffa625106 in compile_bag_node <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:1789:9
+    #3 0x741ffa617751 in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2732:9
+    #4 0x741ffa6162c4 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7579:7
+    #5 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #6 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #7 0x633b7a4fcaa0 in xx2 <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:123:3
+    #8 0x633b7a4f217f in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:319:3
+    #9 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #10 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #11 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:13 
+<hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:34: runtime error: unsigned integer overflow: 4294967295 + 1 cannot be represented in type 'unsigned int'
+    #0 0x741ffa616f52 in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:34
+    #1 0x741ffa627d48 in compile_option_node <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:1583:7
+    #2 0x741ffa625106 in compile_bag_node <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:1789:9
+    #3 0x741ffa617751 in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2732:9
+    #4 0x741ffa6162c4 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7579:7
+    #5 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #6 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #7 0x633b7a4fcaa0 in xx2 <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:123:3
+    #8 0x633b7a4f217f in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:319:3
+    #9 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #10 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #11 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2579:34 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:595:15: runtime error: unsigned integer overflow: 109437808 * 997 cannot be represented in type 'unsigned int'
+    #0 0x741ffa5f8f1e in str_end_hash <hostdir>/src/maquizcoatl/upstream/src/regparse.c:595:15
+    #1 0x741ffa63d8d4 in onig_st_insert <hostdir>/src/maquizcoatl/upstream/src/st.c:277:14
+    #2 0x741ffa5f904d in onig_st_insert_strend <hostdir>/src/maquizcoatl/upstream/src/regparse.c:636:12
+    #3 0x741ffa60cb18 in name_add <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1122:9
+    #4 0x741ffa60695c in prs_bag <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7968:15
+    #5 0x741ffa60547d in prs_exp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:8878:9
+    #6 0x741ffa60518c in prs_branch <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9282:7
+    #7 0x741ffa601c25 in prs_alts <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9337:7
+    #8 0x741ffa5fd438 in prs_regexp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9399:7
+    #9 0x741ffa5fd15e in onig_parse_tree <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9462:7
+    #10 0x741ffa616756 in parse_and_tune <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7398:7
+    #11 0x741ffa616165 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7526:7
+    #12 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #13 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #14 0x633b7a4fcaa0 in xx2 <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:123:3
+    #15 0x633b7a4f5043 in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:706:3
+    #16 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #17 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #18 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:595:15 
+<hostdir>/src/maquizcoatl/upstream/src/regcomp.c:6694:15: runtime error: implicit conversion from type 'unsigned int' of value 2147483648 (32-bit, unsigned) to type 'int' changed the value to -2147483648 (32-bit, signed)
+    #0 0x741ffa621563 in optimize_nodes <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:6694:15
+    #1 0x741ffa616bb0 in set_optimize_info_from_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7020:7
+    #2 0x741ffa616275 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7563:7
+    #3 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #4 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #5 0x633b7a4fcaec in xn <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:133:3
+    #6 0x633b7a4f8dbf in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:1214:3
+    #7 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #8 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #9 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:6694:15 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:7614:36: runtime error: implicit conversion from type 'int' of value -2 (32-bit, signed) to type 'unsigned int' changed the value to 4294967294 (32-bit, unsigned)
+    #0 0x741ffa61041f in prs_callout_args <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7614:36
+    #1 0x741ffa60e2ee in prs_callout_of_name <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7765:15
+    #2 0x741ffa608ae6 in prs_bag <hostdir>/src/maquizcoatl/upstream/src/regparse.c:8535:9
+    #3 0x741ffa60547d in prs_exp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:8878:9
+    #4 0x741ffa605267 in prs_branch <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9301:11
+    #5 0x741ffa601c25 in prs_alts <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9337:7
+    #6 0x741ffa5fd438 in prs_regexp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9399:7
+    #7 0x741ffa5fd15e in onig_parse_tree <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9462:7
+    #8 0x741ffa616756 in parse_and_tune <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7398:7
+    #9 0x741ffa616165 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7526:7
+    #10 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #11 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #12 0x633b7a4fcaa0 in xx2 <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:123:3
+    #13 0x633b7a4f9c80 in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:1379:3
+    #14 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #15 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #16 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7614:36 
+<hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2073:43: runtime error: implicit conversion from type 'OnigLen' (aka 'unsigned int') of value 4294967295 (32-bit, unsigned) to type 'LengthType' (aka 'int') changed the value to -1 (32-bit, signed)
+    #0 0x741ffa62828e in compile_anchor_look_behind_node <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2073:43
+    #1 0x741ffa625b35 in compile_anchor_node <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2366:9
+    #2 0x741ffa617767 in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2736:9
+    #3 0x741ffa616e3c in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2565:11
+    #4 0x741ffa6162c4 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7579:7
+    #5 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #6 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #7 0x633b7a4fcaa0 in xx2 <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:123:3
+    #8 0x633b7a4fa0a3 in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:1415:3
+    #9 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #10 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #11 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2073:43 
+<hostdir>/src/maquizcoatl/upstream/src/regexec.c:4497:11: runtime error: implicit conversion from type 'LengthType' (aka 'int') of value -1 (32-bit, signed) to type 'OnigLen' (aka 'unsigned int') changed the value to 4294967295 (32-bit, unsigned)
+    #0 0x741ffa632dbd in match_at <hostdir>/src/maquizcoatl/upstream/src/regexec.c:4497:11
+    #1 0x741ffa635f2d in search_in_range <hostdir>/src/maquizcoatl/upstream/src/regexec.c:5881:13
+    #2 0x741ffa6356ea in onig_search <hostdir>/src/maquizcoatl/upstream/src/regexec.c:5665:7
+    #3 0x633b7a4fcd8f in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:64:7
+    #4 0x633b7a4fcaa0 in xx2 <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:123:3
+    #5 0x633b7a4fa0a3 in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:1415:3
+    #6 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #7 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #8 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regexec.c:4497:11 
+<hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2209:43: runtime error: implicit conversion from type 'OnigLen' (aka 'unsigned int') of value 4294967295 (32-bit, unsigned) to type 'LengthType' (aka 'int') changed the value to -1 (32-bit, signed)
+    #0 0x741ffa628a22 in compile_anchor_look_behind_not_node <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2209:43
+    #1 0x741ffa625b4b in compile_anchor_node <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2370:9
+    #2 0x741ffa617767 in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2736:9
+    #3 0x741ffa616e3c in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2565:11
+    #4 0x741ffa616e3c in compile_tree <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2565:11
+    #5 0x741ffa6162c4 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7579:7
+    #6 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #7 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #8 0x633b7a4fcaec in xn <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:133:3
+    #9 0x633b7a4fa7bd in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:1475:3
+    #10 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #11 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #12 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:2209:43 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:7868:7: runtime error: implicit conversion from type 'int' of value -1074790401 (32-bit, signed) to type 'OnigCaseFoldType' (aka 'unsigned int') changed the value to 3220176895 (32-bit, unsigned)
+    #0 0x741ffa60e9c0 in set_whole_options <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7868:7
+    #1 0x741ffa608837 in prs_bag <hostdir>/src/maquizcoatl/upstream/src/regparse.c:8485:19
+    #2 0x741ffa60547d in prs_exp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:8878:9
+    #3 0x741ffa60518c in prs_branch <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9282:7
+    #4 0x741ffa601c25 in prs_alts <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9337:7
+    #5 0x741ffa5fd438 in prs_regexp <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9399:7
+    #6 0x741ffa5fd15e in onig_parse_tree <hostdir>/src/maquizcoatl/upstream/src/regparse.c:9462:7
+    #7 0x741ffa616756 in parse_and_tune <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7398:7
+    #8 0x741ffa616165 in onig_compile <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7526:7
+    #9 0x741ffa61826c in onig_new <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7756:7
+    #10 0x633b7a4fcc1a in xx <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:39:7
+    #11 0x633b7a4fcaa0 in xx2 <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:123:3
+    #12 0x633b7a4fbc4e in main <hostdir>/src/maquizcoatl/upstream/test/test_utf8.c:1658:3
+    #13 0x741ffa22a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #14 0x741ffa22a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #15 0x633b7a4c4484 in _start (<hostdir>/build/arith/test/test_utf8+0x5484)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:7868:7 

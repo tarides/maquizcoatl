@@ -1,0 +1,18 @@
+search fail
+COUNT[x]: 4
+match at 0
+COUNT[x]: 10
+match at 0
+COUNT[x]: 2
+match at 0
+COUNT[x]: 2
+match at 0
+COUNT[x]: 4
+match at 5
+COUNT[x]: 4
+match at 5
+COUNT[x]: 7
+search fail
+COUNT[x]: 4
+search fail
+COUNT[x]: 4

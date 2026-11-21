@@ -1,0 +1,13 @@
+2026-11-20T15:35:33Z
+series: fstar inp run 1
+3.00 2.03 1.56
+busy timing CPUs: 
+2026-11-20T15:35:45Z
+series: fstar inp run 2
+2.56 1.98 1.55
+busy timing CPUs: 
+2026-11-20T15:35:57Z
+series: fstar inp run 3
+2.32 1.94 1.55
+busy timing CPUs: 63 400 ps;
+done 2026-11-20T15:36:10Z

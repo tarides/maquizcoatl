@@ -1,0 +1,53 @@
+--- a/harnesses/base.c
++++ b/harnesses/base-deep.c
+@@ -12,8 +12,8 @@
+ #include <time.h>
+ #include "oniguruma.h"
+ 
+-#define PARSE_DEPTH_LIMIT               8
+-#define MAX_SUBEXP_CALL_NEST_LEVEL      8
++#define PARSE_DEPTH_LIMIT            4096  /* fuzzer-deep: was 8 */
++#define MAX_SUBEXP_CALL_NEST_LEVEL     20  /* fuzzer-deep: was 8 */
+ #define SUBEXP_CALL_LIMIT            1000
+ #define BASE_RETRY_LIMIT            20000
+ #define BASE_LENGTH                  2048
+@@ -479,9 +479,9 @@
+ #endif
+ #else
+ #ifdef SYNTAX_TEST
+-#define NUM_CONTROL_BYTES      8
++#define NUM_CONTROL_BYTES      9  /* fuzzer-deep: two-byte pattern size */
+ #else
+-#define NUM_CONTROL_BYTES      7
++#define NUM_CONTROL_BYTES      8  /* fuzzer-deep: two-byte pattern size */
+ #endif
+ #endif
+ 
+@@ -567,7 +567,7 @@
+   int pattern_size;
+   size_t rem_size;
+   unsigned char *data;
+-  unsigned char pattern_size_choice;
++  unsigned int pattern_size_choice; /* fuzzer-deep: two bytes */
+   OnigOptionType  options;
+   OnigEncoding    enc;
+   OnigSyntaxType* syntax;
+@@ -636,7 +636,8 @@
+   data++; rem_size--;
+ #endif
+ 
+-  pattern_size_choice = data[0];
++  pattern_size_choice = data[0] | (data[1] << 8); /* fuzzer-deep */
++  data++; rem_size--;
+   data++; rem_size--;
+ 
+   backward = (data[0] == 0xbb);
+@@ -731,7 +732,7 @@
+ {
+   size_t max_size;
+   size_t n;
+-  uint8_t Data[MAX_INPUT_DATA_SIZE];
++  static uint8_t Data[MAX_INPUT_DATA_SIZE]; /* fuzzer-deep: off the stack */
+ 
+   if (argc > 1) {
+     max_size = (size_t )atoi(argv[1]);

@@ -1,0 +1,73 @@
+diff --git a/correctness/RegexCorrectness/Regex/Basic.lean b/correctness/RegexCorrectness/Regex/Basic.lean
+index 1546152..dccf332 100644
+--- a/correctness/RegexCorrectness/Regex/Basic.lean
++++ b/correctness/RegexCorrectness/Regex/Basic.lean
+@@ -51,7 +51,7 @@ theorem of_parse {s : String} {re : Regex} (h : Regex.parse s = .ok re) :
+     have disj : Expr.Disjoint (.group 0 e) :=
+       eq ▸ Regex.Syntax.Parser.Ast.toRegex_disjoint (.group ast)
+     simp only [Regex.Syntax.Parser.Ast.toRegex] at eq
+-    rw [←h, eq]
++    rw [h, eq]
+     exact of_fromExpr disj
+   | .error e => simp [Except.map] at h
+ 
+diff --git a/correctness/RegexCorrectness/Syntax/Ast.lean b/correctness/RegexCorrectness/Syntax/Ast.lean
+index f01ce98..4e321e4 100644
+--- a/correctness/RegexCorrectness/Syntax/Ast.lean
++++ b/correctness/RegexCorrectness/Syntax/Ast.lean
+@@ -98,13 +98,17 @@ theorem toRegexAux_tags {index index' : ToRegexState} {ast : Ast} {e : Expr}
+     have ⟨le₁, ih₁⟩ := ih₁ h₁
+     have ⟨le₂, ih₂⟩ := ih₂ h₂
+     simp [←h, Expr.tags]
+-    exact ⟨Nat.le_trans le₁ le₂, Finset.Ico_union_Ico_eq_Ico le₁ le₂ ▸ Finset.union_subset_union ih₁ ih₂⟩
++    have hs : e₁.tags ∪ e₂.tags ⊆ Finset.Ico state.index state₂.index :=
++      Finset.Ico_union_Ico_eq_Ico le₁ le₂ ▸ Finset.union_subset_union ih₁ ih₂
++    exact ⟨Nat.le_trans le₁ le₂, Finset.union_subset_iff.mp hs⟩
+   next state ast₁ ast₂ state₁ e₁ h₁ state₂ e₂ h₂ ih₁ ih₂ =>
+     simp at h
+     have ⟨le₁, ih₁⟩ := ih₁ h₁
+     have ⟨le₂, ih₂⟩ := ih₂ h₂
+     simp [←h, Expr.tags]
+-    exact ⟨Nat.le_trans le₁ le₂, Finset.Ico_union_Ico_eq_Ico le₁ le₂ ▸ Finset.union_subset_union ih₁ ih₂⟩
++    have hs : e₁.tags ∪ e₂.tags ⊆ Finset.Ico state.index state₂.index :=
++      Finset.Ico_union_Ico_eq_Ico le₁ le₂ ▸ Finset.union_subset_union ih₁ ih₂
++    exact ⟨Nat.le_trans le₁ le₂, Finset.union_subset_iff.mp hs⟩
+   next state min max greedy ast state' e' h' ih =>
+     simp at h
+     have ⟨le, ih⟩ := ih h'
+diff --git a/correctness/RegexCorrectness/VM/CharStep/Lemmas.lean b/correctness/RegexCorrectness/VM/CharStep/Lemmas.lean
+index faaf9bb..5847840 100644
+--- a/correctness/RegexCorrectness/VM/CharStep/Lemmas.lean
++++ b/correctness/RegexCorrectness/VM/CharStep/Lemmas.lean
+@@ -101,8 +101,7 @@ theorem write_updates_of_mem_next {i k}
+     | .inl mem => exact .inl mem
+     | .inr ⟨update', cls, write⟩ =>
+       have step : nfa.CharStep pos i state' := by
+-        grind only [usr Fin.isLt, = CharStep.fail, = Fin.getElem_fin, => CharStep.char,
+-          => CharStep.sparse, #6698, #51e9, #8818, #5c18, #c184]
++        grind [Fin.isLt, CharStep.fail, Fin.getElem_fin, CharStep.char, CharStep.sparse]
+       exact .inr ⟨state', update', step, cls, write⟩
+   next hn =>
+     injection h with _ hnext
+diff --git a/regex/Regex/Data/SparseSet/Bijection.lean b/regex/Regex/Data/SparseSet/Bijection.lean
+index e8c7f38..81fa41c 100644
+--- a/regex/Regex/Data/SparseSet/Bijection.lean
++++ b/regex/Regex/Data/SparseSet/Bijection.lean
+@@ -21,7 +21,16 @@ public theorem surj_of_inj {n} (f : Fin n → Fin n) (h : Injective f) : Surject
+         ⟨f ⟨n, by grind⟩, by grind⟩
+     have inj' : Injective f' := by
+       intro x y eq
+-      grind
++      simp only [f'] at eq
++      split at eq <;> split at eq
++      all_goals
++        apply Fin.ext
++        have hv := congrArg Fin.val eq
++        simp at hv
++        first
++        | (have := h (Fin.ext hv); simpa using congrArg Fin.val this)
++        | omega
++        | grind
+     have surj' : Surjective f' := ih f' inj'
+ 
+     intro y

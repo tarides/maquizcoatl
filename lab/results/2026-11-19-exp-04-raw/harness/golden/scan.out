@@ -1,0 +1,51 @@
+scan: 0
+match at 0
+0: (0-2)
+scan: 1
+match at 2
+0: (2-5)
+scan: 2
+match at 5
+0: (5-9)
+total: 3 match
+
+total: 0 match
+
+scan: 0
+match at 2
+0: (2-5)
+scan: 1
+match at 6
+0: (6-9)
+scan: 2
+match at 10
+0: (10-13)
+total: 3 match
+
+scan: 0
+match at 0
+0: (0-2)
+scan: 1
+match at 2
+0: (2-5)
+scan: 2
+match at 5
+0: (5-9)
+scan: 3
+match at 10
+0: (10-13)
+total: 4 match
+
+scan: 0
+match at 0
+0: (0-2)
+scan: 1
+match at 2
+0: (2-5)
+scan: 2
+match at 5
+0: (5-9)
+scan: 3
+match at 10
+0: (10-13)
+total: 4 match

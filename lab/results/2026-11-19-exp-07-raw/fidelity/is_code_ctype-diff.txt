@@ -1,0 +1,2 @@
+is_code_ctype differs: ctype 12 U+00B9 table 0 iso 1
+table vs is_code_ctype differences on sample: 1

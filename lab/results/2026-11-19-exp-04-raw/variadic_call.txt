@@ -1,0 +1,9 @@
+== oracle/default
+without einfo: 25 [fail to memory allocation]
+with einfo:    30 [undefined name <foo> reference]
+== stubs/m2/default
+without einfo: 13 [stub error -5]
+with einfo:    27 [stub error -217 (with name)]
+== stubs/m3/default
+without einfo: 13 [stub error -5]
+with einfo:    27 [stub error -217 (with name)]

@@ -1,0 +1,9 @@
+(library
+ (name onig)
+ (wrapped false)
+ (foreign_stubs
+  (language c)
+  (names onig_stubs)
+  (flags (:standard -O2 -I%{env:ONIG_INC=/nonexistent})))
+ (c_library_flags
+  (-L%{env:ONIG_LIB=/nonexistent} -lonig -Wl,-rpath,%{env:ONIG_LIB=/nonexistent})))

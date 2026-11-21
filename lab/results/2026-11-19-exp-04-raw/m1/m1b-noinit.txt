@@ -1,0 +1,4 @@
+UTF8 max_enc_len=0 min_enc_len=0 mbc_enc_len=NULL is_valid=NULL
+ASCII mbc_enc_len=NULL
+OnigDefaultSyntax==&OnigSyntaxOniguruma: 1
+OnigDefaultCaseFoldFlag=0x40000000

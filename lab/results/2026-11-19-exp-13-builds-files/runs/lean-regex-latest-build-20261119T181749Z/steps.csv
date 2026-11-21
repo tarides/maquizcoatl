@@ -1,0 +1,2 @@
+index,label,outcome,start,wall_s,user_s,sys_s,log,command
+1,lake build regex,exit 1,2026-11-19T18:17:49Z,9.8,19.8,4.0,<bench-workdir>/work/logs/lean-regex-latest-build-20261119T181749Z/01-lake_build_regex.log,"(cd <bench-workdir>/work/build/lean-regex-latest/regex && ELAN_HOME=<bench-workdir>/work/switches/elan PATH=<bench-workdir>/work/switches/elan/bin:""$PATH"" LEAN_NUM_THREADS=4 timeout --kill-after=60 4200 taskset --cpu-list 16-19 nice -n 10 lake build)"

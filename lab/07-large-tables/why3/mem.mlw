@@ -1,0 +1,52 @@
+(* Experiment #7: membership and sanity checker over Table. *)
+module Mem
+  use int.Int
+  use list.List
+  use table.Table
+
+  let rec function mem (c: int) (l: list (int, int)) : bool variant { l } =
+    match l with
+    | Nil -> false
+    | Cons (lo, hi) t -> if c < lo then false else if c <= hi then true else mem c t
+    end
+
+  let function ctype_mem (ct c: int) : bool = mem c (code_range ct)
+
+  use string.String
+  use string.OCaml as S
+
+  let rec lookup (s: string) (l: list (string, int)) : int variant { l } =
+    match l with
+    | Nil -> -1
+    | Cons (n, c) t -> if S.(=) s n then c else lookup s t
+    end
+
+  let lookup_name (s: string) : int = lookup s names
+
+  (* Sorted, disjoint, non-adjacent: lo <= hi and hi + 1 < next lo. *)
+  let rec function ok_list (l: list (int, int)) : bool variant { l } =
+    match l with
+    | Nil -> true
+    | Cons (lo, hi) tl ->
+      (if lo <= hi then
+        match tl with Nil -> true | Cons (lo', _) _ -> hi + 1 < lo' end
+       else false)
+      && ok_list tl
+    end
+
+  let rec function all_ok_from (n: int) : bool variant { num_code_ranges - n } =
+    if n >= num_code_ranges then true
+    else ok_list (code_range n) && all_ok_from (n + 1)
+
+  let function table_ok : bool = all_ok_from 0
+end
+
+module Sanity
+  use list.List
+  use table.Table
+  use Mem
+  meta "compute_max_steps" 1000000000
+  goal table_ok_true: table_ok = True
+  goal all_ok_true: all_ok_from 0 = True
+  goal lu_ok: ok_list cr_Lu = True
+end

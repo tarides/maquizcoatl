@@ -1,0 +1,20 @@
+cpu: AMD EPYC 7502P 32-Core Processor, 64 hardware threads
+ram: 503 GB
+kernel: 6.8.0-100-generic
+os: Ubuntu 24.04.5 LTS
+scripts commit: 2072e9c (branch exp/07-large-tables)
+upstream commit: f95747b
+opam: 2.6.1
+ocaml: 5.4.1
+rocq: The Rocq Prover, version 9.3.0
+rocq-stdlib: 9.2.0
+why3: Why3 platform, version 1.9.0
+alt-ergo: 2.6.5
+fstar: F* 2026.11.15 platform=Linux_x86_64 system=Unix compiler=OCaml 5.3.0 date=2026-11-15 18:52:39 +0000 commit=b92b0f87ce325a6ed0fd78086390fbaf2fc629a1 
+krml: KaRaMeL version: 3384ecaf654baca53b109c2e2665112eaa6d7f00
+lean: Lean (version 4.36.0, x86_64-unknown-linux-gnu, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+elan: elan 4.4.0 (3cc76985a 2026-11-18)
+gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+cmake: cmake version 3.28.3
+python: Python 3.12.3
+timing CPUs: 28-31,60-63 (L3 complex 7); exploratory runs on complexes 2-6; CPUs 4-7,36-39 (experiment #11) unused

@@ -1,0 +1,10 @@
+construct	built	first error
+P_control	yes	-
+P_int	no	*** exception Fail raised (line 132 of "General/scan.ML"): identifier expected,
+P_const	no	*** exception Fail raised (line 132 of "General/scan.ML"): identifier expected,
+P_variadic	no	*** Outer lexical error: bad input (line 6 of "<probe>/P_variadic/P_variadic.thy") at ...)
+P_fnptr_param	no	*** Outer lexical error: unclosed comment (line 6 of "<probe>/P_fnptr_param/P_fnptr_param.thy") at (*)(int32_ ...
+P_variadic_cart	no	*** Outer lexical error: bad input (line 6 of "<probe>/P_variadic_cart/P_variadic_cart.thy") at ...)
+P_fnptr_param_cart	no	*** Outer lexical error: unclosed comment (line 6 of "<probe>/P_fnptr_param_cart/P_fnptr_param_cart.thy") at (*)(int32_ ...
+P_fnptr_field	yes	-
+P_struct	yes	-

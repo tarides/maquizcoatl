@@ -1,0 +1,7 @@
+Cleaned Probe_P_fnptr_param
+Running Probe_P_fnptr_param ...
+Probe_P_fnptr_param FAILED (see also "isabelle build_log -H Error Probe_P_fnptr_param")
+*** Outer lexical error: unclosed comment (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_fnptr_param/P_fnptr_param.thy") at (*)(int32_ ...
+*** At command "export_llvm" (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_fnptr_param/P_fnptr_param.thy")
+Unfinished session(s): Probe_P_fnptr_param
+0:00:16 elapsed time
