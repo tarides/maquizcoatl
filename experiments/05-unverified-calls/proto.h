@@ -1,6 +1,6 @@
 /* proto.h: the C interface every experiment #5 prototype implements.
 
-   Each tool exports the six verified functions declared at the end of
+   Each tool exports the seven verified functions declared at the end of
    this file with C linkage, and caller/caller.c is linked against the
    result. The shapes follow the libonig API at f95747b:
 
@@ -14,7 +14,14 @@
    - vu_get_slot, vu_set_slot: onig_get_callout_data_by_callout_args and
      onig_set_callout_data_by_callout_args,
      upstream/src/oniguruma.h:1063 and :1069, reduced to one callout and
-     one value type.
+     one value type;
+   - vu_get_subject_byte: a read accessor combining
+     onig_get_arg_by_callout_args (a bounds-checked indexed read,
+     upstream/src/oniguruma.h:1035) with onig_get_string_by_callout_args
+     and its neighbours (:1037-1045), which hand the callout the subject
+     the engine is matching; this one reads one byte of the subject,
+     behind the pointer held in vu_args, with a bounds check (added in
+     run B of the pipeline, maintainer decision (b) on issue #13).
 
    The constants keep upstream's values so that a prototype's results can
    be compared with upstream's behaviour directly. */
@@ -74,10 +81,12 @@ typedef struct vu_enc_state {
 /* Stand-in for OnigCalloutArgs (upstream/src/regexec.c:1337). The layout is
    fixed here so that every tool produces the same ABI, but the client's
    callouts treat it as opaque: they read and write it only through
-   vu_get_slot and vu_set_slot. The first four members are the verified
-   side's state (a read-only view of the subject and the matcher's
-   position and callout number); only the slots may change across a
-   callout. */
+   vu_get_slot, vu_set_slot and vu_get_subject_byte. The first four
+   members are the verified side's state (a read-only view of the
+   subject and the matcher's position and callout number); only the
+   slots may change across a callout. Invariant the verified functions
+   assume of args: 0 <= subject_len and subject points to subject_len
+   readable bytes, which nobody writes during the call. */
 struct vu_args {
   const unsigned char *subject;
   int subject_len;
@@ -123,5 +132,11 @@ int vu_fold_all(vu_apply_all_fn g, vu_fold_rec *rec);
    [0, VU_SLOT_NUM), in which case nothing is read or written. */
 int vu_get_slot(const vu_args *args, int k, int64_t *v);
 int vu_set_slot(vu_args *args, int k, int64_t v);
+
+/* Read accessor, also called by name from a client callout (shape (b)):
+   returns args->subject[i] (0 to 255) when 0 <= i < args->subject_len,
+   VU_ERR_INVALID_ARGUMENT otherwise, in which case the subject is not
+   read. Neither args nor the subject is written. */
+int vu_get_subject_byte(const vu_args *args, int i);
 
 #endif /* VU_PROTO_H */

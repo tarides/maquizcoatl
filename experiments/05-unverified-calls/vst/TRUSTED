@@ -12,12 +12,15 @@ verif_vu.v:57-59
 # Value of vu_fold_rec and "well formed", used by the apply_all contract.
 verif_vu.v:62-63
 verif_vu.v:65-65
+# The subject lent with a read share (run B, read accessor), used by the
+# callout contract.
+verif_vu.v:112-113
 # Contracts of the encoding callee (vu_char_len's f) and of the callout
 # callee (vu_callout_step's f).
-verif_vu.v:110-143
+verif_vu.v:115-159
 # Contract of the client's apply_all_case_fold (vu_fold_all's g). It
 # refers to i_apply_fs, the proven spec of vu_i_apply, not counted.
-verif_vu.v:166-187
+verif_vu.v:182-203
 #
 # Not counted: the toolchain (clightgen, which translates vu.c to Clight
 # without a proof; Rocq; VST; CompCert, whose compilation is proven; the

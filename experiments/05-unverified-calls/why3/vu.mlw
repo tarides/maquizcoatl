@@ -76,14 +76,30 @@ module Client
     mutable slots : map int int64;
   }
 
-  (* const vu_args *: the same object, seen read only (vu_get_slot). *)
+  (* const vu_args *: the same object, seen read only (vu_get_slot,
+     vu_get_subject_byte). The subject is subject_len bytes, each in
+     [0, 255]; no field is mutable, so nothing in this view is written. *)
   type const_args = abstract {
     cslots : map int int64;
-  }
+    csubject_len : int32;
+    csubject : map int int;
+  } invariant { 0 <= csubject_len /\
+                forall i. 0 <= i < csubject_len -> 0 <= csubject[i] <= 255 }
+    by { cslots = (fun _ -> 0:int64); csubject_len = 0:int32;
+         csubject = (fun _ -> 0) }
 
   val get_slot_raw (a: const_args) (k: int32) : int64
     requires { 0 <= k < slot_num }
     ensures { result = a.cslots[k] }
+
+  val get_subject_len_raw (a: const_args) : int32
+    ensures { result = a.csubject_len }
+
+  (* subject[i]: the read is safe only for i in [0, subject_len), which
+     is all the precondition promises. *)
+  val get_subject_byte_raw (a: const_args) (i: int32) : int32
+    requires { 0 <= i < a.csubject_len }
+    ensures { result = a.csubject[i] }
 
   val set_slot_raw (a: args) (k: int32) (v: int64) : unit
     requires { 0 <= k < slot_num }
@@ -329,6 +345,21 @@ module Vu
     else begin
       set v (get_slot_raw a k);
       0
+    end
+
+  (** {2 Read accessor: vu_get_subject_byte} *)
+
+  let vu_get_subject_byte (a: const_args) (i: int32) : int32
+    ensures { 0 <= i < a.csubject_len -> result = Map.get a.csubject i }
+    ensures { not (0 <= i < a.csubject_len) ->
+                result = err_invalid_argument }
+  = if i < 0 then -30
+    else begin
+      let len = get_subject_len_raw a in
+      (* READ-BEGIN: the negative control deletes the upper bound test. *)
+      if i >= len then -30 else
+      (* READ-END *)
+      get_subject_byte_raw a i
     end
 
   let vu_set_slot (a: args) (k: int32) (v: int64) : int32

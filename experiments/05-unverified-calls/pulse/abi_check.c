@@ -30,3 +30,4 @@ int32_t (*const abi_fold_all)(
     vu_fold_rec *) = vu_fold_all;
 int32_t (*const abi_get_slot)(vu_args *, int32_t, int64_t *) = vu_get_slot;
 int32_t (*const abi_set_slot)(vu_args *, int32_t, int64_t) = vu_set_slot;
+int32_t (*const abi_get_subject_byte)(vu_args *, int32_t) = vu_get_subject_byte;

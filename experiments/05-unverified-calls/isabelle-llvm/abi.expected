@@ -7,3 +7,4 @@ define i32 @VU_vu_fold_all(i8* %g, { i32, { i32, { i32, { i32, { i32, { i32, { i
 define i32 @VU_vu_get_slot({ { i8*, { i32, i32 } }, { i32, { i64, { i64, { i64, { i64, i64 } } } } } }* %args, i32 %k, i64* %out)
 define i32 @VU_vu_set_slot({ { i8*, { i32, i32 } }, { i32, { i64, { i64, { i64, { i64, i64 } } } } } }* %args, i32 %k, i64 %v)
 define i32 @VU_vu_callout_step(i32 %d, i8* %f, { { i8*, { i32, i32 } }, { i32, { i64, { i64, { i64, { i64, i64 } } } } } }* %args, i8* %ud)
+define i32 @VU_vu_get_subject_byte({ { i8*, { i32, i32 } }, { i32, { i64, { i64, { i64, { i64, i64 } } } } } }* %args, i32 %i)

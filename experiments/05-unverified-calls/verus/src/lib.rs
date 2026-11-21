@@ -3,13 +3,15 @@
 // The four verified functions of proto.h, with their specifications:
 // vu_char_len (char_len), vu_callout_step (callout_step), vu_i_apply and
 // vu_fold_all (i_apply, fold_all), vu_get_slot and vu_set_slot
-// (get_slot, set_slot). The client's function pointers are called only
+// (get_slot, set_slot), and the read accessor vu_get_subject_byte
+// (get_subject_byte). The client's function pointers are called only
 // through the trusted shims of shim.rs, whose specifications say
 // nothing about the callee's result or about what the callee does to
 // the memory it is lent. The C entry points are in ffi.rs.
 //
 // Build and check: see build.sh. Two marker comments delimit the clamp
-// that the negative control removes.
+// that the negative control removes, two more the bound test that the
+// read control removes.
 
 use vstd::prelude::*;
 
@@ -279,6 +281,34 @@ pub fn set_slot(args: &mut VuArgs, k: i32, v: i64) -> (r: i32)
     if 0 <= k && k < SLOT_NUM {
         args.slot[k as usize] = v;
         0
+    } else {
+        ERR_INVALID_ARGUMENT
+    }
+}
+
+// ------------------------------------------- 5. vu_get_subject_byte
+
+pub open spec fn subject_index_ok(args: VuArgs, i: i32) -> bool {
+    0 <= i < args.subject_len
+}
+
+/// Reads byte i of the subject; out of [0, subject_len), returns
+/// ERR_INVALID_ARGUMENT and reads nothing. The subject is a shared
+/// slice: Verus has no way to read through the raw pointer held in
+/// args, so ffi.rs (trusted) makes the slice from args.subject and
+/// args.subject_len; the precondition records that agreement. Both
+/// args and the subject are shared references, hence unchanged.
+pub fn get_subject_byte(args: &VuArgs, subject: &[u8], i: i32) -> (r: i32)
+    requires
+        subject@.len() == args.subject_len,
+    ensures
+        subject_index_ok(*args, i) ==> r == subject@[i as int] as i32,
+        !subject_index_ok(*args, i) ==> r == ERR_INVALID_ARGUMENT,
+{
+    // VU-READ-BEGIN
+    if 0 <= i && i < args.subject_len {
+    // VU-READ-END
+        subject[i as usize] as i32
     } else {
         ERR_INVALID_ARGUMENT
     }

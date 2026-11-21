@@ -18,7 +18,7 @@ src/ffi.rs:58-97
 # checks and the six exported functions, which turn raw pointers into
 # the references the verified functions take.
 src/ffi.rs:17-56
-src/ffi.rs:99-149
+src/ffi.rs:99-171
 # The client contract of re-entrancy shape (a), a hypothesis of
 # fold_all_rec_ok: the client's apply-all function reaches the record
 # only through the function it is given. Assumed of the C client,

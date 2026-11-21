@@ -24,6 +24,8 @@ module vu.Client
   syntax val get_max_len "%1->max_enc_len" prec 1 1
 
   syntax val get_slot_raw "%1->slot[%2]" prec 1 1 15
+  syntax val get_subject_len_raw "%1->subject_len" prec 1 1
+  syntax val get_subject_byte_raw "%1->subject[%2]" prec 1 1 15
   syntax val set_slot_raw "%1->slot[%2] = %3" prec 14 1 15 14
 
   syntax val get_calls "((vu_fold_rec *)%1)->calls" prec 1 2

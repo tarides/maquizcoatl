@@ -3,7 +3,7 @@
 # the caller's output with caller/expected.txt; or runs its negative
 # control.
 #
-# Usage: run.sh [-n] TOOL [RUN_ID]
+# Usage: run.sh [-n | -r] TOOL [RUN_ID]
 #
 #   TOOL     a tool directory next to this script (why3, pulse, verus,
 #            ...), or "reference" for caller/reference.c.
@@ -13,6 +13,11 @@
 #            tool's variant without the clamp in vu_char_len); the proof
 #            must fail. Nothing is linked. A rejection only counts after
 #            a normal run of the same tool with the same RUN_ID passed.
+#   -r       second negative control, for the read accessor: build with
+#            VU_NEGATIVE_CONTROL=2 (the tool's variant whose
+#            vu_get_subject_byte drops the upper bound check, so it may
+#            read past subject_len); the proof must fail. Same rules as
+#            -n; outputs in TOOL-control-read.
 #
 # Environment: VU_EXP (required), VU_CACHE (required except for
 # "reference"; its env.sh is sourced), VU_CPUS (CPU list for taskset,
@@ -23,7 +28,7 @@
 #
 # Contract of TOOL/build.sh: run from TOOL's directory with VU_HARNESS
 # (this directory), VU_OUT (an empty build directory), VU_JOBS,
-# VU_NEGATIVE_CONTROL (0 or 1) and VU_PROOF_REJECTED (3) set. It checks
+# VU_NEGATIVE_CONTROL (0, 1 or 2) and VU_PROOF_REJECTED (3) set. It checks
 # the proofs and leaves VU_OUT/libvu.a, a static library that defines
 # the functions of proto.h; VU_OUT/ldflags may list extra link flags.
 # Exit status: 0 when every proof is checked and the library is built;
@@ -31,26 +36,28 @@
 # other non-zero status for any other failure (missing tool, compilation
 # error, out of memory...). Its output is logged.
 #
-# Outputs, in VU_EXP/out/RUN_ID/TOOL (TOOL-control for -n): build.log
+# Outputs, in VU_EXP/out/RUN_ID/TOOL (TOOL-control for -n,
+# TOOL-control-read for -r): build.log
 # (headed by the sha256 of every harness file the run reads),
 # build.time (from /usr/bin/time -v when present), caller.out,
 # caller.diff and result.txt (key=value lines). Logs are redacted. The
-# build directory is VU_EXP/build/RUN_ID/TOOL (or TOOL-control).
+# build directory is VU_EXP/build/RUN_ID/TOOL (or TOOL-control,
+# TOOL-control-read).
 
 set -euo pipefail
 . "$(dirname "${BASH_SOURCE[0]}")/lib.sh"
 
 control=0
-if [ "${1:-}" = "-n" ]; then
-  control=1
-  shift
-fi
-[ $# -ge 1 ] && [ $# -le 2 ] || vu_die "usage: run.sh [-n] TOOL [RUN_ID]"
+case "${1:-}" in
+-n) control=1; shift ;;
+-r) control=2; shift ;;
+esac
+[ $# -ge 1 ] && [ $# -le 2 ] || vu_die "usage: run.sh [-n | -r] TOOL [RUN_ID]"
 tool=$1
 run_id=${2:-$(date -u +%Y%m%dT%H%M%SZ)}
 case "$tool" in */* | .* | "") vu_die "bad tool name: $tool" ;; esac
 case "$run_id" in */* | .* | "") vu_die "bad run id: $run_id" ;; esac
-if [ "$tool" = reference ] && [ "$control" = 1 ]; then
+if [ "$tool" = reference ] && [ "$control" != 0 ]; then
   vu_die "the reference has no proof, hence no negative control"
 fi
 
@@ -73,12 +80,13 @@ jobs=$(vu_jobs "$tool")
 
 suffix=""
 [ "$control" = 1 ] && suffix=-control
+[ "$control" = 2 ] && suffix=-control-read
 out=$VU_EXP/out/$run_id/$tool$suffix
 build=$VU_EXP/build/$run_id/$tool$suffix
 [ -e "$out" ] && vu_die "output directory exists, choose another RUN_ID: $out"
 
 # A negative control relies on a passing normal run.
-if [ "$control" = 1 ]; then
+if [ "$control" != 0 ]; then
   normal_result=$VU_EXP/out/$run_id/$tool/result.txt
   if ! { [ -f "$normal_result" ] &&
     grep -qx 'build_status=0' "$normal_result" &&
@@ -95,10 +103,14 @@ result=$out/result.txt
 record() { printf '%s=%s\n' "$1" "$2" >>"$result"; }
 record tool "$tool"
 record run_id "$run_id"
-record mode "$([ "$control" = 1 ] && echo negative-control || echo normal)"
+case "$control" in
+1) record mode negative-control ;;
+2) record mode negative-control-read ;;
+*) record mode normal ;;
+esac
 record jobs "$jobs"
 record cpus "${VU_CPUS:-unpinned}"
-[ "$control" = 1 ] && record normal_run passed
+[ "$control" != 0 ] && record normal_run passed
 
 # The build, under timeout and (except Isabelle) a virtual memory limit.
 build_cmd() {
@@ -145,7 +157,7 @@ record build_status "$status"
 vu_redact <"$build/build.raw" >"$out/build.log"
 [ -f "$build/time.raw" ] && vu_redact <"$build/time.raw" >"$out/build.time"
 
-if [ "$control" = 1 ]; then
+if [ "$control" != 0 ]; then
   case "$status" in
   "$VU_PROOF_REJECTED")
     record control rejected
@@ -154,7 +166,7 @@ if [ "$control" = 1 ]; then
     ;;
   0)
     record control ACCEPTED
-    vu_log "$tool control: FAILED, the proof passed without the clamp"
+    vu_log "$tool control: FAILED, the proof passed with the broken variant"
     ;;
   124)
     record control timeout

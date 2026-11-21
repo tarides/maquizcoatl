@@ -6,7 +6,10 @@
 #
 # 1. Copies vu.mlw and vu.drv into VU_OUT/src. With VU_NEGATIVE_CONTROL=1,
 #    the clamp of vu_char_len (the lines from CLAMP-BEGIN to CLAMP-END)
-#    is replaced by "r", the callee's raw result. Module Vu may hold no
+#    is replaced by "r", the callee's raw result. With
+#    VU_NEGATIVE_CONTROL=2, the lines from READ-BEGIN to READ-END (the
+#    upper bound test of vu_get_subject_byte) are deleted, so that it may
+#    read past subject_len. Module Vu may hold no
 #    val, axiom or assume.
 # 2. Splits every verification condition of vu.mlw into its goals
 #    (transformation split_vc) and proves each goal with Alt-Ergo, then
@@ -60,6 +63,14 @@ if [ "$control" = 1 ]; then
   cmp -s "$here/vu.mlw" "$src/vu.mlw" && fail "the clamp was not removed"
   diff -u --label vu.mlw --label vu.mlw.control "$here/vu.mlw" \
     "$src/vu.mlw" || true
+elif [ "$control" = 2 ]; then
+  [ "$(grep -c 'READ-BEGIN' "$src/vu.mlw")" = 1 ] &&
+    [ "$(grep -c 'READ-END' "$src/vu.mlw")" = 1 ] ||
+    fail "vu.mlw must hold exactly one READ-BEGIN and one READ-END line"
+  sed '/READ-BEGIN/,/READ-END/d' "$here/vu.mlw" >"$src/vu.mlw"
+  cmp -s "$here/vu.mlw" "$src/vu.mlw" && fail "the bound test was not removed"
+  diff -u --label vu.mlw --label vu.mlw.control-read "$here/vu.mlw" \
+    "$src/vu.mlw" || true
 fi
 sha256sum "$src/vu.mlw" "$src/vu.drv" | sed 's#  .*/#  #'
 # No proof escape in module Vu, the verified part: no val (a declaration
@@ -89,7 +100,9 @@ prove() {
   # below decide which.
   goals=$(grep -c '^Prover result is: ' "$log" || true)
   valid=$(grep -c '^Prover result is: Valid' "$log" || true)
-  rejected=$(grep -Ec '^Prover result is: (Invalid|Unknown|Timeout|Out ?Of ?Memory|Step ?limit)' "$log" || true)
+  # Case-insensitive: Why3 1.9.0 prints "Out of memory" and "Step limit
+  # exceeded" (run B found the first one missed by a case-sensitive test).
+  rejected=$(grep -Eic '^Prover result is: (Invalid|Unknown|Timeout|Out ?of ?memory|Step ?limit)' "$log" || true)
   echo "prover=$p exit=$status goals=$goals valid=$valid rejected=$rejected seconds=$(($(date +%s) - start))"
   [ "$goals" -gt 0 ] || return 1
   [ "$status" = 0 ] && [ "$valid" = "$goals" ] && return 0

@@ -7,7 +7,10 @@
 # Steps, each timed in the log:
 #   1. copy VU.fst to VU_OUT/src; with VU_NEGATIVE_CONTROL=1, replace the
 #      lines between CLAMP-BEGIN and CLAMP-END (the clamp of vu_char_len)
-#      by "r", the callee's raw result; refuse admit, assume, magic,
+#      by "r", the callee's raw result; with VU_NEGATIVE_CONTROL=2,
+#      replace the lines between READ-BEGIN and READ-END (the bounds test
+#      of vu_get_subject_byte) by a test of the lower bound only, so that
+#      it may read past subject_len; refuse admit, assume, magic,
 #      unsafe_coerce, --admit_smt_queries and --lax;
 #   2. F* check (writes the .checked file extraction needs); a rejection
 #      made only of failed proof obligations (F* error 19) exits with
@@ -39,10 +42,15 @@ krml -version | head -1
 cc --version | head -1
 
 step "1. source (negative control: $VU_NEGATIVE_CONTROL)"
+[ "$(grep -c 'CLAMP-BEGIN\|CLAMP-END' VU.fst)" = 2 ] ||
+  { echo "clamp markers not found"; exit 1; }
+[ "$(grep -c 'READ-BEGIN\|READ-END' VU.fst)" = 2 ] ||
+  { echo "read markers not found"; exit 1; }
 if [ "$VU_NEGATIVE_CONTROL" = 1 ]; then
-  [ "$(grep -c 'CLAMP-BEGIN\|CLAMP-END' VU.fst)" = 2 ] ||
-    { echo "clamp markers not found"; exit 1; }
   sed '/CLAMP-BEGIN/,/CLAMP-END/c\  r' VU.fst >"$src/VU.fst"
+  diff VU.fst "$src/VU.fst" || true
+elif [ "$VU_NEGATIVE_CONTROL" = 2 ]; then
+  sed '/READ-BEGIN/,/READ-END/c\  if (I32.lte 0l i) {' VU.fst >"$src/VU.fst"
   diff VU.fst "$src/VU.fst" || true
 else
   cp VU.fst "$src/VU.fst"

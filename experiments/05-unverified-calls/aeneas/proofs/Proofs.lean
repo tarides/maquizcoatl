@@ -265,6 +265,36 @@ theorem set_slot_spec (args : VuArgs) (k : Std.I32) (v : Std.I64) :
     slot_leaf
   all_goals slot_leaf
 
+/-! ## 5. vu_get_subject_byte -/
+
+def subject_ok (args : VuArgs) (i : Int) : Prop :=
+  0 ≤ i ∧ i < args.subject_len.val
+
+/-- The read accessor, given the subject slice that ffi.rs builds from
+    args (hypothesis hlen: the slice has subject_len bytes): in range,
+    it returns the byte at i; out of range, the error. The theorem is a
+    total-correctness triple, so it also says the read never fails. -/
+theorem get_subject_byte_spec (args : VuArgs) (subject : Slice Std.U8)
+    (i : Std.I32) (hlen : subject.length = args.subject_len.val) :
+    get_subject_byte args subject i ⦃ r =>
+      (subject_ok args i.val → r.val = (subject.val[i.toNat]!).val) ∧
+      (¬ subject_ok args i.val → r.val = -30) ⦄ := by
+  unfold get_subject_byte
+  simp only [ERR_INVALID_ARGUMENT, subject_ok]
+  split_ifs with h0 h1
+  · step with IScalar.hcast_inBounds_spec as ⟨j, hj⟩
+    step as ⟨b, hb⟩
+    have hjk : j.val = i.toNat := by scalar_tac
+    refine ⟨fun _ => ?_, fun h => absurd ⟨by scalar_tac, by scalar_tac⟩ h⟩
+    simp_all
+    -- The byte widened to i32: a U8 value is its own i32 value.
+    intro _
+    first
+      | scalar_tac
+      | (simp only [Int.bmod]; split <;> scalar_tac)
+  all_goals (simp only [WP.spec_ok]; refine ⟨fun h => ?_, fun _ => rfl⟩;
+             exfalso; scalar_tac)
+
 end vu
 
 /-! Axioms: build.sh checks that each line below lists only Lean's
@@ -279,3 +309,4 @@ end vu
 #print axioms vu.tableClient_respects
 #print axioms vu.get_slot_spec
 #print axioms vu.set_slot_spec
+#print axioms vu.get_subject_byte_spec

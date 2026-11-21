@@ -13,24 +13,27 @@
 # the verified vu_i_apply (re-entrancy shape (a)).
 shim.c
 # The shim's declaration in VU.thy: its types and its C names.
-VU.thy:80-87
+VU.thy:93-100
 # Contract of the encoding callee (hypothesis of vu_char_len_correct):
 # reads the byte p points to and gives it back, returns any 32-bit
 # value (no range).
-VU.thy:114-115
+VU.thy:127-128
 # Contract of the callout callee (hypothesis of
 # vu_callout_step_correct): gets the whole args record, gives it back
-# with the verified-side state unchanged, result in Q.
-VU.thy:191-193
+# with the verified-side state unchanged, result in Q; gets the subject
+# (whole: no read-only share) and gives it back unchanged (run B).
+VU.thy:207-209
 # ... and the definition of "verified-side state unchanged".
 VU.thy:51-52
+# ... and the subject assertion it lends (run B, read accessor).
+VU.thy:61-65
 # Contract of the client's apply_all_case_fold (hypothesis of
-# vu_fold_all_correct): given the record well formed, gives it back
-# well formed.
-VU.thy:314-316
-# ... and the definition of "well formed", with the field it reads.
-VU.thy:59-59
-VU.thy:64-65
+# vu_fold_all_composed, run B): the client reaches the record only
+# through the vu_i_apply it is given, so it preserves every property
+# that vu_i_apply preserves. vu_fold_all_composed derives the hypothesis
+# of vu_fold_all_correct (record well formed) from it and
+# vu_i_apply_correct, so that hypothesis is no longer trusted.
+VU.thy:349-356
 # ABI mapping from proto.h to the LLVM that export_llvm emits, written
 # by hand: the declare and define lines vu.ll must contain (counted raw).
 abi.expected
@@ -39,7 +42,7 @@ abi.expected
 # is trusted.
 layout.c:18-78
 # Renaming of the exported symbols (VU_<name> to <name>) in vu.o.
-build.sh:129-134
+build.sh:138-143
 #
 # Not counted: the toolchain (Isabelle2026, the AFP, Isabelle-LLVM's VCG
 # and code generator export_llvm, clang/LLVM 23, objcopy, the C

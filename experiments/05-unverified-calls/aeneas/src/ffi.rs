@@ -147,3 +147,27 @@ pub unsafe extern "C" fn vu_set_slot(args: *mut VuArgs, k: c_int, v: i64) -> c_i
     let args = some(unsafe { args.as_mut() });
     crate::set_slot(args, k, v)
 }
+
+/// The subject of args as a shared slice: args.subject must point to
+/// args.subject_len readable bytes that nobody writes during the call
+/// (proto.h). A negative length or a NULL pointer aborts; a zero length
+/// gives the empty slice without reading the pointer. The slice is made
+/// from the raw pointer itself: a first version went through
+/// args.subject.as_ref(), a reference to one byte, which Miri's Stacked
+/// Borrows rejects when the slice reads past that byte (run B).
+unsafe fn subject_of(args: &VuArgs) -> &[u8] {
+    if args.subject_len < 0 || args.subject.is_null() {
+        std::process::abort();
+    }
+    if args.subject_len == 0 {
+        return &[];
+    }
+    unsafe { core::slice::from_raw_parts(args.subject, args.subject_len as usize) }
+}
+
+#[no_mangle]
+pub unsafe extern "C" fn vu_get_subject_byte(args: *const VuArgs, i: c_int) -> c_int {
+    let args = some(unsafe { args.as_ref() });
+    let subject = unsafe { subject_of(args) };
+    crate::get_subject_byte(args, subject, i)
+}

@@ -3,7 +3,7 @@
 // The four verified functions of proto.h, in safe Rust: char_len
 // (vu_char_len), callout_step (vu_callout_step), i_apply and fold_all
 // (vu_i_apply, vu_fold_all), get_slot and set_slot (vu_get_slot,
-// vu_set_slot). Charon and Aeneas translate this file to Lean, where
+// vu_set_slot), get_subject_byte (vu_get_subject_byte). Charon and Aeneas translate this file to Lean, where
 // proofs/Proofs.lean proves their specifications. The same file is
 // compiled by rustc into the C library; the C entry points are in
 // ffi.rs, which Charon does not translate (build.sh: --exclude).
@@ -16,7 +16,7 @@
 // and nothing else.
 //
 // Two marker comments delimit the clamp that the negative control
-// removes.
+// removes, two more the bound test that the read control removes.
 
 mod ffi;
 
@@ -209,6 +209,25 @@ pub fn set_slot(args: &mut VuArgs, k: i32, v: i64) -> i32 {
     if 0 <= k && k < SLOT_NUM {
         args.slot[k as usize] = v;
         0
+    } else {
+        ERR_INVALID_ARGUMENT
+    }
+}
+
+// ------------------------------------------- 5. vu_get_subject_byte
+
+/// Reads byte i of the subject; out of [0, subject_len), returns
+/// ERR_INVALID_ARGUMENT and reads nothing. The subject is a shared
+/// slice: the raw pointer held in args has no model in Aeneas (a
+/// ConstRawPtr is opaque), so ffi.rs (trusted) makes the slice from
+/// args.subject and args.subject_len; the theorem takes their agreement
+/// as a hypothesis. Both args and the subject are shared references,
+/// hence unchanged.
+pub fn get_subject_byte(args: &VuArgs, subject: &[u8], i: i32) -> i32 {
+    // VU-READ-BEGIN
+    if 0 <= i && i < args.subject_len {
+    // VU-READ-END
+        subject[i as usize] as i32
     } else {
         ERR_INVALID_ARGUMENT
     }

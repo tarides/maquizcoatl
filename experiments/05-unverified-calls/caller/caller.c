@@ -18,6 +18,9 @@
      of the branch rules and every direction;
    - co_slots: a callout calling vu_get_slot and vu_set_slot by name
      (re-entrancy shape (b));
+   - co_subject: a callout reading the subject through the read accessor
+     vu_get_subject_byte and storing what it reads with vu_set_slot
+     (shape (b) with shared read access to engine state);
    - client_apply_all: an apply_all_case_fold calling back the verified
      function it is given (re-entrancy shape (a)). */
 
@@ -220,6 +223,46 @@ static void callout_slots(int dir, int value, int64_t slot0) {
   check(same_state(&a, &before), "verified-side state unchanged");
 }
 
+/* Re-entrancy (b) with read access: the callout reads the subject at
+   indices 0 to 2 and stores the bytes in slots 0 to 2, then probes the
+   accessor at -1, at the subject's length, at INT_MIN and at INT_MAX.
+   callout_subject runs it with the subject "abc" given a length of 3
+   and of 2: the bound is subject_len, not the buffer. */
+static int co_subject_got[7];
+
+static int co_subject(vu_args *args, void *user_data) {
+  static const int probes[4] = {-1, 3, INT_MIN, INT_MAX};
+  for (int i = 0; i < 3; i++) {
+    co_subject_got[i] = vu_get_subject_byte(args, i);
+    if (co_subject_got[i] >= 0)
+      (void)vu_set_slot(args, i, co_subject_got[i]);
+  }
+  for (int j = 0; j < 4; j++)
+    co_subject_got[3 + j] = vu_get_subject_byte(args, probes[j]);
+  return *(const int *)user_data;
+}
+
+static void callout_subject(int dir, int value, int len) {
+  vu_args a, before;
+  unsigned char copy[sizeof subject];
+  init_args(&a);
+  a.subject_len = len;
+  before = a;
+  memcpy(copy, subject, sizeof subject);
+  for (int k = 0; k < 7; k++)
+    co_subject_got[k] = CO_SLOTS_UNSET;
+  int r = vu_callout_step(dir, co_subject, &a, &value);
+  printf("subject dir=%s callee=%d len=%d -> %d (%s) read=%d,%d,%d"
+         " probes=%d,%d,%d,%d slots=%lld,%lld,%lld,%lld,%lld\n",
+         dir_name(dir), value, len, r, action_name(r), co_subject_got[0],
+         co_subject_got[1], co_subject_got[2], co_subject_got[3],
+         co_subject_got[4], co_subject_got[5], co_subject_got[6],
+         (long long)a.slot[0], (long long)a.slot[1], (long long)a.slot[2],
+         (long long)a.slot[3], (long long)a.slot[4]);
+  check(same_state(&a, &before), "verified-side state unchanged");
+  check(memcmp(copy, subject, sizeof subject) == 0, "subject unchanged");
+}
+
 /* Re-entrancy (a): the client walks a small fold table and calls back
    the verified function for each entry, stopping at the first non-zero
    result, as upstream's apply_all_case_fold implementations do. */
@@ -312,6 +355,21 @@ int main(void) {
     int s = vu_set_slot(&a, 2, INT64_MIN);
     int g = vu_get_slot(&a, 2, &v);
     printf("direct set=%d get=%d value=%lld\n", s, g, (long long)v);
+  }
+
+  callout_subject(VU_DIR_PROGRESS, VU_CALLOUT_SUCCESS, 3);
+  callout_subject(VU_DIR_EACH_MATCH, 5, 2);
+  {
+    static const unsigned char high[] = {0xff, 0x80, 0x00};
+    vu_args a;
+    init_args(&a);
+    a.subject = high;
+    a.subject_len = 3;
+    printf("direct subject_byte %d,%d,%d,%d\n", vu_get_subject_byte(&a, 0),
+           vu_get_subject_byte(&a, 1), vu_get_subject_byte(&a, 2),
+           vu_get_subject_byte(&a, 3));
+    a.subject_len = 0;
+    printf("direct empty subject_byte %d\n", vu_get_subject_byte(&a, 0));
   }
 
   fold("table", client_apply_all, 0);

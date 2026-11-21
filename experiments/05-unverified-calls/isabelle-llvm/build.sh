@@ -9,8 +9,10 @@
 #   1. copy ROOT and VU.thy to VU_OUT/src; with VU_NEGATIVE_CONTROL=1,
 #      replace the lines between CLAMP-BEGIN and CLAMP-END (the clamp of
 #      vu_char_len) by a definition that returns the callee's raw
-#      result; refuse sorry, axiomatization, oracles and
-#      quick_and_dirty;
+#      result; with VU_NEGATIVE_CONTROL=2, replace the lines between
+#      READ-BEGIN and READ-END (the bound test of vu_get_subject_byte)
+#      by a test of the lower bound only; refuse sorry, axiomatization,
+#      oracles and quick_and_dirty;
 #   2. isabelle build of the session VU (a clean build, -c, so that
 #      export_llvm writes vu.ll again). A failed build whose errors are
 #      all failed proofs exits with VU_PROOF_REJECTED, any other failure
@@ -56,6 +58,13 @@ if [ "$VU_NEGATIVE_CONTROL" = 1 ]; then
   sed '/CLAMP-BEGIN/,/CLAMP-END/c\
 definition vu_clamp :: "32 word \\<Rightarrow> 32 word \\<Rightarrow> 32 word \\<Rightarrow> 32 word llM" where [llvm_inline]:\
   "vu_clamp r mn mx \\<equiv> Mreturn r"' VU.thy >"$src/VU.thy"
+  diff VU.thy "$src/VU.thy" || true
+elif [ "$VU_NEGATIVE_CONTROL" = 2 ]; then
+  [ "$(grep -c 'READ-BEGIN\|READ-END' VU.thy)" = 2 ] ||
+    { echo "read markers not found"; exit 1; }
+  sed '/READ-BEGIN/,/READ-END/c\
+definition in_subject :: "32 word \\<Rightarrow> 32 word \\<Rightarrow> 1 word llM" where [llvm_inline]:\
+  "in_subject i l \\<equiv> ll_icmp_sle 0 i"' VU.thy >"$src/VU.thy"
   diff VU.thy "$src/VU.thy" || true
 else
   cp VU.thy "$src/VU.thy"
@@ -128,7 +137,7 @@ clang --target="$triple" -O2 -Werror -c "$ll" -o "$VU_OUT/vu.o"
 # export_llvm prefixes the names with the theory name: VU_vu_char_len.
 renames=()
 for f in vu_char_len vu_callout_step vu_i_apply vu_fold_all vu_get_slot \
-  vu_set_slot; do
+  vu_set_slot vu_get_subject_byte; do
   renames+=(--redefine-sym "VU_$f=$f")
 done
 objcopy "${renames[@]}" "$VU_OUT/vu.o"

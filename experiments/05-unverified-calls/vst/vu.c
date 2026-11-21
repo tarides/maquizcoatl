@@ -98,3 +98,18 @@ int vu_set_slot(vu_args *args, int k, int64_t v) {
   args->slot[k] = v;
   return 0;
 }
+
+int vu_get_subject_byte(const vu_args *args, int i) {
+  const unsigned char *s;
+  int len, c;
+  if (i < 0)
+    return VU_ERR_INVALID_ARGUMENT;
+  len = args->subject_len;
+  /* READ-BEGIN */
+  if (i >= len)
+    return VU_ERR_INVALID_ARGUMENT;
+  /* READ-END */
+  s = args->subject;
+  c = s[i];
+  return c;
+}

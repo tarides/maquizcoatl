@@ -47,6 +47,10 @@ slots dir=progress callee=0 slot0=41 -> 0 (continue) status=0,0,0,-30,-30,-30 sl
 slots dir=retraction callee=1 slot0=-9 -> 0 (continue) status=0,0,0,-30,-30,-30 slots=-8,0,0,0,-8
 slots dir=progress callee=2 slot0=0 -> -30 (error) status=0,0,0,-30,-30,-30 slots=1,0,0,0,1
 direct set=0 get=0 value=-9223372036854775808
+subject dir=progress callee=0 len=3 -> 0 (continue) read=97,98,99 probes=-30,-30,-30,-30 slots=97,98,99,0,0
+subject dir=each-match callee=5 len=2 -> 1 (backtrack) read=97,98,-30 probes=-30,-30,-30,-30 slots=97,98,0,0,0
+direct subject_byte 255,128,0,-30
+direct empty subject_byte -30
 fold table calls0=0 -> 0 calls=13 recorded=8 from=0x41,0x61,0xdf,0x390,0x101,0x103,0x105,0x107
 fold saturate calls0=2147483645 -> 0 calls=2147483647 recorded=8 from=0x41,0x61,0xdf,0x390,0x101,0x103,0x105,0x107
 fold stop calls0=0 -> -7 calls=1 recorded=1 from=0x41

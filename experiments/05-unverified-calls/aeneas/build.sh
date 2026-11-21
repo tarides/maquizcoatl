@@ -13,7 +13,9 @@
 # Steps, each timed in the log:
 #   1. copy src/ and proofs/ to VU_OUT; with VU_NEGATIVE_CONTROL=1,
 #      replace the clamp of char_len (the lines between the VU-CLAMP
-#      markers of src/lib.rs) by "raw", the callee's raw result;
+#      markers of src/lib.rs) by "raw", the callee's raw result; with
+#      VU_NEGATIVE_CONTROL=2, replace the bound test of get_subject_byte
+#      (between the VU-READ markers) by its lower bound alone;
 #   2. Charon: Rust to LLBC, without the C glue (--exclude crate::ffi);
 #   3. Aeneas: LLBC to Lean (Vu.lean). Any Aeneas error, or an axiom,
 #      sorry or opaque definition in Vu.lean (Aeneas's fallback for what
@@ -64,6 +66,15 @@ if [ "$VU_NEGATIVE_CONTROL" = 1 ]; then
        !skip' src/lib.rs >"$VU_OUT/src/lib.rs"
   echo "negative control: clamp removed"
   diff -u --label src/lib.rs --label control/lib.rs src/lib.rs \
+    "$VU_OUT/src/lib.rs" | sed 's/^/  /' || true
+elif [ "$VU_NEGATIVE_CONTROL" = 2 ]; then
+  [ "$(grep -c '^ *// VU-READ-\(BEGIN\|END\)$' src/lib.rs)" = 2 ] ||
+    { echo "read markers not found in src/lib.rs"; exit 1; }
+  awk '/^ *\/\/ VU-READ-BEGIN$/ { print "    if 0 <= i {"; skip = 1; next }
+       /^ *\/\/ VU-READ-END$/ { skip = 0; next }
+       !skip' src/lib.rs >"$VU_OUT/src/lib.rs"
+  echo "negative control: upper bound test of get_subject_byte removed"
+  diff -u --label src/lib.rs --label control-read/lib.rs src/lib.rs \
     "$VU_OUT/src/lib.rs" | sed 's/^/  /' || true
 fi
 cd "$VU_OUT"
@@ -143,7 +154,7 @@ if [ "$status" != 0 ] || [ "$axioms" != "$theorems" ]; then
   exit 1
 fi
 echo "proofs: all $theorems theorems checked, standard axioms only"
-[ "$VU_NEGATIVE_CONTROL" = 1 ] && exit 0
+[ "$VU_NEGATIVE_CONTROL" != 0 ] && exit 0
 
 step "6. rustc"
 rustc "+$toolchain" "${rust_args[@]}" -C opt-level=2 -C overflow-checks=on \

@@ -105,6 +105,13 @@ Definition apply_records (to_len recorded : Z) : bool :=
 
 Definition slot_ok (k : Z) : bool := andb (0 <=? k) (k <? slot_num).
 
+Definition read_ok (i len : Z) : bool := andb (0 <=? i) (i <? len).
+
+(* The subject, lent with a read share [shs]: [Zlength bytes] bytes at
+   [subj], whose length is the subject_len member of vu_args. *)
+Definition subject_rep (shs : share) (bytes : list byte) (subj : val) :=
+  data_at shs (tarray tuchar (Zlength bytes)) (map Vubyte bytes) subj.
+
 (* ------------------------------------------------------------------
    Client contracts: the funspecs of the client's function pointers.
    CLIENT-CONTRACTS-BEGIN *)
@@ -125,20 +132,29 @@ Definition enc_len_spec : funspec :=
 
 (* vu_callout_fn: gets the whole args record with a writable share and
    gives it back with the verified-side state unchanged and any slots;
-   returns any int. user_data stays the client's: no ownership of it
-   passes through the verified code. *)
+   gets the subject with a read share [shs] and gives it back unchanged
+   (a read share cannot write it); returns any int. user_data stays the
+   client's: no ownership of it passes through the verified code. *)
 Definition callout_spec : funspec :=
   WITH sha : share, args : val, ud : val,
-       subj : val, len : val, pos : val, num : val, slots : list int64
+       subj : val, pos : val, num : val, slots : list int64,
+       shs : share, bytes : list byte
   PRE [tptr t_args, tptr tvoid]
-    PROP (writable_share sha)
+    PROP (writable_share sha; readable_share shs;
+          Zlength bytes <= Int.max_signed)
     PARAMS (args; ud)
-    SEP (data_at sha t_args (args_rep subj len pos num slots) args)
+    SEP (data_at sha t_args
+           (args_rep subj (Vint (Int.repr (Zlength bytes))) pos num slots)
+           args;
+         subject_rep shs bytes subj)
   POST [tint]
     EX r : Z, EX slots' : list int64,
     PROP (Int.min_signed <= r <= Int.max_signed)
     RETURN (Vint (Int.repr r))
-    SEP (data_at sha t_args (args_rep subj len pos num slots') args).
+    SEP (data_at sha t_args
+           (args_rep subj (Vint (Int.repr (Zlength bytes))) pos num slots')
+           args;
+         subject_rep shs bytes subj).
 
 (* CLIENT-CONTRACTS-END *)
 
@@ -216,19 +232,28 @@ Definition vu_char_len_spec :=
 Definition vu_callout_step_spec :=
   DECLARE _vu_callout_step
   WITH dir : Z, f : val, args : val, ud : val, sha : share,
-       subj : val, len : val, pos : val, num : val, slots : list int64
+       subj : val, pos : val, num : val, slots : list int64,
+       shs : share, bytes : list byte
   PRE [tint, t_callout_fn, tptr t_args, tptr tvoid]
-    PROP (writable_share sha; Int.min_signed <= dir <= Int.max_signed)
+    PROP (writable_share sha; readable_share shs;
+          Zlength bytes <= Int.max_signed;
+          Int.min_signed <= dir <= Int.max_signed)
     PARAMS (Vint (Int.repr dir); f; args; ud)
     SEP (func_ptr' callout_spec f;
-         data_at sha t_args (args_rep subj len pos num slots) args)
+         data_at sha t_args
+           (args_rep subj (Vint (Int.repr (Zlength bytes))) pos num slots)
+           args;
+         subject_rep shs bytes subj)
   POST [tint]
     EX r : Z, EX slots' : list int64,
     PROP (Int.min_signed <= r <= Int.max_signed;
           dir_valid dir = false -> slots' = slots)
     RETURN (Vint (Int.repr (step_result dir r)))
     SEP (func_ptr' callout_spec f;
-         data_at sha t_args (args_rep subj len pos num slots') args).
+         data_at sha t_args
+           (args_rep subj (Vint (Int.repr (Zlength bytes))) pos num slots')
+           args;
+         subject_rep shs bytes subj).
 
 Definition vu_i_apply_spec := DECLARE _vu_i_apply i_apply_fs.
 
@@ -284,9 +309,36 @@ Definition vu_set_slot_spec :=
            (args_rep subj len pos num
               (if slot_ok k then upd_Znth k slots x else slots)) args).
 
+(* Read accessor: a read share of args and of the subject suffice; both
+   come back unchanged. The result is the byte at i when i is in
+   [0, subject_len), else the error. *)
+Definition vu_get_subject_byte_spec :=
+  DECLARE _vu_get_subject_byte
+  WITH sha : share, args : val, subj : val, pos : val, num : val,
+       slots : list int64, shs : share, bytes : list byte, i : Z
+  PRE [tptr t_args, tint]
+    PROP (readable_share sha; readable_share shs;
+          Zlength bytes <= Int.max_signed;
+          Int.min_signed <= i <= Int.max_signed)
+    PARAMS (args; Vint (Int.repr i))
+    SEP (data_at sha t_args
+           (args_rep subj (Vint (Int.repr (Zlength bytes))) pos num slots)
+           args;
+         subject_rep shs bytes subj)
+  POST [tint]
+    PROP ()
+    RETURN (Vint (Int.repr
+      (if read_ok i (Zlength bytes) then Byte.unsigned (Znth i bytes)
+       else err_invalid_argument)))
+    SEP (data_at sha t_args
+           (args_rep subj (Vint (Int.repr (Zlength bytes))) pos num slots)
+           args;
+         subject_rep shs bytes subj).
+
 Definition Gprog : funspecs := ltac:(with_library prog [
   vu_char_len_spec; vu_callout_step_spec; vu_i_apply_spec;
-  vu_fold_all_spec; vu_get_slot_spec; vu_set_slot_spec]).
+  vu_fold_all_spec; vu_get_slot_spec; vu_set_slot_spec;
+  vu_get_subject_byte_spec]).
 
 (* ------------------------------------------------------------------
    Proofs *)
@@ -317,7 +369,7 @@ Ltac int_to_Z :=
 Ltac solve_rules :=
   int_to_Z;
   unfold step_result, progress_rule, retraction_rule, each_match_rule,
-    dir_valid, apply_calls, apply_records, slot_ok,
+    dir_valid, apply_calls, apply_records, slot_ok, read_ok,
     callout_success, callout_fail, err_invalid_argument, dir_progress,
     dir_retraction, dir_each_match, act_continue, act_backtrack,
     slot_num, max_to_len, fold_rec_max in *;
@@ -387,7 +439,7 @@ Proof.
     step_is err_invalid_argument.
     entailer!. }
   assert (V : dir_valid dir = true) by solve_rules.
-  forward_call (sha, args, ud, subj, len, pos, num, slots).
+  forward_call (sha, args, ud, subj, pos, num, slots, shs, bytes).
   Intros vret. destruct vret as [r slots']. simpl_pairs.
   forward_if.
   { forward. Exists r slots'.
@@ -501,8 +553,32 @@ Proof.
   entailer!.
 Qed.
 
+Lemma body_vu_get_subject_byte :
+  semax_body Vprog Gprog f_vu_get_subject_byte vu_get_subject_byte_spec.
+Proof.
+  start_function.
+  unfold args_rep, subject_rep.
+  forward_if.
+  { forward. replace (read_ok i (Zlength bytes)) with false
+      by solve_rules. entailer!. }
+  forward.
+  (* READ-BEGIN *)
+  forward_if.
+  { forward. replace (read_ok i (Zlength bytes)) with false
+      by solve_rules. entailer!. }
+  (* READ-END *)
+  forward.
+  forward.
+  { entailer!. all: try rewrite Znth_map_Vubyte by lia.
+    all: apply tc_val_Vubyte. }
+  try rewrite Znth_map_Vubyte by lia.
+  forward.
+  replace (read_ok i (Zlength bytes)) with true by solve_rules.
+  entailer!.
+Qed.
+
 (* ------------------------------------------------------------------
-   The six bodies together *)
+   The seven bodies together *)
 
 #[local] Existing Instance NullExtension.Espec.
 
@@ -532,6 +608,7 @@ Proof.
   semax_func_cons body_vu_fold_all.
   semax_func_cons body_vu_get_slot.
   semax_func_cons body_vu_set_slot.
+  semax_func_cons body_vu_get_subject_byte.
 Qed.
 
 (* The axioms the proofs rest on: build.sh checks that the list holds

@@ -2,7 +2,8 @@
 # build.sh: checks and builds the Verus prototype (contract in ../run.sh).
 #
 # Copies src/ into VU_OUT/src (with the clamp of char_len replaced by
-# the callee's raw result when VU_NEGATIVE_CONTROL=1), checks with
+# the callee's raw result when VU_NEGATIVE_CONTROL=1, and with the upper
+# bound test of get_subject_byte removed when it is 2), checks with
 # --no-cheating that the only proof escapes are the shims of
 # src/shim.rs, verifies it with Verus and, for a normal run, compiles it
 # in the same Verus run into the static library VU_OUT/libvu.a.
@@ -34,6 +35,19 @@ if [ "$control" = 1 ]; then
   fi
   echo "negative control: clamp removed"
   diff -u --label src/lib.rs --label control/lib.rs src/lib.rs "$VU_OUT/src/lib.rs" | sed 's/^/  /' || true
+elif [ "$control" = 2 ]; then
+  # The bound test of get_subject_byte is the line between the VU-READ
+  # markers; the control keeps only its lower bound, so that the read
+  # may go past subject_len.
+  awk '/^ *\/\/ VU-READ-BEGIN$/ { print "    if 0 <= i {"; skip = 1; next }
+       /^ *\/\/ VU-READ-END$/ { skip = 0; next }
+       !skip' src/lib.rs >"$VU_OUT/src/lib.rs"
+  if cmp -s src/lib.rs "$VU_OUT/src/lib.rs"; then
+    echo "build.sh: no read markers in src/lib.rs" >&2
+    exit 1
+  fi
+  echo "negative control: upper bound test of get_subject_byte removed"
+  diff -u --label src/lib.rs --label control-read/lib.rs src/lib.rs "$VU_OUT/src/lib.rs" | sed 's/^/  /' || true
 fi
 
 # No proof escape outside the shims: with --no-cheating, Verus refuses
@@ -56,8 +70,11 @@ if [ "$elsewhere" != 0 ]; then
   exit 1
 fi
 
+# The build directory holds the run id: --remap-path-prefix keeps it out
+# of the library, so that two builds of the same sources give the same
+# libvu.a (run A found the sha256 differing between runs).
 args=(--num-threads "$VU_JOBS" --time --crate-type=staticlib --crate-name=vu
-  --edition=2021 "$VU_OUT/src/lib.rs")
+  --edition=2021 --remap-path-prefix "$VU_OUT=/vu" "$VU_OUT/src/lib.rs")
 if [ "$control" = 0 ]; then
   args+=(--compile -o "$VU_OUT/libvu.a" --print "native-static-libs")
 fi
@@ -80,7 +97,7 @@ if [ "$status" != 0 ] || [ -z "$results" ]; then
   echo "build.sh: Verus failed (status $status) without a proof rejection" >&2
   exit 1
 fi
-[ "$control" = 1 ] && exit 0
+[ "$control" != 0 ] && exit 0
 
 [ -f "$VU_OUT/libvu.a" ] || { echo "build.sh: no libvu.a" >&2; exit 1; }
 sed -nE 's/^note: native-static-libs: //p' "$VU_OUT/verus.log" | tail -n 1 \

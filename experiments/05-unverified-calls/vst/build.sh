@@ -9,7 +9,10 @@
 #      delete the lines between the CLAMP-BEGIN and CLAMP-END markers in
 #      both: the clamp of vu_char_len in vu.c (which then returns the
 #      callee's raw result) and the proof steps of its two branches in
-#      verif_vu.v (the rest of the proof is unchanged);
+#      verif_vu.v (the rest of the proof is unchanged); with
+#      VU_NEGATIVE_CONTROL=2, delete the lines between READ-BEGIN and
+#      READ-END instead: the upper bound check of vu_get_subject_byte,
+#      which may then read past subject_len, and its proof step;
 #   2. clightgen -normalize vu.c, then coqc on the generated vu.v;
 #   3. coqc on verif_vu.v. A failure located inside a Proof ... Qed block
 #      of verif_vu.v exits with VU_PROOF_REJECTED, any other failure with
@@ -55,8 +58,13 @@ step "1. sources (negative control: $VU_NEGATIVE_CONTROL)"
 for f in vu.c verif_vu.v; do
   [ "$(grep -c 'CLAMP-BEGIN\|CLAMP-END' "$f")" = 2 ] ||
     { echo "clamp markers not found in $f"; exit 1; }
+  [ "$(grep -c 'READ-BEGIN\|READ-END' "$f")" = 2 ] ||
+    { echo "read markers not found in $f"; exit 1; }
   if [ "$VU_NEGATIVE_CONTROL" = 1 ]; then
     sed '/CLAMP-BEGIN/,/CLAMP-END/d' "$f" >"$src/$f"
+    diff "$f" "$src/$f" || true
+  elif [ "$VU_NEGATIVE_CONTROL" = 2 ]; then
+    sed '/READ-BEGIN/,/READ-END/d' "$f" >"$src/$f"
     diff "$f" "$src/$f" || true
   else
     cp "$f" "$src/$f"

@@ -1,4 +1,4 @@
-(* VU.fst: the four verified functions of experiment #5 in F* + Pulse,
+(* VU.fst: the verified functions of experiment #5 in F* + Pulse,
    extracted to C with KaRaMeL. The C interface is ../proto.h; the C
    names come from krml's -no-prefix VU.
 
@@ -16,6 +16,9 @@ module U8 = FStar.UInt8
 module U32 = FStar.UInt32
 module I32 = FStar.Int32
 module I64 = FStar.Int64
+module SZ = FStar.SizeT
+module A = Pulse.Lib.Array
+module Cast = FStar.Int.Cast
 
 (* ------------------------------------------------------------------
    Constants of proto.h *)
@@ -44,10 +47,11 @@ type vu_enc_state = {
   max_enc_len : I32.t;
 }
 
-(* struct vu_args. subject is a const unsigned char * on the C side. *)
+(* struct vu_args. subject is a const unsigned char * on the C side: a
+   Pulse array, which KaRaMeL emits as uint8_t *. *)
 noeq
 type vu_args = {
-  subject : ref U8.t;
+  subject : A.array U8.t;
   subject_len : I32.t;
   pos : I32.t;
   num : I32.t;
@@ -217,18 +221,24 @@ fn vu_char_len
    2. vu_callout_step: the callout callee. Its contract: it gets the
    whole args record (so that it can call vu_get_slot and vu_set_slot)
    and must give it back with the verified-side state unchanged; only
-   the slots may differ. user_data is opaque: the verified side holds
-   no permission on it and passes it through. *)
+   the slots may differ. It also gets a fraction ps of the subject (so
+   that it can call vu_get_subject_byte), read-only, and gives it back
+   with the same bytes. user_data is opaque: the verified side holds no
+   permission on it and passes it through. *)
 
 fn vu_callout_step
-  (#v: erased vu_args)
+  (#v: erased vu_args) (#ps: perm) (#s: erased (Seq.seq U8.t))
   (dir: I32.t)
   (f: ((a: ref vu_args) -> (ud: ref U8.t) ->
-       stt I32.t (a |-> reveal v)
-                 (fun _ -> exists* v'. (a |-> v') ** pure (same_state v v'))))
+       stt I32.t ((a |-> reveal v) ** A.pts_to v.subject #ps s **
+                  pure (Seq.length s == I32.v v.subject_len))
+                 (fun _ -> exists* v'. (a |-> v') ** A.pts_to v.subject #ps s **
+                    pure (same_state v v'))))
   (args: ref vu_args)
   (ud: ref U8.t)
   requires args |-> reveal v
+  preserves A.pts_to v.subject #ps s
+  requires pure (Seq.length s == I32.v v.subject_len)
   returns res: I32.t
   ensures exists* v'. (args |-> v') **
     pure (same_state v v' /\
@@ -352,6 +362,35 @@ fn vu_set_slot
     let y = !args;
     args := set_slot_at y k x;
     0l
+  } else {
+    err_invalid_argument
+  }
+}
+
+(* Read accessor, called by name from a client callout with the
+   fraction of the subject it was lent: a fraction of args and of the
+   subject suffice, and both come back unchanged. Out-of-range i:
+   VU_ERR_INVALID_ARGUMENT, the subject is not read. SZ.fits_u32 (size_t
+   holds every uint32_t) is a precondition: Pulse indexes arrays with
+   size_t, and F* leaves the width of size_t to the target. *)
+fn vu_get_subject_byte
+  (args: ref vu_args) (i: I32.t)
+  (#pa: perm) (#a: erased vu_args) (#ps: perm) (#s: erased (Seq.seq U8.t))
+  preserves args |-> Frac pa a
+  preserves A.pts_to a.subject #ps s
+  requires pure (Seq.length s == I32.v a.subject_len /\ SZ.fits_u32)
+  returns res: I32.t
+  ensures pure (if 0 <= I32.v i && I32.v i < Seq.length s
+                then I32.v res == U8.v (Seq.index s (I32.v i))
+                else res == err_invalid_argument)
+{
+  let x = !args;
+  (* READ-BEGIN *)
+  if (I32.lte 0l i && I32.lt i x.subject_len) {
+  (* READ-END *)
+    let j = SZ.uint32_to_sizet (Cast.int32_to_uint32 i);
+    let b = x.subject.(j);
+    Cast.uint8_to_int32 b
   } else {
     err_invalid_argument
   }
