@@ -3,9 +3,26 @@
 T_spec, experiment #7's idle rerun) as Markdown tables.
 
 usage: python3 -I summarise.py DATA OUT
-  DATA holds all.tsv, verdicts.tsv, in.tsv, in-ext.tsv, ids.txt
-  OUT is the copied <exp>/out/<run-id> (g/, rocq/, lean/, why3/, fstar/,
-  e07/ for the idle rerun)
+  DATA holds all.tsv, verdicts.tsv, in.tsv, in-ext.tsv, ids.txt, reps.env
+  OUT holds g/, rocq/, lean/, why3/, fstar/, verus/, isabelle/ (each with
+  times.tsv, throughput-lines.txt and, for the provers, verdicts.txt)
+  and e07/ for experiment #7's idle rerun
+
+Rerunning from the committed data (lab/results/2026-11-20-exp-06-raw/):
+every input is committed except all.tsv, which is deterministic and is
+regenerated first from the pinned submodule:
+
+  R=lab/results/2026-11-20-exp-06-raw
+  python3 -I lab/06-spec-speed/cases/extract.py upstream > <workdir>/all.tsv
+  cp $R/verdicts.tsv $R/in.tsv $R/in-ext.tsv $R/ids.txt $R/reps.env <workdir>/
+  python3 -I lab/06-spec-speed/summarise.py <workdir> $R
+
+(4,565 cases, sha256 d0386ccf...ecc88f; verdicts.tsv, in.tsv and
+in-ext.tsv can likewise be regenerated with `g classify`, see
+g/g.ml.)  The search_cps, parse_cps and e2e_cps figures are read from
+<tool>/throughput-lines.txt, the `grep cps=` condensation of the per-run
+logs <label>.<run>.log (one line per run, prefixed "<label>.<run>.log:";
+the per-run logs themselves are not committed).
 """
 import sys, os, re, statistics
 from collections import Counter, defaultdict
@@ -31,6 +48,19 @@ def times(path):
         lab, run, st, w, rss, load = f[:6]
         t[lab][run] = (int(st), wall(w) if w else float("nan"),
                        int(rss) if rss else 0, load.split()[0])
+    return t
+
+
+def throughput_lines(path):
+    """(label, run) -> the cps= lines of <label>.<run>.log, read from the
+    committed condensation throughput-lines.txt ("<label>.<run>.log:<line>")"""
+    t = defaultdict(list)
+    if not os.path.exists(path):
+        return t
+    for l in open(path):
+        m = re.match(r"(.+)\.(\d+)\.log:(.*)$", l.rstrip("\n"))
+        if m and "cps=" in m.group(3):
+            t[(m.group(1), m.group(2))].append(m.group(3))
     return t
 
 
@@ -165,12 +195,12 @@ def main():
     gparse = None
     for d, lab, name in labs:
         tt = times(f"{out}/{d}/times.tsv").get(lab, {})
+        tl = throughput_lines(f"{out}/{d}/throughput-lines.txt")
         vals = defaultdict(list)
         for run in tt:
-            for l in open(f"{out}/{d}/{lab}.{run}.log"):
-                if "cps=" in l:
-                    for k, v in re.findall(r"(\w+)=([\d.]+)", l):
-                        vals[k].append(float(v))
+            for l in tl.get((lab, run), []):
+                for k, v in re.findall(r"(\w+)=([\d.]+)", l):
+                    vals[k].append(float(v))
         if not tt:
             continue
         reps = int(vals["reps"][0])
