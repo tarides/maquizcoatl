@@ -138,7 +138,7 @@ vu_jobs() {
   local cap=4 j=${VU_JOBS:-4}
   case "$j" in "" | *[!0-9]*) vu_die "VU_JOBS must be a positive integer: $j" ;; esac
   j=$((10#$j))
-  case "$1" in vst | isabelle-llvm | refinedrust) cap=12 ;; esac
+  case "$1" in vst | isabelle-llvm | refinedrust | refinedc) cap=12 ;; esac
   [ "$j" -gt "$cap" ] && j=$cap
   [ "$j" -lt 1 ] && j=1
   printf '%s\n' "$j"

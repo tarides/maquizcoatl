@@ -165,7 +165,8 @@
     "rust": "nightly-2026-08-03",
     "commit": "65349025c67e69fcd7479f1f420fa5904f69bc27",
     "disk_gb": 7,
-    "disk_note": "Rust nightly with rustc-dev and llvm-tools (1.6 GB measured for Charon's nightly), the cargo build of Creusot (about 3 GB), Why3, why3find and solvers from creusot-deps.opam in their own opam switch (about 2 GB)"
+    "disk_note": "Rust nightly with rustc-dev and llvm-tools (1.6 GB measured for Charon's nightly), the cargo build of Creusot (about 3 GB), Why3, why3find and solvers from creusot-deps.opam in their own opam switch (about 2 GB)",
+    "install_note": "install written in run E: the tag's creusot-install (./INSTALL), data and config directories inside <cache>/creusot"
   },
   "refinedrust": {
     "milestone": 3,
@@ -175,7 +176,7 @@
     "ocaml": "4.14.2",
     "disk_gb": 6,
     "disk_note": "an opam switch on OCaml 4.14.2 with Rocq, Iris, std++ and the RefinedRust theories (about 4 GB, VST's switch is 1.2 GB before its proofs), and the Rust nightly with rustc-dev its frontend pins (about 1.6 GB)",
-    "commit_note": "main HEAD, retrieved 2026-11-21 with git ls-remote (fix after the review of run D); the install is still not written (setup.sh step_refinedrust is a disk check followed by vu_die)"
+    "commit_note": "main HEAD, retrieved 2026-11-21 with git ls-remote (fix after the review of run D); install written in run E"
   },
   "bedrock2": {
     "milestone": 4,
@@ -190,7 +191,7 @@
     ],
     "disk_gb": 3,
     "disk_note": "guess, not measured, to be replaced by du -sL of the installed tree: the source with its coqutil, riscv-coq and kami submodules (size not measured) and the compiled coqutil and bedrock2 theories against provers's Rocq 9.3 (the only compiled Rocq library measured so far is the vst switch, 1.2-1.3 GB); the compiler and kami are not built",
-    "install_note": "install not written (run D of the pipeline): setup.sh step_bedrock2 is a disk check followed by vu_die"
+    "install_note": "install written in run E of the pipeline (setup.sh step_bedrock2)"
   },
   "cn": {
     "milestone": 4,
@@ -203,7 +204,7 @@
     "disk_gb": 3,
     "disk_note": "guess, not measured, to be replaced by du -sL of the installed switch: an opam switch cn on OCaml 5.4.1 with cn pinned to its checkout and cerberus-lib at a0f7071 through its pin-depends (about 2 GB, by analogy with the hax switch, 2.2 GB measured on the same OCaml), plus Z3 or cvc5 (about 1 GB, not measured)",
     "repository_note": "found in run D: CN is no longer in the Cerberus repository (its master has cerberus*.opam files and no cn package); it lives in rems-project/cn (pushed 2026-11-19, not archived), which uses cerberus-lib; the plan's 'opam pin of a Cerberus checkout at master' becomes one opam pin of the cn checkout, whose pin-depends brings cerberus-lib at a0f7071",
-    "install_note": "install not written (run D of the pipeline): setup.sh step_cn is a disk check followed by vu_die"
+    "install_note": "install written in run E of the pipeline (setup.sh step_cn)"
   },
   "refinedc": {
     "milestone": 4,
@@ -213,6 +214,8 @@
     "cerberus-lib": "f11e6b3",
     "disk_gb": 5,
     "disk_note": "guess, not measured, to be replaced by du -sL of the installed switch: an opam switch refinedc on Coq 9.1.0 with Iris, std++, Lithium and the RefinedC theories (about 4 GB, as RefinedRust's switch, itself an estimate) and its own cerberus-lib at f11e6b3 (about 1 GB, not measured)",
-    "install_note": "install not written (run D of the pipeline): setup.sh step_refinedc is a disk check followed by vu_die"
+    "install_note": "install written in run E of the pipeline (setup.sh step_refinedc)",
+    "cerberus_commit": "f11e6b335a687c1b77539f7e5695607d09dfc3ea",
+    "cerberus_note": "full hash of the README's pin (opam pin add -n -y cerberus-lib ...#f11e6b33...), retrieved in run E; refinedc.opam has no pin-depends for it"
   }
 }

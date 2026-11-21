@@ -68,6 +68,10 @@
 #   - env.sh is the view's own; the shared cache's env.sh is untouched.
 #   - hax (milestone 3, run C): <shared-cache>/hax, linked as the view's
 #     hax/, the layout setup.sh writes (no difference).
+#   - creusot, refinedrust, bedrock2, cn, refinedc (run E): linked
+#     likewise; their opam switches are in the shared root.
+#   - Locks (run E): one per component list instead of one per view, so
+#     that milestone 3 and 4 installs run side by side.
 
 set -euo pipefail
 here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -90,7 +94,8 @@ link() {
 make_view() {
   local d
   mkdir -p "$view/why3/bin" "$MATHLIB_CACHE_DIR" "$XDG_CACHE_HOME"
-  for d in bin dl opam rustup cargo elan aeneas isabelle llvm hax; do
+  for d in bin dl opam rustup cargo elan aeneas isabelle llvm hax creusot \
+    refinedrust bedrock2 cn refinedc; do
     mkdir -p "$VU_SHARED_CACHE/$d"
     link "$d" "$VU_SHARED_CACHE/$d"
   done
@@ -136,11 +141,16 @@ check) check_shared 2>&1 | vu_redact ;;
   [ "$free" -ge "$need" ] ||
     vu_die "only ${free} GB free, ${need} GB needed: install refused"
   vu_need_env VU_EXP
-  exec 9>"$view/.setup.lock"
+  # One lock per component list (run E): installs of different
+  # components may run side by side, since setup.sh's env.sh is now
+  # written through a file of its own process (write_env) and is the
+  # same for every run; the same components are still refused twice.
+  comps=$(printf '%s-' "${@:2}")
+  exec 9>"$view/.setup-m$1-${comps%-}.lock"
   flock -n 9 ||
-    vu_die "another setup-pipeline.sh run holds the view: refused"
+    vu_die "another setup-pipeline.sh run holds these components: refused"
   mkdir -p "$VU_EXP/out/setup-m$1"
-  console=$VU_EXP/out/setup-m$1/console-$(date -u +%Y%m%dT%H%M%SZ).txt
+  console=$VU_EXP/out/setup-m$1/console-${comps%-}-$(date -u +%Y%m%dT%H%M%SZ).txt
   set +e
   "$here/setup.sh" "$@" 2>&1 | tee "$console"
   exit "${PIPESTATUS[0]}"

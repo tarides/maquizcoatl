@@ -10,7 +10,9 @@
 #
 # A line counts when it is not blank once comments are removed. Comment
 # syntax by extension:
-#   c    .c .h                 "//" to end of line, "/* */" (not nested)
+#   c    .c .h                 "//" to end of line, "/* */" (not nested);
+#                              a "/*@ ... @*/" block is a CN
+#                              specification and counts as code (run E)
 #   rust .rs                   "//" to end of line, "/* */" (nested)
 #   fstar .fst .fsti           "//" to end of line, "(* *)" (nested):
 #                              F*, Pulse
@@ -62,6 +64,7 @@ count() {
           i++; continue
         }
         if (lc != "" && two == lc) break
+        if (lang == "c" && substr(line, i, 3) == "/*@") { out = out "/*@"; i += 3; continue }
         if (open_ != "" && two == open_) { depth = 1; i += 2; continue }
         out = out substr(line, i, 1); i++
       }

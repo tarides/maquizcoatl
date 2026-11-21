@@ -76,14 +76,22 @@ pub fn rec_wf(rec: &VuFoldRec) -> bool {
 // ---------------------------------------------------------- client traits
 
 /// A client vu_enc_len_fn. p (the address of the byte) is passed
-/// through, never read here.
+/// through, never read here. requires(true) (run E): without it, hax
+/// gives the F* method an abstract precondition (f_enc_len_pre) that no
+/// caller can establish; with it, every implementation's precondition is
+/// implied by true, so the verified side may call it in any state. It
+/// assumes nothing of the callee.
+#[hax_lib::attributes]
 pub trait EncLen {
+    #[hax_lib::requires(true)]
     fn enc_len(&self, p: usize) -> i32;
 }
 
 /// A client vu_callout_fn with its user_data. The callee is lent args
-/// mutably for the call.
+/// mutably for the call. requires(true): as for EncLen.
+#[hax_lib::attributes]
 pub trait Callout {
+    #[hax_lib::requires(true)]
     fn callout(&self, args: &mut VuArgs) -> i32;
 }
 

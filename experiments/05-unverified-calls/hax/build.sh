@@ -128,7 +128,9 @@ if [ "$backend" = fstar ]; then
   printf 'include %s\n' "${incs[@]}"
   # The checked files of the libraries are cached per F* version, under
   # <exp>; the prototype's own modules are always rechecked.
-  cache=$VU_EXP/build/hax-fstar-cache/$("$fstar" --version | sed -n 's/^F\* version: *//p' | head -n 1 | tr -c 'A-Za-z0-9.\n' _)
+  # (F* 2025.10.06 prints "F* 2025.10.06", 2026.11.15 "F* version: ...":
+  # both are read since run E, which found the cache directory unnamed.)
+  cache=$VU_EXP/build/hax-fstar-cache/$("$fstar" --version | head -n 1 | sed 's/^F\* *//; s/^version: *//' | tr -c 'A-Za-z0-9.\n' _)
   mkdir -p "$cache"
   # hax's flags (examples/hax.fst.config.json), except --cmi when this F*
   # does not know it (F* 2026.11.15's --help does not list it). The log

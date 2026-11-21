@@ -12,8 +12,7 @@
 #   Milestone 3 components: base hax smoke-hax hax-fstar hax-lean creusot
 #                           refinedrust (added by run C of the pipeline)
 #   Milestone 4 components: base bedrock2 cn refinedc (added by run D of
-#                           the pipeline: disk checks only, installs not
-#                           written)
+#                           the pipeline; installs written in run E)
 #   (default: all of the milestone, in that order; "base" always runs)
 #
 # Environment:
@@ -164,8 +163,10 @@ write_env() {
     echo '_vu_path "$VU_CACHE/isabelle/bin"'
     echo '_vu_path "$VU_CACHE/hax/current/bin"'
     echo 'export PATH'
-  } >"$VU_CACHE/env.sh.new"
-  mv "$VU_CACHE/env.sh.new" "$VU_CACHE/env.sh"
+  } >"$VU_CACHE/env.sh.new.$$"
+  # A file of this process's own, renamed: setup-pipeline.sh may run
+  # several setups side by side (run E), and each writes the same text.
+  mv "$VU_CACHE/env.sh.new.$$" "$VU_CACHE/env.sh"
 }
 
 step_base() {
@@ -787,24 +788,224 @@ EOF2
   echo "hax smoke: ok"
 }
 
-# Lean backend, Creusot, RefinedRust: only the disk check is written,
-# followed by vu_die "install not written". In run C (2026-11-21) none
-# of the three steps ran: setup-pipeline.sh refused them on its own
-# disk check first. Writing the three installs (and pinning
-# RefinedRust's commit in pins.json) is work for the next run.
-step_hax_lean() { need_disk hax-lean "$(vu_pin '.hax.disk_gb["hax-lean"]')"; vu_die "hax-lean install not written"; }
-step_creusot() { need_disk creusot "$(vu_pin .creusot.disk_gb)"; vu_die "creusot install not written"; }
-step_refinedrust() { need_disk refinedrust "$(vu_pin .refinedrust.disk_gb)"; vu_die "refinedrust install not written"; }
+# hax's Lean backend is not run (maintainer decision of 2026-11-21 after
+# runs C and D): "same pipeline as Charon + Aeneas, with hax-lib
+# specifications in front; not run", saving its 10 GB. The step stays a
+# disk check followed by vu_die.
+step_hax_lean() { need_disk hax-lean "$(vu_pin '.hax.disk_gb["hax-lean"]')"; vu_die "hax-lean not run (maintainer decision)"; }
+
+# git_at REPO COMMIT DIR [SUBMODULE...]: a clone of REPO at COMMIT in DIR
+# (made once, checked on every run), with the named submodules. The
+# clone is partial (--filter=blob:none), which opam cannot fetch from
+# as a git pin (run E: CN's first install failed in git upload-pack),
+# so the opam pins of these checkouts use --kind=path.
+git_at() {
+  local repo=$1 commit=$2 dir=$3 m
+  shift 3
+  if [ ! -d "$dir/.git" ]; then
+    rm -rf "$dir"
+    git clone -q --filter=blob:none "$repo" "$dir"
+    git -C "$dir" -c advice.detachedHead=false checkout -q "$commit"
+  fi
+  [ "$(git -C "$dir" rev-parse HEAD)" = "$commit" ] ||
+    vu_die "$(basename "$(dirname "$dir")") clone is not at the pinned commit"
+  for m in "$@"; do
+    git -C "$dir" submodule update -q --init --filter=blob:none "$m"
+  done
+  echo "source $(basename "$(dirname "$dir")"): $(git -C "$dir" rev-parse HEAD)"
+}
+
+# opam_switch NAME COMPILER [REPO=URL...]: creates the opam switch NAME
+# of the cache's root (once), with --no-switch (the root's default
+# switch stays provers) and its own repositories: opam's default
+# repository plus the named ones, selected for this switch only.
+opam_switch() {
+  local name=$1 comp=$2 r repos=default
+  shift 2
+  for r in "$@"; do
+    if ! opam repository list --all --short | grep -qx "${r%%=*}"; then
+      opam repository add --dont-select "${r%%=*}" "${r#*=}"
+    fi
+    repos="$repos,${r%%=*}"
+  done
+  if ! opam switch list --short | grep -qx "$name"; then
+    vu_pinned opam switch create "$name" --packages="$comp" --repos="$repos" \
+      --no-switch -j "$(vu_jobs "$name")"
+  fi
+  echo "switch $name repositories: $(opam repository list --switch "$name" --short | tr '\n' ' ')"
+}
+
+# Creusot (run E): the tag's own installer (./INSTALL is `cargo run --bin
+# creusot-install`), with every path it writes moved into
+# VU_CACHE/creusot: CREUSOT_DATA_HOME (the local opam switch with Why3
+# and why3find from creusot-deps.opam, the provers it downloads and
+# checks by sha256, the prelude, creusot-rustc) and XDG_CONFIG_HOME
+# (why3.conf). cargo-creusot goes to the cache's CARGO_HOME/bin. The
+# cargo build directory is VU_EXP/build/creusot-target, removed after.
+step_creusot() {
+  local dir src tc
+  export OPAMROOT=$VU_OWN_OPAMROOT OPAMYES=1 OPAMCOLOR=never
+  dir=$VU_CACHE/creusot
+  src=$dir/src
+  tc=$(vu_pin .creusot.rust)
+  if ! ls "$dir"/data/toolchains/*/bin/creusot-rustc >/dev/null 2>&1; then
+    need_disk creusot "$(vu_pin .creusot.disk_gb)"
+  fi
+  mkdir -p "$dir/data" "$dir/config"
+  git_at https://github.com/creusot-rs/creusot.git "$(vu_pin .creusot.commit)" "$src"
+  grep -q "^channel = \"$tc\"" "$src/rust-toolchain" ||
+    vu_die "the tag's rust-toolchain is not $tc"
+  vu_pinned rustup toolchain install "$tc" --profile minimal \
+    --component rustfmt,rustc-dev,llvm-tools
+  # in-creusot-ci: creusot-deps.opam then leaves out why3-ide (the GTK
+  # IDE, whose system libraries the bench host lacks and cannot get
+  # without root); run E's first try stopped on opam's depext prompt.
+  export CREUSOT_DATA_HOME=$dir/data XDG_CONFIG_HOME=$dir/config \
+    CARGO_TARGET_DIR=$VU_EXP/build/creusot-target OPAMJOBS="$(vu_jobs creusot)" \
+    OPAMVAR_in_creusot_ci=true
+  (cd "$src" && vu_pinned cargo "+$tc" run --bin creusot-install -- \
+    --provers-parallelism "$(vu_jobs creusot)")
+  rm -rf "$VU_EXP/build/creusot-target"
+  "$CARGO_HOME/bin/cargo-creusot" --version 2>&1 | head -n 3 || true
+  ls "$dir/data/bin"
+  echo "creusot: $(vu_du "$dir") rust: $(vu_du "$RUSTUP_HOME/toolchains/$tc-x86_64-unknown-linux-gnu")"
+}
+
+# RefinedRust (run E): the README's "install on your system" route, in an
+# opam switch refinedrust of the cache's root (OCaml 4.14.2 with flambda,
+# as the README creates it; repositories rocq-released and iris-dev for
+# this switch only): `make builddep`, then the type system and its
+# standard library pinned from the checkout (scripts/install-*.sh), then
+# the frontend (rr_frontend/refinedrust install, into CARGO_HOME/bin)
+# with the nightly of rr_frontend/rust-toolchain.toml.
+step_refinedrust() {
+  local dir src tc
+  export OPAMROOT=$VU_OWN_OPAMROOT OPAMYES=1 OPAMCOLOR=never
+  dir=$VU_CACHE/refinedrust
+  src=$dir/src
+  if ! opam switch list --short | grep -qx refinedrust; then
+    need_disk refinedrust "$(vu_pin .refinedrust.disk_gb)"
+  fi
+  mkdir -p "$dir"
+  git_at "$(vu_pin .refinedrust.repository).git" "$(vu_pin .refinedrust.commit)" "$src"
+  opam_switch refinedrust ocaml-variants.4.14.2+options,ocaml-option-flambda \
+    rocq-released=https://rocq-prover.org/opam/released \
+    iris-dev=https://gitlab.mpi-sws.org/iris/opam.git
+  export OPAMSWITCH=refinedrust OPAMJOBS="$(vu_jobs refinedrust)"
+  (cd "$src" && vu_pinned opam exec -- make builddep)
+  if ! opam list --installed --short refinedrust 2>/dev/null | grep -qx refinedrust; then
+    vu_pinned opam pin add -y --kind=path refinedrust.dev "$src/theories"
+  fi
+  if ! opam list --installed --short refinedrust-stdlib 2>/dev/null | grep -qx refinedrust-stdlib; then
+    vu_pinned opam pin add -y --kind=path refinedrust-stdlib.dev "$src/stdlib"
+  fi
+  tc=$(sed -n 's/^channel = "\(.*\)"/\1/p' "$src/rr_frontend/rust-toolchain.toml")
+  echo "frontend toolchain: $tc"
+  vu_pinned rustup toolchain install "$tc" --profile minimal \
+    --component cargo,llvm-tools-preview,rustc,rustc-dev
+  (cd "$src/rr_frontend" && CARGO_TARGET_DIR=$VU_EXP/build/refinedrust-target \
+    vu_pinned opam exec -- ./refinedrust install)
+  rm -rf "$VU_EXP/build/refinedrust-target"
+  ls "$CARGO_HOME/bin" | grep -i refinedrust
+  opam list --installed --short | grep -E '^(rocq-core|rocq-iris|rocq-stdpp|refinedrust)' | tr '\n' ' '
+  echo
+  echo "refinedrust: switch $(vu_du "$OPAMROOT/refinedrust") src $(vu_du "$src")" \
+    "rust: $(vu_du "$RUSTUP_HOME/toolchains/$tc-x86_64-unknown-linux-gnu")"
+}
 
 # ------------------------------------------------------------ milestone 4
 
-# Run D of the pipeline pinned the three tools in pins.json (commits and
-# disk estimates, not measured) but did not write their installs: the
-# disk was already under the floor, so none could be tried. As for
-# milestone 3's last three steps, each is a disk check then vu_die.
-step_bedrock2() { need_disk bedrock2 "$(vu_pin .bedrock2.disk_gb)"; vu_die "bedrock2 install not written"; }
-step_cn() { need_disk cn "$(vu_pin .cn.disk_gb)"; vu_die "cn install not written"; }
-step_refinedc() { need_disk refinedc "$(vu_pin .refinedc.disk_gb)"; vu_die "refinedc install not written"; }
+# Run D pinned the three tools; run E writes their installs.
+
+# Bedrock2 (run E): the checkout with its coqutil submodule (riscv-coq
+# and kami are for the compiler and the processor, not needed), coqutil
+# and the bedrock2 directory's "noex" target (the language, its
+# semantics and program logic, without the examples) compiled in place
+# with the Rocq of the provers switch (read only; nothing installed in
+# it). Prototypes use them with -Q.
+step_bedrock2() {
+  local dir src
+  dir=$VU_CACHE/bedrock2
+  src=$dir/src
+  if [ ! -f "$dir/built" ]; then
+    need_disk bedrock2 "$(vu_pin .bedrock2.disk_gb)"
+  fi
+  mkdir -p "$dir"
+  git_at "$(vu_pin .bedrock2.repository).git" "$(vu_pin .bedrock2.commit)" "$src" deps/coqutil
+  echo "coqutil: $(git -C "$src/deps/coqutil" rev-parse HEAD)"
+  export PATH="$VU_SHARED_CACHE/opam/provers/bin:$PATH"
+  rocq --version 2>/dev/null | head -n 1 || coqc --version | head -n 1
+  vu_pinned make -C "$src/deps/coqutil" -j "$(vu_jobs bedrock2)"
+  vu_pinned make -C "$src/bedrock2" noex -j "$(vu_jobs bedrock2)"
+  touch "$dir/built"
+  echo "bedrock2: $(vu_du "$dir")"
+}
+
+# CN (run E): an opam switch cn (OCaml 5.4.1) of the cache's root with
+# the CN checkout pinned; cn.opam's pin-depends brings cerberus-lib at
+# Cerberus a0f7071 (no separate pin). CN calls an SMT solver: Z3 4.15.3
+# of the F* bundle, the one Why3 uses (VU_WHY3_Z3).
+step_cn() {
+  local dir src
+  export OPAMROOT=$VU_OWN_OPAMROOT OPAMYES=1 OPAMCOLOR=never
+  dir=$VU_CACHE/cn
+  src=$dir/src
+  if ! opam switch list --short | grep -qx cn; then
+    need_disk cn "$(vu_pin .cn.disk_gb)"
+  fi
+  mkdir -p "$dir"
+  git_at "$(vu_pin .cn.repository).git" "$(vu_pin .cn.commit)" "$src"
+  grep -F "$(vu_pin .cn.cerberus_commit | cut -c1-7)" "$src/cn.opam"
+  opam_switch cn ocaml-base-compiler.5.4.1
+  export OPAMSWITCH=cn OPAMJOBS="$(vu_jobs cn)"
+  if ! opam list --installed --short cn 2>/dev/null | grep -qx cn; then
+    vu_pinned opam pin add -y --kind=path cn "$src"
+  fi
+  opam exec -- cn --version 2>&1 | head -n 2 || true
+  opam show --field=version,pin cerberus-lib 2>&1 | tr '\n' ' '
+  echo
+  "$VU_WHY3_Z3" --version
+  echo "cn: switch $(vu_du "$OPAMROOT/cn") src $(vu_du "$src")"
+}
+
+# RefinedC (run E): an opam switch refinedc (OCaml 4.14.2 with flambda,
+# as RefinedC's README creates it; repositories coq-released and
+# iris-dev for this switch only), cerberus-lib pinned at the README's
+# commit, then the RefinedC checkout pinned.
+step_refinedc() {
+  local dir src url
+  export OPAMROOT=$VU_OWN_OPAMROOT OPAMYES=1 OPAMCOLOR=never
+  dir=$VU_CACHE/refinedc
+  src=$dir/src
+  if ! opam switch list --short | grep -qx refinedc; then
+    need_disk refinedc "$(vu_pin .refinedc.disk_gb)"
+  fi
+  mkdir -p "$dir"
+  git_at "$(vu_pin .refinedc.repository).git" "$(vu_pin .refinedc.commit)" "$src"
+  opam_switch refinedc ocaml-variants.4.14.2+options,ocaml-option-flambda \
+    coq-released=https://coq.inria.fr/opam/released \
+    iris-dev=https://gitlab.mpi-sws.org/iris/opam.git
+  export OPAMSWITCH=refinedc OPAMJOBS="$(vu_jobs refinedc)"
+  if ! opam list --installed --short cerberus-lib 2>/dev/null | grep -qx cerberus-lib; then
+    vu_pinned opam pin add -n -y cerberus-lib \
+      "git+https://github.com/rems-project/cerberus.git#$(vu_pin .refinedc.cerberus_commit)"
+  fi
+  # refinedc and coq-lithium from the repository at the pinned commit,
+  # by URL: a path pin has no .git, where refinedc.opam's "dune subst"
+  # fails ("repository does not contain any version information", run
+  # E's first try), and the partial clone cannot serve a git pin.
+  url="git+$(vu_pin .refinedc.repository).git#$(vu_pin .refinedc.commit)"
+  if ! opam list --installed --short refinedc 2>/dev/null | grep -qx refinedc; then
+    opam pin remove -y refinedc >/dev/null 2>&1 || true
+    vu_pinned opam pin add -y -n coq-lithium "$url"
+    vu_pinned opam pin add -y refinedc "$url"
+  fi
+  opam pin list
+  opam exec -- refinedc --version 2>&1 | head -n 2 || true
+  opam list --installed --short | grep -E '^(coq|rocq-iris|refinedc|cerberus-lib|coq-lithium)' | tr '\n' ' '
+  echo
+  echo "refinedc: switch $(vu_du "$OPAMROOT/refinedc") src $(vu_du "$src")"
+}
 
 # ----------------------------------------------------------------- main
 

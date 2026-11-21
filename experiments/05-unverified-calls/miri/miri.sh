@@ -13,6 +13,11 @@
 # address, so client.rs is used with SUBJECT.as_ptr() replaced by
 # SUBJECT.as_ptr().expose_provenance() (a sed, printed in the log).
 #
+# Run E added creusot: its src/lib.rs and src/ffi.rs as they are, with
+# creusot-std (=0.14.0) as a dependency for its contract attributes
+# (erased outside cfg(creusot)); its vu_args holds the subject as a raw
+# pointer, as Aeneas's, so client.rs is used unchanged.
+#
 # Usage: miri.sh WORKDIR. Environment: VU_CACHE (its env.sh is
 # sourced), VU_MIRI_TOOLCHAIN (default: the Charon nightly of
 # pins.json, which has the miri component), VU_MIRI_TOOLS (default
@@ -31,7 +36,7 @@ cargo "+$tc" miri --version
 echo "sha256:"
 (cd "$here/.." && sha256sum miri/client.rs miri/erase_verus.py miri/miri.sh \
   verus/src/lib.rs verus/src/shim.rs verus/src/ffi.rs aeneas/src/lib.rs aeneas/src/ffi.rs \
-  hax/src/lib.rs hax/src/ffi.rs)
+  hax/src/lib.rs hax/src/ffi.rs creusot/src/lib.rs creusot/src/ffi.rs)
 
 status=0
 for tool in ${VU_MIRI_TOOLS:-aeneas verus}; do
@@ -41,6 +46,9 @@ for tool in ${VU_MIRI_TOOLS:-aeneas verus}; do
   deps=""
   if [ "$tool" = verus ]; then
     python3 -I "$here/erase_verus.py" "$here/../verus/src" "$d/vu"
+  elif [ "$tool" = creusot ]; then
+    cp "$here/../creusot/src/lib.rs" "$here/../creusot/src/ffi.rs" "$d/vu/"
+    deps="creusot-std = \"=0.14.0\""
   elif [ "$tool" = hax ]; then
     cp "$here/../hax/src/lib.rs" "$here/../hax/src/ffi.rs" "$d/vu/"
     deps="hax-lib = \"=$(vu_pin .hax.hax_lib)\""

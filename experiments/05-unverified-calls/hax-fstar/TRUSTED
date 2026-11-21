@@ -22,7 +22,7 @@
 # function keeps the record well formed (it reaches the record only
 # through the verified function it is given). Assumed of the C client,
 # checked nowhere: the implementation is in ffi.rs.
-../hax/src/lib.rs:105-109
+../hax/src/lib.rs:113-117
 #
 # Not counted: the toolchain (hax's frontend and engine, F* and hax's F*
 # library, rustc, the C compiler), including the claim that the F*
