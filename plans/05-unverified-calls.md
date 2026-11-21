@@ -241,6 +241,33 @@ and two negative controls per tool.
 - **Why3's `build.sh`** classified Z3's "Out of memory" as an error, not
   a rejection; the test is now case-insensitive.
 
+## Deviations found during run C
+
+Recorded in the `runC` notebook entry.
+
+- **hax toolchain.** The release binary is a standalone `cargo-hax`
+  that runs only the Lean backend. The full toolchain is built from the
+  tag, as its `setup.sh` does: the Rust binaries with `cargo install
+  --locked` into `<cache>/hax/<tag>`, and the OCaml engine in an opam
+  switch `hax` on OCaml 5.4.1 (created with `--no-switch`). The cargo
+  build directory is removed after the install.
+- **hax's F\*.** The cache's F\* 2026.11.15 cannot check hax v0.5.0's
+  output (no `FStar.Mul`, no `--cmi`), so the plan's first choice does
+  not apply. The pinned F\* v2025.10.06 is needed.
+- **hax's Rocq backend** needs hax's `Core` Rocq library and
+  `coq-record-update` (v0.3.7). Both are built with `provers`'s Rocq 9.3
+  into `<exp>/build/hax-rocq-libs`; neither is installed in `provers`.
+- **hax's Lean extraction** downloads its own Charon (604 MB) into
+  `XDG_CACHE_HOME` on first use.
+- **Three hax tools.** `hax-fstar/` and `hax-rocq/` are `run.sh` tools
+  that share the prototype in `hax/`. `hax/link-check.sh` links and runs
+  the library without any proof, to check the C ABI while no proof can
+  run.
+- **Disk floor.** Every milestone 3 install after hax's was refused:
+  F\* v2025.10.06 (1 GB), the Lean backend (10 GB), Creusot (7 GB) and
+  RefinedRust (6 GB). Those tools are pending, and the remaining runs
+  wait for the maintainer's disk-floor decision.
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own

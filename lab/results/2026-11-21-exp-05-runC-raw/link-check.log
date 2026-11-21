@@ -1,0 +1,20 @@
+== sources (sha256)
+a476d0dceeb80012b3304d4807a34c03f232f40ec620b0f7ce4f5a3c1e72abb1  hax/Cargo.toml
+d15b704d13831b2683cdbe2692dbcda9ed911d7d06cc268d48d0030c2a48db78  hax/Cargo.lock
+f3b238f979cb57e1b46d6e0f9c04b9e5796c978ace92bb124ca5e6cbac51fdba  hax/src/lib.rs
+df2c70c41755042a033816346b1e88da8528cc915fdddf702a31ea3642569d9b  hax/src/ffi.rs
+c54dcf37c3d5acfabb3ceaee0a1f8a077e08d8df2563506fdf9470efb07a4990  hax/link-check.sh
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+rustc 1.93.0-nightly (843f8ce2e 2025-11-07)
+ldflags: -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_get_subject_byte
+exported: vu_i_apply
+exported: vu_set_slot
+caller status: 0
+caller_output=same

@@ -7,7 +7,10 @@ tool's `TRUSTED` file. Details and raw outputs: the `prototypes-m<N>`
 entries of `lab/notebook.md`, and the `review-fixes` entry for the re-run
 of milestones 1 and 2 after the independent review.
 
-Last update: run B of the pipeline (run id `runB`): the read accessor
+Last update: run C of the pipeline (run id `runC`, milestone 3,
+entry `2026-11-21-exp-05-runC`): the hax rows; the other milestone 3
+installs were refused by the 20 GB disk floor, so their tools stay
+pending. Before that: run B of the pipeline (run id `runB`): the read accessor
 `vu_get_subject_byte` in `proto.h` and the six prototypes, each with a
 second negative control; the Isabelle-LLVM composition proof of shape
 (a). Entry `2026-11-21-exp-05-runB` of the lab notebook, corrected by
@@ -22,16 +25,27 @@ callee assumptions, how two read controls fail).
 | Charon + Aeneas | Aeneas nightly-2026.11.19-8f4466d, Charon 0.1.321 (`61c67516`), Rust nightly-2026-09-17, Lean 4.36.0-rc2 | works with trusted shim (122 lines) | trusted shim (one trait per client C function; the verified functions are generic over the traits and the Lean theorems quantify over every implementation; the one implementation, in unverified Rust, does the indirect call), plus a client contract for (a) | 122 (shims 30, C glue 88, client contract 4) | terminates and returns normally; no range on the result; may write anything into `args` (the verified side restores its fields); the subject is `subject_len` readable bytes, turned into a shared slice by the trusted glue (the verified side holds no permission on it); keeps no pointer after returning; for (a), reaches the record only through the function it is given; each callee is modelled as a pure function of its arguments (deterministic, with no hidden state the verified side sees), harmless here with one call per function | yes, proved under the client contract; the function's address is taken in trusted code (`c_apply` in `ffi.rs`); a Lean model of `caller.c`'s client meets it | yes |
 | VST + CompCert | VST 2.17, CompCert 3.18 (prints 3.17), Rocq 9.2.0 | works | client contract (each client pointer comes with a VST funspec, `func_ptr'`; VST checks the indirect calls that `vu.c` makes itself, and CompCert compiles the same `vu.c`) | 54 (callee funspecs and the representation predicates they use) | may diverge (partial correctness); result any `int`; touches no memory it was not lent (frame rule); the encoding gets a read share of `*p`; the callout gets `*args` and must give it back with `subject`, `subject_len`, `pos` and `num` unchanged, and a read share of the subject (unchanged, since a read share cannot write); `apply_all` gets `vu_i_apply` with its proven funspec and must give the record back well formed | yes; `vu_i_apply`'s pointer carries its proven funspec, and `vu_funcs` (`semax_func`) checks the six bodies together, so that funspec is the proven one | yes |
 | Isabelle-LLVM | Isabelle2026, AFP 2026-11-19, Isabelle-LLVM `e42f4781`; clang 23.1.5 | works with trusted shim (108 lines) | trusted shim (three C functions make the indirect calls; their contracts are hypotheses of the theorems, not axioms) | 108 (C shim 8 and its declaration 7, callee hypotheses and their predicates 20, hand-written ABI mapping 67, symbol rename 6) | terminates (total correctness); no range on the result; lent memory comes back: the byte at `p` unchanged, `args` with its verified-side fields unchanged, the subject whole (full ownership: no read-only share) with the same bytes; for (a), reaches the record only through the `vu_i_apply` it is given | yes, through the shim (C takes `vu_i_apply`'s address); proved under a client contract (`respects_i_apply`), composed with `vu_i_apply_correct` in `vu_fold_all_composed` | yes |
-| hax (F\* backend) | | pending (milestone 3) | | | | | |
-| hax (Rocq backend) | | pending (milestone 3) | | | | | |
-| hax (Lean backend) | | pending (milestone 3) | | | | | |
-| Creusot | | pending (milestone 3) | | | | | |
-| RefinedRust | | pending (milestone 3) | | | | | |
+| hax (F\* backend) | cargo-hax v0.5.0 (`a045d15a`), Rust nightly-2025-11-08; F\* v2025.10.06 not installed | pending (milestone 3, run C): hax extracts `Vu.fst`, but F\* 2026.11.15 cannot check it (`FStar.Mul` missing, error 134) and the F\* hax pins was refused by the disk floor | trusted shim, as Aeneas (one trait per client C function, implemented in unverified Rust by the indirect call), plus a client contract for (a) on `ApplyAll` | 126 (shims 30, C glue 91, client contract 5) | not checked yet; the extracted model takes each callee as a type-class method, a pure function of its arguments; as written, no range on the result and nothing assumed of what the callout writes into `args` (the verified side restores its fields); the subject is a shared slice made by the glue (length agreement is a precondition); pointers the verified side passes through are `usize` addresses (no raw pointer type in hax) | built and run (C caller output equal to `expected.txt`), not proved; `vu_i_apply`'s address is taken in trusted code (`c_apply` in `ffi.rs`) | built and run, not proved |
+| hax (Rocq backend) | cargo-hax v0.5.0 (`a045d15a`), Rocq 9.3.0, hax `Core` library at the tag | does not work (at v0.5.0): the extracted model does not type-check against the tag's own Rocq library, for the prototype (`t_VuFoldRec` undefined: records are emitted as `VuFoldRec_record`) and for two minimal probes (a one-field struct; one comparison, `f_lt` vs the library's `PartialOrd_f_lt`); ensures clauses are emitted as `Admitted` lemmas. Experiment #1: 0 callouts and UTF-8 only in its 5,870 triples | as F\* backend (same prototype) | 126 (same glue) | as F\* backend; besides, the Rocq classes drop the trait contracts, so the client contract of (a) is lost | no model to prove it on | no model to prove it on |
+| hax (Lean backend) | cargo-hax v0.5.0 | pending (milestone 3, run C): its Lean library needs Lean v4.35.0, Mathlib and Aeneas's Lean library at `2b9e3ea4` (about 10 GB), refused by the disk floor | | | | | |
+| Creusot | v0.14.0 | pending (milestone 3, run C): install (about 7 GB) refused by the disk floor | | | | | |
+| RefinedRust | | pending (milestone 3, run C): install (about 6 GB) refused by the disk floor | | | | | |
 | Bedrock2 | | pending (milestone 4) | | | | | |
 | CN | | pending (milestone 4) | | | | | |
 | RefinedC | | pending (milestone 4) | | | | | |
 
 ## Notes
+
+- **hax (run C).** The prototype is Aeneas's, with hax-lib
+  specifications. `callout_step` returns the callee's raw result as a
+  ghost second component, which the glue drops. It links with
+  `caller.c` and runs clean under Miri (Stacked and Tree Borrows). Miri
+  warns that the glue's `with_exposed_provenance` may hide pointer bugs:
+  hax has no raw pointer type, so the subject address is a `usize`. The
+  release binary of cargo-hax only runs the Lean backend; the F\* and
+  Rocq backends need the OCaml engine built from source (2.2 GB opam
+  switch). The F\* of milestone 1 (2026.11.15) cannot check hax
+  v0.5.0's output, so the F\* backend needs its own F\* (v2025.10.06).
 
 - **Read accessor (run B).** `vu_get_subject_byte(args, i)` reads byte
   `i` of the subject behind the pointer held in `args`, with a bounds
@@ -151,5 +165,8 @@ callee assumptions, how two read controls fail).
   ending with its own last parameter is eta-reduced, and the C function
   loses that parameter, with no warning. The prototype avoids the shape,
   and `pulse/abi_check.c` rejects it. Reproducer in `pulse/probes/`.
-- No tool has a "does not work" verdict so far, so experiment 1's
-  numbers are not cited here yet.
+- The first "does not work" verdict is hax's Rocq backend (run C).
+  Experiment #1's numbers are cited next to it, as the plan requires:
+  0 callouts and UTF-8 only across its 5,870 triples. The failure is
+  not about calls to unverified code: the backend's output at v0.5.0
+  does not type-check even for a one-field struct.

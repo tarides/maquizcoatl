@@ -1,0 +1,68 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+713569985c69f42b924383b51bb8bb0db3ff27a222d730f807eda7ed86167a96  hax-rocq/TRUSTED
+09df7c32d12beb4deb84305a4729fbe19ad3b30c0ad944321ac57aa7a98250c4  hax-rocq/build.sh
+41c3dfda665fffba54341b8bf429e87642aa2e902713657db564d21b1afb9f70  hax-rocq/probes/cmp/src/lib.rs
+fb3508efd5e0b4af67eaccee04370b248bae06344d3c5313cada7a7cb587e0a6  hax-rocq/probes/probe.sh
+831cd9130bf89f2bbfbf23a015e92035c77d82caccbf7bc7698c2697e35b4a8c  hax-rocq/probes/struct/src/lib.rs
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+== build
+== ../hax sources (sha256)
+d15b704d13831b2683cdbe2692dbcda9ed911d7d06cc268d48d0030c2a48db78  hax/Cargo.lock
+a476d0dceeb80012b3304d4807a34c03f232f40ec620b0f7ce4f5a3c1e72abb1  hax/Cargo.toml
+cfbaccca46b6e14ceab5c7ed5ae56345cd18cdb305d1d606a1cb4e823260905b  hax/build.sh
+c54dcf37c3d5acfabb3ceaee0a1f8a077e08d8df2563506fdf9470efb07a4990  hax/link-check.sh
+df2c70c41755042a033816346b1e88da8528cc915fdddf702a31ea3642569d9b  hax/src/ffi.rs
+f3b238f979cb57e1b46d6e0f9c04b9e5796c978ace92bb124ca5e6cbac51fdba  hax/src/lib.rs
+== versions (0 s)
+hax 
+version=0.5.0
+commit=a045d15a3bf43fe05096146f488668b521a4ae44
+rustc 1.93.0-nightly (843f8ce2e 2025-11-07)
+hax source: a045d15a3bf43fe05096146f488668b521a4ae44
+== 1. source (backend rocq, negative control: 0) (0 s)
+== 2. hax into coq (0 s)
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling libc v0.2.191
+   Compiling serde_core v1.0.229
+   Compiling autocfg v1.5.1
+   Compiling getrandom v0.4.3
+   Compiling zmij v1.0.23
+   Compiling cfg-if v1.0.5
+   Compiling serde v1.0.229
+   Compiling serde_json v1.0.154
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling hax-lib v0.5.0
+   Compiling num-traits v0.2.19
+   Compiling syn v3.0.10
+   Compiling syn v2.0.119
+    Checking num-integer v0.1.47
+    Checking num-bigint v0.4.8
+   Compiling uuid v1.29.3
+   Compiling serde_derive v1.0.229
+   Compiling hax-lib-macros-types v0.5.0
+   Compiling hax-lib-macros v0.5.0
+    Checking vu v0.1.0 (<exp>/build/runC/hax-rocq/crate)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.83s
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/coq/extraction/Vu.v[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/coq/extraction/_CoqProject[0m
+extracted proofs/coq/extraction/Vu.v: 329 lines, sha256 228b1d767b937e69a12af64ecf1a143d9a5b6188ae256c09303430561bdb8c80
+extracted proofs/coq/extraction/Vu.v.map: 0 lines, sha256 adb58a1769443be74f4a686cc418a98d88533011277168c2312414a065049622
+extracted proofs/coq/extraction/_CoqProject: 4 lines, sha256 067f436f5035e42e669873656d6935e6c4ec75d77d5432a7140c49d9f27c3f24
+== 3. Rocq (6 s)
+The Rocq Prover, version 9.3.0
+compiled with OCaml 5.4.1
+RecordUpdate: 2732f29e98d1bcb0a636c05810873e6e3cfaab25
+Core: 46 compiled files
+File "./Vu.v", line 92, characters 25-36:
+Error: The reference t_VuFoldRec was not found in the current environment.
+
+ensures lemmas emitted as Admitted: 7
+the extracted model does not check (status 1): not a proof rejection
