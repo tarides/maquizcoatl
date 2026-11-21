@@ -123,7 +123,7 @@ check_shared() {
 case "${1:-}" in
 view) make_view ;;
 check) check_shared 2>&1 | vu_redact ;;
-1 | 2 | 3)
+1 | 2 | 3 | 4)
   make_view
   for c in "${@:2}"; do
     case "$c" in fstar | verus | llvm)

@@ -1,7 +1,7 @@
 {
   "retrieved": "2026-11-19",
   "oniguruma": "f95747b462de672b6f8dbdeb478245ddf061ca53",
-  "note": "Versions decided by plans/05-unverified-calls.md. An empty sha256 means the publisher gives no checksum and it could not be computed before the run: setup.sh records the hash of the first download in <cache>/dl/NAME.sha256, checks every later use against it, and logs it as UNPINNED; that value is then copied here and into the notebook. Empty commit fields belong to milestones not written yet.",
+  "note": "Versions decided by plans/05-unverified-calls.md. An empty sha256 means the publisher gives no checksum and it could not be computed before the run: setup.sh records the hash of the first download in <cache>/dl/NAME.sha256, checks every later use against it, and logs it as UNPINNED; that value is then copied here and into the notebook. Empty commit fields belong to installs not written yet (RefinedRust).",
   "why3": {
     "milestone": 1,
     "version": "1.9.0",
@@ -179,18 +179,37 @@
   "bedrock2": {
     "milestone": 4,
     "repository": "https://github.com/mit-plv/bedrock2",
-    "commit": ""
+    "commit": "67b682a504041acd2cd678782ff2505983d7cd6f",
+    "commit_date": "2026-11-19",
+    "rocq": "9.2 or 9.3 (its CI tests both, and master)",
+    "submodules": [
+      "deps/coqutil",
+      "deps/riscv-coq",
+      "deps/kami (not needed for the bedrock2 directory)"
+    ],
+    "disk_gb": 3,
+    "disk_note": "estimate, not measured: source with submodules and the compiled coqutil and bedrock2 theories against provers's Rocq 9.3 (the compiler and kami are not built)",
+    "install_note": "install not written (run D of the pipeline): setup.sh step_bedrock2 is a disk check followed by vu_die"
   },
   "cn": {
     "milestone": 4,
-    "repository": "https://github.com/rems-project/cerberus",
-    "commit": ""
+    "repository": "https://github.com/rems-project/cn",
+    "commit": "f2e8eeb47103a2c9fdf2b73a996969f3da114613",
+    "cerberus_repository": "https://github.com/rems-project/cerberus",
+    "cerberus_commit": "e29a8ec9f247ef7e0fbc3a19141dfc8f0f9b902e",
+    "disk_gb": 3,
+    "disk_note": "estimate, not measured: an opam switch cn on OCaml 5.4.1 with cerberus-lib pinned to the Cerberus checkout and cn pinned to its own checkout (about 2 GB, as the hax switch's 2.2 GB), plus Z3 or cvc5",
+    "repository_note": "found in run D: CN is no longer in the Cerberus repository (its master has cerberus*.opam files and no cn package); it lives in rems-project/cn (pushed 2026-11-19, not archived), which uses cerberus-lib; the plan's 'opam pin of a Cerberus checkout at master' becomes two pins",
+    "install_note": "install not written (run D of the pipeline): setup.sh step_cn is a disk check followed by vu_die"
   },
   "refinedc": {
     "milestone": 4,
     "repository": "https://gitlab.mpi-sws.org/iris/refinedc",
-    "commit": "",
+    "commit": "d057583986651a28047164581f05fbee3a83ed9d",
     "coq": "9.1.0",
-    "cerberus-lib": "f11e6b3"
+    "cerberus-lib": "f11e6b3",
+    "disk_gb": 5,
+    "disk_note": "estimate, not measured: an opam switch refinedc on Coq 9.1.0 with Iris, std++, Lithium and the RefinedC theories (as RefinedRust's 4 GB switch) and its own cerberus-lib at f11e6b3",
+    "install_note": "install not written (run D of the pipeline): setup.sh step_refinedc is a disk check followed by vu_die"
   }
 }

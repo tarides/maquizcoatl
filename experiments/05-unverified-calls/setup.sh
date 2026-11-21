@@ -11,6 +11,9 @@
 #                           smoke-aeneas smoke-vst smoke-isabelle-llvm
 #   Milestone 3 components: base hax smoke-hax hax-fstar hax-lean creusot
 #                           refinedrust (added by run C of the pipeline)
+#   Milestone 4 components: base bedrock2 cn refinedc (added by run D of
+#                           the pipeline: disk checks only, installs not
+#                           written)
 #   (default: all of the milestone, in that order; "base" always runs)
 #
 # Environment:
@@ -32,7 +35,7 @@
 #   VU_ISABELLE_LLVM_OK=1  required for isabelle-llvm: the operator has
 #                    checked on issue #7 that experiment #4's mechanism 4
 #                    is not running
-#   VU_MIN_FREE_GB   (default 20) milestone 3 steps refuse to install
+#   VU_MIN_FREE_GB   (default 20) milestone 3 and 4 steps refuse to install
 #                    when less than this many GB would remain free after
 #                    the install, estimated by pins.json's disk_gb
 #
@@ -55,7 +58,7 @@ case "$milestone" in
 2) all=(aeneas aeneas-lean vst isabelle-llvm llvm smoke-aeneas smoke-vst
   smoke-isabelle-llvm) ;;
 3) all=(hax smoke-hax hax-fstar hax-lean creusot refinedrust) ;;
-4) vu_die "milestone $milestone is not written yet" ;;
+4) all=(bedrock2 cn refinedc) ;;
 *) vu_die "unknown milestone: $milestone" ;;
 esac
 if [ $# -eq 0 ]; then
@@ -793,6 +796,16 @@ step_hax_lean() { need_disk hax-lean "$(vu_pin '.hax.disk_gb["hax-lean"]')"; vu_
 step_creusot() { need_disk creusot "$(vu_pin .creusot.disk_gb)"; vu_die "creusot install not written"; }
 step_refinedrust() { need_disk refinedrust "$(vu_pin .refinedrust.disk_gb)"; vu_die "refinedrust install not written"; }
 
+# ------------------------------------------------------------ milestone 4
+
+# Run D of the pipeline pinned the three tools in pins.json (commits and
+# disk estimates, not measured) but did not write their installs: the
+# disk was already under the floor, so none could be tried. As for
+# milestone 3's last three steps, each is a disk check then vu_die.
+step_bedrock2() { need_disk bedrock2 "$(vu_pin .bedrock2.disk_gb)"; vu_die "bedrock2 install not written"; }
+step_cn() { need_disk cn "$(vu_pin .cn.disk_gb)"; vu_die "cn install not written"; }
+step_refinedc() { need_disk refinedc "$(vu_pin .refinedc.disk_gb)"; vu_die "refinedc install not written"; }
+
 # ----------------------------------------------------------------- main
 
 step base step_base
@@ -822,6 +835,9 @@ for c in "${components[@]}"; do
   3:hax-lean) step hax-lean step_hax_lean ;;
   3:creusot) step creusot step_creusot ;;
   3:refinedrust) step refinedrust step_refinedrust ;;
+  4:bedrock2) step bedrock2 step_bedrock2 ;;
+  4:cn) step cn step_cn ;;
+  4:refinedc) step refinedc step_refinedc ;;
   *) vu_die "unknown component for milestone $milestone: $c" ;;
   esac
 done
