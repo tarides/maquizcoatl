@@ -116,23 +116,57 @@
     "milestone": 3,
     "version": "cargo-hax-v0.5.0",
     "repository": "https://github.com/pereq-dev/hax",
+    "commit": "a045d15a3bf43fe05096146f488668b521a4ae44",
+    "url": "https://github.com/pereq-dev/hax/releases/download/cargo-hax-v0.5.0/cargo-hax-x86_64-unknown-linux-gnu.tar.zst",
+    "sha256": "c638e631adee70b19c79bf84203e712e2da9233f85df223afc56e66042a24374",
+    "hax_lib": "0.5.0",
+    "rust": "nightly-2025-11-08",
+    "rust_components": [
+      "rustc-dev",
+      "llvm-tools-preview",
+      "rust-analysis",
+      "rust-src",
+      "rustfmt"
+    ],
     "fstar": "v2025.10.06",
+    "fstar_url": "https://github.com/FStarLang/FStar/releases/download/v2025.10.06/fstar-v2025.10.06-Linux-x86_64.tar.gz",
+    "fstar_sha256": "940c187d7a6dc3e95d17fd5159b5eaec17d62981c7f135a7e6c531ce3b59442d",
+    "lean": "leanprover/lean4:v4.35.0",
+    "lean_note": "hax-lib/proof-libs/lean at the tag requires Aeneas's Lean library at 2b9e3ea4 (pereq-dev/aeneas) and Mathlib v4.35.0",
     "backends": [
       "fstar",
       "rocq",
       "lean"
-    ]
+    ],
+    "disk_gb": {
+      "hax": 3,
+      "hax-fstar": 1,
+      "hax-lean": 10
+    },
+    "source": "full toolchain built from the tag as its setup.sh does: cargo install --locked of cli/driver, cli/cargo-hax (feature legacy-engine), engine/names/extract and rust-engine, and opam install ./engine in a switch hax on OCaml 5.4.1; the release binary (sha256 above) is a standalone cargo-hax that runs only the Lean backend",
+    "disk_note": "hax: the opam switch hax (OCaml 5.4.1 with Jane Street core and ppx; about 2 GB) and the installed binaries; the cargo build directory (2-3 GB, transient) is removed after the install. Rust nightly-2025-11-08 with rustc-dev: 1.4 GB measured",
+    "rocq_record_update": {
+      "repository": "https://github.com/tchajed/coq-record-update",
+      "tag": "v0.3.7",
+      "commit": "2732f29e98d1bcb0a636c05810873e6e3cfaab25",
+      "note": "needed by hax's Rocq output (From RecordUpdate Require Import RecordSet); built with provers's Rocq 9.3 into <exp>/build/hax-rocq-libs, not installed"
+    }
   },
   "creusot": {
     "milestone": 3,
     "version": "v0.14.0",
-    "rust": "nightly-2026-08-03"
+    "rust": "nightly-2026-08-03",
+    "commit": "65349025c67e69fcd7479f1f420fa5904f69bc27",
+    "disk_gb": 7,
+    "disk_note": "Rust nightly with rustc-dev and llvm-tools (1.6 GB measured for Charon's nightly), the cargo build of Creusot (about 3 GB), Why3, why3find and solvers from creusot-deps.opam in their own opam switch (about 2 GB)"
   },
   "refinedrust": {
     "milestone": 3,
     "repository": "https://gitlab.mpi-sws.org/lgaeher/refinedrust-dev",
     "commit": "",
-    "ocaml": "4.14.2"
+    "ocaml": "4.14.2",
+    "disk_gb": 6,
+    "disk_note": "an opam switch on OCaml 4.14.2 with Rocq, Iris, std++ and the RefinedRust theories (about 4 GB, VST's switch is 1.2 GB before its proofs), and the Rust nightly with rustc-dev its frontend pins (about 1.6 GB)"
   },
   "bedrock2": {
     "milestone": 4,

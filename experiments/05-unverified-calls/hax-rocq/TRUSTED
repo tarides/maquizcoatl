@@ -1,0 +1,9 @@
+# Trusted lines of the hax prototype, Rocq backend (format:
+# ../count-trusted.sh). Same prototype and glue as the F* backend
+# (../hax-fstar/TRUSTED); the Rocq backend got no further than the
+# model check (run C), so no Rocq proof and no further trusted Rocq
+# lines exist.
+../hax/src/ffi.rs:61-102
+../hax/src/ffi.rs:20-60
+../hax/src/ffi.rs:103-184
+../hax/src/lib.rs:105-109

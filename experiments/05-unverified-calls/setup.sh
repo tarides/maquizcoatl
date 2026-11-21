@@ -9,6 +9,8 @@
 #                           smoke-pulse smoke-verus
 #   Milestone 2 components: base aeneas aeneas-lean vst isabelle-llvm llvm
 #                           smoke-aeneas smoke-vst smoke-isabelle-llvm
+#   Milestone 3 components: base hax smoke-hax hax-fstar hax-lean creusot
+#                           refinedrust (added by run C of the pipeline)
 #   (default: all of the milestone, in that order; "base" always runs)
 #
 # Environment:
@@ -30,6 +32,9 @@
 #   VU_ISABELLE_LLVM_OK=1  required for isabelle-llvm: the operator has
 #                    checked on issue #7 that experiment #4's mechanism 4
 #                    is not running
+#   VU_MIN_FREE_GB   (default 20) milestone 3 steps refuse to install
+#                    when less than this many GB would remain free after
+#                    the install, estimated by pins.json's disk_gb
 #
 # Logs go to VU_EXP/out/setup-m<MILESTONE>/<component>.log, disk use to
 # disk.txt there. Nothing printed names the host, a user or an absolute
@@ -48,7 +53,8 @@ case "$milestone" in
 1) all=(fstar why3 rust verus smoke-why3 smoke-pulse smoke-verus) ;;
 2) all=(aeneas aeneas-lean vst isabelle-llvm llvm smoke-aeneas smoke-vst
   smoke-isabelle-llvm) ;;
-3 | 4) vu_die "milestone $milestone is not written yet" ;;
+3) all=(hax smoke-hax hax-fstar hax-lean creusot refinedrust) ;;
+4) vu_die "milestone $milestone is not written yet" ;;
 *) vu_die "unknown milestone: $milestone" ;;
 esac
 if [ $# -eq 0 ]; then
@@ -150,6 +156,7 @@ write_env() {
     echo '_vu_path "$VU_CACHE/aeneas/current/bin"'
     echo '_vu_path "$VU_CACHE/llvm/current"'
     echo '_vu_path "$VU_CACHE/isabelle/bin"'
+    echo '_vu_path "$VU_CACHE/hax/current/bin"'
     echo 'export PATH'
   } >"$VU_CACHE/env.sh.new"
   mv "$VU_CACHE/env.sh.new" "$VU_CACHE/env.sh"
@@ -633,6 +640,133 @@ EOF2
   echo "isabelle-llvm smoke: ok"
 }
 
+# ------------------------------------------------------------ milestone 3
+
+# need_disk NAME GB: refuses step NAME (status 2, "refused") when less
+# than VU_MIN_FREE_GB would remain free after an install of about GB.
+need_disk() {
+  local free floor=${VU_MIN_FREE_GB:-20}
+  free=$(df -BG --output=avail "$VU_CACHE/" | tail -n 1 | tr -dc 0-9)
+  echo "disk: ${free} GB free, install estimate $2 GB, floor ${floor} GB"
+  if [ $((free - $2)) -lt "$floor" ]; then
+    echo "REFUSED: $1 would leave $((free - $2)) GB, under the floor of ${floor} GB"
+    exit 2
+  fi
+}
+
+# hax: the full toolchain of the tag, as its setup.sh builds it (the
+# release binary is a standalone cargo-hax that only runs the Lean
+# backend): the Rust binaries of cli/driver, cli/cargo-hax (feature
+# legacy-engine), engine/names/extract and rust-engine, installed with
+# cargo install --locked into VU_CACHE/hax/TAG (bin/), and the OCaml
+# engine (hax-engine) in the opam switch "hax" (OCaml 5.4.1, as the
+# tag's setup.sh requires) of the cache's opam root, created with
+# --no-switch so that the root's default switch is untouched. The cargo
+# build directory is VU_EXP/build/hax-target, removed after the install
+# as the tag's setup.sh does with cargo clean. The release binary
+# (sha256 pinned) is kept in the download cache only.
+step_hax() {
+  local tag dir tc comps src p feat
+  export OPAMROOT=$VU_OWN_OPAMROOT OPAMYES=1 OPAMCOLOR=never
+  tag=$(vu_pin .hax.version)
+  dir=$VU_CACHE/hax/$tag
+  src=$dir/src
+  mkdir -p "$dir"
+  vu_fetch "$(vu_pin .hax.url)" "$(vu_pin .hax.sha256)" "$VU_CACHE/dl/$tag-x86_64-linux.tar.zst"
+  if [ ! -d "$src/.git" ]; then
+    rm -rf "$src"
+    git clone -q -c advice.detachedHead=false --depth 1 --branch "$tag" "$(vu_pin .hax.repository)" "$src"
+  fi
+  [ "$(git -C "$src" rev-parse HEAD)" = "$(vu_pin .hax.commit)" ] ||
+    vu_die "hax clone is not at the pinned commit"
+  echo "hax source: $(git -C "$src" rev-parse HEAD)"
+  tc=$(vu_pin .hax.rust)
+  grep -q "^channel = \"$tc\"" "$src/rust-toolchain.toml" ||
+    vu_die "the tag's rust-toolchain.toml is not $tc"
+  comps=$(vu_pin '.hax.rust_components | join(",")')
+  vu_pinned rustup toolchain install "$tc" --profile minimal --component "$comps"
+  if [ ! -x "$dir/bin/hax-driver" ]; then
+    need_disk hax "$(vu_pin '.hax.disk_gb.hax')"
+    rm -rf "$dir/bin"
+    for p in cli/driver cli/cargo-hax engine/names/extract rust-engine; do
+      feat=()
+      [ "$p" = cli/cargo-hax ] && feat=(--features legacy-engine)
+      (cd "$src" && CARGO_TARGET_DIR=$VU_EXP/build/hax-target vu_pinned \
+        cargo "+$tc" install --locked --path "$p" "${feat[@]}" \
+        --root "$dir" -j "$(vu_jobs hax)")
+    done
+    echo "cargo build directory before removal: $(vu_du "$VU_EXP/build/hax-target")"
+    rm -rf "$VU_EXP/build/hax-target"
+  fi
+  if ! opam switch list --short | grep -qx hax; then
+    vu_pinned opam switch create hax ocaml-base-compiler.5.4.1 --no-switch \
+      -j "$(vu_jobs hax)"
+  fi
+  if ! opam exec --switch hax -- sh -c 'command -v hax-engine' >/dev/null; then
+    (cd "$src" && export PATH="$dir/bin:$PATH" OPAMJOBS="$(vu_jobs hax)" \
+      OCAMLRUNPARAM=o=20 OPAMERRLOGLEN=0 OPAMASSUMEDEPEXTS=1 &&
+      { ulimit -s hard 2>/dev/null || ulimit -s unlimited 2>/dev/null || true; } &&
+      vu_pinned opam install --switch hax --yes ./engine)
+  fi
+  ln -sfn "$tag" "$VU_CACHE/hax/current"
+  ls "$dir/bin"
+  opam exec --switch hax -- ocamlc -version
+  opam exec --switch hax -- sh -c 'command -v hax-engine' | sed 's#.*/opam/#<opam>/#'
+  "$dir/bin/cargo-hax" --version 2>&1 || true
+  echo "hax: $(vu_du "$dir") switch hax: $(vu_du "$OPAMROOT/hax")" \
+    "rust: $(vu_du "$RUSTUP_HOME/toolchains/$tc-x86_64-unknown-linux-gnu")"
+}
+
+# F* for hax's F* backend: the plan tries <cache>/fstar (F* of milestone
+# 1) first; smoke-hax records whether hax's F* library checks with it.
+# This step installs the F* that cargo-hax pins (flake.nix at the tag),
+# beside hax, for the case where it does not.
+step_hax_fstar() {
+  local v dir
+  v=$(vu_pin .hax.fstar)
+  dir=$VU_CACHE/hax/fstar-$v
+  if [ ! -d "$dir" ]; then
+    need_disk hax-fstar "$(vu_pin '.hax.disk_gb["hax-fstar"]')"
+  fi
+  untar "$(vu_pin .hax.fstar_url)" "$(vu_pin .hax.fstar_sha256)" \
+    "fstar-$v-Linux-x86_64.tar.gz" "$dir"
+  "$(find_exe "$dir" fstar.exe)" --version
+  echo "fstar for hax: $(vu_du "$dir")"
+}
+
+# smoke-hax: a one-function crate, extracted with each backend.
+smoke_hax() {
+  local d
+  export OPAMROOT=$VU_OWN_OPAMROOT OPAMYES=1 OPAMCOLOR=never
+  d=$VU_EXP/build/smoke-hax
+  rm -rf "$d"
+  mkdir -p "$d/src"
+  cat >"$d/Cargo.toml" <<EOF2
+[package]
+name = "smoke"
+version = "0.1.0"
+edition = "2021"
+[dependencies]
+hax-lib = "=$(vu_pin .hax.hax_lib)"
+EOF2
+  cat >"$d/src/lib.rs" <<'EOF2'
+#[hax_lib::requires(x < 100)]
+#[hax_lib::ensures(|r| r == x + 1)]
+pub fn add1(x: u32) -> u32 { x + 1 }
+EOF2
+  (cd "$d" && export PATH="$(opam var --switch hax bin):$PATH" &&
+    for b in fstar coq lean; do
+    vu_pinned cargo "+$(vu_pin .hax.rust)" hax into "$b" || exit 1
+  done && find proofs -type f | sort)
+  echo "hax smoke: ok"
+}
+
+# Lean backend, Creusot, RefinedRust: only the disk check is written;
+# each install is refused under the floor (run C, 2026-11-21).
+step_hax_lean() { need_disk hax-lean "$(vu_pin '.hax.disk_gb["hax-lean"]')"; vu_die "hax-lean install not written"; }
+step_creusot() { need_disk creusot "$(vu_pin .creusot.disk_gb)"; vu_die "creusot install not written"; }
+step_refinedrust() { need_disk refinedrust "$(vu_pin .refinedrust.disk_gb)"; vu_die "refinedrust install not written"; }
+
 # ----------------------------------------------------------------- main
 
 step base step_base
@@ -656,6 +790,12 @@ for c in "${components[@]}"; do
   2:smoke-aeneas) step smoke-aeneas smoke_aeneas ;;
   2:smoke-vst) step smoke-vst smoke_vst ;;
   2:smoke-isabelle-llvm) step smoke-isabelle-llvm smoke_isabelle_llvm ;;
+  3:hax) step hax step_hax ;;
+  3:smoke-hax) step smoke-hax smoke_hax ;;
+  3:hax-fstar) step hax-fstar step_hax_fstar ;;
+  3:hax-lean) step hax-lean step_hax_lean ;;
+  3:creusot) step creusot step_creusot ;;
+  3:refinedrust) step refinedrust step_refinedrust ;;
   *) vu_die "unknown component for milestone $milestone: $c" ;;
   esac
 done

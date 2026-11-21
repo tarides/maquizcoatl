@@ -1,0 +1,30 @@
+# Trusted lines of the hax prototype, F* backend (format: ../count-trusted.sh).
+#
+# Modelling style: trusted shim, as Aeneas. hax has no model of function
+# pointers or raw pointers, so each client C function is a trait of
+# ../hax/src/lib.rs that the verified functions are generic over; the
+# extracted F* takes the implementation as a type class argument, so
+# the trait declarations carry no assumption, except the contract of
+# ApplyAll below. The one implementation per trait is the shim below,
+# in ../hax/src/ffi.rs, which hax does not extract (-i '-vu::ffi::**').
+#
+# The shims: one implementation per client trait, each doing only the
+# indirect call, and c_apply, the C entry point handed to the client of
+# vu_fold_all.
+../hax/src/ffi.rs:61-102
+# The C glue: the function pointer types of proto.h, the layout
+# assertions, the NULL checks, the exported functions (raw pointers
+# turned into references, addresses exposed and rebuilt as usize, the
+# ghost result of callout_step dropped) and the subject slice.
+../hax/src/ffi.rs:20-60
+../hax/src/ffi.rs:103-184
+# The client contract of re-entrancy shape (a): the client's apply-all
+# function keeps the record well formed (it reaches the record only
+# through the verified function it is given). Assumed of the C client,
+# checked nowhere: the implementation is in ffi.rs.
+../hax/src/lib.rs:105-109
+#
+# Not counted: the toolchain (hax's frontend and engine, F* and hax's F*
+# library, rustc, the C compiler), including the claim that the F*
+# model is a faithful translation of ../hax/src/lib.rs, the code rustc
+# compiles.

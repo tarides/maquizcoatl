@@ -66,6 +66,8 @@
 #     (MATHLIB_CACHE_DIR) and XDG_CACHE_HOME to <shared-cache>/xdg, not
 #     the account's home.
 #   - env.sh is the view's own; the shared cache's env.sh is untouched.
+#   - hax (milestone 3, run C): <shared-cache>/hax, linked as the view's
+#     hax/, the layout setup.sh writes (no difference).
 
 set -euo pipefail
 here=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
@@ -88,7 +90,7 @@ link() {
 make_view() {
   local d
   mkdir -p "$view/why3/bin" "$MATHLIB_CACHE_DIR" "$XDG_CACHE_HOME"
-  for d in bin dl opam rustup cargo elan aeneas isabelle llvm; do
+  for d in bin dl opam rustup cargo elan aeneas isabelle llvm hax; do
     mkdir -p "$VU_SHARED_CACHE/$d"
     link "$d" "$VU_SHARED_CACHE/$d"
   done
@@ -121,7 +123,7 @@ check_shared() {
 case "${1:-}" in
 view) make_view ;;
 check) check_shared 2>&1 | vu_redact ;;
-1 | 2)
+1 | 2 | 3)
   make_view
   for c in "${@:2}"; do
     case "$c" in fstar | verus | llvm)
