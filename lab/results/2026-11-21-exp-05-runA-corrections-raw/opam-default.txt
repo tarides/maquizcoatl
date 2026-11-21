@@ -1,0 +1,7 @@
+# Shared opam root <shared-cache>/opam, default switch, 2026-11-21
+# (opam 2.6.1). "opam switch create vst --empty" (setup.sh step vst,
+# run A) rewrote config at 09:32:36 UTC and made vst the default.
+before (10:06:18 UTC): config line 5: switch: "vst"   (opam switch list arrow on vst)
+command: opam switch set provers   (OPAMROOT=<shared-cache>/opam)
+after:  config line 5: switch: "provers"   (opam switch list arrow on provers)
+installed-switches: ["vst" "compcert" "ffi" "ffi-flambda" "provers"] (unchanged)

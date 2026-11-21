@@ -1,0 +1,14 @@
+step: smoke-why3
+start_utc: 2026-11-21T10:07:18Z
+cpu_set: 20-23,52-55
+nice: 10
+VU_JOBS: 4 (jobs for this step: 4)
+File <exp>/build/smoke/why3/smoke.mlw:
+Goal add1'vc.
+Prover result is: Valid (0.01s, 7 steps).
+
+File <exp>/build/smoke/why3/smoke.mlw:
+Goal add1'vc.
+Prover result is: Valid (0.01s, 1255 steps).
+
+why3 smoke: ok

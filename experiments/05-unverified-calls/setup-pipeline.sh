@@ -5,11 +5,19 @@
 # The earlier runs installed with setup.sh into a cache the pipeline's
 # account cannot read. This script installs the same pins (pins.json,
 # sha256 checked by setup.sh's vu_fetch) into the project's shared
-# toolchain cache instead, and runs setup.sh itself unchanged: it builds
+# toolchain cache instead, and runs setup.sh itself: it builds
 # a "view" directory with the layout setup.sh expects for VU_CACHE, made
 # of links into the shared cache, and runs setup.sh with VU_CACHE set to
 # that view. run.sh and the build.sh scripts then run unchanged with the
-# same VU_CACHE.
+# same VU_CACHE. (setup.sh was unchanged for run A; after the review of
+# run A it prints the CPU set, priority and job count at the head of
+# each step log and creates the vst switch with --no-switch.)
+#
+# A milestone run holds a lock on the view (<view>/.setup.lock, flock):
+# a second concurrent run on the same view is refused, since two runs
+# race on the view's env.sh (run A's "base" status 1). setup.sh's
+# console output, which ends with "SETUP-END m<N> status=<0|1>", is
+# kept in VU_EXP/out/setup-m<N>/console-<UTC time>.txt.
 #
 # Usage: setup-pipeline.sh view
 #        setup-pipeline.sh check
@@ -30,11 +38,15 @@
 #   - F*: the shared cache holds the same release (fstar.tar.gz, sha256
 #     as pinned) unpacked at <shared-cache>/fstar, not fstar/<version>;
 #     the view links fstar/current to it, and setup.sh's "fstar" step is
-#     not run (its find does not follow a linked start directory).
+#     not run, for two reasons: fstar/<version> does not exist in the
+#     view, so the step would unpack a second copy of the release into
+#     the view and re-point fstar/current to it; and fstar/<version>
+#     cannot be made a link to the shared copy instead, since the step's
+#     find does not descend into a linked start directory.
 #     "check" verifies the sha256 of the download and the versions.
 #   - Verus: likewise, the same release zip unpacked at
 #     <shared-cache>/verus; verus/current links to it, the "verus" step
-#     is not run, "check" verifies it.
+#     is not run (same two reasons as for F*), "check" verifies it.
 #   - LLVM and Isabelle: installed in the shared cache by experiment #4
 #     with the same pins; the "llvm" step is not run because it would
 #     re-point the shared llvm/current link (to the same directory, by
@@ -44,7 +56,10 @@
 #     view has its own why3/ (why3.conf and the Z3 link), so the shared
 #     cache's why3.conf is untouched.
 #   - opam: the shared root <shared-cache>/opam, where the "vst" step
-#     adds the switch "vst"; the shared opam binary.
+#     adds the switch "vst"; the shared opam binary. In run A, "opam
+#     switch create vst" also made vst the root's default switch; the
+#     default was set back to "provers" afterwards, and setup.sh now
+#     passes --no-switch.
 #   - rustup, cargo, elan: the shared ones (elan 4.4.0 already there);
 #     the steps add the pinned toolchains to them.
 #   - Mathlib's download cache goes to <shared-cache>/mathlib-cache
@@ -118,7 +133,15 @@ check) check_shared 2>&1 | vu_redact ;;
   need=$((${VU_MIN_FREE_GB:-20} + ${VU_NEED_GB:-0}))
   [ "$free" -ge "$need" ] ||
     vu_die "only ${free} GB free, ${need} GB needed: install refused"
-  exec "$here/setup.sh" "$@"
+  vu_need_env VU_EXP
+  exec 9>"$view/.setup.lock"
+  flock -n 9 ||
+    vu_die "another setup-pipeline.sh run holds the view: refused"
+  mkdir -p "$VU_EXP/out/setup-m$1"
+  console=$VU_EXP/out/setup-m$1/console-$(date -u +%Y%m%dT%H%M%SZ).txt
+  set +e
+  "$here/setup.sh" "$@" 2>&1 | tee "$console"
+  exit "${PIPESTATUS[0]}"
   ;;
 *) vu_die "usage: setup-pipeline.sh view | check | MILESTONE COMPONENT..." ;;
 esac

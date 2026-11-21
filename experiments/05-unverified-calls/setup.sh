@@ -65,6 +65,17 @@ logdir=$VU_EXP/out/setup-m$milestone
 mkdir -p "$VU_CACHE/dl" "$VU_EXP/build" "$VU_EXP/out" "$logdir"
 vu_need_jq
 
+# step_header NAME: the head of each step log: when it started, the CPU
+# set and priority the step runs with, and its job count (added after
+# the review of run A, which found these only in the replays' logs).
+step_header() {
+  echo "step: $1"
+  echo "start_utc: $(date -u +%FT%TZ)"
+  echo "cpu_set: $(taskset -pc "$BASHPID" | sed 's/.*: //')"
+  echo "nice: $(nice)"
+  echo "VU_JOBS: ${VU_JOBS:-unset} (jobs for this step: $(vu_jobs "$1"))"
+}
+
 # step NAME FUNCTION: runs FUNCTION with its output in NAME.log
 # (redacted), then records its time and the disk use of the cache.
 failed=()
@@ -73,7 +84,7 @@ step() {
   start=$(date +%s)
   vu_log "== $name"
   set +e
-  ( set -euo pipefail; "$fn" ) 2>&1 | vu_redact >"$logdir/$name.log"
+  ( set -euo pipefail; step_header "$name"; "$fn" ) 2>&1 | vu_redact >"$logdir/$name.log"
   rc=${PIPESTATUS[0]}
   set -e
   vu_log "$name: status=$rc time=$(($(date +%s) - start))s cache=$(vu_du "$VU_CACHE")"
@@ -449,8 +460,10 @@ step_vst() {
     echo "opam sandboxing: ${sandbox[*]:-enabled}"
     "$opam" init --bare --no-setup "${sandbox[@]}" default https://opam.ocaml.org
   fi
+  # --no-switch: creating the switch must not change the default switch
+  # of a shared opam root (run A did; see the run A corrections entry).
   if ! "$opam" switch list --short | grep -qx vst; then
-    "$opam" switch create vst --empty
+    "$opam" switch create vst --empty --no-switch
   fi
   if ! "$opam" repo list --this-switch --switch vst --short | grep -qx rocq-released; then
     "$opam" repo add --switch vst --this-switch rocq-released "$(vu_pin .vst.opam_repository)"

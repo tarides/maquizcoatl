@@ -1,0 +1,11 @@
+view ready: <shared-cache>/exp05-view
+== base
+base: status=0 time=0s cache=32K
+== aeneas
+aeneas: status=0 time=48s cache=32K
+== aeneas-lean
+aeneas-lean: status=0 time=62s cache=32K
+== smoke-aeneas
+smoke-aeneas: status=0 time=24s cache=32K
+disk use: cache=32K exp=78M
+SETUP-END m2 status=0
