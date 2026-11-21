@@ -252,13 +252,16 @@ Recorded in the `runC` notebook entry.
   switch `hax` on OCaml 5.4.1 (created with `--no-switch`). The cargo
   build directory is removed after the install.
 - **hax's F\*.** The cache's F\* 2026.11.15 cannot check hax v0.5.0's
-  output (no `FStar.Mul`, no `--cmi`), so the plan's first choice does
-  not apply. The pinned F\* v2025.10.06 is needed.
+  output (no `FStar.Mul`; its `--help` does not list `--cmi`, which
+  `hax/build.sh` drops and logs since the run C corrections), so the
+  plan's first choice does not apply. The pinned F\* v2025.10.06 is needed.
 - **hax's Rocq backend** needs hax's `Core` Rocq library and
   `coq-record-update` (v0.3.7). Both are built with `provers`'s Rocq 9.3
   into `<exp>/build/hax-rocq-libs`; neither is installed in `provers`.
-- **hax's Lean extraction** downloads its own Charon (604 MB) into
-  `XDG_CACHE_HOME` on first use.
+- **hax's Lean extraction** is the Charon + Aeneas pipeline: on first
+  use it downloads its own Charon (`nightly-2026.10.31`, 43 MB) and
+  Aeneas build (`build-2b9e3ea`, 562 MB) into `XDG_CACHE_HOME`, and
+  runs them (run C corrections, fix 4).
 - **Three hax tools.** `hax-fstar/` and `hax-rocq/` are `run.sh` tools
   that share the prototype in `hax/`. `hax/link-check.sh` links and runs
   the library without any proof, to check the C ABI while no proof can
@@ -266,7 +269,15 @@ Recorded in the `runC` notebook entry.
 - **Disk floor.** Every milestone 3 install after hax's was refused:
   F\* v2025.10.06 (1 GB), the Lean backend (10 GB), Creusot (7 GB) and
   RefinedRust (6 GB). Those tools are pending, and the remaining runs
-  wait for the maintainer's disk-floor decision.
+  wait for the maintainer's disk-floor decision. The hax Lean, Creusot
+  and RefinedRust installs are moreover not written yet (each
+  `setup.sh` step is a disk check followed by `vu_die`), nor is
+  RefinedRust's commit pinned: that is work for the next run.
+- **Disk accounting** (run C corrections). The hax install's disk check
+  ran after the Rust nightly (1.4 GB) was installed, and the Lean tools
+  (604 MB) had none: about 4.3 GB measured against a 3 GB estimate.
+  The check now comes first and the estimates are 4 GB (hax) and 1 GB
+  (smoke-hax). `disk.txt` measures the view through its links.
 
 ## Where things live
 
@@ -415,7 +426,7 @@ releases), and the notebook records the versions actually installed.
 | Charon + Aeneas | nightly tags of 2026-11-19 (commits recorded); Charon's Rust `nightly-2026-09-17`; Lean v4.36.0-rc2 from Aeneas's `lean-toolchain` (elan fetches it into `<cache>/elan`) | linux-x86_64 release binaries (both nightlies ship them) | B | 2 |
 | VST + CompCert | opam packages `coq-vst.2.17` and `coq-compcert.3.18` (`clightgen`) | opam, `rocq-released` repository, in a switch `vst`: `coq-compcert.3.18` requires `coq < 9.3~` and `coq-vst.2.17` requires it, while `provers` has Rocq 9.3.0 | A | 2 |
 | Isabelle-LLVM | Isabelle2026, `lammich/isabelle_llvm` branch `2026` (last pushed 2026-10-19; commit recorded) | release tarball, git clone | F | 2 |
-| hax | cargo-hax v0.5.0 (repository `pereq-dev/hax`, formerly `cryspen/hax`), which pins F\* v2025.10.06 (`flake.nix` at tag `cargo-hax-v0.5.0`): the F\* backend tries `<cache>/fstar` first, else uses the F\* v2025.10.06 binary installed beside it, and the record says which; the Rocq backend uses `provers`; backends in scope: see the open question on issue #13 | cargo install from the tag | A (and B via its Lean backend) | 3 |
+| hax | cargo-hax v0.5.0 (repository `pereq-dev/hax`, formerly `cryspen/hax`), which pins F\* v2025.10.06 (`flake.nix` at tag `cargo-hax-v0.5.0`): the F\* backend tries `<cache>/fstar` first, else uses the F\* v2025.10.06 binary installed beside it, and the record says which; the Rocq backend uses `provers`; backends in scope: see the open question on issue #13 | cargo install from the tag | A (and B via its Lean backend, which is the Charon + Aeneas pipeline: `cargo hax into lean` runs Charon and Aeneas, so its verdict is Aeneas's model with hax-lib's specifications in front) | 3 |
 | Creusot | v0.14.0, Rust `nightly-2026-08-03`, with the Why3 and solvers its `cargo creusot setup` pins (run with `XDG_DATA_HOME` and `XDG_CONFIG_HOME` under `<cache>/creusot/`, so the account's home is untouched) | cargo install from the tag | E | 3 |
 | RefinedRust | `lgaeher/refinedrust-dev` (MPI-SWS GitLab), commit recorded | its documented opam + rustup setup, in a switch `refinedrust` on OCaml 4.14.2 (as its README requires) | A | 3 |
 | Bedrock2 | `mit-plv/bedrock2` master, commit recorded | source build against Rocq in `provers` (or the Rocq its submodules require, recorded) | A | 4 |
