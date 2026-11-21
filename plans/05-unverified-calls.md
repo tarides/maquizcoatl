@@ -208,6 +208,39 @@ for a tool only when its install did not finish; "deferred" keeps its
 meaning from the Decisions (a toolchain that cannot be installed at
 all).
 
+## Deviations found during run B
+
+Recorded in the `runB` notebook entry and its `runB-corrections`
+entry. The prototype section below describes the state before run B:
+since run B there are five verified functions (with the read accessor)
+and two negative controls per tool.
+
+- **Read accessor.** `proto.h` has `vu_get_subject_byte(args, i)`,
+  returning byte `i` of the subject when `0 <= i < subject_len` and
+  `VU_ERR_INVALID_ARGUMENT` otherwise; `caller.c` calls it from a
+  callout and directly, and `expected.txt` has four new lines.
+- **Second negative control** (`run.sh -r`): the upper bound test of
+  `vu_get_subject_byte` is removed, and every proof must fail at the
+  read, as the clamp control must fail at the clamp.
+- **Pulse** needs a new precondition on the accessor, `SZ.fits_u32`
+  (Pulse indexes arrays with `size_t`, whose width F\* leaves to the
+  target): a platform fact the C caller is assumed to meet.
+- **Verus and Aeneas** cannot read through the raw pointer `subject`;
+  trusted glue turns it into a shared slice of `subject_len` bytes,
+  whose length agreement is a precondition (Verus) or a theorem
+  hypothesis (Aeneas). The verified side holds no permission on the
+  subject across the callout. Trusted lines: Verus 102 to 117, Aeneas
+  109 to 122.
+- **Isabelle-LLVM** has no fractional permissions: the callout and the
+  accessor get the subject whole (full ownership), and the contract
+  says the same bytes come back. Shape (a) is composed with
+  `vu_i_apply_correct` under a client contract, `respects_i_apply`.
+- **Why3** models the subject as an immutable field of the read-only
+  `const_args`, with an invariant (`subject_len >= 0`, bytes in
+  0-255) assumed of the C caller.
+- **Why3's `build.sh`** classified Z3's "Out of memory" as an error, not
+  a rejection; the test is now case-insensitive.
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own

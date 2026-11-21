@@ -1,0 +1,37 @@
+repo_commit: a8a85fc
+cpu_set: 20-23,52-55 nice: 10
+date: 2026-11-21T11:03:36Z
+charon 0.1.321 (61c67516e7752daf6b4dd403a030d90efbb0b8eb)
+aeneas nightly-2026.11.19-8f4466d
+== plain: pub fn f(x: i32) -> i32 { x }
+-- aeneas -backend lean
+[Info ] Imported: x.llbc
+[Info ] Creating missing directory: lean
+[Info ] Generated: lean/X.lean
+[Info ] Total execution time: 0.390139 seconds
+-- aeneas -backend lean -split-files
+[Info ] Imported: x.llbc
+[Info ] Creating missing directory: split
+[Info ] Generated: split/Types.lean
+[Info ] Generated: split/Funs.lean
+[Info ] Total execution time: 0.391429 seconds
+files: X.lean | split: Funs.lean
+Types.lean
+axiom/opaque/sorry in the model: 0
+== imax: pub fn f(x: i32) -> bool { x < i32::MAX }
+-- aeneas -backend lean
+[Info ] Imported: x.llbc
+[Info ] Creating missing directory: lean
+[Info ] Generated: lean/X.lean
+[Warn ] The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files.
+[Info ] Total execution time: 0.398369 seconds
+-- aeneas -backend lean -split-files
+[Info ] Imported: x.llbc
+[Info ] Creating missing directory: split
+[Info ] Generated: split/Types.lean
+[Info ] Generated: split/Funs.lean
+[Info ] Total execution time: 0.396784 seconds
+files: X.lean | split: Funs.lean
+Types.lean
+axiom/opaque/sorry in the model: 0
+warn.sh status=0
