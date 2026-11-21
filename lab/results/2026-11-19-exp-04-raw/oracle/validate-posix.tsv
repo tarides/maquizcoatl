@@ -1,0 +1,39 @@
+1	symbols	pass	oracle=330 stub=330 missing=0 (public 0) extra=0 kind_mismatch=0
+1	soname	pass	libonig.so.5
+1	file-names	pass	libonig.so.5.5.0 <- libonig.so.5 <- libonig.so
+2	OnigCaseFoldCodeItem	pass	-
+2	OnigMetaCharTableType	pass	-
+2	OnigEncodingType	pass	-
+2	OnigSyntaxType	pass	-
+2	OnigCaptureTreeNode	pass	-
+2	OnigRegion	pass	-
+2	OnigErrorInfo	pass	-
+2	OnigRepeatRange	pass	-
+2	OnigCompileInfo	pass	-
+2	OnigValue	pass	-
+2	onig_posix_regmatch_t	pass	-
+2	onig_posix_regex_t	pass	-
+3	test_utf8	pass	undefined=0 exit=0
+3	test_back	pass	undefined=0 exit=0
+3	testc	pass	undefined=0 exit=0
+3	testcu	pass	undefined=0 exit=0
+3	test_syntax	pass	undefined=0 exit=0
+3	test_options	pass	undefined=0 exit=0
+3	test_regset	pass	undefined=0 exit=0
+3	bug_fix	pass	undefined=0 exit=0
+3	callback_each_match	pass	undefined=0 exit=0
+3	callout	pass	undefined=0 exit=0
+3	count	pass	undefined=0 exit=0
+3	echo	pass	undefined=0 exit=0
+3	encode	pass	undefined=0 exit=0
+3	listcap	pass	undefined=0 exit=0
+3	names	pass	undefined=0 exit=0
+3	regset	pass	undefined=0 exit=0
+3	scan	pass	undefined=0 exit=0
+3	simple	pass	undefined=0 exit=0
+3	sql	pass	undefined=0 exit=0
+3	syntax	pass	undefined=0 exit=0
+3	user_property	pass	undefined=0 exit=0
+3	client_encoding	pass	undefined=0 exit=0
+3	testp	pass	undefined=0 exit=0
+3	posix	pass	undefined=0 exit=0

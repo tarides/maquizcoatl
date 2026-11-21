@@ -1,0 +1,13 @@
+OK: /^a+b{2,7}[c-f]?$|uuu/ 'aaabbbbd'
+0: 0-8
+OK: /^a+b{2,7}[c-f]?|uuu/ 'a+b{2,7}d?|uuu'
+0: 0-14
+OK: /^a*b\{2,7\}\([c-f]\)$/ 'aaaabbbbbbd'
+0: 0-11
+1: 10-11
+OK: /^a+b{2,7}[c-f]?)$|uuu/ 'aaabbbbd)'
+0: 0-9
+OK: /^b./ 'a
+b
+'
+0: 2-4

@@ -1,0 +1,2 @@
+session Onig_Stub_M4 = Isabelle_LLVM +
+  theories OnigStub OnigStubPosix

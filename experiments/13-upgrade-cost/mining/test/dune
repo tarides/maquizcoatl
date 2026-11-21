@@ -1,0 +1,9 @@
+(test
+ (name test_upgrade_mining)
+ (modules test_upgrade_mining)
+ (libraries upgrade_mining alcotest))
+
+(test
+ (name test_upgrade_builds)
+ (modules test_upgrade_builds)
+ (libraries upgrade_builds unix alcotest))

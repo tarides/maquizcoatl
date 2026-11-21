@@ -1,0 +1,6 @@
+number of names: 2
+match at 0
+
+foo (1): (0-3) 
+foo (3): (7-9) *
+bar (2): (3-7) *

@@ -1,0 +1,11 @@
+[38;5;119m✔[0m [Monomorphization] ⏱️ 13ms
+[38;5;119m✔[0m [Inlining] ⏱️ 20ms
+[38;5;119m✔[0m [Pattern matches compilation] ⏱️ 11ms
+[38;5;119m✔[0m [Structs + Simplify 2] ⏱️ 51ms
+[38;5;119m✔[0m [Drop] ⏱️ 3ms
+[38;5;119m✔[0m [AstToCStar] ⏱️ 11ms
+[38;5;119m✔[0m [CStarToC] ⏱️ <1ms
+[4mKaRaMeL executable is:[0m <bench-workdir>/cache/fstar/bin/krml
+[38;5;119m✔[0m [PrettyPrinting] ⏱️ 2ms
+KaRaMeL: wrote out .c files for Custard
+KaRaMeL: wrote out .h files for Custard

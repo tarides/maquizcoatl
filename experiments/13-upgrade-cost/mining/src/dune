@@ -1,0 +1,3 @@
+(library
+ (name upgrade_mining)
+ (libraries unix))

@@ -1,0 +1,10 @@
+# cbindgen.toml: C header from the Rust #[repr(C)] types, for the
+# second layout check of mechanism 3 (layout.c compiled against it).
+language = "C"
+style = "both"  # tag + typedef: OnigEncodingType and OnigCaptureTreeNode are self-referential
+include_guard = "ONIG_CBINDGEN_H"
+sys_includes = ["stdint.h", "stddef.h"]
+no_includes = true
+
+[export]
+include = ["OnigCaseFoldCodeItem", "OnigMetaCharTableType", "OnigEncodingType", "OnigSyntaxType", "OnigCaptureTreeNode", "OnigRegion", "OnigErrorInfo", "OnigRepeatRange", "OnigCompileInfo", "OnigValue", "onig_posix_regmatch_t", "onig_posix_regex_t"]

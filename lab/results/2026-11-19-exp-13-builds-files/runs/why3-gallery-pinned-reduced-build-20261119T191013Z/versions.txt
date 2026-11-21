@@ -1,0 +1,100 @@
+$ (cd <bench-workdir>/work/build/why3-gallery-pinned && OPAMROOT=<bench-workdir>/work/opam OPAMCOLOR=never OPAMNODEPEXTS=1 WHY3CONFIG=<bench-workdir>/work/switches/why3-1.8.2/why3.conf PATH=<bench-workdir>/work/switches/provers/cvc5-1.2.1/cvc5-Linux-x86_64-static/bin:<bench-workdir>/work/switches/provers/z3-4.13.4/z3-4.13.4-x64-glibc-2.35/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 28-31 nice -n 10 opam exec --switch <bench-workdir>/work/switches/why3-1.8.2 -- why3 --version)
+Why3 platform, version 1.8.2
+# exit 0
+
+$ (cd <bench-workdir>/work/build/why3-gallery-pinned && OPAMROOT=<bench-workdir>/work/opam OPAMCOLOR=never OPAMNODEPEXTS=1 WHY3CONFIG=<bench-workdir>/work/switches/why3-1.8.2/why3.conf PATH=<bench-workdir>/work/switches/provers/cvc5-1.2.1/cvc5-Linux-x86_64-static/bin:<bench-workdir>/work/switches/provers/z3-4.13.4/z3-4.13.4-x64-glibc-2.35/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 28-31 nice -n 10 opam exec --switch <bench-workdir>/work/switches/why3-1.8.2 -- why3 config list-provers)
+Alt-Ergo 2.6.2
+Alt-Ergo 2.6.2 (BV)
+Alt-Ergo 2.6.2 (counterexamples)
+CVC5 1.2.1
+CVC5 1.2.1 (counterexamples)
+CVC5 1.2.1 (strings)
+CVC5 1.2.1 (strings+counterexamples)
+Z3 4.13.4
+Z3 4.13.4 (counterexamples)
+Z3 4.13.4 (noBV)
+# exit 0
+
+$ (cd <bench-workdir>/work/build/why3-gallery-pinned && OPAMROOT=<bench-workdir>/work/opam OPAMCOLOR=never OPAMNODEPEXTS=1 WHY3CONFIG=<bench-workdir>/work/switches/why3-1.8.2/why3.conf PATH=<bench-workdir>/work/switches/provers/cvc5-1.2.1/cvc5-Linux-x86_64-static/bin:<bench-workdir>/work/switches/provers/z3-4.13.4/z3-4.13.4-x64-glibc-2.35/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 28-31 nice -n 10 opam exec --switch <bench-workdir>/work/switches/why3-1.8.2 -- alt-ergo --version)
+v2.6.2
+# exit 0
+
+$ (cd <bench-workdir>/work/build/why3-gallery-pinned && OPAMROOT=<bench-workdir>/work/opam OPAMCOLOR=never OPAMNODEPEXTS=1 WHY3CONFIG=<bench-workdir>/work/switches/why3-1.8.2/why3.conf PATH=<bench-workdir>/work/switches/provers/cvc5-1.2.1/cvc5-Linux-x86_64-static/bin:<bench-workdir>/work/switches/provers/z3-4.13.4/z3-4.13.4-x64-glibc-2.35/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 28-31 nice -n 10 opam exec --switch <bench-workdir>/work/switches/why3-1.8.2 -- z3 --version)
+Z3 version 4.13.4 - 64 bit
+# exit 0
+
+$ (cd <bench-workdir>/work/build/why3-gallery-pinned && OPAMROOT=<bench-workdir>/work/opam OPAMCOLOR=never OPAMNODEPEXTS=1 WHY3CONFIG=<bench-workdir>/work/switches/why3-1.8.2/why3.conf PATH=<bench-workdir>/work/switches/provers/cvc5-1.2.1/cvc5-Linux-x86_64-static/bin:<bench-workdir>/work/switches/provers/z3-4.13.4/z3-4.13.4-x64-glibc-2.35/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 28-31 nice -n 10 opam exec --switch <bench-workdir>/work/switches/why3-1.8.2 -- cvc5 --version)
+This is cvc5 version 1.2.1 [git tag 1.2.1 branch HEAD]
+compiled with GCC version 9.4.0
+on Jan 27 2025 19:58:17
+
+Copyright (c) 2009-2025 by the authors and their institutional
+affiliations listed at https://cvc5.github.io/people.html
+
+cvc5 is open-source and is covered by the BSD license (modified).
+
+THIS SOFTWARE IS PROVIDED AS-IS, WITHOUT ANY WARRANTIES.
+USE AT YOUR OWN RISK.
+
+This version of cvc5 is linked against the following non-(L)GPL'ed
+third party libraries.
+
+  CaDiCaL - Simplified Satisfiability Solver
+  See https://github.com/arminbiere/cadical for copyright information.
+
+  Editline Library
+  See https://thrysoee.dk/editline
+  for copyright information.
+
+  SymFPU - The Symbolic Floating Point Unit
+  See https://github.com/martin-cs/symfpu/tree/CVC4 for copyright information.
+
+This version of cvc5 is linked against the following third party
+libraries covered by the LGPLv3 license.
+See licenses/lgpl-3.0.txt for more information.
+
+  GMP - Gnu Multi Precision Arithmetic Library
+  See http://gmplib.org for copyright information.
+
+  LibPoly polynomial library
+  See https://github.com/SRI-CSL/libpoly for copyright and
+  licensing information.
+
+cvc5 is statically linked against these libraries. To recompile
+this version of cvc5 with different versions of these libraries
+follow the instructions on https://github.com/cvc5/cvc5/blob/main/INSTALL.md
+
+See the file COPYING (distributed with the source code, and with
+all binaries) for the full cvc5 copyright, licensing, and (lack of)
+warranty information.
+
+# exit 0
+
+$ (cd <bench-workdir>/work/build/why3-gallery-pinned && timeout --kill-after=60 300 taskset --cpu-list 28-31 nice -n 10 git rev-parse HEAD)
+88b18b1ae353852ed5d2e320135cd50d03bf036a
+# exit 0
+
+$ (cd <bench-workdir>/work/build/why3-gallery-pinned && timeout --kill-after=60 300 taskset --cpu-list 28-31 nice -n 10 git status --short)
+ M examples/binary_sort/why3session.xml
+ M examples/conjugate/why3session.xml
+ M examples/finite_tarski/why3session.xml
+ M examples/insertion_sort/why3session.xml
+ M examples/leftist_heap/why3session.xml
+ M examples/pairing_heap/why3session.xml
+ M examples/vstte10_max_sum/why3session.xml
+ M examples/zeros/why3session.xml
+?? upgrade_builds.why3.conf
+# exit 0
+
+$ (cd <bench-workdir>/work/build/why3-gallery-pinned && timeout --kill-after=60 300 taskset --cpu-list 28-31 nice -n 10 git diff --stat)
+ examples/binary_sort/why3session.xml     |  77 +++++++++---------
+ examples/conjugate/why3session.xml       |  60 +++++++-------
+ examples/finite_tarski/why3session.xml   |  32 ++++----
+ examples/insertion_sort/why3session.xml  | 135 +++++++++++++++----------------
+ examples/leftist_heap/why3session.xml    |  51 ++++++------
+ examples/pairing_heap/why3session.xml    | 125 ++++++++++++++--------------
+ examples/vstte10_max_sum/why3session.xml |  92 ++++++++++-----------
+ examples/zeros/why3session.xml           |  16 ++--
+ 8 files changed, 292 insertions(+), 296 deletions(-)
+# exit 0
+

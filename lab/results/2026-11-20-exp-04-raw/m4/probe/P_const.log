@@ -1,0 +1,8 @@
+Cleaned Probe_P_const
+Running Probe_P_const ...
+Probe_P_const FAILED (see also "isabelle build_log -H Error Probe_P_const")
+*** exception Fail raised (line 132 of "General/scan.ML"): identifier expected,
+*** but keyword int32_t (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_const/P_const.thy") was found
+*** At command "export_llvm" (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_const/P_const.thy")
+Unfinished session(s): Probe_P_const
+0:00:16 elapsed time

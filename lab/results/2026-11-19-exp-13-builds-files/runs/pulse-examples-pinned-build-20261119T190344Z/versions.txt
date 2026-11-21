@@ -1,0 +1,27 @@
+$ (cd <bench-workdir>/work/build/pulse-examples-pinned && PATH=<bench-workdir>/work/switches/fstar-v2026.10.25/bin:"$PATH" FSTAR_EXE=<bench-workdir>/work/switches/fstar-v2026.10.25/bin/fstar.exe timeout --kill-after=60 300 taskset --cpu-list 20-23 nice -n 10 fstar.exe --version)
+F* 2026.10.25
+platform=Linux_x86_64
+system=Unix
+compiler=OCaml 5.3.0
+date=2026-10-25 15:48:28 +0000
+commit=362e792b3aa882f1766b95c7450e3fe63081163d
+# exit 0
+
+$ (cd <bench-workdir>/work/build/pulse-examples-pinned && PATH=<bench-workdir>/work/switches/fstar-v2026.10.25/bin:"$PATH" FSTAR_EXE=<bench-workdir>/work/switches/fstar-v2026.10.25/bin/fstar.exe timeout --kill-after=60 300 taskset --cpu-list 20-23 nice -n 10 fstar.exe --locate_z3 4.13.3)
+<bench-workdir>/work/switches/fstar-v2026.10.25/lib/fstar/z3-4.13.3/bin/z3
+# exit 0
+
+$ (cd <bench-workdir>/work/build/pulse-examples-pinned && timeout --kill-after=60 300 taskset --cpu-list 20-23 nice -n 10 git rev-parse HEAD)
+362e792b3aa882f1766b95c7450e3fe63081163d
+# exit 0
+
+$ (cd <bench-workdir>/work/build/pulse-examples-pinned && timeout --kill-after=60 300 taskset --cpu-list 20-23 nice -n 10 git status --short)
+# exit 0
+
+$ (cd <bench-workdir>/work/build/pulse-examples-pinned && timeout --kill-after=60 300 taskset --cpu-list 20-23 nice -n 10 git diff --stat)
+# exit 0
+
+$ (cd <bench-workdir>/work/build/pulse-examples-pinned && timeout --kill-after=60 300 taskset --cpu-list 20-23 nice -n 10 git rev-parse HEAD:karamel)
+98ffca53b25c8ac50f303dae87c083de65cc1db8
+# exit 0
+

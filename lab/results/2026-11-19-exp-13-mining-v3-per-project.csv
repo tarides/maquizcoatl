@@ -1,0 +1,9 @@
+project,tool,kloc,releases_crossed,median_hand_per_release,mean_hand_per_release,released_hand,unreleased_hand,other_hand,yearly_hand,yearly_total,optional,raw,yearly_hand_per_kloc,mean_hand_per_release_per_kloc
+warblre,rocq,8.9,5,227.0,172.6,863.0,0,0.0,863.0,971.0,0.0,2580,97.4,19.47
+linden,rocq,24.1,5,126.7,93.2,466.0,0,2.0,468.0,468.0,0.0,851,19.4,3.87
+lean-regex,lean,13.7,10,70.5,973.3,9733.0,0,0,9733.0,9733.0,0.0,10131,710.4,71.04
+everparse-cbor,fstar,126.6,16,0.0,155.4,2487.0,1932.0,0,4419.0,4419.0,166.0,6864,34.9,1.23
+why3-gallery,why3,101.3,1,157.0,157.0,157.0,0,0,157.0,515.0,0.0,82849,1.5,1.55
+creusot,why3,94.4,0,,,0,23.0,0.0,23.0,992.0,0.0,118591,0.2,
+anvil,verus,85.9,49,,85.6,4194.0,0,0,4194.0,4194.0,3578.0,61860,48.8,1.0
+afp-regex,isabelle,23.2,3,4.0,6.7,20.0,0,0,20.0,20.0,0.0,1574,0.9,0.29
