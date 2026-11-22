@@ -13,6 +13,7 @@ Always say "experiment #N" or "issue #N", never a bare "#N".
 | 4 | ABI feasibility, per output mechanism | [#7](https://github.com/tarides/maquizcoatl/issues/7) | [#16](https://github.com/tarides/maquizcoatl/pull/16) | pipeline |
 | 5 | Calls to unverified code | [#13](https://github.com/tarides/maquizcoatl/issues/13) | [#21](https://github.com/tarides/maquizcoatl/pull/21) | pipeline (milestones 1-2 by Vincent Balat) |
 | 5 (follow-up) | Report the F\* eta-reduction miscompilation upstream | [#29](https://github.com/tarides/maquizcoatl/issues/29) | — | pipeline |
+| 5 (follow-up) | Isabelle-LLVM model of caller.c's client meeting respects_i_apply | [#30](https://github.com/tarides/maquizcoatl/issues/30) | — | pipeline, after experiment #5 or with experiment #9 |
 | 6 | Executable spec speed | [#1](https://github.com/tarides/maquizcoatl/issues/1) | [#24](https://github.com/tarides/maquizcoatl/pull/24) | pipeline |
 | 6 (follow-up) | Milestone 2 (S2), after experiment #5 | [#28](https://github.com/tarides/maquizcoatl/issues/28) | — | pipeline, after experiment #5 |
 | 7 | Large tables in the prover | [#11](https://github.com/tarides/maquizcoatl/issues/11) | [#19](https://github.com/tarides/maquizcoatl/pull/19) | pipeline |
