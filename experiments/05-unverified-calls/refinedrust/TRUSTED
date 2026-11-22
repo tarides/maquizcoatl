@@ -28,13 +28,13 @@ src/ffi.rs:126-194
 src/lib.rs:94-97
 src/lib.rs:104-108
 src/lib.rs:130-136
-# The precondition of get_subject_byte on the subject (proto.h's
-# invariant of vu_args): subject_len is the length of the bytes owned at
-# subject, whose allocation is alive and holds them. Met by the C
-# caller, checked nowhere (ffi.rs passes args through).
-src/lib.rs:366-369
 #
-# Not counted: the toolchain (RefinedRust's frontend and its translation
+# Not counted: the precondition of get_subject_byte on the subject
+# (src/lib.rs:366-369, proto.h's invariant of vu_args, met by the C
+# caller): it is the specification of a verified function, under the
+# rule applied to CN's accessor precondition (cn/vu.c:235-238, not
+# counted) and to the C tools (run F corrections). Not counted either:
+# the toolchain (RefinedRust's frontend and its translation
 # of the code rustc compiles, the Radium semantics and Lithium
 # automation, RefinedRust's standard library specifications of ptr::add
 # and ptr::read, Iris, Rocq, rustc, the C compiler). The manual proofs of

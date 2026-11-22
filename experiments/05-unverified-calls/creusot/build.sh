@@ -102,16 +102,23 @@ if [ "$rc" != 0 ]; then
   # prover answers logged: it counts as rejected only if some prover
   # answered Invalid or Unknown (the goal is not valid, or the prover
   # gave up on it), not if every failed attempt was a Timeout or another
-  # resource limit (OutOfMemory, StepLimit).
+  # resource limit (OutOfMemory, StepLimit). Unknown is no refutation
+  # either (a prover also answers it on a valid goal it cannot decide):
+  # the rejection is genuine because the normal run, which run.sh
+  # requires to pass first, proves the same target at the same limits.
   case $VU_NEGATIVE_CONTROL in 1) target=char_len ;; *) target=get_subject_byte ;; esac
   grep -qE "Goal Coma\.vc_${target}(_[A-Za-z]+)?: ✘" prove.log ||
     { echo "the control did not fail in $target: not counted as a rejection"; exit 1; }
   rm -f prover-results.json
   set +e
-  cargo "+$tc" creusot prove --no-cache --why3find-arg=--log-prover-results \
+  # Creusot 0.14 has no "prove" subcommand: the target pattern alone.
+  cargo "+$tc" creusot --no-cache --why3find-arg=--log-prover-results \
     --why3find-arg="$PWD/prover-results.json" "$target" >prove-target.log 2>&1
   rc2=$?
   set -e
+  echo "--- prove-target.log ($target alone, status $rc2)"
+  cat prove-target.log
+  echo "--- end of prove-target.log"
   answers=$(python3 -I -c '
 import collections, json, sys
 text = open(sys.argv[1]).read()
@@ -126,7 +133,8 @@ while True:
 print(" ".join("%s=%d" % kv for kv in sorted(n.items())))' prover-results.json)
   echo "prover answers on $target alone (status $rc2): $answers"
   if [ "$rc2" != 0 ] && echo "$answers" | grep -qE '(^| )(Invalid|Unknown)='; then
-    echo "proof rejected (status $rc): a prover answered Invalid or Unknown"
+    echo "proof rejected (status $rc): a prover answered Invalid or Unknown;" \
+      "not a refutation by itself: the normal run proves $target at the same limits"
     exit "$VU_PROOF_REJECTED"
   fi
   echo "only timeouts or resource limits (or $target proved alone): not counted as a rejection"

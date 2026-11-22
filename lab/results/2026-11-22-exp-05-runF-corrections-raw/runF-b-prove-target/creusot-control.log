@@ -1,0 +1,6 @@
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.05s
+Warning: found 'prove' pattern; it is no longer a 'cargo creusot' command. Just run 'cargo creusot'.
+File "<exp>/build/runF-b/creusot-control/crate/src/lib.rs", line 119, characters 1-72: proof failed
+Goal Coma.vc_char_len_F: ✘ (1/2)
+Error: 1 unproved file
+Error: 'why3find prove' failed

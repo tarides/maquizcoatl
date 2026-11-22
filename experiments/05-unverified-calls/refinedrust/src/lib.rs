@@ -14,7 +14,7 @@
 // function is a trait the verified functions are generic over, with a
 // RefinedRust trait specification that every implementation must
 // refine; the only implementations are in ffi.rs. The structs of
-// proto.h are refined by tuples of their fields (#[rr::refined_by]).
+// proto.h are plain structs, not refined (no #[rr::refined_by]).
 // The subject is a raw pointer in VuArgs: get_subject_byte reads it with
 // ptr::add and a dereference (RefinedRust at 2862b1d8 rejects slice
 // indexing, "PtrMetadata unop not supported"), under a precondition
