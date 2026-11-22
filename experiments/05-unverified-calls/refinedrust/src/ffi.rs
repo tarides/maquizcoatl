@@ -1,7 +1,8 @@
 // ffi.rs: the C entry points of the RefinedRust prototype (trusted
-// glue, every item #[rr::skip]: not translated, not verified). Copied
-// from the hax prototype's ffi.rs (usize addresses, the raw result of
-// callout_step dropped here), with the #[rr::skip] attributes added. It
+// glue, every item #[rr::skip]: not translated, not verified). Adapted
+// from the hax prototype's ffi.rs (the raw result of callout_step is
+// dropped here; the subject is a raw pointer in VuArgs, read by the
+// verified get_subject_byte), with the #[rr::skip] attributes added. It
 // holds:
 // - the C function pointer types of proto.h;
 // - one implementation of each client trait of lib.rs, which does the
@@ -34,7 +35,9 @@ const _: () = assert!(size_of::<VuEncState>() == 8 && align_of::<VuEncState>() =
 const _: () = assert!(size_of::<VuArgs>() == 64 && align_of::<VuArgs>() == 8);
 const _: () = assert!(size_of::<VuFoldRec>() == 40 && align_of::<VuFoldRec>() == 4);
 // The member offsets, so that the mirrors of lib.rs are checked field by
-// field (an array member is checked at its start).
+// field. lib.rs spells the arrays slot[5] and from[8] of proto.h as one
+// field per element: each element field must sit where the C array puts
+// that element (start + index * element size).
 const _: () = assert!(
     offset_of!(VuEncState, min_enc_len) == 0 && offset_of!(VuEncState, max_enc_len) == 4
 );
@@ -43,12 +46,23 @@ const _: () = assert!(
         && offset_of!(VuArgs, subject_len) == 8
         && offset_of!(VuArgs, pos) == 12
         && offset_of!(VuArgs, num) == 16
-        && offset_of!(VuArgs, slot) == 24
+        && offset_of!(VuArgs, slot0) == 24
+        && offset_of!(VuArgs, slot1) == 32
+        && offset_of!(VuArgs, slot2) == 40
+        && offset_of!(VuArgs, slot3) == 48
+        && offset_of!(VuArgs, slot4) == 56
 );
 const _: () = assert!(
     offset_of!(VuFoldRec, calls) == 0
         && offset_of!(VuFoldRec, recorded) == 4
-        && offset_of!(VuFoldRec, from) == 8
+        && offset_of!(VuFoldRec, from0) == 8
+        && offset_of!(VuFoldRec, from1) == 12
+        && offset_of!(VuFoldRec, from2) == 16
+        && offset_of!(VuFoldRec, from3) == 20
+        && offset_of!(VuFoldRec, from4) == 24
+        && offset_of!(VuFoldRec, from5) == 28
+        && offset_of!(VuFoldRec, from6) == 32
+        && offset_of!(VuFoldRec, from7) == 36
 );
 
 #[rr::skip]
@@ -169,32 +183,12 @@ pub unsafe extern "C" fn vu_set_slot(args: *mut VuArgs, k: c_int, v: i64) -> c_i
     crate::set_slot(args, k, v)
 }
 
-/// The subject of args as a shared slice: args.subject must be the
-/// address of args.subject_len readable bytes that nobody writes during
-/// the call (proto.h), and its provenance must have been exposed (a C
-/// caller's pointers are; a Rust client calls expose_provenance). A
-/// negative length or a NULL address aborts; a zero length gives the
-/// empty slice without reading. The slice is made from the raw pointer
-/// itself, not from a one-byte reference (the Aeneas glue's bug that
-/// Miri found in run B).
-#[rr::skip]
-unsafe fn subject_of(args: &VuArgs) -> &[u8] {
-    if args.subject_len < 0 || args.subject == 0 {
-        std::process::abort();
-    }
-    if args.subject_len == 0 {
-        return &[];
-    }
-    let p: *const u8 = core::ptr::with_exposed_provenance(args.subject);
-    unsafe { core::slice::from_raw_parts(p, args.subject_len as usize) }
-}
-
 #[rr::skip]
 #[no_mangle]
 pub unsafe extern "C" fn vu_get_subject_byte(args: *const VuArgs, i: c_int) -> c_int {
     let args = some(unsafe { args.as_ref() });
-    let subject = unsafe { subject_of(args) };
-    // subject_of makes the slice of args.subject_len bytes, which meets
-    // the precondition of get_subject_byte.
-    crate::get_subject_byte(args, subject, i)
+    // proto.h's invariant of vu_args (subject points to subject_len
+    // readable bytes that nobody writes during the call) is the
+    // precondition of get_subject_byte; it is the C caller's to meet.
+    crate::get_subject_byte(args, i)
 }

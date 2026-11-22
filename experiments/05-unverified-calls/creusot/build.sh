@@ -13,7 +13,10 @@
 #      (a failure here is not a proof rejection: exit 1);
 #   3. cargo creusot --only=prove: Why3find proves every verification
 #      condition with the provers creusot-install set up; a failed proof
-#      exits with VU_PROOF_REJECTED;
+#      exits with VU_PROOF_REJECTED, except that a negative control must
+#      also show a prover answer Invalid or Unknown on its target (a
+#      control whose goal only times out is not a rejection: exit 1;
+#      run F);
 #   4. rustc (through cargo): the static library (normal run only).
 #
 # Environment (from run.sh): VU_HARNESS, VU_OUT, VU_NEGATIVE_CONTROL,
@@ -84,11 +87,49 @@ cargo "+$tc" creusot --only=prove 2>&1 | tee prove.log
 rc=${PIPESTATUS[0]}
 set -e
 if [ "$rc" != 0 ]; then
-  if grep -qE 'proof failed|unproved' prove.log; then
+  if ! grep -qE 'proof failed|unproved' prove.log; then
+    echo "why3find failed for another reason (status $rc)"
+    exit 1
+  fi
+  if [ "$VU_NEGATIVE_CONTROL" = 0 ]; then
     echo "proof rejected (status $rc)"
     exit "$VU_PROOF_REJECTED"
   fi
-  echo "why3find failed for another reason (status $rc)"
+  # A negative control. why3find reports a goal that only timed out
+  # exactly as a refuted one ("proof failed", "✘", "N unproved file";
+  # checked in run F), so its summary cannot tell a rejection from a
+  # timeout. The control's target is proved again on its own, with the
+  # prover answers logged: it counts as rejected only if some prover
+  # answered Invalid or Unknown (the goal is not valid, or the prover
+  # gave up on it), not if every failed attempt was a Timeout or another
+  # resource limit (OutOfMemory, StepLimit).
+  case $VU_NEGATIVE_CONTROL in 1) target=char_len ;; *) target=get_subject_byte ;; esac
+  grep -qE "Goal Coma\.vc_${target}(_[A-Za-z]+)?: ✘" prove.log ||
+    { echo "the control did not fail in $target: not counted as a rejection"; exit 1; }
+  rm -f prover-results.json
+  set +e
+  cargo "+$tc" creusot prove --no-cache --why3find-arg=--log-prover-results \
+    --why3find-arg="$PWD/prover-results.json" "$target" >prove-target.log 2>&1
+  rc2=$?
+  set -e
+  answers=$(python3 -I -c '
+import collections, json, sys
+text = open(sys.argv[1]).read()
+dec, i, n = json.JSONDecoder(), 0, collections.Counter()
+while True:
+    while i < len(text) and text[i].isspace():
+        i += 1
+    if i >= len(text):
+        break
+    o, i = dec.raw_decode(text, i)
+    n[o.get("result", "?")] += 1
+print(" ".join("%s=%d" % kv for kv in sorted(n.items())))' prover-results.json)
+  echo "prover answers on $target alone (status $rc2): $answers"
+  if [ "$rc2" != 0 ] && echo "$answers" | grep -qE '(^| )(Invalid|Unknown)='; then
+    echo "proof rejected (status $rc): a prover answered Invalid or Unknown"
+    exit "$VU_PROOF_REJECTED"
+  fi
+  echo "only timeouts or resource limits (or $target proved alone): not counted as a rejection"
   exit 1
 fi
 echo "Creusot: every verification condition proved"

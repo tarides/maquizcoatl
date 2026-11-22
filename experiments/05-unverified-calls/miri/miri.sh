@@ -18,6 +18,12 @@
 # (erased outside cfg(creusot)); its vu_args holds the subject as a raw
 # pointer, as Aeneas's, so client.rs is used unchanged.
 #
+# Run F added refinedrust: its src/lib.rs and src/ffi.rs as they are
+# (the rr attributes are a registered tool, no dependency); its
+# vu_args and vu_fold_rec spell the arrays slot[5] and from[8] as one
+# field per element, so client.rs is used with the array accesses
+# rewritten to the fields (a sed, printed in the log).
+#
 # Usage: miri.sh WORKDIR. Environment: VU_CACHE (its env.sh is
 # sourced), VU_MIRI_TOOLCHAIN (default: the Charon nightly of
 # pins.json, which has the miri component), VU_MIRI_TOOLS (default
@@ -36,7 +42,8 @@ cargo "+$tc" miri --version
 echo "sha256:"
 (cd "$here/.." && sha256sum miri/client.rs miri/erase_verus.py miri/miri.sh \
   verus/src/lib.rs verus/src/shim.rs verus/src/ffi.rs aeneas/src/lib.rs aeneas/src/ffi.rs \
-  hax/src/lib.rs hax/src/ffi.rs creusot/src/lib.rs creusot/src/ffi.rs)
+  hax/src/lib.rs hax/src/ffi.rs creusot/src/lib.rs creusot/src/ffi.rs \
+  refinedrust/src/lib.rs refinedrust/src/ffi.rs)
 
 status=0
 for tool in ${VU_MIRI_TOOLS:-aeneas verus}; do
@@ -49,6 +56,8 @@ for tool in ${VU_MIRI_TOOLS:-aeneas verus}; do
   elif [ "$tool" = creusot ]; then
     cp "$here/../creusot/src/lib.rs" "$here/../creusot/src/ffi.rs" "$d/vu/"
     deps="creusot-std = \"=0.14.0\""
+  elif [ "$tool" = refinedrust ]; then
+    cp "$here/../refinedrust/src/lib.rs" "$here/../refinedrust/src/ffi.rs" "$d/vu/"
   elif [ "$tool" = hax ]; then
     cp "$here/../hax/src/lib.rs" "$here/../hax/src/ffi.rs" "$d/vu/"
     deps="hax-lib = \"=$(vu_pin .hax.hax_lib)\""
@@ -59,6 +68,14 @@ for tool in ${VU_MIRI_TOOLS:-aeneas verus}; do
   if [ "$tool" = hax ]; then
     sed -i 's/SUBJECT\.as_ptr()/SUBJECT.as_ptr().expose_provenance()/g' "$d/client.rs"
     diff -u --label client.rs --label hax/client.rs "$here/client.rs" "$d/client.rs" || true
+  fi
+  if [ "$tool" = refinedrust ]; then
+    sed -i -e 's/slot: \[41, 0, 0, 0, 0\]/slot0: 41, slot1: 0, slot2: 0, slot3: 0, slot4: 0/' \
+      -e 's/slot: \[0; 5\]/slot0: 0, slot1: 0, slot2: 0, slot3: 0, slot4: 0/' \
+      -e 's/a\.slot\b/[a.slot0, a.slot1, a.slot2, a.slot3, a.slot4]/g' \
+      -e 's/from: \[0; 8\]/from0: 0, from1: 0, from2: 0, from3: 0, from4: 0, from5: 0, from6: 0, from7: 0/' \
+      -e 's/&rec\.from\[\.\.2\]/\&[rec.from0, rec.from1]/g' "$d/client.rs"
+    diff -u --label client.rs --label refinedrust/client.rs "$here/client.rs" "$d/client.rs" || true
   fi
   cat >"$d/Cargo.toml" <<TOML
 [package]
