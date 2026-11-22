@@ -866,7 +866,9 @@ step_creusot() {
   (cd "$src" && vu_pinned cargo "+$tc" run --bin creusot-install -- \
     --provers-parallelism "$(vu_jobs creusot)")
   rm -rf "$VU_EXP/build/creusot-target"
-  "$CARGO_HOME/bin/cargo-creusot" --version 2>&1 | head -n 3 || true
+  # From the source directory: cargo-creusot runs cargo metadata, which
+  # needs a Cargo.toml (review of run E, problem 5).
+  (cd "$src" && cargo "+$tc" creusot version 2>&1 | head -n 4)
   ls "$dir/data/bin"
   echo "creusot: $(vu_du "$dir") rust: $(vu_du "$RUSTUP_HOME/toolchains/$tc-x86_64-unknown-linux-gnu")"
 }

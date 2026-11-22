@@ -84,7 +84,7 @@ cargo "+$tc" creusot --only=prove 2>&1 | tee prove.log
 rc=${PIPESTATUS[0]}
 set -e
 if [ "$rc" != 0 ]; then
-  if grep -qiE 'fail|unproved|not proved|timeout' prove.log; then
+  if grep -qE 'proof failed|unproved' prove.log; then
     echo "proof rejected (status $rc)"
     exit "$VU_PROOF_REJECTED"
   fi

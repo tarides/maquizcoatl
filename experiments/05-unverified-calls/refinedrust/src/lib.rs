@@ -1,6 +1,7 @@
 // lib.rs: the RefinedRust prototype of experiment 5 (verified part; run
-// E of the pipeline). DRAFT, NOT CHECKED: run E stopped here at its
-// 3-hour cap (RefinedRust stays pending). State at the stop:
+// E of the pipeline). DRAFT, NOT CHECKED: run E stopped here after 1h08
+// of its 3 hours, the cap not reached (RefinedRust stays pending).
+// State at the stop:
 // - char_len (with EncLen's trait specification) is translated and
 //   checked by RefinedRust (in a one-function crate);
 // - the specifications of the &mut functions do not type-check yet in

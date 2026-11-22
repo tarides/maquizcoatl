@@ -229,9 +229,11 @@ vu_uint() {
   case "$2" in "" | *[!0-9]*) vu_die "$1 must be a non-negative integer: $2" ;; esac
 }
 
-# vu_du DIR: disk use of DIR, human-readable.
+# vu_du DIR: disk use of DIR, human-readable, following symbolic links:
+# VU_CACHE is a view made of links to the real directories, and du
+# without -L measured the link (0 or 32K; review of run E, problem 3).
 vu_du() {
-  if [ -e "$1" ]; then du -sh "$1" 2>/dev/null | cut -f1; else echo 0; fi
+  if [ -e "$1" ]; then du -sLh "$1" 2>/dev/null | cut -f1; else echo 0; fi
 }
 
 # vu_du_links DIR: disk use of DIR following symbolic links (for a view

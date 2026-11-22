@@ -350,8 +350,9 @@ run"), the Isabelle-LLVM model client a recorded follow-up.
 - **opam pins of the partial clones** (`--filter=blob:none`) cannot be
   git pins (git upload-pack fails), so CN's and RefinedRust's checkouts
   are pinned with `--kind=path`.
-- **Bedrock2**: installed, prototype not written within the cap
-  (pending).
+- **Bedrock2**: installed, prototype not started (pending): run E
+  stopped at 1h08 of its 3 hours, with the cap not reached (review of
+  run E; entry `2026-11-21-exp-05-runE-corrections`).
 
 ## Where things live
 

@@ -4,8 +4,9 @@
 # pointers or raw pointers, so each client C function is a trait of
 # ../hax/src/lib.rs that the verified functions are generic over; the
 # extracted F* takes the implementation as a type class argument, so
-# the trait declarations carry no assumption, except the contract of
-# ApplyAll below. The one implementation per trait is the shim below,
+# the trait declarations carry no assumption, except the contracts of
+# ApplyAll, EncLen and Callout below (the last two, requires(true), since
+# run E). The one implementation per trait is the shim below,
 # in ../hax/src/ffi.rs, which hax does not extract (-i '-vu::ffi::**').
 #
 # The shims: one implementation per client trait, each doing only the
