@@ -1,0 +1,222 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+69fd04d331b40761a87b65080115b44c1c45dda17e41d1730ae468f4bf090ce1  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+5853041d6ab2f33a1f148c365243f3edeee2fcbc75dee3275cf1fbdbe91d9b97  refinedrust/Cargo.toml
+338520ef33cebccdbe3695be87cb4a2fa22174d97105e89479d5b7793fb2880a  refinedrust/RefinedRust.toml
+be7f14507e56bb47d8481b048a4fd818e450e554e8c7a69ae73906a16df903c7  refinedrust/TRUSTED
+84f7028ca17d13407e04a3cc657dec83c11eefa7969bad907698cbb1f49bb32e  refinedrust/build.sh
+80d052310fb440eff8461150d68d67ed85ba41e8769df662f3d630c060532494  refinedrust/probe.sh
+05373f5584f1d6407fedb583a452876a75a86129b3dfc20585ff9a1c2bd1f86d  refinedrust/probe/Cargo.toml
+338520ef33cebccdbe3695be87cb4a2fa22174d97105e89479d5b7793fb2880a  refinedrust/probe/RefinedRust.toml
+a119b38c30edd9027c8b50db19d93d4b7ebcfc438d272d399e74666b7a238912  refinedrust/probe/src/lib.rs
+6cb098491b8d6fae0ec3aa2357d7bbbbd5fc35289e4a6c52e99ba75bfd49092d  refinedrust/proofs/proof_get_subject_byte.v
+0570db08bc6bbf1e5bc0c906776b71235805f923f2ef2622561320afcc3a3cb3  refinedrust/proofs/proof_i_apply.v
+85b92acbc7a0fcd9d4a7c93475d559108811ce41219b263e4635b49c6cb452d1  refinedrust/proofs/proof_record_at.v
+bf8d0d6b64a79663d4b3e12de0ad9806ebae59f297c0abae41488bbc8924af7d  refinedrust/src/ffi.rs
+bfb7b6ceceb9d3d6c7f1ad083fa4f3dff5e72c86ec834370ca0b9e442811c014  refinedrust/src/lib.rs
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+== build
+== versions (0 s)
+refinedrust source: 2862b1d8044919d22330a9c8d5778fef85a47936, frontend toolchain nightly-2026-11-15
+rustc 1.102.0-nightly (5f4effd57 2026-11-13)
+The Rocq Prover, version 9.2
+refinedrust refinedrust-stdlib rocq-iris rocq-stdpp 
+== 1. source (negative control: 2) (1 s)
+negative control: upper bound test of get_subject_byte removed
+  --- src/lib.rs
+  +++ control-read/lib.rs
+  @@ -374,9 +374,7 @@
+   #[rr::ensures("0 ≤ i < len → bs !! Z.to_nat i = Some res")]
+   #[rr::ensures("¬ (0 ≤ i < len) → res = -30")]
+   pub fn get_subject_byte(args: &VuArgs, i: i32) -> i32 {
+  -    // VU-READ-BEGIN
+  -    if 0 <= i && i < args.subject_len {
+  -    // VU-READ-END
+  +    if 0 <= i {
+           unsafe { args.subject.add(i as usize).read() as i32 }
+       } else {
+           ERR_INVALID_ARGUMENT
+== 2. cargo refinedrust (1 s)
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+  --> src/ffi.rs:69:1
+   |
+69 | fn some<T>(x: Option<T>) -> T {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+   --> src/ffi.rs:116:1
+    |
+116 | / unsafe extern "C" fn c_apply<A: Apply>(
+117 | |     from: c_uint,
+118 | |     _to: *mut c_uint,
+119 | |     to_len: c_int,
+120 | |     arg: *mut c_void,
+121 | | ) -> c_int {
+    | |__________^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+   --> src/ffi.rs:130:1
+    |
+130 | / pub unsafe extern "C" fn vu_char_len(
+131 | |     f: VuEncLenFn,
+132 | |     p: *const u8,
+133 | |     st: *const VuEncState,
+134 | | ) -> c_int {
+    | |__________^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+   --> src/ffi.rs:143:1
+    |
+143 | / pub unsafe extern "C" fn vu_callout_step(
+144 | |     dir: c_int,
+145 | |     f: VuCalloutFn,
+146 | |     args: *mut VuArgs,
+147 | |     user_data: *mut c_void,
+148 | | ) -> c_int {
+    | |__________^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+   --> src/ffi.rs:155:1
+    |
+155 | / pub unsafe extern "C" fn vu_i_apply(
+156 | |     from: c_uint,
+157 | |     to: *mut c_uint,
+158 | |     to_len: c_int,
+159 | |     arg: *mut c_void,
+160 | | ) -> c_int {
+    | |__________^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+   --> src/ffi.rs:166:1
+    |
+166 | pub unsafe extern "C" fn vu_fold_all(g: VuApplyAllFn, rec: *mut VuFoldRec) -> c_int {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+   --> src/ffi.rs:173:1
+    |
+173 | pub unsafe extern "C" fn vu_get_slot(args: *const VuArgs, k: c_int, v: *mut i64) -> c_int {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+   --> src/ffi.rs:181:1
+    |
+181 | pub unsafe extern "C" fn vu_set_slot(args: *mut VuArgs, k: c_int, v: i64) -> c_int {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+   --> src/ffi.rs:188:1
+    |
+188 | pub unsafe extern "C" fn vu_get_subject_byte(args: *const VuArgs, i: c_int) -> c_int {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]` on enclosing impl
+  --> src/ffi.rs:84:1
+   |
+84 | impl EncLen for CEncLen {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]` on enclosing impl
+  --> src/ffi.rs:97:1
+   |
+97 | impl Callout for CCallout {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]` on enclosing impl
+   --> src/ffi.rs:107:1
+    |
+107 | impl ApplyAll for CApplyAll {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+  --> src/ffi.rs:84:1
+   |
+84 | impl EncLen for CEncLen {
+   | ^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+  --> src/ffi.rs:97:1
+   |
+97 | impl Callout for CCallout {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: [RefinedRust] Skipping function due to `#[rr::skip]`
+   --> src/ffi.rs:107:1
+    |
+107 | impl ApplyAll for CApplyAll {
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: `vu` (lib) generated 15 warnings
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.12s
+== 3. manual proofs (2 s)
+manual proof: proof_get_subject_byte.v sha256 6cb098491b8d6fae0ec3aa2357d7bbbbd5fc35289e4a6c52e99ba75bfd49092d
+manual proof: proof_i_apply.v sha256 0570db08bc6bbf1e5bc0c906776b71235805f923f2ef2622561320afcc3a3cb3
+manual proof: proof_record_at.v sha256 85b92acbc7a0fcd9d4a7c93475d559108811ce41219b263e4635b49c6cb452d1
+rocq output/vu/generated/generated_code_vu.v: 1388 lines, sha256 b2122c0b07c5694dfb7be92ed02efad7427274597cfaafcd542af466a3d0f2bc
+rocq output/vu/generated/generated_specs_vu.v: 631 lines, sha256 aefc2e4dda78011f3e36a739a00d7d2cbd142610df08c0b3e0545bb1949ba280
+rocq output/vu/generated/generated_template_IApplyasApply_apply.v: 33 lines, sha256 cb54640cece0a46c75bad4160baa648c4e4c32b3e1ef377ff0085e5f9a5d2293
+rocq output/vu/generated/generated_template_action.v: 32 lines, sha256 3b37bb2761374438cbfaa17b87ad2b49073f888be0d94a5b21110c5bd23c3e27
+rocq output/vu/generated/generated_template_callout_step.v: 55 lines, sha256 92c844847f2df2d8bc56a9767d31b91ba581119604a13d5836b8305c0e5abe76
+rocq output/vu/generated/generated_template_can_record.v: 32 lines, sha256 1a2ee6b080bddca1518aef2e340270769be8496dd2f712949b7f0f1d67a6a5c3
+rocq output/vu/generated/generated_template_char_len.v: 45 lines, sha256 c74631b8a6fa0f1cc0173d772b412b36dbe293c7b21baa8cba29471f478cc3f9
+rocq output/vu/generated/generated_template_fold_all.v: 54 lines, sha256 7bf387c8fd5248407e08862491e1360a6bba8ca99a86b843a5e0795524f412d8
+rocq output/vu/generated/generated_template_get_slot.v: 45 lines, sha256 caf3629f4112a62842c34baa5cc5b9d1bce854c3f72f43b4ea6b82a8e4e59c4c
+rocq output/vu/generated/generated_template_get_subject_byte.v: 47 lines, sha256 7da165b9f24faf4f8c7af88cdc2a88db904e9be9a35c4004cc690456c13ff49b
+rocq output/vu/generated/generated_template_i_apply.v: 49 lines, sha256 9a032abca1bcd94bc7396f6b00230b184e70e0dfe58f1662787f666db704868b
+rocq output/vu/generated/generated_template_record_at.v: 45 lines, sha256 6b4eb7d0f0f21335bf63048d092e7dd728535400706ec612131d9ee6493312b1
+rocq output/vu/generated/generated_template_set_slot.v: 44 lines, sha256 06fd03a752d2052e9bc2962347ac8c9e9dcb08140c6a1162b30f27dc10e5628d
+rocq output/vu/proofs/proof_IApplyasApply_apply.v: 22 lines, sha256 f8cca65d9e08c92be4d7b3656adf33848f995a2ec136df2ad8715d21ff6736ae
+rocq output/vu/proofs/proof_action.v: 22 lines, sha256 291752c549ff8fe56c1970b574ddc1191712066e6d23f8083049124f6c4baf6a
+rocq output/vu/proofs/proof_callout_step.v: 22 lines, sha256 c29a8e43c33f8b16f0de54f64ca98016adaac8c577452f11eb835c43a1e51520
+rocq output/vu/proofs/proof_can_record.v: 22 lines, sha256 0792c17f45a9e688ef3f9a0faf5f7c2325bab29e7f0b601b2e15db519844ea2e
+rocq output/vu/proofs/proof_char_len.v: 22 lines, sha256 4193295bc70d1b917c3b740d352595d3f07bd2805de2ed6579ce256ee2a586c8
+rocq output/vu/proofs/proof_fold_all.v: 22 lines, sha256 a8498b1790c753334bd7967383c9ad6e7ac84e22b9be366cfc0881c2498dc8af
+rocq output/vu/proofs/proof_get_slot.v: 22 lines, sha256 a99330b7104cf61dccc41f137758a1a1837077e94737951d4ef86f9c50a629fe
+rocq output/vu/proofs/proof_get_subject_byte.v: 73 lines, sha256 6cb098491b8d6fae0ec3aa2357d7bbbbd5fc35289e4a6c52e99ba75bfd49092d
+rocq output/vu/proofs/proof_i_apply.v: 30 lines, sha256 0570db08bc6bbf1e5bc0c906776b71235805f923f2ef2622561320afcc3a3cb3
+rocq output/vu/proofs/proof_record_at.v: 33 lines, sha256 85b92acbc7a0fcd9d4a7c93475d559108811ce41219b263e4635b49c6cb452d1
+rocq output/vu/proofs/proof_set_slot.v: 22 lines, sha256 35bc43fa8201732c7cdb6f4d2beeaa5d56e1297d03a0117dabdc7d33d7a2bdd9
+rocq output/vu/proofs/trait_incl_IApplyasApply_spec_subsumption_correct.v: 21 lines, sha256 ed28134fa2b04227bb1b4720d82715eacb052240b315c983581dc2e83b27455c
+== 4. dune build (2 s)
+        rocq vu/generated/.refinedrust.examples.vu.theory.d
+        rocq vu/proofs/.refinedrust.examples.vu.theory.d
+        rocq vu/generated/generated_code_vu.{glob,vo}
+        rocq vu/generated/generated_specs_vu.{glob,vo}
+        rocq vu/generated/generated_template_callout_step.{glob,vo}
+        rocq vu/generated/generated_template_char_len.{glob,vo}
+        rocq vu/generated/generated_template_IApplyasApply_apply.{glob,vo}
+        rocq vu/generated/generated_template_action.{glob,vo}
+        rocq vu/generated/generated_template_can_record.{glob,vo}
+        rocq vu/generated/generated_template_fold_all.{glob,vo}
+        rocq vu/generated/generated_template_get_slot.{glob,vo}
+        rocq vu/generated/generated_template_i_apply.{glob,vo}
+        rocq vu/generated/generated_template_get_subject_byte.{glob,vo}
+        rocq vu/generated/generated_template_record_at.{glob,vo}
+        rocq vu/generated/generated_template_set_slot.{glob,vo}
+        rocq vu/proofs/trait_incl_IApplyasApply_spec_subsumption_correct.{glob,vo}
+        rocq vu/proofs/proof_IApplyasApply_apply.{glob,vo}
+Did 1256 steps.
+        rocq vu/proofs/proof_can_record.{glob,vo}
+Did 2518 steps.
+        rocq vu/proofs/proof_fold_all.{glob,vo}
+Did 1103 steps.
+        rocq vu/proofs/proof_action.{glob,vo}
+Did 3997 steps.
+        rocq vu/proofs/proof_char_len.{glob,vo}
+Did 3075 steps.
+        rocq vu/proofs/proof_get_subject_byte.{glob,vo} (exit 1)
+File "./vu/proofs/proof_get_subject_byte.v", line 70, characters 7-10:
+Error: Tactic failure:  Cannot find witness.
+
+        rocq vu/proofs/proof_get_slot.{glob,vo}
+Did 6096 steps.
+        rocq vu/proofs/proof_callout_step.{glob,vo}
+Did 6086 steps.
+        rocq vu/proofs/proof_set_slot.{glob,vo}
+Did 8297 steps.
+        rocq vu/proofs/proof_i_apply.{glob,vo}
+        rocq vu/proofs/proof_record_at.{glob,vo}
+proof rejected (status 1)

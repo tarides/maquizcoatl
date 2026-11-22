@@ -7,7 +7,14 @@ tool's `TRUSTED` file. Details and raw outputs: the `prototypes-m<N>`
 entries of `lab/notebook.md`, and the `review-fixes` entry for the re-run
 of milestones 1 and 2 after the independent review.
 
-Last update: fixes after the review of run E (entry
+Last update: run F of the pipeline (run id `runF`, entry
+`2026-11-22-exp-05-runF`): RefinedRust works with trusted shim (156
+lines; the read accessor reads the subject through a raw pointer in
+verified code, with a manual proof); Bedrock2 still pending (not
+started); Creusot's negative controls now count only if a prover
+answered Invalid or Unknown (why3find reports a timeout as it reports
+a refutation), and both are still rejected; hax F\* listed as its own
+route (note below). Before that: fixes after the review of run E (entry
 `2026-11-21-exp-05-runE-corrections`): RefinedRust and Bedrock2 stay
 pending because run E stopped at 1h08 of its 3 hours (results at 18:09
 UTC), not because the cap was reached; RefinedRust's install finished
@@ -53,12 +60,34 @@ callee assumptions, how two read controls fail).
 | hax (Rocq backend) | cargo-hax v0.5.0 (`a045d15a`), Rocq 9.3.0, hax `Core` library at the tag | does not work (at v0.5.0): the extracted model does not type-check against the tag's own Rocq library, for the prototype (`t_VuFoldRec` undefined: records are emitted as `VuFoldRec_record`) and for two minimal probes (a one-field struct; one comparison, `f_lt` vs the library's `PartialOrd_f_lt`); ensures clauses are emitted as `Admitted` lemmas. Upstream status: hax's README at the tag rates the Rocq/Coq backend "Experimental" (F\* "Stable", Lean via Aeneas "Recommended"); no CI workflow at the tag mentions Coq or Rocq, and the Coq snapshots are compared as text, never compiled; `main` is 2 commits past the tag, none under `engine/backends/coq` or `hax-lib/proof-libs/coq` (last functional commits 2026-02-17 and 2025-07-21), so a re-check on `main` cannot differ. Experiment #1: 0 callouts and UTF-8 only in its 5,870 triples | as F\* backend (same prototype) | 134 (same glue and client contracts; was 126 before the review of run E) | as F\* backend; besides, the Rocq classes drop the trait contracts, so the client contract of (a) is lost | no model to prove it on | no model to prove it on |
 | hax (Lean backend) | cargo-hax v0.5.0, which runs Charon `nightly-2026.10.31` + Aeneas `build-2b9e3ea` | not run (maintainer decision of 2026-11-21): same pipeline as Charon + Aeneas, with hax-lib specifications in front; not run, saving its 10 GB | | | | | |
 | Creusot | v0.14.0 (`65349025`), Rust nightly-2026-08-03, Why3 1.8.2+git (`05bf4ddf`), why3find `0f054b93`; Alt-Ergo 2.6.4, Z3 (prints 5.1.0), CVC5 1.4.1, CVC4 1.8 (creusot-install's downloads) | works with trusted shim (123 lines) | trusted shim, as Aeneas (one trait per client C function, implemented in unverified Rust by the indirect call; `ffi.rs` is `cfg(not(creusot))`), plus a client contract for (a) on `ApplyAll` | 123 (shims 30, C glue 88, client contract 5) | may diverge (partial correctness); a trait method without contract is a relation, so no determinism is assumed (unlike Aeneas and hax); no range on the result; nothing assumed of what the callout writes into `args` (the verified side restores its fields); the subject is a shared slice made by the glue (length agreement is a precondition; the verified side holds no permission on the subject across the callout); for (a), the client keeps the record well formed (`ApplyAll`'s contract, trusted: Creusot does not see the implementation in `ffi.rs`, so it checks no refinement of it) | yes, proved under the client contract; `vu_i_apply`'s address is taken in trusted code (`c_apply` in `ffi.rs`) | yes; Miri (Stacked and Tree Borrows) accepts a Rust client calling the accessors through the raw pointer during a callout |
-| RefinedRust | `lgaeher/refinedrust-dev` `2862b1d8` (2026-11-16) | pending (run E): installed (switch `refinedrust` with `refinedrust-stdlib`, status 0 after 3869 s, about 18:11 UTC, two minutes after the run's results; frontend with Rust nightly-2026-11-15); `char_len` with `EncLen`'s trait specification checks in a probe, but the whole prototype was not checked: the run stopped at 1h08 of its 3 hours, with the cap not reached; the `&mut` struct specifications do not type-check yet, and the frontend rejects the slice index of `get_subject_byte` ("Unsupported feature: PtrMetadata unop not supported") | | | | | |
-| Bedrock2 | `mit-plv/bedrock2` `67b682a5` (2026-11-19), coqutil `4c399b76`, Rocq 9.3.0 (`provers`) | pending (run E): installed (coqutil and the `noex` part of bedrock2 built, 63 MB), prototype not started (the run stopped at 1h08 of its 3 hours, with the cap not reached); Bedrock2's language calls functions by name only (`cmd.call`) and external code through `cmd.interact`, specified by an `ext_spec`, which `ToCString` prints as a C call to the action's name: the indirect calls would go through a trusted C shim, as for Isabelle-LLVM | | | | | |
+| RefinedRust | `lgaeher/refinedrust-dev` `2862b1d8` (2026-11-16), Rocq 9.2.0 (switch `refinedrust`, with `refinedrust-stdlib`), frontend Rust nightly-2026-11-15 | works with trusted shim (156 lines) | trusted shim, as Aeneas, hax and Creusot (one trait per client C function, with a RefinedRust trait specification; the one implementation per trait, in `ffi.rs`, is `#[rr::skip]` and does the indirect call), plus client contracts: the trait specifications of `EncLen`, `Callout` (no precondition: the client accepts every argument) and `ApplyAll` (the record invariant, for (a)); `proto.h`'s arrays spelt as one field per element (RefinedRust at `2862b1d8` cannot fold an array back after an element write); three of the twelve proof files are manual (`proofs/`) | 156 (shims 37, C glue 99, client contracts 16, the subject precondition of `get_subject_byte` 4) | may diverge (partial correctness); any result; the encoding is lent nothing; the callout gets `*args` mutably and may leave any values in its nine fields (the verified side restores its four); the C caller meets `get_subject_byte`'s precondition: the subject is `subject_len` live bytes, owned for the call; the subject is lent **whole** (an owned array, given back with the same bytes), and read in verified code (`ptr::add`, `ptr::read`, manual proof) | yes, proved under the client contract; `IApply` refines `Apply`'s specification (checked); address taken in trusted code | yes, three accessors called by name, proved; Miri clean (Stacked and Tree Borrows) |
+| Bedrock2 | `mit-plv/bedrock2` `67b682a5` (2026-11-19), coqutil `4c399b76`, Rocq 9.3.0 (`provers`) | pending (run F): installed (coqutil and the `noex` part of bedrock2 built, 63 MB), prototype not started: run F spent its time on RefinedRust; Bedrock2's language calls functions by name only (`cmd.call`) and external code through `cmd.interact`, specified by an `ext_spec`, which `ToCString` prints as a C call to the action's name: the indirect calls would go through a trusted C shim, as for Isabelle-LLVM; not deferred (it is installed), and it cannot remove a stack (stack A has two *works* routes) | | | | | |
 | CN | `rems-project/cn` `f2e8eeb4` (its `--version` prints "unknown"), `cerberus-lib` at `rems-project/cerberus` `a0f7071`, OCaml 5.4.1; Z3 4.15.3 | works with trusted shim (22 lines) | trusted shim (three C functions marked `trusted` make the indirect calls; their CN specifications are the callee contracts) | 22 (the three shims with their specifications 19, `rec_wf` 3) | may diverge (partial correctness); result any `int`; the encoding is lent nothing; the callout gets `*args` (`RW`) and gives back some `vu_args` (the verified side restores its fields); the callout is lent no access to the subject; the apply-all function keeps the record well formed (the shim's contract); the read accessor takes the subject whole (`RW`, CN has no read-only share) and gives it back with the same bytes | yes; `vu_i_apply`'s address is taken in the trusted shim | yes |
 | RefinedC | `iris/refinedc` `d0575839` (with `coq-lithium` at the same commit), Rocq 9.1.0, Iris `fc84ea73`, `cerberus-lib` `f11e6b33` | works | client contract (each client pointer argument has a `function_ptr` type carrying the callee's specification; RefinedC checks the indirect calls that `vu.c` makes itself) | 25 (callee contracts 12, the refinement types of `vu_args` and `vu_fold_rec` they use 12, `rec_wf` 1) | may diverge (partial correctness); result any `int`; the encoding is lent nothing (`p` as `place`); the callout gets `*args` owned and gives back some `vu_args` (the verified side restores its fields); the subject is a shared, read-only array (`&shr`) held in `vu_args`, so neither the callout nor the accessor can write it; `apply_all` gets `vu_i_apply` with its proven specification and must give the record back well formed | yes, in verified code: `vu_fold_all` passes `vu_i_apply`, whose `function_ptr` type is its proven specification | yes |
 
 ## Notes
+
+- **Routes, not stacks: hax F\*** (maintainer decision of 2026-11-22).
+  hax's F\* backend is its own route, Rust → F\* through hax, built as a
+  Rust library; it is not stack C (F\* + Pulse, C generated by
+  KaRaMeL). The report's matrix lists hax only under stack A (its Rocq
+  backend). Its verdict (works with trusted shim, 134) does not change
+  which stacks are eliminated.
+
+- **Run F.** RefinedRust: the structs are plain field lists (a
+  `#[rr::refined_by]` struct becomes an invariant type and the proofs
+  get stuck folding it back), with `slot[5]` and `from[8]` spelt as
+  fields (asserted to have the C layout in `ffi.rs`); the read accessor
+  owns the subject array in its precondition and reads it with
+  `ptr::add` and `ptr::read` (manual proof, as minivec's
+  `get_unchecked` in RefinedRust's case studies); `record_at` and
+  `i_apply` need a few manual lines; the branch rules and the record
+  test are separate verified functions (the first proofs took 15-25
+  minutes each, the crate now checks in 7). Creusot: on a crate whose
+  goals are all provable, why3find with 1 ms limits prints "proof
+  failed", "✘" and "N unproved files", the summary of a refutation; the
+  control check now proves the target alone with the prover answers
+  logged and needs an Invalid or Unknown answer.
 
 - **Run E.** No install was refused (69 GB free at the start). CN
   cannot call a function pointer unless it is provably a defined

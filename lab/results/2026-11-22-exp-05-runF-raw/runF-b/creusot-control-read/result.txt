@@ -1,0 +1,9 @@
+tool=creusot
+run_id=runF-b
+mode=negative-control-read
+jobs=4
+cpus=16-17,48-49
+normal_run=passed
+build_seconds=85
+build_status=3
+control=rejected

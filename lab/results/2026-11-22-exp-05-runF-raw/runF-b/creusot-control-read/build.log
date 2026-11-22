@@ -1,0 +1,151 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+902bdeee749e86c9f63905525412fb19eda049785f4db1fe6b40584dab9c50c0  creusot/Cargo.lock
+43cecd633887d952de90bf9c833b2fdc31074d218020ff97a741bb30c859c161  creusot/Cargo.toml
+48a507051caf3e7486a44f4805c21086102bf2156fcd122756cf6e6c3c4a21c7  creusot/TRUSTED
+03e4a6fa98d9a78d3ff85ada97c10f4f4f36f5b95e34bb3356ba6a364263c186  creusot/build.sh
+4a678fc8c21cc484d89023562b511a8b2951e4c38fb1f3797a7fbda676656511  creusot/src/ffi.rs
+a6c584a8334cba667c7c0c97d6295f67cff3a7d414a27e710a808f9af3f8dbc8  creusot/src/lib.rs
+69fd04d331b40761a87b65080115b44c1c45dda17e41d1730ae468f4bf090ce1  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+== build
+== versions (0 s)
+cargo-creusot 0.14.0
+Rust toolchain nightly-2026-08-03
+Why3 platform, version 1.8.2+git
+why3find v1.3.0+dev
+alt-ergo 2.6.4
+z3 5.1.0
+cvc4 1.8
+cvc5 bad CVC5 version: cvc5 1.4.1 [git 2b2e844 on branch HEAD]
+compiled as a unrestricted build with GCC version 11.4.0 on Sep 25 2026 20:47:45
+
+Copyright (c) 2009-2026 by the authors and their institutional
+affiliations listed at https://cvc5.github.io/people.html
+
+This build of cvc5 uses GPLed libraries, and is thus covered by
+the GNU General Public License (GPL) version 3.  Versions of cvc5
+are available that are covered by the (modified) BSD license. If
+you want to license cvc5 under this license, please configure cvc5
+with the "--no-gpl" option before building from sources.
+
+THIS SOFTWARE IS PROVIDED AS-IS, WITHOUT ANY WARRANTIES.
+USE AT YOUR OWN RISK.
+
+This version of cvc5 is linked against the following non-(L)GPL'ed
+third party libraries.
+
+  CaDiCaL - Simplified Satisfiability Solver
+  See https://github.com/arminbiere/cadical for copyright information.
+
+  Editline Library
+  See https://thrysoee.dk/editline
+  for copyright information.
+
+  SymFPU - The Symbolic Floating Point Unit
+  See https://github.com/martin-cs/symfpu/tree/main for copyright information.
+
+This version of cvc5 is linked against the following third party
+libraries covered by the LGPLv3 license.
+See licenses/lgpl-3.0.txt for more information.
+
+  LibPoly polynomial library
+  See https://github.com/SRI-CSL/libpoly for copyright and
+  licensing information.
+
+cvc5 is statically linked against these libraries. To recompile
+this version of cvc5 with different versions of these libraries
+follow the instructions on https://github.com/cvc5/cvc5/blob/main/INSTALL.md
+
+This version of cvc5 is linked against the following third party
+libraries covered by the GPLv3 license.
+See licenses/gpl-3.0.txt for more information.
+
+  CLN - Class Library for Numbers
+  See http://www.ginac.de/CLN for copyright information.
+
+  glpk-cut-log - a modified version of GPLK, the GNU Linear Programming Kit
+  See http://github.com/timothy-king/glpk-cut-log for copyright information
+
+  CoCoALib - a computer algebra library
+  See https://cocoa.dima.unige.it/cocoa/cocoalib/index.shtml for copyright information
+
+  Normaliz - a rational cones library
+  See https://github.com/Normaliz/Normaliz for copyright information
+
+See the file COPYING (distributed with the source code, and with
+all binaries) for the full cvc5 copyright, licensing, and (lack of)
+warranty information.
+
+ (recommended 1.4.1)
+rustc 1.99.0-nightly (11177f223 2026-08-02)
+creusot source: 65349025c67e69fcd7479f1f420fa5904f69bc27
+== 1. source (negative control: 2) (0 s)
+negative control: upper bound test of get_subject_byte removed
+  --- src/lib.rs
+  +++ control-read/lib.rs
+  @@ -309,9 +309,7 @@
+           result@ == -30
+       })]
+   pub fn get_subject_byte(args: &VuArgs, subject: &[u8], i: i32) -> i32 {
+  -    // VU-READ-BEGIN
+  -    if 0 <= i && i < args.subject_len {
+  -    // VU-READ-END
+  +    if 0 <= i {
+           subject[i as usize] as i32
+       } else {
+           ERR_INVALID_ARGUMENT
+{
+  "fast": 0.2,
+  "time": 1.0,
+  "depth": 6,
+  "packages": [ "creusot" ],
+  "provers": [ "alt-ergo", "z3", "cvc5", "cvc4" ],
+  "tactics": [ "compute_specified", "split_vc" ],
+  "drivers": [],
+  "warnoff": [ "unused_variable", "axiom_abstract" ],
+  "profile": [
+    { "prover": "cvc5@", "size": 47, "time": 0.541 },
+    { "prover": "z3@", "size": 33, "time": 0.548 },
+    { "prover": "alt-ergo@", "size": 17, "time": 0.58 },
+    { "prover": "cvc4@", "size": 45, "time": 0.432 }
+  ]
+}
+== 2. cargo creusot --only=coma (0 s)
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+    Blocking waiting for file lock on package cache
+   Compiling proc-macro2 v1.0.107
+   Compiling libc v0.2.191
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling getrandom v0.4.3
+   Compiling cfg-if v1.0.5
+   Compiling syn v2.0.119
+   Compiling uuid v1.29.3
+   Compiling pearlite-syn v0.14.0
+   Compiling creusot-std-proc v0.14.0
+    Checking creusot-std v0.14.0
+    Checking vu v0.1.0 (<exp>/build/runF-b/creusot-control-read/crate)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 37.09s
+coma verif/vu_staticlib/callout_step.coma: 272 lines, sha256 944baefbac026ae67ca0ec690c30b5d6b11f895893e3103ca103faeff568424c
+coma verif/vu_staticlib/char_len.coma: 85 lines, sha256 e32c6012106af34fa8898804895559e86c6c3a759d1cedde3bfb2650a6217c45
+coma verif/vu_staticlib/fold_all.coma: 122 lines, sha256 f150570521683d19fb20a8ebeac2308a101217e6936061f33cc0f435dcc10d47
+coma verif/vu_staticlib/get_slot.coma: 98 lines, sha256 0f49f34489faad45e3195b47901246926df4ff11450ee49a992c3ce6434ccb9b
+coma verif/vu_staticlib/get_subject_byte.coma: 86 lines, sha256 8f110b97ddfb475af7a9cbfa66ac0c5a6d064cffdba3472d868e283f52944f87
+coma verif/vu_staticlib/i_apply.coma: 157 lines, sha256 0b4a432c947f410155b522e43809188d08b015a1aef3ac4b2093422716517a44
+coma verif/vu_staticlib/impl_Apply_for_IApply/apply.coma: 109 lines, sha256 0914ca84c3bc64724b1d25caf79ea816c5fa9070e93ee8d68642b8b86553e678
+coma verif/vu_staticlib/impl_Apply_for_IApply/apply__refines.coma: 61 lines, sha256 57e4766764b01aadfe1206ed98b9d6f45d34da5cbc41b78c783a7c0488ce92e0
+coma verif/vu_staticlib/set_slot.coma: 118 lines, sha256 ebbf1ffc75f400506d44d92cc2987c4f6f96ba90d5683d71be7efb4d133d86f2
+== 3. cargo creusot --only=prove (38 s)
+Warning: inexistent file in source location: No resolved file among [/rustc/11177f2235f0c842b00f82c558ad9480c0c3a895/library/core/src/num/int_macros.rs]
+Warning: inexistent file in source location: No resolved file among [/rustc/11177f2235f0c842b00f82c558ad9480c0c3a895/library/core/src/num/int_macros.rs]
+File "<exp>/build/runF-b/creusot-control-read/crate/src/lib.rs", line 311, characters 1-70: proof failed
+Goal Coma.vc_get_subject_byte: ✘ (3/4)
+Error: 1 unproved file
+Error: 'why3find prove' failed
+prover answers on get_subject_byte alone (status 1): Timeout=7 Unknown=9 Valid=7
+proof rejected (status 1): a prover answered Invalid or Unknown

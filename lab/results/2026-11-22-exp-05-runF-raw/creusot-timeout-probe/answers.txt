@@ -1,0 +1,20 @@
+# Prover answers logged by why3find (--log-prover-results), counted per
+# result, in <exp>/dev-runF on the bench host, 2026-11-22 18:00-18:30 UTC
+# (Creusot v0.14.0, why3find 0f054b93, the run E crates of <exp>/build/runE).
+#
+# 1. Timeout probe: the normal crate (every goal provable), why3find.json
+#    with "fast": 0.001, "time": 0.001 and no profile, proof.json caches
+#    deleted, whole crate (prove-timeout.log: "proof failed", "✘" and
+#    "Error: 9 unproved files", the same summary as a refuted goal):
+whole crate                     Timeout=2229 Valid=1343
+# 2. The same crate, each control target alone, with --no-cache
+#    (prove-timeout-<target>.log: "✘", "Error: 1 unproved file"):
+char_len                        No Result=2 Timeout=49 Valid=86
+get_subject_byte                No Result=2 Timeout=56 Valid=90
+# 3. The normal crate with the default why3find.json, each target alone:
+char_len                        Valid=3
+get_subject_byte                Valid=2
+# 4. The run E control crates, default why3find.json, target alone (the
+#    same counts as the recorded runF-b controls):
+char_len (clamp removed)        Timeout=12 Unknown=15 Valid=6
+get_subject_byte (bound removed) Timeout=7 Unknown=9 Valid=7
