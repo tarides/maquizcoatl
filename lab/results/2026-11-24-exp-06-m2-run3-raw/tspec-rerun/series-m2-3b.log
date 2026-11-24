@@ -1,0 +1,13 @@
+2026-11-24T18:37:41Z
+series: isabelle tspec run 1
+0.58 1.87 1.49
+busy timing CPUs: 
+2026-11-24T18:38:53Z
+series: isabelle tspec run 2
+2.63 2.23 1.64
+busy timing CPUs: 
+2026-11-24T18:40:04Z
+series: isabelle tspec run 3
+3.31 2.45 1.75
+busy timing CPUs: 
+done 2026-11-24T18:41:15Z

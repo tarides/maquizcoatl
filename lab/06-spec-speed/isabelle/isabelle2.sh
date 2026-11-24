@@ -52,7 +52,9 @@ case $PHASE in
 tspec)
   B=$M2/build/isabelle/tspec.$RUN; rm -rf "$B"; mkdir -p "$B"; cd "$B"; roots
   $I version > "$OUT/version.txt" 2>&1
-  $I build -d . E06T2 > "$OUT/build-stub.$RUN.log" 2>&1
+  # -b: keep the stub session's heap, so that no timed step rebuilds it
+  # (series-m2-3a's runs 2 and 3 rebuilt it inside isabelle-check-base)
+  $I build -b -d . E06T2 > "$OUT/build-stub.$RUN.log" 2>&1
   tm isabelle-check-base $I build -c -d . E06Base2
   tm isabelle-check $I build -c -d . E06Spec2
   tm isabelle-export-code $I build -c -d . E06SpecX2

@@ -1,0 +1,9 @@
+File "spec.ml", line 247, characters 23-31:
+247 |                      | p, false -> not p
+                             ^^^^^^^^
+Warning 11 [redundant-case]: this match case is unused.
+
+File "spec.ml", line 248, characters 23-30:
+248 |                      | p, true -> p;;
+                             ^^^^^^^
+Warning 11 [redundant-case]: this match case is unused.
