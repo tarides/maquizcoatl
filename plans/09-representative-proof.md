@@ -44,13 +44,21 @@ recorded in the issue's Decisions section:
    Issue #30 (the Isabelle-LLVM follow-up of experiment #5, listed as
    "after experiment #5 or with experiment #9") is therefore not part
    of this plan.
-4. **Empty-iteration rule: DEV-003's** (option (a) of the plan
-   review's question,
-   [comment](https://github.com/tarides/maquizcoatl/issues/4#issuecomment-7134436728)):
-   the proof measured is the one the final project keeps, including the
-   capture-change termination measure. The compiler's divergence from
-   upstream on the empty check is stated in `FRAGMENT.md` and in the
-   comparison.
+4. **Empty-iteration rule: the spec's current rule, DEV-008.** First
+   decided as DEV-003's rule (option (a) of the plan review's question,
+   [comment](https://github.com/tarides/maquizcoatl/issues/4#issuecomment-7134436728)).
+   Experiment #6's milestone 2 (issue #28, run 2) then found DEV-003's
+   literal rule exponential and not observably equal to upstream, and
+   DEV-008 superseded it: the empty-iteration check compares only the
+   groups that some backreference of the pattern names, in every loop,
+   bounded or not. The fragment has no backreferences, so under DEV-008
+   no group is compared and the rule is upstream's plain check. The
+   maintainer amended decision 4 accordingly
+   ([comment](https://github.com/tarides/maquizcoatl/issues/4#issuecomment-7140581824)):
+   the fragment's compiler equals upstream's on the empty check, so
+   `OP_EMPTY_CHECK_END_MEMST` and the capture-change termination measure
+   leave the fragment. DEV-008 is on branch `exp/06-spec-speed-m2`
+   (PR #31) until that PR is merged.
 
 Order: the maintainer's dependency order (experiments #4 and #5 before
 #9) is satisfied. The report's suggested order also puts #6 and #8
@@ -163,11 +171,14 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
 - **Bytecode** (issue's list, `upstream/src/regint.h:496-597`): one
   literal opcode (the `OP_STR_*` variants collapsed), `OP_PUSH`,
   `OP_JUMP`, `OP_FAIL`, `OP_MEM_START`, `OP_MEM_START_PUSH`,
-  `OP_MEM_END`, `OP_EMPTY_CHECK_START`, `OP_EMPTY_CHECK_END`,
-  `OP_EMPTY_CHECK_END_MEMST`, `OP_END`, and `OP_FINISH` as the
+  `OP_MEM_END`, `OP_EMPTY_CHECK_START`, `OP_EMPTY_CHECK_END`, `OP_END`,
+  and `OP_FINISH` as the
   backtrack-stack sentinel (`upstream/src/regexec.c:3074`). Peephole
   variants (`OP_PUSH_OR_JUMP_EXACT1`, `OP_PUSH_IF_PEEK_NEXT`,
-  `OP_ANYCHAR_STAR*`) are outside the theorem.
+  `OP_ANYCHAR_STAR*`) are outside the theorem. The issue's list also
+  names `OP_EMPTY_CHECK_END_MEMST`; `f95747b` never emits it for a
+  fragment pattern (no backreferences), and under decision 4 neither
+  does the fragment's compiler, so it is left out.
 - **Compiler**, after `compile_quantifier_node`
   (`upstream/src/regcomp.c:1399`), `compile_bag_memory_node` (`:1699`),
   alternation in `compile_tree` (`:2575-2598`) and the empty check
@@ -177,54 +188,39 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
   in the last iteration keeps its earlier span: experiment #2, probe
   ei11, `(?:(a)|())*` on `ab` gives `1=0-1 2=1-1`); the VM restores
   captures on backtracking through `OP_MEM_START_PUSH` stack entries.
-- **Empty iterations:** the decided rule of `spec/deviations.md`
-  DEV-003 (after an empty iteration, continue if any capture group of
-  the body changed, otherwise stop). The compiler emits
-  `OP_EMPTY_CHECK_END_MEMST` for every star whose body may be empty and
-  contains a group, `OP_EMPTY_CHECK_END` otherwise. In the fragment
-  there are no backreferences, so DEV-003 states that the results equal
-  upstream's (experiment #2 run 2, ei04, ei05, ei07-ei09, ei11):
-  done-criterion 2 is expected to show no difference, and any
-  difference is analysed against DEV-003 before anything else.
-  This makes the fragment's compiler diverge from upstream's on the
-  empty check, and `FRAGMENT.md` and the comparison say so: `f95747b`
-  emits `OP_EMPTY_CHECK_END_MEMST` only when the quantifier carries
-  `EMPTY_STATUS_CHECK` (`upstream/src/regcomp.c:984-989`), which is set
-  only for a group backreferenced outside the loop (`:3941-3957`), so
-  the C library runs plain `OP_EMPTY_CHECK_END` for every fragment
-  pattern. The proven VM therefore runs bytecode the C compiler never
-  emits for these patterns. The maintainer chose DEV-003's rule
-  (decision 4 below and in the issue), over upstream's plain rule and
-  over both rules with a proof that they agree on the fragment.
+- **Empty iterations:** the spec's rule, `spec/deviations.md` DEV-008
+  (decision 4), which supersedes DEV-003. It compares only groups named
+  by a backreference of the pattern; the fragment has none, so after an
+  iteration that consumed nothing the loop stops: upstream's plain
+  check. `f95747b` emits `OP_EMPTY_CHECK_END_MEMST` only when the
+  quantifier carries `EMPTY_STATUS_CHECK`
+  (`upstream/src/regcomp.c:984-989`), set only for a group
+  backreferenced outside the loop (`:3941-3957`), so for every fragment
+  pattern it emits `OP_EMPTY_CHECK_START` / `OP_EMPTY_CHECK_END`, and
+  the fragment's compiler does the same: the proven VM runs the bytecode
+  the C compiler emits. `OP_EMPTY_CHECK_END_MEMST` is not in the
+  fragment's VM. The check applies to every star whose body may match
+  the empty string (experiment #2 run 2, ei04, ei05, ei07-ei09, ei11).
 - **Reference semantics:** a backtracking-tree semantics in Linden's
   style (Rocq development, MIT licence; techniques reused, not its
   JavaScript definitions): the tree of choices in priority order
   (left alternative first, greedy star), whose leftmost success is the
-  result. Defined first-order and executable. Termination: under
-  DEV-003's rule, (remaining subject, pattern size) does not decrease
-  across a continued empty iteration (the subject is unchanged and the
-  star is re-entered), and chains of two consecutive continued empty
-  iterations occur in the fragment, so that pair is not a measure. The
-  semantics takes a fuel argument (returning `OutOfFuel` when it runs
-  out), and completeness lemma (d) also covers it: some fuel makes the
-  semantics return a result, and the result does not change with more
-  fuel. A stated and proven bound on the number of continued empty
-  iterations (from the number of groups of the body) may replace the
-  fuel if it is cheaper in a tool; `FRAGMENT.md` says which. It is
+  result. Defined first-order and executable. Termination: with the
+  plain check, an iteration that consumed nothing ends the loop, so
+  (remaining subject, pattern size) decreases lexicographically. Each
+  tool may still use a fuel argument (returning `OutOfFuel` when it runs
+  out) if that is cheaper than a structural measure; then completeness
+  lemma (d) covers it: some fuel makes the semantics return a result,
+  and the result does not change with more fuel. `FRAGMENT.md` says
+  which a tool uses. It is
   cross-checked on the cases against experiment #6's executable
   semantics of the same tool
   (`lab/06-spec-speed/{rocq/Spec.v,fstar/Spec.fst,verus/spec.rs}`),
   whose subset contains the fragment. Experiment #6's semantics
-  implements upstream's plain check
+  implements the same plain check on the fragment
   (`lab/06-spec-speed/rocq/Spec.v:120-121`: after an iteration that
-  consumed nothing, stop), not DEV-003's rule, so this cross-check
-  compares two rules: agreement is evidence for DEV-003's claim that
-  the results are unchanged without backreferences, and a difference is
-  a DEV-003 finding, analysed and raised on the issue. Run 1 also runs a
-  cheap brute-force pre-check of the two rules (all fragment patterns up
-  to a small size against all subjects up to a small length over a
-  two-letter alphabet, in the Rocq extraction or a short Python model),
-  recorded with the fragment-cases entry.
+  consumed nothing, stop), so any difference is a bug in one of the two
+  and is analysed before anything else.
 - **VM:** a function from (bytecode, subject, start position, fuel) to
   `Match (end, captures) | NoMatch | OutOfFuel`, with an explicit
   backtrack stack bottomed by `OP_FINISH`. Rocq: Gallina; F\*: total F\*
@@ -273,9 +269,9 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
    a continuation (the backtracking-tree / continuation-passing
    argument Linden uses), by induction on the pattern, with the stack
    discipline of `OP_PUSH` and `OP_MEM_START_PUSH`; (c) the star case
-   with the empty check, on a measure (remaining input, then capture
-   status changes, DEV-003's termination argument); (d) completeness
-   (a fuel bound); (e) the main theorem and `axioms.sh`. Each run
+   with the plain empty check, on the measure (remaining input, then
+   pattern size); (d) completeness (a fuel bound, where a tool uses
+   fuel); (e) the main theorem and `axioms.sh`. Each run
    continues where the last stopped; the run's notebook entry says which
    lemmas are closed. If after its third M2 run a tool's theorem is
    still open, the pipeline stops that tool, records the open lemmas
@@ -449,11 +445,11 @@ checks named in criterion 1 do not apply; the Verus check is step 5's.)
 | Risk | Effect | Mitigation |
 |------|--------|------------|
 | The proof takes longer than 3 runs per tool (report: 2-4 weeks per tool) | M2 unfinished | stop after the third M2 run, record open lemmas, ask the maintainer |
-| Star with empty check (DEV-003 rule) needs a non-structural measure | lemma (c) stalls | state the measure in `FRAGMENT.md` first; Linden's handling of empty iterations as the model |
+| Star with empty check: the measure through an empty iteration is awkward in a tool | lemma (c) stalls | state the measure in `FRAGMENT.md` first; Linden's handling of empty iterations as the model |
 | Rocq: `simpl` or conversion unfolds fuel (experiment #8's two failures) | slow or failing checks | keep fuel out of lemma statements, abstract the VM as experiment #8 did |
 | Verus: own list type and large encodings (experiment #8) | more lines, slower interpreter | reuse experiment #6's `spec.rs` types |
 | F\* + Pulse: the selected stack's native-C route is Pulse, but this VM is total F\* | the proof says less about Pulse | stated in the comparison; the Pulse VM is experiment #10's |
 | Verus with another Z3 is unsupported | spurious failures | reported apart from the default-solver results |
 | Too few fragment cases in the upstream suites | weak done-criterion 2 | report the count; add experiment #2's loop probes (ei04, ei05, ei07, ei11) as extra cases, kept separate from the upstream count |
-| Agreement difference with C | criterion 2 fails | analyse against DEV-003 and experiment #2; raise a deviation candidate on the issue |
+| Agreement difference with C | criterion 2 fails | analyse against DEV-008 and experiment #2; raise a deviation candidate on the issue |
 | Bench host load from other experiments | noisy check times | lock, pinning, load average per run; rerun when idle if needed |
