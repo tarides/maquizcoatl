@@ -418,7 +418,7 @@ that run 1's semantics implemented, the review of run 1
 (https://github.com/tarides/maquizcoatl/issues/28#issuecomment-7135797879,
 problems 2 and 3) and the maintainer's decisions after run 1
 (https://github.com/tarides/maquizcoatl/issues/28#issuecomment-7136902494,
-decisions 1 and 2). Supersedes DEV-003, whose text is kept as it was.
+decisions 7 and 8 of the issue body (1 and 2 of the comment)). Supersedes DEV-003, whose text is kept as it was.
 
 **Upstream behaviour at `f95747b`.** This corrects DEV-003's
 paragraph, which says "an unbounded loop". `tune_quant` marks a
@@ -434,9 +434,10 @@ bounded quantifiers get when they are not expanded
 (`compile_range_repeat_node`, `upstream/src/regcomp.c:1285-1308`, called
 at `:1563`). When an iteration was empty, `OP_EMPTY_CHECK_END` skips the
 next instruction (`upstream/src/regexec.c:4227-4257`). In the
-`OP_REPEAT` form that instruction is `OP_REPEAT_INC`, the only place
-where the count is compared with `lower` and `upper`
-(`upstream/src/regexec.c:4386-4400`), so the plain check leaves the
+`OP_REPEAT` form that instruction is `OP_REPEAT_INC` /
+`OP_REPEAT_INC_NG` (greedy / non-greedy), the only places where the
+count is compared with `lower` and `upper`
+(`upstream/src/regexec.c:4386-4400`, `:4405-4421`), so the plain check leaves the
 loop even when the count is still below `lower`. Copies that the
 compiler unrolls carry no check: the first `lower` copies of an infinite
 quantifier (`upstream/src/regcomp.c:1459`) and the copies of a small
@@ -463,7 +464,7 @@ the `Iter` item (`:1089-1092`) compares the captures with `same_refs`
 (`:1031`) over the groups that `brefs` (`:1034`) collects from the
 pattern (`:1159`); `rep` (`:1133`) is the usual loop step. Rocq,
 Lean 4, Why3 and F\* transcribe the same test (for example
-`why3/spec2.mlw:325`, `fstar/Spec2.fst:253`). Results:
+`why3/spec2.mlw:326`, `fstar/Spec2.fst:254`). Results:
 test_utf8:742 `(?:\1a|())*` on `a` still gives `M 0-1 | 1=1-1`, a
 difference from upstream that DEV-003 decided and DEV-008 keeps (`\1`
 inside the loop selects group 1). test_utf8:797 gives C's

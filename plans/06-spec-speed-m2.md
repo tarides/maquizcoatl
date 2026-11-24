@@ -576,33 +576,34 @@ Given on 2026-11-24 in the maintainer's session and recorded on issue
 
 Given on 2026-11-24 on run 1's results and review, recorded on issue
 #28 (https://github.com/tarides/maquizcoatl/issues/28#issuecomment-7136902494).
+They are numbered 7-11 as in the issue body (1-5 in the comment).
 They apply from run 2 on and take precedence over step 3 and decision 1
 above where they differ:
 
-3. **DEV-003's normative form.** The form run 1 implemented, which
+7. **DEV-003's normative form.** The form run 1 implemented, which
    compares only the backreferenced groups of the loop body, is the
    normative rule. The literal "every group of the loop body" form
    makes `a(b|)+d` (`upstream/test/test_utf8.c:1757`) exponential. A new
    entry of `spec/deviations.md` supersedes DEV-003: it states the
    implemented form, why the literal one was dropped, and the evidence
    for the observable equality, without claiming a proof.
-4. **Empty iteration in a bounded loop: upstream's rule.**
+8. **Empty iteration in a bounded loop: upstream's rule.**
    `upstream/src/regcomp.c:5681-5688` sets the empty check for every
    quantifier with `upper >= 1` whose body can be empty, bounded or
    not, and the plain check leaves the loop even below `lower`. Stack G
    and the provers follow it, so `upstream/test/test_utf8.c:797`
    agrees with C. The same new entry corrects DEV-003's "Upstream
    behaviour" paragraph, which says "an unbounded loop".
-5. **`\x{..}` / `\o{..}` code point lists** (46 cases): in S2 from run
+9. **`\x{..}` / `\o{..}` code point lists** (46 cases): in S2 from run
    2. A list is a literal string; inside a class, a set of code points
    and ranges. Stack G's parser accepts them and the case files are
    regenerated, so every row's counts change from run 2 on; run 2
    reruns the agreement of stack G, Why3 and F\* (untimed) on the
    updated S2 and records it as a new entry.
-6. **Runs 2 and 3** are launched one after the other: run 3 starts when
-   run 2 and its review are done.
-7. **Why3 bug report**: tracked in issue #36; the maintainer handles it
-   in a separate session (WP H's draft stays as recorded).
+10. **Runs 2 and 3** are launched one after the other: run 3 starts
+    when run 2 and its review are done.
+11. **Why3 bug report**: tracked in issue #36; the maintainer handles it
+    in a separate session (WP H's draft stays as recorded).
 
 Also in run 2, without a decision: the nested-interval product rule of
 `g/g2.ml:527` has no upstream source and is removed (the lookbehind
