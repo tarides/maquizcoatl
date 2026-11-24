@@ -282,7 +282,7 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
    `--lax` or `#lang-` escape in the sources; Verus: full
    `verus --crate-type=lib` check (`--no-verify` absent) reporting
    "0 errors", a second full check with `--no-cheating` (present at the
-   pinned commit `8bf68ee`))), and a scan finding no `assume(`, `admit(`,
+   pinned commit `8bf68ee`), and a scan finding no `assume(`, `admit(`,
    `#[verifier::external_body]`, `#[verifier::external]` or
    `#[verifier::exec_allows_no_decreases_clause]` on any function the
    theorem depends on. The output is saved raw and quoted in the
