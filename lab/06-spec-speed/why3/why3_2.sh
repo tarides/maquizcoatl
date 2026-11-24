@@ -23,7 +23,9 @@ tspec)
   $X why3 extract -D ocaml64 -L . tables.Tables -o tables.ml
   $X ocamlfind ocamlopt -package zarith -c tables.ml
   tm why3-extract-ocaml $X why3 extract -D ocaml64 -L . spec2.Spec2 -o spec2.ml
-  tm why3-ocamlopt  $X ocamlfind ocamlopt -package zarith -c spec2.ml ;;
+  # the extracted spec2.ml names the table module's constructors
+  # unqualified: compile it with Tables opened
+  tm why3-ocamlopt  $X ocamlfind ocamlopt -package zarith -open Tables -c spec2.ml ;;
 full)
   B=$M2/build/why3/full; rm -rf "$B"; mkdir -p "$B"; cd "$B"
   cp "$L/why3/spec2.mlw" "$L/why3/main2.ml" "$G/cases.mlw" "$G/restricted/tables.mlw" .
@@ -43,9 +45,12 @@ inp)
   q Q0 "0"
   q QX "passes ${REPS_EXEC:?} 0" ;;
 spot)
-  B=$M2/build/why3/spot; rm -rf "$B"; mkdir -p "$B"; cd "$B"
-  cp "$L/why3/spec2.mlw" "$G/heavy/cases.mlw" "$G/full/tables.mlw" .
+  # SPOT_TABLE=full (labels Q0F/QXF) or restricted (Q0R/QXR, the same
+  # heavy cases with the main runs' table, for comparison)
+  T=${SPOT_TABLE:-full}; S=$(echo "$T" | cut -c1 | tr a-z A-Z)
+  B=$M2/build/why3/spot-$T; rm -rf "$B"; mkdir -p "$B"; cd "$B"
+  cp "$L/why3/spec2.mlw" "$G/heavy/cases.mlw" "$G/$T/tables.mlw" .
   q() { tm "why3-$1" $X why3 execute -L . cases.mlw --use=Cases2 --rac-timelimit=1150 "$2"; }
-  q Q0F "0"
-  q QXF "passes ${REPS_EXEC_SPOT:-1} 0" ;;
+  q Q0$S "0"
+  q QX$S "passes ${REPS_EXEC_SPOT:-1} 0" ;;
 esac

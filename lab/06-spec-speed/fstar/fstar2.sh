@@ -50,12 +50,14 @@ inp)
   q Q0 ''
   q QN "let _ = assert_norm (passes ${REPS_NORM:?} cases 0 = $(( REPS_NORM * ${NAGREE:?} )))" ;;
 spot)
-  B=$M2/build/fstar/spot; rm -rf "$B"; mkdir -p "$B/cache"; cd "$B"
-  cp "$L/fstar/Spec2.fst" "$G/heavy/Cases.fst" "$G/full/Tables.fst" .
-  $F Tables.fst > "$OUT/spot-build.log" 2>&1 && $F Spec2.fst >> "$OUT/spot-build.log" 2>&1 &&
-  $F Cases.fst >> "$OUT/spot-build.log" 2>&1
+  # SPOT_TABLE=full (labels Q0F/QNF) or restricted (Q0R/QNR)
+  T=${SPOT_TABLE:-full}; S=$(echo "$T" | cut -c1 | tr a-z A-Z)
+  B=$M2/build/fstar/spot-$T; rm -rf "$B"; mkdir -p "$B/cache"; cd "$B"
+  cp "$L/fstar/Spec2.fst" "$G/heavy/Cases.fst" "$G/$T/Tables.fst" .
+  $F Tables.fst > "$OUT/spot-build-$T.log" 2>&1 && $F Spec2.fst >> "$OUT/spot-build-$T.log" 2>&1 &&
+  $F Cases.fst >> "$OUT/spot-build-$T.log" 2>&1
   q() { printf 'module %s\nopen Spec2\nopen Cases\n%s\n' "$1" "$2" > "$1.fst"
         rm -f "cache/$1.fst.checked"; tm "fstar-$1" $F "$1.fst"; }
-  q Q0F ''
-  q QNF "let _ = assert_norm (passes ${REPS_NORM_SPOT:-1} cases 0 >= 0)" ;;
+  q Q0$S ''
+  q QN$S "let _ = assert_norm (passes ${REPS_NORM_SPOT:-1} cases 0 >= 0)" ;;
 esac
