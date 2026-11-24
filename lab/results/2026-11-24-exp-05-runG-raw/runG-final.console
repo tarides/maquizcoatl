@@ -1,0 +1,14 @@
+repo_commit: c38d80e
+uptime:  09:07:54 up 211 days,  1:38,  6 users,  load average: 0.61, 1.29, 1.45
+disk_free_start: 53157M
+reference: caller output equals expected.txt
+bedrock2: caller output equals expected.txt
+run.sh bedrock2: status 0
+bedrock2 control: proof rejected, as required
+bedrock2 control: proof rejected, as required
+mode=negative-control
+build_status=3
+mode=negative-control-read
+build_status=3
+uptime end:  09:11:39 up 211 days,  1:42,  7 users,  load average: 1.71, 1.37, 1.43
+disk_free_end: 53152M

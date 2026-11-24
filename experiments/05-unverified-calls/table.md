@@ -7,7 +7,13 @@ tool's `TRUSTED` file. Details and raw outputs: the `prototypes-m<N>`
 entries of `lab/notebook.md`, and the `review-fixes` entry for the re-run
 of milestones 1 and 2 after the independent review.
 
-Last update: fixes after the review of run F (entry
+Last update: run G of the pipeline (run id `runG`, entry
+`2026-11-24-exp-05-runG`, maintainer decision of 2026-11-24): Bedrock2
+works with trusted shim (119 lines; the three indirect calls are
+`cmd.interact` actions made by a C shim, with their `ext_spec`
+contracts as theorem hypotheses; the read accessor reads the subject in
+verified code, lent whole); every row now has a verdict. Before that:
+fixes after the review of run F (entry
 `2026-11-22-exp-05-runF-corrections`): RefinedRust counts 152 trusted
 lines, was 156 (its accessor's own subject precondition is no longer
 counted, as for CN; no rank changes); Bedrock2 was not started although
@@ -68,7 +74,7 @@ callee assumptions, how two read controls fail).
 | hax (Lean backend) | cargo-hax v0.5.0, which runs Charon `nightly-2026.10.31` + Aeneas `build-2b9e3ea` | not run (maintainer decision of 2026-11-21): same pipeline as Charon + Aeneas, with hax-lib specifications in front; not run, saving its 10 GB | | | | | |
 | Creusot | v0.14.0 (`65349025`), Rust nightly-2026-08-03, Why3 1.8.2+git (`05bf4ddf`), why3find `0f054b93`; Alt-Ergo 2.6.4, Z3 (prints 5.1.0), CVC5 1.4.1, CVC4 1.8 (creusot-install's downloads) | works with trusted shim (123 lines) | trusted shim, as Aeneas (one trait per client C function, implemented in unverified Rust by the indirect call; `ffi.rs` is `cfg(not(creusot))`), plus a client contract for (a) on `ApplyAll` | 123 (shims 30, C glue 88, client contract 5) | may diverge (partial correctness); a trait method without contract is a relation, so no determinism is assumed (unlike Aeneas and hax); no range on the result; nothing assumed of what the callout writes into `args` (the verified side restores its fields); the subject is a shared slice made by the glue (length agreement is a precondition; the verified side holds no permission on the subject across the callout); for (a), the client keeps the record well formed (`ApplyAll`'s contract, trusted: Creusot does not see the implementation in `ffi.rs`, so it checks no refinement of it) | yes, proved under the client contract; `vu_i_apply`'s address is taken in trusted code (`c_apply` in `ffi.rs`) | yes; Miri (Stacked and Tree Borrows) accepts a Rust client calling the accessors through the raw pointer during a callout |
 | RefinedRust | `lgaeher/refinedrust-dev` `2862b1d8` (2026-11-16), Rocq 9.2.0 (switch `refinedrust`, with `refinedrust-stdlib`), frontend Rust nightly-2026-11-15 | works with trusted shim (152 lines) | trusted shim, as Aeneas, hax and Creusot (one trait per client C function, with a RefinedRust trait specification; the one implementation per trait, in `ffi.rs`, is `#[rr::skip]` and does the indirect call), plus client contracts: the trait specifications of `EncLen`, `Callout` (no precondition: the client accepts every argument) and `ApplyAll` (the record invariant, for (a)); `proto.h`'s arrays spelt as one field per element (RefinedRust at `2862b1d8` cannot fold an array back after an element write); three of the twelve proof files are manual (`proofs/`) | 152 (shims 37, C glue 99, client contracts 16; the subject precondition of `get_subject_byte` is not counted, as CN's) | may diverge (partial correctness); any result; the encoding is lent nothing; the callout gets `*args` mutably and may leave any values in its nine fields (the verified side restores its four); the C caller meets `get_subject_byte`'s precondition: the subject is `subject_len` live bytes, owned for the call; the subject is lent **whole** (an owned array, given back with the same bytes), and read in verified code (`ptr::add`, `ptr::read`, manual proof) | yes, proved under the client contract; `IApply` refines `Apply`'s specification (checked); address taken in trusted code | yes, three accessors called by name, proved; Miri clean (Stacked and Tree Borrows) |
-| Bedrock2 | `mit-plv/bedrock2` `67b682a5` (2026-11-19), coqutil `4c399b76`, Rocq 9.3.0 (`provers`) | pending (run F): installed (coqutil and the `noex` part of bedrock2 built, 63 MB), prototype not started: run F stopped at 2h01 of its 3 hours (decision 16:38 UTC, results 18:39 UTC), about 59 minutes unused, judged too short for a Bedrock2 prototype with both negative controls after RefinedRust took about 1h40; Bedrock2's language calls functions by name only (`cmd.call`) and external code through `cmd.interact`, specified by an `ext_spec`, which `ToCString` prints as a C call to the action's name: the indirect calls would go through a trusted C shim, as for Isabelle-LLVM; not deferred (it is installed), and it cannot remove a stack (stack A has two *works* routes) | | | | | |
+| Bedrock2 | `mit-plv/bedrock2` `67b682a5` (2026-11-19), coqutil `4c399b76`, Rocq 9.3.0 (`provers`) | works with trusted shim (119 lines) | trusted shim (the three indirect calls are external actions, `cmd.interact`, made by three C functions; Bedrock2 calls functions by name only); the contract of each action on `ext_spec` is a section variable of `VU.v`, so a hypothesis of every theorem (`Print Assumptions`: closed under the global context), and `ext_spec.ok` is assumed; for (a), a client contract stated on the function the client is given (`respects_i_apply`, as Isabelle-LLVM); `ToCString` prints the C, wrapped to `proto.h` by a trusted ABI layer (every Bedrock2 value is a machine word) | 119 (C shim 13, ABI mapping 59: `b2ext.h` 16, `abi.c` 31, struct offsets 12; callee contracts, `ext_spec.ok` and the memory predicates they use 47) | returns (an external call's `ext_spec` gives a postcondition for its results: no divergence); result any `int` (the shim sign-extends it); the encoding is lent the byte at `p` (whole) and gives it back unchanged; the callout is lent the whole `args` record and the subject **whole** (no fractional permission in Bedrock2's separation logic) and gives back the record with `subject`, `subject_len`, `pos` and `num` unchanged (slots and padding any) and the subject with the same bytes; for (a), the client reaches the record only through the `vu_i_apply` it is given | yes, through the shim (C takes `vu_i_apply`'s address); proved under the client contract `respects_i_apply`, composed with `b2_vu_i_apply_ok` (`i_apply_rec_wf`) in `b2_vu_fold_all_ok` | yes, three accessors called by name, proved; the read accessor reads the subject in verified code (`load1` from the lent array) |
 | CN | `rems-project/cn` `f2e8eeb4` (its `--version` prints "unknown"), `cerberus-lib` at `rems-project/cerberus` `a0f7071`, OCaml 5.4.1; Z3 4.15.3 | works with trusted shim (22 lines) | trusted shim (three C functions marked `trusted` make the indirect calls; their CN specifications are the callee contracts) | 22 (the three shims with their specifications 19, `rec_wf` 3) | may diverge (partial correctness); result any `int`; the encoding is lent nothing; the callout gets `*args` (`RW`) and gives back some `vu_args` (the verified side restores its fields); the callout is lent no access to the subject; the apply-all function keeps the record well formed (the shim's contract); the read accessor takes the subject whole (`RW`, CN has no read-only share) and gives it back with the same bytes | yes; `vu_i_apply`'s address is taken in the trusted shim | yes |
 | RefinedC | `iris/refinedc` `d0575839` (with `coq-lithium` at the same commit), Rocq 9.1.0, Iris `fc84ea73`, `cerberus-lib` `f11e6b33` | works | client contract (each client pointer argument has a `function_ptr` type carrying the callee's specification; RefinedC checks the indirect calls that `vu.c` makes itself) | 25 (callee contracts 12, the refinement types of `vu_args` and `vu_fold_rec` they use 12, `rec_wf` 1) | may diverge (partial correctness); result any `int`; the encoding is lent nothing (`p` as `place`); the callout gets `*args` owned and gives back some `vu_args` (the verified side restores its fields); the subject is a shared, read-only array (`&shr`) held in `vu_args`, so neither the callout nor the accessor can write it; `apply_all` gets `vu_i_apply` with its proven specification and must give the record back well formed | yes, in verified code: `vu_fold_all` passes `vu_i_apply`, whose `function_ptr` type is its proven specification | yes |
 
@@ -80,6 +86,26 @@ callee assumptions, how two read controls fail).
   KaRaMeL). The report's matrix lists hax only under stack A (its Rocq
   backend). Its verdict (works with trusted shim, 134) does not change
   which stacks are eliminated.
+
+- **Run G (Bedrock2).** Bedrock2's language has no function pointer:
+  `cmd.call` names a function of the program, and anything else is an
+  external action (`cmd.interact`), whose effect the proofs take from
+  `ext_spec` and which `ToCString` prints as a C call to a function of
+  the action's name. The three indirect calls are three such actions
+  (`shim.c`), as Isabelle-LLVM's shim; `VU.v` defines no `ext_spec`:
+  each action's contract is a section variable, a hypothesis of every
+  theorem. Every Bedrock2 value is a machine word, so `abi.c` converts
+  `proto.h`'s `int` arguments (sign extension) and results (proven in the
+  `int` range), and 32-bit fields are read with `load4` and
+  sign-extended in verified code. The slot accessors and the record
+  write of `vu_i_apply` select the field with a chain of tests on the
+  index, as Isabelle-LLVM's prototype; the read accessor computes the
+  address `s + i` and reads it from the lent byte array. The read
+  access is expressed by lending the subject whole (as Isabelle-LLVM,
+  CN and RefinedRust): Bedrock2's separation logic has no fractional or
+  read-only permission. Proof automation: `straightline` plus a
+  word-arithmetic tactic (`wsolve`); the seven functions check in about
+  3 minutes.
 
 - **Run F.** RefinedRust: the structs are plain field lists (a
   `#[rr::refined_by]` struct becomes an invariant type and the proofs
@@ -198,7 +224,9 @@ callee assumptions, how two read controls fail).
   `assume`, `magic`, `--admit_smt_queries`), Verus (`--no-cheating`
   refuses only the three shims of `shim.rs`), Aeneas and VST (no
   `sorry` or `admit`, standard axioms only), Isabelle-LLVM (no `sorry`,
-  `axiomatization`, `oracle` or `quick_and_dirty`).
+  `axiomatization`, `oracle` or `quick_and_dirty`), Bedrock2 (no `admit`,
+  `Admitted`, `Axiom`, `Parameter` or `Hypothesis`; `Print Assumptions`
+  of the seven theorems: closed under the global context).
 - The trusted-line counts are not directly comparable. Why3's include
   the model of the C structs and of `void *`. Verus's and Aeneas's
   include the C entry points in `unsafe` Rust, and the size, alignment
@@ -247,8 +275,8 @@ callee assumptions, how two read controls fail).
   no axiom or opaque definition.
 - Re-entrancy (a): only Pulse and VST take `vu_i_apply`'s address in
   verified code. Why3 (a driver entry), Verus (`shim.rs`), Aeneas
-  (`c_apply` in `ffi.rs`) and Isabelle-LLVM (`shim.c`) take it in
-  trusted code.
+  (`c_apply` in `ffi.rs`), Isabelle-LLVM (`shim.c`) and Bedrock2
+  (`bedrock2/shim.c`) take it in trusted code.
 - Isabelle-LLVM has no function-pointer type (a `TFptr` exists only in
   its LLVM writer) and calls external functions by name only, hence the
   C shim. Its exported names carry the theory prefix and are renamed

@@ -383,6 +383,16 @@ After the maintainer's decisions of 2026-11-22 on issue #13 (entry
 - **Bedrock2**: still pending, not started in run F (the RefinedRust
   prototype took the run's time).
 
+Status after run G (2026-11-24, maintainer decision of 2026-11-24,
+option (a)):
+
+- **Bedrock2**: works with trusted shim (119 lines). The three indirect
+  calls are `cmd.interact` actions made by a C shim (`bedrock2/shim.c`);
+  their `ext_spec` contracts are section hypotheses of the seven
+  theorems; the `ToCString` output is wrapped to `proto.h` by a
+  word-level ABI layer (`abi.c`, `b2ext.h`). Every row now has a verdict
+  (hax Lean not run by decision): the done-criteria are met.
+
 ## Where things live
 
 - **Bench host.** Nothing is installed system-wide; the account's own
