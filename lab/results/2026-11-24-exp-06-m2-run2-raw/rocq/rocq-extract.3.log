@@ -1,0 +1,6 @@
+File "./ExtractSpec2.v", line 7, characters 0-50:
+Warning: Setting extraction output directory by default to
+"<bench-workdir>/exp/06-spec-speed/m2/build/rocq/tspec.3".
+Use "Set Extraction Output Directory" or command line option
+"-output-directory" to set a different directory for extracted files to
+appear in. [extraction-default-directory,extraction,default]
