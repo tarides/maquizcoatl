@@ -64,7 +64,10 @@ does not change the fragment and is not waited for.
   repository; the branch's worktree is `<workdir>/wt/09-representative-proof`.
   Raw outputs are copied back to `<workdir>/e09/out/` before selection.
   No toolchain is installed on the workstation; every check goes to the
-  bench host.
+  bench host, and no run starts without the bench host (if it is
+  unavailable the run waits; it does not fall back to the
+  workstation). The issue's feasibility note about a 16-CPU / 4 GB
+  machine is therefore moot under this plan.
 - **Repository** (branch `exp/09-representative-proof`),
   `lab/09-representative-proof/`:
   - `FRAGMENT.md`: the shared design every tool transcribes (AST,
@@ -84,7 +87,12 @@ does not change the fragment and is not waited for.
     `axioms.sh` (done-criterion 1 checks), `loc.py` (from experiment
     #8), `lemmas.py` (automatic-lemma count), `brittle.sh`
     (done-criterion 4), `provenance.sh`, `pins.json`, `effort.tsv`
-    (one line per lemma attempt and per human intervention);
+    (one line per lemma attempt and per human intervention). Experiment
+    #8's `timed.sh`, `check.sh`, `loc.py`, `pins.json` and
+    `provenance.sh` come from branch `exp/08-hard-features` (PR #26,
+    still open), not `main`: `lab/08-hard-features/` at commit
+    `8d7727e`, or the branch head at run 1, whose branch and commit
+    `provenance.sh` records;
   - build output is gitignored (`_build`, `*.vo*`, `*.checked`,
     `target`, caches).
 
@@ -171,15 +179,46 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
   upstream's (experiment #2 run 2, ei04, ei05, ei07-ei09, ei11):
   done-criterion 2 is expected to show no difference, and any
   difference is analysed against DEV-003 before anything else.
+  This makes the fragment's compiler diverge from upstream's on the
+  empty check, and `FRAGMENT.md` and the comparison say so: `f95747b`
+  emits `OP_EMPTY_CHECK_END_MEMST` only when the quantifier carries
+  `EMPTY_STATUS_CHECK` (`upstream/src/regcomp.c:984-989`), which is set
+  only for a group backreferenced outside the loop (`:3941-3957`), so
+  the C library runs plain `OP_EMPTY_CHECK_END` for every fragment
+  pattern. The proven VM therefore runs bytecode the C compiler never
+  emits for these patterns. Which rule the fragment implements is an
+  open question for the maintainer on issue #4 (DEV-003's rule as
+  above, upstream's plain rule, or both with a proof that they agree on
+  the fragment); this plan describes DEV-003's rule until then.
 - **Reference semantics:** a backtracking-tree semantics in Linden's
   style (Rocq development, MIT licence; techniques reused, not its
   JavaScript definitions): the tree of choices in priority order
   (left alternative first, greedy star), whose leftmost success is the
-  result. Defined first-order, total by a measure (remaining subject,
-  pattern size), executable. It is cross-checked on the cases against
-  experiment #6's executable semantics of the same tool
+  result. Defined first-order and executable. Termination: under
+  DEV-003's rule, (remaining subject, pattern size) does not decrease
+  across a continued empty iteration (the subject is unchanged and the
+  star is re-entered), and chains of two consecutive continued empty
+  iterations occur in the fragment, so that pair is not a measure. The
+  semantics takes a fuel argument (returning `OutOfFuel` when it runs
+  out), and completeness lemma (d) also covers it: some fuel makes the
+  semantics return a result, and the result does not change with more
+  fuel. A stated and proven bound on the number of continued empty
+  iterations (from the number of groups of the body) may replace the
+  fuel if it is cheaper in a tool; `FRAGMENT.md` says which. It is
+  cross-checked on the cases against experiment #6's executable
+  semantics of the same tool
   (`lab/06-spec-speed/{rocq/Spec.v,fstar/Spec.fst,verus/spec.rs}`),
-  whose subset contains the fragment.
+  whose subset contains the fragment. Experiment #6's semantics
+  implements upstream's plain check
+  (`lab/06-spec-speed/rocq/Spec.v:120-121`: after an iteration that
+  consumed nothing, stop), not DEV-003's rule, so this cross-check
+  compares two rules: agreement is evidence for DEV-003's claim that
+  the results are unchanged without backreferences, and a difference is
+  a DEV-003 finding, analysed and raised on the issue. Run 1 also runs a
+  cheap brute-force pre-check of the two rules (all fragment patterns up
+  to a small size against all subjects up to a small length over a
+  two-letter alphabet, in the Rocq extraction or a short Python model),
+  recorded with the fragment-cases entry.
 - **VM:** a function from (bytecode, subject, start position, fuel) to
   `Match (end, captures) | NoMatch | OutOfFuel`, with an explicit
   backtrack stack bottomed by `OP_FINISH`. Rocq: Gallina; F\*: total F\*
@@ -214,7 +253,11 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
    positions; agreement of the VM and the semantics with the C oracle
    (done-criterion 2) and with experiment #6's Rocq semantics.
 3. **F\* M1 and Verus M1** (runs 2 and 3), the same for each tool. F\*
-   driver: extraction to OCaml (`--codegen OCaml`), as experiment #6.
+   driver: extraction to OCaml (`--codegen OCaml`), as experiment #6;
+   the extracted part uses `Prims` only, as experiment #6's did, since
+   the release's `fstar.lib` is compiled by OCaml 5.3.0 and cannot be
+   linked from the 5.4.1 switch (a 5.3.0 switch or an `fstar.lib` build
+   would be a new toolchain, which the budget excludes).
    Verus driver: the `exec` VM compiled by Verus's rustc, as experiment
    #6.
 4. **M2: equivalence proofs** (runs 4-12, three per tool, one tool at a
@@ -238,7 +281,8 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
    `admit`, `assume`, `assume val`, `--admit_smt_queries true`,
    `--lax` or `#lang-` escape in the sources; Verus: full
    `verus --crate-type=lib` check (`--no-verify` absent) reporting
-   "0 errors", and a scan finding no `assume(`, `admit(`,
+   "0 errors", a second full check with `--no-cheating` (present at the
+   pinned commit `8bf68ee`))), and a scan finding no `assume(`, `admit(`,
    `#[verifier::external_body]`, `#[verifier::external]` or
    `#[verifier::exec_allows_no_decreases_clause]` on any function the
    theorem depends on. The output is saved raw and quoted in the
@@ -247,7 +291,12 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
    tool's M2 closing run: `loc.py` lines (non-blank, non-comment) of
    semantics, compiler + VM, proof; `timed.sh`: three full clean checks
    pinned to one L3 complex, median and spread, peak RSS, load average
-   per run; `lemmas.py`: lemmas total and automatic (Rocq: the proof is one
+   per run; `lemmas.py`: lemmas total and automatic. A lemma is a
+   named statement: Rocq `Lemma`, `Theorem`, `Corollary`, `Fact`,
+   `Proposition`; F\* a top-level `val`/`let` whose type is a `Lemma`;
+   Verus a `proof fn`. Inline proof blocks, `assert ... by`, `calc`
+   steps and local `have`/`assert` are not lemmas, so the counts are
+   comparable across tools. Automatic: (Rocq: the proof is one
    call of an automation tactic, `lia`, `auto`, `eauto`, `easy`,
    `congruence`, `intuition` or `firstorder`, possibly with hints; a
    single other tactic such as `reflexivity` or `inversion` does not
