@@ -44,6 +44,13 @@ recorded in the issue's Decisions section:
    Issue #30 (the Isabelle-LLVM follow-up of experiment #5, listed as
    "after experiment #5 or with experiment #9") is therefore not part
    of this plan.
+4. **Empty-iteration rule: DEV-003's** (option (a) of the plan
+   review's question,
+   [comment](https://github.com/tarides/maquizcoatl/issues/4#issuecomment-7134436728)):
+   the proof measured is the one the final project keeps, including the
+   capture-change termination measure. The compiler's divergence from
+   upstream on the empty check is stated in `FRAGMENT.md` and in the
+   comparison.
 
 Order: the maintainer's dependency order (experiments #4 and #5 before
 #9) is satisfied. The report's suggested order also puts #6 and #8
@@ -186,10 +193,9 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
   only for a group backreferenced outside the loop (`:3941-3957`), so
   the C library runs plain `OP_EMPTY_CHECK_END` for every fragment
   pattern. The proven VM therefore runs bytecode the C compiler never
-  emits for these patterns. Which rule the fragment implements is an
-  open question for the maintainer on issue #4 (DEV-003's rule as
-  above, upstream's plain rule, or both with a proof that they agree on
-  the fragment); this plan describes DEV-003's rule until then.
+  emits for these patterns. The maintainer chose DEV-003's rule
+  (decision 4 below and in the issue), over upstream's plain rule and
+  over both rules with a proof that they agree on the fragment.
 - **Reference semantics:** a backtracking-tree semantics in Linden's
   style (Rocq development, MIT licence; techniques reused, not its
   JavaScript definitions): the tree of choices in priority order
