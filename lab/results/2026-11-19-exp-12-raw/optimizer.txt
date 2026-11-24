@@ -1,0 +1,51 @@
+== pid 92 syntax/options 0 256 pattern_hex 22
+optimize: STR_FAST
+exact: ["]: length: 1, dmin: 0, dmax: 0
+== pid 93 syntax/options 0 256 pattern_hex 27
+optimize: STR_FAST
+exact: [']: length: 1, dmin: 0, dmax: 0
+== pid 94 syntax/options 0 256 pattern_hex 2f5c2a
+optimize: STR_FAST
+exact: [/*]: length: 2, dmin: 0, dmax: 0
+== pid 95 syntax/options 0 256 pattern_hex 5c7b
+optimize: STR_FAST
+exact: [{]: length: 1, dmin: 0, dmax: 0
+== pid 96 syntax/options 0 256 pattern_hex 3d3e
+optimize: STR_FAST
+exact: [=>]: length: 2, dmin: 0, dmax: 0
+== pid 97 syntax/options 0 256 pattern_hex 5c2e5c2e5c2e
+optimize: STR_FAST
+exact: [...]: length: 3, dmin: 0, dmax: 0
+== pid 99 syntax/options 0 256 pattern_hex 3c3c7c3e3e3e7c3e3e
+optimize: MAP
+map: n=2, dmin: 0, dmax: 0
+== pid 101 syntax/options 0 256 pattern_hex 3c3d7c3e3d7c3c3e7c3c7c3e
+optimize: MAP
+map: n=2, dmin: 0, dmax: 0
+== pid 103 syntax/options 0 256 pattern_hex 5c267c7e7c5c5e7c5c7c
+optimize: MAP
+map: n=4, dmin: 0, dmax: 0
+== pid 104 syntax/options 0 256 pattern_hex 5c3d
+optimize: STR_FAST
+exact: [=]: length: 1, dmin: 0, dmax: 0
+== pid 105 syntax/options 0 256 pattern_hex 2d2d
+optimize: STR_FAST
+exact: [--]: length: 2, dmin: 0, dmax: 0
+== pid 106 syntax/options 0 256 pattern_hex 5c2b5c2b
+optimize: STR_FAST
+exact: [++]: length: 2, dmin: 0, dmax: 0
+== pid 107 syntax/options 0 256 pattern_hex 257c5c2a7c2f7c2d7c5c2b
+optimize: MAP
+map: n=5, dmin: 0, dmax: 0
+== pid 108 syntax/options 0 256 pattern_hex 5c732a285c5b29
+optimize: STR_FAST
+exact: [[]: length: 1, dmin: 0, dmax: inf.
+== pid 109 syntax/options 0 256 pattern_hex 5c28
+optimize: STR_FAST
+exact: [(]: length: 1, dmin: 0, dmax: 0
+== pid 110 syntax/options 0 256 pattern_hex 2c
+optimize: STR_FAST
+exact: [,]: length: 1, dmin: 0, dmax: 0
+== pid 111 syntax/options 0 256 pattern_hex 3b
+optimize: STR_FAST
+exact: [;]: length: 1, dmin: 0, dmax: 0

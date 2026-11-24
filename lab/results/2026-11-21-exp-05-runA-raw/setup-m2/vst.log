@@ -1,0 +1,107 @@
+opam 2.6.1 sha256=b533d393a6967150d6ef41cb3d71e147e93ecbabeb59e921aa412c0ae79ebe3d
+# To update the current shell environment, run: eval $(opam env --root=<shared-cache>/opam --switch=vst)
+[rocq-released] synchronised from https://rocq-prover.org/opam/released
+The following actions will be performed:
+=== install 34 packages
+  ∗ base-bigarray         base
+  ∗ base-domains          base
+  ∗ base-effects          base
+  ∗ base-nnp              base
+  ∗ base-threads          base     [required by dune]
+  ∗ base-unix             base     [required by dune]
+  ∗ conf-g++              1.0      [required by coq-flocq]
+  ∗ conf-gmp              5        [required by zarith]
+  ∗ conf-linux-libc-dev   0        [required by rocq-runtime]
+  ∗ conf-pkg-config       5        [required by zarith]
+  ∗ coq                   9.2.0    [required by coq-compcert, coq-vst]
+  ∗ coq-compcert          3.18
+  ∗ coq-core              9.2.0    [required by coq-vst]
+  ∗ coq-flocq             4.2.2    [required by coq-compcert, coq-vst]
+  ∗ coq-menhirlib         20260209 [required by coq-compcert]
+  ∗ coq-vst               2.17
+  ∗ coq-vst-zlist         2.13     [required by coq-vst]
+  ∗ coqide-server         9.2.0    [required by coq]
+  ∗ dune                  3.23.1   [required by menhir]
+  ∗ menhir                20260209 [required by coq-compcert]
+  ∗ menhirCST             20260209 [required by menhir]
+  ∗ menhirGLR             20260209 [required by menhir]
+  ∗ menhirLib             20260209 [required by menhir]
+  ∗ menhirSdk             20260209 [required by menhir]
+  ∗ ocaml                 5.4.1    [required by coq-compcert, coq-vst]
+  ∗ ocaml-base-compiler   5.4.1
+  ∗ ocaml-compiler        5.4.1    [required by ocaml-base-compiler]
+  ∗ ocaml-config          3        [required by ocaml]
+  ∗ ocaml-options-vanilla 1
+  ∗ ocamlfind             1.9.8    [required by rocq-runtime]
+  ∗ rocq-core             9.2.0    [required by rocq-stdlib]
+  ∗ rocq-runtime          9.2.0    [required by coqide-server, coq-core, rocq-stdlib]
+  ∗ rocq-stdlib           9.2.0    [required by coq-vst]
+  ∗ zarith                1.14     [required by rocq-runtime]
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+⬇ retrieved conf-gmp.5  (cached)
+⬇ retrieved conf-pkg-config.5  (cached)
+∗ installed base-bigarray.base
+∗ installed base-threads.base
+∗ installed base-unix.base
+⬇ retrieved coq-compcert.3.18  (cached)
+⬇ retrieved coq-core.9.2.0, coqide-server.9.2.0, rocq-core.9.2.0, rocq-runtime.9.2.0  (cached)
+⬇ retrieved coq-flocq.4.2.2  (cached)
+∗ installed conf-g++.1.0
+∗ installed conf-gmp.5
+⬇ retrieved coq-menhirlib.20260209, menhir.20260209, menhirCST.20260209, menhirGLR.20260209, menhirLib.20260209, menhirSdk.20260209  (cached)
+∗ installed conf-linux-libc-dev.0
+∗ installed conf-pkg-config.5
+⬇ retrieved coq-vst.2.17  (https://github.com/PrincetonUniversity/VST/archive/refs/tags/v2.17.tar.gz)
+⬇ retrieved dune.3.23.1  (cached)
+⬇ retrieved ocaml-config.3  (cached)
+∗ installed ocaml-options-vanilla.1
+⬇ retrieved coq-vst-zlist.2.13  (https://github.com/PrincetonUniversity/VST/archive/refs/tags/v2.13.tar.gz)
+⬇ retrieved ocaml-compiler.5.4.1  (cached)
+⬇ retrieved ocamlfind.1.9.8  (cached)
+⬇ retrieved zarith.1.14  (cached)
+⬇ retrieved rocq-stdlib.9.2.0  (https://github.com/coq/stdlib/releases/download/V9.2.0/stdlib-9.2.0.tar.gz)
+∗ installed ocaml-compiler.5.4.1
+∗ installed ocaml-base-compiler.5.4.1
+∗ installed ocaml-config.3
+∗ installed ocaml.5.4.1
+∗ installed base-domains.base
+∗ installed base-effects.base
+∗ installed base-nnp.base
+∗ installed ocamlfind.1.9.8
+∗ installed zarith.1.14
+∗ installed dune.3.23.1
+∗ installed menhirCST.20260209
+∗ installed menhirSdk.20260209
+∗ installed menhirLib.20260209
+∗ installed menhirGLR.20260209
+∗ installed menhir.20260209
+∗ installed rocq-runtime.9.2.0
+∗ installed coq-core.9.2.0
+∗ installed coqide-server.9.2.0
+∗ installed rocq-core.9.2.0
+∗ installed rocq-stdlib.9.2.0
+∗ installed coq.9.2.0
+∗ installed coq-menhirlib.20260209
+∗ installed coq-vst-zlist.2.13
+∗ installed coq-flocq.4.2.2
+∗ installed coq-compcert.3.18
+∗ installed coq-vst.2.17
+Done.
+
+<><> coq-core.9.2.0 installed successfully ><><><><><><><><><><><><><><><><><><>
+=> Coq has been renamed to The Rocq Prover, see https://rocq-prover.org/refman/changes.html#porting-to-the-rocq-prover for details.
+      This package provides compatibility binaries to ease the transition to the new rocq binary.
+# To update the current shell environment, run: eval $(opam env --root=<shared-cache>/opam)
+# Packages matching: (name-match(ocaml) | name-match(coq) | name-match(coq-core) | name-match(rocq-core) | name-match(coq-compcert) | name-match(coq-vst)) & installed
+# Name       # Version
+coq          9.2.0
+coq-compcert 3.18
+coq-core     9.2.0
+coq-vst      2.17
+ocaml        5.4.1
+rocq-core    9.2.0
+The Rocq Prover, version 9.2
+compiled with OCaml 5.4.1
+The CompCert CompCert AST generator, version 3.17
+opam root: 0

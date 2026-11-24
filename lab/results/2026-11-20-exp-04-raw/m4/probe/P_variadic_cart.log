@@ -1,0 +1,6 @@
+Running Probe_P_variadic_cart ...
+Probe_P_variadic_cart FAILED (see also "isabelle build_log -H Error Probe_P_variadic_cart")
+*** Outer lexical error: bad input (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_variadic_cart/P_variadic_cart.thy") at ...)
+*** At command "export_llvm" (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_variadic_cart/P_variadic_cart.thy")
+Unfinished session(s): Probe_P_variadic_cart
+0:00:16 elapsed time

@@ -1,0 +1,7 @@
+== base
+base: status=0 time=0s cache=48G free=69G
+== creusot
+creusot: status=1 time=537s cache=54G free=62G
+disk use: cache=32K exp=1.8G
+failed components: creusot
+SETUP-END m3 status=1

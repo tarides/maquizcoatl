@@ -1,0 +1,6 @@
+(library
+ (name vm)
+ (wrapped false)
+ (ocamlopt_flags
+  (:standard
+   (:include ../oflags.sexp))))

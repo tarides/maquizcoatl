@@ -1,0 +1,10 @@
+tool=pulse
+run_id=m1-pulse
+mode=normal
+jobs=4
+cpus=28-31
+build_seconds=6
+build_status=0
+link=ok
+caller_status=0
+caller_output=same

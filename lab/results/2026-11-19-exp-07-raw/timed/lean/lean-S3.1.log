@@ -1,0 +1,10 @@
+S3.lean:3:40: error: Tactic `decide` failed to reduce
+  @decide (tableOk = true) (instDecidableEqBool tableOk true)
+to `true` or `false`.
+
+After unfolding the instances `instDecidableEqBool`, `Bool.decEq`, and `Nat.decLe`, reduction got stuck at
+  Array.anyM.loop
+    (fun v => do
+      let __do_lift ← (fun x => pure ((fun a => okList a.toList) x)) v
+      pure !__do_lift)
+    Table.codeRanges Table.codeRanges.size ⋯ 0

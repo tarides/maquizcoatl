@@ -1,0 +1,6 @@
+== base
+base: status=0 time=0s cache=32K
+== smoke-why3
+smoke-why3: status=0 time=1s cache=32K
+disk use: cache=32K exp=52K
+SETUP-END m1 status=0

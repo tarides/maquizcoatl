@@ -1,0 +1,87 @@
+== harness sources (sha256)
+b713a624295b2fa776fa5458f1ffa4145a91c3eaff724022486ad25faacf44d6  caller/caller.c
+47d090a0603942ed4d292b0c520050e6b542024ee704cbbc20535f5474483d58  caller/expected.txt
+76d2d982ec26547b0e20ef5f31a7f8ea8e8acdddccf17b582e5a81cd3f8723e6  caller/reference.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+9871592930f511a8eed9133164c8ee5cc3370c95b9a60c9b3c663d4c24937ffd  proto.h
+9551f6bf83cf59d060ed811911c406f5873eeae615cdef0f2487dbaf4e548865  pulse/TRUSTED
+b0706ae787aea068fa16e8406018aca87ced19cdfb994c90b1db3ccbbb0514df  pulse/VU.fst
+4540e95089222dc8d6502da339cf4fc340bb5793adc0010e4ca036025885c7b9  pulse/abi_check.c
+51a508cb85eba6723badebfecf033116d3b612de39cfd574959ab4fbc18bd03a  pulse/build.sh
+8064bcd37c91116bb825fe0dc2f4aa5cd81df767fe5435449406993b90b9d6b6  pulse/layout.c
+cb7247c6ff64e5fb5483d3231ec069f7a656ed8b679000c5ca5f57b2b49beb85  pulse/negative-control.txt
+7c4f400859a670d73fa04e2d3b0b993f730406a54a58368e70caa49dd9f81612  pulse/probes/EtaD.fst
+fd09d5161add8b2c5efda6c06c884a43678cd78994cb8239f42e7aa308d36797  pulse/probes/eta-output.txt
+060e575dfdc739464a2ff75ba1eab19ff1244eaa851d6259f7ed8b74ff46f570  pulse/probes/eta.sh
+29568bd78d6552c895c0ad305c7d1dc397011b9b70449beeb65d143006c9e9b2  pulse/probes/eta_caller.c
+da3e757566851dae737ee3f304da8a3f97b07056a2f0397be19140be01d44a70  run.sh
+== build
+== versions (0 s)
+F* 2026.11.15
+commit=b92b0f87ce325a6ed0fd78086390fbaf2fc629a1
+KaRaMeL version: 3384ecaf654baca53b109c2e2665112eaa6d7f00
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 1) (1 s)
+209,213c209
+<   (* CLAMP-BEGIN *)
+<   if (I32.lt r b.min_enc_len) { b.min_enc_len }
+<   else if (I32.gt r b.max_enc_len) { b.max_enc_len }
+<   else { r }
+<   (* CLAMP-END *)
+---
+>   r
+proof escapes: none
+== 2. F* check (1 s)
+* Error 19 at VU.fst(209,2-209,3):
+  - Failed to prove pure property:
+      ‘I32.v s.min_enc_len <= I32.v r /\ I32.v r <= I32.v s.max_enc_len’
+  - Assertion failed
+  - The SMT solver could not prove the query.
+  - Failed to prove: FStar.Int32.v r <= FStar.Int32.v s.max_enc_len
+  - In context:
+      pm: PulseCore.FractionalPermission.perm
+      c: FStar.Ghost.erased FStar.UInt8.t
+      ps: PulseCore.FractionalPermission.perm
+      s: FStar.Ghost.erased VU.vu_enc_state
+      f:
+      q: Pulse.Lib.Reference.ref FStar.UInt8.t
+          -> fn
+               requires q |-> Pulse.Class.PtsTo.Base.Frac pm c
+               returns FStar.Int32.t
+               ensures q |-> Pulse.Class.PtsTo.Base.Frac pm c
+      p: Pulse.Lib.Reference.ref FStar.UInt8.t
+      st: Pulse.Lib.Reference.ref VU.vu_enc_state
+      1 <= FStar.Int32.v s.min_enc_len /\
+      FStar.Int32.v s.min_enc_len <= FStar.Int32.v s.max_enc_len
+      r: FStar.Int32.t
+      b: VU.vu_enc_state
+      Pulse.Lib.Core.rewrites_to_p b s
+      FStar.Int32.v s.min_enc_len <= FStar.Int32.v r
+
+* Error 19 at VU.fst(209,2-209,3):
+  - Failed to prove pure property:
+      ‘I32.v s.min_enc_len <= I32.v r /\ I32.v r <= I32.v s.max_enc_len’
+  - Assertion failed
+  - The SMT solver could not prove the query.
+  - Failed to prove: FStar.Int32.v s.min_enc_len <= FStar.Int32.v r
+  - In context:
+      pm: PulseCore.FractionalPermission.perm
+      c: FStar.Ghost.erased FStar.UInt8.t
+      ps: PulseCore.FractionalPermission.perm
+      s: FStar.Ghost.erased VU.vu_enc_state
+      f:
+      q: Pulse.Lib.Reference.ref FStar.UInt8.t
+          -> fn
+               requires q |-> Pulse.Class.PtsTo.Base.Frac pm c
+               returns FStar.Int32.t
+               ensures q |-> Pulse.Class.PtsTo.Base.Frac pm c
+      p: Pulse.Lib.Reference.ref FStar.UInt8.t
+      st: Pulse.Lib.Reference.ref VU.vu_enc_state
+      1 <= FStar.Int32.v s.min_enc_len /\
+      FStar.Int32.v s.min_enc_len <= FStar.Int32.v s.max_enc_len
+      r: FStar.Int32.t
+      b: VU.vu_enc_state
+      Pulse.Lib.Core.rewrites_to_p b s
+
+2 errors were reported (see above)
+proof rejected (F* error 19 only)

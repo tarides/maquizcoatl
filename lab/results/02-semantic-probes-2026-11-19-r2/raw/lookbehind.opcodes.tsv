@@ -1,0 +1,76 @@
+id	result	empty_check	lookbehind
+lb01o	M 3-6	-	mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb01r	E -122 invalid pattern in look-behind	-	-
+lb01p	E -122 invalid pattern in look-behind	-	-
+lb02o	M 4-6	-	mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb02r	E -122 invalid pattern in look-behind	-	-
+lb02p	E -122 invalid pattern in look-behind	-	-
+lb03o	M 3-4	-	move,mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb03r	E -122 invalid pattern in look-behind	-	-
+lb03p	E -122 invalid pattern in look-behind	-	-
+lb04o	M 2-3	-	mark,step-back-start,cut-to-mark
+lb04r	M 2-3	-	mark,step-back-start,cut-to-mark
+lb04p	E -122 invalid pattern in look-behind	-	-
+lb05o	E -122 invalid pattern in look-behind	-	-
+lb05r	E -122 invalid pattern in look-behind	-	-
+lb05p	E -122 invalid pattern in look-behind	-	-
+lb06o	E -122 invalid pattern in look-behind	-	-
+lb06r	E -122 invalid pattern in look-behind	-	-
+lb06p	E -122 invalid pattern in look-behind	-	-
+lb07o	M 0-1 | 1=0-1	-	mark,step-back-start,cut-to-mark
+lb07r	M 0-1 | 1=0-1	-	mark,step-back-start,cut-to-mark
+lb07p	M 0-1 | 1=0-1	-	mark,step-back-start,cut-to-mark
+lb08o	M 2-3 | 1=1-2	-	move,mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb08r	E -122 invalid pattern in look-behind	-	-
+lb08p	E -122 invalid pattern in look-behind	-	-
+lb09o	M 3-4	-	move,mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb09r	E -122 invalid pattern in look-behind	-	-
+lb09p	E -122 invalid pattern in look-behind	-	-
+lb10o	M 2-3	-	mark,move,step-back-start,step-back-next,check-position,pop-to-mark
+lb10r	E -122 invalid pattern in look-behind	-	-
+lb10p	E -122 invalid pattern in look-behind	-	-
+lb11o	M 1-2	-	move,mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb11r	E -122 invalid pattern in look-behind	-	-
+lb11p	E -122 invalid pattern in look-behind	-	-
+lb12o	M 3-4	-	move,mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb12r	E -122 invalid pattern in look-behind	-	-
+lb12p	E -122 invalid pattern in look-behind	-	-
+lb13o	N	-	mark,move,step-back-start,step-back-next,check-position,pop-to-mark
+lb13r	E -122 invalid pattern in look-behind	-	-
+lb13p	E -122 invalid pattern in look-behind	-	-
+lb14o	M 4-5	-	move,mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb14r	E -122 invalid pattern in look-behind	-	-
+lb14p	E -122 invalid pattern in look-behind	-	-
+lb15o	N	-	move,mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb15r	E -122 invalid pattern in look-behind	-	-
+lb15p	E -122 invalid pattern in look-behind	-	-
+lb16o	M 2-3	-	mark,step-back-start,cut-to-mark
+lb16r	M 2-3	-	mark,step-back-start,cut-to-mark
+lb16p	M 2-3	-	mark,step-back-start,cut-to-mark
+lb17o	M 3-4	-	mark,step-back-start,cut-to-mark
+lb17r	M 3-4	-	mark,step-back-start,cut-to-mark
+lb17p	M 3-4	-	mark,step-back-start,cut-to-mark
+lb18o	M 2-3	-	mark,step-back-start,cut-to-mark
+lb18r	M 2-3	-	mark,step-back-start,cut-to-mark
+lb18p	M 2-3	-	mark,step-back-start,cut-to-mark
+lb19o	M 1-2	-	mark,step-back-start,pop-to-mark
+lb19r	M 1-2	-	mark,step-back-start,pop-to-mark
+lb19p	M 1-2	-	mark,step-back-start,pop-to-mark
+lb20o	N	-	mark,move,step-back-start,step-back-next,check-position,pop-to-mark
+lb20r	E -122 invalid pattern in look-behind	-	-
+lb20p	E -122 invalid pattern in look-behind	-	-
+lb21o	M 2-3 | 1=1-2	-	mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb21r	E -122 invalid pattern in look-behind	-	-
+lb21p	E -122 invalid pattern in look-behind	-	-
+lb22o	M 2-3 | 1=2-2	-	mark,step-back-start,step-back-next,check-position,cut-to-mark
+lb22r	E -122 invalid pattern in look-behind	-	-
+lb22p	E -122 invalid pattern in look-behind	-	-
+lb23o	M 2-3	-	mark,step-back-start,cut-to-mark
+lb23r	M 2-3	-	mark,step-back-start,cut-to-mark
+lb23p	M 2-3	-	mark,step-back-start,cut-to-mark
+lb24o	E -122 invalid pattern in look-behind	-	-
+lb24r	E -122 invalid pattern in look-behind	-	-
+lb24p	E -122 invalid pattern in look-behind	-	-
+lb25o	N	-	mark,step-back-start,cut-to-mark
+lb25r	N	-	mark,step-back-start,cut-to-mark
+lb25p	N	-	mark,step-back-start,cut-to-mark

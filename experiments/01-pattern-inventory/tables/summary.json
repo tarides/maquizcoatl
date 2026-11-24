@@ -1,0 +1,254 @@
+{
+ "vscode_z_rewrite": {
+  "occurrences": 10,
+  "distinct_patterns": 7
+ },
+ "vscode": {
+  "triples": 5870,
+  "compiled": 5865,
+  "failed": 5,
+  "features": {
+   "captures": 3831,
+   "named_groups": 90,
+   "backreferences": 95,
+   "lookahead": 2425,
+   "lookbehind": 1419,
+   "atomic_groups": 245,
+   "possessive": 430,
+   "bounded_repetition": 372,
+   "subexp_calls": 120,
+   "absent": 2,
+   "conditionals": 2,
+   "callouts": 0,
+   "unicode_properties": 137,
+   "case_insensitive": 613,
+   "multichar_casefold": 320
+  },
+  "tiers": {
+   "linear": 5657,
+   "fuel": 208
+  },
+  "tiers_occ": {
+   "linear": 17022,
+   "fuel": 340
+  },
+  "syntax": {
+   "ONIGURUMA": 5870
+  },
+  "encoding": {
+   "UTF-8": 5870
+  }
+ },
+ "vscode-grammar-text": {
+  "triples": 5888,
+  "compiled": 5833,
+  "failed": 55,
+  "features": {
+   "captures": 3827,
+   "named_groups": 90,
+   "backreferences": 128,
+   "lookahead": 2408,
+   "lookbehind": 1416,
+   "atomic_groups": 241,
+   "possessive": 425,
+   "bounded_repetition": 370,
+   "subexp_calls": 120,
+   "absent": 2,
+   "conditionals": 2,
+   "callouts": 0,
+   "unicode_properties": 137,
+   "case_insensitive": 613,
+   "multichar_casefold": 320
+  },
+  "tiers": {
+   "linear": 5592,
+   "fuel": 241
+  },
+  "tiers_occ": {
+   "linear": 16689,
+   "fuel": 529
+  },
+  "syntax": {
+   "ONIGURUMA": 5888
+  },
+  "encoding": {
+   "UTF-8": 5888
+  }
+ },
+ "jq": {
+  "triples": 44,
+  "compiled": 44,
+  "failed": 0,
+  "features": {
+   "captures": 19,
+   "named_groups": 13,
+   "backreferences": 0,
+   "lookahead": 1,
+   "lookbehind": 0,
+   "atomic_groups": 0,
+   "possessive": 0,
+   "bounded_repetition": 0,
+   "subexp_calls": 0,
+   "absent": 0,
+   "conditionals": 0,
+   "callouts": 0,
+   "unicode_properties": 0,
+   "case_insensitive": 6,
+   "multichar_casefold": 0
+  },
+  "tiers": {
+   "linear": 44
+  },
+  "tiers_occ": {
+   "linear": 69
+  },
+  "syntax": {
+   "PERL_NG": 44
+  },
+  "encoding": {
+   "UTF-8": 44
+  }
+ },
+ "php": {
+  "triples": 73,
+  "compiled": 66,
+  "failed": 7,
+  "features": {
+   "captures": 21,
+   "named_groups": 8,
+   "backreferences": 3,
+   "lookahead": 0,
+   "lookbehind": 0,
+   "atomic_groups": 0,
+   "possessive": 0,
+   "bounded_repetition": 2,
+   "subexp_calls": 0,
+   "absent": 0,
+   "conditionals": 0,
+   "callouts": 0,
+   "unicode_properties": 0,
+   "case_insensitive": 7,
+   "multichar_casefold": 1
+  },
+  "tiers": {
+   "linear": 63,
+   "fuel": 3
+  },
+  "tiers_occ": {
+   "linear": 89,
+   "fuel": 4
+  },
+  "syntax": {
+   "RUBY": 72,
+   "POSIX_BASIC": 1
+  },
+  "encoding": {
+   "UTF-8": 69,
+   "UTF-32BE": 1,
+   "EUC-JP": 2,
+   "ISO-8859-1": 1
+  }
+ },
+ "vscode-dynamic-only": {
+  "triples": 381,
+  "compiled": 381
+ },
+ "jq-dynamic-only": {
+  "triples": 0,
+  "compiled": 0
+ },
+ "php-dynamic-only": {
+  "triples": 131,
+  "compiled": 131
+ },
+ "subsets": {
+  "S0: UTF-8; Oniguruma/Perl_NG/Ruby syntax; linear tier": {
+   "vscode": [
+    5657,
+    5865,
+    5870
+   ],
+   "jq": [
+    44,
+    44,
+    44
+   ],
+   "php": [
+    58,
+    66,
+    73
+   ],
+   "pooled": [
+    5759,
+    5975,
+    5987
+   ]
+  },
+  "S1: S0 without multi-character case folding": {
+   "vscode": [
+    5341,
+    5865,
+    5870
+   ],
+   "jq": [
+    44,
+    44,
+    44
+   ],
+   "php": [
+    57,
+    66,
+    73
+   ],
+   "pooled": [
+    5442,
+    5975,
+    5987
+   ]
+  },
+  "S2: S0 + backreferences": {
+   "vscode": [
+    5743,
+    5865,
+    5870
+   ],
+   "jq": [
+    44,
+    44,
+    44
+   ],
+   "php": [
+    61,
+    66,
+    73
+   ],
+   "pooled": [
+    5848,
+    5975,
+    5987
+   ]
+  },
+  "S3: S2 + subexpression calls, conditionals (everything except absent and callouts)": {
+   "vscode": [
+    5863,
+    5865,
+    5870
+   ],
+   "jq": [
+    44,
+    44,
+    44
+   ],
+   "php": [
+    61,
+    66,
+    73
+   ],
+   "pooled": [
+    5968,
+    5975,
+    5987
+   ]
+  }
+ }
+}

@@ -1,0 +1,27 @@
+step: refinedc
+start_utc: 2026-11-21T17:29:41Z
+cpu_set: 14-19,46-51
+nice: 10
+VU_JOBS: 12 (jobs for this step: 12)
+source refinedc: d057583986651a28047164581f05fbee3a83ed9d
+switch refinedc repositories: default coq-released iris-dev 
+[coq-lithium.dev.2026-10-29.0.d0575839] synchronised (git+https://gitlab.mpi-sws.org/iris/refinedc.git#d057583986651a28047164581f05fbee3a83ed9d)
+coq-lithium is now pinned to git+https://gitlab.mpi-sws.org/iris/refinedc.git#d057583986651a28047164581f05fbee3a83ed9d (version dev.2026-10-29.0.d0575839)
+[refinedc.dev.2026-10-29.0.d0575839] synchronised (git+https://gitlab.mpi-sws.org/iris/refinedc.git#d057583986651a28047164581f05fbee3a83ed9d)
+refinedc is now pinned to git+https://gitlab.mpi-sws.org/iris/refinedc.git#d057583986651a28047164581f05fbee3a83ed9d (version dev.2026-10-29.0.d0575839)
+
+The following actions will be performed:
+=== install 1 package
+  ∗ refinedc dev.2026-10-29.0.d0575839 (pinned)  with default configuration
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+⬇ retrieved refinedc.dev.2026-10-29.0.d0575839  (no changes)
+∗ installed refinedc.dev.2026-10-29.0.d0575839
+Done.
+# To update the current shell environment, run: eval $(opam env --root=<shared-cache>/opam)
+cerberus-lib.dev                         git  git+https://github.com/rems-project/cerberus.git#f11e6b335a687c1b77539f7e5695607d09dfc3ea  (at f11e6b335a687c1b77539f7e5695607d09dfc3ea)
+coq-lithium.dev.2026-10-29.0.d0575839    git  git+https://gitlab.mpi-sws.org/iris/refinedc.git#d057583986651a28047164581f05fbee3a83ed9d  (at d057583986651a28047164581f05fbee3a83ed9d)
+refinedc.dev.2026-10-29.0.d0575839       git  git+https://gitlab.mpi-sws.org/iris/refinedc.git#d057583986651a28047164581f05fbee3a83ed9d  (at d057583986651a28047164581f05fbee3a83ed9d)
+d057583-dirty
+cerberus-lib coq coq-core coq-lithium coq-record-update coq-stdlib coqide-server refinedc rocq-iris 
+refinedc: switch 2.9G src 5.8M

@@ -1,0 +1,5 @@
+match at 0  (UTF-8)
+0: (0-4)
+search fail (UTF-8)
+match at 12  (UTF-8)
+0: (12-17)

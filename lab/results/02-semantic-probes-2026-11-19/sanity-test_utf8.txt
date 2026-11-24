@@ -1,0 +1,4 @@
+# test_utf8 sanity runs (upstream f95747b)
+debug: RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
+asan:  RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
+asan sanitizer report lines (runtime error / AddressSanitizer / LeakSanitizer): 0

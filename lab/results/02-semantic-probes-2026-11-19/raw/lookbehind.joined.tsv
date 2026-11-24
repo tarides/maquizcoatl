@@ -1,0 +1,70 @@
+id	syntax	encoding	options	pattern	subject	onig	asan_same	sanitizer	js_pattern	js_flags	js_marks	js	js_nou	cmp
+lb01o	Oniguruma	UTF-8	NONE	(?<=az*)abc	azzabc	M 3-6	yes	clean	(?<=az*)abc	-	-	M 3-6	M 3-6	same
+lb01r	Ruby	UTF-8	NONE	(?<=az*)abc	azzabc	E -122 invalid pattern in look-behind	yes	clean	(?<=az*)abc	-	-	M 3-6	M 3-6	different
+lb01p	Perl	UTF-8	NONE	(?<=az*)abc	azzabc	E -122 invalid pattern in look-behind	yes	clean	(?<=az*)abc	-	-	M 3-6	M 3-6	different
+lb02o	Oniguruma	UTF-8	NONE	(?<=ta+|tb+|tc+|td+)zz	tbbbzz	M 4-6	yes	clean	(?<=ta+|tb+|tc+|td+)zz	-	-	M 4-6	M 4-6	same
+lb02r	Ruby	UTF-8	NONE	(?<=ta+|tb+|tc+|td+)zz	tbbbzz	E -122 invalid pattern in look-behind	yes	clean	(?<=ta+|tb+|tc+|td+)zz	-	-	M 4-6	M 4-6	different
+lb02p	Perl	UTF-8	NONE	(?<=ta+|tb+|tc+|td+)zz	tbbbzz	E -122 invalid pattern in look-behind	yes	clean	(?<=ta+|tb+|tc+|td+)zz	-	-	M 4-6	M 4-6	different
+lb03o	Oniguruma	UTF-8	NONE	(?<=a.*\w)z	abcz	M 3-4	yes	clean	(?<=a.*\w)z	-	-	M 3-4	M 3-4	same
+lb03r	Ruby	UTF-8	NONE	(?<=a.*\w)z	abcz	E -122 invalid pattern in look-behind	yes	clean	(?<=a.*\w)z	-	-	M 3-4	M 3-4	different
+lb03p	Perl	UTF-8	NONE	(?<=a.*\w)z	abcz	E -122 invalid pattern in look-behind	yes	clean	(?<=a.*\w)z	-	-	M 3-4	M 3-4	different
+lb04o	Oniguruma	UTF-8	NONE	(?<=a|bc)x	bcx	M 2-3	yes	clean	(?<=a|bc)x	-	-	M 2-3	M 2-3	same
+lb04r	Ruby	UTF-8	NONE	(?<=a|bc)x	bcx	M 2-3	yes	clean	(?<=a|bc)x	-	-	M 2-3	M 2-3	same
+lb04p	Perl	UTF-8	NONE	(?<=a|bc)x	bcx	E -122 invalid pattern in look-behind	yes	clean	(?<=a|bc)x	-	-	M 2-3	M 2-3	different
+lb05o	Oniguruma	UTF-8	NONE	(?<!(a))b	cb	E -122 invalid pattern in look-behind	yes	clean	(?<!(a))b	-	-	M 1-2 | 1=-	M 1-2 | 1=-	different
+lb05r	Ruby	UTF-8	NONE	(?<!(a))b	cb	E -122 invalid pattern in look-behind	yes	clean	(?<!(a))b	-	-	M 1-2 | 1=-	M 1-2 | 1=-	different
+lb05p	Perl	UTF-8	NONE	(?<!(a))b	cb	E -122 invalid pattern in look-behind	yes	clean	(?<!(a))b	-	-	M 1-2 | 1=-	M 1-2 | 1=-	different
+lb06o	Oniguruma	UTF-8	NONE	(?<!(a))b	ab	E -122 invalid pattern in look-behind	yes	clean	(?<!(a))b	-	-	N	N	different
+lb06r	Ruby	UTF-8	NONE	(?<!(a))b	ab	E -122 invalid pattern in look-behind	yes	clean	(?<!(a))b	-	-	N	N	different
+lb06p	Perl	UTF-8	NONE	(?<!(a))b	ab	E -122 invalid pattern in look-behind	yes	clean	(?<!(a))b	-	-	N	N	different
+lb07o	Oniguruma	UTF-8	NONE	(?i:(a)(?<=\1))	A	M 0-1 | 1=0-1	yes	clean	(?i:(a)(?<=\1))	-	js-flagged	M 0-1 | 1=0-1	M 0-1 | 1=0-1	same
+lb07r	Ruby	UTF-8	NONE	(?i:(a)(?<=\1))	A	M 0-1 | 1=0-1	yes	clean	(?i:(a)(?<=\1))	-	js-flagged	M 0-1 | 1=0-1	M 0-1 | 1=0-1	same
+lb07p	Perl	UTF-8	NONE	(?i:(a)(?<=\1))	A	M 0-1 | 1=0-1	yes	clean	(?i:(a)(?<=\1))	-	js-flagged	M 0-1 | 1=0-1	M 0-1 | 1=0-1	same
+lb08o	Oniguruma	UTF-8	NONE	(?<=(a+))b	aab	M 2-3 | 1=1-2	yes	clean	(?<=(a+))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2	different
+lb08r	Ruby	UTF-8	NONE	(?<=(a+))b	aab	E -122 invalid pattern in look-behind	yes	clean	(?<=(a+))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2	different
+lb08p	Perl	UTF-8	NONE	(?<=(a+))b	aab	E -122 invalid pattern in look-behind	yes	clean	(?<=(a+))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2	different
+lb09o	Oniguruma	UTF-8	NONE	(?<=a+b)x	aabx	M 3-4	yes	clean	(?<=a+b)x	-	-	M 3-4	M 3-4	same
+lb09r	Ruby	UTF-8	NONE	(?<=a+b)x	aabx	E -122 invalid pattern in look-behind	yes	clean	(?<=a+b)x	-	-	M 3-4	M 3-4	different
+lb09p	Perl	UTF-8	NONE	(?<=a+b)x	aabx	E -122 invalid pattern in look-behind	yes	clean	(?<=a+b)x	-	-	M 3-4	M 3-4	different
+lb10o	Oniguruma	UTF-8	NONE	(?<!a+b)x	cbx	M 2-3	yes	clean	(?<!a+b)x	-	-	M 2-3	M 2-3	same
+lb10r	Ruby	UTF-8	NONE	(?<!a+b)x	cbx	E -122 invalid pattern in look-behind	yes	clean	(?<!a+b)x	-	-	M 2-3	M 2-3	different
+lb10p	Perl	UTF-8	NONE	(?<!a+b)x	cbx	E -122 invalid pattern in look-behind	yes	clean	(?<!a+b)x	-	-	M 2-3	M 2-3	different
+lb11o	Oniguruma	UTF-8	NONE	(?<=a*b)x	bx	M 1-2	yes	clean	(?<=a*b)x	-	-	M 1-2	M 1-2	same
+lb11r	Ruby	UTF-8	NONE	(?<=a*b)x	bx	E -122 invalid pattern in look-behind	yes	clean	(?<=a*b)x	-	-	M 1-2	M 1-2	different
+lb11p	Perl	UTF-8	NONE	(?<=a*b)x	bx	E -122 invalid pattern in look-behind	yes	clean	(?<=a*b)x	-	-	M 1-2	M 1-2	different
+lb12o	Oniguruma	UTF-8	NONE	(?<=ba+)x	baax	M 3-4	yes	clean	(?<=ba+)x	-	-	M 3-4	M 3-4	same
+lb12r	Ruby	UTF-8	NONE	(?<=ba+)x	baax	E -122 invalid pattern in look-behind	yes	clean	(?<=ba+)x	-	-	M 3-4	M 3-4	different
+lb12p	Perl	UTF-8	NONE	(?<=ba+)x	baax	E -122 invalid pattern in look-behind	yes	clean	(?<=ba+)x	-	-	M 3-4	M 3-4	different
+lb13o	Oniguruma	UTF-8	NONE	(?<!ba+)x	bax	N	yes	clean	(?<!ba+)x	-	-	N	N	same
+lb13r	Ruby	UTF-8	NONE	(?<!ba+)x	bax	E -122 invalid pattern in look-behind	yes	clean	(?<!ba+)x	-	-	N	N	different
+lb13p	Perl	UTF-8	NONE	(?<!ba+)x	bax	E -122 invalid pattern in look-behind	yes	clean	(?<!ba+)x	-	-	N	N	different
+lb14o	Oniguruma	UTF-8	NONE	(?<=a+b*c)x	abbcx	M 4-5	yes	clean	(?<=a+b*c)x	-	-	M 4-5	M 4-5	same
+lb14r	Ruby	UTF-8	NONE	(?<=a+b*c)x	abbcx	E -122 invalid pattern in look-behind	yes	clean	(?<=a+b*c)x	-	-	M 4-5	M 4-5	different
+lb14p	Perl	UTF-8	NONE	(?<=a+b*c)x	abbcx	E -122 invalid pattern in look-behind	yes	clean	(?<=a+b*c)x	-	-	M 4-5	M 4-5	different
+lb15o	Oniguruma	UTF-8	NONE	y(?<=a+b)	aaby	N	yes	clean	y(?<=a+b)	-	-	N	N	same
+lb15r	Ruby	UTF-8	NONE	y(?<=a+b)	aaby	E -122 invalid pattern in look-behind	yes	clean	y(?<=a+b)	-	-	N	N	different
+lb15p	Perl	UTF-8	NONE	y(?<=a+b)	aaby	E -122 invalid pattern in look-behind	yes	clean	y(?<=a+b)	-	-	N	N	different
+lb16o	Oniguruma	UTF-8	NONE	(?<=a+)x	aax	M 2-3	yes	clean	(?<=a+)x	-	-	M 2-3	M 2-3	same
+lb16r	Ruby	UTF-8	NONE	(?<=a+)x	aax	M 2-3	yes	clean	(?<=a+)x	-	-	M 2-3	M 2-3	same
+lb16p	Perl	UTF-8	NONE	(?<=a+)x	aax	M 2-3	yes	clean	(?<=a+)x	-	-	M 2-3	M 2-3	same
+lb17o	Oniguruma	UTF-8	NONE	(?<=a+a)x	aaax	M 3-4	yes	clean	(?<=a+a)x	-	-	M 3-4	M 3-4	same
+lb17r	Ruby	UTF-8	NONE	(?<=a+a)x	aaax	M 3-4	yes	clean	(?<=a+a)x	-	-	M 3-4	M 3-4	same
+lb17p	Perl	UTF-8	NONE	(?<=a+a)x	aaax	M 3-4	yes	clean	(?<=a+a)x	-	-	M 3-4	M 3-4	same
+lb18o	Oniguruma	UTF-8	NONE	(?<=\w+b)x	abx	M 2-3	yes	clean	(?<=\w+b)x	-	-	M 2-3	M 2-3	same
+lb18r	Ruby	UTF-8	NONE	(?<=\w+b)x	abx	M 2-3	yes	clean	(?<=\w+b)x	-	-	M 2-3	M 2-3	same
+lb18p	Perl	UTF-8	NONE	(?<=\w+b)x	abx	M 2-3	yes	clean	(?<=\w+b)x	-	-	M 2-3	M 2-3	same
+lb19o	Oniguruma	UTF-8	NONE	(?<!a+)x	bx	M 1-2	yes	clean	(?<!a+)x	-	-	M 1-2	M 1-2	same
+lb19r	Ruby	UTF-8	NONE	(?<!a+)x	bx	M 1-2	yes	clean	(?<!a+)x	-	-	M 1-2	M 1-2	same
+lb19p	Perl	UTF-8	NONE	(?<!a+)x	bx	M 1-2	yes	clean	(?<!a+)x	-	-	M 1-2	M 1-2	same
+lb20o	Oniguruma	UTF-8	NONE	(?<!a+b)x	aabx	N	yes	clean	(?<!a+b)x	-	-	N	N	same
+lb20r	Ruby	UTF-8	NONE	(?<!a+b)x	aabx	E -122 invalid pattern in look-behind	yes	clean	(?<!a+b)x	-	-	N	N	different
+lb20p	Perl	UTF-8	NONE	(?<!a+b)x	aabx	E -122 invalid pattern in look-behind	yes	clean	(?<!a+b)x	-	-	N	N	different
+lb21o	Oniguruma	UTF-8	NONE	(?<=(a|aa))b	aab	M 2-3 | 1=1-2	yes	clean	(?<=(a|aa))b	-	-	M 2-3 | 1=1-2	M 2-3 | 1=1-2	same
+lb21r	Ruby	UTF-8	NONE	(?<=(a|aa))b	aab	E -122 invalid pattern in look-behind	yes	clean	(?<=(a|aa))b	-	-	M 2-3 | 1=1-2	M 2-3 | 1=1-2	different
+lb21p	Perl	UTF-8	NONE	(?<=(a|aa))b	aab	E -122 invalid pattern in look-behind	yes	clean	(?<=(a|aa))b	-	-	M 2-3 | 1=1-2	M 2-3 | 1=1-2	different
+lb22o	Oniguruma	UTF-8	NONE	(?<=(a*))b	aab	M 2-3 | 1=2-2	yes	clean	(?<=(a*))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2	different
+lb22r	Ruby	UTF-8	NONE	(?<=(a*))b	aab	E -122 invalid pattern in look-behind	yes	clean	(?<=(a*))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2	different
+lb22p	Perl	UTF-8	NONE	(?<=(a*))b	aab	E -122 invalid pattern in look-behind	yes	clean	(?<=(a*))b	-	-	M 2-3 | 1=0-2	M 2-3 | 1=0-2	different
+lb23o	Oniguruma	UTF-8	NONE	(?<=a+|b)x	aax	M 2-3	yes	clean	(?<=a+|b)x	-	-	M 2-3	M 2-3	same
+lb23r	Ruby	UTF-8	NONE	(?<=a+|b)x	aax	M 2-3	yes	clean	(?<=a+|b)x	-	-	M 2-3	M 2-3	same
+lb23p	Perl	UTF-8	NONE	(?<=a+|b)x	aax	M 2-3	yes	clean	(?<=a+|b)x	-	-	M 2-3	M 2-3	same

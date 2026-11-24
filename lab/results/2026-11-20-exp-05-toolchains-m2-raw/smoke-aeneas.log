@@ -1,0 +1,13 @@
+[Info ] Imported: smoke.llbc
+Applied prepasses:  [--------------------------------------------------]  0/24 ⠋Applied prepasses:  [##------------------------------------------------]  1/24 ⠋Applied prepasses:  [###########################################-------] 21/24 ⠙Applied prepasses:  [##################################################] 24/24 ✔️
+Translated globals:  [---------------------------------------------------] 0/0 ⠋Translated globals:  [---------------------------------------------------] 0/0 ✔️
+Translated opaque functions:  [------------------------------------------] 0/0 ⠋Translated opaque functions:  [------------------------------------------] 0/0 ✔️
+Translated transparent functions:  [-------------------------------------] 0/1 ⠋Translated transparent functions:  [#####################################] 1/1 ⠙Translated transparent functions:  [#####################################] 1/1 ✔️
+Translated trait declarations:  [----------------------------------------] 0/5 ⠋Translated trait declarations:  [----------------------------------------] 0/5 ✔️
+Translated trait impls:  [-----------------------------------------------] 0/8 ⠋Translated trait impls:  [-----------------------------------------------] 0/8 ✔️
+Post-processed translated opaque functions:  [---------------------------] 0/0 ⠋Post-processed translated opaque functions:  [---------------------------] 0/0 ✔️
+Post-processed translated transparent functions:  [----------------------] 0/1 ⠋Post-processed translated transparent functions:  [######################] 1/1 ⠋Post-processed translated transparent functions:  [######################] 1/1 ✔️
+[Info ] Creating missing directory: out
+[Info ] Generated: out/Smoke.lean
+[Info ] Total execution time: 0.435758 seconds
+aeneas smoke: ok

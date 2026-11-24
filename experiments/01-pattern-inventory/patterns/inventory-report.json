@@ -1,0 +1,56 @@
+{
+ "occurrences": {
+  "vscode": {
+   "literal": 17034,
+   "host-substituted": 333
+  },
+  "jq": {
+   "literal": 69
+  },
+  "php": {
+   "non-literal": 44,
+   "literal": 100
+  }
+ },
+ "sources": {
+  "jq": {
+   "distinct_triples": 44,
+   "occurrences_compiled": 69,
+   "compile_status": {
+    "ok": 44
+   },
+   "stock_vs_instrumented_mismatches": []
+  },
+  "php": {
+   "distinct_triples": 73,
+   "occurrences_compiled": 100,
+   "compile_status": {
+    "ok": 66,
+    "error": 7
+   },
+   "stock_vs_instrumented_mismatches": []
+  },
+  "vscode": {
+   "distinct_triples": 5870,
+   "occurrences_compiled": 17367,
+   "compile_status": {
+    "ok": 5865,
+    "error": 5
+   },
+   "stock_vs_instrumented_mismatches": []
+  },
+  "vscode-grammar-text": {
+   "distinct_triples": 5888,
+   "occurrences_compiled": 17367,
+   "compile_status": {
+    "ok": 5833,
+    "error": 55
+   },
+   "stock_vs_instrumented_mismatches": []
+  }
+ },
+ "vscode_z_rewrite": {
+  "occurrences": 10,
+  "distinct_patterns": 7
+ }
+}

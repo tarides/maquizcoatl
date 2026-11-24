@@ -1,0 +1,20 @@
+== base
+base: status=0 time=0s cache=37G
+== aeneas
+aeneas: status=0 time=1s cache=37G
+== aeneas-lean
+aeneas-lean: status=0 time=9s cache=37G
+== vst
+vst: status=0 time=3s cache=37G
+== isabelle-llvm
+isabelle-llvm: status=0 time=18s cache=37G
+== llvm
+llvm: status=0 time=0s cache=37G
+== smoke-aeneas
+smoke-aeneas: status=0 time=3s cache=37G
+== smoke-vst
+smoke-vst: status=0 time=3s cache=37G
+== smoke-isabelle-llvm
+smoke-isabelle-llvm: status=0 time=21s cache=37G
+disk use: cache=37G exp=123M
+SETUP-END m2 status=0

@@ -1,0 +1,571 @@
+short ('c', 'jq') rc=0 wall=0.50 123.489
+short ('c', 'php') rc=0 wall=0.51 6965.617
+short ('c', 'vscode') rc=0 wall=0.67 77.685
+short ('c', 'longphp') rc=0 wall=60.50 14354.158
+short ('stubs', 'jq') rc=0 wall=0.51 125.651
+short ('stubs', 'php') rc=0 wall=0.51 6545.165
+short ('stubs', 'vscode') rc=0 wall=0.67 86.434
+short ('stubs', 'longphp') rc=0 wall=0.65 15429.747
+short ('ctypes', 'jq') rc=0 wall=0.51 749.597
+short ('ctypes', 'php') rc=0 wall=0.51 7360.249
+short ('ctypes', 'vscode') rc=0 wall=0.82 689.357
+short ('ctypes', 'longphp') rc=0 wall=0.64 16879.709
+short ('vm', 'jq') rc=0 wall=0.51 84.579
+short ('vm', 'php') rc=0 wall=0.51 13170.358
+short ('vm', 'vscode') rc=0 wall=0.78 647.119
+short ('vm', 'longphp') rc=0 wall=0.64 39565.532
+short ('vm-flambda', 'jq') rc=0 wall=0.51 73.879
+short ('vm-flambda', 'php') rc=0 wall=0.51 10180.484
+short ('vm-flambda', 'vscode') rc=0 wall=0.80 557.171
+short ('vm-flambda', 'longphp') rc=0 wall=0.62 27043.383
+short ('re', 'jq') rc=0 wall=0.51 104.631
+short ('re', 'php') rc=0 wall=0.51 116.361
+short ('re', 'vscode') rc=0 wall=0.69 124.394
+short ('re', 'longphp') rc=0 wall=0.65 8043.524
+large ('c', 'log', '1m', 92, 1) rc=0 wall=0.01 666228882.0 m=0
+large ('stubs', 'log', '1m', 92, 1) rc=0 wall=0.01 663487385.0 m=0
+large ('ctypes', 'log', '1m', 92, 1) rc=0 wall=0.01 644018129.0 m=0
+large ('vm', 'log', '1m', 92, 1) rc=0 wall=0.04 68992206.6 m=0
+large ('vm-flambda', 'log', '1m', 92, 1) rc=0 wall=0.03 74020837.9 m=0
+large ('re', 'log', '1m', 92, 1) rc=0 wall=0.01 340533514.9 m=0
+large ('c', 'log', '16m', 92, 1) rc=0 wall=0.07 664755616.5 m=1
+large ('stubs', 'log', '16m', 92, 1) rc=0 wall=0.07 664588586.9 m=1
+large ('ctypes', 'log', '16m', 92, 1) rc=0 wall=0.07 662604497.9 m=1
+large ('vm', 'log', '16m', 92, 1) rc=0 wall=0.51 68480835.9 m=1
+large ('vm-flambda', 'log', '16m', 92, 1) rc=0 wall=0.47 74223494.5 m=1
+large ('re', 'log', '16m', 92, 1) rc=0 wall=0.12 335865328.2 m=1
+large ('c', 'log', '1m', 93, 2) rc=0 wall=0.01 663841078.2 m=0
+large ('stubs', 'log', '1m', 93, 2) rc=0 wall=0.01 661445292.9 m=0
+large ('ctypes', 'log', '1m', 93, 2) rc=0 wall=0.01 665233462.0 m=0
+large ('vm', 'log', '1m', 93, 2) rc=0 wall=0.04 69090733.9 m=0
+large ('vm-flambda', 'log', '1m', 93, 2) rc=0 wall=0.03 74007698.1 m=0
+large ('re', 'log', '1m', 93, 2) rc=0 wall=0.01 348994488.2 m=0
+large ('c', 'log', '16m', 93, 2) rc=0 wall=0.07 664335187.8 m=10
+large ('stubs', 'log', '16m', 93, 2) rc=0 wall=0.07 664090656.4 m=10
+large ('ctypes', 'log', '16m', 93, 2) rc=0 wall=0.07 662666132.4 m=10
+large ('vm', 'log', '16m', 93, 2) rc=0 wall=0.51 68358880.5 m=10
+large ('vm-flambda', 'log', '16m', 93, 2) rc=0 wall=0.47 74306169.5 m=10
+large ('re', 'log', '16m', 93, 2) rc=0 wall=0.12 341082765.6 m=10
+large ('c', 'log', '1m', 109, 3) rc=0 wall=0.01 517967241.4 m=3127
+large ('stubs', 'log', '1m', 109, 3) rc=0 wall=0.01 490850617.1 m=3127
+large ('ctypes', 'log', '1m', 109, 3) rc=0 wall=0.02 237717413.3 m=3127
+large ('vm', 'log', '1m', 109, 3) rc=0 wall=0.04 66789629.6 m=3127
+large ('vm-flambda', 'log', '1m', 109, 3) rc=0 wall=0.04 72724593.0 m=3127
+large ('re', 'log', '1m', 109, 3) rc=0 wall=0.01 264019670.5 m=3127
+large ('c', 'log', '16m', 109, 3) rc=0 wall=0.08 514559861.4 m=50809
+large ('stubs', 'log', '16m', 109, 3) rc=0 wall=0.09 490296356.4 m=50809
+large ('ctypes', 'log', '16m', 109, 3) rc=0 wall=0.16 241566689.0 m=50809
+large ('vm', 'log', '16m', 109, 3) rc=0 wall=0.52 66651857.9 m=50809
+large ('vm-flambda', 'log', '16m', 109, 3) rc=0 wall=0.48 73577309.7 m=50809
+large ('re', 'log', '16m', 109, 3) rc=0 wall=0.13 299542978.0 m=50809
+large ('c', 'log', '1m', 95, 4) rc=0 wall=0.01 658199997.4 m=0
+large ('stubs', 'log', '1m', 95, 4) rc=0 wall=0.01 661424013.4 m=0
+large ('ctypes', 'log', '1m', 95, 4) rc=0 wall=0.01 660872892.0 m=0
+large ('vm', 'log', '1m', 95, 4) rc=0 wall=0.04 69031296.6 m=0
+large ('vm-flambda', 'log', '1m', 95, 4) rc=0 wall=0.03 73964904.8 m=0
+large ('re', 'log', '1m', 95, 4) rc=0 wall=0.01 354416358.7 m=0
+large ('c', 'log', '16m', 95, 4) rc=0 wall=0.07 664422956.9 m=0
+large ('stubs', 'log', '16m', 95, 4) rc=0 wall=0.07 664580399.5 m=0
+large ('ctypes', 'log', '16m', 95, 4) rc=0 wall=0.07 663541689.1 m=0
+large ('vm', 'log', '16m', 95, 4) rc=0 wall=0.50 69297397.0 m=0
+large ('vm-flambda', 'log', '16m', 95, 4) rc=0 wall=0.47 74051417.1 m=0
+large ('re', 'log', '16m', 95, 4) rc=0 wall=0.12 340907965.0 m=0
+large ('c', 'log', '1m', 110, 5) rc=0 wall=0.01 663736023.1 m=0
+large ('stubs', 'log', '1m', 110, 5) rc=0 wall=0.01 665754259.6 m=0
+large ('ctypes', 'log', '1m', 110, 5) rc=0 wall=0.01 665280313.1 m=0
+large ('vm', 'log', '1m', 110, 5) rc=0 wall=0.04 68961196.9 m=0
+large ('vm-flambda', 'log', '1m', 110, 5) rc=0 wall=0.03 74213126.7 m=0
+large ('re', 'log', '1m', 110, 5) rc=0 wall=0.01 343357124.7 m=0
+large ('c', 'log', '16m', 110, 5) rc=0 wall=0.07 663742905.8 m=59
+large ('stubs', 'log', '16m', 110, 5) rc=0 wall=0.07 664140447.4 m=59
+large ('ctypes', 'log', '16m', 110, 5) rc=0 wall=0.07 659606842.7 m=59
+large ('vm', 'log', '16m', 110, 5) rc=0 wall=0.51 68412420.7 m=59
+large ('vm-flambda', 'log', '16m', 110, 5) rc=0 wall=0.47 74207342.5 m=59
+large ('re', 'log', '16m', 110, 5) rc=0 wall=0.12 344289194.3 m=59
+large ('c', 'log', '1m', 106, 6) rc=0 wall=0.01 992280612.1 m=0
+large ('stubs', 'log', '1m', 106, 6) rc=0 wall=0.01 997159350.3 m=0
+large ('ctypes', 'log', '1m', 106, 6) rc=0 wall=0.01 995660443.5 m=0
+large ('vm', 'log', '1m', 106, 6) rc=0 wall=0.04 57973220.5 m=0
+large ('vm-flambda', 'log', '1m', 106, 6) rc=0 wall=0.04 61948953.8 m=0
+large ('re', 'log', '1m', 106, 6) rc=0 wall=0.01 349801801.9 m=0
+large ('c', 'log', '16m', 106, 6) rc=0 wall=0.05 992008855.6 m=0
+large ('stubs', 'log', '16m', 106, 6) rc=0 wall=0.05 995073939.8 m=0
+large ('ctypes', 'log', '16m', 106, 6) rc=0 wall=0.05 995359085.0 m=0
+large ('vm', 'log', '16m', 106, 6) rc=0 wall=0.60 58173783.2 m=0
+large ('vm-flambda', 'log', '16m', 106, 6) rc=0 wall=0.55 62846197.6 m=0
+large ('re', 'log', '16m', 106, 6) rc=0 wall=0.12 341323340.9 m=0
+large ('c', 'log', '1m', 105, 7) rc=0 wall=0.01 993816447.8 m=0
+large ('stubs', 'log', '1m', 105, 7) rc=0 wall=0.01 988858364.3 m=0
+large ('ctypes', 'log', '1m', 105, 7) rc=0 wall=0.01 992243051.7 m=0
+large ('vm', 'log', '1m', 105, 7) rc=0 wall=0.04 57997158.1 m=0
+large ('vm-flambda', 'log', '1m', 105, 7) rc=0 wall=0.04 62251587.8 m=0
+large ('re', 'log', '1m', 105, 7) rc=0 wall=0.01 348845635.1 m=0
+large ('c', 'log', '16m', 105, 7) rc=0 wall=0.05 993266455.9 m=0
+large ('stubs', 'log', '16m', 105, 7) rc=0 wall=0.05 994256132.0 m=0
+large ('ctypes', 'log', '16m', 105, 7) rc=0 wall=0.05 994175238.1 m=0
+large ('vm', 'log', '16m', 105, 7) rc=0 wall=0.59 58291663.0 m=0
+large ('vm-flambda', 'log', '16m', 105, 7) rc=0 wall=0.56 62288426.5 m=0
+large ('re', 'log', '16m', 105, 7) rc=0 wall=0.12 345085347.4 m=0
+large ('c', 'log', '1m', 96, 8) rc=0 wall=0.01 986545393.3 m=0
+large ('stubs', 'log', '1m', 96, 8) rc=0 wall=0.01 987020872.2 m=0
+large ('ctypes', 'log', '1m', 96, 8) rc=0 wall=0.01 990721432.3 m=0
+large ('vm', 'log', '1m', 96, 8) rc=0 wall=0.04 57151959.7 m=0
+large ('vm-flambda', 'log', '1m', 96, 8) rc=0 wall=0.04 61914206.6 m=0
+large ('re', 'log', '1m', 96, 8) rc=0 wall=0.01 350142540.4 m=0
+large ('c', 'log', '16m', 96, 8) rc=0 wall=0.05 990102967.4 m=0
+large ('stubs', 'log', '16m', 96, 8) rc=0 wall=0.05 991233614.6 m=0
+large ('ctypes', 'log', '16m', 96, 8) rc=0 wall=0.05 989981211.9 m=0
+large ('vm', 'log', '16m', 96, 8) rc=0 wall=0.60 57409643.7 m=0
+large ('vm-flambda', 'log', '16m', 96, 8) rc=0 wall=0.57 61309729.6 m=0
+large ('re', 'log', '16m', 96, 8) rc=0 wall=0.12 346195201.9 m=0
+large ('c', 'log', '1m', 111, 9) rc=0 wall=0.01 515982910.4 m=3134
+large ('stubs', 'log', '1m', 111, 9) rc=0 wall=0.01 488039339.8 m=3134
+large ('ctypes', 'log', '1m', 111, 9) rc=0 wall=0.02 238602020.5 m=3134
+large ('vm', 'log', '1m', 111, 9) rc=0 wall=0.04 66853936.8 m=3134
+large ('vm-flambda', 'log', '1m', 111, 9) rc=0 wall=0.03 73488688.0 m=3134
+large ('re', 'log', '1m', 111, 9) rc=0 wall=0.01 257784933.7 m=3134
+large ('c', 'log', '16m', 111, 9) rc=0 wall=0.08 516122981.8 m=51117
+large ('stubs', 'log', '16m', 111, 9) rc=0 wall=0.09 489618367.2 m=51117
+large ('ctypes', 'log', '16m', 111, 9) rc=0 wall=0.16 236630431.7 m=51117
+large ('vm', 'log', '16m', 111, 9) rc=0 wall=0.52 67099170.0 m=51117
+large ('vm-flambda', 'log', '16m', 111, 9) rc=0 wall=0.47 74113105.2 m=51117
+large ('re', 'log', '16m', 111, 9) rc=0 wall=0.13 302456450.6 m=51117
+large ('c', 'log', '1m', 97, 10) rc=0 wall=0.01 1206075392.0 m=0
+large ('stubs', 'log', '1m', 97, 10) rc=0 wall=0.01 1201697796.0 m=0
+large ('ctypes', 'log', '1m', 97, 10) rc=0 wall=0.01 1207312734.2 m=0
+large ('vm', 'log', '1m', 97, 10) rc=0 wall=0.04 57017961.5 m=0
+large ('vm-flambda', 'log', '1m', 97, 10) rc=0 wall=0.04 60934048.6 m=0
+large ('re', 'log', '1m', 97, 10) rc=0 wall=0.01 319659102.0 m=0
+large ('c', 'log', '16m', 97, 10) rc=0 wall=0.04 1224545948.5 m=0
+large ('stubs', 'log', '16m', 97, 10) rc=0 wall=0.05 1226452051.3 m=0
+large ('ctypes', 'log', '16m', 97, 10) rc=0 wall=0.05 1226070320.3 m=0
+large ('vm', 'log', '16m', 97, 10) rc=0 wall=0.61 56989468.4 m=0
+large ('vm-flambda', 'log', '16m', 97, 10) rc=0 wall=0.57 60926436.9 m=0
+large ('re', 'log', '16m', 97, 10) rc=0 wall=0.12 341541469.3 m=0
+large ('c', 'log', '1m', 107, 11) rc=0 wall=0.01 251628393.6 m=828
+large ('stubs', 'log', '1m', 107, 11) rc=0 wall=0.01 252044719.0 m=828
+large ('ctypes', 'log', '1m', 107, 11) rc=0 wall=0.02 199337312.2 m=828
+large ('vm', 'log', '1m', 107, 11) rc=0 wall=0.13 17558445.2 m=828
+large ('vm-flambda', 'log', '1m', 107, 11) rc=0 wall=0.10 22510542.3 m=828
+large ('re', 'log', '1m', 107, 11) rc=0 wall=0.01 313965970.6 m=828
+large ('c', 'log', '16m', 107, 11) rc=0 wall=0.15 252698143.8 m=7543
+large ('stubs', 'log', '16m', 107, 11) rc=0 wall=0.15 251855903.6 m=7543
+large ('ctypes', 'log', '16m', 107, 11) rc=0 wall=0.17 231554696.4 m=7543
+large ('vm', 'log', '16m', 107, 11) rc=0 wall=1.95 17352102.7 m=7543
+large ('vm-flambda', 'log', '16m', 107, 11) rc=0 wall=1.50 22734157.1 m=7543
+large ('re', 'log', '16m', 107, 11) rc=0 wall=0.12 326306357.1 m=7543
+large ('c', 'log', '1m', 94, 12) rc=0 wall=0.01 991303090.0 m=0
+large ('stubs', 'log', '1m', 94, 12) rc=0 wall=0.01 976255894.8 m=0
+large ('ctypes', 'log', '1m', 94, 12) rc=0 wall=0.01 995765399.9 m=0
+large ('vm', 'log', '1m', 94, 12) rc=0 wall=0.04 58313334.5 m=0
+large ('vm-flambda', 'log', '1m', 94, 12) rc=0 wall=0.04 62086381.4 m=0
+large ('re', 'log', '1m', 94, 12) rc=0 wall=0.01 342182701.2 m=0
+large ('c', 'log', '16m', 94, 12) rc=0 wall=0.05 995739710.2 m=0
+large ('stubs', 'log', '16m', 94, 12) rc=0 wall=0.05 994484096.1 m=0
+large ('ctypes', 'log', '16m', 94, 12) rc=0 wall=0.05 996462653.2 m=0
+large ('vm', 'log', '16m', 94, 12) rc=0 wall=0.62 55858447.6 m=0
+large ('vm-flambda', 'log', '16m', 94, 12) rc=0 wall=0.56 62320583.0 m=0
+large ('re', 'log', '16m', 94, 12) rc=0 wall=0.12 337825246.5 m=0
+large ('c', 'log', '1m', 104, 13) rc=0 wall=0.01 264288989.2 m=17347
+large ('stubs', 'log', '1m', 104, 13) rc=0 wall=0.01 231919989.3 m=17347
+large ('ctypes', 'log', '1m', 104, 13) rc=0 wall=0.04 62241329.7 m=17347
+large ('vm', 'log', '1m', 104, 13) rc=0 wall=0.04 64243775.3 m=17347
+large ('vm-flambda', 'log', '1m', 104, 13) rc=0 wall=0.04 70235914.2 m=17347
+large ('re', 'log', '1m', 104, 13) rc=0 wall=0.02 200531789.4 m=17347
+large ('c', 'log', '16m', 104, 13) rc=0 wall=0.15 246980217.4 m=313527
+large ('stubs', 'log', '16m', 104, 13) rc=0 wall=0.18 215447894.9 m=313527
+large ('ctypes', 'log', '16m', 104, 13) rc=0 wall=0.65 52697427.0 m=313527
+large ('vm', 'log', '16m', 104, 13) rc=0 wall=0.54 64150217.9 m=313527
+large ('vm-flambda', 'log', '16m', 104, 13) rc=0 wall=0.50 70256715.2 m=313527
+large ('re', 'log', '16m', 104, 13) rc=0 wall=0.19 192194325.5 m=313527
+large ('c', 'log', '1m', 108, 14) rc=0 wall=0.06 34965983.9 m=12696
+large ('stubs', 'log', '1m', 108, 14) rc=0 wall=0.07 34579372.9 m=12696
+large ('ctypes', 'log', '1m', 108, 14) rc=0 wall=0.09 26581622.0 m=12696
+large ('vm', 'log', '1m', 108, 14) rc=0 wall=0.11 20476035.6 m=12696
+large ('vm-flambda', 'log', '1m', 108, 14) rc=0 wall=0.10 23318886.8 m=12696
+large ('re', 'log', '1m', 108, 14) rc=0 wall=0.02 226296241.7 m=12696
+large ('c', 'log', '16m', 108, 14) rc=0 wall=0.97 35181214.3 m=203043
+large ('stubs', 'log', '16m', 108, 14) rc=0 wall=0.99 34598791.2 m=203043
+large ('ctypes', 'log', '16m', 108, 14) rc=0 wall=1.28 26578705.2 m=203043
+large ('vm', 'log', '16m', 108, 14) rc=0 wall=1.67 20455588.4 m=203043
+large ('vm-flambda', 'log', '16m', 108, 14) rc=0 wall=1.46 23350955.2 m=203043
+large ('re', 'log', '16m', 108, 14) rc=0 wall=0.17 228386348.9 m=203043
+large ('c', 'log', '1m', 103, 15) rc=0 wall=0.01 255895040.7 m=0
+large ('stubs', 'log', '1m', 103, 15) rc=0 wall=0.01 258284361.0 m=0
+large ('ctypes', 'log', '1m', 103, 15) rc=0 wall=0.01 257877687.9 m=0
+large ('vm', 'log', '1m', 103, 15) rc=0 wall=0.10 21803511.4 m=0
+large ('vm-flambda', 'log', '1m', 103, 15) rc=0 wall=0.08 27032013.9 m=0
+large ('re', 'log', '1m', 103, 15) rc=0 wall=0.01 345948651.4 m=0
+large ('c', 'log', '16m', 103, 15) rc=0 wall=0.15 256073871.2 m=0
+large ('stubs', 'log', '16m', 103, 15) rc=0 wall=0.15 255934057.1 m=0
+large ('ctypes', 'log', '16m', 103, 15) rc=0 wall=0.15 256213959.4 m=0
+large ('vm', 'log', '16m', 103, 15) rc=0 wall=1.56 21763341.5 m=0
+large ('vm-flambda', 'log', '16m', 103, 15) rc=0 wall=1.25 27143184.5 m=0
+large ('re', 'log', '16m', 103, 15) rc=0 wall=0.12 337934611.5 m=0
+large ('c', 'log', '1m', 99, 16) rc=0 wall=0.01 261245993.3 m=0
+large ('stubs', 'log', '1m', 99, 16) rc=0 wall=0.01 260030771.2 m=0
+large ('ctypes', 'log', '1m', 99, 16) rc=0 wall=0.01 263255177.8 m=0
+large ('vm', 'log', '1m', 99, 16) rc=0 wall=0.09 24325760.3 m=0
+large ('vm-flambda', 'log', '1m', 99, 16) rc=0 wall=0.08 28996257.5 m=0
+large ('re', 'log', '1m', 99, 16) rc=0 wall=0.01 330336299.2 m=0
+large ('c', 'log', '16m', 99, 16) rc=0 wall=0.15 256927065.5 m=0
+large ('stubs', 'log', '16m', 99, 16) rc=0 wall=0.15 256817863.1 m=0
+large ('ctypes', 'log', '16m', 99, 16) rc=0 wall=0.15 256576701.2 m=0
+large ('vm', 'log', '16m', 99, 16) rc=0 wall=1.39 24387326.9 m=0
+large ('vm-flambda', 'log', '16m', 99, 16) rc=0 wall=1.17 29045188.3 m=0
+large ('re', 'log', '16m', 99, 16) rc=0 wall=0.12 323266494.6 m=0
+large ('c', 'src', '1m', 92, 1) rc=0 wall=0.01 488621604.8 m=3536
+large ('stubs', 'src', '1m', 92, 1) rc=0 wall=0.01 456905154.3 m=3536
+large ('ctypes', 'src', '1m', 92, 1) rc=0 wall=0.02 220025706.0 m=3536
+large ('vm', 'src', '1m', 92, 1) rc=0 wall=0.04 65291662.5 m=3536
+large ('vm-flambda', 'src', '1m', 92, 1) rc=0 wall=0.03 73626379.9 m=3536
+large ('re', 'src', '1m', 92, 1) rc=0 wall=0.01 256567263.2 m=3536
+large ('c', 'src', '16m', 92, 1) rc=0 wall=0.09 433844069.2 m=93522
+large ('stubs', 'src', '16m', 92, 1) rc=0 wall=0.10 403107214.5 m=93522
+large ('ctypes', 'src', '16m', 92, 1) rc=0 wall=0.24 156334016.6 m=93522
+large ('vm', 'src', '16m', 92, 1) rc=0 wall=0.52 66468026.5 m=93522
+large ('vm-flambda', 'src', '16m', 92, 1) rc=0 wall=0.48 72799272.6 m=93522
+large ('re', 'src', '16m', 92, 1) rc=0 wall=0.14 277300429.5 m=93522
+large ('c', 'src', '1m', 93, 2) rc=0 wall=0.01 593210069.0 m=1064
+large ('stubs', 'src', '1m', 93, 2) rc=0 wall=0.01 590258657.1 m=1064
+large ('ctypes', 'src', '1m', 93, 2) rc=0 wall=0.01 414178637.2 m=1064
+large ('vm', 'src', '1m', 93, 2) rc=0 wall=0.04 67792345.1 m=1064
+large ('vm-flambda', 'src', '1m', 93, 2) rc=0 wall=0.03 73920973.0 m=1064
+large ('re', 'src', '1m', 93, 2) rc=0 wall=0.01 295541937.0 m=1064
+large ('c', 'src', '16m', 93, 2) rc=0 wall=0.08 560190408.6 m=33024
+large ('stubs', 'src', '16m', 93, 2) rc=0 wall=0.08 539683391.4 m=33024
+large ('ctypes', 'src', '16m', 93, 2) rc=0 wall=0.13 309793513.1 m=33024
+large ('vm', 'src', '16m', 93, 2) rc=0 wall=0.51 67566172.8 m=33024
+large ('vm-flambda', 'src', '16m', 93, 2) rc=0 wall=0.47 73958933.1 m=33024
+large ('re', 'src', '16m', 93, 2) rc=0 wall=0.13 318453551.7 m=33024
+large ('c', 'src', '1m', 109, 3) rc=0 wall=0.01 328281085.7 m=11917
+large ('stubs', 'src', '1m', 109, 3) rc=0 wall=0.01 288385806.7 m=11917
+large ('ctypes', 'src', '1m', 109, 3) rc=0 wall=0.03 87976420.5 m=11917
+large ('vm', 'src', '1m', 109, 3) rc=0 wall=0.04 65470589.0 m=11917
+large ('vm-flambda', 'src', '1m', 109, 3) rc=0 wall=0.04 71460336.0 m=11917
+large ('re', 'src', '1m', 109, 3) rc=0 wall=0.02 230199470.2 m=11917
+large ('c', 'src', '16m', 109, 3) rc=0 wall=0.11 346503710.2 m=164109
+large ('stubs', 'src', '16m', 109, 3) rc=0 wall=0.13 312790224.3 m=164109
+large ('ctypes', 'src', '16m', 109, 3) rc=0 wall=0.35 100514460.4 m=164109
+large ('vm', 'src', '16m', 109, 3) rc=0 wall=0.53 65367090.0 m=164109
+large ('vm-flambda', 'src', '16m', 109, 3) rc=0 wall=0.49 71889422.6 m=164109
+large ('re', 'src', '16m', 109, 3) rc=0 wall=0.16 239646549.1 m=164109
+large ('c', 'src', '1m', 95, 4) rc=0 wall=0.01 641319685.5 m=407
+large ('stubs', 'src', '1m', 95, 4) rc=0 wall=0.01 633239843.6 m=407
+large ('ctypes', 'src', '1m', 95, 4) rc=0 wall=0.01 487644890.2 m=407
+large ('vm', 'src', '1m', 95, 4) rc=0 wall=0.04 66865881.7 m=407
+large ('vm-flambda', 'src', '1m', 95, 4) rc=0 wall=0.03 74032102.4 m=407
+large ('re', 'src', '1m', 95, 4) rc=0 wall=0.01 313161388.4 m=407
+large ('c', 'src', '16m', 95, 4) rc=0 wall=0.07 577768423.0 m=25982
+large ('stubs', 'src', '16m', 95, 4) rc=0 wall=0.08 562263450.7 m=25982
+large ('ctypes', 'src', '16m', 95, 4) rc=0 wall=0.12 344666385.7 m=25982
+large ('vm', 'src', '16m', 95, 4) rc=0 wall=0.51 67587296.0 m=25982
+large ('vm-flambda', 'src', '16m', 95, 4) rc=0 wall=0.47 73659297.4 m=25982
+large ('re', 'src', '16m', 95, 4) rc=0 wall=0.13 319871182.0 m=25982
+large ('c', 'src', '1m', 110, 5) rc=0 wall=0.01 414147554.4 m=6627
+large ('stubs', 'src', '1m', 110, 5) rc=0 wall=0.01 377046981.5 m=6627
+large ('ctypes', 'src', '1m', 110, 5) rc=0 wall=0.02 143444750.2 m=6627
+large ('vm', 'src', '1m', 110, 5) rc=0 wall=0.04 65804070.2 m=6627
+large ('vm-flambda', 'src', '1m', 110, 5) rc=0 wall=0.03 72745356.8 m=6627
+large ('re', 'src', '1m', 110, 5) rc=0 wall=0.02 264923746.8 m=6627
+large ('c', 'src', '16m', 110, 5) rc=0 wall=0.09 446591923.7 m=85365
+large ('stubs', 'src', '16m', 110, 5) rc=0 wall=0.10 417728317.9 m=85365
+large ('ctypes', 'src', '16m', 110, 5) rc=0 wall=0.22 170946548.2 m=85365
+large ('vm', 'src', '16m', 110, 5) rc=0 wall=0.52 66843418.2 m=85365
+large ('vm-flambda', 'src', '16m', 110, 5) rc=0 wall=0.48 73110133.0 m=85365
+large ('re', 'src', '16m', 110, 5) rc=0 wall=0.14 281095809.6 m=85365
+large ('c', 'src', '1m', 106, 6) rc=0 wall=0.01 989179102.4 m=31
+large ('stubs', 'src', '1m', 106, 6) rc=0 wall=0.01 982048962.1 m=31
+large ('ctypes', 'src', '1m', 106, 6) rc=0 wall=0.01 920320022.5 m=31
+large ('vm', 'src', '1m', 106, 6) rc=0 wall=0.04 58061350.8 m=31
+large ('vm-flambda', 'src', '1m', 106, 6) rc=0 wall=0.04 63397555.3 m=31
+large ('re', 'src', '1m', 106, 6) rc=0 wall=0.01 305738107.9 m=31
+large ('c', 'src', '16m', 106, 6) rc=0 wall=0.05 982587996.1 m=816
+large ('stubs', 'src', '16m', 106, 6) rc=0 wall=0.05 982596685.8 m=816
+large ('ctypes', 'src', '16m', 106, 6) rc=0 wall=0.06 920071571.4 m=816
+large ('vm', 'src', '16m', 106, 6) rc=0 wall=0.60 58066969.7 m=816
+large ('vm-flambda', 'src', '16m', 106, 6) rc=0 wall=0.55 62989892.0 m=816
+large ('re', 'src', '16m', 106, 6) rc=0 wall=0.12 341153401.8 m=816
+large ('c', 'src', '1m', 105, 7) rc=0 wall=0.01 760531036.2 m=2058
+large ('stubs', 'src', '1m', 105, 7) rc=0 wall=0.01 734454974.1 m=2058
+large ('ctypes', 'src', '1m', 105, 7) rc=0 wall=0.01 361587041.1 m=2058
+large ('vm', 'src', '1m', 105, 7) rc=0 wall=0.04 57785608.8 m=2058
+large ('vm-flambda', 'src', '1m', 105, 7) rc=0 wall=0.04 61538761.3 m=2058
+large ('re', 'src', '1m', 105, 7) rc=0 wall=0.01 311013107.1 m=2058
+large ('c', 'src', '16m', 105, 7) rc=0 wall=0.05 927574872.5 m=4199
+large ('stubs', 'src', '16m', 105, 7) rc=0 wall=0.06 921933827.5 m=4199
+large ('ctypes', 'src', '16m', 105, 7) rc=0 wall=0.06 792690787.9 m=4199
+large ('vm', 'src', '16m', 105, 7) rc=0 wall=0.60 57717302.5 m=4199
+large ('vm-flambda', 'src', '16m', 105, 7) rc=0 wall=0.56 61836914.2 m=4199
+large ('re', 'src', '16m', 105, 7) rc=0 wall=0.12 334411429.8 m=4199
+large ('c', 'src', '1m', 96, 8) rc=0 wall=0.01 954042859.8 m=0
+large ('stubs', 'src', '1m', 96, 8) rc=0 wall=0.01 963582911.4 m=0
+large ('ctypes', 'src', '1m', 96, 8) rc=0 wall=0.01 957394101.6 m=0
+large ('vm', 'src', '1m', 96, 8) rc=0 wall=0.04 57945698.6 m=0
+large ('vm-flambda', 'src', '1m', 96, 8) rc=0 wall=0.04 61744713.5 m=0
+large ('re', 'src', '1m', 96, 8) rc=0 wall=0.01 335033130.5 m=0
+large ('c', 'src', '16m', 96, 8) rc=0 wall=0.05 963187876.4 m=54
+large ('stubs', 'src', '16m', 96, 8) rc=0 wall=0.05 963148008.7 m=54
+large ('ctypes', 'src', '16m', 96, 8) rc=0 wall=0.05 955090026.9 m=54
+large ('vm', 'src', '16m', 96, 8) rc=0 wall=0.60 57799232.2 m=54
+large ('vm-flambda', 'src', '16m', 96, 8) rc=0 wall=0.56 61717095.9 m=54
+large ('re', 'src', '16m', 96, 8) rc=0 wall=0.12 336637435.2 m=54
+large ('c', 'src', '1m', 111, 9) rc=0 wall=0.01 523457371.9 m=3005
+large ('stubs', 'src', '1m', 111, 9) rc=0 wall=0.01 497604558.2 m=3005
+large ('ctypes', 'src', '1m', 111, 9) rc=0 wall=0.02 244088538.2 m=3005
+large ('vm', 'src', '1m', 111, 9) rc=0 wall=0.04 67023489.1 m=3005
+large ('vm-flambda', 'src', '1m', 111, 9) rc=0 wall=0.03 74058665.9 m=3005
+large ('re', 'src', '1m', 111, 9) rc=0 wall=0.01 262990886.9 m=3005
+large ('c', 'src', '16m', 111, 9) rc=0 wall=0.10 399686400.8 m=119977
+large ('stubs', 'src', '16m', 111, 9) rc=0 wall=0.11 364151826.2 m=119977
+large ('ctypes', 'src', '16m', 111, 9) rc=0 wall=0.28 129850205.5 m=119977
+large ('vm', 'src', '16m', 111, 9) rc=0 wall=0.52 66418931.8 m=119977
+large ('vm-flambda', 'src', '16m', 111, 9) rc=0 wall=0.48 72515733.6 m=119977
+large ('re', 'src', '16m', 111, 9) rc=0 wall=0.15 261382635.6 m=119977
+large ('c', 'src', '1m', 97, 10) rc=0 wall=0.01 1236877618.8 m=38
+large ('stubs', 'src', '1m', 97, 10) rc=0 wall=0.01 1235474121.4 m=38
+large ('ctypes', 'src', '1m', 97, 10) rc=0 wall=0.01 1109685176.0 m=38
+large ('vm', 'src', '1m', 97, 10) rc=0 wall=0.04 57542205.5 m=38
+large ('vm-flambda', 'src', '1m', 97, 10) rc=0 wall=0.04 61313110.9 m=38
+large ('re', 'src', '1m', 97, 10) rc=0 wall=0.01 337118476.8 m=38
+large ('c', 'src', '16m', 97, 10) rc=0 wall=0.04 1212424800.6 m=1697
+large ('stubs', 'src', '16m', 97, 10) rc=0 wall=0.05 1207877489.4 m=1697
+large ('ctypes', 'src', '16m', 97, 10) rc=0 wall=0.05 1100754221.9 m=1697
+large ('vm', 'src', '16m', 97, 10) rc=0 wall=0.60 57543961.5 m=1697
+large ('vm-flambda', 'src', '16m', 97, 10) rc=0 wall=0.56 61776327.2 m=1697
+large ('re', 'src', '16m', 97, 10) rc=0 wall=0.12 338349040.2 m=1697
+large ('c', 'src', '1m', 107, 11) rc=0 wall=0.03 98397621.3 m=45702
+large ('stubs', 'src', '1m', 107, 11) rc=0 wall=0.03 88310518.8 m=45702
+large ('ctypes', 'src', '1m', 107, 11) rc=0 wall=0.10 23415368.7 m=45702
+large ('vm', 'src', '1m', 107, 11) rc=0 wall=0.13 17124708.8 m=45702
+large ('vm-flambda', 'src', '1m', 107, 11) rc=0 wall=0.10 22348109.1 m=45702
+large ('re', 'src', '1m', 107, 11) rc=0 wall=0.02 129839866.6 m=45702
+large ('c', 'src', '16m', 107, 11) rc=0 wall=0.28 129013329.2 m=454304
+large ('stubs', 'src', '16m', 107, 11) rc=0 wall=0.31 116738034.8 m=454304
+large ('ctypes', 'src', '16m', 107, 11) rc=0 wall=0.96 35735542.7 m=454304
+large ('vm', 'src', '16m', 107, 11) rc=0 wall=1.96 17278588.8 m=454304
+large ('vm-flambda', 'src', '16m', 107, 11) rc=0 wall=1.57 21816773.8 m=454304
+large ('re', 'src', '16m', 107, 11) rc=0 wall=0.22 166078372.1 m=454304
+large ('c', 'src', '1m', 94, 12) rc=0 wall=0.01 890481379.2 m=1
+large ('stubs', 'src', '1m', 94, 12) rc=0 wall=0.01 894003574.3 m=1
+large ('ctypes', 'src', '1m', 94, 12) rc=0 wall=0.01 893202394.8 m=1
+large ('vm', 'src', '1m', 94, 12) rc=0 wall=0.04 58050784.6 m=1
+large ('vm-flambda', 'src', '1m', 94, 12) rc=0 wall=0.04 62294641.7 m=1
+large ('re', 'src', '1m', 94, 12) rc=0 wall=0.01 314152213.9 m=1
+large ('c', 'src', '16m', 94, 12) rc=0 wall=0.05 874886501.2 m=8959
+large ('stubs', 'src', '16m', 94, 12) rc=0 wall=0.06 861164567.9 m=8959
+large ('ctypes', 'src', '16m', 94, 12) rc=0 wall=0.07 652471918.6 m=8959
+large ('vm', 'src', '16m', 94, 12) rc=0 wall=0.60 57802137.3 m=8959
+large ('vm-flambda', 'src', '16m', 94, 12) rc=0 wall=0.56 62168690.7 m=8959
+large ('re', 'src', '16m', 94, 12) rc=0 wall=0.12 333659995.8 m=8959
+large ('c', 'src', '1m', 104, 13) rc=0 wall=0.01 455027401.0 m=5002
+large ('stubs', 'src', '1m', 104, 13) rc=0 wall=0.01 423150776.6 m=5002
+large ('ctypes', 'src', '1m', 104, 13) rc=0 wall=0.02 175079510.9 m=5002
+large ('vm', 'src', '1m', 104, 13) rc=0 wall=0.04 66275567.8 m=5002
+large ('vm-flambda', 'src', '1m', 104, 13) rc=0 wall=0.03 72855209.4 m=5002
+large ('re', 'src', '1m', 104, 13) rc=0 wall=0.01 278323089.8 m=5002
+large ('c', 'src', '16m', 104, 13) rc=0 wall=0.11 369515509.6 m=140047
+large ('stubs', 'src', '16m', 104, 13) rc=0 wall=0.12 339307935.1 m=140047
+large ('ctypes', 'src', '16m', 104, 13) rc=0 wall=0.31 114161642.3 m=140047
+large ('vm', 'src', '16m', 104, 13) rc=0 wall=0.52 65905065.4 m=140047
+large ('vm-flambda', 'src', '16m', 104, 13) rc=0 wall=0.48 72267370.2 m=140047
+large ('re', 'src', '16m', 104, 13) rc=0 wall=0.15 255242997.6 m=140047
+large ('c', 'src', '1m', 103, 14) rc=0 wall=0.01 215137928.3 m=6306
+large ('stubs', 'src', '1m', 103, 14) rc=0 wall=0.02 206808542.2 m=6306
+large ('ctypes', 'src', '1m', 103, 14) rc=0 wall=0.03 105031266.5 m=6306
+large ('vm', 'src', '1m', 103, 14) rc=0 wall=0.10 21605769.0 m=6306
+large ('vm-flambda', 'src', '1m', 103, 14) rc=0 wall=0.08 26684990.2 m=6306
+large ('re', 'src', '1m', 103, 14) rc=0 wall=0.02 277704104.1 m=6306
+large ('c', 'src', '16m', 103, 14) rc=0 wall=0.17 222022442.0 m=82639
+large ('stubs', 'src', '16m', 103, 14) rc=0 wall=0.18 215293382.6 m=82639
+large ('ctypes', 'src', '16m', 103, 14) rc=0 wall=0.30 120516517.9 m=82639
+large ('vm', 'src', '16m', 103, 14) rc=0 wall=1.58 21443499.8 m=82639
+large ('vm-flambda', 'src', '16m', 103, 14) rc=0 wall=1.27 26700122.3 m=82639
+large ('re', 'src', '16m', 103, 14) rc=0 wall=0.14 281768750.7 m=82639
+large ('c', 'src', '1m', 99, 15) rc=0 wall=0.01 259192478.8 m=13
+large ('stubs', 'src', '1m', 99, 15) rc=0 wall=0.01 260584709.9 m=13
+large ('ctypes', 'src', '1m', 99, 15) rc=0 wall=0.01 259063501.6 m=13
+large ('vm', 'src', '1m', 99, 15) rc=0 wall=0.09 24174825.1 m=13
+large ('vm-flambda', 'src', '1m', 99, 15) rc=0 wall=0.08 28911709.0 m=13
+large ('re', 'src', '1m', 99, 15) rc=0 wall=0.01 311632713.5 m=13
+large ('c', 'src', '16m', 99, 15) rc=0 wall=0.15 257895466.0 m=591
+large ('stubs', 'src', '16m', 99, 15) rc=0 wall=0.15 258159533.7 m=591
+large ('ctypes', 'src', '16m', 99, 15) rc=0 wall=0.15 253934553.7 m=591
+large ('vm', 'src', '16m', 99, 15) rc=0 wall=1.40 24304755.9 m=591
+large ('vm-flambda', 'src', '16m', 99, 15) rc=0 wall=1.17 29042337.5 m=591
+large ('re', 'src', '16m', 99, 15) rc=0 wall=0.12 333306380.9 m=591
+large ('c', 'src', '1m', 101, 16) rc=0 wall=0.01 217517922.9 m=5876
+large ('stubs', 'src', '1m', 101, 16) rc=0 wall=0.02 208399204.5 m=5876
+large ('ctypes', 'src', '1m', 101, 16) rc=0 wall=0.03 109738714.9 m=5876
+large ('vm', 'src', '1m', 101, 16) rc=0 wall=0.14 15851489.5 m=5876
+large ('vm-flambda', 'src', '1m', 101, 16) rc=0 wall=0.11 20321842.7 m=5876
+large ('re', 'src', '1m', 101, 16) rc=0 wall=0.02 271418712.6 m=5876
+large ('c', 'src', '16m', 101, 16) rc=0 wall=0.17 219294120.9 m=88332
+large ('stubs', 'src', '16m', 101, 16) rc=0 wall=0.18 209858114.7 m=88332
+large ('ctypes', 'src', '16m', 101, 16) rc=0 wall=0.32 111182940.8 m=88332
+large ('vm', 'src', '16m', 101, 16) rc=0 wall=2.12 16030251.7 m=88332
+large ('vm-flambda', 'src', '16m', 101, 16) rc=0 wall=1.67 20354504.9 m=88332
+large ('re', 'src', '16m', 101, 16) rc=0 wall=0.14 280370190.9 m=88332
+cata ('c', 'jq', 16) rc=0 wall=0.01 nomatch 0.001769
+cata ('c', 'jq', 32) rc=0 wall=0.13 limit 0.129404
+cata ('c', 'jq', 64) rc=0 wall=0.13 limit 0.129593
+cata ('c', 'jq', 128) rc=0 wall=0.13 limit 0.129703
+cata ('c', 'jq', 256) rc=0 wall=0.13 limit 0.129186
+cata ('c', 'jq', 512) rc=0 wall=0.14 limit 0.134961
+cata ('c', 'jq', 1024) rc=0 wall=0.13 limit 0.130474
+cata ('c', 'jq', 2048) rc=0 wall=0.13 limit 0.129384
+cata ('c', 'jq', 4096) rc=0 wall=0.13 limit 0.129969
+cata ('c', 'php', 16) rc=0 wall=0.00 nomatch 0.000190
+cata ('c', 'php', 32) rc=0 wall=0.09 limit 0.084281
+cata ('c', 'php', 64) rc=0 wall=0.09 limit 0.084686
+cata ('c', 'php', 128) rc=0 wall=0.09 limit 0.084754
+cata ('c', 'php', 256) rc=0 wall=0.09 limit 0.086106
+cata ('c', 'php', 512) rc=0 wall=0.09 limit 0.085543
+cata ('c', 'php', 1024) rc=0 wall=0.09 limit 0.085406
+cata ('c', 'php', 2048) rc=0 wall=0.09 limit 0.087513
+cata ('c', 'php', 4096) rc=0 wall=0.09 limit 0.087094
+cata ('c', 'vscode', 16) rc=0 wall=0.01 nomatch 0.004544
+cata ('c', 'vscode', 32) rc=0 wall=0.12 limit 0.113339
+cata ('c', 'vscode', 64) rc=0 wall=0.12 limit 0.114670
+cata ('c', 'vscode', 128) rc=0 wall=0.12 limit 0.113286
+cata ('c', 'vscode', 256) rc=0 wall=0.12 limit 0.113123
+cata ('c', 'vscode', 512) rc=0 wall=0.12 limit 0.113174
+cata ('c', 'vscode', 1024) rc=0 wall=0.12 limit 0.113187
+cata ('c', 'vscode', 2048) rc=0 wall=0.12 limit 0.113504
+cata ('c', 'vscode', 4096) rc=0 wall=0.12 limit 0.113641
+cata ('stubs', 'jq', 16) rc=0 wall=0.01 nomatch 0.001786
+cata ('stubs', 'jq', 32) rc=0 wall=0.13 limit 0.129210
+cata ('stubs', 'jq', 64) rc=0 wall=0.13 limit 0.129420
+cata ('stubs', 'jq', 128) rc=0 wall=0.13 limit 0.129748
+cata ('stubs', 'jq', 256) rc=0 wall=0.13 limit 0.129341
+cata ('stubs', 'jq', 512) rc=0 wall=0.13 limit 0.127982
+cata ('stubs', 'jq', 1024) rc=0 wall=0.13 limit 0.129268
+cata ('stubs', 'jq', 2048) rc=0 wall=0.13 limit 0.129522
+cata ('stubs', 'jq', 4096) rc=0 wall=0.13 limit 0.129831
+cata ('stubs', 'php', 16) rc=0 wall=0.01 nomatch 0.000195
+cata ('stubs', 'php', 32) rc=0 wall=0.09 limit 0.086279
+cata ('stubs', 'php', 64) rc=0 wall=0.09 limit 0.085137
+cata ('stubs', 'php', 128) rc=0 wall=0.09 limit 0.086605
+cata ('stubs', 'php', 256) rc=0 wall=0.09 limit 0.084876
+cata ('stubs', 'php', 512) rc=0 wall=0.09 limit 0.085140
+cata ('stubs', 'php', 1024) rc=0 wall=0.09 limit 0.085280
+cata ('stubs', 'php', 2048) rc=0 wall=0.09 limit 0.085228
+cata ('stubs', 'php', 4096) rc=0 wall=0.09 limit 0.085521
+cata ('stubs', 'vscode', 16) rc=0 wall=0.01 nomatch 0.004535
+cata ('stubs', 'vscode', 32) rc=0 wall=0.12 limit 0.112774
+cata ('stubs', 'vscode', 64) rc=0 wall=0.12 limit 0.113308
+cata ('stubs', 'vscode', 128) rc=0 wall=0.12 limit 0.113302
+cata ('stubs', 'vscode', 256) rc=0 wall=0.12 limit 0.113293
+cata ('stubs', 'vscode', 512) rc=0 wall=0.12 limit 0.113293
+cata ('stubs', 'vscode', 1024) rc=0 wall=0.12 limit 0.113133
+cata ('stubs', 'vscode', 2048) rc=0 wall=0.12 limit 0.113263
+cata ('stubs', 'vscode', 4096) rc=0 wall=0.12 limit 0.113189
+cata ('ctypes', 'jq', 16) rc=0 wall=0.01 nomatch 0.001741
+cata ('ctypes', 'jq', 32) rc=0 wall=0.13 limit 0.129299
+cata ('ctypes', 'jq', 64) rc=0 wall=0.13 limit 0.129749
+cata ('ctypes', 'jq', 128) rc=0 wall=0.13 limit 0.129651
+cata ('ctypes', 'jq', 256) rc=0 wall=0.13 limit 0.129973
+cata ('ctypes', 'jq', 512) rc=0 wall=0.13 limit 0.129557
+cata ('ctypes', 'jq', 1024) rc=0 wall=0.13 limit 0.126633
+cata ('ctypes', 'jq', 2048) rc=0 wall=0.13 limit 0.129955
+cata ('ctypes', 'jq', 4096) rc=0 wall=0.13 limit 0.129218
+cata ('ctypes', 'php', 16) rc=0 wall=0.01 nomatch 0.000216
+cata ('ctypes', 'php', 32) rc=0 wall=0.09 limit 0.083212
+cata ('ctypes', 'php', 64) rc=0 wall=0.09 limit 0.085147
+cata ('ctypes', 'php', 128) rc=0 wall=0.09 limit 0.086997
+cata ('ctypes', 'php', 256) rc=0 wall=0.09 limit 0.086999
+cata ('ctypes', 'php', 512) rc=0 wall=0.09 limit 0.085409
+cata ('ctypes', 'php', 1024) rc=0 wall=0.09 limit 0.085126
+cata ('ctypes', 'php', 2048) rc=0 wall=0.09 limit 0.085720
+cata ('ctypes', 'php', 4096) rc=0 wall=0.09 limit 0.085563
+cata ('ctypes', 'vscode', 16) rc=0 wall=0.01 nomatch 0.004649
+cata ('ctypes', 'vscode', 32) rc=0 wall=0.12 limit 0.112960
+cata ('ctypes', 'vscode', 64) rc=0 wall=0.12 limit 0.113507
+cata ('ctypes', 'vscode', 128) rc=0 wall=0.12 limit 0.113085
+cata ('ctypes', 'vscode', 256) rc=0 wall=0.12 limit 0.116582
+cata ('ctypes', 'vscode', 512) rc=0 wall=0.12 limit 0.113107
+cata ('ctypes', 'vscode', 1024) rc=0 wall=0.12 limit 0.113421
+cata ('ctypes', 'vscode', 2048) rc=0 wall=0.12 limit 0.113613
+cata ('ctypes', 'vscode', 4096) rc=0 wall=0.12 limit 0.113847
+cata ('vm', 'jq', 16) rc=0 wall=0.01 nomatch 0.007243
+cata ('vm', 'jq', 32) rc=0 wall=0.28 limit 0.271747
+cata ('vm', 'jq', 64) rc=0 wall=0.28 limit 0.272786
+cata ('vm', 'jq', 128) rc=0 wall=0.28 limit 0.270411
+cata ('vm', 'jq', 256) rc=0 wall=0.27 limit 0.268772
+cata ('vm', 'jq', 512) rc=0 wall=0.28 limit 0.274091
+cata ('vm', 'jq', 1024) rc=0 wall=0.27 limit 0.267811
+cata ('vm', 'jq', 2048) rc=0 wall=0.27 limit 0.267901
+cata ('vm', 'jq', 4096) rc=0 wall=0.28 limit 0.276324
+cata ('vm', 'php', 16) rc=0 wall=0.01 nomatch 0.000642
+cata ('vm', 'php', 32) rc=0 wall=0.29 limit 0.288873
+cata ('vm', 'php', 64) rc=0 wall=0.29 limit 0.287873
+cata ('vm', 'php', 128) rc=0 wall=0.29 limit 0.283440
+cata ('vm', 'php', 256) rc=0 wall=0.29 limit 0.285423
+cata ('vm', 'php', 512) rc=0 wall=0.29 limit 0.287381
+cata ('vm', 'php', 1024) rc=0 wall=0.29 limit 0.288957
+cata ('vm', 'php', 2048) rc=0 wall=0.29 limit 0.289813
+cata ('vm', 'php', 4096) rc=0 wall=0.29 limit 0.288981
+cata ('vm', 'vscode', 16) rc=0 wall=0.02 nomatch 0.011044
+cata ('vm', 'vscode', 32) rc=0 wall=0.28 limit 0.276231
+cata ('vm', 'vscode', 64) rc=0 wall=0.28 limit 0.279294
+cata ('vm', 'vscode', 128) rc=0 wall=0.28 limit 0.276203
+cata ('vm', 'vscode', 256) rc=0 wall=0.29 limit 0.280459
+cata ('vm', 'vscode', 512) rc=0 wall=0.28 limit 0.278994
+cata ('vm', 'vscode', 1024) rc=0 wall=0.28 limit 0.273890
+cata ('vm', 'vscode', 2048) rc=0 wall=0.29 limit 0.280642
+cata ('vm', 'vscode', 4096) rc=0 wall=0.29 limit 0.281155
+cata ('vm-flambda', 'jq', 16) rc=0 wall=0.01 nomatch 0.006540
+cata ('vm-flambda', 'jq', 32) rc=0 wall=0.25 limit 0.246213
+cata ('vm-flambda', 'jq', 64) rc=0 wall=0.25 limit 0.243652
+cata ('vm-flambda', 'jq', 128) rc=0 wall=0.25 limit 0.242071
+cata ('vm-flambda', 'jq', 256) rc=0 wall=0.25 limit 0.249886
+cata ('vm-flambda', 'jq', 512) rc=0 wall=0.25 limit 0.242132
+cata ('vm-flambda', 'jq', 1024) rc=0 wall=0.25 limit 0.248568
+cata ('vm-flambda', 'jq', 2048) rc=0 wall=0.25 limit 0.241435
+cata ('vm-flambda', 'jq', 4096) rc=0 wall=0.25 limit 0.249052
+cata ('vm-flambda', 'php', 16) rc=0 wall=0.01 nomatch 0.000549
+cata ('vm-flambda', 'php', 32) rc=0 wall=0.26 limit 0.250631
+cata ('vm-flambda', 'php', 64) rc=0 wall=0.26 limit 0.255136
+cata ('vm-flambda', 'php', 128) rc=0 wall=0.25 limit 0.244143
+cata ('vm-flambda', 'php', 256) rc=0 wall=0.26 limit 0.250224
+cata ('vm-flambda', 'php', 512) rc=0 wall=0.25 limit 0.242570
+cata ('vm-flambda', 'php', 1024) rc=0 wall=0.25 limit 0.248875
+cata ('vm-flambda', 'php', 2048) rc=0 wall=0.25 limit 0.247682
+cata ('vm-flambda', 'php', 4096) rc=0 wall=0.26 limit 0.255660
+cata ('vm-flambda', 'vscode', 16) rc=0 wall=0.01 nomatch 0.009819
+cata ('vm-flambda', 'vscode', 32) rc=0 wall=0.24 limit 0.239408
+cata ('vm-flambda', 'vscode', 64) rc=0 wall=0.24 limit 0.239898
+cata ('vm-flambda', 'vscode', 128) rc=0 wall=0.24 limit 0.240230
+cata ('vm-flambda', 'vscode', 256) rc=0 wall=0.24 limit 0.237893
+cata ('vm-flambda', 'vscode', 512) rc=0 wall=0.24 limit 0.237415
+cata ('vm-flambda', 'vscode', 1024) rc=0 wall=0.24 limit 0.238881
+cata ('vm-flambda', 'vscode', 2048) rc=0 wall=0.24 limit 0.238693
+cata ('vm-flambda', 'vscode', 4096) rc=0 wall=0.24 limit 0.238521
+cata ('re', 'jq', 16) rc=0 wall=0.01 nomatch 0.000025
+cata ('re', 'jq', 32) rc=0 wall=0.00 nomatch 0.000022
+cata ('re', 'jq', 64) rc=0 wall=0.00 nomatch 0.000022
+cata ('re', 'jq', 128) rc=0 wall=0.00 nomatch 0.000022
+cata ('re', 'jq', 256) rc=0 wall=0.00 nomatch 0.000022
+cata ('re', 'jq', 512) rc=0 wall=0.00 nomatch 0.000023
+cata ('re', 'jq', 1024) rc=0 wall=0.00 nomatch 0.000026
+cata ('re', 'jq', 2048) rc=0 wall=0.00 nomatch 0.000028
+cata ('re', 'jq', 4096) rc=0 wall=0.00 nomatch 0.000033
+cata ('re', 'php', 16) rc=0 wall=0.00 nomatch 0.000040
+cata ('re', 'php', 32) rc=0 wall=0.00 nomatch 0.000039
+cata ('re', 'php', 64) rc=0 wall=0.00 nomatch 0.000040
+cata ('re', 'php', 128) rc=0 wall=0.00 nomatch 0.000040
+cata ('re', 'php', 256) rc=0 wall=0.00 nomatch 0.000041
+cata ('re', 'php', 512) rc=0 wall=0.00 nomatch 0.000050
+cata ('re', 'php', 1024) rc=0 wall=0.00 nomatch 0.000043
+cata ('re', 'php', 2048) rc=0 wall=0.00 nomatch 0.000045
+cata ('re', 'php', 4096) rc=0 wall=0.00 nomatch 0.000051
+cata ('re', 'vscode', 16) rc=0 wall=0.00 nomatch 0.000027
+cata ('re', 'vscode', 32) rc=0 wall=0.00 nomatch 0.000027
+cata ('re', 'vscode', 64) rc=0 wall=0.00 nomatch 0.000027
+cata ('re', 'vscode', 128) rc=0 wall=0.00 nomatch 0.000035
+cata ('re', 'vscode', 256) rc=0 wall=0.00 nomatch 0.000027
+cata ('re', 'vscode', 512) rc=0 wall=0.00 nomatch 0.000026
+cata ('re', 'vscode', 1024) rc=0 wall=0.00 nomatch 0.000028
+cata ('re', 'vscode', 2048) rc=0 wall=0.00 nomatch 0.000032
+cata ('re', 'vscode', 4096) rc=0 wall=0.00 nomatch 0.000038
+TOTAL one run per cell (s): {'short': 74.21355152130127, 'large': 74.76516771316528, 'cata': 21.24558186531067}

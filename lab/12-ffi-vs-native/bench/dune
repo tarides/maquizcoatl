@@ -1,0 +1,6 @@
+(executable
+ (name main)
+ (ocamlopt_flags
+  (:standard
+   (:include ../oflags.sexp)))
+ (libraries vm onig onig_ctypes re mtime.clock.os))

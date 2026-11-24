@@ -1,0 +1,2 @@
+index,label,outcome,start,wall_s,user_s,sys_s,log,command
+1,dune build,exit 1,2026-11-19T18:33:02Z,0.1,0.1,0.1,<bench-workdir>/work/logs/linden-latest-build-20261119T183302Z/01-dune_build.log,(cd <bench-workdir>/work/build/linden-latest && OPAMROOT=<bench-workdir>/work/opam OPAMCOLOR=never OPAMNODEPEXTS=1 DUNE_CACHE=disabled timeout --kill-after=60 4200 taskset --cpu-list 24-27 nice -n 10 opam exec --switch <bench-workdir>/work/switches/rocq-9.3.0 -- dune build -j 4)

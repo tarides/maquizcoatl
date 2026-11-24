@@ -1,0 +1,5 @@
+INFO: Seed: 1223848689
+INFO: Loaded 1 modules   (15690 inline 8-bit counters): 15690 [0x5cc08d8e4910, 0x5cc08d8e865a), 
+INFO: Loaded 1 PC tables (15690 PCs): 15690 [0x5cc08d8e8660,0x5cc08d925b00), 
+#10856	INITED cov: 6229 ft: 32934 corp: 9134/620Kb exec/s: 1085 rss: 559Mb
+#10856	DONE   cov: 6229 ft: 32934 corp: 9134/620Kb lim: 277 exec/s: 1085 rss: 559Mb

@@ -1,0 +1,60 @@
+== versions (0 s)
+F* 2026.11.15
+commit=b92b0f87ce325a6ed0fd78086390fbaf2fc629a1
+KaRaMeL version: 3384ecaf654baca53b109c2e2665112eaa6d7f00
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 0) (0 s)
+== 2. F* check (0 s)
+Verified module: VU
+All verification conditions discharged successfully
+== 3. extraction (4 s)
+Verified module: VU
+All verification conditions discharged successfully
+✔ [Monomorphization] ⏱️ 7ms
+✔ [Inlining] ⏱️ 10ms
+✔ [Pattern matches compilation] ⏱️ 7ms
+✔ [Structs + Simplify 2] ⏱️ 17ms
+✔ [Drop] ⏱️ 1ms
+✔ [AstToCStar] ⏱️ 5ms
+✔ [CStarToC] ⏱️ <1ms
+KaRaMeL executable is: <cache>/fstar/v2026.11.15/fstar/bin/krml
+✔ [PrettyPrinting] ⏱️ <1ms
+KaRaMeL: wrote out .c files for Custard
+KaRaMeL: wrote out .h files for Custard
+generated kc/Custard.c: 305 lines, 16263 bytes, sha256 2c86481c5f9400be362ffae828994b11e012413de6d8bc44219b743078f9c783
+generated kc/Custard.h: 76 lines, 1522 bytes, sha256 7df09e629b25c0c4a5cd89ce761d1a525d22988bffa2f58c345a267032127de9
+== 4. ABI checks (6 s)
+abi_check: ok
+vu_enc_state size=8 align=4
+vu_enc_state.min_enc_len offset=0 size=4
+vu_enc_state.max_enc_len offset=4 size=4
+vu_args size=64 align=8
+vu_args.subject offset=0 size=8
+vu_args.subject_len offset=8 size=4
+vu_args.pos offset=12 size=4
+vu_args.num offset=16 size=4
+vu_args.slot0 offset=24 size=8
+vu_args.slot1 offset=32 size=8
+vu_args.slot2 offset=40 size=8
+vu_args.slot3 offset=48 size=8
+vu_args.slot4 offset=56 size=8
+vu_fold_rec size=40 align=4
+vu_fold_rec.calls offset=0 size=4
+vu_fold_rec.recorded offset=4 size=4
+vu_fold_rec.from0 offset=8 size=4
+vu_fold_rec.from1 offset=12 size=4
+vu_fold_rec.from2 offset=16 size=4
+vu_fold_rec.from3 offset=20 size=4
+vu_fold_rec.from4 offset=24 size=4
+vu_fold_rec.from5 offset=28 size=4
+vu_fold_rec.from6 offset=32 size=4
+vu_fold_rec.from7 offset=36 size=4
+layout: same
+== 5. compile (6 s)
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_i_apply
+exported: vu_set_slot
+== done (6 s)

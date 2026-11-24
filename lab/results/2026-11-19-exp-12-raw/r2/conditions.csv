@@ -1,0 +1,13 @@
+tag,time,load1,load5,load15,cpu2_governor,others
+large-start,2026-11-19T17:47:30Z,1.28,1.11,1.18,schedutil,#11
+large-run1,2026-11-19T17:48:22Z,1.39,1.18,1.20,schedutil,none-detected
+large-run2,2026-11-19T17:49:15Z,1.16,1.15,1.18,schedutil,none-detected
+large-run3,2026-11-19T17:50:07Z,1.11,1.14,1.18,schedutil,none-detected
+large-run4,2026-11-19T17:50:59Z,1.71,1.30,1.23,schedutil,none-detected
+large-run5,2026-11-19T17:51:51Z,2.01,1.44,1.28,schedutil,none-detected
+large-run6,2026-11-19T17:52:43Z,2.07,1.57,1.34,schedutil,none-detected
+large-run7,2026-11-19T17:53:35Z,2.03,1.64,1.38,schedutil,none-detected
+large-run8,2026-11-19T17:54:27Z,2.23,1.74,1.43,schedutil,none-detected
+large-run9,2026-11-19T17:55:20Z,2.14,1.80,1.47,schedutil,none-detected
+large-run10,2026-11-19T17:56:12Z,1.58,1.71,1.45,schedutil,none-detected
+large-end,2026-11-19T17:56:12Z,1.58,1.71,1.45,schedutil,none-detected

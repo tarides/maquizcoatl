@@ -1,0 +1,23 @@
+repo_commit: 3d11767
+upstream_commit: f95747b
+onig-release: Release C_FLAGS='' C_FLAGS_RELEASE='-O3 -DNDEBUG' C_FLAGS_DEBUG='-g'
+onig-debug: Debug C_FLAGS='' C_FLAGS_RELEASE='-O3 -DNDEBUG' C_FLAGS_DEBUG='-g'
+gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+cmake: cmake version 3.28.3
+python: Python 3.12.3
+opam: 2.6.1
+opam_repo_default: 
+switch ffi: 5.4.1 flambda: false flat_float_array: true 
+  packages: conf-libffi    2.0.0 ctypes         0.24.0 ctypes-foreign 0.24.0 dune           3.25.0 mtime          2.2.0 re             1.14.0 
+switch ffi-flambda: 5.4.1 flambda: true flat_float_array: true 
+  packages: conf-libffi    2.0.0 ctypes         0.24.0 ctypes-foreign 0.24.0 dune           3.25.0 mtime          2.2.0 re             1.14.0 
+libffi: 3.4.6
+cpu: AMD EPYC 7502P 32-Core Processor
+cpus_online: 64
+ram: 503 GiB
+kernel: Linux 6.8.0-100-generic
+os: Ubuntu 24.04.5 LTS
+cpu2_governor: schedutil
+timing_cpu: 2; build_cpus: 0-3,32-35
+loadavg: 0.28 0.93 1.25
+date: 2026-11-19T17:05:58Z

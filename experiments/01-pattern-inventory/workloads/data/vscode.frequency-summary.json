@@ -1,0 +1,80 @@
+{
+ "calls": 1486388,
+ "distinct_searches": 473134,
+ "scanners": 1492,
+ "max_count": 10201,
+ "count_distribution": {
+  "1": {
+   "searches": 36060,
+   "calls": 36060
+  },
+  "2": {
+   "searches": 71414,
+   "calls": 142828
+  },
+  "3-4": {
+   "searches": 348228,
+   "calls": 1047344
+  },
+  "5-9": {
+   "searches": 14452,
+   "calls": 92168
+  },
+  "10-99": {
+   "searches": 2806,
+   "calls": 58947
+  },
+  "100-999": {
+   "searches": 158,
+   "calls": 32163
+  },
+  "1000+": {
+   "searches": 16,
+   "calls": 76878
+  }
+ },
+ "top_scanners_by_calls": [
+  {
+   "scanner": 301,
+   "calls": 311910
+  },
+  {
+   "scanner": 315,
+   "calls": 273591
+  },
+  {
+   "scanner": 313,
+   "calls": 153891
+  },
+  {
+   "scanner": 314,
+   "calls": 114025
+  },
+  {
+   "scanner": 470,
+   "calls": 74924
+  },
+  {
+   "scanner": 289,
+   "calls": 60654
+  },
+  {
+   "scanner": 292,
+   "calls": 52355
+  },
+  {
+   "scanner": 469,
+   "calls": 49517
+  },
+  {
+   "scanner": 298,
+   "calls": 43921
+  },
+  {
+   "scanner": 302,
+   "calls": 42932
+  }
+ ],
+ "committed_lines": 11263,
+ "full_lines": 473134
+}

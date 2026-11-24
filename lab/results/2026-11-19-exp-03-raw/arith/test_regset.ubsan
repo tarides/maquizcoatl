@@ -1,0 +1,26 @@
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:687:15: runtime error: unsigned integer overflow: 69645508 * 997 cannot be represented in type 'unsigned int'
+    #0 0x7d3c16ba622f in callout_name_table_hash <hostdir>/src/maquizcoatl/upstream/src/regparse.c:687:15
+    #1 0x7d3c16bea8d4 in onig_st_insert <hostdir>/src/maquizcoatl/upstream/src/st.c:277:14
+    #2 0x7d3c16baa8aa in st_insert_callout_name_table <hostdir>/src/maquizcoatl/upstream/src/regparse.c:740:12
+    #3 0x7d3c16ba721e in callout_name_entry <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1566:9
+    #4 0x7d3c16ba6c53 in onig_set_callout_of_name <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1726:8
+    #5 0x7d3c16bf05aa in init <hostdir>/src/maquizcoatl/upstream/src/ascii.c:45:27
+    #6 0x7d3c16be8338 in onig_initialize_encoding <hostdir>/src/maquizcoatl/upstream/src/regenc.c:118:11
+    #7 0x7d3c16bc5107 in onig_initialize <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7779:9
+    #8 0x5b6e3c3faf80 in main <hostdir>/src/maquizcoatl/upstream/test/test_regset.c:405:3
+    #9 0x7d3c1682a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #10 0x7d3c1682a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #11 0x5b6e3c3ce524 in _start (<hostdir>/build/arith/test/test_regset+0x6524)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:687:15 
+<hostdir>/src/maquizcoatl/upstream/src/regparse.c:1713:19: runtime error: implicit conversion from type 'int' of value -2 (32-bit, signed) to type 'unsigned int' changed the value to 4294967294 (32-bit, unsigned)
+    #0 0x7d3c16ba6b2b in onig_set_callout_of_name <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1713:19
+    #1 0x7d3c16bf080f in init <hostdir>/src/maquizcoatl/upstream/src/ascii.c:55:5
+    #2 0x7d3c16be8338 in onig_initialize_encoding <hostdir>/src/maquizcoatl/upstream/src/regenc.c:118:11
+    #3 0x7d3c16bc5107 in onig_initialize <hostdir>/src/maquizcoatl/upstream/src/regcomp.c:7779:9
+    #4 0x5b6e3c3faf80 in main <hostdir>/src/maquizcoatl/upstream/test/test_regset.c:405:3
+    #5 0x7d3c1682a1c9 in __libc_start_call_main csu/../sysdeps/nptl/libc_start_call_main.h:58:16
+    #6 0x7d3c1682a28a in __libc_start_main csu/../csu/libc-start.c:360:3
+    #7 0x5b6e3c3ce524 in _start (<hostdir>/build/arith/test/test_regset+0x6524)
+
+SUMMARY: UndefinedBehaviorSanitizer: undefined-behavior <hostdir>/src/maquizcoatl/upstream/src/regparse.c:1713:19 

@@ -1,0 +1,9 @@
+File <exp>/build/smoke/why3/smoke.mlw:
+Goal add1'vc.
+Prover result is: Valid (0.02s, 7 steps).
+
+File <exp>/build/smoke/why3/smoke.mlw:
+Goal add1'vc.
+Prover result is: Valid (0.00s, 1255 steps).
+
+why3 smoke: ok

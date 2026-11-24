@@ -1,0 +1,41 @@
+# Trusted lines of the RefinedRust prototype (format: ../count-trusted.sh).
+#
+# Modelling style: trusted shim, as Aeneas, hax and Creusot. RefinedRust
+# cannot call an unsafe extern "C" function pointer from verified code,
+# so each client C function is a trait of src/lib.rs that the verified
+# functions are generic over, with a RefinedRust trait specification;
+# the one implementation per trait is the shim below, in src/ffi.rs,
+# whose items are #[rr::skip] (not translated, not verified).
+#
+# The shims: one implementation per client trait, each doing only the
+# indirect call, and c_apply, the C entry point handed to the client of
+# vu_fold_all.
+src/ffi.rs:76-124
+# The C glue: the function pointer types of proto.h, the layout
+# assertions (lib.rs spells slot[5] and from[8] as one field per
+# element), the NULL checks and the exported functions, which turn raw
+# pointers into the references the verified functions take, and the raw
+# result of callout_step dropped.
+src/ffi.rs:21-74
+src/ffi.rs:126-194
+# The client contracts. The trait specifications of EncLen and Callout
+# assume no result range and let the callout leave anything in args, but
+# have no precondition: the C client must accept every argument (as
+# hax's requires(true)), and an implementation is never checked against
+# them (it is in ffi.rs). ApplyAll's is the contract of re-entrancy
+# shape (a): the client's apply-all function keeps the record well
+# formed.
+src/lib.rs:94-97
+src/lib.rs:104-108
+src/lib.rs:130-136
+#
+# Not counted: the precondition of get_subject_byte on the subject
+# (src/lib.rs:366-369, proto.h's invariant of vu_args, met by the C
+# caller): it is the specification of a verified function, under the
+# rule applied to CN's accessor precondition (cn/vu.c:235-238, not
+# counted) and to the C tools (run F corrections). Not counted either:
+# the toolchain (RefinedRust's frontend and its translation
+# of the code rustc compiles, the Radium semantics and Lithium
+# automation, RefinedRust's standard library specifications of ptr::add
+# and ptr::read, Iris, Rocq, rustc, the C compiler). The manual proofs of
+# proofs/ are checked by Rocq and are not trusted.

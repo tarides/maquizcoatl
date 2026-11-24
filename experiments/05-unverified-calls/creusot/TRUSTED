@@ -1,0 +1,31 @@
+# Trusted lines of the Creusot prototype (format: ../count-trusted.sh).
+#
+# Modelling style: trusted shim, as Aeneas and hax. Creusot cannot call
+# an unsafe extern "C" function pointer from verified code, so each
+# client C function is a trait of src/lib.rs that the verified functions
+# are generic over; their proofs hold for every implementation, so the
+# trait declarations without a contract (EncLen, Callout) carry no
+# assumption. The one implementation per trait is the shim below, in
+# src/ffi.rs, which Creusot does not see (cfg(not(creusot))).
+#
+# The shims: one implementation per client trait, each doing only the
+# indirect call, and c_apply, the C entry point handed to the client of
+# vu_fold_all.
+src/ffi.rs:61-100
+# The C glue: the function pointer types of proto.h, the layout
+# assertions, the NULL checks and the exported functions, which turn raw
+# pointers into the references the verified functions take, the subject
+# slice, and the raw result of callout_step dropped.
+src/ffi.rs:20-59
+src/ffi.rs:102-174
+# The client contract of re-entrancy shape (a): the client's apply-all
+# function keeps the record well formed (it reaches the record only
+# through the verified function it is given). Assumed of the C client,
+# checked nowhere: the implementation is in ffi.rs, which Creusot does
+# not see, so Creusot does not check that it refines the contract.
+src/lib.rs:106-110
+#
+# Not counted: the toolchain (Creusot, creusot-std's specifications of
+# Rust's standard library, Why3, Why3find and the provers, rustc, the C
+# compiler), including the claim that Creusot's translation is faithful
+# to the code rustc compiles.

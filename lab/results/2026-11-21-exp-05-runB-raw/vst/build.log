@@ -1,0 +1,55 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+ba19d0b8e4e7467824dcff95542d957f00dbbca724a9a02318a67bb434f07231  vst/TRUSTED
+4d15c097774835f5adfb5be66eb9c6df8b75ada3d9154877897423c023e9c183  vst/build.sh
+dc7acffca2a2a7cf2f2ee22b16868d7a6bb6277438df6035e71aaf0262c62f6b  vst/negative-control.txt
+416ea1a2155bcf24551d632a43a942dfb0dd09974957717a35748c16470a5d63  vst/verif_vu.v
+d525e857f2cafbe3415eccbb0919ae44e67543415c8cdd60a9764bbba18341da  vst/vu.c
+== build
+== versions (0 s)
+The Rocq Prover, version 9.2
+The CompCert CompCert AST generator, version 3.17
+The CompCert C verified compiler, version 3.17
+VST 2.17
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. sources (negative control: 0) (0 s)
+== 2. clightgen and Clight check (0 s)
+generated vu.v: 725 lines, 32657 bytes, sha256 fedd8a2d2f13475c4ceffcb583f8ec2264c217b21d94bc2f670cbaeb6d7f24cc
+File "./vu.v", line 1, characters 5-8:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+== 3. VST proofs (1 s)
+File "./verif_vu.v", line 13, characters 0-35:
+Warning: Hint Db norm already exists and is discriminated.
+[mismatched-hint-db,automation,default]
+Unproved goal, with its pure hypotheses:
+Axioms:
+ClassicalDedekindReals.sig_not_dec : forall P : Prop, {~ ~ P} + {~ P}
+ClassicalDedekindReals.sig_forall_dec :
+  forall P : nat -> Prop,
+  (forall n : nat, {P n} + {~ P n}) ->
+  {n : nat | ~ P n} + {forall n : nat, P n}
+prop_ext : ClassicalFacts.prop_extensionality
+functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+Classical_Prop.classic : forall P : Prop, P \/ ~ P
+Ensembles.Extensionality_Ensembles :
+  forall (U : Type) (A B : Ensembles.Ensemble U),
+  Ensembles.Same_set A B -> A = B
+axioms: only the allowed ones (6)
+== 4. CompCert compile (68 s)
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_get_subject_byte
+exported: vu_i_apply
+exported: vu_set_slot
+libvu.a: 2280 bytes, sha256 4486be0f1d3c6d76a6bc0d8280ff0934a271a6d7a801c80b09b532759b1071ea
+== done (68 s)

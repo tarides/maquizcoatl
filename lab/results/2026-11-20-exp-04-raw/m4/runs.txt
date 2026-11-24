@@ -1,0 +1,14 @@
+== bin-variadic_call
+without einfo: 13 [stub error -5]
+with einfo:    27 [stub error -217 (with name)]
+exit 0
+== bin-data_init
+UTF8 max_enc_len=1 min_enc_len=1 mbc_enc_len=set is_valid=set
+ASCII mbc_enc_len=set
+OnigDefaultSyntax==&OnigSyntaxOniguruma: 1
+OnigDefaultCaseFoldFlag=0x40000000
+exit 0
+== nm -D --defined-only counts
+default 208
+posix 216
+ 0x000000000000000e (SONAME)             Library soname: [libonig.so.5]

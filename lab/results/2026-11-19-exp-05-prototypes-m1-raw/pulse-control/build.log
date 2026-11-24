@@ -1,0 +1,68 @@
+== versions (0 s)
+F* 2026.11.15
+commit=b92b0f87ce325a6ed0fd78086390fbaf2fc629a1
+KaRaMeL version: 3384ecaf654baca53b109c2e2665112eaa6d7f00
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 1) (1 s)
+209,213c209
+<   (* CLAMP-BEGIN *)
+<   if (I32.lt r b.min_enc_len) { b.min_enc_len }
+<   else if (I32.gt r b.max_enc_len) { b.max_enc_len }
+<   else { r }
+<   (* CLAMP-END *)
+---
+>   r
+== 2. F* check (1 s)
+* Error 19 at VU.fst(209,2-209,3):
+  - Failed to prove pure property:
+      ‘I32.v s.min_enc_len <= I32.v r /\ I32.v r <= I32.v s.max_enc_len’
+  - Assertion failed
+  - The SMT solver could not prove the query.
+  - Failed to prove: FStar.Int32.v r <= FStar.Int32.v s.max_enc_len
+  - In context:
+      pm: PulseCore.FractionalPermission.perm
+      c: FStar.Ghost.erased FStar.UInt8.t
+      ps: PulseCore.FractionalPermission.perm
+      s: FStar.Ghost.erased VU.vu_enc_state
+      f:
+      q: Pulse.Lib.Reference.ref FStar.UInt8.t
+          -> fn
+               requires q |-> Pulse.Class.PtsTo.Base.Frac pm c
+               returns FStar.Int32.t
+               ensures q |-> Pulse.Class.PtsTo.Base.Frac pm c
+      p: Pulse.Lib.Reference.ref FStar.UInt8.t
+      st: Pulse.Lib.Reference.ref VU.vu_enc_state
+      1 <= FStar.Int32.v s.min_enc_len /\
+      FStar.Int32.v s.min_enc_len <= FStar.Int32.v s.max_enc_len
+      r: FStar.Int32.t
+      b: VU.vu_enc_state
+      Pulse.Lib.Core.rewrites_to_p b s
+      FStar.Int32.v s.min_enc_len <= FStar.Int32.v r
+
+* Error 19 at VU.fst(209,2-209,3):
+  - Failed to prove pure property:
+      ‘I32.v s.min_enc_len <= I32.v r /\ I32.v r <= I32.v s.max_enc_len’
+  - Assertion failed
+  - The SMT solver could not prove the query.
+  - Failed to prove: FStar.Int32.v s.min_enc_len <= FStar.Int32.v r
+  - In context:
+      pm: PulseCore.FractionalPermission.perm
+      c: FStar.Ghost.erased FStar.UInt8.t
+      ps: PulseCore.FractionalPermission.perm
+      s: FStar.Ghost.erased VU.vu_enc_state
+      f:
+      q: Pulse.Lib.Reference.ref FStar.UInt8.t
+          -> fn
+               requires q |-> Pulse.Class.PtsTo.Base.Frac pm c
+               returns FStar.Int32.t
+               ensures q |-> Pulse.Class.PtsTo.Base.Frac pm c
+      p: Pulse.Lib.Reference.ref FStar.UInt8.t
+      st: Pulse.Lib.Reference.ref VU.vu_enc_state
+      1 <= FStar.Int32.v s.min_enc_len /\
+      FStar.Int32.v s.min_enc_len <= FStar.Int32.v s.max_enc_len
+      r: FStar.Int32.t
+      b: VU.vu_enc_state
+      Pulse.Lib.Core.rewrites_to_p b s
+
+2 errors were reported (see above)
+proof rejected (F* error 19 only)

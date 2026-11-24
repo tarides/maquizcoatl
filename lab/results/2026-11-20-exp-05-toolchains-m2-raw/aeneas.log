@@ -1,0 +1,15 @@
+info: syncing channel updates for nightly-2026-09-17-x86_64-unknown-linux-gnu
+info: latest update on 2026-09-17 for version 1.100.0-nightly (923c95cdf 2026-09-16)
+info: component llvm-tools is up to date
+info: component miri is up to date
+info: component rust-src is up to date
+info: component rustc-dev is up to date
+
+  nightly-2026-09-17-x86_64-unknown-linux-gnu unchanged - rustc 1.100.0-nightly (923c95cdf 2026-09-16)
+
+info: checking for self-update (current version: 1.29.3)
+elan 4.4.0 (3cc76985a 2026-11-18)
+info: toolchain 'leanprover/lean4:v4.36.0-rc2' is already installed
+charon 0.1.321 (61c67516e7752daf6b4dd403a030d90efbb0b8eb) toolchain nightly-2026-09-17
+Aeneas: verification of Rust programs by translation to pure lambda calculus
+aeneas tree: 8.8G elan: 3.1G

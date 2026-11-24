@@ -1,0 +1,14 @@
+repo_commit: 30b737c
+uptime:  18:02:27 up 208 days, 10:33,  8 users,  load average: 12.25, 12.64, 11.51
+disk_free_start: 54855M
+reference: caller output equals expected.txt
+hax-fstar: caller output equals expected.txt
+run.sh hax-fstar: status 0
+hax-fstar control: proof rejected, as required
+run.sh -n hax-fstar: status 0
+hax-fstar control: proof rejected, as required
+run.sh -r hax-fstar: status 0
+miri status 0
+rr probe status 0
+uptime end:  18:08:41 up 208 days, 10:39, 10 users,  load average: 8.12, 11.74, 11.66
+disk_free_end: 54055M

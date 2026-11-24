@@ -1,0 +1,1278 @@
+{
+ "retrieved": "2026-11-19",
+ "oniguruma": {
+  "repository": "https://github.com/kkos/oniguruma",
+  "commit": "f95747b462de672b6f8dbdeb478245ddf061ca53",
+  "license": "BSD-2-Clause",
+  "note": "instrument.patch and classify.c derive from / use Oniguruma internals; Copyright (c) 2002-2021 K.Kosako, BSD-2-Clause conditions retained in instrument.patch"
+ },
+ "sources": {
+  "vscode": {
+   "repository": "https://github.com/microsoft/vscode",
+   "commit": "184833947d794fddbe2cda93f3ad318c42724f55",
+   "license": "MIT",
+   "checkout": "sparse, extensions/ only, depth 1",
+   "grammar_count": 83
+  },
+  "vscode-textmate": {
+   "repository": "https://github.com/microsoft/vscode-textmate",
+   "commit": "5fc1758043624ace930a2b417259852e534668d8",
+   "license": "MIT",
+   "npm": "vscode-textmate@9.3.2 (version at that commit; VS Code package.json requires ^9.3.2)"
+  },
+  "vscode-oniguruma": {
+   "repository": "https://github.com/microsoft/vscode-oniguruma",
+   "commit": "1e38f9612a2599529cfa54283dd419bad697de23",
+   "license": "MIT",
+   "bundled_oniguruma": "deps/oniguruma submodule at 08d3611 (v6.9.8), not f95747b",
+   "npm": "vscode-oniguruma@1.7.0: the version VS Code pins in package.json; the repository HEAD says 2.1.0 but 2.1.0 is not published on npm (latest 2.0.1)"
+  },
+  "jq": {
+   "repository": "https://github.com/jqlang/jq",
+   "tag": "jq-1.8.2",
+   "commit": "34f7186b86743a083a589741b6cea95293524108",
+   "tarball": "https://github.com/jqlang/jq/releases/download/jq-1.8.2/jq-1.8.2.tar.gz",
+   "sha256": "71b8d6e8f5fe81f6c6d0d110e3892251f6ce76ed095abd315e26e6e1193af3af",
+   "license": "MIT (code); manual CC-BY-3.0",
+   "corpus": [
+    "tests/jq.test",
+    "tests/onig.test",
+    "tests/optional.test",
+    "docs/content/manual/manual.yml"
+   ]
+  },
+  "php-src": {
+   "repository": "https://github.com/php/php-src",
+   "tag": "php-8.5.12",
+   "commit": "136e049ac10b032c83018e65b63b6df858943750",
+   "tarball": "https://www.php.net/distributions/php-8.5.12.tar.xz",
+   "sha256": "08bc2eba2a588654ade1357174aa646b761556c862dda0678345ee29ed481209",
+   "license": "PHP-3.01",
+   "corpus": [
+    "ext/mbstring/tests/*.phpt"
+   ]
+  },
+  "php-doc-en": {
+   "repository": "https://github.com/php/doc-en",
+   "commit": "5b7d0e3c7a1339ef0871851e4611dafcc75c4fb5",
+   "license": "CC-BY-3.0",
+   "checkout": "sparse, reference/mbstring only, depth 1",
+   "corpus": [
+    "reference/mbstring/**/*.xml <programlisting role=\"php\">"
+   ]
+  }
+ },
+ "host_configurations": {
+  "vscode": {
+   "encoding": "UTF-8",
+   "syntax": "ONIGURUMA (ONIG_SYNTAX_DEFAULT)",
+   "options": [
+    "CAPTURE_GROUP"
+   ],
+   "evidence": [
+    "vscode-oniguruma src/onig.cc createOnigRegExp: onig_new(..., options, ONIG_ENCODING_UTF8, syntax, ...)",
+    "vscode-oniguruma src/index.ts OnigScanner: options default [FindOption.CaptureGroup], syntax default Syntax.Default",
+    "vscode-oniguruma src/onig.cc findNextOnigScannerMatch: onig_regset_search with ONIG_REGSET_POSITION_LEAD when strLength < 1000, else per-regex onig_search",
+    "vscode-textmate src/rule.ts RegExpSource: \\z rewritten to $(?!\\n)(?<!\\n); \\A and \\G replaced by U+FFFF in the scanner variants where they cannot match",
+    "vscode-textmate src/debug.ts UseOnigurumaFindOptions = false: search-time FindOption is None; \\A/\\G handled by the rewrite above",
+    "vscode-textmate src/rule.ts resolveBackReferences: \\N in end/while replaced by the escaped begin capture text"
+   ]
+  },
+  "jq": {
+   "encoding": "UTF-8",
+   "syntax": "PERL_NG",
+   "options": [
+    "CAPTURE_GROUP"
+   ],
+   "flags": {
+    "i": "IGNORECASE",
+    "x": "EXTEND",
+    "m": "MULTILINE",
+    "s": "SINGLELINE",
+    "p": "MULTILINE|SINGLELINE",
+    "l": "FIND_LONGEST",
+    "n": "FIND_NOT_EMPTY",
+    "g": "(global search, no option)"
+   },
+   "evidence": [
+    "jq src/builtin.c f_match: onig_new(..., options, ONIG_ENCODING_UTF8, ONIG_SYNTAX_PERL_NG, ...); onig_search(..., ONIG_OPTION_NONE)"
+   ]
+  },
+  "php": {
+   "encoding": "mb_regex_encoding(), default UTF-8 (or mbstring.internal_encoding)",
+   "syntax": "RUBY by default; option letters j u g c r z b d select JAVA GNU_REGEX GREP EMACS RUBY PERL POSIX_BASIC POSIX_EXTENDED",
+   "options": [
+    "MULTILINE",
+    "SINGLELINE"
+   ],
+   "notes": [
+    "an explicit option string replaces the default options (it is not OR-ed with MULTILINE|SINGLELINE)",
+    "mb_eregi / mb_eregi_replace add IGNORECASE",
+    "mb_regex_set_options() replaces the default options and syntax",
+    "searches use onig_search_with_param with match stack limit mbstring.regex_stack_limit (default 100000; upstream default 0 = unlimited) and retry limit mbstring.regex_retry_limit (default 1000000; upstream default 10000000)"
+   ],
+   "evidence": [
+    "php-src ext/mbstring/php_mbregex.c: _php_mb_regex_globals_alloc, _php_mb_regex_init_options, php_mbregex_compile_pattern, _php_mb_onig_search",
+    "php-src ext/mbstring/mbstring.c: INI entries mbstring.regex_stack_limit, mbstring.regex_retry_limit"
+   ]
+  }
+ },
+ "grammars": [
+  {
+   "file": "extensions/bat/syntaxes/batchfile.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/mmims/language-batchfile",
+    "commit": "6154ae25a24e01ac9329e7bcf958e093cd8733a9",
+    "license": "MIT",
+    "version": "0.7.6"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/mmims/language-batchfile/blob/master/grammars/batchfile.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/clojure/syntaxes/clojure.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/atom/language-clojure",
+    "commit": "45bdb881501d0b8f8b707ca1d3fcc8b4b99fca03",
+    "license": "MIT",
+    "version": "0.22.8"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/atom/language-clojure/blob/master/grammars/clojure.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/coffeescript/syntaxes/coffeescript.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/atom/language-coffee-script",
+    "commit": "0f6db9143663e18b1ad00667820f46747dba495e",
+    "license": "MIT",
+    "version": "0.49.3"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/atom/language-coffee-script/blob/master/grammars/coffeescript.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/cpp/syntaxes/c.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jeff-hykin/better-c-syntax",
+    "commit": "34712a6106a4ffb0a04d2fa836fd28ff6c5849a4",
+    "license": "MIT",
+    "version": "1.13.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jeff-hykin/better-c-syntax/blob/master/autogenerated/c.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/cpp/syntaxes/cpp.embedded.macro.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jeff-hykin/better-cpp-syntax",
+    "commit": "2fe8b635aa580a5fed0b3c4457da0d65a764168f",
+    "license": "MIT",
+    "version": "1.27.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jeff-hykin/better-cpp-syntax/blob/master/autogenerated/cpp.embedded.macro.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/cpp/syntaxes/cpp.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jeff-hykin/better-cpp-syntax",
+    "commit": "2fe8b635aa580a5fed0b3c4457da0d65a764168f",
+    "license": "MIT",
+    "version": "1.27.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jeff-hykin/better-cpp-syntax/blob/master/autogenerated/cpp.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/cpp/syntaxes/cuda-cpp.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/NVIDIA/cuda-cpp-grammar",
+    "commit": "81e88eaec5170aa8585736c63627c73e3589998c",
+    "license": "MIT",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/NVIDIA/cuda-cpp-grammar/blob/master/syntaxes/cuda-cpp.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/cpp/syntaxes/platform.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/c.tmbundle",
+    "commit": "60daf83b9d45329524f7847a75e9298b3aae5805",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/c.tmbundle/blob/master/Syntaxes/Platform.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/csharp/syntaxes/csharp.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/dotnet/csharp-tmLanguage",
+    "commit": "61acf50cb1c7fcac8097249983dddfba56023608",
+    "license": "MIT",
+    "version": "0.1.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/dotnet/csharp-tmLanguage/blob/master/grammars/csharp.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/css/syntaxes/css.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/vscode-css",
+    "commit": "de9e6beee756760f31b15efbd782735fc25de3db",
+    "license": "MIT License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/vscode-css/blob/master/grammars/css.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/dart/syntaxes/dart.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/dart-lang/dart-syntax-highlight",
+    "commit": "122ddbf14fa40d617a8d547140bf8f3114212273",
+    "license": "BSD",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/dart-lang/dart-syntax-highlight/blob/master/grammars/dart.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/diff/syntaxes/diff.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/diff.tmbundle",
+    "commit": "0593bb775eab1824af97ef2172fd38822abd97d7",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/diff.tmbundle/blob/master/Syntaxes/Diff.plist"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/docker/syntaxes/docker.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/moby/moby",
+    "commit": "bea959c7b793b32a893820b97c4eadc7c87fabb0",
+    "license": "Apache-2.0",
+    "version": "28.3.3"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/moby/moby/blob/master/contrib/syntax/textmate/Docker.tmbundle/Syntaxes/Dockerfile.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/dotenv/syntaxes/dotenv.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/dotenv-org/dotenv-vscode",
+    "commit": "3b4caf3398b3958b5fef8ef723c332eb1f30dfbb",
+    "license": "MIT License",
+    "version": "1.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/dotenv-org/dotenv-vscode/blob/master/syntaxes/dotenv.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/fsharp/syntaxes/fsharp.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/ionide/ionide-fsgrammar",
+    "commit": "0cb968a4b8fdb2e0656b95342cdffbeff04a1248",
+    "license": "MIT",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/ionide/ionide-fsgrammar/blob/master/grammars/fsharp.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/git-base/syntaxes/git-commit.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/walles/git-commit-message-plus",
+    "commit": "35a079dea5a91b087021b40c01a6bb4eb0337a87",
+    "license": "MIT",
+    "version": "1.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/walles/git-commit-message-plus/blob/master/syntaxes/git-commit.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/git-base/syntaxes/git-rebase.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/git.tmbundle",
+    "commit": "5870cf3f8abad3a6637bdf69250b5d2ded427dc4",
+    "license": "MIT",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/git.tmbundle/blob/master/Syntaxes/Git%20Rebase%20Message.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/git-base/syntaxes/ignore.tmLanguage.json",
+   "upstream": null,
+   "cgmanifest_registrations": [
+    {
+     "repository": "https://github.com/textmate/git.tmbundle",
+     "commit": "5870cf3f8abad3a6637bdf69250b5d2ded427dc4",
+     "license": "MIT",
+     "version": "0.0.0"
+    },
+    {
+     "repository": "https://github.com/walles/git-commit-message-plus",
+     "commit": "35a079dea5a91b087021b40c01a6bb4eb0337a87",
+     "license": "MIT",
+     "version": "1.0.0"
+    }
+   ],
+   "converted_from": null,
+   "note": null
+  },
+  {
+   "file": "extensions/go/syntaxes/go.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/worlpaker/go-syntax",
+    "commit": "4a9b120a52c30e209133ab69e868e13c980be40e",
+    "license": "MIT",
+    "version": "0.8.7"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/worlpaker/go-syntax/blob/master/syntaxes/go.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/groovy/syntaxes/groovy.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/groovy.tmbundle",
+    "commit": "85d8f7c97ae473ccb9473f6c8d27e4ec957f4be1",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/groovy.tmbundle/blob/master/Syntaxes/Groovy.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/handlebars/syntaxes/Handlebars.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/daaain/Handlebars",
+    "commit": "0ffd0a2d95bfc052c3ff29a3eb4dd3749957b466",
+    "license": "MIT",
+    "version": "1.10.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/daaain/Handlebars/blob/master/grammars/Handlebars.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/hlsl/syntaxes/hlsl.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/tgjones/shaders-tmLanguage",
+    "commit": "87c0dca3a39170dbd7ee7e277db4f915fb2de14a",
+    "license": "MIT",
+    "version": "0.1.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/tgjones/shaders-tmLanguage/blob/master/grammars/hlsl.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/html/syntaxes/html-derivative.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/html.tmbundle",
+    "commit": "0c3d5ee54de3a993f747f54186b73a4d2d3c44a2",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/html.tmbundle/blob/master/Syntaxes/HTML%20%28Derivative%29.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/html/syntaxes/html.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/html.tmbundle",
+    "commit": "0c3d5ee54de3a993f747f54186b73a4d2d3c44a2",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/html.tmbundle/blob/master/Syntaxes/HTML.plist"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/ini/syntaxes/ini.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/ini.tmbundle",
+    "commit": "2af0cbb0704940f967152616f2f1ff0aae6287a6",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/ini.tmbundle/blob/master/Syntaxes/Ini.plist"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/java/syntaxes/java.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/redhat-developer/vscode-java",
+    "commit": "28e59628a8ea73b35cf96ad018d929f8a10eabe4",
+    "license": "MIT",
+    "version": "1.56.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/redhat-developer/vscode-java/blob/master/language-support/java/java.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/javascript/syntaxes/JavaScript.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/TypeScript-TmLanguage",
+    "commit": "3133e3d914db9a2bb8812119f9273727a305f16b",
+    "license": "MIT",
+    "version": "0.0.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/TypeScript-TmLanguage/blob/master/TypeScriptReact.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/javascript/syntaxes/JavaScriptReact.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/TypeScript-TmLanguage",
+    "commit": "3133e3d914db9a2bb8812119f9273727a305f16b",
+    "license": "MIT",
+    "version": "0.0.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/TypeScript-TmLanguage/blob/master/TypeScriptReact.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/json/syntaxes/JSON.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/vscode-JSON.tmLanguage",
+    "commit": "9bd83f1c252b375e957203f21793316203f61f70",
+    "license": "MIT",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/vscode-JSON.tmLanguage/blob/master/JSON.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/json/syntaxes/JSONC.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/vscode-JSON.tmLanguage",
+    "commit": "9bd83f1c252b375e957203f21793316203f61f70",
+    "license": "MIT",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/vscode-JSON.tmLanguage/blob/master/JSON.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/json/syntaxes/JSONL.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/vscode-JSON.tmLanguage",
+    "commit": "9bd83f1c252b375e957203f21793316203f61f70",
+    "license": "MIT",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/vscode-JSON.tmLanguage/blob/master/JSON.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/json/syntaxes/snippets.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jeff-hykin/better-snippet-syntax",
+    "commit": "2b1bb124cb2b9c75c3c80eae1b8f3a043841d654",
+    "license": "MIT",
+    "version": "1.0.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jeff-hykin/better-snippet-syntax/blob/master/autogenerated/jsonc.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/julia/syntaxes/julia.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/JuliaEditorSupport/atom-language-julia",
+    "commit": "dbaa99358d1dbc2fc6c337f0f6571060dbc4ee1f",
+    "license": "MIT",
+    "version": "0.23.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/JuliaEditorSupport/atom-language-julia/blob/master/variants/julia_vscode.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/latex/syntaxes/Bibtex.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jlelong/vscode-latex-basics",
+    "commit": "0837e7aab6b7d59b719e4136f97ad4c6fe34ef41",
+    "license": "MIT",
+    "version": "1.18.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jlelong/vscode-latex-basics/blob/master/syntaxes/Bibtex.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/latex/syntaxes/LaTeX.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jlelong/vscode-latex-basics",
+    "commit": "0837e7aab6b7d59b719e4136f97ad4c6fe34ef41",
+    "license": "MIT",
+    "version": "1.18.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jlelong/vscode-latex-basics/blob/master/syntaxes/LaTeX.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/latex/syntaxes/TeX.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jlelong/vscode-latex-basics",
+    "commit": "0837e7aab6b7d59b719e4136f97ad4c6fe34ef41",
+    "license": "MIT",
+    "version": "1.18.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jlelong/vscode-latex-basics/blob/master/syntaxes/TeX.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/latex/syntaxes/cpp-grammar-bailout.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jlelong/vscode-latex-basics",
+    "commit": "0837e7aab6b7d59b719e4136f97ad4c6fe34ef41",
+    "license": "MIT",
+    "version": "1.18.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jlelong/vscode-latex-basics/blob/master/syntaxes/cpp-grammar-bailout.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/latex/syntaxes/markdown-latex-combined.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jlelong/vscode-latex-basics",
+    "commit": "0837e7aab6b7d59b719e4136f97ad4c6fe34ef41",
+    "license": "MIT",
+    "version": "1.18.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jlelong/vscode-latex-basics/blob/master/syntaxes/markdown-latex-combined.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/less/syntaxes/less.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/radium-v/Better-Less",
+    "commit": "63c0cba9792e49e255cce0f6dd03250fb30591e6",
+    "license": "MIT",
+    "version": "0.6.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/radium-v/Better-Less/blob/master/Syntaxes/Better%20Less.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/log/syntaxes/log.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/emilast/vscode-logfile-highlighter",
+    "commit": "d3de1dfef09b6a071d82a8c36c9fc24f9b08a5e0",
+    "license": "MIT",
+    "version": "3.7.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/emilast/vscode-logfile-highlighter/blob/master/syntaxes/log.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/lua/syntaxes/lua.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/sumneko/lua.tmbundle",
+    "commit": "b295d83bf0e91b5d3a69eb097f9ed351623b95be",
+    "license": "TextMate Bundle License",
+    "version": "1.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/sumneko/lua.tmbundle/blob/master/Syntaxes/Lua.plist"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/make/syntaxes/make.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/fadeevab/make.tmbundle",
+    "commit": "1d4c0b541959995db098df751ffc129da39a294b",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/fadeevab/make.tmbundle/blob/master/Syntaxes/Makefile.plist"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/markdown-basics/syntaxes/markdown.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/vscode-markdown-tm-grammar",
+    "commit": "0812fc4b190efc17bfed0d5b4ff918eff8e4e377",
+    "license": "MIT",
+    "version": "1.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/vscode-markdown-tm-grammar/blob/master/syntaxes/markdown.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/markdown-math/syntaxes/md-math-block.tmLanguage.json",
+   "upstream": null,
+   "cgmanifest_registrations": [
+    {
+     "repository": "https://github.com/James-Yu/LaTeX-Workshop",
+     "commit": "e4cd86f1731546c2cdde0cc93717ca3fec2da0ba",
+     "license": "MIT",
+     "version": "8.19.1"
+    }
+   ],
+   "converted_from": null,
+   "note": null
+  },
+  {
+   "file": "extensions/markdown-math/syntaxes/md-math-fence.tmLanguage.json",
+   "upstream": null,
+   "cgmanifest_registrations": [
+    {
+     "repository": "https://github.com/James-Yu/LaTeX-Workshop",
+     "commit": "e4cd86f1731546c2cdde0cc93717ca3fec2da0ba",
+     "license": "MIT",
+     "version": "8.19.1"
+    }
+   ],
+   "converted_from": null,
+   "note": null
+  },
+  {
+   "file": "extensions/markdown-math/syntaxes/md-math-inline.tmLanguage.json",
+   "upstream": null,
+   "cgmanifest_registrations": [
+    {
+     "repository": "https://github.com/James-Yu/LaTeX-Workshop",
+     "commit": "e4cd86f1731546c2cdde0cc93717ca3fec2da0ba",
+     "license": "MIT",
+     "version": "8.19.1"
+    }
+   ],
+   "converted_from": null,
+   "note": null
+  },
+  {
+   "file": "extensions/markdown-math/syntaxes/md-math.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/James-Yu/LaTeX-Workshop",
+    "commit": "e4cd86f1731546c2cdde0cc93717ca3fec2da0ba",
+    "license": "MIT",
+    "version": "8.19.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/James-Yu/LaTeX-Workshop/blob/master/syntax/TeX.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/objective-c/syntaxes/objective-c++.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jeff-hykin/better-objcpp-syntax",
+    "commit": "5a7eb15eee382dd5aa388bc04fdb60a0d2128e14",
+    "license": "MIT",
+    "version": "0.1.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jeff-hykin/better-objcpp-syntax/blob/master/autogenerated/objcpp.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/objective-c/syntaxes/objective-c.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jeff-hykin/better-objc-syntax",
+    "commit": "119b75fb1f4d3e8726fa62588e3b935e0b719294",
+    "license": "MIT",
+    "version": "0.2.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jeff-hykin/better-objc-syntax/blob/master/autogenerated/objc.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/perl/syntaxes/perl.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/perl.tmbundle",
+    "commit": "a85927a902d6e5d7805f56a653f324d34dfad53a",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/perl.tmbundle/blob/master/Syntaxes/Perl.plist"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/perl/syntaxes/perl6.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/perl.tmbundle",
+    "commit": "a85927a902d6e5d7805f56a653f324d34dfad53a",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/perl.tmbundle/blob/master/Syntaxes/Perl%206.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/php/syntaxes/html.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/KapitanOczywisty/language-php",
+    "commit": "14d55df14b9123d2f361bd010aa72b746e8cf843",
+    "license": "MIT",
+    "version": "0.49.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/KapitanOczywisty/language-php/blob/master/grammars/html.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/php/syntaxes/php.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/KapitanOczywisty/language-php",
+    "commit": "14d55df14b9123d2f361bd010aa72b746e8cf843",
+    "license": "MIT",
+    "version": "0.49.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/KapitanOczywisty/language-php/blob/master/grammars/php.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/powershell/syntaxes/powershell.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/PowerShell/EditorSyntax",
+    "commit": "23eed76d483c887a1608609e9dd57e09666411cc",
+    "license": "MIT",
+    "version": "1.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/PowerShell/EditorSyntax/blob/master/PowerShellSyntax.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/prompt-basics/syntaxes/prompt.tmLanguage.json",
+   "upstream": null,
+   "cgmanifest_registrations": [],
+   "converted_from": [
+    "https://github.com/microsoft/vscode-markdown-tm-grammar/blob/master/syntaxes/markdown.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/pug/syntaxes/pug.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/davidrios/pug-tmbundle",
+    "commit": "ae1dd60ca4aa4b45617f236d584216cd8d19eecf",
+    "license": "MIT",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/davidrios/pug-tmbundle/blob/master/Syntaxes/Pug.JSON-tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/python/syntaxes/MagicPython.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/MagicStack/MagicPython",
+    "commit": "7d0f2b22a5ad8fccbd7341bc7b7a715169283044",
+    "license": "MIT",
+    "version": "1.1.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/MagicStack/MagicPython/blob/master/grammars/MagicPython.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/python/syntaxes/MagicRegExp.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/MagicStack/MagicPython",
+    "commit": "7d0f2b22a5ad8fccbd7341bc7b7a715169283044",
+    "license": "MIT",
+    "version": "1.1.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/MagicStack/MagicPython/blob/master/grammars/MagicRegExp.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/r/syntaxes/r.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/REditorSupport/vscode-R-syntax",
+    "commit": "b199996070723eefbe7a61e0384b2ae4768eb7f0",
+    "license": "MIT",
+    "version": "0.1.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/REditorSupport/vscode-R-syntax/blob/master/syntaxes/r.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/razor/syntaxes/cshtml.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/dotnet/roslyn",
+    "commit": "7a33db14140ee4100f0c9c2c13bb2ff493750155",
+    "license": "MIT",
+    "version": "1.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/dotnet/roslyn/blob/master/src/Razor/src/Razor/src/Microsoft.VisualStudio.RazorExtension/EmbeddedGrammars/aspnetcorerazor.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/restructuredtext/syntaxes/rst.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/trond-snekvik/vscode-rst",
+    "commit": "7f2d6bb4e20642b60f2979afcb594cfe4b48117a",
+    "license": "MIT",
+    "version": "1.5.3"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/trond-snekvik/vscode-rst/blob/master/syntaxes/rst.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/ruby/syntaxes/ruby.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/Shopify/ruby-lsp",
+    "commit": "e044408a069f43c892143f19c389628eebffbd01",
+    "license": "MIT License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/Shopify/ruby-lsp/blob/master/vscode/grammars/ruby.cson.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/rust/syntaxes/rust.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/dustypomerleau/rust-syntax",
+    "commit": "24e041c9b0bd625bb5704550f09fc9c1c5830efa",
+    "license": "MIT",
+    "version": "0.6.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/dustypomerleau/rust-syntax/blob/master/syntaxes/rust.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/scss/syntaxes/sassdoc.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/atom/language-sass",
+    "commit": "f52ab12f7f9346cc2568129d8c4419bd3d506b47",
+    "license": "MIT",
+    "version": "0.62.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/atom/language-sass/blob/master/grammars/sassdoc.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/scss/syntaxes/scss.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/atom/language-sass",
+    "commit": "f52ab12f7f9346cc2568129d8c4419bd3d506b47",
+    "license": "MIT",
+    "version": "0.62.1"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/atom/language-sass/blob/master/grammars/scss.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/search-result/syntaxes/searchResult.tmLanguage.json",
+   "upstream": null,
+   "cgmanifest_registrations": [],
+   "converted_from": null,
+   "note": "no cgmanifest.json: grammar authored in microsoft/vscode (MIT)"
+  },
+  {
+   "file": "extensions/shaderlab/syntaxes/shaderlab.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/tgjones/shaders-tmLanguage",
+    "commit": "c72c8b39380ba5a86c58ceed053b5d965ebf38b3",
+    "license": "MIT",
+    "version": "0.1.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/tgjones/shaders-tmLanguage/blob/master/grammars/shaderlab.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/shellscript/syntaxes/shell-unix-bash.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jeff-hykin/better-shell-syntax",
+    "commit": "35020b0bd79a90d3b262b4c13a8bb0b33adc1f45",
+    "license": "MIT",
+    "version": "1.8.7"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jeff-hykin/better-shell-syntax/blob/master/autogenerated/shell.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/sql/syntaxes/sql.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/vscode-mssql",
+    "commit": "684648ee5414eb2d9df22b0392ef05079f91e44e",
+    "license": "MIT",
+    "version": "1.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/vscode-mssql/blob/master/extensions/mssql/syntaxes/SQL.plist"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/swift/syntaxes/swift.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/jtbandes/swift-tmlanguage",
+    "commit": "2be007b6bc88e54a0edfd3c313ff31276edc923d",
+    "license": "MIT",
+    "version": null
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/jtbandes/swift-tmlanguage/blob/master/Swift.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/typescript-basics/syntaxes/TypeScript.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/TypeScript-TmLanguage",
+    "commit": "48f608692aa6d6ad7bd65b478187906c798234a8",
+    "license": "MIT",
+    "version": "1.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/TypeScript-TmLanguage/blob/master/TypeScript.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/typescript-basics/syntaxes/TypeScriptReact.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/microsoft/TypeScript-TmLanguage",
+    "commit": "48f608692aa6d6ad7bd65b478187906c798234a8",
+    "license": "MIT",
+    "version": "1.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/microsoft/TypeScript-TmLanguage/blob/master/TypeScriptReact.tmLanguage"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/typescript-basics/syntaxes/jsdoc.js.injection.tmLanguage.json",
+   "upstream": null,
+   "cgmanifest_registrations": [
+    {
+     "repository": "https://github.com/microsoft/TypeScript-TmLanguage",
+     "commit": "48f608692aa6d6ad7bd65b478187906c798234a8",
+     "license": "MIT",
+     "version": "1.0.0"
+    }
+   ],
+   "converted_from": null,
+   "note": null
+  },
+  {
+   "file": "extensions/typescript-basics/syntaxes/jsdoc.ts.injection.tmLanguage.json",
+   "upstream": null,
+   "cgmanifest_registrations": [
+    {
+     "repository": "https://github.com/microsoft/TypeScript-TmLanguage",
+     "commit": "48f608692aa6d6ad7bd65b478187906c798234a8",
+     "license": "MIT",
+     "version": "1.0.0"
+    }
+   ],
+   "converted_from": null,
+   "note": null
+  },
+  {
+   "file": "extensions/vb/syntaxes/asp-vb-net.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/textmate/asp.vb.net.tmbundle",
+    "commit": "72d44550b3286d0382d7be0624140cf97857ff69",
+    "license": "TextMate Bundle License",
+    "version": "0.0.0"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/textmate/asp.vb.net.tmbundle/blob/master/Syntaxes/ASP%20VB.net.plist"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/xml/syntaxes/xml.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/atom/language-xml",
+    "commit": "7bc75dfe779ad5b35d9bf4013d9181864358cb49",
+    "license": "MIT",
+    "version": "0.35.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/atom/language-xml/blob/master/grammars/xml.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/xml/syntaxes/xsl.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/atom/language-xml",
+    "commit": "7bc75dfe779ad5b35d9bf4013d9181864358cb49",
+    "license": "MIT",
+    "version": "0.35.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/atom/language-xml/blob/master/grammars/xsl.cson"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/yaml/syntaxes/yaml-1.0.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/RedCMD/YAML-Syntax-Highlighter",
+    "commit": "53d38bbc66b704803de54ffce5b251bf97211c60",
+    "license": "MIT",
+    "version": "1.3.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/RedCMD/YAML-Syntax-Highlighter/blob/master/syntaxes/yaml-1.0.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/yaml/syntaxes/yaml-1.1.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/RedCMD/YAML-Syntax-Highlighter",
+    "commit": "53d38bbc66b704803de54ffce5b251bf97211c60",
+    "license": "MIT",
+    "version": "1.3.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/RedCMD/YAML-Syntax-Highlighter/blob/master/syntaxes/yaml-1.1.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/yaml/syntaxes/yaml-1.2.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/RedCMD/YAML-Syntax-Highlighter",
+    "commit": "53d38bbc66b704803de54ffce5b251bf97211c60",
+    "license": "MIT",
+    "version": "1.3.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/RedCMD/YAML-Syntax-Highlighter/blob/master/syntaxes/yaml-1.2.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/yaml/syntaxes/yaml-1.3.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/RedCMD/YAML-Syntax-Highlighter",
+    "commit": "53d38bbc66b704803de54ffce5b251bf97211c60",
+    "license": "MIT",
+    "version": "1.3.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/RedCMD/YAML-Syntax-Highlighter/blob/master/syntaxes/yaml-1.3.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/yaml/syntaxes/yaml-embedded.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/RedCMD/YAML-Syntax-Highlighter",
+    "commit": "53d38bbc66b704803de54ffce5b251bf97211c60",
+    "license": "MIT",
+    "version": "1.3.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/RedCMD/YAML-Syntax-Highlighter/blob/master/syntaxes/yaml-embedded.tmLanguage.json"
+   ],
+   "note": null
+  },
+  {
+   "file": "extensions/yaml/syntaxes/yaml.tmLanguage.json",
+   "upstream": {
+    "repository": "https://github.com/RedCMD/YAML-Syntax-Highlighter",
+    "commit": "53d38bbc66b704803de54ffce5b251bf97211c60",
+    "license": "MIT",
+    "version": "1.3.2"
+   },
+   "cgmanifest_registrations": null,
+   "converted_from": [
+    "https://github.com/RedCMD/YAML-Syntax-Highlighter/blob/master/syntaxes/yaml.tmLanguage.json"
+   ],
+   "note": null
+  }
+ ]
+}

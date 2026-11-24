@@ -1,0 +1,10 @@
+repo_commit: 74e92b0
+uptime:  11:51:51 up 208 days,  4:22,  6 users,  load average: 0.08, 0.21, 0.89
+disk_free_start: 18964M
+hax-fstar: build or proof failed (status 1), see build.log
+run.sh hax-fstar: status 1
+vu_du (old disk.txt measure): 32K
+vu_du_links (new): 47G
+vu_free (new): 19G
+uptime end:  11:52:03 up 208 days,  4:22,  6 users,  load average: 0.29, 0.25, 0.90
+disk_free_end: 18851M

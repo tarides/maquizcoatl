@@ -1,0 +1,10 @@
+tool=isabelle-llvm
+run_id=m2-isabelle-llvm
+mode=normal
+jobs=4
+cpus=40-43
+build_seconds=40
+build_status=0
+link=ok
+caller_status=0
+caller_output=same

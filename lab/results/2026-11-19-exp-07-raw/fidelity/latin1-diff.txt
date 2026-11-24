@@ -1,0 +1,14 @@
+ctype 3 U+00AD CR_table 0 is_code_ctype 1
+ctype 7 U+0009 CR_table 0 is_code_ctype 1
+ctype 7 U+000A CR_table 0 is_code_ctype 1
+ctype 7 U+000B CR_table 0 is_code_ctype 1
+ctype 7 U+000C CR_table 0 is_code_ctype 1
+ctype 7 U+000D CR_table 0 is_code_ctype 1
+ctype 7 U+0085 CR_table 0 is_code_ctype 1
+ctype 12 U+00B2 CR_table 0 is_code_ctype 1
+ctype 12 U+00B3 CR_table 0 is_code_ctype 1
+ctype 12 U+00B9 CR_table 0 is_code_ctype 1
+ctype 12 U+00BC CR_table 0 is_code_ctype 1
+ctype 12 U+00BD CR_table 0 is_code_ctype 1
+ctype 12 U+00BE CR_table 0 is_code_ctype 1
+total 13

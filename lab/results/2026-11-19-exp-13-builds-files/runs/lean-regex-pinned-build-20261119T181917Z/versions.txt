@@ -1,0 +1,18 @@
+$ (cd <bench-workdir>/work/build/lean-regex-pinned && ELAN_HOME=<bench-workdir>/work/switches/elan PATH=<bench-workdir>/work/switches/elan/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 lean +leanprover/lean4:v4.34.0-rc1 --version)
+Lean (version 4.34.0-rc1, x86_64-unknown-linux-gnu, commit 3447a668783dbce1a8fdb97101dd067687b2b418, Release)
+# exit 0
+
+$ (cd <bench-workdir>/work/build/lean-regex-pinned && ELAN_HOME=<bench-workdir>/work/switches/elan PATH=<bench-workdir>/work/switches/elan/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 lake +leanprover/lean4:v4.34.0-rc1 --version)
+Lake version 5.0.0-src+3447a66 (Lean version 4.34.0-rc1)
+# exit 0
+
+$ (cd <bench-workdir>/work/build/lean-regex-pinned && timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 git rev-parse HEAD)
+32af6f33d80e1dad2b072da6981da58e92b08b9e
+# exit 0
+
+$ (cd <bench-workdir>/work/build/lean-regex-pinned && timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 git status --short)
+# exit 0
+
+$ (cd <bench-workdir>/work/build/lean-regex-pinned && timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 git diff --stat)
+# exit 0
+

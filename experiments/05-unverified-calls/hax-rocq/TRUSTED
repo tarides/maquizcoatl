@@ -1,0 +1,15 @@
+# Trusted lines of the hax prototype, Rocq backend (format:
+# ../count-trusted.sh). Same prototype and glue as the F* backend
+# (../hax-fstar/TRUSTED); the Rocq backend got no further than the
+# model check (run C), so no Rocq proof and no further trusted Rocq
+# lines exist. The ranges are those of the F* backend, including the
+# two requires(true) client contracts of EncLen and Callout added in run
+# E: the Rocq classes drop the trait contracts, but the shared Rust
+# source carries them, and they are assumed of the C client either way
+# (review of run E, problem 4).
+../hax/src/ffi.rs:61-102
+../hax/src/ffi.rs:20-60
+../hax/src/ffi.rs:103-184
+../hax/src/lib.rs:113-117
+../hax/src/lib.rs:85-89
+../hax/src/lib.rs:93-97

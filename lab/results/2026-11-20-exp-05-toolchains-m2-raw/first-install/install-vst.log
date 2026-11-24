@@ -1,0 +1,6 @@
+== base
+base: status=0 time=0s cache=2.6G
+== vst
+vst: status=0 time=1386s cache=37G
+disk use: cache=37G exp=122M
+SETUP-END m2 status=0

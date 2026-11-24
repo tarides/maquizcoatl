@@ -32,7 +32,7 @@ decisions and open questions so far.
 ## 2026-11-19 — From report to experiments
 
 1. **"What are the 12 tests to conduct?"** The report's experiment table had
-   grown to 13 (#13, upgrade cost, was added later). Claude listed them from
+   grown to 13 (experiment #13, upgrade cost, was added later). Claude listed them from
    the doc.
 2. **Repository published.** `gh repo create tarides/maquizcoatl --public`,
    after checking that no tracked file leaks local paths or host details.
@@ -92,9 +92,10 @@ decisions and open questions so far.
 
 5. **Setup.** Labels created (`experiment`, `stage:issue`, `stage:plan`,
    `stage:run`, `stage:done`, `needs-decision`, `blocked`). A dashboard
-   artifact tracks the 13 experiments. #13 had no place in the order, so it
-   joins the first wave with #7, as the report suggests ("#7 and #13
-   (cheap)"). #11 uses the #1 workloads, so it runs after #1 like #12.
+   artifact tracks the 13 experiments. Experiment #13 had no place in the
+   order, so it joins the first wave with experiment #7, as the report
+   suggests ("#7 and #13 (cheap)"). Experiment #11 uses the experiment #1
+   workloads, so it runs after experiment #1 like experiment #12.
    The machine has 16 CPUs but little free memory and disk, so at most two
    experiments execute at once.
 
@@ -112,13 +113,117 @@ any plan was written: 25 questions in total. The recurring themes:
 
 - **Thresholds.** What "fast enough", "acceptable table cost" or "reaching
   the speed target" means, which the report left open.
-- **Tool choice.** Which provers #5, #8 and #9 cover, and who picks them
+- **Tool choice.** Which provers experiments #5, #8 and #9 cover, and who picks them
   after the eliminators.
 - **Benchmark hygiene.** Where timing runs happen (shared workstation versus
   a dedicated machine) and how they avoid noise from fuzzing.
-- **Scope edges.** Corpus sources and licences (#1), legacy-encoding probes
-  (#2), sanitizer and fuzzer configurations (#3), splitting #12's dependency
-  on #10.
+- **Scope edges.** Corpus sources and licences (experiment #1), legacy-encoding
+  probes (experiment #2), sanitizer and fuzzer configurations
+  (experiment #3), splitting experiment #12's dependency on experiment #10.
 
 Issue numbers on GitHub do not match experiment numbers, since the issues
 were opened in parallel.
+
+## 2026-11-19 — Answers in the tracker; first experiment done
+
+The maintainer answered on the issues; a monitor in the session picked up
+each answer within a minute and resumed that experiment from its plan.
+Plan reviews raised two more decisions (experiment #4: F\* to C through KaRaMeL,
+Custard or both; experiment #11: root on the bench host for the CPU governor). The
+maintainer moved experiments #3, #5, #7 and #11 to a dedicated bench host and raised the
+cap on concurrent runs from 2 to 4.
+
+**Experiment #2 (semantic probes) is the first one done**, about 25 minutes
+after the answer: 134 probes on the C library under Debug and
+ASan/UBSan builds, compared with JavaScript as Linden's reference. Verdicts:
+Linden's semantics adapts for captures in loops, unset backreferences, empty
+iterations and case folding; its lookbehind node must be rewritten (Oniguruma
+steps back then matches forward, so captures differ). Three candidate
+deviation-log entries came out of it. The Fable review replayed the run
+byte for byte, then corrected one verdict by dumping the bytecode: the
+capture-status check on empty iterations applies only to groups referenced
+from outside the loop.
+
+## 2026-11-19 — Pattern inventory done; deviation log started
+
+**Experiment #1 (pattern inventory) is done**, about 70 minutes after the
+answer. From pinned sources it extracted 5,870 distinct VS Code grammar
+patterns, 44 jq and 73 PHP. Findings: 97.3% of patterns fall in the linear
+ReDoS tier (hosts weighted equally); lookahead appears in 41% of VS Code
+patterns and lookbehind in 24%; callouts never appear; the absent operator
+appears twice; subexpression calls are rare (2%) but spread across 18 of 82
+grammars. Proposed first subset: UTF-8, Oniguruma/Perl_NG/Ruby syntaxes,
+linear-tier features plus backreferences, covering 97.9% of compiling
+patterns. Five VS Code patterns that the older Oniguruma bundled in VS Code
+accepts are rejected by `f95747b`. One incident: an uncapped capture log
+filled the work disk for under a minute; the shim now caps it.
+
+**Experiment #2 follow-up.** The review's fixes were applied and three
+upstream behaviours became the first entries of `spec/deviations.md`
+(DEV-001 to DEV-003): lookbehind acceptance that depends on optimiser order,
+captures forbidden in negative lookbehind, and an empty-loop rule narrower
+than the documentation.
+
+Experiment #11 (performance baselines) now runs on the bench host with
+experiment #1's workloads; experiments #3 and #7 run there too.
+
+## 2026-11-19: experiment #13, Part C done
+
+Experiment #13 (upgrade cost) was led from a separate interactive session,
+outside the pipeline. It was then handed over to a background workflow,
+from a handoff note.
+
+**Part C (history mining) is done.** The mining tool ran on 8 projects over
+one year, then Claude agents classified 66 rows by reading their diffs (all
+48 that the plan requires). Observed adaptation per release: Rocq 12 to 103
+lines per 9.x release after a 380 to 1,630-line 9.0 migration; Lean a median
+of about 70, with a 9,220-line String API overhaul over three releases; F\*
+a median of 0; Why3 about 470 to 513 forced lines in the gallery for 1.8.2
+to 1.9.0; Verus about 147; Isabelle about 7. Results were posted on issue #3.
+
+The Part A driver (`upgrade_builds`) was reviewed and committed, but not run
+yet: it waits for the CPU set it may use on the bench host.
+
+## 2026-11-20: eliminators report, first speed figures
+
+- **Experiment #13 (upgrade cost)** and **experiment #4 (ABI
+  feasibility)** were squash-merged; their branches are kept so the
+  commit IDs cited in the results still resolve. Experiment #4 ended
+  with no mechanism eliminated: all four routes (F\* via KaRaMeL or
+  Custard, C proven with VST or Why3, Rust, Isabelle-LLVM) give a
+  libonig drop-in, differing in the size of the hand-written C shell.
+  Isabelle-LLVM's run used its own copy of the toolchain, reproduced
+  from experiment #5's pins, rather than opening another account's
+  directory.
+- **Experiment #5 (calls to unverified code)**, led by Vincent Balat,
+  finished its first two milestones: all six of the report's tools can
+  call client C function pointers and be called back. F\*+Pulse and VST
+  need no trusted shim (25 and 44 trusted lines); Why3, Verus, Aeneas
+  and Isabelle-LLVM need one (100-128 lines). No stack is eliminated.
+- With no stack eliminated, the maintainer lifted the wait on
+  **experiment #6 (executable spec speed)**. Its milestone 1 ran in
+  about 70 minutes: an OCaml reference interpreter and six provers
+  (Rocq, Lean 4, Why3, F\*, Verus, Isabelle) agree with the C library on
+  all 152 cases of experiment #9's subset, and every one of them can run
+  10^6 cases in under 8 hours on one core; the interpreted modes of Why3
+  and F\* only by a factor of 1.8.
+- The results reviews keep catching real slips: an overstated
+  function-pointer limit in Isabelle-LLVM (it can call named C
+  functions), and in experiment #8 a peak-memory rule the reviewer
+  misread, which a recomputation of all 16 cells settled.
+
+## 2026-11-24: experiment #5 closed
+
+- **Experiment #5 (calls to unverified code)** is done and merged
+  (PR #21). Taken back into the pipeline on 2026-11-21, it ran four more
+  milestones on the bench host: every one of the 14 tool rows now has a
+  verdict, and no stack is eliminated. Only hax's Rocq backend fails;
+  hax's Lean backend was not run, by decision. The trusted code ranges
+  from 22 lines (CN) to 152 (RefinedRust). Pulse, VST and RefinedC can
+  lend the subject read-only; the others lend it whole or through
+  trusted glue.
+- Two follow-ups remain: the upstream report of the F\* eta-reduction
+  miscompilation (issue #29, drafted, awaiting the maintainer's
+  approval) and an Isabelle-LLVM model of the C client (issue #30).
+  Experiment #9's tool choice and experiment #6's milestone 2 (issue
+  #28) no longer wait on anything.

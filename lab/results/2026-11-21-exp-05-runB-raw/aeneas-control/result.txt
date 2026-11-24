@@ -1,0 +1,9 @@
+tool=aeneas
+run_id=runB
+mode=negative-control
+jobs=4
+cpus=20-23,52-55
+normal_run=passed
+build_seconds=17
+build_status=3
+control=rejected

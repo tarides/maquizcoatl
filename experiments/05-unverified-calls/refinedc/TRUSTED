@@ -1,0 +1,26 @@
+# Trusted lines of the RefinedC prototype (format: ../count-trusted.sh).
+#
+# Modelling style: client contract, as VST. Each client pointer argument
+# has a function_ptr type carrying the callee's specification; RefinedC
+# checks the indirect calls that vu.c makes itself, and vu_fold_all
+# hands the client vu_i_apply with its proven specification. No shim.
+#
+# The callee contracts: the function_ptr specifications of the encoding
+# function (vu_char_len), the callout (vu_callout_step) and the
+# apply-all function (vu_fold_all).
+vu.c:46-48
+vu.c:75-78
+vu.c:159-163
+# rec_wf, which the apply-all contract uses.
+vu.c:27-27
+# The refinement types of vu_args and vu_fold_rec, which the callout
+# and apply-all contracts use (vu_rc.h; RefinedC checks them against the
+# layouts, and build.sh checks the copy against proto.h).
+vu_rc.h:96-102
+vu_rc.h:106-110
+#
+# Not counted: the toolchain (RefinedC's frontend on Cerberus, Lithium,
+# Iris, Caesium's C semantics, Rocq, the C compiler), including the
+# agreement between Caesium's semantics and the C compiler's; the
+# specifications of the verified functions and the rc::tactics, which
+# Rocq checks.

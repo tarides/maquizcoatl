@@ -1,0 +1,221 @@
+{
+  "retrieved": "2026-11-19",
+  "oniguruma": "f95747b462de672b6f8dbdeb478245ddf061ca53",
+  "note": "Versions decided by plans/05-unverified-calls.md. An empty sha256 means the publisher gives no checksum and it could not be computed before the run: setup.sh records the hash of the first download in <cache>/dl/NAME.sha256, checks every later use against it, and logs it as UNPINNED; that value is then copied here and into the notebook.",
+  "why3": {
+    "milestone": 1,
+    "version": "1.9.0",
+    "alt-ergo": "2.6.5",
+    "z3": [
+      "4.15.3",
+      "4.13.3"
+    ],
+    "source": "opam switch provers of the shared cache (experiment #7), read only; Z3 from the F* bundle"
+  },
+  "fstar": {
+    "milestone": 1,
+    "version": "v2026.11.15",
+    "url": "https://github.com/FStarLang/FStar/releases/download/v2026.11.15/fstar-v2026.11.15-Linux-x86_64.tar.gz",
+    "sha256": "375b811af042d36c38641995799c4d4146a521b1db4014efc9d018c713e5177b",
+    "source": "installed into this account's cache: the shared copy (experiment #7) is not usable read only, since its checked library files are readable only by their owner; krml and Z3 bundled"
+  },
+  "rustup": {
+    "milestone": 1,
+    "version": "1.29.3",
+    "url": "https://static.rust-lang.org/rustup/archive/1.29.3/x86_64-unknown-linux-gnu/rustup-init",
+    "sha256": "b1c8cb14e30889e7e2999e6b69e62d9e9b9ffc0f4df8180564d306d9680e6c55"
+  },
+  "verus": {
+    "milestone": 1,
+    "version": "0.2026.11.02.8bf68ee",
+    "tag": "release/0.2026.11.02.8bf68ee",
+    "commit": "8bf68ee741df833ea5d0fe6a2255126fdea87e47",
+    "url": "https://github.com/verus-lang/verus/releases/download/release/0.2026.11.02.8bf68ee/verus-0.2026.11.02.8bf68ee-x86-linux.zip",
+    "sha256": "f3a0119292df8855e4435da8130bee1873b0e6a60c306accf81a08ea687bba3c",
+    "rust": "1.99.1",
+    "rust_components": [
+      "rustc",
+      "rust-std",
+      "cargo",
+      "rustfmt",
+      "rustc-dev",
+      "llvm-tools"
+    ]
+  },
+  "charon": {
+    "milestone": 2,
+    "version": "0.1.321",
+    "commit": "61c67516e7752daf6b4dd403a030d90efbb0b8eb",
+    "source": "bundled in the Aeneas release tarball (charon, charon-driver and its rust-toolchain file)",
+    "rust": "nightly-2026-09-17",
+    "rust_components": [
+      "rustc-dev",
+      "llvm-tools",
+      "rust-src",
+      "miri"
+    ],
+    "note": "the standalone release nightly-2026.11.19 (commit 9b0ee438f05b59b5ec4c5272cc1de8a480ffc207, same version 0.1.321) is not used: the bundled Charon is the one this Aeneas nightly is built and tested with, so its LLBC matches what Aeneas reads; miri is in the bundled rust-toolchain file, and Charon falls back to a slower sysroot without it"
+  },
+  "aeneas": {
+    "milestone": 2,
+    "tag": "nightly-2026.11.19-8f4466d",
+    "commit": "8f4466db9f0d59267b8e76b54473a21a005cf7be",
+    "url": "https://github.com/AeneasVerif/aeneas/releases/download/nightly-2026.11.19-8f4466d/aeneas-linux-x86_64.tar.gz",
+    "sha256": "00d4e95028bc5e27c0b4c3195079a421a9ac68f3e3d92c5e6260871e827d0be6",
+    "lean_build_url": "https://github.com/AeneasVerif/aeneas/releases/download/nightly-2026.11.19-8f4466d/lean-build-aeneas-x86_64-unknown-linux-gnu.tar.gz",
+    "lean_build_sha256": "84896c4bc46d93c87e0e4cfb09b602d0e94b60b7fb9373871d70244b9a49d525",
+    "lean": "leanprover/lean4:v4.36.0-rc2"
+  },
+  "elan": {
+    "milestone": 2,
+    "version": "v4.4.0",
+    "url": "https://github.com/leanprover/elan/releases/download/v4.4.0/elan-x86_64-unknown-linux-gnu.tar.gz",
+    "sha256": "0e8250aa2be86c7af929ade68db617af9edc8b9ccf6eaf5ece228250d0d032e2",
+    "note": "installed in the account's own cache: the shared one is read only, and Aeneas's Lean must be fetched"
+  },
+  "vst": {
+    "milestone": 2,
+    "opam_packages": [
+      "coq-vst.2.17",
+      "coq-compcert.3.18"
+    ],
+    "opam_repository": "https://rocq-prover.org/opam/released",
+    "switch": "vst",
+    "note": "own opam root in the account's cache; coq-compcert.3.18 requires coq < 9.3~"
+  },
+  "isabelle": {
+    "milestone": 2,
+    "version": "Isabelle2026",
+    "url": "https://www.cl.cam.ac.uk/research/hvg/Isabelle/dist/Isabelle2026_linux.tar.gz",
+    "sha256": "858c995b32216b3876bf395c3be843147d1f1eee404bc6c958d7534ee335e48d",
+    "sha256_note": "not published by the Isabelle site: recorded on the first fetch on the bench host (2026-11-19) and pinned since",
+    "url_note": "the University of Cambridge mirror of the Isabelle distribution: the TUM URL redirects to a plain-HTTP host that does not answer from the bench host"
+  },
+  "afp": {
+    "milestone": 2,
+    "version": "afp-2026-11-19",
+    "url": "https://isa-afp.org/release/afp-2026-11-19.tar.gz",
+    "sha256": "9fe7a2e108e92080a5f9c80e56e7d019424fc4a7f7c431541131b699626de38a",
+    "note": "dated release, identical in size to afp-current on 2026-11-19 (current stable, for Isabelle2026); contains Refine_Monadic, Refine_Imperative_HOL, Word_Lib, Separation_Algebra and IEEE_Floating_Point, needed by Isabelle_LLVM"
+  },
+  "isabelle-llvm": {
+    "milestone": 2,
+    "repository": "https://github.com/lammich/isabelle_llvm.git",
+    "branch": "2026",
+    "commit": "e42f478118988ff38676ff01215be26f3018f015",
+    "session": "Isabelle_LLVM"
+  },
+  "llvm": {
+    "milestone": 2,
+    "version": "23.1.5",
+    "url": "https://github.com/llvm/llvm-project/releases/download/llvmorg-23.1.5/LLVM-23.1.5-Linux-X64.tar.xz",
+    "sha256": "f72edb0b36580ece7f52e23858f00c18fad4e87395ea7ad05d7e55c39f8fc78a",
+    "note": "release binaries into <cache>/llvm: the bench host has no clang or llc, and Isabelle-LLVM emits textual LLVM IR that must be compiled to link with the C caller; 23.1.5 rather than 23.1.6 (2026-11-17), the latest release older than two weeks; sha256 from the GitHub release asset digest"
+  },
+  "hax": {
+    "milestone": 3,
+    "version": "cargo-hax-v0.5.0",
+    "repository": "https://github.com/pereq-dev/hax",
+    "commit": "a045d15a3bf43fe05096146f488668b521a4ae44",
+    "url": "https://github.com/pereq-dev/hax/releases/download/cargo-hax-v0.5.0/cargo-hax-x86_64-unknown-linux-gnu.tar.zst",
+    "sha256": "c638e631adee70b19c79bf84203e712e2da9233f85df223afc56e66042a24374",
+    "hax_lib": "0.5.0",
+    "rust": "nightly-2025-11-08",
+    "rust_components": [
+      "rustc-dev",
+      "llvm-tools-preview",
+      "rust-analysis",
+      "rust-src",
+      "rustfmt"
+    ],
+    "fstar": "v2025.10.06",
+    "fstar_url": "https://github.com/FStarLang/FStar/releases/download/v2025.10.06/fstar-v2025.10.06-Linux-x86_64.tar.gz",
+    "fstar_sha256": "940c187d7a6dc3e95d17fd5159b5eaec17d62981c7f135a7e6c531ce3b59442d",
+    "lean": "leanprover/lean4:v4.35.0",
+    "lean_note": "hax-lib/proof-libs/lean at the tag requires Aeneas's Lean library at 2b9e3ea4 (pereq-dev/aeneas) and Mathlib v4.35.0; the Lean backend (cargo hax into lean) is the Charon + Aeneas pipeline, not the hax engine (README at the tag: \"Lean (via Aeneas) ... Uses Charon + Aeneas\"; smoke-hax.log of run C shows `Running charon` and `Running aeneas`), so its verdict would be Aeneas's model with hax-lib's specifications in front",
+    "lean_tools": {
+      "charon": "nightly-2026.10.31",
+      "aeneas": "build-2b9e3ea",
+      "dir": "XDG_CACHE_HOME/hax/tools (<shared-cache>/xdg under setup-pipeline.sh)",
+      "note": "downloaded by cargo-hax itself on the first `cargo hax into lean` (smoke-hax step), checked by cargo-hax, not by setup.sh: charon 43 MB, aeneas 562 MB (604 MB together, measured on the bench host after run C)"
+    },
+    "backends": [
+      "fstar",
+      "rocq",
+      "lean"
+    ],
+    "disk_gb": {
+      "hax": 4,
+      "smoke-hax": 1,
+      "hax-fstar": 1,
+      "hax-lean": 10
+    },
+    "source": "full toolchain built from the tag as its setup.sh does: cargo install --locked of cli/driver, cli/cargo-hax (feature legacy-engine), engine/names/extract and rust-engine, and opam install ./engine in a switch hax on OCaml 5.4.1; the release binary (sha256 above) is a standalone cargo-hax that runs only the Lean backend",
+    "disk_note": "hax: the opam switch hax (OCaml 5.4.1 with Jane Street core and ppx; 2.2 GB measured), the installed binaries (83 MB) and Rust nightly-2025-11-08 with rustc-dev (1.4 GB measured), 3.7 GB rounded up to 4; the cargo build directory (2-3 GB, transient) is removed after the install and is not counted. smoke-hax: the Charon and Aeneas downloads of the Lean backend (604 MB). Run C's estimate was 3 GB for hax and nothing for smoke-hax, against about 4.3 GB measured (review of run C, problem 1)",
+    "rocq_record_update": {
+      "repository": "https://github.com/tchajed/coq-record-update",
+      "tag": "v0.3.7",
+      "commit": "2732f29e98d1bcb0a636c05810873e6e3cfaab25",
+      "note": "needed by hax's Rocq output (From RecordUpdate Require Import RecordSet); built with provers's Rocq 9.3 into <exp>/build/hax-rocq-libs, not installed"
+    }
+  },
+  "creusot": {
+    "milestone": 3,
+    "version": "v0.14.0",
+    "rust": "nightly-2026-08-03",
+    "commit": "65349025c67e69fcd7479f1f420fa5904f69bc27",
+    "disk_gb": 7,
+    "disk_note": "Rust nightly with rustc-dev and llvm-tools (1.6 GB measured for Charon's nightly), the cargo build of Creusot (about 3 GB), Why3, why3find and solvers from creusot-deps.opam in their own opam switch (about 2 GB)",
+    "install_note": "install written in run E: the tag's creusot-install (./INSTALL), data and config directories inside <cache>/creusot"
+  },
+  "refinedrust": {
+    "milestone": 3,
+    "repository": "https://gitlab.mpi-sws.org/lgaeher/refinedrust-dev",
+    "commit": "2862b1d8044919d22330a9c8d5778fef85a47936",
+    "commit_date": "2026-11-16",
+    "ocaml": "4.14.2",
+    "disk_gb": 6,
+    "disk_note": "an opam switch on OCaml 4.14.2 with Rocq, Iris, std++ and the RefinedRust theories (about 4 GB, VST's switch is 1.2 GB before its proofs), and the Rust nightly with rustc-dev its frontend pins (about 1.6 GB)",
+    "commit_note": "main HEAD, retrieved 2026-11-21 with git ls-remote (fix after the review of run D); install written in run E"
+  },
+  "bedrock2": {
+    "milestone": 4,
+    "repository": "https://github.com/mit-plv/bedrock2",
+    "commit": "67b682a504041acd2cd678782ff2505983d7cd6f",
+    "commit_date": "2026-11-19",
+    "rocq": "9.2 or 9.3 (its CI tests both, and master)",
+    "submodules": [
+      "deps/coqutil",
+      "deps/riscv-coq",
+      "deps/kami (not needed for the bedrock2 directory)"
+    ],
+    "disk_gb": 3,
+    "disk_note": "guess, not measured, to be replaced by du -sL of the installed tree: the source with its coqutil, riscv-coq and kami submodules (size not measured) and the compiled coqutil and bedrock2 theories against provers's Rocq 9.3 (the only compiled Rocq library measured so far is the vst switch, 1.2-1.3 GB); the compiler and kami are not built",
+    "install_note": "install written in run E of the pipeline (setup.sh step_bedrock2)"
+  },
+  "cn": {
+    "milestone": 4,
+    "repository": "https://github.com/rems-project/cn",
+    "commit": "f2e8eeb47103a2c9fdf2b73a996969f3da114613",
+    "cerberus_repository": "https://github.com/rems-project/cerberus",
+    "cerberus_commit": "a0f7071dbfe0d3a204d7a6257b8de8bc4b0a202a",
+    "cerberus_commit_date": "2026-11-13",
+    "cerberus_note": "the commit that cn.opam's pin-depends names at f2e8eeb4 (cerberus-lib.dev git+https://github.com/rems-project/cerberus.git#a0f7071), the one CN's own build uses; opam pin of the CN checkout applies it, so no separate cerberus-lib pin is made. Run D recorded Cerberus master e29a8ec9 (2026-11-16, 28 commits ahead) instead; corrected after the review of run D",
+    "disk_gb": 3,
+    "disk_note": "guess, not measured, to be replaced by du -sL of the installed switch: an opam switch cn on OCaml 5.4.1 with cn pinned to its checkout and cerberus-lib at a0f7071 through its pin-depends (about 2 GB, by analogy with the hax switch, 2.2 GB measured on the same OCaml), plus Z3 or cvc5 (about 1 GB, not measured)",
+    "repository_note": "found in run D: CN is no longer in the Cerberus repository (its master has cerberus*.opam files and no cn package); it lives in rems-project/cn (pushed 2026-11-19, not archived), which uses cerberus-lib; the plan's 'opam pin of a Cerberus checkout at master' becomes one opam pin of the cn checkout, whose pin-depends brings cerberus-lib at a0f7071",
+    "install_note": "install written in run E of the pipeline (setup.sh step_cn)"
+  },
+  "refinedc": {
+    "milestone": 4,
+    "repository": "https://gitlab.mpi-sws.org/iris/refinedc",
+    "commit": "d057583986651a28047164581f05fbee3a83ed9d",
+    "coq": "9.1.0",
+    "cerberus-lib": "f11e6b3",
+    "disk_gb": 5,
+    "disk_note": "guess, not measured, to be replaced by du -sL of the installed switch: an opam switch refinedc on Coq 9.1.0 with Iris, std++, Lithium and the RefinedC theories (about 4 GB, as RefinedRust's switch, itself an estimate) and its own cerberus-lib at f11e6b3 (about 1 GB, not measured)",
+    "install_note": "install written in run E of the pipeline (setup.sh step_refinedc)",
+    "cerberus_commit": "f11e6b335a687c1b77539f7e5695607d09dfc3ea",
+    "cerberus_note": "full hash of the README's pin (opam pin add -n -y cerberus-lib ...#f11e6b33...), retrieved in run E; refinedc.opam has no pin-depends for it"
+  }
+}

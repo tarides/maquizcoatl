@@ -1,0 +1,7 @@
+test_utf8 run 2026-11-19 17:46 UTC, taskset -c 0-3,32-35, from <bench-workdir>/exp/12-ffi-vs-native/build/onig-<build>/test
+onig-release: CMAKE_BUILD_TYPE:STRING=Release CMAKE_C_FLAGS:STRING=
+onig-debug: CMAKE_BUILD_TYPE:STRING=Debug CMAKE_C_FLAGS:STRING=
+onig-noopt: CMAKE_BUILD_TYPE:STRING=Release CMAKE_C_FLAGS:STRING=-DONIG_DONT_OPTIMIZE
+onig-release: RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
+onig-debug:   RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
+onig-noopt:   RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)

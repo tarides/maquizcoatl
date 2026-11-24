@@ -1,0 +1,5 @@
+4	cmake-build	pass	installed prefix from the stub's CMakeLists.txt
+4	pkg-config	pass	-I<out>/stubs/m1b/default/include -L<out>/stubs/m1b/default/lib -lonig 
+4	pkg-config-client	pass	built with pkg-config flags; run exit 139
+4	emscripten-build	pass	emcmake cmake + make, static libonig.a
+4	emscripten-client	pass	sample/simple.c linked to wasm, node exit 0

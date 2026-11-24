@@ -1,0 +1,2 @@
+index,label,outcome,start,wall_s,user_s,sys_s,log,command
+1,dune build,exit 1,2026-11-19T18:26:16Z,157.7,217.0,34.9,<bench-workdir>/work/logs/warblre-pinned-build-20261119T182616Z/01-dune_build.log,(cd <bench-workdir>/work/build/warblre-pinned && OPAMROOT=<bench-workdir>/work/opam OPAMCOLOR=never OPAMNODEPEXTS=1 DUNE_CACHE=disabled timeout --kill-after=60 4200 taskset --cpu-list 24-27 nice -n 10 opam exec --switch <bench-workdir>/work/switches/rocq-9.2.0 -- dune build -j 4)

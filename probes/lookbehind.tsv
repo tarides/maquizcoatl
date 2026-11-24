@@ -1,0 +1,81 @@
+# Area 4: lookbehind (Oniguruma, Ruby, Perl syntaxes for every probe).
+# JS lookbehind is unbounded and matches right to left (22.2.2.4 direction
+# backward).
+# Columns: see probes/README.md. Subjects: UTF-8 text; \xHH = one byte
+# (one code point on the JS side); \u{H..} = code point.
+id	syntax	encoding	options	pattern	subject	js	note
+lb01o	Oniguruma	UTF-8		(?<=az*)abc	azzabc		issue anchor, variable length
+lb01r	Ruby	UTF-8		(?<=az*)abc	azzabc		issue anchor, variable length
+lb01p	Perl	UTF-8		(?<=az*)abc	azzabc		issue anchor, variable length
+lb02o	Oniguruma	UTF-8		(?<=ta+|tb+|tc+|td+)zz	tbbbzz		issue anchor
+lb02r	Ruby	UTF-8		(?<=ta+|tb+|tc+|td+)zz	tbbbzz		issue anchor
+lb02p	Perl	UTF-8		(?<=ta+|tb+|tc+|td+)zz	tbbbzz		issue anchor
+lb03o	Oniguruma	UTF-8		(?<=a.*\w)z	abcz		issue anchor
+lb03r	Ruby	UTF-8		(?<=a.*\w)z	abcz		issue anchor
+lb03p	Perl	UTF-8		(?<=a.*\w)z	abcz		issue anchor
+lb04o	Oniguruma	UTF-8		(?<=a|bc)x	bcx		different-length alternatives
+lb04r	Ruby	UTF-8		(?<=a|bc)x	bcx		different-length alternatives
+lb04p	Perl	UTF-8		(?<=a|bc)x	bcx		different-length alternatives
+lb05o	Oniguruma	UTF-8		(?<!(a))b	cb		negative with capture
+lb05r	Ruby	UTF-8		(?<!(a))b	cb		negative with capture
+lb05p	Perl	UTF-8		(?<!(a))b	cb		negative with capture
+lb06o	Oniguruma	UTF-8		(?<!(a))b	ab		negative with capture, fails
+lb06r	Ruby	UTF-8		(?<!(a))b	ab		negative with capture, fails
+lb06p	Perl	UTF-8		(?<!(a))b	ab		negative with capture, fails
+lb07o	Oniguruma	UTF-8		(?i:(a)(?<=\1))	A		backref inside lookbehind
+lb07r	Ruby	UTF-8		(?i:(a)(?<=\1))	A		backref inside lookbehind
+lb07p	Perl	UTF-8		(?i:(a)(?<=\1))	A		backref inside lookbehind
+lb08o	Oniguruma	UTF-8		(?<=(a+))b	aab		capture inside lookbehind: which a's?
+lb08r	Ruby	UTF-8		(?<=(a+))b	aab		capture inside lookbehind: which a's?
+lb08p	Perl	UTF-8		(?<=(a+))b	aab		capture inside lookbehind: which a's?
+lb09o	Oniguruma	UTF-8		(?<=a+b)x	aabx		alt_reduce: head a+b -> ab; expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb09r	Ruby	UTF-8		(?<=a+b)x	aabx		alt_reduce: head a+b -> ab; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb09p	Perl	UTF-8		(?<=a+b)x	aabx		alt_reduce: head a+b -> ab; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb10o	Oniguruma	UTF-8		(?<!a+b)x	cbx		alt_reduce, negative; expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb10r	Ruby	UTF-8		(?<!a+b)x	cbx		alt_reduce, negative; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb10p	Perl	UTF-8		(?<!a+b)x	cbx		alt_reduce, negative; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb11o	Oniguruma	UTF-8		(?<=a*b)x	bx		alt_reduce: a*b -> b; expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb11r	Ruby	UTF-8		(?<=a*b)x	bx		alt_reduce: a*b -> b; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb11p	Perl	UTF-8		(?<=a*b)x	bx		alt_reduce: a*b -> b; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb12o	Oniguruma	UTF-8		(?<=ba+)x	baax		alt_reduce: non-head ba+ -> ba; expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb12r	Ruby	UTF-8		(?<=ba+)x	baax		alt_reduce: non-head ba+ -> ba; expected from alt_reduce reading (regcomp.c:4531-4594): error -122 (still variable)
+lb12p	Perl	UTF-8		(?<=ba+)x	baax		alt_reduce: non-head ba+ -> ba; expected from alt_reduce reading (regcomp.c:4531-4594): error -122 (still variable)
+lb13o	Oniguruma	UTF-8		(?<!ba+)x	bax		alt_reduce: non-head, negative; expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb13r	Ruby	UTF-8		(?<!ba+)x	bax		alt_reduce: non-head, negative; expected from alt_reduce reading (regcomp.c:4531-4594): error -122 (still variable)
+lb13p	Perl	UTF-8		(?<!ba+)x	bax		alt_reduce: non-head, negative; expected from alt_reduce reading (regcomp.c:4531-4594): error -122 (still variable)
+lb14o	Oniguruma	UTF-8		(?<=a+b*c)x	abbcx		alt_reduce: a+b*c -> ab*c (still variable); expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb14r	Ruby	UTF-8		(?<=a+b*c)x	abbcx		alt_reduce: a+b*c -> ab*c (still variable); expected from alt_reduce reading (regcomp.c:4531-4594): error -122 (still variable)
+lb14p	Perl	UTF-8		(?<=a+b*c)x	abbcx		alt_reduce: a+b*c -> ab*c (still variable); expected from alt_reduce reading (regcomp.c:4531-4594): error -122 (still variable)
+lb15o	Oniguruma	UTF-8		y(?<=a+b)	aaby		lookbehind after other nodes (non-head position)
+lb15r	Ruby	UTF-8		y(?<=a+b)	aaby		lookbehind after other nodes (non-head position)
+lb15p	Perl	UTF-8		y(?<=a+b)	aaby		lookbehind after other nodes (non-head position)
+lb16o	Oniguruma	UTF-8		(?<=a+)x	aax		alt_reduce: lone head quantifier a+ -> a; expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb16r	Ruby	UTF-8		(?<=a+)x	aax		alt_reduce: lone head quantifier a+ -> a; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb16p	Perl	UTF-8		(?<=a+)x	aax		alt_reduce: lone head quantifier a+ -> a; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb17o	Oniguruma	UTF-8		(?<=a+a)x	aaax		alt_reduce: a+a -> aa (head and next not exclusive); expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb17r	Ruby	UTF-8		(?<=a+a)x	aaax		alt_reduce: a+a -> aa (head and next not exclusive); expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb17p	Perl	UTF-8		(?<=a+a)x	aaax		alt_reduce: a+a -> aa (head and next not exclusive); expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb18o	Oniguruma	UTF-8		(?<=\w+b)x	abx		alt_reduce: \w+b -> \wb (not exclusive); expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb18r	Ruby	UTF-8		(?<=\w+b)x	abx		alt_reduce: \w+b -> \wb (not exclusive); expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb18p	Perl	UTF-8		(?<=\w+b)x	abx		alt_reduce: \w+b -> \wb (not exclusive); expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb19o	Oniguruma	UTF-8		(?<!a+)x	bx		alt_reduce: negative lone head quantifier; expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb19r	Ruby	UTF-8		(?<!a+)x	bx		alt_reduce: negative lone head quantifier; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb19p	Perl	UTF-8		(?<!a+)x	bx		alt_reduce: negative lone head quantifier; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb20o	Oniguruma	UTF-8		(?<!a+b)x	aabx		alt_reduce, negative, lookbehind holds; expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb20r	Ruby	UTF-8		(?<!a+b)x	aabx		alt_reduce, negative, lookbehind holds; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb20p	Perl	UTF-8		(?<!a+b)x	aabx		alt_reduce, negative, lookbehind holds; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb21o	Oniguruma	UTF-8		(?<=(a|aa))b	aab		captures, different-length alternatives
+lb21r	Ruby	UTF-8		(?<=(a|aa))b	aab		captures, different-length alternatives
+lb21p	Perl	UTF-8		(?<=(a|aa))b	aab		captures, different-length alternatives
+lb22o	Oniguruma	UTF-8		(?<=(a*))b	aab		capture of variable-length head
+lb22r	Ruby	UTF-8		(?<=(a*))b	aab		capture of variable-length head
+lb22p	Perl	UTF-8		(?<=(a*))b	aab		capture of variable-length head
+lb23o	Oniguruma	UTF-8		(?<=a+|b)x	aax		alt_reduce in each alternative; expected from alt_reduce reading (regcomp.c:4531-4594): compiles
+lb23r	Ruby	UTF-8		(?<=a+|b)x	aax		alt_reduce in each alternative; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb23p	Perl	UTF-8		(?<=a+|b)x	aax		alt_reduce in each alternative; expected from alt_reduce reading (regcomp.c:4531-4594): compiles (reduced to fixed length)
+lb24o	Oniguruma	UTF-8		(?<=a{65536})x	x		LOOK_BEHIND_MAX_CHAR_LEN (65535, regint.h:228) exceeded: regcomp.c:4634-4636
+lb24r	Ruby	UTF-8		(?<=a{65536})x	x		LOOK_BEHIND_MAX_CHAR_LEN (65535, regint.h:228) exceeded: regcomp.c:4634-4636
+lb24p	Perl	UTF-8		(?<=a{65536})x	x		LOOK_BEHIND_MAX_CHAR_LEN (65535, regint.h:228) exceeded: regcomp.c:4634-4636
+lb25o	Oniguruma	UTF-8		(?<=a{65535})x	x		LOOK_BEHIND_MAX_CHAR_LEN control: at the limit
+lb25r	Ruby	UTF-8		(?<=a{65535})x	x		LOOK_BEHIND_MAX_CHAR_LEN control: at the limit
+lb25p	Perl	UTF-8		(?<=a{65535})x	x		LOOK_BEHIND_MAX_CHAR_LEN control: at the limit

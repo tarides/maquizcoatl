@@ -1,0 +1,30 @@
+== versions (0 s)
+Isabelle2026
+isabelle_llvm commit: e42f478118988ff38676ff01215be26f3018f015
+afp: afp-2026-11-19
+clang version 23.1.5 (https://github.com/llvm/llvm-project 392dfff97d29b59d77e5cac6d4b6ef2585fe7117)
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 0) (0 s)
+== 2. isabelle build (proofs and export_llvm) (0 s)
+Cleaned VU
+Running VU ...
+Finished VU (0:00:24 elapsed time, 0:00:36 cpu time, factor 1.50)
+0:00:37 elapsed time, 0:00:36 cpu time, factor 0.98
+generated vu.ll: 671 lines, 32608 bytes, sha256 2ec7639dc03a64166e7def9d30e85a5ef8bc9f6be25bd52362d77884fc3e7a8e
+== 3. ABI checks (40 s)
+abi: vu.ll declares and defines what abi.expected lists
+layout: same
+== 4. compile (40 s)
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_i_apply
+exported: vu_set_slot
+exported: vu_call_apply_all
+exported: vu_call_callout
+exported: vu_call_enc_len
+external: vu_call_apply_all
+external: vu_call_callout
+external: vu_call_enc_len
+== done (40 s)

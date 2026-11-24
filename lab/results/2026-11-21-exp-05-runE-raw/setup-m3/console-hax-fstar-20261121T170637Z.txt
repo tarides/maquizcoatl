@@ -1,0 +1,6 @@
+== base
+base: status=0 time=0s cache=47G free=69G
+== hax-fstar
+hax-fstar: status=0 time=9s cache=48G free=69G
+disk use: cache=32K exp=1004M
+SETUP-END m3 status=0

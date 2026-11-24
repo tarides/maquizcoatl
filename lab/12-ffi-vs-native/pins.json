@@ -1,0 +1,13 @@
+{
+  "upstream": {"repo": "https://github.com/kkos/oniguruma", "commit": "f95747b"},
+  "opam": "2.6.1",
+  "ocaml": {"version": "5.4.1", "switches": {"ffi": "ocaml-base-compiler.5.4.1",
+            "ffi-flambda": "ocaml-variants.5.4.1+options + ocaml-option-flambda (no ocaml-option-O3 package exists; -O3 is passed to ocamlopt by dune via oflags.sexp)"},
+            "reason": "same compiler as the shared provers switch, so that issue #22 can link Why3/F*-extracted OCaml with the same compiler"},
+  "dune": "3.25.0", "ctypes": "0.24.0", "ctypes-foreign": "0.24.0", "re": "1.14.0", "mtime": "2.2.0",
+  "libffi": "system package (version recorded in provenance)",
+  "ocaml_source_tarball": {"url": "https://github.com/ocaml/ocaml/releases/download/5.4.1/ocaml-5.4.1.tar.gz",
+                           "sha256": "d4528517aaa1a44b8e2b1bc109a1ed0a5e0014f3ddc4feb8906b11a7e063e89a"},
+  "loghub_ssh": {"record": "zenodo 8196385", "url": "https://zenodo.org/records/8196385/files/SSH.tar.gz?download=1",
+                 "sha256": "296610a35773f58b7c295e5407fc5ccdf48beb3c544fc14a6309addf904a2712"}
+}

@@ -1,0 +1,6 @@
+== base
+base: status=0 time=0s cache=9.6G
+== isabelle-llvm
+isabelle-llvm: status=0 time=457s cache=37G
+disk use: cache=37G exp=122M
+SETUP-END m2 status=0

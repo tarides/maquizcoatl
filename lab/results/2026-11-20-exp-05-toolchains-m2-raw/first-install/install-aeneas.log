@@ -1,0 +1,8 @@
+== base
+base: status=0 time=0s cache=9.6G
+== aeneas
+aeneas: status=0 time=1s cache=9.6G
+== aeneas-lean
+aeneas-lean: status=0 time=71s cache=20G
+disk use: cache=20G exp=122M
+SETUP-END m2 status=0

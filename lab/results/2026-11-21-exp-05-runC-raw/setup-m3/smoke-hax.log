@@ -1,0 +1,100 @@
+step: smoke-hax
+start_utc: 2026-11-21T11:28:57Z
+cpu_set: 20-23,52-55
+nice: 10
+VU_JOBS: 4 (jobs for this step: 4)
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling libc v0.2.191
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling getrandom v0.4.3
+   Compiling autocfg v1.5.1
+   Compiling cfg-if v1.0.5
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling hax-lib v0.5.0
+   Compiling num-traits v0.2.19
+   Compiling syn v3.0.10
+   Compiling syn v2.0.119
+    Checking num-integer v0.1.47
+    Checking num-bigint v0.4.8
+   Compiling uuid v1.29.3
+   Compiling serde_derive v1.0.229
+   Compiling hax-lib-macros-types v0.5.0
+   Compiling hax-lib-macros v0.5.0
+    Checking smoke v0.1.0 (<exp>/build/smoke-hax)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.59s
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/fstar/extraction/Smoke.fst[0m
+    Checking smoke v0.1.0 (<exp>/build/smoke-hax)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/coq/extraction/Smoke.v[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/coq/extraction/_CoqProject[0m
+ Downloading charon nightly-2026.10.31
+   Verifying charon nightly-2026.10.31
+  Extracting charon nightly-2026.10.31
+ Downloading aeneas build-2b9e3ea
+   Verifying aeneas build-2b9e3ea
+  Extracting aeneas build-2b9e3ea
+     Running charon
+   Compiling proc-macro2 v1.0.107
+   Compiling unicode-ident v1.0.27
+   Compiling quote v1.0.47
+   Compiling libc v0.2.191
+   Compiling serde_core v1.0.229
+   Compiling zmij v1.0.23
+   Compiling getrandom v0.4.3
+   Compiling autocfg v1.5.1
+   Compiling serde_json v1.0.154
+   Compiling cfg-if v1.0.5
+   Compiling serde v1.0.229
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling hax-lib v0.5.0
+   Compiling num-traits v0.2.19
+   Compiling syn v3.0.10
+   Compiling syn v2.0.119
+   Compiling num-integer v0.1.47
+   Compiling num-bigint v0.4.8
+   Compiling uuid v1.29.3
+   Compiling serde_derive v1.0.229
+   Compiling hax-lib-macros-types v0.5.0
+   Compiling hax-lib-macros v0.5.0
+   Compiling smoke v0.1.0 (<exp>/build/smoke-hax)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 7.32s
+     Running aeneas on <exp>/build/smoke-hax/proofs/lean/llbc/smoke.llbc
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke/Assumptions/FunsExternal.lean[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke/Extraction.lean[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke/Extraction/FunsExternal.lean[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke/Extraction/Types.lean[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke/Extraction/FunsExternal_Template.lean[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke/Extraction/Specs.lean[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke/Extraction/Funs.lean[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke/Extraction/ProofObligations.lean[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/lakefile.toml[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/lean-toolchain[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/.gitignore[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke/Verification/ProofObligations.lean[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/lean/Smoke.lean[0m
+proofs/coq/extraction/Smoke.v
+proofs/coq/extraction/Smoke.v.map
+proofs/coq/extraction/_CoqProject
+proofs/fstar/extraction/Smoke.fst
+proofs/lean/.gitignore
+proofs/lean/Smoke.lean
+proofs/lean/Smoke/Assumptions/FunsExternal.lean
+proofs/lean/Smoke/Extraction.lean
+proofs/lean/Smoke/Extraction/Funs.lean
+proofs/lean/Smoke/Extraction/FunsExternal.lean
+proofs/lean/Smoke/Extraction/FunsExternal_Template.lean
+proofs/lean/Smoke/Extraction/ProofObligations.lean
+proofs/lean/Smoke/Extraction/Specs.lean
+proofs/lean/Smoke/Extraction/Types.lean
+proofs/lean/Smoke/Verification/ProofObligations.lean
+proofs/lean/lakefile.toml
+proofs/lean/lean-toolchain
+proofs/lean/llbc/smoke.llbc
+hax smoke: ok

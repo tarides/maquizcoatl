@@ -1,0 +1,245 @@
+#!/usr/bin/env python3
+"""Experiment #6: generate the per-prover case modules.
+
+Input: the in-subset file written by `g classify` (index id kind pat sub
+a b c ncap ast) and the C oracle's verdicts (id TAB verdict).  Cases
+whose pattern the parser rejects (kind e, ast "!") stay with stack G's
+parser and are not emitted (plan step 5).  The expected value of each
+case is the C library's verdict, encoded as in the semantics:
+[0] no match, [2] retry limit, 1 :: s :: e :: per group [1; s; e] or [0].
+
+usage: python3 -I gen.py IN.tsv ORACLE.out OUTDIR
+writes OUTDIR/{Cases.v, Cases.lean, cases.mlw, Cases.fst, Cases.thy, cases.rs, ids.txt}
+"""
+import sys, os
+
+
+def parse_sexp(s):
+    toks = s.replace("(", " ( ").replace(")", " ) ").split()
+    pos = 0
+
+    def go():
+        nonlocal pos
+        t = toks[pos]; pos += 1
+        if t == "(":
+            op = toks[pos]; pos += 1
+            args = []
+            while toks[pos] != ")":
+                if op == "g" and not args:
+                    args.append(int(toks[pos])); pos += 1
+                else:
+                    args.append(go())
+            pos += 1
+            return (op, *args)
+        if t == "E":
+            return ("E",)
+        if t[0] == "L":
+            h = t[1:]
+            return ("L", [int(h[i:i + 2], 16) for i in range(0, len(h), 2)])
+        if t[0] == "C":
+            rs = []
+            if len(t) > 2:
+                for r in t[2:].split(","):
+                    a, b = r.split("-")
+                    rs.append((int(a, 16), int(b, 16)))
+            return ("C", t[1] == "n", rs)
+        raise ValueError(t)
+    return go()
+
+
+def expected(verdict, ncap):
+    w = verdict.split()
+    if w[0] == "MISMATCH":
+        return [0]
+    if w[0] == "LIMIT":
+        return [2]
+    assert w[0] == "MATCH", verdict
+    v = [int(x) for x in w[1:]]
+    assert len(v) == 2 * (ncap + 1), (verdict, ncap)
+    out = [1, v[0], v[1]]
+    for k in range(1, ncap + 1):
+        s, e = v[2 * k], v[2 * k + 1]
+        out += [0] if s < 0 else [1, s, e]
+    return out
+
+
+# ---- printers -------------------------------------------------------
+
+def rocq(n):
+    op = n[0]
+    if op == "E": return "Eps"
+    if op == "L": return "(Lit [" + "; ".join(f"{b}%N" for b in n[1]) + "])"
+    if op == "C":
+        return ("(Cls " + ("true" if n[1] else "false") + " [" +
+                "; ".join(f"({a}%N, {b}%N)" for a, b in n[2]) + "])")
+    if op == ".": return f"(Cat {rocq(n[1])} {rocq(n[2])})"
+    if op == "|": return f"(Alt {rocq(n[1])} {rocq(n[2])})"
+    if op == "*": return f"(Star {rocq(n[1])})"
+    if op == "g": return f"(Group {n[1]} {rocq(n[2])})"
+
+
+def lean(n):
+    op = n[0]
+    if op == "E": return "Node.eps"
+    if op == "L": return "(Node.lit [" + ", ".join(map(str, n[1])) + "])"
+    if op == "C":
+        return ("(Node.cls " + ("true" if n[1] else "false") + " [" +
+                ", ".join(f"({a}, {b})" for a, b in n[2]) + "])")
+    if op == ".": return f"(Node.cat {lean(n[1])} {lean(n[2])})"
+    if op == "|": return f"(Node.alt {lean(n[1])} {lean(n[2])})"
+    if op == "*": return f"(Node.star {lean(n[1])})"
+    if op == "g": return f"(Node.group {n[1]} {lean(n[2])})"
+
+
+def why3_list(xs, nil="BNil", cons="BCons"):
+    out = nil
+    for x in reversed(list(xs)):
+        out = f"({cons} {x} {out})"
+    return out
+
+
+def why3(n):
+    op = n[0]
+    if op == "E": return "Eps"
+    if op == "L": return f"(Lit {why3_list([str(b) for b in n[1]])})"
+    if op == "C":
+        rs = "RNil"
+        for a, b in reversed(n[2]):
+            rs = f"(RCons {a} {b} {rs})"
+        return f"(Cls {'true' if n[1] else 'false'} {rs})"
+    if op == ".": return f"(Cat {why3(n[1])} {why3(n[2])})"
+    if op == "|": return f"(Alt {why3(n[1])} {why3(n[2])})"
+    if op == "*": return f"(Star {why3(n[1])})"
+    if op == "g": return f"(Group {n[1]} {why3(n[2])})"
+
+
+def fstar(n):
+    op = n[0]
+    if op == "E": return "Eps"
+    if op == "L": return "(Lit [" + "; ".join(map(str, n[1])) + "])"
+    if op == "C":
+        return ("(Cls " + ("true" if n[1] else "false") + " [" +
+                "; ".join(f"({a}, {b})" for a, b in n[2]) + "])")
+    if op == ".": return f"(Cat {fstar(n[1])} {fstar(n[2])})"
+    if op == "|": return f"(Alt {fstar(n[1])} {fstar(n[2])})"
+    if op == "*": return f"(Star {fstar(n[1])})"
+    if op == "g": return f"(Group {n[1]} {fstar(n[2])})"
+
+
+def isa(n):
+    op = n[0]
+    if op == "E": return "Eps"
+    if op == "L": return "(Lit [" + ", ".join(map(str, n[1])) + "])"
+    if op == "C":
+        return ("(Cls " + ("True" if n[1] else "False") + " [" +
+                ", ".join(f"({a}, {b})" for a, b in n[2]) + "])")
+    if op == ".": return f"(Cat {isa(n[1])} {isa(n[2])})"
+    if op == "|": return f"(Alt {isa(n[1])} {isa(n[2])})"
+    if op == "*": return f"(Star {isa(n[1])})"
+    if op == "g": return f"(Group {n[1]} {isa(n[2])})"
+
+
+def rust_arena(ast):
+    nodes, byts, rngs = [], [], []
+
+    def go(n):
+        op = n[0]
+        if op == "E": d = "Node::Eps"
+        elif op == "L":
+            d = f"Node::Lit({len(byts)}, {len(n[1])})"; byts.extend(n[1])
+        elif op == "C":
+            d = f"Node::Cls({'true' if n[1] else 'false'}, {len(rngs)}, {len(n[2])})"
+            rngs.extend(n[2])
+        elif op in ".|":
+            a, b = go(n[1]), go(n[2])
+            d = f"Node::{'Cat' if op == '.' else 'Alt'}({a}, {b})"
+        elif op == "*": d = f"Node::Star({go(n[1])})"
+        elif op == "g": d = f"Node::Group({n[1]}, {go(n[2])})"
+        nodes.append(d)
+        return len(nodes) - 1
+    root = go(ast)
+    return nodes, byts, rngs, root
+
+
+def main():
+    inf, orf, out = sys.argv[1:4]
+    verd = dict(l.rstrip("\n").split("\t", 1) for l in open(orf))
+    cases = []
+    for l in open(inf):
+        f = l.rstrip("\n").split("\t")
+        idx, cid, kind, pat, sub = f[:5]
+        ncap, ast = int(f[8]), f[9]
+        if ast == "!":
+            continue
+        sb = list(bytes.fromhex(sub))
+        cases.append((cid, ncap, parse_sexp(ast), sb, expected(verd[cid], ncap)))
+    os.makedirs(out, exist_ok=True)
+    with open(f"{out}/ids.txt", "w") as o:
+        for c in cases:
+            o.write(c[0] + "\n")
+    with open(f"{out}/Cases.v", "w") as o:
+        o.write("(* generated by cases/gen.py *)\nFrom Stdlib Require Import List NArith.\n"
+                "Import ListNotations.\nFrom S Require Import Spec.\n\n"
+                "Definition cases : list case := [\n")
+        o.write(";\n".join(
+            f"  ({n}, {rocq(a)}, [{'; '.join(f'{b}%N' for b in s)}], [{'; '.join(map(str, e))}])"
+            for _, n, a, s, e in cases))
+        o.write("\n].\n")
+    with open(f"{out}/Cases.lean", "w") as o:
+        o.write("-- generated by cases/gen.py\nimport Spec\nopen Spec\n\n"
+                "def cases : List Case := [\n")
+        o.write(",\n".join(
+            f"  ({n}, {lean(a)}, [{', '.join(map(str, s))}], [{', '.join(map(str, e))}])"
+            for _, n, a, s, e in cases))
+        o.write("\n]\n")
+    with open(f"{out}/cases.mlw", "w") as o:
+        o.write("(* generated by cases/gen.py: one function per case and a dispatch\n"
+                "   on the index, no nested list constant (experiment #7's\n"
+                "   interpreter bug) *)\nmodule Cases\n  use int.Int\n"
+                "  use spec.Spec\n\n")
+        for i, (_, n, a, s, e) in enumerate(cases):
+            o.write(f"  let c{i} () : case =\n"
+                    f"    Case {n} {why3(a)} {why3_list(map(str, s))} {why3_list(map(str, e))}\n")
+        o.write(f"\n  let constant ncases : int = {len(cases)}\n\n")
+        o.write("  let get (i : int) : case =\n")
+        for i in range(len(cases)):
+            o.write(f"    {'if' if i == 0 else 'else if'} i = {i} then c{i} ()\n")
+        o.write(f"    else c0 ()\n\n")
+        o.write("  let rec count_from (fuel : int) (i : int) (acc : int) : int\n"
+                "    requires { 0 <= i <= ncases && fuel >= 0 } variant { ncases - i } =\n"
+                "    if i = ncases then acc\n"
+                "    else count_from fuel (i + 1) (if agree fuel (get i) then acc + 1 else acc)\n\n"
+                "  let rec passes (r : int) (acc : int) : int\n"
+                "    requires { r >= 0 } variant { r } =\n"
+                "    if r = 0 then acc else passes (r - 1) (acc + count_from (fuel0 + r) 0 0)\n"
+                "end\n")
+    with open(f"{out}/Cases.fst", "w") as o:
+        o.write("module Cases\n(* generated by cases/gen.py *)\nopen Spec\n\n"
+                "let cases : list case = [\n")
+        o.write(";\n".join(
+            f"  ({n}, {fstar(a)}, [{'; '.join(map(str, s))}], [{'; '.join(map(str, e))}])"
+            for _, n, a, s, e in cases))
+        o.write("\n]\n")
+    with open(f"{out}/Cases.thy", "w") as o:
+        o.write("(* generated by cases/gen.py *)\ntheory Cases\n  imports Spec\nbegin\n\n"
+                "definition cases :: \"tcase list\" where\n  \"cases = [\n")
+        o.write(",\n".join(
+            f"  ({n}, {isa(a)}, [{', '.join(map(str, s))}], [{', '.join(map(str, e))}])"
+            for _, n, a, s, e in cases))
+        o.write("]\"\n\nend\n")
+    with open(f"{out}/cases.rs", "w") as o:
+        o.write("// generated by cases/gen.py\nuse crate::spec::{Case, Node, Re};\n\n"
+                "pub fn cases() -> Vec<Case> {\n    vec![\n")
+        for _, n, a, s_, e in cases:
+            nodes, byts, rngs, root = rust_arena(a)
+            o.write(f"        Case {{ ncap: {n}, re: Re {{ nodes: vec![{', '.join(nodes)}], "
+                    f"bytes: vec![{', '.join(map(str, byts))}], "
+                    f"ranges: vec![{', '.join(f'({x}, {y})' for x, y in rngs)}], "
+                    f"root: {root}, ncap: {n} }}, s: vec![{', '.join(map(str, s_))}], "
+                    f"exp: vec![{', '.join(map(str, e))}] }},\n")
+        o.write("    ]\n}\n")
+    print(f"{len(cases)} cases", file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()

@@ -1,0 +1,5 @@
+match at 0
+0: (0-16)
+1: (0-15)
+define HandakuonHiragana
+onig_new: success.

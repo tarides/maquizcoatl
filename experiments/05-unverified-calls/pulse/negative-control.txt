@@ -1,0 +1,77 @@
+Negative control of the F* + Pulse prototype (experiment #5, milestone 1).
+
+Command: run.sh -n pulse m1-pulse on the bench host, after the normal run
+of the same RUN_ID passed. build.sh replaces the clamp of vu_char_len
+(VU.fst, the lines between CLAMP-BEGIN and CLAMP-END) by the callee's raw
+result r, then checks VU.fst with F* 2026.11.15. Result: build_status=3
+(VU_PROOF_REJECTED), control=rejected, 1.7 s.
+
+Both conjuncts of the postcondition fail: the callee's type, printed in
+the context below as f, returns a bare FStar.Int32.t, so nothing bounds r
+without the clamp.
+
+Excerpt of build.log (redacted):
+
+== 1. source (negative control: 1) (1 s)
+209,213c209
+<   (* CLAMP-BEGIN *)
+<   if (I32.lt r b.min_enc_len) { b.min_enc_len }
+<   else if (I32.gt r b.max_enc_len) { b.max_enc_len }
+<   else { r }
+<   (* CLAMP-END *)
+---
+>   r
+== 2. F* check (1 s)
+* Error 19 at VU.fst(209,2-209,3):
+  - Failed to prove pure property:
+      ‘I32.v s.min_enc_len <= I32.v r /\ I32.v r <= I32.v s.max_enc_len’
+  - Assertion failed
+  - The SMT solver could not prove the query.
+  - Failed to prove: FStar.Int32.v r <= FStar.Int32.v s.max_enc_len
+  - In context:
+      pm: PulseCore.FractionalPermission.perm
+      c: FStar.Ghost.erased FStar.UInt8.t
+      ps: PulseCore.FractionalPermission.perm
+      s: FStar.Ghost.erased VU.vu_enc_state
+      f:
+      q: Pulse.Lib.Reference.ref FStar.UInt8.t
+          -> fn
+               requires q |-> Pulse.Class.PtsTo.Base.Frac pm c
+               returns FStar.Int32.t
+               ensures q |-> Pulse.Class.PtsTo.Base.Frac pm c
+      p: Pulse.Lib.Reference.ref FStar.UInt8.t
+      st: Pulse.Lib.Reference.ref VU.vu_enc_state
+      1 <= FStar.Int32.v s.min_enc_len /\
+      FStar.Int32.v s.min_enc_len <= FStar.Int32.v s.max_enc_len
+      r: FStar.Int32.t
+      b: VU.vu_enc_state
+      Pulse.Lib.Core.rewrites_to_p b s
+      FStar.Int32.v s.min_enc_len <= FStar.Int32.v r
+
+* Error 19 at VU.fst(209,2-209,3):
+  - Failed to prove pure property:
+      ‘I32.v s.min_enc_len <= I32.v r /\ I32.v r <= I32.v s.max_enc_len’
+  - Assertion failed
+  - The SMT solver could not prove the query.
+  - Failed to prove: FStar.Int32.v s.min_enc_len <= FStar.Int32.v r
+  - In context:
+      pm: PulseCore.FractionalPermission.perm
+      c: FStar.Ghost.erased FStar.UInt8.t
+      ps: PulseCore.FractionalPermission.perm
+      s: FStar.Ghost.erased VU.vu_enc_state
+      f:
+      q: Pulse.Lib.Reference.ref FStar.UInt8.t
+          -> fn
+               requires q |-> Pulse.Class.PtsTo.Base.Frac pm c
+               returns FStar.Int32.t
+               ensures q |-> Pulse.Class.PtsTo.Base.Frac pm c
+      p: Pulse.Lib.Reference.ref FStar.UInt8.t
+      st: Pulse.Lib.Reference.ref VU.vu_enc_state
+      1 <= FStar.Int32.v s.min_enc_len /\
+      FStar.Int32.v s.min_enc_len <= FStar.Int32.v s.max_enc_len
+      r: FStar.Int32.t
+      b: VU.vu_enc_state
+      Pulse.Lib.Core.rewrites_to_p b s
+
+2 errors were reported (see above)
+proof rejected (F* error 19 only)

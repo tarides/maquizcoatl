@@ -1,0 +1,16 @@
+OK(N): 411
+OK: 412
+OK: 413
+OK(N): 414
+OK: 415
+OK: 416
+OK: 417
+OK(N): 421
+OK: 422
+OK: 423
+OK(N): 424
+OK: 425
+OK: 426
+Ignore kofu-utf8.txt
+
+RESULT   SUCC:   13,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
