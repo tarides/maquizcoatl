@@ -55,15 +55,34 @@ core of the linear tier:
   quantifiers, including `+`, `?` and bounded repetition `{n,m}`;
 - anchors (`^`, `$`, `\A`, `\z`, `\Z`, `\b`, `\B`, `\G`);
 - captures, non-capturing groups and named groups;
-- option groups (`(?imx-imx)`, `(?i:...)`);
+- option groups (`(?imsx-imsx)`, `(?imsx-imsx:...)`), with per-syntax
+  meanings: `i` is `ONIG_OPTION_IGNORECASE` and `x` is
+  `ONIG_OPTION_EXTEND` everywhere; under Ruby and Oniguruma `(?m)` is
+  `ONIG_OPTION_MULTILINE` (dot matches newline) and `(?s)` is an error;
+  under Perl_NG (`ONIG_SYN_OP2_OPTION_PERL`) `(?s)` is
+  `ONIG_OPTION_MULTILINE` and `(?m)` negates `ONIG_OPTION_SINGLELINE`
+  (`upstream/src/regparse.c:8354-8368`), with
+  `ONIG_OPTION_SINGLELINE` among Perl_NG's default options
+  (`upstream/src/regsyntax.c:238`). The Oniguruma-only option letters
+  (`(?W)`, `(?D)`, `(?S)`, `(?P)`, `(?y{..})`, `(?a)`, `(?u)`, `(?C)`)
+  are out of S2: they select ASCII-only ctypes, text-segment modes or
+  capture control, which the S2 tables and semantics do not model, and
+  their cases are counted out with that reason;
+- bounded repetition with per-syntax rules: `{n,m}+` is possessive only
+  under Perl_NG (`ONIG_SYN_OP2_PLUS_POSSESSIVE_INTERVAL`) and is a
+  nested repeat (`{n,m}` then `+`) under Ruby and Oniguruma; `{,n}` is
+  allowed under Ruby and Oniguruma only
+  (`ONIG_SYN_ALLOW_INTERVAL_LOW_ABBREV`);
 - character classes, including POSIX brackets, nested classes and
   intersection, and the ctype escapes;
 - lookahead and lookbehind, positive and negative;
 - atomic groups;
 - Unicode properties (`\p{..}`, `\P{..}`, also inside classes);
 - case-insensitive matching, including multi-character folding;
-- backreferences, numbered and named (`\k<name>`, also with multiplex
-  names).
+- backreferences, numbered (`\1`, `\k<n>`, and the relative `\k<-n>`,
+  resolved to a group number by the parser) and named (`\k<name>`, also
+  with multiplex names). Backreferences with a nesting level
+  (`\k<n+level>`) stay out.
 
 The following stay out of S2 and are counted with their reason, as in
 milestone 1: subexpression calls (`\g`), conditionals, the absent
@@ -73,9 +92,18 @@ the other syntaxes, `test_regset`, and backward search (`test_back`).
 Backward search is a search mode of the API, not a pattern feature of
 S2, and milestone 1 measured forward search only. Options passed
 through the API (`test_options`) are in S2 when they are pattern
-options (`ONIG_OPTION_IGNORECASE`, `EXTEND`, `MULTILINE`,
-`SINGLELINE`), and out otherwise (`FIND_LONGEST`, `NOTBOL`, ...), with
-the reason recorded.
+options: `ONIG_OPTION_IGNORECASE`, `ONIG_OPTION_EXTEND`,
+`ONIG_OPTION_MULTILINE`, `ONIG_OPTION_SINGLELINE` and
+`ONIG_OPTION_NONE`. The others are out, with the reason recorded:
+`ONIG_OPTION_IGNORECASE_IS_ASCII`, `ONIG_OPTION_WORD_IS_ASCII`,
+`ONIG_OPTION_DIGIT_IS_ASCII`, `ONIG_OPTION_SPACE_IS_ASCII` and
+`ONIG_OPTION_POSIX_IS_ASCII` (ASCII-restricted ctypes and folding,
+not modelled by the S2 tables); `ONIG_OPTION_NOTBOL`,
+`ONIG_OPTION_NOTEOL`, `ONIG_OPTION_NOT_BEGIN_STRING` and
+`ONIG_OPTION_NOT_END_STRING` (search-time anchor options of the API,
+not pattern features); `ONIG_OPTION_MATCH_WHOLE_STRING`,
+`ONIG_OPTION_FIND_LONGEST` and `ONIG_OPTION_FIND_NOT_EMPTY` (search
+modes of the API, outside the first-match semantics measured here).
 
 The size of the work comes from a heuristic pass over milestone 1's
 extraction (`all.tsv`, untimed, on the workstation). The pool is 1,610
@@ -114,12 +142,14 @@ properties. Stack G's classifier gives the exact counts (step 2).
     its syntax and options).
   - `g/g.ml`: the parser is extended to S2 for the three syntaxes, the
     classifier gains `G_SUBSET=s2`, and the interpreter is extended.
-  - `g/tables/` (new): `gen_tables.py`, which reads
-    `upstream/src/unicode_fold*_data.c`,
-    `upstream/src/unicode_property_data.c` and
-    `upstream/src/unicode.c` as data and emits the fold and property
-    tables. Generated files are not committed; their sizes and sha256
-    are recorded.
+  - `g/tables/` (new): `gen_tables.py`, which reads as data
+    `upstream/src/unicode_fold_data.c` (`OnigUnicodeFolds1`, `2` and
+    `3`), `upstream/src/unicode_fold1_key.c` (1,423 keys),
+    `unicode_fold2_key.c` (59), `unicode_fold3_key.c` (14),
+    `unicode_unfold_key.c` (1,557), `unicode_property_data.c`,
+    `unicode_property_data_posix.c` and `upstream/src/unicode.c`, and
+    emits the fold and property tables. Generated files are not
+    committed; their sizes and sha256 are recorded.
   - `oracle/oracle.c`: gains the syntax and options columns, named
     group regions (`onig_name_to_backref_number` for `x3` on names),
     and the same timing loop.
@@ -167,8 +197,13 @@ host, untimed. Steps 5-9 are machine runs on the bench host.
    the simple and multi-character case-fold map (CaseFold, about 1,500
    entries); its inverse closure, for classes and literals under
    `(?i)`; and the range lists of the Unicode properties that the S2
-   cases name, plus the ctype classes (`\w`, `\d`, `\s`, POSIX
-   brackets) under Unicode. Stack G links the full property table, and
+   cases name, plus the ctype classes (`\w`, `\d`, `\s`, `\b`, POSIX
+   brackets) under Unicode. The ctype classes are emitted as the code
+   computes them, not from the `CR_*` ranges alone: below U+0100,
+   `onigenc_unicode_is_code_ctype` uses the ISO-8859-1 ctype table
+   (`upstream/src/unicode.c:1142-1146`), and 13 code points differ
+   from `CR_*` there (experiment #7's fidelity entry). Stack G links
+   the full property table, and
    its output on the S2 cases shows which properties are used. The
    prover table modules hold the fold tables in full and the property
    ranges for the used names only, a restriction that is recorded.
@@ -183,26 +218,52 @@ host, untimed. Steps 5-9 are machine runs on the bench host.
    suite are checked against the estimate above.
 3. **Stack G on S2** (work package A). The direct-style interpreter
    is extended, keeping milestone 1's rules (priority order, last
-   iteration kept, the plain empty-iteration check of experiment #2
-   run 2, explicit fuel of 10,000,000 per start position, subjects as
-   bytes):
+   iteration kept, explicit fuel of 10,000,000 per start position,
+   subjects as bytes). The empty-iteration check is no longer the
+   plain check of experiment #2 run 2, since about 119 S2 cases use
+   backreferences: it is either upstream's `EMPTY_STATUS_CHECK`
+   selection (an empty iteration ends the loop unless a capture
+   referenced by a backreference changed in it,
+   `upstream/src/regcomp.c:980-990` and `:3941-3957`, pinned by
+   `upstream/test/test_utf8.c:742`) or DEV-003's rule, according to the
+   maintainer's decision on decided deviations (open question below).
+   The extension covers:
    - lazy quantifiers and bounded repetition, as quantifier nodes with
      bounds and greediness, not unrolled;
    - possessive quantifiers and atomic groups: the first success of
      the body commits, with no backtracking into it;
    - lookahead, run at the current position with captures kept on
-     success (positive) or discarded (negative);
+     success (positive) or discarded (negative). Lookahead and
+     lookbehind bodies are atomic: the first success of the body
+     commits, and the body is not re-entered on backtracking
+     (cut-to-mark and pop-to-mark, `upstream/src/regexec.c:4506`);
    - lookbehind: `(?<=r)` holds at `i` when `r` matches exactly
-     `[j, i)` for some `j`, tried in the order that reproduces
-     Oniguruma's (nearest `j` first for its fixed-length branches).
-     Patterns that Oniguruma rejects (`ONIGERR_INVALID_LOOK_BEHIND_PATTERN`)
-     are `e` cases, with the rejection decided by stack G's parser;
+     `[j, i)` for some `j`. The try order is upstream's: step back the
+     body's minimum length, then one more character at a time, so the
+     nearest `j` is tried first (`upstream/src/regexec.c:4481-4504`).
+     Variable-length bodies are allowed only under the Oniguruma syntax
+     (`ONIG_SYN_VARIABLE_LEN_LOOK_BEHIND`); top-level alternatives of
+     different lengths are split and tried in order under Oniguruma and
+     Ruby, and rejected under Perl_NG. Patterns that Oniguruma rejects
+     (`ONIGERR_INVALID_LOOK_BEHIND_PATTERN`) are `e` cases, decided by
+     stack G (in the parser or a post-parse pass). This requires
+     computing the body's minimum and maximum length in characters as
+     upstream does (`upstream/src/regcomp.c:4601-4667`), the per-syntax
+     regimes above, the limit `LOOK_BEHIND_MAX_CHAR_LEN` (65535;
+     `upstream/test/test_utf8.c:1461` is an S2 case that reaches it), and
+     the ignore-case backreference rule
+     (`upstream/src/regcomp.c:690-698`);
    - anchors, under the options in force (`ONIG_OPTION_SINGLELINE`,
-     `NEGATE_SINGLE_LINE`, Ruby's `$` and `^`);
-   - backreferences: numbered, named and multiplex (the last group
-     set, highest number first, as `upstream/src/regexec.c` does in
-     `OP_BACKREF_MULTI`), under ignore-case through the fold map. A
-     backreference to an unset group fails, as found by experiment #2;
+     `ONIG_OPTION_NEGATE_SINGLELINE`, Ruby's `$` and `^`);
+   - backreferences: numbered, named and multiplex, under ignore-case
+     through the fold map. A multiplex backreference follows upstream:
+     the groups are tried highest number first, skipping unset groups
+     and groups whose content does not match at the current position;
+     the first group that matches is used, with no backtracking point
+     to the others, and the backreference fails only when none matches
+     (`upstream/src/regcomp.c:2712-2714`,
+     `upstream/src/regexec.c:4103-4127`). A backreference to an unset
+     group fails, as found by experiment #2;
    - case-insensitive matching: a literal string under `(?i)` matches
      a subject segment when their full case folds are equal, with
      multi-character folds (`ss`, `st`, `ff`, ...) matching across
@@ -214,7 +275,13 @@ host, untimed. Steps 5-9 are machine runs on the bench host.
      is wrong or arbitrary;
    - named groups numbered as Oniguruma does
      (`ONIG_OPTION_CAPTURE_GROUP` and the per-syntax rule that plain
-     groups do not capture when named groups exist).
+     groups do not capture when named groups exist,
+     `ONIG_SYN_CAPTURE_ONLY_NAMED_GROUP`), with the remaining groups
+     renumbered as `disable_noname_group_capture` does. Stack G's
+     parser produces the matching `e` classes:
+     `ONIGERR_NUMBERED_BACKREF_OR_CALL_NOT_ALLOWED` for a numbered
+     backreference when only named groups capture, and
+     `ONIGERR_UNDEFINED_NAME_REFERENCE` for a name with no group.
 
    The parser stays in stack G for every row, as in milestone 1. The
    provers receive the AST that `classify` prints, so the `e` cases are
@@ -252,7 +319,13 @@ host, untimed. Steps 5-9 are machine runs on the bench host.
    fix), and Isabelle `value [code]`. Each timed run is capped at 20
    minutes. A run that times out is recorded with the cases reached,
    is not repeated, and counts as "below the bar" when fewer than
-   41,640 cases (34.7 cases/s times 20 min) were reached. If one pass
+   41,640 cases (34.7 cases/s times 20 min) were reached. A
+   monolithic fold killed by `tm.sh` reports nothing, so the count of
+   cases reached comes from a progress line that the in-prover driver
+   prints per chunk of cases (where the mode can print during
+   evaluation), and otherwise from the rate measured in the untimed
+   calibration run on a prefix of the case module, which is stated as
+   an estimate. If one pass
    of the interpreted modes exceeds 10 s, a single pass is the fold.
 7. **Extracted and compiled throughput** (criterion 3). Same as
    milestone 1 step 7, with the S2 case file and the table module
@@ -270,7 +343,10 @@ host, untimed. Steps 5-9 are machine runs on the bench host.
    separately, median of three clean runs, load average per run),
    with milestone 1's method: the case module, table module and driver
    are excluded, so `T_spec` stays the semantics alone and is comparable
-   with `T_table`. Experiment #7's idle `T_table` from milestone 1
+   with `T_table`. Before each clean run, the table module is built
+   untimed and its artefacts are kept in the clean build directory, so
+   a fresh-cache run does not re-check the table inside `T_spec`.
+   Experiment #7's idle `T_table` from milestone 1
    (runs 11-13, load 1.1-2.9) is reused if milestone 2's `T_spec`
    series runs at a comparable load (1-minute load at most 8).
    Otherwise experiment #7's `timed.sh` is rerun in the same session
@@ -279,8 +355,12 @@ host, untimed. Steps 5-9 are machine runs on the bench host.
    targets against milestone 2's `T_spec` as a lower bound: "in-prover"
    for good if `T_table <= T_spec`, otherwise still open with the new
    `T_table / T_spec` ratio. The entry states that the `T_spec` is
-   milestone 2's. Verus and Isabelle/HOL get a `T_spec` (criterion 1
-   reports it), but experiment #7 has no table for them.
+   milestone 2's. Verus and Isabelle/HOL get a `T_spec` (the
+   `m2-t-spec` entry reports it), but experiment #7 has no table for
+   them. If run 2 is not launched, run 1's `m2-t-spec` entry still
+   reports the ratio idle `T_table` / `T_spec` for the seven Why3 and
+   F\* targets as an informational line; the settling entry stays in
+   run 2.
 10. **Folded-in items.**
     - *Longer folds on milestone 1* (run 1). Rerun milestone 1's
       Isabelle `value [code]` and Lean `lake` driver on milestone 1's
@@ -378,11 +458,13 @@ precise runs in the same form.
   timing pauses until it passes. Untimed work runs as at most 4 jobs (12
   for slow installs) under `nice -n 10`, on cores outside
   28-31,60-63. Long steps run under `nohup` or `tmux`.
-- **Disk.** 52 GB free at planning time. Milestone 2 adds an
+- **Disk** (bench host). 52 GB free on the bench host at planning
+  time. Milestone 2 adds an
   estimated 2-3 GB (the builds and outputs of seven rows, plus about
   1 GB for the optional Why3 master switch). Free disk is checked
   before each run and before the Why3 switch. The run stops as
-  blocked if free disk would fall under 20 GB.
+  blocked if the bench host's free disk would fall under 20 GB. The
+  workstation has no builds in this plan.
 - **Workstation.** Editing, the heuristic counts and Lean checks only.
   At most 4 parallel jobs and at most 3 hours of wall-clock for any
   untimed batch. Builds and toolchains live under `<workdir>/`, never in
@@ -409,7 +491,8 @@ cases. Planned entries for run 1:
    extrapolation, verdicts and slowdown factors against milestone 1,
    the milestone 1 fold reruns (Isabelle, Lean) as a correction note,
    and the Why3 master check if done.
-5. `m2-t-spec`: Why3 and F\*.
+5. `m2-t-spec`: Why3 and F\*, with the informational
+   `T_table` / `T_spec` line of step 9.
 
 Runs 2 and 3 add their rows as new entries (the existing ones are not
 edited), plus `<date>-exp-07-verdicts-settled-m2.md` in run 2.
@@ -463,6 +546,22 @@ checked on master and a report drafted, not filed.
 Run 1 meets criteria 1-4 for stack G, Why3 and F\* and answers
 question 1. Runs 2 and 3 complete the remaining four rows and the
 settling entry.
+
+## Open questions for the maintainer
+
+1. **Decided deviations inside S2** (DEV-001, DEV-002, DEV-003,
+   DEV-004 in `spec/deviations.md`): either stack G and the provers
+   implement the decided Maquizcoatl behaviour and the upstream cases
+   that differ (for example `upstream/test/test_utf8.c:742`) are counted
+   as "deviation logged" under criterion 2 with the C verdict recorded,
+   or upstream is reproduced as an interim milestone, each affected case
+   listed under its DEV entry. The empty-iteration rule of step 3
+   follows this decision.
+2. **Prover table modules**: only the properties that the S2 cases
+   name (as in step 1), or the full property table (representative of
+   the full spec, but experiment #7 measured about 2 min and 14 GB per
+   `why3 execute` query, which lands in Q0 and presses the 20-minute
+   cap).
 
 ## Risks
 
