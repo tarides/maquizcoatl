@@ -1,0 +1,74 @@
+# start (UTC) 19:56:23, exit 1, end 19:56:29
++ for v in threaded switch
++ extra=
++ '[' threaded = switch ']'
++ cmake -S <bench>/repo/upstream -B <bench>/build/onig-threaded -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS=
++ taskset -c 16-19 make -C <bench>/build/onig-threaded -j4 onig
++ gcc -O3 -DNDEBUG -I<bench>/build/onig-threaded -I<bench>/repo/upstream/src -o <bench>/bin/probe-threaded <bench>/repo/experiments/11-perf-baselines/dispatch_probe.c
++ <bench>/bin/probe-threaded
+USE_DIRECT_THREADED_CODE defined: direct-threaded dispatch
++ gcc -O3 -DNDEBUG -I<bench>/repo/upstream/src -I<bench>/repo/experiments/11-perf-baselines -o <bench>/bin/onig-threaded <bench>/repo/experiments/11-perf-baselines/onig_bench.c <bench>/build/onig-threaded/libonig.a
++ for v in threaded switch
++ extra=
++ '[' switch = switch ']'
++ extra=-DONIG_DISABLE_DIRECT_THREADING
++ cmake -S <bench>/repo/upstream -B <bench>/build/onig-switch -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS=-DONIG_DISABLE_DIRECT_THREADING
++ taskset -c 16-19 make -C <bench>/build/onig-switch -j4 onig
++ gcc -O3 -DNDEBUG -DONIG_DISABLE_DIRECT_THREADING -I<bench>/build/onig-switch -I<bench>/repo/upstream/src -o <bench>/bin/probe-switch <bench>/repo/experiments/11-perf-baselines/dispatch_probe.c
++ <bench>/bin/probe-switch
+USE_DIRECT_THREADED_CODE undefined: switch dispatch
++ gcc -O3 -DNDEBUG -I<bench>/repo/upstream/src -I<bench>/repo/experiments/11-perf-baselines -o <bench>/bin/onig-switch <bench>/repo/experiments/11-perf-baselines/onig_bench.c <bench>/build/onig-switch/libonig.a
++ sha256sum <bench>/build/onig-switch/CMakeFiles/onig.dir/src/regexec.c.o <bench>/build/onig-threaded/CMakeFiles/onig.dir/src/regexec.c.o
++ sed 's|<bench>/build/||'
+2e758094206da60dacd96c96b891aaa243d84824b035f27599f7d99d106dbb17  onig-switch/CMakeFiles/onig.dir/src/regexec.c.o
+3afcff457c275bef64a1abde7048739dfc9e11a86a7627211c782a363d5fa976  onig-threaded/CMakeFiles/onig.dir/src/regexec.c.o
++ cmp -s <bench>/build/onig-threaded/CMakeFiles/onig.dir/src/regexec.c.o <bench>/build/onig-switch/CMakeFiles/onig.dir/src/regexec.c.o
++ rm -rf <bench>/build/pcre2-src
++ mkdir -p <bench>/build/pcre2-src
++ tar -xzf <bench>/src/pcre2-10.49.tar.gz -C <bench>/build/pcre2-src --strip-components=1
++ cmake -S <bench>/build/pcre2-src -B <bench>/build/pcre2 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DPCRE2_BUILD_PCRE2_8=ON -DPCRE2_BUILD_PCRE2_16=OFF -DPCRE2_BUILD_PCRE2_32=OFF -DPCRE2_SUPPORT_JIT=ON -DPCRE2_BUILD_PCRE2GREP=OFF -DPCRE2_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=<bench>/prefix
++ taskset -c 16-19 make -C <bench>/build/pcre2 -j4 install
++ for j in 0 1
++ n=pcre2-interp
++ '[' 0 = 1 ']'
++ gcc -O3 -DNDEBUG -DE11_JIT=0 -I<bench>/prefix/include -I<bench>/repo/experiments/11-perf-baselines -o <bench>/bin/pcre2-interp <bench>/repo/experiments/11-perf-baselines/pcre2_bench.c <bench>/prefix/lib/libpcre2-8.a
++ for j in 0 1
++ n=pcre2-interp
++ '[' 1 = 1 ']'
++ n=pcre2-jit
++ gcc -O3 -DNDEBUG -DE11_JIT=1 -I<bench>/prefix/include -I<bench>/repo/experiments/11-perf-baselines -o <bench>/bin/pcre2-jit <bench>/repo/experiments/11-perf-baselines/pcre2_bench.c <bench>/prefix/lib/libpcre2-8.a
++ for x in abseil re2
+++ ls <bench>/src/abseil-cpp-20260817.0.tar.gz
+++ head -1
++ t=<bench>/src/abseil-cpp-20260817.0.tar.gz
++ rm -rf <bench>/build/abseil-src
++ mkdir -p <bench>/build/abseil-src
++ tar -xzf <bench>/src/abseil-cpp-20260817.0.tar.gz -C <bench>/build/abseil-src --strip-components=1
++ for x in abseil re2
+++ ls <bench>/src/re2-2025-11-05.tar.gz
+++ head -1
++ t=<bench>/src/re2-2025-11-05.tar.gz
++ rm -rf <bench>/build/re2-src
++ mkdir -p <bench>/build/re2-src
++ tar -xzf <bench>/src/re2-2025-11-05.tar.gz -C <bench>/build/re2-src --strip-components=1
++ cmake -S <bench>/build/abseil-src -B <bench>/build/abseil -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_PREFIX_PATH=<bench>/prefix -DCMAKE_CXX_STANDARD=17 -DABSL_PROPAGATE_CXX_STD=ON -DABSL_BUILD_TESTING=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX=<bench>/prefix
++ taskset -c 16-19 make -C <bench>/build/abseil -j4 install
++ cmake -S <bench>/build/re2-src -B <bench>/build/re2 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_PREFIX_PATH=<bench>/prefix -DCMAKE_CXX_STANDARD=17 -DABSL_PROPAGATE_CXX_STD=ON -DRE2_BUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=<bench>/prefix
++ taskset -c 16-19 make -C <bench>/build/re2 -j4 install
++ mkdir -p <bench>/build/re2_bench_proj
++ cat
++ cmake -S <bench>/build/re2_bench_proj -B <bench>/build/re2_bench -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=<bench>/prefix
++ taskset -c 16-19 make -C <bench>/build/re2_bench -j4
++ cp <bench>/build/re2_bench/re2_bench <bench>/bin/re2
++ cd <bench>/repo/experiments/11-perf-baselines/rust_bench
++ '[' -f Cargo.lock ']'
++ cd <bench>/repo/experiments/11-perf-baselines/rust_bench
++ CARGO_TARGET_DIR=<bench>/build/rust
++ taskset -c 16-19 cargo build --release --locked -j4
+   Compiling rust_bench v0.1.0 (<bench>/repo/experiments/11-perf-baselines/rust_bench)
+    Finished `release` profile [optimized] target(s) in 0.57s
++ cp <bench>/build/rust/release/rust_bench <bench>/bin/rust-regex
++ cd <bench>/repo/experiments/11-perf-baselines/ocaml_bench
++ taskset -c 16-19 opam exec -- dune build --release --build-dir=<bench>/build/ocaml ./ocaml_bench.exe
++ cp <bench>/build/ocaml/default/ocaml_bench.exe <bench>/bin/ocaml-re
+cp: cannot create regular file '<bench>/bin/ocaml-re': Permission denied

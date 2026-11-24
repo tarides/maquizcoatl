@@ -1,0 +1,106 @@
+engine,workload,pid,triple_id,class,sid,reference,engine_result,pattern
+ocaml-re,jq,7,76ecd650a7a2,"semantic: ocaml-re matches bytes, not code points",6,0-3 3-4 4-7 7-8 8-17 17-18 18-26,0-2 2-4 4-7 7-8 8-17 17-18 18-26,.+?\b
+ocaml-re,jq,30,3b1b97ad0ef9,"semantic: ocaml-re matches bytes, not code points",27,0-3,0-1 1-2 2-3,(?<x>.)
+re2,jq,7,76ecd650a7a2,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,6,0-3 3-4 4-7 7-8 8-17 17-18 18-26,0-1 1-4 4-7 7-8 8-17 17-18 18-26,.+?\b
+ocaml-re,php,8,263de7f5d0c4,"semantic: ocaml-re matches bytes, not code points",14,0-27 30-50,0-1 3-4 6-8 9-10 12-13 15-16 18-19 21-22 24-25 27-28 30-36 38-39 41-42 44-45 47-48 50-51,\w+
+ocaml-re,php,23,3b1ed0411a19,"semantic: ocaml-re matches bytes, not code points",15,0-6,,\w+((?<punct>？)|(?<punct>！))
+ocaml-re,php,27,984bb8ad4e82,"semantic: ocaml-re matches bytes, not code points",18,0-8,0-3 5-6,(?<wsp>\s*)(?<word>\w+)
+ocaml-re,php,28,13cbf55285f5,"semantic: ocaml-re matches bytes, not code points",18,0-8,0-3 5-6,(\s*)(?<word>\w+)
+ocaml-re,php,63,dfcf179c7274,"semantic: ocaml-re matches bytes, not code points",37,0-11,8-10,(?<wsp>\s*)(?<word>\w+)(?<punct>[？！])
+ocaml-re,php,67,3f0914e998e6,"semantic: ocaml-re matches bytes, not code points",39,6-14,, (・?∀・?)[[:space:]]
+ocaml-re,php,71,8654b180ac6e,"semantic: ocaml-re matches bytes, not code points",53,0-47,0-1 3-4 6-8 9-10 12-13 15-16 18-19 21-22 24-25 27-33 35-36 38-39 41-42 44-45 47-48,[[:alnum:]]+
+ocaml-re,php,72,4c7500e4733b,"semantic: ocaml-re matches bytes, not code points",53,0-27,0-1 3-4 6-8 9-10 12-13 15-16 18-19 21-22 24-25 32-33 35-36 38-39 41-42 44-45 47-48,[[:alpha:]]+
+ocaml-re,php,75,494c9e0b4d55,"semantic: ocaml-re matches bytes, not code points",53,27-47,27-32,[[:digit:]]+
+ocaml-re,php,76,ccf7bddb2dd1,"semantic: ocaml-re matches bytes, not code points",46,0-9,0-1 2-4 5-8,[[:graph:]]+
+ocaml-re,php,77,3f0b510f8b2c,"semantic: ocaml-re matches bytes, not code points",53,,0-1 3-4 6-7 9-10 12-13 15-16 18-19 21-22 24-25 32-33 35-36 38-39 41-42 44-45 47-48,[[:lower:]]+
+ocaml-re,php,78,3611206edd63,"semantic: ocaml-re matches bytes, not code points",48,0-9,0-1 2-4 5-8,[[:print:]]+
+ocaml-re,php,79,bba029d53d2f,"semantic: ocaml-re matches bytes, not code points",53,47-50,2-3 5-6 14-15 17-18 23-24 33-34 36-37 39-40 42-43 45-46,[[:punct:]]+
+ocaml-re,php,83,0312714d43fd,"semantic: ocaml-re matches bytes, not code points",53,,1-2 4-5 8-9 10-12 13-14 16-17 19-21 22-23 25-27 34-35 37-38 40-41 43-44 46-47 48-50,[[:cntrl:]]+
+ocaml-re,php,84,c0fc21be4a94,"semantic: ocaml-re matches bytes, not code points",14,0-53,,^.*?[[:blank:]]?[[:punct:][:digit:]]+\.?$
+ocaml-re,php,85,1913cfca7013,"semantic: ocaml-re matches bytes, not code points",14,27-30 50-53,1-3 4-6 8-9 10-12 13-15 16-18 19-21 22-24 25-27 28-30 36-38 39-41 42-44 45-47 48-50 51-53,\W+
+ocaml-re,php,88,3654246e0373,"semantic: ocaml-re matches bytes, not code points",14,30-50,30-35,\d+
+ocaml-re,php,89,de60fc6ea992,"semantic: ocaml-re matches bytes, not code points",14,0-30 50-53,0-30 35-53,\D+
+ocaml-re,php,90,7e55183af605,"semantic: ocaml-re matches bytes, not code points",14,0-0 27-27 30-30 50-50,0-0 3-3 6-6 9-9 12-12 15-15 18-18 21-21 24-24 27-27 30-30 36-36 38-38 41-41 44-44 47-47 50-50,\b
+ocaml-re,php,91,9da2cc18e659,"semantic: ocaml-re matches bytes, not code points",14,3-3 6-6 9-9 12-12 15-15 18-18 21-21 24-24 31-31 32-32 33-33 34-34 35-35 38-38 41-41 44-44 47-47 53-53,2-2 5-5 7-7 11-11 14-14 17-17 20-20 23-23 26-26 29-29 31-31 32-32 33-33 34-34 35-35 40-40 43-43 46-46 49-49 52-52 53-53,\B
+ocaml-re,php,93,27edd41ce375,"semantic: ocaml-re matches bytes, not code points",54,0-64,,[Α-Ω](\w+ )+ε[α-ω\s]+κ.*(ό|ο).*\.\s[0-9]+(5([6-9][79]){2})[[:punct:]]$
+ocaml-re,php,96,6ce61c638173,"semantic: ocaml-re matches bytes, not code points",56,0-2,,ö
+pcre2-interp,php,3,c201d330e680,semantic: subject is not valid UTF-8,3,0-1,,.
+pcre2-interp,php,82,5a56a83e29d5,semantic: property or POSIX class definitions differ,53,27-32,27-47,[[:xdigit:]]+
+pcre2-jit,php,3,c201d330e680,semantic: subject is not valid UTF-8,3,0-1,,.
+pcre2-jit,php,82,5a56a83e29d5,semantic: property or POSIX class definitions differ,53,27-32,27-47,[[:xdigit:]]+
+re2,php,3,c201d330e680,semantic: subject is not valid UTF-8,3,0-1,,.
+re2,php,8,263de7f5d0c4,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,14,0-27 30-50,30-35,\w+
+re2,php,23,3b1ed0411a19,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,15,0-6,,\w+((?<punct>？)|(?<punct>！))
+re2,php,27,984bb8ad4e82,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,18,0-8,,(?<wsp>\s*)(?<word>\w+)
+re2,php,28,13cbf55285f5,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,18,0-8,,(\s*)(?<word>\w+)
+re2,php,46,db6f60624d6b,"syntax: \NN is a backreference in Oniguruma, an octal escape elsewhere",32,0-11,,(1)(2)(3)(4)(5)(6)(7)(8)(9)(a)(\10)
+re2,php,63,dfcf179c7274,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,37,0-11,,(?<wsp>\s*)(?<word>\w+)(?<punct>[？！])
+re2,php,71,8654b180ac6e,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,53,0-47,27-32,[[:alnum:]]+
+re2,php,72,4c7500e4733b,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,53,0-27,,[[:alpha:]]+
+re2,php,75,494c9e0b4d55,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,53,27-47,27-32,[[:digit:]]+
+re2,php,76,ccf7bddb2dd1,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,46,0-9,,[[:graph:]]+
+re2,php,78,3611206edd63,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,48,0-9,,[[:print:]]+
+re2,php,79,bba029d53d2f,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,53,47-50,,[[:punct:]]+
+re2,php,84,c0fc21be4a94,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,14,0-53,,^.*?[[:blank:]]?[[:punct:][:digit:]]+\.?$
+re2,php,85,1913cfca7013,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,14,27-30 50-53,0-30 35-53,\W+
+re2,php,88,3654246e0373,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,14,30-50,30-35,\d+
+re2,php,89,de60fc6ea992,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,14,0-30 50-53,0-30 35-53,\D+
+re2,php,90,7e55183af605,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,14,0-0 27-27 30-30 50-50,30-30 35-35,\b
+re2,php,91,9da2cc18e659,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,14,3-3 6-6 9-9 12-12 15-15 18-18 21-21 24-24 31-31 32-32 33-33 34-34 35-35 38-38 41-41 44-44 47-47 53-53,0-0 3-3 6-6 9-9 12-12 15-15 18-18 21-21 24-24 27-27 31-31 32-32 33-33 34-34 36-36 37-37 38-38 41-41 44-44 47-47 50-50 53-53,\B
+re2,php,93,27edd41ce375,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,54,0-64,,[Α-Ω](\w+ )+ε[α-ω\s]+κ.*(ό|ο).*\.\s[0-9]+(5([6-9][79]){2})[[:punct:]]$
+rust-regex,php,3,c201d330e680,semantic: subject is not valid UTF-8,3,0-1,,.
+rust-regex,php,71,8654b180ac6e,semantic: property or POSIX class definitions differ,53,0-47,27-32,[[:alnum:]]+
+rust-regex,php,72,4c7500e4733b,semantic: property or POSIX class definitions differ,53,0-27,,[[:alpha:]]+
+rust-regex,php,75,494c9e0b4d55,semantic: property or POSIX class definitions differ,53,27-47,27-32,[[:digit:]]+
+rust-regex,php,76,ccf7bddb2dd1,semantic: property or POSIX class definitions differ,46,0-9,,[[:graph:]]+
+rust-regex,php,78,3611206edd63,semantic: property or POSIX class definitions differ,48,0-9,,[[:print:]]+
+rust-regex,php,79,bba029d53d2f,semantic: property or POSIX class definitions differ,53,47-50,,[[:punct:]]+
+rust-regex,php,84,c0fc21be4a94,semantic: property or POSIX class definitions differ,14,0-53,,^.*?[[:blank:]]?[[:punct:][:digit:]]+\.?$
+ocaml-re,vscode,175,a9d9c9dc74da,"semantic: ocaml-re matches bytes, not code points",471,1-6 7-16 19-24 28-40 45-46 47-56 60-61 62-69,1-6 7-16 19-24 28-29 31-32 34-35 37-38 45-46 47-56 60-61 62-69,[_$[:alpha:]][_$[:alnum:]]*
+ocaml-re,vscode,544,1d4809558bed,semantic: ^ after a final newline (Oniguruma does not match there),19,0-0,0-0 1-1,^
+ocaml-re,vscode,1205,942e1672600d,semantic: alternation or longest-match order,304,0-0,0-0 26-26,"\+{1,2}|-{1,2}|!|~|\*{1,2}|/|%|<[<=]?|>[>=]?|==|!=|^|\|{1,2}|&{1,2}|\?|\:|,|=|[*/%+\-&^|]=|<<=|>>="
+ocaml-re,vscode,1375,fa622e143a4d,semantic: ^ after a final newline (Oniguruma does not match there),19,0-1,0-1 1-1,^\s*
+ocaml-re,vscode,1403,de1da0c8f53f,"semantic: ocaml-re matches bytes, not code points",357,2-39,2-34,(</?)(?:([-\w\.]+)((:)))?([-\w\.:]+)
+ocaml-re,vscode,1410,f5ee67e54302,"semantic: ocaml-re matches bytes, not code points",357,39-55 66-76,39-55,(?:^|\s+)(?:([-\w.]+)((:)))?([-\w.:]+)\s*=
+ocaml-re,vscode,2770,dee20fcf98bc,semantic: end anchor before a final newline,19,0-0,0-0 1-1,"((^|\G)([ ]{2,4}|\t))|(^[ \t]*$)"
+ocaml-re,vscode,3376,b847adba58bc,semantic: end anchor before a final newline,1659,0-1 8-9 11-12 12-13 17-18 18-19,0-1 8-9 11-12 12-13 17-18 18-19 34-34,\*|^\s*$
+ocaml-re,vscode,3377,6043d62d0714,semantic: end anchor before a final newline,1659,11-13 17-19,11-13 17-19 34-34,\*{2}|^\s*$
+ocaml-re,vscode,3378,9861d4fa6255,semantic: end anchor before a final newline,1659,21-23 30-32,21-23 30-32 34-34,``|^\s*$
+ocaml-re,vscode,3382,e15b837650a2,semantic: ^ after a final newline (Oniguruma does not match there),19,0-1,0-1 1-1,^\s*$
+ocaml-re,vscode,3389,2213da1a3821,semantic: ^ after a final newline (Oniguruma does not match there),19,0-1,0-1 1-1,^\s{3}.*|^\s*$
+pcre2-interp,vscode,316,d3634e4930e5,"syntax: \h is a hex digit in Oniguruma, horizontal space elsewhere",1311,7-14,,(#)(\h{3}|\h{4}|\h{6}|\h{8})\b
+pcre2-interp,vscode,517,0cc4bb32a9fe,syntax: character-class intersection && is Oniguruma-only,80,0-5 5-6 6-7 7-8 8-12,,".[[^""':,\[\]{}]&&!-~\x{85}\x{A0}-\x{D7FF}\x{E000}-\x{FFFD}\x{010000}-\x{10FFFF}]*+"
+pcre2-interp,vscode,547,2a0ae8b08493,syntax: character-class intersection && is Oniguruma-only,81,,0-0 1-1 2-2 3-3 4-4 5-5 6-6 7-7 8-8 9-9 10-10 11-11,"\G(?![?:!""'0-9A-Za-z$()+./;<=\\^_~\[{\x{85}\x{A0}-\x{D7FF}\x{E000}-\x{FFFD}\x{010000}-\x{10FFFF}&&[^\x{FEFF}]]|-[^
+	 ])"
+pcre2-jit,vscode,316,d3634e4930e5,"syntax: \h is a hex digit in Oniguruma, horizontal space elsewhere",1311,7-14,,(#)(\h{3}|\h{4}|\h{6}|\h{8})\b
+pcre2-jit,vscode,517,0cc4bb32a9fe,syntax: character-class intersection && is Oniguruma-only,80,0-5 5-6 6-7 7-8 8-12,,".[[^""':,\[\]{}]&&!-~\x{85}\x{A0}-\x{D7FF}\x{E000}-\x{FFFD}\x{010000}-\x{10FFFF}]*+"
+pcre2-jit,vscode,547,2a0ae8b08493,syntax: character-class intersection && is Oniguruma-only,81,,0-0 1-1 2-2 3-3 4-4 5-5 6-6 7-7 8-8 9-9 10-10 11-11,"\G(?![?:!""'0-9A-Za-z$()+./;<=\\^_~\[{\x{85}\x{A0}-\x{D7FF}\x{E000}-\x{FFFD}\x{010000}-\x{10FFFF}&&[^\x{FEFF}]]|-[^
+	 ])"
+re2,vscode,175,a9d9c9dc74da,semantic: end anchor before a final newline,471,1-6 7-16 19-24 28-40 45-46 47-56 60-61 62-69,1-6 7-16 19-24 45-46 47-56 60-61 62-69,[_$[:alpha:]][_$[:alnum:]]*
+re2,vscode,544,1d4809558bed,semantic: ^ after a final newline (Oniguruma does not match there),19,0-0,0-0 1-1,^
+re2,vscode,1205,942e1672600d,semantic: alternation or longest-match order,304,0-0,0-0 26-26,"\+{1,2}|-{1,2}|!|~|\*{1,2}|/|%|<[<=]?|>[>=]?|==|!=|^|\|{1,2}|&{1,2}|\?|\:|,|=|[*/%+\-&^|]=|<<=|>>="
+re2,vscode,1375,fa622e143a4d,semantic: ^ after a final newline (Oniguruma does not match there),19,0-1,0-1 1-1,^\s*
+re2,vscode,1403,de1da0c8f53f,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,357,2-39,2-33,(</?)(?:([-\w\.]+)((:)))?([-\w\.:]+)
+re2,vscode,1410,f5ee67e54302,semantic: RE2 \w \b \d \s and POSIX classes are ASCII-only,357,39-55 66-76,39-55,(?:^|\s+)(?:([-\w.]+)((:)))?([-\w.:]+)\s*=
+re2,vscode,3376,b847adba58bc,semantic: end anchor before a final newline,1659,0-1 8-9 11-12 12-13 17-18 18-19,0-1 8-9 11-12 12-13 17-18 18-19 34-34,\*|^\s*$
+re2,vscode,3377,6043d62d0714,semantic: end anchor before a final newline,1659,11-13 17-19,11-13 17-19 34-34,\*{2}|^\s*$
+re2,vscode,3378,9861d4fa6255,semantic: end anchor before a final newline,1659,21-23 30-32,21-23 30-32 34-34,``|^\s*$
+re2,vscode,3382,e15b837650a2,semantic: ^ after a final newline (Oniguruma does not match there),19,0-1,0-1 1-1,^\s*$
+re2,vscode,3383,9355d16df875,semantic: end anchor before a final newline,1677,2-3 15-17,20-20,"`_{,2}|^\s*$"
+re2,vscode,3389,2213da1a3821,semantic: ^ after a final newline (Oniguruma does not match there),19,0-1,0-1 1-1,^\s{3}.*|^\s*$
+rust-regex,vscode,175,a9d9c9dc74da,semantic: end anchor before a final newline,471,1-6 7-16 19-24 28-40 45-46 47-56 60-61 62-69,1-6 7-16 19-24 45-46 47-56 60-61 62-69,[_$[:alpha:]][_$[:alnum:]]*
+rust-regex,vscode,183,363dae50c328,"syntax: \< \> are word anchors in Rust regex, literals in Oniguruma",1,,1-1 8-8 15-15,\<
+rust-regex,vscode,544,1d4809558bed,semantic: ^ after a final newline (Oniguruma does not match there),19,0-0,0-0 1-1,^
+rust-regex,vscode,1205,942e1672600d,semantic: alternation or longest-match order,304,0-0,0-0 26-26,"\+{1,2}|-{1,2}|!|~|\*{1,2}|/|%|<[<=]?|>[>=]?|==|!=|^|\|{1,2}|&{1,2}|\?|\:|,|=|[*/%+\-&^|]=|<<=|>>="
+rust-regex,vscode,1375,fa622e143a4d,semantic: ^ after a final newline (Oniguruma does not match there),19,0-1,0-1 1-1,^\s*
+rust-regex,vscode,1438,5a005933b5b8,"syntax: \< \> are word anchors in Rust regex, literals in Oniguruma",405,20-21,3-3 5-5 13-13 20-20 39-39 42-42 47-47,\>
+rust-regex,vscode,2309,a5e75454c40b,"syntax: \< \> are word anchors in Rust regex, literals in Oniguruma",1044,37-39,,(\->|\<\-)
+rust-regex,vscode,2656,620212ea8272,"syntax: \< \> are word anchors in Rust regex, literals in Oniguruma",1337,,6-13 14-15 16-25 26-34,\<[a-zA-Z_\*][a-zA-Z0-9_\.\*\-]*\>
+rust-regex,vscode,3376,b847adba58bc,semantic: end anchor before a final newline,1659,0-1 8-9 11-12 12-13 17-18 18-19,0-1 8-9 11-12 12-13 17-18 18-19 34-34,\*|^\s*$
+rust-regex,vscode,3377,6043d62d0714,semantic: end anchor before a final newline,1659,11-13 17-19,11-13 17-19 34-34,\*{2}|^\s*$
+rust-regex,vscode,3378,9861d4fa6255,semantic: end anchor before a final newline,1659,21-23 30-32,21-23 30-32 34-34,``|^\s*$
+rust-regex,vscode,3382,e15b837650a2,semantic: ^ after a final newline (Oniguruma does not match there),19,0-1,0-1 1-1,^\s*$
+rust-regex,vscode,3389,2213da1a3821,semantic: ^ after a final newline (Oniguruma does not match there),19,0-1,0-1 1-1,^\s{3}.*|^\s*$
+rust-regex,vscode,3860,e1c8b170808e,"syntax: \< \> are word anchors in Rust regex, literals in Oniguruma",2374,44-45 71-72,7-7 18-18 44-44 53-53 56-56 71-71 83-83 97-97 106-106 114-114 117-117,(\>)
+ocaml-re,vscode-subst,393,05e1d1eef0d5,"semantic: ocaml-re matches bytes, not code points",89,0-0,0-0 3-3,(^|\￿)
+ocaml-re,vscode-subst,399,48513b384a1f,"semantic: ocaml-re matches bytes, not code points",10,0-0,0-0 1-1,"((^|\￿)([ ]{2,4}|\t))|(^[ \t]*$)"
