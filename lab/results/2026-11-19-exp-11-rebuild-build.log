@@ -1,0 +1,186 @@
++ for v in threaded switch
++ extra=
++ '[' threaded = switch ']'
++ cmake -S <bench>/repo/upstream -B <bench>/build/onig-threaded -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS=
++ taskset -c 16-19 make -C <bench>/build/onig-threaded -j4 onig
++ gcc -O3 -DNDEBUG -I<bench>/build/onig-threaded -I<bench>/repo/upstream/src -o <bench>/bin/probe-threaded <bench>/repo/experiments/11-perf-baselines/dispatch_probe.c
++ <bench>/bin/probe-threaded
+USE_DIRECT_THREADED_CODE defined: direct-threaded dispatch
++ gcc -O3 -DNDEBUG -I<bench>/repo/upstream/src -I<bench>/repo/experiments/11-perf-baselines -o <bench>/bin/onig-threaded <bench>/repo/experiments/11-perf-baselines/onig_bench.c <bench>/build/onig-threaded/libonig.a
++ for v in threaded switch
++ extra=
++ '[' switch = switch ']'
++ extra=-DONIG_DISABLE_DIRECT_THREADING
++ cmake -S <bench>/repo/upstream -B <bench>/build/onig-switch -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_C_FLAGS=-DONIG_DISABLE_DIRECT_THREADING
++ taskset -c 16-19 make -C <bench>/build/onig-switch -j4 onig
++ gcc -O3 -DNDEBUG -DONIG_DISABLE_DIRECT_THREADING -I<bench>/build/onig-switch -I<bench>/repo/upstream/src -o <bench>/bin/probe-switch <bench>/repo/experiments/11-perf-baselines/dispatch_probe.c
++ <bench>/bin/probe-switch
+USE_DIRECT_THREADED_CODE undefined: switch dispatch
++ gcc -O3 -DNDEBUG -I<bench>/repo/upstream/src -I<bench>/repo/experiments/11-perf-baselines -o <bench>/bin/onig-switch <bench>/repo/experiments/11-perf-baselines/onig_bench.c <bench>/build/onig-switch/libonig.a
++ sha256sum <bench>/build/onig-switch/CMakeFiles/onig.dir/src/regexec.c.o <bench>/build/onig-threaded/CMakeFiles/onig.dir/src/regexec.c.o
++ sed 's|<bench>/build/||'
+2e758094206da60dacd96c96b891aaa243d84824b035f27599f7d99d106dbb17  onig-switch/CMakeFiles/onig.dir/src/regexec.c.o
+3afcff457c275bef64a1abde7048739dfc9e11a86a7627211c782a363d5fa976  onig-threaded/CMakeFiles/onig.dir/src/regexec.c.o
++ cmp -s <bench>/build/onig-threaded/CMakeFiles/onig.dir/src/regexec.c.o <bench>/build/onig-switch/CMakeFiles/onig.dir/src/regexec.c.o
++ rm -rf <bench>/build/pcre2-src
++ mkdir -p <bench>/build/pcre2-src
++ tar -xzf <bench>/src/pcre2-10.49.tar.gz -C <bench>/build/pcre2-src --strip-components=1
++ cmake -S <bench>/build/pcre2-src -B <bench>/build/pcre2 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DPCRE2_BUILD_PCRE2_8=ON -DPCRE2_BUILD_PCRE2_16=OFF -DPCRE2_BUILD_PCRE2_32=OFF -DPCRE2_SUPPORT_JIT=ON -DPCRE2_BUILD_PCRE2GREP=OFF -DPCRE2_BUILD_TESTS=OFF -DCMAKE_INSTALL_PREFIX=<bench>/prefix
++ taskset -c 16-19 make -C <bench>/build/pcre2 -j4 install
++ for j in 0 1
++ n=pcre2-interp
++ '[' 0 = 1 ']'
++ gcc -O3 -DNDEBUG -DE11_JIT=0 -I<bench>/prefix/include -I<bench>/repo/experiments/11-perf-baselines -o <bench>/bin/pcre2-interp <bench>/repo/experiments/11-perf-baselines/pcre2_bench.c <bench>/prefix/lib/libpcre2-8.a
++ for j in 0 1
++ n=pcre2-interp
++ '[' 1 = 1 ']'
++ n=pcre2-jit
++ gcc -O3 -DNDEBUG -DE11_JIT=1 -I<bench>/prefix/include -I<bench>/repo/experiments/11-perf-baselines -o <bench>/bin/pcre2-jit <bench>/repo/experiments/11-perf-baselines/pcre2_bench.c <bench>/prefix/lib/libpcre2-8.a
++ for x in abseil re2
+++ ls <bench>/src/abseil-cpp-20260817.0.tar.gz
+++ head -1
++ t=<bench>/src/abseil-cpp-20260817.0.tar.gz
++ rm -rf <bench>/build/abseil-src
++ mkdir -p <bench>/build/abseil-src
++ tar -xzf <bench>/src/abseil-cpp-20260817.0.tar.gz -C <bench>/build/abseil-src --strip-components=1
++ for x in abseil re2
+++ head -1
+++ ls <bench>/src/re2-2025-11-05.tar.gz
++ t=<bench>/src/re2-2025-11-05.tar.gz
++ rm -rf <bench>/build/re2-src
++ mkdir -p <bench>/build/re2-src
++ tar -xzf <bench>/src/re2-2025-11-05.tar.gz -C <bench>/build/re2-src --strip-components=1
++ cmake -S <bench>/build/abseil-src -B <bench>/build/abseil -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_PREFIX_PATH=<bench>/prefix -DCMAKE_CXX_STANDARD=17 -DABSL_PROPAGATE_CXX_STD=ON -DABSL_BUILD_TESTING=OFF -DCMAKE_POSITION_INDEPENDENT_CODE=ON -DCMAKE_INSTALL_PREFIX=<bench>/prefix
++ taskset -c 16-19 make -C <bench>/build/abseil -j4 install
++ cmake -S <bench>/build/re2-src -B <bench>/build/re2 -DCMAKE_BUILD_TYPE=Release -DBUILD_SHARED_LIBS=OFF -DCMAKE_PREFIX_PATH=<bench>/prefix -DCMAKE_CXX_STANDARD=17 -DABSL_PROPAGATE_CXX_STD=ON -DRE2_BUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=<bench>/prefix
+CMake Warning:
+  Manually-specified variables were not used by the project:
+
+    ABSL_PROPAGATE_CXX_STD
+
+
++ taskset -c 16-19 make -C <bench>/build/re2 -j4 install
+<bench>/build/re2-src/re2/dfa.cc: In member function ‘re2::DFA::State* re2::DFA::RunStateOnByteUnlocked(State*, int)’:
+<bench>/build/re2-src/re2/dfa.cc:1018:28: warning: ‘absl::lts_20260817::MutexLock::MutexLock(absl::lts_20260817::Mutex*)’ is deprecated: Use the constructor that takes a reference instead [-Wdeprecated-declarations]
+ 1018 |   absl::MutexLock l(&mutex_);
+      |                            ^
+In file included from <bench>/prefix/include/absl/strings/internal/cordz_info.h:31,
+                 from <bench>/prefix/include/absl/strings/cord.h:94,
+                 from <bench>/prefix/include/absl/container/internal/hash_function_defaults.h:59,
+                 from <bench>/prefix/include/absl/container/hash_container_defaults.h:19,
+                 from <bench>/prefix/include/absl/container/flat_hash_map.h:43,
+                 from <bench>/build/re2-src/re2/dfa.cc:39:
+<bench>/prefix/include/absl/synchronization/mutex.h:635:12: note: declared here
+  635 |   explicit MutexLock(Mutex* absl_nonnull mu) ABSL_EXCLUSIVE_LOCK_FUNCTION(mu)
+      |            ^~~~~~~~~
+<bench>/build/re2-src/re2/dfa.cc: In constructor ‘re2::DFA::RWLocker::RWLocker(re2::DFA::CacheMutex*)’:
+<bench>/build/re2-src/re2/dfa.cc:1155:18: warning: ‘void absl::lts_20260817::Mutex::ReaderLock()’ is deprecated [-Wdeprecated-declarations]
+ 1155 |   mu_->ReaderLock();
+      |   ~~~~~~~~~~~~~~~^~
+<bench>/prefix/include/absl/synchronization/mutex.h:269:8: note: declared here
+  269 |   void ReaderLock() ABSL_SHARED_LOCK_FUNCTION() { lock_shared(); }
+      |        ^~~~~~~~~~
+<bench>/build/re2-src/re2/dfa.cc: In member function ‘void re2::DFA::RWLocker::LockForWriting()’:
+<bench>/build/re2-src/re2/dfa.cc:1162:22: warning: ‘void absl::lts_20260817::Mutex::ReaderUnlock()’ is deprecated [-Wdeprecated-declarations]
+ 1162 |     mu_->ReaderUnlock();
+      |     ~~~~~~~~~~~~~~~~~^~
+<bench>/prefix/include/absl/synchronization/mutex.h:279:8: note: declared here
+  279 |   void ReaderUnlock() ABSL_UNLOCK_FUNCTION() { unlock_shared(); }
+      |        ^~~~~~~~~~~~
+<bench>/build/re2-src/re2/dfa.cc:1163:20: warning: ‘void absl::lts_20260817::Mutex::WriterLock()’ is deprecated [-Wdeprecated-declarations]
+ 1163 |     mu_->WriterLock();
+      |     ~~~~~~~~~~~~~~~^~
+<bench>/prefix/include/absl/synchronization/mutex.h:314:8: note: declared here
+  314 |   void WriterLock() ABSL_EXCLUSIVE_LOCK_FUNCTION() { lock(); }
+      |        ^~~~~~~~~~
+<bench>/build/re2-src/re2/dfa.cc: In destructor ‘re2::DFA::RWLocker::~RWLocker()’:
+<bench>/build/re2-src/re2/dfa.cc:1170:22: warning: ‘void absl::lts_20260817::Mutex::ReaderUnlock()’ is deprecated [-Wdeprecated-declarations]
+ 1170 |     mu_->ReaderUnlock();
+      |     ~~~~~~~~~~~~~~~~~^~
+<bench>/prefix/include/absl/synchronization/mutex.h:279:8: note: declared here
+  279 |   void ReaderUnlock() ABSL_UNLOCK_FUNCTION() { unlock_shared(); }
+      |        ^~~~~~~~~~~~
+<bench>/build/re2-src/re2/dfa.cc:1172:22: warning: ‘void absl::lts_20260817::Mutex::WriterUnlock()’ is deprecated [-Wdeprecated-declarations]
+ 1172 |     mu_->WriterUnlock();
+      |     ~~~~~~~~~~~~~~~~~^~
+<bench>/prefix/include/absl/synchronization/mutex.h:317:8: note: declared here
+  317 |   void WriterUnlock() ABSL_UNLOCK_FUNCTION() { unlock(); }
+      |        ^~~~~~~~~~~~
+<bench>/build/re2-src/re2/dfa.cc: In member function ‘re2::DFA::State* re2::DFA::StateSaver::Restore()’:
+<bench>/build/re2-src/re2/dfa.cc:1270:34: warning: ‘absl::lts_20260817::MutexLock::MutexLock(absl::lts_20260817::Mutex*)’ is deprecated: Use the constructor that takes a reference instead [-Wdeprecated-declarations]
+ 1270 |   absl::MutexLock l(&dfa_->mutex_);
+      |                                  ^
+<bench>/prefix/include/absl/synchronization/mutex.h:635:12: note: declared here
+  635 |   explicit MutexLock(Mutex* absl_nonnull mu) ABSL_EXCLUSIVE_LOCK_FUNCTION(mu)
+      |            ^~~~~~~~~
+<bench>/build/re2-src/re2/dfa.cc: In member function ‘bool re2::DFA::AnalyzeSearchHelper(SearchParams*, StartInfo*, uint32_t)’:
+<bench>/build/re2-src/re2/dfa.cc:1733:28: warning: ‘absl::lts_20260817::MutexLock::MutexLock(absl::lts_20260817::Mutex*)’ is deprecated: Use the constructor that takes a reference instead [-Wdeprecated-declarations]
+ 1733 |   absl::MutexLock l(&mutex_);
+      |                            ^
+<bench>/prefix/include/absl/synchronization/mutex.h:635:12: note: declared here
+  635 |   explicit MutexLock(Mutex* absl_nonnull mu) ABSL_EXCLUSIVE_LOCK_FUNCTION(mu)
+      |            ^~~~~~~~~
+<bench>/build/re2-src/re2/dfa.cc: In member function ‘bool re2::DFA::PossibleMatchRange(std::string*, std::string*, int)’:
+<bench>/build/re2-src/re2/dfa.cc:2053:31: warning: ‘absl::lts_20260817::MutexLock::MutexLock(absl::lts_20260817::Mutex*)’ is deprecated: Use the constructor that takes a reference instead [-Wdeprecated-declarations]
+ 2053 |   absl::MutexLock lock(&mutex_);
+      |                               ^
+<bench>/prefix/include/absl/synchronization/mutex.h:635:12: note: declared here
+  635 |   explicit MutexLock(Mutex* absl_nonnull mu) ABSL_EXCLUSIVE_LOCK_FUNCTION(mu)
+      |            ^~~~~~~~~
+<bench>/build/re2-src/re2/regexp.cc: In member function ‘int re2::Regexp::Ref()’:
+<bench>/build/re2-src/re2/regexp.cc:98:32: warning: ‘absl::lts_20260817::MutexLock::MutexLock(absl::lts_20260817::Mutex*)’ is deprecated: Use the constructor that takes a reference instead [-Wdeprecated-declarations]
+   98 |   absl::MutexLock l(ref_mutex());
+      |                                ^
+In file included from <bench>/prefix/include/absl/strings/internal/cordz_info.h:31,
+                 from <bench>/prefix/include/absl/strings/cord.h:94,
+                 from <bench>/prefix/include/absl/container/internal/hash_function_defaults.h:59,
+                 from <bench>/prefix/include/absl/container/hash_container_defaults.h:19,
+                 from <bench>/prefix/include/absl/container/flat_hash_map.h:43,
+                 from <bench>/build/re2-src/re2/regexp.cc:21:
+<bench>/prefix/include/absl/synchronization/mutex.h:635:12: note: declared here
+  635 |   explicit MutexLock(Mutex* absl_nonnull mu) ABSL_EXCLUSIVE_LOCK_FUNCTION(mu)
+      |            ^~~~~~~~~
+<bench>/build/re2-src/re2/regexp.cc: In member function ‘re2::Regexp* re2::Regexp::Incref()’:
+<bench>/build/re2-src/re2/regexp.cc:111:34: warning: ‘absl::lts_20260817::MutexLock::MutexLock(absl::lts_20260817::Mutex*)’ is deprecated: Use the constructor that takes a reference instead [-Wdeprecated-declarations]
+  111 |     absl::MutexLock l(ref_mutex());
+      |                                  ^
+<bench>/prefix/include/absl/synchronization/mutex.h:635:12: note: declared here
+  635 |   explicit MutexLock(Mutex* absl_nonnull mu) ABSL_EXCLUSIVE_LOCK_FUNCTION(mu)
+      |            ^~~~~~~~~
+<bench>/build/re2-src/re2/regexp.cc: In member function ‘void re2::Regexp::Decref()’:
+<bench>/build/re2-src/re2/regexp.cc:131:34: warning: ‘absl::lts_20260817::MutexLock::MutexLock(absl::lts_20260817::Mutex*)’ is deprecated: Use the constructor that takes a reference instead [-Wdeprecated-declarations]
+  131 |     absl::MutexLock l(ref_mutex());
+      |                                  ^
+<bench>/prefix/include/absl/synchronization/mutex.h:635:12: note: declared here
+  635 |   explicit MutexLock(Mutex* absl_nonnull mu) ABSL_EXCLUSIVE_LOCK_FUNCTION(mu)
+      |            ^~~~~~~~~
++ mkdir -p <bench>/build/re2_bench_proj
++ cat
++ cmake -S <bench>/build/re2_bench_proj -B <bench>/build/re2_bench -DCMAKE_BUILD_TYPE=Release -DCMAKE_PREFIX_PATH=<bench>/prefix
++ taskset -c 16-19 make -C <bench>/build/re2_bench -j4
++ cp <bench>/build/re2_bench/re2_bench <bench>/bin/re2
++ cd <bench>/repo/experiments/11-perf-baselines/rust_bench
++ '[' -f Cargo.lock ']'
++ cd <bench>/repo/experiments/11-perf-baselines/rust_bench
++ CARGO_TARGET_DIR=<bench>/build/rust
++ taskset -c 16-19 cargo build --release --locked -j4
+    Updating crates.io index
+ Downloading crates ...
+  Downloaded aho-corasick v1.1.5
+  Downloaded memchr v2.8.3
+  Downloaded regex v1.13.2
+  Downloaded regex-syntax v0.8.12
+  Downloaded regex-automata v0.4.19
+   Compiling memchr v2.8.3
+   Compiling regex-syntax v0.8.12
+   Compiling aho-corasick v1.1.5
+   Compiling regex-automata v0.4.19
+   Compiling regex v1.13.2
+   Compiling rust_bench v0.1.0 (<bench>/repo/experiments/11-perf-baselines/rust_bench)
+    Finished `release` profile [optimized] target(s) in 6.88s
++ cp <bench>/build/rust/release/rust_bench <bench>/bin/rust-regex
++ cd <bench>/repo/experiments/11-perf-baselines/ocaml_bench
++ taskset -c 16-19 opam exec -- dune build --release --build-dir=<bench>/build/ocaml ./ocaml_bench.exe
++ cp <bench>/build/ocaml/default/ocaml_bench.exe <bench>/bin/ocaml-re
++ set +x
+build done
