@@ -605,8 +605,8 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
      onig_reduce_nested_quantifier, which fails with -201 only when the
      product overflows a C int (onig_positive_int_multiply,
      upstream/src/regparse.c:4449-4455, upstream/src/regcomp.c:345-352).
-     Run 2 replaces run 1's threshold (a product above 100,000), which
-     had no upstream source. *)
+     Decision 12 of issue #28: upstream's rule, no deviation; 2^31-1 on
+     the reduced count is a resource limit (run 1's 100,000 dropped). *)
   let mk_rep mn mx greedy poss t =
     (match t with
      | PRep (a, b, _, _, _) when a = b && mn = mx && mn > 0 && a > 0

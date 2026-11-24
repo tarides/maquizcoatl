@@ -605,11 +605,31 @@ above where they differ:
 11. **Why3 bug report**: tracked in issue #36; the maintainer handles it
     in a separate session (WP H's draft stays as recorded).
 
-Also in run 2, without a decision: the nested-interval product rule of
-`g/g2.ml:527` has no upstream source and is removed (the lookbehind
-length check then gives `upstream/test/test_utf8.c:1461` C's -122), and
-the review's small follow-ups (ctype list wording, "Eval s" column
-label, a milestone 2 line in `provenance.sh`) go in a corrections entry.
+Also in run 2, without a decision: the review's small follow-ups
+(ctype list wording, "Eval s" column label, a milestone 2 line in
+`provenance.sh`) go in a corrections entry.
+
+## Maintainer decision after run 2
+
+Given on 2026-11-24 on run 2's results and review, recorded on issue
+#28 (https://github.com/tarides/maquizcoatl/issues/28#issuecomment-7140237547).
+It is numbered 12 as in the issue body:
+
+12. **Nested fixed intervals: (a), upstream's rule.** Run 1's threshold
+    (a product above 100,000 rejected, `g/g2.ml:527` at run 1) had no
+    upstream source and is replaced by upstream's rule, as run 2
+    implements it: a fixed interval directly on a fixed interval is
+    reduced to the product of the two counts
+    (`onig_reduce_nested_quantifier`,
+    `upstream/src/regparse.c:4449-4455`), and the pattern is rejected
+    with `ONIGERR_TOO_BIG_NUMBER_FOR_REPEAT_RANGE` (-201) only when the
+    product overflows a C `int` (`onig_positive_int_multiply`,
+    `upstream/src/regcomp.c:345-353`). Each written interval stays
+    bounded by `ONIG_MAX_REPEAT_NUM` (100,000). The spec states the
+    bound 2^31-1 on the reduced count explicitly, as a resource limit.
+    No deviation entry: S2 agrees with C on
+    `upstream/test/test_utf8.c:1461` (-122, the lookbehind length
+    check) and on `:1770-1772` (-201).
 
 ## Risks
 
