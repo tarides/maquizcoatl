@@ -1,0 +1,10 @@
+tool=reference
+run_id=runF
+mode=normal
+jobs=4
+cpus=8-13,40-45
+build_seconds=0
+build_status=0
+link=ok
+caller_status=0
+caller_output=same

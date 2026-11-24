@@ -1,0 +1,57 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+294e9ab876d5aabca784a22b641d0bb7aa91035b74bc4069fdd00f47c9d4060f  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+82fe442a30fe20350a5f704ae5da595cd2bccefcf75e5ea869a279651ffa51f1  refinedc/TRUSTED
+37dd020f65968626e45dc7a139ea28367256d6622ec5509d032e9b23d227ef01  refinedc/build.sh
+17bb60678e6f78e8966a02904fc4ac6ffba76fb3239c2abf3d28d3b0aaa16420  refinedc/vu.c
+e02cfa25ea1e2b384296f6de433a143edbf40d73f98a70a523a08c011f676507  refinedc/vu_rc.h
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+== build
+refinedc source: d057583986651a28047164581f05fbee3a83ed9d
+d057583-dirty
+The Rocq Prover, version 9.1.0
+# Packages matching: (name-match(refinedc) | name-match(coq-lithium) | name-match(cerberus-lib) | name-match(rocq-iris) | name-match(rocq-stdpp)) & installed
+# Name       # Version
+cerberus-lib dev
+coq-lithium  dev.2026-10-29.0.d0575839
+refinedc     dev.2026-10-29.0.d0575839
+rocq-iris    dev.2026-10-29.1.fc84ea73
+rocq-stdpp   dev.2026-10-16.2.70b50ea3
+== 1. vu_rc.h against proto.h
+vu_rc.h is proto.h plus rc attributes
+== 2. project (negative control: 0)
+== 3. refinedc check
+Entering directory '<exp>/build/runE-b/refinedc/rc/vu_rc'
+        rocq proofs/vu/.refinedc.project.vu_rc.theory.d
+        rocq proofs/vu/generated_code.{glob,vo}
+        rocq proofs/vu/generated_spec.{glob,vo}
+        rocq proofs/vu/generated_proof_vu_fold_all.{glob,vo}
+        rocq proofs/vu/generated_proof_vu_char_len.{glob,vo}
+        rocq proofs/vu/generated_proof_vu_get_slot.{glob,vo}
+        rocq proofs/vu/generated_proof_vu_set_slot.{glob,vo}
+        rocq proofs/vu/generated_proof_vu_get_subject_byte.{glob,vo}
+        rocq proofs/vu/generated_proof_vu_i_apply.{glob,vo}
+        rocq proofs/vu/generated_proof_vu_callout_step.{glob,vo}
+Leaving directory '<exp>/build/runE-b/refinedc/rc/vu_rc'
+File "vu.c" successfully checked.
+refinedc status: 0
+== 4. assumptions
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+assumptions: standard axioms only
+== 5. cc
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_get_subject_byte
+exported: vu_i_apply
+exported: vu_set_slot

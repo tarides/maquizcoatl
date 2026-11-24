@@ -1,0 +1,17 @@
+# Trusted lines of the CN prototype (format: ../count-trusted.sh).
+#
+# Modelling style: trusted shim. CN calls a function pointer only when
+# it is provably equal to a defined function, so the three indirect
+# calls are in C shims marked trusted: CN takes their specifications
+# (the callee contracts) and does not check their bodies.
+#
+# The shims, with their specifications (the callee contracts) and the
+# taking of vu_i_apply's address (re-entrancy shape (a)).
+vu.c:44-70
+# rec_wf, the record predicate the apply-all contract uses.
+vu.c:23-25
+#
+# Not counted: the toolchain (CN and Cerberus, Z3, the C compiler),
+# including the agreement between Cerberus's C semantics and the C
+# compiler's; CN's specifications of the verified functions, which CN
+# checks.

@@ -1,0 +1,378 @@
+(* vu.mlw: the Why3 prototype of experiment #5 (calls to unverified code).
+
+   Module Client is the trusted part: it declares the C objects of
+   proto.h that WhyML cannot express (function pointers, void pointers,
+   the fields of vu_args, vu_enc_state and vu_fold_rec) as abstract
+   types with a logical model, and the operations on them (field access,
+   indirect calls) as vals without bodies. vu.drv maps each of them to a
+   C expression. Nothing here is proved; TRUSTED lists this module.
+
+   Module Vu is the verified part: the functions of proto.h, with their
+   specifications, extracted to C. *)
+
+module Client
+
+  use int.Int
+  use map.Map
+  use mach.int.Int32
+  use mach.int.UInt32
+  use mach.int.Int64
+  use mach.c.C
+
+  (** {2 Constants of proto.h} *)
+
+  let constant callout_success : int = 0     (* VU_CALLOUT_SUCCESS *)
+  let constant callout_fail : int = 1        (* VU_CALLOUT_FAIL *)
+  let constant err_invalid_argument : int = -30
+                                             (* VU_ERR_INVALID_ARGUMENT *)
+  let constant slot_num : int = 5            (* VU_SLOT_NUM *)
+  let constant max_to_len : int = 3          (* VU_MAX_TO_LEN *)
+  let constant fold_rec_max : int = 8        (* VU_FOLD_REC_MAX *)
+  let constant dir_progress : int = 0        (* VU_DIR_PROGRESS *)
+  let constant dir_retraction : int = 1      (* VU_DIR_RETRACTION *)
+  let constant dir_each_match : int = 2      (* VU_DIR_EACH_MATCH *)
+  let constant act_continue : int = 0        (* VU_ACT_CONTINUE *)
+  let constant act_backtrack : int = 1       (* VU_ACT_BACKTRACK *)
+
+  (** {2 Opaque client values} *)
+
+  (* const unsigned char *: the subject pointer handed to the encoding.
+     The verified side never reads through it. *)
+  type bytes
+
+  (* vu_enc_len_fn, vu_callout_fn, vu_apply_fn, vu_apply_all_fn. *)
+  type enc_len_fn
+  type callout_fn
+  type apply_fn
+  type apply_all_fn
+
+  (* void *: the callout's user_data, passed through untouched. *)
+  type user_data
+
+  (** {2 const vu_enc_state *} *)
+
+  (* The fields are mutable in the model so that "st is unchanged across
+     the call" is a proof obligation, not a consequence of the type. *)
+  type enc_state = abstract {
+    mutable min_len : int32;
+    mutable max_len : int32;
+  }
+
+  val get_min_len (st: enc_state) : int32
+    ensures { result = st.min_len }
+
+  val get_max_len (st: enc_state) : int32
+    ensures { result = st.max_len }
+
+  (** {2 vu_args *} *)
+
+  (* The verified side's state (subject, subject_len, pos, num) and the
+     data slots. subject_len stands for the whole read-only view of the
+     subject. *)
+  type args = abstract {
+    mutable subject_len : int32;
+    mutable pos : int32;
+    mutable num : int32;
+    mutable slots : map int int64;
+  }
+
+  (* const vu_args *: the same object, seen read only (vu_get_slot,
+     vu_get_subject_byte). The subject is subject_len bytes, each in
+     [0, 255]; no field is mutable, so nothing in this view is written. *)
+  type const_args = abstract {
+    cslots : map int int64;
+    csubject_len : int32;
+    csubject : map int int;
+  } invariant { 0 <= csubject_len /\
+                forall i. 0 <= i < csubject_len -> 0 <= csubject[i] <= 255 }
+    by { cslots = (fun _ -> 0:int64); csubject_len = 0:int32;
+         csubject = (fun _ -> 0) }
+
+  val get_slot_raw (a: const_args) (k: int32) : int64
+    requires { 0 <= k < slot_num }
+    ensures { result = a.cslots[k] }
+
+  val get_subject_len_raw (a: const_args) : int32
+    ensures { result = a.csubject_len }
+
+  (* subject[i]: the read is safe only for i in [0, subject_len), which
+     is all the precondition promises. *)
+  val get_subject_byte_raw (a: const_args) (i: int32) : int32
+    requires { 0 <= i < a.csubject_len }
+    ensures { result = a.csubject[i] }
+
+  val set_slot_raw (a: args) (k: int32) (v: int64) : unit
+    requires { 0 <= k < slot_num }
+    writes { a.slots }
+    ensures { a.slots = (old a.slots)[k <- v] }
+
+  (** {2 The vu_fold_rec of re-entrancy (a)} *)
+
+  (* vu_fold_rec *, as vu_fold_all receives it. *)
+  type fold_rec = abstract {
+    mutable calls : int32;
+    mutable recorded : int32;
+    mutable from : map int uint32;
+  }
+
+  (* void *, as vu_i_apply receives it: proto.h requires it to point to
+     a vu_fold_rec, and the accessors below cast it. *)
+  type fold_arg = abstract {
+    mutable acalls : int32;
+    mutable arecorded : int32;
+    mutable afrom : map int uint32;
+  }
+
+  val get_calls (a: fold_arg) : int32
+    ensures { result = a.acalls }
+
+  val set_calls (a: fold_arg) (v: int32) : unit
+    writes { a.acalls }
+    ensures { a.acalls = v }
+
+  val get_recorded (a: fold_arg) : int32
+    ensures { result = a.arecorded }
+
+  val set_recorded (a: fold_arg) (v: int32) : unit
+    writes { a.arecorded }
+    ensures { a.arecorded = v }
+
+  val set_from (a: fold_arg) (i: int32) (v: uint32) : unit
+    requires { 0 <= i < fold_rec_max }
+    writes { a.afrom }
+    ensures { a.afrom = (old a.afrom)[i <- v] }
+
+  (** {2 How a record may evolve}
+
+      [evolves c0 r0 f0 c1 r1 f1]: the record (calls, recorded, from)
+      went from state 0 to state 1 by calls of vu_i_apply. Module Vu
+      proves that one call of vu_i_apply satisfies it and that it is
+      reflexive and transitive, which is what the client contract of
+      call_apply_all below relies on. *)
+
+  predicate rec_ok (r: int) = 0 <= r <= fold_rec_max
+
+  predicate evolves (c0 r0: int) (f0: map int uint32)
+                    (c1 r1: int) (f1: map int uint32) =
+    c0 <= c1 /\ r0 <= r1 /\ (rec_ok r0 -> rec_ok r1) /\
+    (forall i. 0 <= i < r0 -> f1[i] = f0[i])
+
+  (** {2 Calls to client code}
+
+      Each indirect call is a val whose specification is all that the
+      verified side assumes of the client. None of them gives the
+      callee's result a range beyond its C type. A val is assumed to
+      terminate and to return normally (no longjmp).
+
+      A ghost trace per callee kind counts the calls and keeps the last
+      result, so that specifications can say "called once" and name the
+      value the callee returned. Traces are erased at extraction. *)
+
+  type trace = abstract {
+    mutable ncalls : int;
+    mutable last : int;
+  }
+
+  val ghost enc_trace : trace
+  val ghost callout_trace : trace
+
+  (* f(p). The encoding writes nothing the verified side can see: in
+     particular not the vu_enc_state. *)
+  val call_enc_len (f: enc_len_fn) (p: bytes) : int32
+    writes { enc_trace }
+    ensures { enc_trace.ncalls = old enc_trace.ncalls + 1 }
+    ensures { enc_trace.last = result }
+
+  (* f(args, user_data). The callout may write the data slots of args
+     (through vu_set_slot) and nothing else of the verified side. *)
+  val call_callout (f: callout_fn) (a: args) (ud: user_data) : int32
+    writes { a.slots, callout_trace }
+    ensures { callout_trace.ncalls = old callout_trace.ncalls + 1 }
+    ensures { callout_trace.last = result }
+
+  (* The pointer to vu_i_apply, handed to the client (re-entrancy (a)). *)
+  val i_apply_ptr () : apply_fn
+
+  (* ((void)to, 0): vu_i_apply never reads its to parameter (proto.h).
+     This marks it used in the extracted C and is the 0 vu_i_apply
+     returns (extraction erases a call that returns unit and has no
+     effect). *)
+  val ignore_to (p: ptr uint32) : int32
+    ensures { result = 0 }
+
+  (* g(vu_i_apply, rec). Client contract: g changes rec only by calling
+     the vu_i_apply it receives, with rec as arg, any number of times. *)
+  val call_apply_all (_g: apply_all_fn) (_f: apply_fn) (r: fold_rec) : int32
+    writes { r.calls, r.recorded, r.from }
+    ensures { evolves (old r.calls) (old r.recorded) (old r.from)
+                      r.calls r.recorded r.from }
+
+end
+
+module Vu
+
+  use int.Int
+  use map.Map
+  use mach.int.Int32
+  use mach.int.UInt32
+  use mach.int.Int64
+  use array.Array
+  use mach.c.C
+  use Client
+
+  (** {2 vu_char_len} *)
+
+  function clamp (lo hi x: int) : int =
+    if x < lo then lo else if x > hi then hi else x
+
+  (* The proof of the range postcondition rests only on the clamp: the
+     callee's result is any int32 (the negative control removes the
+     clamp and this postcondition fails). *)
+  let vu_char_len (f: enc_len_fn) (p: bytes) (st: enc_state) : int32
+    requires { 1 <= st.min_len <= st.max_len }
+    ensures { st.min_len <= result <= st.max_len }
+    ensures { st.min_len = old st.min_len /\ st.max_len = old st.max_len }
+    ensures { enc_trace.ncalls = old enc_trace.ncalls + 1 }
+    ensures { result = clamp st.min_len st.max_len enc_trace.last }
+  = let mn = get_min_len st in
+    let mx = get_max_len st in
+    let r = call_enc_len f p in
+    (* CLAMP-BEGIN: the negative control replaces these lines by "r". *)
+    if r < mn then mn else if r > mx then mx else r
+    (* CLAMP-END *)
+
+  (** {2 vu_callout_step} *)
+
+  (* The branch rules of the harness notebook entry: the action for a
+     callee result c in direction dir (upstream/src/regexec.c:4615-4632,
+     :1218-1234 and :3387-3400). *)
+  function step (dir c: int) : int =
+    if dir = dir_progress then
+      if c = callout_fail then act_backtrack
+      else if c = callout_success then act_continue
+      else if c > 0 then err_invalid_argument
+      else c
+    else if dir = dir_retraction then
+      if c = callout_fail \/ c = callout_success then act_continue
+      else if c > 0 then err_invalid_argument
+      else c
+    else if dir = dir_each_match then
+      if c < 0 then c else act_backtrack
+    else err_invalid_argument
+
+  predicate valid_dir (dir: int) =
+    dir = dir_progress \/ dir = dir_retraction \/ dir = dir_each_match
+
+  let vu_callout_step (dir: int32) (f: callout_fn) (a: args)
+                      (ud: user_data) : int32
+    ensures { valid_dir dir ->
+                callout_trace.ncalls = old callout_trace.ncalls + 1 /\
+                result = step dir callout_trace.last }
+    ensures { not valid_dir dir ->
+                callout_trace.ncalls = old callout_trace.ncalls /\
+                result = err_invalid_argument /\ a.slots = old a.slots }
+    ensures { a.subject_len = old a.subject_len /\ a.pos = old a.pos /\
+              a.num = old a.num }
+  = if dir = 0 then begin
+      let r = call_callout f a ud in
+      if r = 1 then 1
+      else if r = 0 then 0
+      else if r > 0 then -30
+      else r
+    end else if dir = 1 then begin
+      let r = call_callout f a ud in
+      if r = 1 || r = 0 then 0
+      else if r > 0 then -30
+      else r
+    end else if dir = 2 then begin
+      let r = call_callout f a ud in
+      if r < 0 then r else 1
+    end else
+      -30
+
+  (** {2 Re-entrancy (a): vu_i_apply and vu_fold_all} *)
+
+  let vu_i_apply (from: uint32) (_to: ptr uint32) (to_len: int32)
+                 (arg: fold_arg) : int32
+    ensures { result = 0 }
+    ensures { arg.acalls = if old arg.acalls < max_int32
+                           then old arg.acalls + 1 else old arg.acalls }
+    ensures { if 1 <= to_len <= max_to_len /\ rec_ok (old arg.arecorded)
+                 /\ old arg.arecorded < fold_rec_max
+              then arg.arecorded = old arg.arecorded + 1 /\
+                   arg.afrom = Map.set (old arg.afrom) (old arg.arecorded) from
+              else arg.arecorded = old arg.arecorded /\
+                   arg.afrom = old arg.afrom }
+    (* The client contract of call_apply_all in terms of this spec. *)
+    ensures { evolves (old arg.acalls) (old arg.arecorded) (old arg.afrom)
+                      arg.acalls arg.arecorded arg.afrom }
+  = let c = get_calls arg in
+    if c < 2147483647 then set_calls arg (c + 1);
+    let n = get_recorded arg in
+    if 1 <= to_len && to_len <= 3 && 0 <= n && n < 8 then begin
+      set_from arg n from;
+      set_recorded arg (n + 1)
+    end;
+    ignore_to _to
+
+  (* Any number of calls of vu_i_apply evolves the record. *)
+  lemma evolves_refl :
+    forall c r f. evolves c r f c r f
+
+  lemma evolves_trans :
+    forall c0 r0 f0 c1 r1 f1 c2 r2 f2.
+      evolves c0 r0 f0 c1 r1 f1 -> evolves c1 r1 f1 c2 r2 f2 ->
+      evolves c0 r0 f0 c2 r2 f2
+
+  let vu_fold_all (g: apply_all_fn) (r: fold_rec) : int32
+    ensures { old r.calls <= r.calls }
+    ensures { rec_ok (old r.recorded) -> rec_ok r.recorded }
+    ensures { old r.recorded <= r.recorded }
+    ensures { forall i. 0 <= i < old r.recorded -> Map.get r.from i = Map.get (old r.from) i }
+  = call_apply_all g (i_apply_ptr ()) r
+
+  (** {2 Re-entrancy (b): vu_get_slot and vu_set_slot} *)
+
+  let vu_get_slot (a: const_args) (k: int32) (v: ptr int64) : int32
+    requires { k < 0 \/ k >= slot_num \/
+               (v.min <= v.offset < v.max /\ writable v) }
+    writes { v.data.elts }
+    ensures { 0 <= k < slot_num -> result = 0 /\
+                pelts v = Map.set (old pelts v) v.offset (Map.get a.cslots k) }
+    ensures { not (0 <= k < slot_num) ->
+                result = err_invalid_argument /\ pelts v = old pelts v }
+  = if k < 0 || k >= 5 then -30
+    else begin
+      set v (get_slot_raw a k);
+      0
+    end
+
+  (** {2 Read accessor: vu_get_subject_byte} *)
+
+  let vu_get_subject_byte (a: const_args) (i: int32) : int32
+    ensures { 0 <= i < a.csubject_len -> result = Map.get a.csubject i }
+    ensures { not (0 <= i < a.csubject_len) ->
+                result = err_invalid_argument }
+  = if i < 0 then -30
+    else begin
+      let len = get_subject_len_raw a in
+      (* READ-BEGIN: the negative control deletes the upper bound test. *)
+      if i >= len then -30 else
+      (* READ-END *)
+      get_subject_byte_raw a i
+    end
+
+  let vu_set_slot (a: args) (k: int32) (v: int64) : int32
+    ensures { 0 <= k < slot_num -> result = 0 /\
+                a.slots = Map.set (old a.slots) k v }
+    ensures { not (0 <= k < slot_num) ->
+                result = err_invalid_argument /\ a.slots = old a.slots }
+    ensures { a.subject_len = old a.subject_len /\ a.pos = old a.pos /\
+              a.num = old a.num }
+  = if k < 0 || k >= 5 then -30
+    else begin
+      set_slot_raw a k v;
+      0
+    end
+
+end

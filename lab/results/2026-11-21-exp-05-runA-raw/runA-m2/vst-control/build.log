@@ -1,0 +1,62 @@
+== harness sources (sha256)
+b713a624295b2fa776fa5458f1ffa4145a91c3eaff724022486ad25faacf44d6  caller/caller.c
+47d090a0603942ed4d292b0c520050e6b542024ee704cbbc20535f5474483d58  caller/expected.txt
+76d2d982ec26547b0e20ef5f31a7f8ea8e8acdddccf17b582e5a81cd3f8723e6  caller/reference.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+9871592930f511a8eed9133164c8ee5cc3370c95b9a60c9b3c663d4c24937ffd  proto.h
+da3e757566851dae737ee3f304da8a3f97b07056a2f0397be19140be01d44a70  run.sh
+dbb9e89d03b7c420b98e54b1b7e39ece8a84999c132ef8a463bb4ee4e8a89162  vst/TRUSTED
+b26702827715c46ffd287b8afc5b6b987fbd82e52a6dc8903b509e377818e685  vst/build.sh
+dc7acffca2a2a7cf2f2ee22b16868d7a6bb6277438df6035e71aaf0262c62f6b  vst/negative-control.txt
+f3ab1500ab02243fac81cad12f6af01ec00547f6b4bc6b2df7245be08c1bb18c  vst/verif_vu.v
+a89661d251a4eb301da2f44b47add7982f027c82eaaa6b1c3647d6fe97a0d2ab  vst/vu.c
+== build
+== versions (0 s)
+The Rocq Prover, version 9.2
+The CompCert CompCert AST generator, version 3.17
+The CompCert C verified compiler, version 3.17
+VST 2.17
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. sources (negative control: 1) (0 s)
+24,29d23
+<   /* CLAMP-BEGIN */
+<   if (r < lo)
+<     return lo;
+<   if (r > hi)
+<     return hi;
+<   /* CLAMP-END */
+364,369d363
+<   (* CLAMP-BEGIN *)
+<   forward_if.
+<   { forward. Exists lo. entailer!. }
+<   forward_if.
+<   { forward. Exists hi. entailer!. }
+<   (* CLAMP-END *)
+== 2. clightgen and Clight check (0 s)
+generated vu.v: 675 lines, 30769 bytes, sha256 633ddaefd6ac0d5b4c1f4dbdda5a89e7d9baab7516f38c9625c0638f32213cfe
+File "./vu.v", line 1, characters 5-8:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+== 3. VST proofs (1 s)
+File "./verif_vu.v", line 13, characters 0-35:
+Warning: Hint Db norm already exists and is discriminated.
+[mismatched-hint-db,automation,default]
+Unproved goal, with its pure hypotheses:
+   H5 : (value_fits t_enc (Vint (Int.repr lo), Vint (Int.repr hi)))
+   H4 : (field_compatible t_enc [] st)
+   Pf : (isptr f)
+   H3 : (tc_val' tuchar (Vint (Int.repr c)))
+   H2 : (field_compatible tuchar [] p)
+   PNst : (is_pointer_or_null st)
+   PNp : (is_pointer_or_null p)
+   PNf : (is_pointer_or_null f)
+   H1 : (Int.min_signed <= r <= Int.max_signed)
+   H0 : (hi <= Int.max_signed)
+   H : (1 <= lo <= hi)
+   SH0 : (readable_share shs)
+   SH : (readable_share shp)
+  goal: (lo <= r <= hi)
+File "./verif_vu.v", line 368, characters 7-15:
+Error: Tactic failure: postcondition not proved.
+
+proof rejected (error at line 368, inside a proof)

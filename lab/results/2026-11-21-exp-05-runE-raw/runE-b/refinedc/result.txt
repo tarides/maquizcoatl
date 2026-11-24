@@ -1,0 +1,10 @@
+tool=refinedc
+run_id=runE-b
+mode=normal
+jobs=4
+cpus=14-19,46-51
+build_seconds=78
+build_status=0
+link=ok
+caller_status=0
+caller_output=same

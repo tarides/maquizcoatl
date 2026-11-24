@@ -1,0 +1,32 @@
+phase: start
+time_utc: 2026-11-19T22:09:14Z
+load_avg: 0.41 1.07 1.17
+cpu_model: AMD EPYC 7502P 32-Core Processor
+cpus_online: 0-63
+kernel: Linux 6.8.0-100-generic
+os: Ubuntu 24.04.5 LTS
+jobs: 4
+cpu_set: 12-15
+cflags: default
+repo_commit: 3e53f3689df631c7dfe29ec14b4e365d50870389
+upstream_commit: gitlink=f95747b462de672b6f8dbdeb478245ddf061ca53 checkout=f95747b462de672b6f8dbdeb478245ddf061ca53 pinned=yes
+pins_sha256: 5c3703ebaff275a34d48670f293582fb7a9759c6c0c91463485054b97f2ff2b8
+gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+cmake: cmake version 3.28.3
+opam: absent
+why3: Why3 platform, version 1.9.0
+alt-ergo: v2.6.4-1-g997f541
+z3_for_why3: Z3 version 4.15.3 - 64 bit
+fstar: F* 2026.11.15
+krml: KaRaMeL version: 3384ecaf654baca53b109c2e2665112eaa6d7f00
+verus: 0.2026.11.02.8bf68ee
+rustup: rustup 1.29.3 (edbc831ce 2026-11-02)
+rust_toolchains: 1.99.1-x86_64-unknown-linux-gnu (active, default) 
+charon: absent
+aeneas: absent
+lean: absent
+isabelle: absent
+phase: end
+time_utc: 2026-11-19T22:09:23Z
+load_avg: 0.66 1.10 1.18
+duration_s: 9

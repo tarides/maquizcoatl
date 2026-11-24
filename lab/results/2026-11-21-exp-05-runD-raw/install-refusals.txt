@@ -1,0 +1,19 @@
+== bedrock2 (estimate 3 GB) 2026-11-21T11:57:12Z
+view ready: <shared-cache>/exp05-view
+error: only 19 GB free, 23 GB needed: install refused
+status 1
+== cn (estimate 3 GB) 2026-11-21T11:57:12Z
+view ready: <shared-cache>/exp05-view
+error: only 19 GB free, 23 GB needed: install refused
+status 1
+== refinedc (estimate 5 GB) 2026-11-21T11:57:12Z
+view ready: <shared-cache>/exp05-view
+error: only 19 GB free, 25 GB needed: install refused
+status 1
+== any (estimate 0 GB) 2026-11-21T11:57:12Z
+view ready: <shared-cache>/exp05-view
+error: only 19 GB free, 20 GB needed: install refused
+status 1
+== df 2026-11-21T11:57:13Z
+1G-blocks  Used Avail Use%
+     875G  812G   19G  98%

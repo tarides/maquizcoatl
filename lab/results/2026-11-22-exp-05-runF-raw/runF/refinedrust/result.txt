@@ -1,0 +1,10 @@
+tool=refinedrust
+run_id=runF
+mode=normal
+jobs=6
+cpus=8-13,40-45
+build_seconds=422
+build_status=0
+link=ok
+caller_status=0
+caller_output=same

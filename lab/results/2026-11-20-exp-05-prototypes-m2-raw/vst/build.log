@@ -1,0 +1,41 @@
+== versions (0 s)
+The Rocq Prover, version 9.2
+The CompCert CompCert AST generator, version 3.17
+The CompCert C verified compiler, version 3.17
+VST 2.17
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. sources (negative control: 0) (0 s)
+== 2. clightgen and Clight check (0 s)
+generated vu.v: 684 lines, 31126 bytes, sha256 80a9aa581dba13bddde057ff784a732359ad4c335b8192e65610162f57efcee2
+File "./vu.v", line 1, characters 5-8:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+== 3. VST proofs (1 s)
+File "./verif_vu.v", line 13, characters 0-35:
+Warning: Hint Db norm already exists and is discriminated.
+[mismatched-hint-db,automation,default]
+Unproved goal, with its pure hypotheses:
+Axioms:
+ClassicalDedekindReals.sig_not_dec : forall P : Prop, {~ ~ P} + {~ P}
+ClassicalDedekindReals.sig_forall_dec :
+  forall P : nat -> Prop,
+  (forall n : nat, {P n} + {~ P n}) ->
+  {n : nat | ~ P n} + {forall n : nat, P n}
+prop_ext : ClassicalFacts.prop_extensionality
+functional_extensionality_dep :
+  forall (A : Type) (B : A -> Type) (f g : forall x : A, B x),
+  (forall x : A, f x = g x) -> f = g
+Classical_Prop.classic : forall P : Prop, P \/ ~ P
+Ensembles.Extensionality_Ensembles :
+  forall (U : Type) (A B : Ensembles.Ensemble U),
+  Ensembles.Same_set A B -> A = B
+axioms: only the allowed ones (6)
+== 4. CompCert compile (53 s)
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_i_apply
+exported: vu_set_slot
+libvu.a: 2104 bytes, sha256 17279c8471d520f0dc5e9f0766000fe0335eff89a04bada5953f839719581a56
+== done (53 s)

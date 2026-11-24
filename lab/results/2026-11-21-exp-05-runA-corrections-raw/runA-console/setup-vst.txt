@@ -1,0 +1,10 @@
+view ready: <shared-cache>/exp05-view
+== base
+base: status=1 time=0s cache=32K
+== vst
+vst: status=0 time=1361s cache=32K
+== smoke-vst
+smoke-vst: status=0 time=2s cache=32K
+disk use: cache=32K exp=135M
+failed components: base
+SETUP-END m2 status=1

@@ -1,0 +1,43 @@
+Negative control of the Verus prototype (experiment 5, run m1-verus on
+the bench host): `run.sh -n verus m1-verus`, after the normal run of the
+same RUN_ID passed. build.sh replaces the clamp of char_len (the block
+between the two marker comments of src/lib.rs) with the callee's raw
+result; Verus must then reject the postcondition of char_len, since
+call_enc_len (shim.rs) gives the callee's result no range.
+
+Result: build_status=3 (proof rejected), control=rejected; 16 verified,
+1 error, the error being the range postcondition of char_len.
+
+Excerpt of build.log (redacted, timing lines omitted):
+
+negative control: clamp removed
+  --- src/lib.rs
+  +++ control/lib.rs
+  @@ -76,15 +76,7 @@
+       let raw = call_enc_len(f, p);
+       // A shared reference: Verus knows st is unchanged by the call.
+       assert(*st == st0);
+  -    // VU-CLAMP-BEGIN
+  -    if raw < st.min_enc_len {
+  -        st.min_enc_len
+  -    } else if raw > st.max_enc_len {
+  -        st.max_enc_len
+  -    } else {
+  -        raw
+  -    }
+  -    // VU-CLAMP-END
+  +    raw
+   }
+   
+   // -------------------------------------------------------- 2. vu_callout_step
+error: postcondition not satisfied
+  --> <exp>/build/m1-verus/verus-control/src/lib.rs:73:9
+   |
+73 |         st.min_enc_len <= st.max_enc_len ==> st.min_enc_len <= r <= st.max_enc_len,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ failed this postcondition
+...
+79 |     raw
+   |     --- at the end of the function body
+
+verification results:: 16 verified, 1 errors
+build.sh: Verus rejected the proof (verification results:: 16 verified, 1 errors)

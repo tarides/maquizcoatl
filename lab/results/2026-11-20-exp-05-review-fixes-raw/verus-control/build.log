@@ -1,0 +1,110 @@
+== harness sources (sha256)
+b713a624295b2fa776fa5458f1ffa4145a91c3eaff724022486ad25faacf44d6  caller/caller.c
+47d090a0603942ed4d292b0c520050e6b542024ee704cbbc20535f5474483d58  caller/expected.txt
+76d2d982ec26547b0e20ef5f31a7f8ea8e8acdddccf17b582e5a81cd3f8723e6  caller/reference.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+9871592930f511a8eed9133164c8ee5cc3370c95b9a60c9b3c663d4c24937ffd  proto.h
+da3e757566851dae737ee3f304da8a3f97b07056a2f0397be19140be01d44a70  run.sh
+7bba5316d877ee8cae8635b5ffc1ee4cdfd20d036e696db35c4bec111d4ab484  verus/TRUSTED
+e98922bd36e8189529b86aa2d8ff8ea010fd543b7b1d8e11d8f2b98c555a913a  verus/build.sh
+9593826dc20f4bccf06b2a1db6efcc270fc67b7e27df99c8f90ed47ef85cba32  verus/negative-control.txt
+edcee4f0c09e2096145d0ba793865742b97507a95e782c90107a2313c20c1731  verus/src/ffi.rs
+833d4a66da81766d76b912b099411667935f510af8ca550002fe057237156df0  verus/src/lib.rs
+f03bb2923b92568062ce22fe8be072753bdbc4929715cc245c26a2c816483e96  verus/src/shim.rs
+== build
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+negative control: clamp removed
+  --- src/lib.rs
+  +++ control/lib.rs
+  @@ -76,15 +76,7 @@
+       let raw = call_enc_len(f, p);
+       // A shared reference: Verus knows st is unchanged by the call.
+       assert(*st == st0);
+  -    // VU-CLAMP-BEGIN
+  -    if raw < st.min_enc_len {
+  -        st.min_enc_len
+  -    } else if raw > st.max_enc_len {
+  -        st.max_enc_len
+  -    } else {
+  -        raw
+  -    }
+  -    // VU-CLAMP-END
+  +    raw
+   }
+   
+   // -------------------------------------------------------- 2. vu_callout_step
+error: postcondition not satisfied
+  --> <exp>/build/m2-review/verus-control/src/lib.rs:73:9
+   |
+73 |         st.min_enc_len <= st.max_enc_len ==> st.min_enc_len <= r <= st.max_enc_len,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ failed this postcondition
+...
+79 |     raw
+   |     --- at the end of the function body
+
+error: `external_body`/`assume_specification` not allowed with `--no-cheating`
+  --> <exp>/build/m2-review/verus-control/src/shim.rs:33:1
+   |
+33 | pub fn call_enc_len(f: &EncLenFn, p: *const u8) -> (r: i32) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: `external_body`/`assume_specification` not allowed with `--no-cheating`
+  --> <exp>/build/m2-review/verus-control/src/shim.rs:40:1
+   |
+40 | pub fn call_callout(f: &CalloutFn, args: &mut VuArgs, ud: &UserData) -> (r: i32) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: `external_body`/`assume_specification` not allowed with `--no-cheating`
+  --> <exp>/build/m2-review/verus-control/src/shim.rs:47:1
+   |
+47 | pub fn call_apply_all(g: &ApplyAllFn, rec: &mut VuFoldRec) -> (r: i32) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 4 previous errors
+
+no-cheating: 3 refusals in src/shim.rs, 0 elsewhere
+error: postcondition not satisfied
+  --> <exp>/build/m2-review/verus-control/src/lib.rs:73:9
+   |
+73 |         st.min_enc_len <= st.max_enc_len ==> st.min_enc_len <= r <= st.max_enc_len,
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ failed this postcondition
+...
+79 |     raw
+   |     --- at the end of the function body
+
+verification results:: 16 verified, 1 errors
+error: aborting due to 1 previous error
+
+(use --output-json for machine-readable output)
+verus-build-info
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+total-time:            1054 ms    (estimated total cpu time 1081 ms)
+    rust-time:                 100 ms
+        init-and-types:             50 ms
+        trait-conflicts:            50 ms
+        compile-time:                0 ms
+    verification-time:         718 ms
+        vir-time:                  546 ms
+            hir-time:                    0 ms
+            import-time:               423 ms
+            rust-to-vir:                47 ms
+        verify-crate-time:         171 ms
+    unaccounted-time:          235 ms
+
+verify-crate-time-breakdown
+    total verify-time:            189 ms   (2 threads)
+        total air-time:                99 ms   (2 threads)
+        total smt-time:                26 ms   (2 threads)
+            total smt-init:                 0 ms,     1138 rlimit (2 threads)
+            total smt-run:                 26 ms,    82885 rlimit (2 threads)
+build.sh: Verus rejected the proof (verification results:: 16 verified, 1 errors)

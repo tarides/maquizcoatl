@@ -1,0 +1,8 @@
+Cleaned Smoke
+Running Smoke ...
+Finished Smoke (0:00:02 elapsed time)
+0:00:17 elapsed time
+warning: overriding the module target triple with x86_64-unknown-linux-gnu [-Woverride-module]
+1 warning generated.
+42
+isabelle-llvm smoke: ok

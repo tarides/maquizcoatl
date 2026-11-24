@@ -1,0 +1,7 @@
+# du -sLm through the cache view, on the bench host, 2026-11-22T10:04:31Z
+956	<cache>/creusot
+63	<cache>/bedrock2
+3325	<cache>/opam/refinedrust
+# without -L (what vu_du measured before this fix)
+0	<cache>/creusot
+0	<cache>/bedrock2

@@ -1,0 +1,23 @@
+repo_commit: 0c28395
+uptime:  10:42:47 up 208 days,  3:13,  6 users,  load average: 0.27, 0.80, 1.62
+reference: caller output equals expected.txt
+why3: caller output equals expected.txt
+why3 control: proof rejected, as required
+why3 control: proof rejected, as required
+pulse: caller output equals expected.txt
+pulse control: proof rejected, as required
+pulse control: proof rejected, as required
+verus: caller output equals expected.txt
+verus control: proof rejected, as required
+verus control: proof rejected, as required
+aeneas: caller output equals expected.txt
+aeneas control: proof rejected, as required
+aeneas control: proof rejected, as required
+vst: caller output equals expected.txt
+vst control: proof rejected, as required
+vst control: proof rejected, as required
+isabelle-llvm: caller output equals expected.txt
+isabelle-llvm control: proof rejected, as required
+isabelle-llvm control: proof rejected, as required
+miri status 0
+uptime end:  10:50:16 up 208 days,  3:21,  7 users,  load average: 2.00, 1.51, 1.59

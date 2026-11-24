@@ -1,0 +1,8 @@
+== base
+base: status=0 time=0s cache=32K
+== hax
+hax: status=0 time=951s cache=32K
+== smoke-hax
+smoke-hax: status=0 time=24s cache=32K
+disk use: cache=32K exp=5.5G
+SETUP-END m3 status=0

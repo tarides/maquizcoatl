@@ -1,0 +1,16 @@
+opam 2.6.1 sha256=b533d393a6967150d6ef41cb3d71e147e93ecbabeb59e921aa412c0ae79ebe3d
+[NOTE] Package coq-compcert is already installed (current version is 3.18).
+[NOTE] Package coq-vst is already installed (current version is 2.17).
+[NOTE] Package ocaml-base-compiler is already installed (current version is 5.4.1).
+# Packages matching: (name-match(ocaml) | name-match(coq) | name-match(coq-core) | name-match(rocq-core) | name-match(coq-compcert) | name-match(coq-vst)) & installed
+# Name       # Version
+coq          9.2.0
+coq-compcert 3.18
+coq-core     9.2.0
+coq-vst      2.17
+ocaml        5.4.1
+rocq-core    9.2.0
+The Rocq Prover, version 9.2
+compiled with OCaml 5.4.1
+The CompCert CompCert AST generator, version 3.17
+opam root: 1.3G

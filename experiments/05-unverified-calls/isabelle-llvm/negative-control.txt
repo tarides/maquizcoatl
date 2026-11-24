@@ -1,0 +1,45 @@
+Negative control of the Isabelle-LLVM prototype (experiment 5, run
+m2-isabelle-llvm on the bench host): `run.sh -n isabelle-llvm
+m2-isabelle-llvm`, after the normal run of the same RUN_ID passed.
+build.sh replaces the clamp of vu_char_len (the definition vu_clamp,
+between the two marker comments of VU.thy) with a definition that
+returns the callee's raw result; Isabelle must then reject
+vu_char_len_correct, since the hypothesis on vu_call_enc_len (the shim)
+gives the callee's result no range.
+
+Result: build_status=3 (proof rejected), control=rejected; one failed
+proof, vu_char_len_correct (line 114), whose only open goal is the range
+postcondition for an arbitrary callee result r. The other five theorems
+are proved, as in the normal run.
+
+Excerpt of build.log (redacted):
+
+== 1. source (negative control: 1) (0 s)
+92d91
+< (* CLAMP-BEGIN *)
+94,101c93
+<   "vu_clamp r mn mx \<equiv> doM {
+<     lt \<leftarrow> ll_icmp_slt r mn;
+<     llc_if lt (Mreturn mn) (doM {
+<       gt \<leftarrow> ll_icmp_slt mx r;
+<       llc_if gt (Mreturn mx) (Mreturn r)
+<     })
+<   }"
+< (* CLAMP-END *)
+---
+>   "vu_clamp r mn mx \<equiv> Mreturn r"
+
+== 2. isabelle build (proofs and export_llvm) (0 s)
+Cleaned VU
+Running VU ...
+VU FAILED (see also "isabelle build_log -H Error VU")
+*** Failed to finish proof (line 114 of "<exp>/build/m2-isabelle-llvm/isabelle-llvm-control/src/VU.thy"):
+*** goal (1 subgoal):
+***  1. ⋀r. ⟦1 ≤ sint mn; sint mn ≤ sint mx; abase st; abase p⟧
+***         ⟹ sint mn ≤ sint r ∧
+***            sint r
+***            ≤ sint
+***               mx
+*** At command "by" (line 114 of "<exp>/build/m2-isabelle-llvm/isabelle-llvm-control/src/VU.thy")
+Unfinished session(s): VU
+proof rejected: 1 failed proof(s), no other error

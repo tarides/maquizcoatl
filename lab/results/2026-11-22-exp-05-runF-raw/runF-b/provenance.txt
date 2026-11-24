@@ -1,0 +1,36 @@
+phase: start
+time_utc: 2026-11-22T18:19:46Z
+load_avg: 4.49 2.70 2.29
+cpu_model: AMD EPYC 7502P 32-Core Processor
+cpus_online: 0-63
+kernel: Linux 6.8.0-100-generic
+os: Ubuntu 24.04.5 LTS
+jobs: 4
+cpu_set: 14-17,46-49
+cflags: default
+repo_commit: a7946892527baa1c35758c4a4a0a0b21b7e1e967
+upstream_commit: gitlink=f95747b462de672b6f8dbdeb478245ddf061ca53 checkout=f95747b462de672b6f8dbdeb478245ddf061ca53 pinned=yes
+pins_sha256: f9fe880d11d370da197b99ad013513a8578579c8b173a1d3dd873aaf58ea40e3
+gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+cmake: cmake version 3.28.3
+opam: 2.6.1
+why3: Why3 platform, version 1.9.0
+alt-ergo: v2.6.4-1-g997f541
+z3_for_why3: Z3 version 4.15.3 - 64 bit
+fstar: F* 2026.11.15
+krml: KaRaMeL version: 3384ecaf654baca53b109c2e2665112eaa6d7f00
+verus: 0.2026.11.02.8bf68ee
+rustup: rustup 1.29.3 (edbc831ce 2026-11-02)
+rust_toolchains: nightly-2025-11-08-x86_64-unknown-linux-gnu nightly-2026-08-03-x86_64-unknown-linux-gnu nightly-2026-09-17-x86_64-unknown-linux-gnu nightly-2026-11-15-x86_64-unknown-linux-gnu 1.99.1-x86_64-unknown-linux-gnu (active, default) 
+charon: 0.1.321 (61c67516e7752daf6b4dd403a030d90efbb0b8eb)
+aeneas: aeneas nightly-2026.11.19-8f4466d
+lean: error: no default toolchain configured. run `elan default stable` to install & configure the latest Lean 4 stable release.
+isabelle: Isabelle2026
+clang: clang version 23.1.5 (https://github.com/llvm/llvm-project 392dfff97d29b59d77e5cac6d4b6ef2585fe7117)
+coqc_vst: The Rocq Prover, version 9.2
+clightgen_vst: The CompCert CompCert AST generator, version 3.17
+opam_switches(<cache>/opam): <shared-cache>/creusot/data cn compcert ffi ffi-flambda hax provers refinedc refinedrust vst 
+phase: end
+time_utc: 2026-11-22T18:22:05Z
+load_avg: 6.03 4.04 2.85
+duration_s: 140

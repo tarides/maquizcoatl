@@ -1,0 +1,4 @@
+fetched LLVM-23.1.5-Linux-X64.tar.xz sha256=f72edb0b36580ece7f52e23858f00c18fad4e87395ea7ad05d7e55c39f8fc78a
+clang version 23.1.5 (https://github.com/llvm/llvm-project 392dfff97d29b59d77e5cac6d4b6ef2585fe7117)
+  LLVM version 23.1.5
+llvm: 12G

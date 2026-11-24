@@ -1,0 +1,43 @@
+(* vu.drv: the C side of module Client of vu.mlw, used with Why3's C
+   extraction driver ("why3 extract -D c -D vu.drv"). Every entry is
+   trusted: it says which C expression implements a val of Client, and
+   Why3 does not check it. TRUSTED lists this file. *)
+
+module vu.Client
+
+  prelude "#include \"proto.h\""
+  interface "#include \"proto.h\""
+
+  syntax type bytes "const unsigned char *"
+  syntax type enc_len_fn "vu_enc_len_fn"
+  syntax type callout_fn "vu_callout_fn"
+  syntax type apply_fn "vu_apply_fn"
+  syntax type apply_all_fn "vu_apply_all_fn"
+  syntax type user_data "void *"
+  syntax type enc_state "const vu_enc_state *"
+  syntax type args "vu_args *"
+  syntax type const_args "const vu_args *"
+  syntax type fold_rec "vu_fold_rec *"
+  syntax type fold_arg "void *"
+
+  syntax val get_min_len "%1->min_enc_len" prec 1 1
+  syntax val get_max_len "%1->max_enc_len" prec 1 1
+
+  syntax val get_slot_raw "%1->slot[%2]" prec 1 1 15
+  syntax val get_subject_len_raw "%1->subject_len" prec 1 1
+  syntax val get_subject_byte_raw "%1->subject[%2]" prec 1 1 15
+  syntax val set_slot_raw "%1->slot[%2] = %3" prec 14 1 15 14
+
+  syntax val get_calls "((vu_fold_rec *)%1)->calls" prec 1 2
+  syntax val set_calls "((vu_fold_rec *)%1)->calls = %2" prec 14 2 14
+  syntax val get_recorded "((vu_fold_rec *)%1)->recorded" prec 1 2
+  syntax val set_recorded "((vu_fold_rec *)%1)->recorded = %2" prec 14 2 14
+  syntax val set_from "((vu_fold_rec *)%1)->from[%2] = %3" prec 14 2 15 14
+
+  syntax val call_enc_len "%1(%2)" prec 1 1 15
+  syntax val call_callout "%1(%2, %3)" prec 1 1 15 15
+  syntax val i_apply_ptr "vu_i_apply" prec 0
+  syntax val ignore_to "((void)%1, 0)" prec 0 2
+  syntax val call_apply_all "%1(%2, %3)" prec 1 1 15 15
+
+end

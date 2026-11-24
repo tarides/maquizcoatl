@@ -1,0 +1,54 @@
+--- pre-fix/verus/src/ffi.rs
++++ runB/verus/src/ffi.rs
+@@ -102,17 +102,19 @@
+ 
+ /// The subject of args as a shared slice: args.subject must point to
+ /// args.subject_len readable bytes that nobody writes during the call
+-/// (proto.h). A negative length aborts; a zero length gives the empty
+-/// slice without reading the pointer.
++/// (proto.h). A negative length or a NULL pointer aborts; a zero length
++/// gives the empty slice without reading the pointer. The slice is made
++/// from the raw pointer itself: a first version went through
++/// args.subject.as_ref(), a reference to one byte, which Miri's Stacked
++/// Borrows rejects when the slice reads past that byte (run B).
+ unsafe fn subject_of(args: &VuArgs) -> &[u8] {
+-    if args.subject_len < 0 {
++    if args.subject_len < 0 || args.subject.is_null() {
+         std::process::abort();
+     }
+     if args.subject_len == 0 {
+         return &[];
+     }
+-    let p = some(unsafe { args.subject.as_ref() });
+-    unsafe { core::slice::from_raw_parts(p, args.subject_len as usize) }
++    unsafe { core::slice::from_raw_parts(args.subject, args.subject_len as usize) }
+ }
+ 
+ #[no_mangle]
+--- pre-fix/aeneas/src/ffi.rs
++++ runB/aeneas/src/ffi.rs
+@@ -150,17 +150,19 @@
+ 
+ /// The subject of args as a shared slice: args.subject must point to
+ /// args.subject_len readable bytes that nobody writes during the call
+-/// (proto.h). A negative length aborts; a zero length gives the empty
+-/// slice without reading the pointer.
++/// (proto.h). A negative length or a NULL pointer aborts; a zero length
++/// gives the empty slice without reading the pointer. The slice is made
++/// from the raw pointer itself: a first version went through
++/// args.subject.as_ref(), a reference to one byte, which Miri's Stacked
++/// Borrows rejects when the slice reads past that byte (run B).
+ unsafe fn subject_of(args: &VuArgs) -> &[u8] {
+-    if args.subject_len < 0 {
++    if args.subject_len < 0 || args.subject.is_null() {
+         std::process::abort();
+     }
+     if args.subject_len == 0 {
+         return &[];
+     }
+-    let p = some(unsafe { args.subject.as_ref() });
+-    unsafe { core::slice::from_raw_parts(p, args.subject_len as usize) }
++    unsafe { core::slice::from_raw_parts(args.subject, args.subject_len as usize) }
+ }
+ 
+ #[no_mangle]

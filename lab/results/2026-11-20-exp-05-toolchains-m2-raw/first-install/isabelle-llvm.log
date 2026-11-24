@@ -1,0 +1,36 @@
+UNPINNED Isabelle2026_linux.tar.gz sha256=858c995b32216b3876bf395c3be843147d1f1eee404bc6c958d7534ee335e48d (recorded on first fetch)
+Isabelle2026
+fetched afp-2026-11-19.tar.gz sha256=9fe7a2e108e92080a5f9c80e56e7d019424fc4a7f7c431541131b699626de38a
+afp release: afp-2026-11-19
+isabelle_llvm commit: e42f478118988ff38676ff01215be26f3018f015
+Building Automatic_Refinement ...
+Finished Automatic_Refinement (0:00:34 elapsed time, 0:01:40 cpu time, factor 2.91)
+Building Refine_Monadic ...
+Finished Refine_Monadic (0:00:51 elapsed time, 0:02:18 cpu time, factor 2.69)
+Building Isabelle_LLVM ...
+Finished Isabelle_LLVM (0:04:10 elapsed time, 0:13:54 cpu time, factor 3.34)
+0:05:58 elapsed time, 0:17:53 cpu time, factor 3.00
+	Command being timed: "isabelle build -b -j 3 -o threads=4 -d <cache>/isabelle/afp-2026-11-19/afp-2026-11-19/thys -d <cache>/isabelle/isabelle_llvm/thys Isabelle_LLVM"
+	User time (seconds): 1296.42
+	System time (seconds): 80.34
+	Percent of CPU this job got: 380%
+	Elapsed (wall clock) time (h:mm:ss or m:ss): 6:01.95
+	Average shared text size (kbytes): 0
+	Average unshared data size (kbytes): 0
+	Average stack size (kbytes): 0
+	Average total size (kbytes): 0
+	Maximum resident set size (kbytes): 4910856
+	Average resident set size (kbytes): 0
+	Major (requiring I/O) page faults: 49
+	Minor (reclaiming a frame) page faults: 7580954
+	Voluntary context switches: 2874867
+	Involuntary context switches: 7514
+	Swaps: 0
+	File system inputs: 17936
+	File system outputs: 732608
+	Socket messages sent: 0
+	Socket messages received: 0
+	Signals delivered: 0
+	Page size (bytes): 4096
+	Exit status: 0
+isabelle tree: 3.9G

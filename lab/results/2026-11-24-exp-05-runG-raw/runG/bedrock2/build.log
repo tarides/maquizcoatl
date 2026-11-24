@@ -1,0 +1,67 @@
+== harness sources (sha256)
+dfe29e738c284f7b6fc74b83bb374bd232fac8b2e473f7141ec981cf955b9245  bedrock2/Check.v
+cf12546a0af20d155f59604fe834ea75c0aea9c43e96e1607053dd1b66df638c  bedrock2/README.md
+3d1cdd7f9e6f5c9f4a6358c36d35e503fbe01be54d34cd1197e88c4eec5f2838  bedrock2/TRUSTED
+4ffab6f856ef18e035ab0ad5adba407f555117f8909bd434a079d2f235c6a493  bedrock2/ToC.v
+1533c360d7bf3bd30f0a2d40f4ce85b67298efac0cd5d0c43fd640bcb5f76c1e  bedrock2/VU.v
+39c0dbc8773c86bb9c2bc3733ae44d2e1b035239b0e0af76ee29258c401246f9  bedrock2/abi.c
+0edb5c2256c160ed86422ae4cff16c77cfa2617964450859a24bcf806e9c9845  bedrock2/b2ext.h
+2a7dbf7af12d533f96c7fb99f7b99a82562bdf7d3573d2ff5e5b470c153128f1  bedrock2/build.sh
+0bc1bb8e133092ac9446a25d748595beab3f68b7c1148a358fc0e0a188637dbd  bedrock2/layout.c
+374467ea5d98a914b132e0d058b8aad4cc94958278b7b467a4ecde55fa9b5805  bedrock2/shim.c
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+69fd04d331b40761a87b65080115b44c1c45dda17e41d1730ae468f4bf090ce1  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+== build
+== versions (0 s)
+The Rocq Prover, version 9.3.0
+bedrock2 commit: 67b682a504041acd2cd678782ff2505983d7cd6f
+coqutil commit: 4c399b76628330f77c53c25ebbeceadb115602ee
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 0) (0 s)
+== 2. Rocq proofs (0 s)
+File "./VU.v", line 158, characters 0-11:
+VU.v: all proofs checked
+== 3. assumptions (164 s)
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+Closed under the global context
+assumptions: none (7 theorems closed under the global context)
+== 4. C code (ToCString) (188 s)
+generated vu.c: 310 lines, sha256 7788e919dc82c9458339a42c4d4297ccc083caee2374ec4e8fd1ebb28f8bd81c
+br_word_t b2_vu_char_len(br_word_t f, br_word_t p, br_word_t st) {
+br_word_t b2_vu_callout_step(br_word_t dir, br_word_t f, br_word_t a, br_word_t ud) {
+br_word_t b2_vu_i_apply(br_word_t from, br_word_t to, br_word_t tl, br_word_t a) {
+br_word_t b2_vu_fold_all(br_word_t g, br_word_t rc) {
+br_word_t b2_vu_get_slot(br_word_t a, br_word_t k, br_word_t v) {
+br_word_t b2_vu_set_slot(br_word_t a, br_word_t k, br_word_t v) {
+br_word_t b2_vu_get_subject_byte(br_word_t a, br_word_t i) {
+== 5. compile (189 s)
+exported: b2_vu_callout_step
+exported: b2_vu_char_len
+exported: b2_vu_fold_all
+exported: b2_vu_get_slot
+exported: b2_vu_get_subject_byte
+exported: b2_vu_i_apply
+exported: b2_vu_set_slot
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_get_subject_byte
+exported: vu_i_apply
+exported: vu_set_slot
+exported: vu_call_apply_all
+exported: vu_call_callout
+exported: vu_call_enc_len
+external: vu_call_apply_all
+external: vu_call_callout
+external: vu_call_enc_len
+== done (189 s)

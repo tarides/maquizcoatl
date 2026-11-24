@@ -1,0 +1,9 @@
+tool=refinedc
+run_id=runE-b
+mode=negative-control-read
+jobs=4
+cpus=14-19,46-51
+normal_run=passed
+build_seconds=62
+build_status=3
+control=rejected

@@ -1,0 +1,10 @@
+tool=creusot
+run_id=runE
+mode=normal
+jobs=4
+cpus=20-23,52-55
+build_seconds=46
+build_status=0
+link=ok
+caller_status=0
+caller_output=same

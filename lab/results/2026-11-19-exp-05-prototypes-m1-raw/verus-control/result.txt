@@ -1,0 +1,9 @@
+tool=verus
+run_id=m1-verus
+mode=negative-control
+jobs=4
+cpus=28-31
+normal_run=passed
+build_seconds=1
+build_status=3
+control=rejected

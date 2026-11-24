@@ -1,0 +1,54 @@
+# Trusted lines of the Bedrock2 prototype (format: ../count-trusted.sh).
+#
+# Modelling style: trusted shim. Bedrock2's language calls functions by
+# name only (cmd.call); anything else is an external action
+# (cmd.interact), whose behaviour the proofs take from ext_spec and
+# which ToCString prints as a C call to a function of the action's name.
+# The three indirect calls are such actions, made by the C shim. VU.v
+# assumes no ext_spec: the contract of each action is a section variable
+# of VU.v, so it is a hypothesis of every theorem (Print Assumptions:
+# closed under the global context), and the theorems hold for any shim
+# and client that meet those contracts.
+#
+# The shim: three C functions that make the indirect calls and return
+# the callee's raw int result as a word; vu_call_apply_all also takes
+# the address of the verified vu_i_apply (re-entrancy shape (a)).
+shim.c
+# The word-level C names of the actions and of the verified functions
+# (hand-written ABI mapping; the compiler checks the generated
+# definitions against it).
+b2ext.h
+# The proto.h wrappers: int to word conversions (sign or zero
+# extension), word to int truncation.
+abi.c
+# The struct offsets that the memory predicates assume, written as
+# numbers.
+layout.c:8-19
+# The w notation and the memory predicates the contracts use: the args
+# record (whole, with its padding), the subject (whole: Bedrock2 has
+# no fractional permission, so no read-only share), the fold record.
+VU.v:111-111
+VU.v:117-140
+# The external world's ext_spec is well formed (ext_spec.ok), which
+# bedrock2's program logic needs.
+VU.v:164-164
+# Contract of the encoding callee (vu_call_enc_len): lent the byte at
+# p, gives it back unchanged, returns an int.
+VU.v:168-171
+# Contract of the callout callee (vu_call_callout): lent the record and
+# the subject; gives back the record with subject, subject_len, pos and
+# num unchanged (slots and padding any) and the subject with the same
+# bytes; returns an int.
+VU.v:178-184
+# Contract of the client's apply_all (vu_call_apply_all), stated on the
+# function it is given: the client preserves every property of the
+# record that every call of b2_vu_i_apply preserves (as Isabelle-LLVM's
+# respects_i_apply). A hypothesis of b2_vu_fold_all_ok, composed there
+# with b2_vu_i_apply_ok (i_apply_rec_wf).
+VU.v:192-203
+#
+# Not counted: the toolchain (Rocq, coqutil, bedrock2's semantics and
+# program logic, ToCString, which prints C without a proof, bytedump.py,
+# the C compiler), as for every tool; the specifications of the verified
+# functions, which Rocq checks, including the accessors' own
+# preconditions (as for CN and RefinedRust).

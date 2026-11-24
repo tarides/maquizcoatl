@@ -1,0 +1,15 @@
+repo_commit: a794689
+uptime:  18:18:16 up 209 days, 10:49,  6 users,  load average: 1.04, 1.76, 1.97
+disk_free_start: 54224M
+reference: caller output equals expected.txt
+refinedrust: caller output equals expected.txt
+run.sh refinedrust: status 0
+refinedrust control: proof rejected, as required
+refinedrust control: proof rejected, as required
+mode=negative-control
+build_status=3
+mode=negative-control-read
+build_status=3
+miri status 0
+uptime end:  18:34:13 up 209 days, 11:05,  7 users,  load average: 3.14, 5.07, 4.37
+disk_free_end: 53411M

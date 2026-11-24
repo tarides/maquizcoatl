@@ -1,0 +1,18 @@
+== base
+base: status=0 time=0s cache=2.6G
+== fstar
+fstar: status=0 time=1s cache=2.6G
+== why3
+why3: status=0 time=0s cache=2.6G
+== rust
+rust: status=0 time=0s cache=2.6G
+== verus
+verus: status=0 time=0s cache=2.6G
+== smoke-why3
+smoke-why3: status=0 time=1s cache=2.6G
+== smoke-pulse
+smoke-pulse: status=0 time=2s cache=2.6G
+== smoke-verus
+smoke-verus: status=0 time=2s cache=2.6G
+disk use: cache=2.6G exp=53M
+SETUP-END m1 status=0

@@ -1,0 +1,16 @@
+== hax-fstar (estimate 1 GB) 2026-11-21T11:37:05Z
+view ready: <shared-cache>/exp05-view
+error: only 19 GB free, 21 GB needed: install refused
+status 1
+== hax-lean (estimate 10 GB) 2026-11-21T11:37:05Z
+view ready: <shared-cache>/exp05-view
+error: only 19 GB free, 30 GB needed: install refused
+status 1
+== creusot (estimate 7 GB) 2026-11-21T11:37:05Z
+view ready: <shared-cache>/exp05-view
+error: only 19 GB free, 27 GB needed: install refused
+status 1
+== refinedrust (estimate 6 GB) 2026-11-21T11:37:05Z
+view ready: <shared-cache>/exp05-view
+error: only 19 GB free, 26 GB needed: install refused
+status 1

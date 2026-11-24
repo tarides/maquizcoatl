@@ -1,0 +1,6 @@
+== base
+base: status=0 time=0s cache=48G free=68G
+== bedrock2
+bedrock2: status=0 time=144s cache=50G free=66G
+disk use: cache=32K exp=1.4G
+SETUP-END m4 status=0

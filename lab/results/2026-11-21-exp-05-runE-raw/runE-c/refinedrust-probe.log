@@ -1,0 +1,14 @@
+refinedrust source: 2862b1d8044919d22330a9c8d5778fef85a47936, toolchain nightly-2026-11-15
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 1.08s
+translate probe: status 0
+Did 3075 steps.
+dune probe: status 0
+no Admitted or admit in the probe's Rocq files
+error: [RefinedRust] Unsupported feature: PtrMetadata unop not supported
+
+warning: [RefinedRust] Skipping function due to previous failure
+   --> src/lib.rs:296:1
+    |
+--
+error: could not compile `vu` (lib) due to 1 previous error; 17 warnings emitted
+translate draft (get_subject_byte not skipped): status 101

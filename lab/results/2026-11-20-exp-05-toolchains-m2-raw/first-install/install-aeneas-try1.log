@@ -1,0 +1,7 @@
+== base
+base: status=0 time=0s cache=2.6G
+== aeneas
+aeneas: status=141 time=54s cache=9.0G
+disk use: cache=9.0G exp=121M
+failed components: aeneas
+SETUP-END m2 status=1

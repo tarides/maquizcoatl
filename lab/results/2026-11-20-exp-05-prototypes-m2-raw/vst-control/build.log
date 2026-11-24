@@ -1,0 +1,49 @@
+== versions (0 s)
+The Rocq Prover, version 9.2
+The CompCert CompCert AST generator, version 3.17
+The CompCert C verified compiler, version 3.17
+VST 2.17
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. sources (negative control: 1) (0 s)
+24,29d23
+<   /* CLAMP-BEGIN */
+<   if (r < lo)
+<     return lo;
+<   if (r > hi)
+<     return hi;
+<   /* CLAMP-END */
+364,369d363
+<   (* CLAMP-BEGIN *)
+<   forward_if.
+<   { forward. Exists lo. entailer!. }
+<   forward_if.
+<   { forward. Exists hi. entailer!. }
+<   (* CLAMP-END *)
+== 2. clightgen and Clight check (0 s)
+generated vu.v: 675 lines, 30769 bytes, sha256 633ddaefd6ac0d5b4c1f4dbdda5a89e7d9baab7516f38c9625c0638f32213cfe
+File "./vu.v", line 1, characters 5-8:
+Warning: "From Coq" has been replaced by "From Stdlib".
+[deprecated-from-Coq,deprecated-since-9.0,deprecated,default]
+== 3. VST proofs (2 s)
+File "./verif_vu.v", line 13, characters 0-35:
+Warning: Hint Db norm already exists and is discriminated.
+[mismatched-hint-db,automation,default]
+Unproved goal, with its pure hypotheses:
+   H5 : (value_fits t_enc (Vint (Int.repr lo), Vint (Int.repr hi)))
+   H4 : (field_compatible t_enc [] st)
+   Pf : (isptr f)
+   H3 : (tc_val' tuchar (Vint (Int.repr c)))
+   H2 : (field_compatible tuchar [] p)
+   PNst : (is_pointer_or_null st)
+   PNp : (is_pointer_or_null p)
+   PNf : (is_pointer_or_null f)
+   H1 : (Int.min_signed <= r <= Int.max_signed)
+   H0 : (hi <= Int.max_signed)
+   H : (1 <= lo <= hi)
+   SH0 : (readable_share shs)
+   SH : (readable_share shp)
+  goal: (lo <= r <= hi)
+File "./verif_vu.v", line 368, characters 7-15:
+Error: Tactic failure: postcondition not proved.
+
+proof rejected (error at line 368, inside a proof)

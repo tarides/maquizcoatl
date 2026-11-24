@@ -1,0 +1,15 @@
+File "vu/proofs/dune", lines 2-7, characters 0-606:
+2 | (rocq.theory
+3 | (flags -w -notation-overridden -w -redundant-canonical-projection)
+4 | (name refinedrust.examples.vu.proofs)
+5 | (modules proof_get_subject_byte)
+6 | (generate_project_file)
+7 | (theories stdpp iris iris_contrib Ltac2 Equations lrust radium lithium refinedrust Stdlib rrstd.clone.clone.generated rrstd.closures.closures.generated rrstd.closures.theories rrstd.mem.mem.generated rrstd.mem.theories rrstd.num.num.generated rrstd.option.option.generated rrstd.ptr.ptr.generated rrstd.ptr.theories rrstd.result.result.generated rrstd.result.theories rrstd.sized.sized.generated refinedrust.examples.vu.generated))
+LEFT (MinInt isize ≤ wrap_to_it i usize ≤ MaxInt isize)
+LEFT (loc_a s + wrap_to_it i usize ≤ loc_a s + length bs)
+LEFT (wrap_to_it i usize < length bs)
+LEFT (bs !! Z.to_nat i = Some (wrap_to_it x'0 i32))
+LEFT (wrap_to_it x'0 i32 = -30)
+File "./vu/proofs/proof_get_subject_byte.v", line 71, characters 7-10:
+Error: Tactic failure:  Cannot find witness.
+

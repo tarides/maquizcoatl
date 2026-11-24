@@ -1,0 +1,47 @@
+== harness sources (sha256)
+b713a624295b2fa776fa5458f1ffa4145a91c3eaff724022486ad25faacf44d6  caller/caller.c
+47d090a0603942ed4d292b0c520050e6b542024ee704cbbc20535f5474483d58  caller/expected.txt
+76d2d982ec26547b0e20ef5f31a7f8ea8e8acdddccf17b582e5a81cd3f8723e6  caller/reference.c
+f98d7a2ed11f826282fe9306f441e3ddeb94eb4c77c5288260d35408ab518aea  isabelle-llvm/ROOT
+1a80d1dc1c8f0f27d4bebcac044d78cc906af0e575677ebc8313295b5a6fed09  isabelle-llvm/TRUSTED
+26b1915c3b713fce4cf6e6f2491cff2f11e899465b776c259b5b53dc8458fcfe  isabelle-llvm/VU.thy
+ca3a6871a04c920c596284cc1e639fb5469e5c61c44266e93c439505612fa287  isabelle-llvm/abi.expected
+a62244f2bdcba31ef2675be75357273d636969caf819e5be1304023128f673a0  isabelle-llvm/build.sh
+344b71c32fa9b62f48e535fb1819a79fcb1c0f08e9fee1b411091e84497bba1d  isabelle-llvm/layout.c
+b2c1fb72b3d59f385544c81e069b39c1349da1f1f06da3d40fb3dd730b471fb7  isabelle-llvm/negative-control.txt
+4e213786a915675ce895b93ce79a4d7c62e9b4a97bf69e31cfe029658527c987  isabelle-llvm/shim.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+9871592930f511a8eed9133164c8ee5cc3370c95b9a60c9b3c663d4c24937ffd  proto.h
+da3e757566851dae737ee3f304da8a3f97b07056a2f0397be19140be01d44a70  run.sh
+== build
+== versions (0 s)
+Isabelle2026
+isabelle_llvm commit: e42f478118988ff38676ff01215be26f3018f015
+afp: afp-2026-11-19
+clang version 23.1.5 (https://github.com/llvm/llvm-project 392dfff97d29b59d77e5cac6d4b6ef2585fe7117)
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 0) (0 s)
+proof escapes: none
+== 2. isabelle build (proofs and export_llvm) (0 s)
+Cleaned VU
+Running VU ...
+Finished VU (0:00:24 elapsed time, 0:00:36 cpu time, factor 1.50)
+0:00:38 elapsed time, 0:00:36 cpu time, factor 0.96
+generated vu.ll: 671 lines, 32608 bytes, sha256 2ec7639dc03a64166e7def9d30e85a5ef8bc9f6be25bd52362d77884fc3e7a8e
+== 3. ABI checks (42 s)
+abi: vu.ll declares and defines what abi.expected lists
+layout: same
+== 4. compile (42 s)
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_i_apply
+exported: vu_set_slot
+exported: vu_call_apply_all
+exported: vu_call_callout
+exported: vu_call_enc_len
+external: vu_call_apply_all
+external: vu_call_callout
+external: vu_call_enc_len
+== done (42 s)

@@ -1,0 +1,9 @@
+tool=pulse
+run_id=m1-pulse
+mode=negative-control
+jobs=4
+cpus=28-31
+normal_run=passed
+build_seconds=2
+build_status=3
+control=rejected

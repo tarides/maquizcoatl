@@ -1,0 +1,17 @@
+repo_commit: 030c4b6
+uptime:  11:35:24 up 208 days,  4:06,  6 users,  load average: 1.63, 2.38, 2.28
+disk_free_start: 19536M
+reference: caller output equals expected.txt
+hax-fstar: build or proof failed (status 1), see build.log
+run.sh hax-fstar: status 1
+error: no passing normal run of hax-fstar with RUN_ID runC: run it first
+run.sh -n hax-fstar: status 1
+hax-rocq: build or proof failed (status 1), see build.log
+run.sh hax-rocq: status 1
+error: no passing normal run of hax-rocq with RUN_ID runC: run it first
+run.sh -n hax-rocq: status 1
+probes status 0
+link-check status 0
+miri status 0
+uptime end:  11:36:49 up 208 days,  4:07,  6 users,  load average: 1.90, 2.32, 2.26
+disk_free_end: 18965M
