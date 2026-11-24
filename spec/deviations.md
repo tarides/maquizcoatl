@@ -411,6 +411,66 @@ documented header.
 
 ---
 
+## DEV-007: The default subexp-call nest limit is 20, as in the code
+
+Origin: experiment #8, hard-feature spec probe (issue #12), deviation
+candidate D-08-1
+([corpus entry](../lab/results/2026-11-19-exp-08-corpus.md)) and
+maintainer decision
+(https://github.com/tarides/maquizcoatl/issues/12#issuecomment-7038399798).
+
+**Upstream behaviour at `f95747b`.** The default limit on the nesting of
+subexpression calls is 20: `DEFAULT_SUBEXP_CALL_MAX_NEST_LEVEL` is 20
+(`upstream/src/regint.h:115`) and initialises `SubexpCallMaxNestLevel`
+(`upstream/src/regexec.c:2874`), which `match_at` compares with the call
+nest counter (`upstream/src/regexec.c:4426`) and which
+`onig_get_subexp_call_max_nest_level` returns
+(`upstream/src/regexec.c:6102-6105`). The documentation of that function
+says "(default: 24)" (`upstream/doc/API:1020`). The definition site of a
+called group is itself compiled as a call
+(`upstream/src/regcomp.c:1704-1713`), so limit k admits k-1 nested
+recursive calls. Case ca06 (`(?<foo>a|\(\g<foo>\))` on a 24-deep
+nesting, default limit) gives `M 5-44`: 19 levels, as limit 20 implies,
+not the 23 that limit 24 would give (`M 1-48`).
+
+**Maquizcoatl behaviour.** The default limit is 20, and
+`onig_get_subexp_call_max_nest_level` returns 20 until
+`onig_set_subexp_call_max_nest_level` changes it. The specification
+takes the code as reference; the "24" of `doc/API` is a documentation
+error.
+
+**Alternatives considered.**
+
+- Follow `doc/API` and make the default 24. This changes the result of
+  every pattern whose recursion depth lies between 20 and 23 compared
+  with the library that clients run today (ca06 would match `M 1-48`
+  instead of `M 5-44`), to agree with a figure that the code of
+  `f95747b` does not use.
+
+**Reason.** Disagreement between documentation and code; the code is
+the reference (CLAUDE.md, "Upstream architecture"). The deviation is
+from upstream's documentation, not from its behaviour.
+
+**Evidence.** Experiment #8's case corpus, run on the Debug and
+ASan/UBSan builds of `f95747b`
+([corpus entry](../lab/results/2026-11-19-exp-08-corpus.md)): case ca06
+(`lab/08-hard-features/cases/calls.tsv`, result in
+[raw/corpus-r2/calls.joined.tsv](../lab/results/2026-11-19-exp-08-raw/corpus-r2/calls.joined.tsv)),
+and the nest-limit cases and scans nc01-nc04, ns01 (limits 0-30) and
+ns02 (limits 0-30) run with `onig_set_subexp_call_max_nest_level`
+(`lab/08-hard-features/cases/nest.tsv`, `cases/nest.c`; results in
+[raw/corpus/nest.joined.tsv](../lab/results/2026-11-19-exp-08-raw/corpus/nest.joined.tsv)):
+ns01 needs limit 4 for 3 recursive calls, and ns02 at limit k matches
+nesting k-1. The four formalisations of experiment #8 take the limit as
+a parameter with default 20 and agree with ca06
+([calls entry](../lab/results/2026-11-19-exp-08-calls.md),
+[review fixes](../lab/results/2026-11-20-exp-08-review-fixes.md)).
+
+**Status.** Decided by the maintainer 2026-11-20
+(https://github.com/tarides/maquizcoatl/issues/12#issuecomment-7038399798).
+
+---
+
 ## DEV-008: The empty-loop check compares the backreferenced groups, in every loop
 
 Origin: experiment #6, milestone 2 (issue #28): the form of DEV-003

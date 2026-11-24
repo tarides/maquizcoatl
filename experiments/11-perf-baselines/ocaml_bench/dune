@@ -1,0 +1,4 @@
+(executable
+ (name ocaml_bench)
+ (ocamlopt_flags (:standard -unsafe -inline 200))
+ (libraries re mtime mtime.clock))

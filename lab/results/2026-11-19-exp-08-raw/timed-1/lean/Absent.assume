@@ -1,0 +1,6 @@
+grep -nE 'sorry|native_decide|ofReduceBool|axiom ' Absent.lean:
+(no match)
+kernel output (Print Assumptions / #print axioms):
+'Absent.absent_not_inside' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Absent.ab07' depends on axioms: [propext]
+'Absent.ab11' depends on axioms: [propext]

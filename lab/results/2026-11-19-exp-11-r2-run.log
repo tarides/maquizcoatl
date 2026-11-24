@@ -1,0 +1,48 @@
+start 2026-11-19T15:24:40Z
+projected timed phase: 741 s (12.3 min), plus possible repeats
+gate: CPUs 4 5 6 7 36 37 38 39 0% busy; load 0.14 0.83 1.14
+15:24:49 time onig-threaded jq
+15:24:52 time onig-threaded php
+15:24:56 time onig-threaded php-legacy
+15:25:00 time onig-threaded vscode
+15:27:34 time onig-threaded vscode-subst
+gate: CPUs 4 5 6 7 36 37 38 39 0% busy; load 0.92 0.94 1.10
+15:28:49 time onig-switch jq
+15:28:52 time onig-switch php
+15:28:56 time onig-switch php-legacy
+15:29:00 time onig-switch vscode
+15:31:34 time onig-switch vscode-subst
+gate: CPUs 4 5 6 7 36 37 38 39 0% busy; load 1.02 1.10 1.15
+15:32:49 time pcre2-interp jq
+15:32:54 time pcre2-interp php
+skip pcre2-interp php-legacy: no timed pattern
+15:33:01 time pcre2-interp vscode
+15:34:12 time pcre2-interp vscode-subst
+gate: CPUs 4 5 6 7 36 37 38 39 0% busy; load 0.95 1.06 1.12
+15:34:58 time pcre2-jit jq
+15:35:04 time pcre2-jit php
+skip pcre2-jit php-legacy: no timed pattern
+15:35:10 time pcre2-jit vscode
+15:37:42 time pcre2-jit vscode-subst
+gate: CPUs 4 5 6 7 36 37 38 39 0% busy; load 1.60 1.39 1.22
+15:39:41 time re2 jq
+15:39:46 time re2 php
+skip re2 php-legacy: no timed pattern
+15:39:52 time re2 vscode
+15:40:57 time re2 vscode-subst
+gate: CPUs 4 5 6 7 36 37 38 39 0% busy; load 1.04 1.26 1.19
+15:41:13 time rust-regex jq
+15:41:20 time rust-regex php
+skip rust-regex php-legacy: no timed pattern
+15:41:31 time rust-regex vscode
+15:46:25 time rust-regex vscode-subst
+gate: CPUs 4 5 6 7 36 37 38 39 0% busy; load 1.14 1.17 1.17
+15:47:05 time ocaml-re jq
+15:47:10 time ocaml-re php
+skip ocaml-re php-legacy: no timed pattern
+15:47:16 time ocaml-re vscode
+15:47:47 time ocaml-re vscode-subst
+gate: CPUs 4 5 6 7 36 37 38 39 0% busy; load 1.03 1.14 1.16
+run r2 done
+exit 0
+end 2026-11-19T15:48:18Z

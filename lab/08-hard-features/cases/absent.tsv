@@ -1,0 +1,13 @@
+# Experiment #8, absent operator (non-nested). Columns: probes/README.md.
+id	syntax	encoding	options	pattern	subject	js	note
+ab01	Oniguruma	UTF-8		(?~ab)	abc		test_utf8.c:840
+ab02	Oniguruma	UTF-8		(?~abc)	abc		test_utf8.c:841
+ab03	Oniguruma	UTF-8		(?~abc|ab)	abc		test_utf8.c:842
+ab04	Oniguruma	UTF-8		aaaaa(?~)	aaaaaaaaaa		test_utf8.c:847
+ab05	Oniguruma	UTF-8		(?~|abc|\O*)	abc		written: absent expression, doc/RE:368 says = (?~abc)
+ab06	Oniguruma	UTF-8		(?~abc)	xabcx		written: repeater, absent inside
+ab07	Oniguruma	UTF-8		(?~|abc|\O*)	xabcx		written: expression form of ab06
+ab08	Oniguruma	UTF-8		(?~abc)z	xabz		written: repeater then literal
+ab09	Oniguruma	UTF-8		(?~|abc|\O*)z	xabz		written: expression form of ab08
+ab10	Oniguruma	UTF-8		(?~|abc).*	xxabcyy		written: absent stopper cuts the range
+ab11	Oniguruma	UTF-8		(?~|abc)(?~|).*	xxabcyy		written: range clear after a stopper

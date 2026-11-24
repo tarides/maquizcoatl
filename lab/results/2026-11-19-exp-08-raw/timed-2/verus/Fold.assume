@@ -1,0 +1,2 @@
+grep -nE 'assume|admit|external_body|external' fold.rs:
+(no match)

@@ -1,0 +1,8 @@
+# Experiment #8, subexpression calls with a set nest limit (cases/nest.c). options: NEST=<k> or SCAN (limits 0..30).
+id	syntax	encoding	options	pattern	subject	js	note
+nc01	Oniguruma	UTF-8	NEST=2	\A(?<n>a\g<n>|b)\z	aaab		written: needs more than 2 live frames
+nc02	Oniguruma	UTF-8	NEST=20	\A(?<n>a\g<n>|b)\z	aaab		written: same at the default limit
+nc03	Oniguruma	UTF-8	NEST=2	(?<foo>a|\(\g<foo>\))	((((((a))))))		written: the limit moves the match to a later start
+nc04	Oniguruma	UTF-8	NEST=0	(a)\g<1>	aa		written: limit 0, even the definition-site call fails
+ns01	Oniguruma	UTF-8	SCAN	\A(?<n>a\g<n>|b)\z	aaab		threshold scan
+ns02	Oniguruma	UTF-8	SCAN	(?<foo>a|\(\g<foo>\))	((((((a))))))		threshold scan

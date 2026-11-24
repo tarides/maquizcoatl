@@ -1,0 +1,6 @@
+grep -nE 'Admitted|admit|Axiom|native_compute' Absent.v:
+(no match)
+kernel output (Print Assumptions / #print axioms):
+Closed under the global context
+Closed under the global context
+Closed under the global context

@@ -1,0 +1,12 @@
+# Experiment #8, ISO-8859-1 multi-character case folding. Columns: probes/README.md.
+id	syntax	encoding	options	pattern	subject	js	note
+cf21	Oniguruma	ISO-8859-1		(?i)ss	\xDF		probes/case-folding.tsv cf21
+cf22	Oniguruma	ISO-8859-1		(?i)\xDF	ss		probes/case-folding.tsv cf22
+if01	Oniguruma	ISO-8859-1		(?i)\xDF	SS		written, after test_utf8.c:337, sample/encode.c:140
+if02	Oniguruma	ISO-8859-1		(?i)\xDF	sS		written
+if03	Oniguruma	ISO-8859-1		(?i)\xDF	Ss		written
+if04	Oniguruma	ISO-8859-1		(?i)SS	\xDF		written, after sample/encode.c:142
+if05	Oniguruma	ISO-8859-1		(?i)sS	\xDF		written
+if06	Oniguruma	ISO-8859-1		(?i)Ss	\xDF		written
+if07	Oniguruma	ISO-8859-1	IGNORECASE	SSb\xDFssc	a\xDFbSS\xDFcd		sample/encode.c:144
+if08	Oniguruma	ISO-8859-1	IGNORECASE	is	iss		sample/encode.c:148
