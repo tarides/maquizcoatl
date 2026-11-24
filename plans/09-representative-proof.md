@@ -121,8 +121,8 @@ F\* release tree):
   ones by name. Versions: `--z3version 5.3.0` (the version experiments
   #6-#8 used, the baseline) and `--z3version 4.15.3`; 4.13.3 is a third
   data point if the run has time. Seeds: `--z3seed N`, N = 1..10, plus
-  the default seed. Every check also passes `--query_stats` to the
-  brittleness runs only, so the failing queries are named.
+  the default seed. The brittleness runs (only) add `--query_stats`,
+  so that failing queries are named.
 - **Verus** ships Z3 4.16.0 and refuses another version unless told
   otherwise. The second version uses the documented opt-out:
   `-V no-solver-version-check` with `VERUS_Z3_PATH` pointing at the
@@ -247,11 +247,12 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
    tool's M2 closing run: `loc.py` lines (non-blank, non-comment) of
    semantics, compiler + VM, proof; `timed.sh`: three full clean checks
    pinned to one L3 complex, median and spread, peak RSS, load average
-   per run; `lemmas.py`: lemmas total and automatic (Rocq: proof is one
-   tactic call among `lia`, `auto`, `eauto`, `easy`, `now`,
-   `congruence`, `intuition`, `firstorder`, `reflexivity`, `discriminate`,
-   `inversion` not counted; F\*: body `()` or a single SMT discharge, no
-   explicit calls to other lemmas; Verus: empty `proof fn` body); effort
+   per run; `lemmas.py`: lemmas total and automatic (Rocq: the proof is one
+   call of an automation tactic, `lia`, `auto`, `eauto`, `easy`,
+   `congruence`, `intuition` or `firstorder`, possibly with hints; a
+   single other tactic such as `reflexivity` or `inversion` does not
+   count; F\*: body `()`, the default SMT discharge, with no explicit
+   call to another lemma; Verus: empty `proof fn` body, likewise); effort
    from `effort.tsv`.
 7. **M3: SMT brittleness** (done-criterion 4; one run per SMT tool,
    runs 13-14). `brittle.sh`: full check for each solver version above
