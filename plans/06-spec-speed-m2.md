@@ -225,8 +225,9 @@ host, untimed. Steps 5-9 are machine runs on the bench host.
    selection (an empty iteration ends the loop unless a capture
    referenced by a backreference changed in it,
    `upstream/src/regcomp.c:980-990` and `:3941-3957`, pinned by
-   `upstream/test/test_utf8.c:742`) or DEV-003's rule, according to the
-   maintainer's decision on decided deviations (open question below).
+   `upstream/test/test_utf8.c:742`) or DEV-003's rule. The maintainer
+   chose DEV-003's rule (decision 1 under "Maintainer decisions"):
+   DEV-001 to DEV-004 are implemented as decided.
    The extension covers:
    - lazy quantifiers and bounded repetition, as quantifier nodes with
      bounds and greediness, not unrolled;
@@ -406,7 +407,8 @@ semantics, while each run must stay under 4 hours with fixed scripts.
 Milestone 2 therefore takes three execution runs. **Run 1 is the first
 milestone, and it answers question 1 on its own.**
 
-**Run 1: WP A, B, C, D (and H if time remains).** Expected 2 h 10 min,
+**Run 1: WP A, B, C, D, then the full-table spot check (decision 2),
+then H if time remains.** Expected 2 h 10 min,
 worst case 3 h 40 min:
 
 | Phase | Time (expected / worst) |
@@ -420,6 +422,7 @@ worst case 3 h 40 min:
 | Timed: F\* normaliser, Q0 plus three runs (20 min cap each) | 20 / 50 min |
 | Timed: `T_spec` Why3 and F\* (OCaml target), three clean runs each | 10 / 15 min |
 | Timed: milestone 1 fold reruns, Isabelle and Lean | 10 / 15 min |
+| Timed: full-table spot check, `why3 execute` and F\* normaliser, property-heavy cases (20 min cap each, after WPs A-D) | 15 / 40 min |
 | Fetch, summarise, redaction check | 15 / 20 min |
 | WP H (untimed, overlapping, only if time remains) | 0 / (30 min) |
 
@@ -547,21 +550,27 @@ Run 1 meets criteria 1-4 for stack G, Why3 and F\* and answers
 question 1. Runs 2 and 3 complete the remaining four rows and the
 settling entry.
 
-## Open questions for the maintainer
+## Maintainer decisions on the plan's questions
 
-1. **Decided deviations inside S2** (DEV-001, DEV-002, DEV-003,
-   DEV-004 in `spec/deviations.md`): either stack G and the provers
-   implement the decided Maquizcoatl behaviour and the upstream cases
-   that differ (for example `upstream/test/test_utf8.c:742`) are counted
-   as "deviation logged" under criterion 2 with the C verdict recorded,
-   or upstream is reproduced as an interim milestone, each affected case
-   listed under its DEV entry. The empty-iteration rule of step 3
-   follows this decision.
-2. **Prover table modules**: only the properties that the S2 cases
-   name (as in step 1), or the full property table (representative of
-   the full spec, but experiment #7 measured about 2 min and 14 GB per
-   `why3 execute` query, which lands in Q0 and presses the 20-minute
-   cap).
+Given on 2026-11-24 in the maintainer's session and recorded on issue
+#28 (https://github.com/tarides/maquizcoatl/issues/28#issuecomment-7133538725):
+
+1. **Decided deviations inside S2: (A).** Stack G and the six provers
+   implement the decided Maquizcoatl behaviour of DEV-001 to DEV-004
+   (`spec/deviations.md`). Upstream cases that differ (for example
+   `upstream/test/test_utf8.c:742`) count as "deviation logged" under
+   criterion 2, with the C verdict recorded next to each case. The
+   empty-iteration rule of step 3 is DEV-003's rule.
+2. **Prover table modules: (A) plus a full-table spot check.** The main
+   throughput runs use table modules restricted to the properties the
+   S2 cases name (step 1). In addition, run 1 makes one bounded
+   spot-check run of the property-heavy S2 cases with the full property
+   table, in `why3 execute` and in the F\* normaliser, so that the
+   verdict on question 1 is not optimistic. It is scheduled in run 1
+   after WPs A-D and before WP H, and stays within run 1's caps (20-min
+   cap per timed run, 4-hour run). If it would exceed them, it is
+   recorded as not finished, with what was measured. Its result is
+   reported in the `m2-throughput` entry.
 
 ## Risks
 
