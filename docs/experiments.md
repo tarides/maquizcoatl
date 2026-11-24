@@ -16,6 +16,7 @@ Always say "experiment #N" or "issue #N", never a bare "#N".
 | 5 (follow-up) | Isabelle-LLVM model of caller.c's client meeting respects_i_apply | [#30](https://github.com/tarides/maquizcoatl/issues/30) | — | pipeline, after experiment #5 or with experiment #9 |
 | 6 | Executable spec speed | [#1](https://github.com/tarides/maquizcoatl/issues/1) | [#24](https://github.com/tarides/maquizcoatl/pull/24) | pipeline |
 | 6 (follow-up) | Milestone 2 (S2) | [#28](https://github.com/tarides/maquizcoatl/issues/28) | [#31](https://github.com/tarides/maquizcoatl/pull/31) | pipeline |
+| 6 (follow-up) | Report the why3 execute type-mismatch bug upstream | [#36](https://github.com/tarides/maquizcoatl/issues/36) | — | maintainer |
 | 7 | Large tables in the prover | [#11](https://github.com/tarides/maquizcoatl/issues/11) | [#19](https://github.com/tarides/maquizcoatl/pull/19) | pipeline |
 | 8 | Hard-feature spec probe | [#12](https://github.com/tarides/maquizcoatl/issues/12) | [#26](https://github.com/tarides/maquizcoatl/pull/26) | pipeline |
 | 8 (follow-up) | Discriminating lemmas (lemma F over a symbolic subject, absent desugaring equivalence) | [#34](https://github.com/tarides/maquizcoatl/issues/34) | — | pipeline |
