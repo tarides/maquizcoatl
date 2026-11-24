@@ -1,0 +1,9 @@
+tool=bedrock2
+run_id=runG
+mode=negative-control-read
+jobs=4
+cpus=12-15
+normal_run=passed
+build_seconds=27
+build_status=3
+control=rejected

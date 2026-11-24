@@ -1,0 +1,58 @@
+Negative control of the Charon + Aeneas prototype (experiment 5, run
+m2-aeneas-3 on the bench host): `run.sh -n aeneas m2-aeneas-3`, after
+the normal run of the same RUN_ID passed. build.sh replaces the clamp of
+char_len (the block between the two marker comments of src/lib.rs) with
+the callee's raw result, translates the result with Charon and Aeneas,
+and checks proofs/Proofs.lean against the new model. Lean must then
+reject char_len_spec: the callee is a field of the EncLen structure, and
+the theorem quantifies over every structure and every result r it
+returns, so nothing bounds r.
+
+Result: build_status=3 (proof rejected), control=rejected. One error,
+in char_len_spec: the goal left is the range postcondition itself, on
+the callee's unconstrained result r. The other nine theorems still
+check (char_len_in_bounds stays true without the clamp: a result already
+in bounds is returned unchanged). The axiom report of char_len_spec then
+lists sorryAx, which build.sh also counts as a rejection.
+
+Excerpt of build.log (redacted; the axiom reports and two linter
+warnings omitted):
+
+negative control: clamp removed
+  --- src/lib.rs
+  +++ control/lib.rs
+  @@ -92,15 +92,7 @@
+   /// shared reference that the callee is not given.
+   pub fn char_len<F: EncLen>(f: &F, p: *const u8, st: &VuEncState) -> i32 {
+       let raw = f.enc_len(p);
+  -    // VU-CLAMP-BEGIN
+  -    if raw < st.min_enc_len {
+  -        st.min_enc_len
+  -    } else if raw > st.max_enc_len {
+  -        st.max_enc_len
+  -    } else {
+  -        raw
+  -    }
+  -    // VU-CLAMP-END
+  +    raw
+   }
+...
+== 5. Lean, proofs (6 s)
+Proofs.lean:36:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal:
+F : Type
+EncLenInst : EncLen F
+f : F
+p : ConstRawPtr U8
+st : VuEncState
+r : I32
+hcall : EncLenInst.enc_len f p = ok r
+hst : ↑st.min_enc_len ≤ ↑st.max_enc_len
+⊢ ↑st.min_enc_len ≤ ↑r ∧ ↑r ≤ ↑st.max_enc_len
+...
+proofs: status=1 errors_in_model=0 errors_in_proofs=1 theorems=10 axiom_reports=10 nonstandard_axioms=1
+proof rejected

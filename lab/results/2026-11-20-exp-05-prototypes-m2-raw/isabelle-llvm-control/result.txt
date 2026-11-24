@@ -1,0 +1,9 @@
+tool=isabelle-llvm
+run_id=m2-isabelle-llvm
+mode=negative-control
+jobs=4
+cpus=40-43
+normal_run=passed
+build_seconds=43
+build_status=3
+control=rejected

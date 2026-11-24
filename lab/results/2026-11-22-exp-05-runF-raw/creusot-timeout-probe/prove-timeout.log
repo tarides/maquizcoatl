@@ -1,0 +1,31 @@
+Warning: found dangling files and directories:
+  verif/vu_staticlib/get_subject_byte
+  verif/vu_staticlib/get_slot
+  verif/vu_staticlib/set_slot
+  verif/vu_staticlib/callout_step
+  verif/vu_staticlib/impl_Apply_for_IApply/apply__refines
+  verif/vu_staticlib/impl_Apply_for_IApply/apply
+  verif/vu_staticlib/i_apply
+  verif/vu_staticlib/fold_all
+  verif/vu_staticlib/char_len
+Run 'cargo creusot clean' to remove them
+File "verif/vu_staticlib/impl_Apply_for_IApply/apply__refines.coma", lines 57-61: proof failed
+Goal Coma.refines: ✘
+File "<exp>/build/runE/creusot/crate/src/lib.rs", line 267, characters 1-59: proof failed
+Goal Coma.vc_get_slot: ✘
+File "<exp>/build/runE/creusot/crate/src/lib.rs", line 244, characters 5-65: proof failed
+Goal Coma.vc_apply_IApply: ✘
+File "<exp>/build/runE/creusot/crate/src/lib.rs", line 288, characters 1-58: proof failed
+Goal Coma.vc_set_slot: ✘ (1/16)
+File "<exp>/build/runE/creusot/crate/src/lib.rs", line 119, characters 1-72: proof failed
+Goal Coma.vc_char_len_F: ✘ (2/6)
+File "<exp>/build/runE/creusot/crate/src/lib.rs", line 254, characters 1-64: proof failed
+Goal Coma.vc_fold_all_G: ✘
+File "<exp>/build/runE/creusot/crate/src/lib.rs", line 311, characters 1-70: proof failed
+Goal Coma.vc_get_subject_byte: ✘
+File "<exp>/build/runE/creusot/crate/src/lib.rs", line 226, characters 1-67: proof failed
+Goal Coma.vc_i_apply: ✘
+File "<exp>/build/runE/creusot/crate/src/lib.rs", line 172, characters 1-82: proof failed
+Goal Coma.vc_callout_step_F: ✘ (6/48)
+Error: 9 unproved files
+Error: 'why3find prove' failed

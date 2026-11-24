@@ -1,0 +1,8 @@
+tool=hax-fstar
+run_id=dev-runE-1
+mode=normal
+jobs=4
+cpus=26-27,58-59
+build_seconds=104
+build_status=3
+verdict=build-failed

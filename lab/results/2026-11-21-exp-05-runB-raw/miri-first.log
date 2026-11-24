@@ -1,0 +1,100 @@
+toolchain: nightly-2026-09-17
+cargo 1.100.0-nightly (495c385d0 2026-09-16)
+miri 0.1.0 (923c95cdf5 2026-09-16)
+sha256:
+f7f32829fab097357602ea441e189104308b40d1ddb6134fc0c24fb185aa612c  miri/client.rs
+67d5937c34dcf26292c6881a785d15d33682d2c64eaca1a02a8f71a3be4028af  miri/erase_verus.py
+62ae9c3623ae081197fa0d7e1d4d604ae4dca0b89d1086290dd1d4beed5fefcb  miri/miri.sh
+adfa088177fa2ffb9bf5e6ced898fa1b052bff63e9291aa428eb685d464dedce  verus/src/lib.rs
+f03bb2923b92568062ce22fe8be072753bdbc4929715cc245c26a2c816483e96  verus/src/shim.rs
+3c2623564bb783a75864ceab5503bf11c18cdaea3252e1852af7a78d1245db77  verus/src/ffi.rs
+55c8fc8ac726e0db4471f38a784fef31274af6bc13254be7c43834ab9ca54735  aeneas/src/lib.rs
+207a5b6fe0621ffe7e5584493a8e59d47c6a65a266a2670f40f8996300602a13  aeneas/src/ffi.rs
+== aeneas, stacked borrows
+error: Undefined Behavior: trying to retag from <612> for SharedReadOnly permission at alloc141[0x1], but that tag does not exist in the borrow stack for this location
+   --> vu/ffi.rs:163:14
+    |
+163 |     unsafe { core::slice::from_raw_parts(p, args.subject_len as usize) }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this error occurs as part of retag at alloc141[0x0..0x3]
+    |
+    = help: this indicates a potential bug in the program: it performed an invalid operation, but the Stacked Borrows rules it violated are still experimental
+    = help: see https://github.com/rust-lang/unsafe-code-guidelines/blob/master/wip/stacked-borrows.md for further information
+help: <612> was created by a SharedReadOnly retag at offsets [0x0..0x1]
+   --> client.rs:42:21
+    |
+ 42 |             let b = vu_get_subject_byte(args, i);
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: stack backtrace:
+            0: vu::ffi::subject_of
+                at vu/ffi.rs:163:14: 163:71
+            1: vu::ffi::vu_get_subject_byte
+                at vu/ffi.rs:169:28: 169:44
+            2: co_slots
+                at client.rs:42:21: 42:49
+            3: <vu::ffi::CCallout as vu::Callout>::callout
+                at vu/ffi.rs:75:18: 75:63
+            4: vu::callout_step::<vu::ffi::CCallout>
+                at vu/lib.rs:130:13: 130:28
+            5: vu::ffi::vu_callout_step
+                at vu/ffi.rs:119:5: 119:72
+            6: main
+                at client.rs:82:13: 82:90
+
+note: some details are omitted, run with `MIRIFLAGS=-Zmiri-backtrace=full` for a verbose backtrace
+
+error: aborting due to 1 previous error
+
+miri aeneas stacked: status=1
+== aeneas, tree borrows
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri aeneas tree: status=0
+== verus, stacked borrows
+error: Undefined Behavior: trying to retag from <618> for SharedReadOnly permission at alloc141[0x1], but that tag does not exist in the borrow stack for this location
+   --> vu/ffi.rs:115:14
+    |
+115 |     unsafe { core::slice::from_raw_parts(p, args.subject_len as usize) }
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ this error occurs as part of retag at alloc141[0x0..0x3]
+    |
+    = help: this indicates a potential bug in the program: it performed an invalid operation, but the Stacked Borrows rules it violated are still experimental
+    = help: see https://github.com/rust-lang/unsafe-code-guidelines/blob/master/wip/stacked-borrows.md for further information
+help: <618> was created by a SharedReadOnly retag at offsets [0x0..0x1]
+   --> client.rs:42:21
+    |
+ 42 |             let b = vu_get_subject_byte(args, i);
+    |                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    = note: stack backtrace:
+            0: vu::ffi::subject_of
+                at vu/ffi.rs:115:14: 115:71
+            1: vu::ffi::vu_get_subject_byte
+                at vu/ffi.rs:121:28: 121:44
+            2: co_slots
+                at client.rs:42:21: 42:49
+            3: vu::shim::call_callout
+                at vu/shim.rs:33:14: 33:46
+            4: vu::callout_step
+                at vu/lib.rs:120:13: 120:38
+            5: vu::ffi::vu_callout_step
+                at vu/ffi.rs:70:5: 70:78
+            6: main
+                at client.rs:82:13: 82:90
+
+note: some details are omitted, run with `MIRIFLAGS=-Zmiri-backtrace=full` for a verbose backtrace
+
+error: aborting due to 1 previous error
+
+miri verus stacked: status=1
+== verus, tree borrows
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri verus tree: status=0

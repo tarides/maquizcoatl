@@ -183,3 +183,47 @@ to 1.9.0; Verus about 147; Isabelle about 7. Results were posted on issue #3.
 
 The Part A driver (`upgrade_builds`) was reviewed and committed, but not run
 yet: it waits for the CPU set it may use on the bench host.
+
+## 2026-11-20: eliminators report, first speed figures
+
+- **Experiment #13 (upgrade cost)** and **experiment #4 (ABI
+  feasibility)** were squash-merged; their branches are kept so the
+  commit IDs cited in the results still resolve. Experiment #4 ended
+  with no mechanism eliminated: all four routes (F\* via KaRaMeL or
+  Custard, C proven with VST or Why3, Rust, Isabelle-LLVM) give a
+  libonig drop-in, differing in the size of the hand-written C shell.
+  Isabelle-LLVM's run used its own copy of the toolchain, reproduced
+  from experiment #5's pins, rather than opening another account's
+  directory.
+- **Experiment #5 (calls to unverified code)**, led by Vincent Balat,
+  finished its first two milestones: all six of the report's tools can
+  call client C function pointers and be called back. F\*+Pulse and VST
+  need no trusted shim (25 and 44 trusted lines); Why3, Verus, Aeneas
+  and Isabelle-LLVM need one (100-128 lines). No stack is eliminated.
+- With no stack eliminated, the maintainer lifted the wait on
+  **experiment #6 (executable spec speed)**. Its milestone 1 ran in
+  about 70 minutes: an OCaml reference interpreter and six provers
+  (Rocq, Lean 4, Why3, F\*, Verus, Isabelle) agree with the C library on
+  all 152 cases of experiment #9's subset, and every one of them can run
+  10^6 cases in under 8 hours on one core; the interpreted modes of Why3
+  and F\* only by a factor of 1.8.
+- The results reviews keep catching real slips: an overstated
+  function-pointer limit in Isabelle-LLVM (it can call named C
+  functions), and in experiment #8 a peak-memory rule the reviewer
+  misread, which a recomputation of all 16 cells settled.
+
+## 2026-11-24: experiment #5 closed
+
+- **Experiment #5 (calls to unverified code)** is done and merged
+  (PR #21). Taken back into the pipeline on 2026-11-21, it ran four more
+  milestones on the bench host: every one of the 14 tool rows now has a
+  verdict, and no stack is eliminated. Only hax's Rocq backend fails;
+  hax's Lean backend was not run, by decision. The trusted code ranges
+  from 22 lines (CN) to 152 (RefinedRust). Pulse, VST and RefinedC can
+  lend the subject read-only; the others lend it whole or through
+  trusted glue.
+- Two follow-ups remain: the upstream report of the F\* eta-reduction
+  miscompilation (issue #29, drafted, awaiting the maintainer's
+  approval) and an Isabelle-LLVM model of the C client (issue #30).
+  Experiment #9's tool choice and experiment #6's milestone 2 (issue
+  #28) no longer wait on anything.

@@ -1,0 +1,2 @@
+comparing the 85772 ctype queries only (no name lookup in this target)
+compared 85772 lines, 0 mismatches

@@ -1,0 +1,165 @@
+toolchain: nightly-2026-09-17
+cargo 1.100.0-nightly (495c385d0 2026-09-16)
+miri 0.1.0 (923c95cdf5 2026-09-16)
+sha256:
+f7f32829fab097357602ea441e189104308b40d1ddb6134fc0c24fb185aa612c  miri/client.rs
+67d5937c34dcf26292c6881a785d15d33682d2c64eaca1a02a8f71a3be4028af  miri/erase_verus.py
+466d6e81223031e5476042b1b4d740686e04ee52646f8db3997baf74148c0050  miri/miri.sh
+adfa088177fa2ffb9bf5e6ced898fa1b052bff63e9291aa428eb685d464dedce  verus/src/lib.rs
+f03bb2923b92568062ce22fe8be072753bdbc4929715cc245c26a2c816483e96  verus/src/shim.rs
+cc59cd403c3215c342d228167e5ebc819e3199e001a28b84029d3d8c6b338dcc  verus/src/ffi.rs
+55c8fc8ac726e0db4471f38a784fef31274af6bc13254be7c43834ab9ca54735  aeneas/src/lib.rs
+41863dbb9e61b7e1c1050de7d34faf4a45fd26a3e2a1c6da4b1dec54d8fb749b  aeneas/src/ffi.rs
+8cb0b94c9a466b7d0f4f13e171543e160ecae706875270f1c0cf521ce5f768a0  hax/src/lib.rs
+df2c70c41755042a033816346b1e88da8528cc915fdddf702a31ea3642569d9b  hax/src/ffi.rs
+a6c584a8334cba667c7c0c97d6295f67cff3a7d414a27e710a808f9af3f8dbc8  creusot/src/lib.rs
+4a678fc8c21cc484d89023562b511a8b2951e4c38fb1f3797a7fbda676656511  creusot/src/ffi.rs
+== creusot, stacked borrows
+warning: unexpected `cfg` condition name: `creusot`
+  --> vu/lib.rs:28:11
+   |
+28 | #[cfg(not(creusot))]
+   |           ^^^^^^^
+   |
+   = help: expected names are: `docsrs`, `feature`, and `test` and 34 more
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(creusot)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(creusot)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri creusot stacked: status=0
+== creusot, tree borrows
+warning: unexpected `cfg` condition name: `creusot`
+  --> vu/lib.rs:28:11
+   |
+28 | #[cfg(not(creusot))]
+   |           ^^^^^^^
+   |
+   = help: expected names are: `docsrs`, `feature`, and `test` and 34 more
+   = help: consider using a Cargo feature instead
+   = help: or consider adding in `Cargo.toml` the `check-cfg` lint config for the lint:
+            [lints.rust]
+            unexpected_cfgs = { level = "warn", check-cfg = ['cfg(creusot)'] }
+   = help: or consider adding `println!("cargo::rustc-check-cfg=cfg(creusot)");` to the top of the `build.rs`
+   = note: see <https://doc.rust-lang.org/nightly/rustc/check-cfg/cargo-specifics.html> for more information about checking conditional configuration
+   = note: `#[warn(unexpected_cfgs)]` on by default
+
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri creusot tree: status=0
+--- client.rs
++++ hax/client.rs
+@@ -71,7 +71,7 @@
+     // Shape (b), in each direction the callout is made.
+     for (dir, value, expected) in [(0, 0, 0), (1, 1, 0), (2, 5, 1), (0, 2, -30)] {
+         let mut a = VuArgs {
+-            subject: SUBJECT.as_ptr(),
++            subject: SUBJECT.as_ptr().expose_provenance(),
+             subject_len: 3,
+             pos: 1,
+             num: 1,
+@@ -83,11 +83,11 @@
+         };
+         assert_eq!(r, expected);
+         assert_eq!(a.slot, [42, 97, 98, 99, 42]);
+-        assert!(a.subject == SUBJECT.as_ptr() && a.subject_len == 3 && a.pos == 1 && a.num == 1);
++        assert!(a.subject == SUBJECT.as_ptr().expose_provenance() && a.subject_len == 3 && a.pos == 1 && a.num == 1);
+         println!("shape (b) dir={dir} callee={value} -> {r} slots={:?}", a.slot);
+     }
+     // The read accessor with a length shorter than the buffer.
+-    let a = VuArgs { subject: SUBJECT.as_ptr(), subject_len: 2, pos: 0, num: 0, slot: [0; 5] };
++    let a = VuArgs { subject: SUBJECT.as_ptr().expose_provenance(), subject_len: 2, pos: 0, num: 0, slot: [0; 5] };
+     let got: Vec<c_int> = (0..3).map(|i| unsafe { vu_get_subject_byte(&a, i) }).collect();
+     assert_eq!(got, [97, 98, -30]);
+     println!("subject_byte len=2 -> {got:?}");
+== hax, stacked borrows
+warning: integer-to-pointer cast
+   --> vu/ffi.rs:173:24
+    |
+173 |     let p: *const u8 = core::ptr::with_exposed_provenance(args.subject);
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ integer-to-pointer cast
+    |
+    = help: this program is using integer-to-pointer casts or (equivalently) `ptr::with_exposed_provenance`, which means that Miri might miss pointer bugs in this program
+    = help: see https://doc.rust-lang.org/nightly/std/ptr/fn.with_exposed_provenance.html for more details on that operation
+    = help: to ensure that Miri does not miss bugs in your program, use Strict Provenance APIs (https://doc.rust-lang.org/nightly/std/ptr/index.html#strict-provenance, https://crates.io/crates/sptr) instead
+    = help: you can then set `MIRIFLAGS=-Zmiri-strict-provenance` to ensure you are not relying on `with_exposed_provenance` semantics
+    = help: alternatively, `MIRIFLAGS=-Zmiri-permissive-provenance` disables this warning
+    = note: stack backtrace:
+            0: vu::ffi::subject_of
+                at vu/ffi.rs:173:24: 173:72
+            1: vu::ffi::vu_get_subject_byte
+                at vu/ffi.rs:180:28: 180:44
+            2: co_slots
+                at client.rs:42:21: 42:49
+            3: <vu::ffi::CCallout as vu::Callout>::callout
+                at vu/ffi.rs:80:18: 80:63
+            4: vu::callout_step::<vu::ffi::CCallout>
+                at vu/lib.rs:201:13: 201:28
+            5: vu::ffi::vu_callout_step
+                at vu/ffi.rs:126:5: 126:72
+            6: main
+                at client.rs:82:13: 82:90
+
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+warning: 1 warning emitted
+
+miri hax stacked: status=0
+== hax, tree borrows
+warning: integer-to-pointer cast
+   --> vu/ffi.rs:173:24
+    |
+173 |     let p: *const u8 = core::ptr::with_exposed_provenance(args.subject);
+    |                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ integer-to-pointer cast
+    |
+    = help: this program is using integer-to-pointer casts or (equivalently) `ptr::with_exposed_provenance`, which means that Miri might miss pointer bugs in this program
+    = help: see https://doc.rust-lang.org/nightly/std/ptr/fn.with_exposed_provenance.html for more details on that operation
+    = help: to ensure that Miri does not miss bugs in your program, use Strict Provenance APIs (https://doc.rust-lang.org/nightly/std/ptr/index.html#strict-provenance, https://crates.io/crates/sptr) instead
+    = help: you can then set `MIRIFLAGS=-Zmiri-strict-provenance` to ensure you are not relying on `with_exposed_provenance` semantics
+    = help: Tree Borrows does not support integer-to-pointer casts, so the program is likely to go wrong when this pointer gets used
+    = note: stack backtrace:
+            0: vu::ffi::subject_of
+                at vu/ffi.rs:173:24: 173:72
+            1: vu::ffi::vu_get_subject_byte
+                at vu/ffi.rs:180:28: 180:44
+            2: co_slots
+                at client.rs:42:21: 42:49
+            3: <vu::ffi::CCallout as vu::Callout>::callout
+                at vu/ffi.rs:80:18: 80:63
+            4: vu::callout_step::<vu::ffi::CCallout>
+                at vu/lib.rs:201:13: 201:28
+            5: vu::ffi::vu_callout_step
+                at vu/ffi.rs:126:5: 126:72
+            6: main
+                at client.rs:82:13: 82:90
+
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+warning: 1 warning emitted
+
+miri hax tree: status=0

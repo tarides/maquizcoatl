@@ -1,0 +1,79 @@
+== harness sources (sha256)
+b713a624295b2fa776fa5458f1ffa4145a91c3eaff724022486ad25faacf44d6  caller/caller.c
+47d090a0603942ed4d292b0c520050e6b542024ee704cbbc20535f5474483d58  caller/expected.txt
+76d2d982ec26547b0e20ef5f31a7f8ea8e8acdddccf17b582e5a81cd3f8723e6  caller/reference.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+9871592930f511a8eed9133164c8ee5cc3370c95b9a60c9b3c663d4c24937ffd  proto.h
+9551f6bf83cf59d060ed811911c406f5873eeae615cdef0f2487dbaf4e548865  pulse/TRUSTED
+b0706ae787aea068fa16e8406018aca87ced19cdfb994c90b1db3ccbbb0514df  pulse/VU.fst
+4540e95089222dc8d6502da339cf4fc340bb5793adc0010e4ca036025885c7b9  pulse/abi_check.c
+51a508cb85eba6723badebfecf033116d3b612de39cfd574959ab4fbc18bd03a  pulse/build.sh
+8064bcd37c91116bb825fe0dc2f4aa5cd81df767fe5435449406993b90b9d6b6  pulse/layout.c
+cb7247c6ff64e5fb5483d3231ec069f7a656ed8b679000c5ca5f57b2b49beb85  pulse/negative-control.txt
+7c4f400859a670d73fa04e2d3b0b993f730406a54a58368e70caa49dd9f81612  pulse/probes/EtaD.fst
+fd09d5161add8b2c5efda6c06c884a43678cd78994cb8239f42e7aa308d36797  pulse/probes/eta-output.txt
+060e575dfdc739464a2ff75ba1eab19ff1244eaa851d6259f7ed8b74ff46f570  pulse/probes/eta.sh
+29568bd78d6552c895c0ad305c7d1dc397011b9b70449beeb65d143006c9e9b2  pulse/probes/eta_caller.c
+da3e757566851dae737ee3f304da8a3f97b07056a2f0397be19140be01d44a70  run.sh
+== build
+== versions (0 s)
+F* 2026.11.15
+commit=b92b0f87ce325a6ed0fd78086390fbaf2fc629a1
+KaRaMeL version: 3384ecaf654baca53b109c2e2665112eaa6d7f00
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 0) (0 s)
+proof escapes: none
+== 2. F* check (0 s)
+Verified module: VU
+All verification conditions discharged successfully
+== 3. extraction (4 s)
+Verified module: VU
+All verification conditions discharged successfully
+[38;5;119m✔[0m [Monomorphization] ⏱️ 7ms
+[38;5;119m✔[0m [Inlining] ⏱️ 10ms
+[38;5;119m✔[0m [Pattern matches compilation] ⏱️ 7ms
+[38;5;119m✔[0m [Structs + Simplify 2] ⏱️ 17ms
+[38;5;119m✔[0m [Drop] ⏱️ 1ms
+[38;5;119m✔[0m [AstToCStar] ⏱️ 5ms
+[38;5;119m✔[0m [CStarToC] ⏱️ <1ms
+[4mKaRaMeL executable is:[0m <cache>/fstar/v2026.11.15/fstar/bin/krml
+[38;5;119m✔[0m [PrettyPrinting] ⏱️ <1ms
+KaRaMeL: wrote out .c files for Custard
+KaRaMeL: wrote out .h files for Custard
+generated kc/Custard.c: 305 lines, 16263 bytes, sha256 2c86481c5f9400be362ffae828994b11e012413de6d8bc44219b743078f9c783
+generated kc/Custard.h: 76 lines, 1522 bytes, sha256 7df09e629b25c0c4a5cd89ce761d1a525d22988bffa2f58c345a267032127de9
+== 4. ABI checks (6 s)
+abi_check: ok
+vu_enc_state size=8 align=4
+vu_enc_state.min_enc_len offset=0 size=4
+vu_enc_state.max_enc_len offset=4 size=4
+vu_args size=64 align=8
+vu_args.subject offset=0 size=8
+vu_args.subject_len offset=8 size=4
+vu_args.pos offset=12 size=4
+vu_args.num offset=16 size=4
+vu_args.slot0 offset=24 size=8
+vu_args.slot1 offset=32 size=8
+vu_args.slot2 offset=40 size=8
+vu_args.slot3 offset=48 size=8
+vu_args.slot4 offset=56 size=8
+vu_fold_rec size=40 align=4
+vu_fold_rec.calls offset=0 size=4
+vu_fold_rec.recorded offset=4 size=4
+vu_fold_rec.from0 offset=8 size=4
+vu_fold_rec.from1 offset=12 size=4
+vu_fold_rec.from2 offset=16 size=4
+vu_fold_rec.from3 offset=20 size=4
+vu_fold_rec.from4 offset=24 size=4
+vu_fold_rec.from5 offset=28 size=4
+vu_fold_rec.from6 offset=32 size=4
+vu_fold_rec.from7 offset=36 size=4
+layout: same
+== 5. compile (6 s)
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_i_apply
+exported: vu_set_slot
+== done (6 s)

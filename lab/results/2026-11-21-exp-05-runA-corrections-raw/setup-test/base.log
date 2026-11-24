@@ -1,0 +1,10 @@
+step: base
+start_utc: 2026-11-21T10:07:18Z
+cpu_set: 20-23,52-55
+nice: 10
+VU_JOBS: 4 (jobs for this step: 4)
+env.sh written
+gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+cmake: cmake version 3.28.3
+shared cache: set
+disk free: 31G

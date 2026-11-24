@@ -1,0 +1,8 @@
+Cleaned Probe_P_int
+Running Probe_P_int ...
+Probe_P_int FAILED (see also "isabelle build_log -H Error Probe_P_int")
+*** exception Fail raised (line 132 of "General/scan.ML"): identifier expected,
+*** but keyword int (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_int/P_int.thy") was found
+*** At command "export_llvm" (line 6 of "<bench-workdir>/exp/04-abi-feasibility/w/stubs/m4-probe/P_int/P_int.thy")
+Unfinished session(s): Probe_P_int
+0:00:16 elapsed time

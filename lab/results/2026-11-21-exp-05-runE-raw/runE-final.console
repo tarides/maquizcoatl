@@ -1,0 +1,25 @@
+repo_commit: 4e11987
+uptime:  17:31:01 up 208 days, 10:01,  8 users,  load average: 5.51, 7.90, 7.58
+disk_free_start: 58919M
+reference: caller output equals expected.txt
+hax-fstar: caller output equals expected.txt
+run.sh hax-fstar: status 0
+hax-fstar control: proof rejected, as required
+run.sh -n hax-fstar: status 0
+hax-fstar control: proof rejected, as required
+run.sh -r hax-fstar: status 0
+creusot: caller output equals expected.txt
+run.sh creusot: status 0
+creusot control: proof rejected, as required
+run.sh -n creusot: status 0
+creusot control: proof rejected, as required
+run.sh -r creusot: status 0
+cn: caller output equals expected.txt
+run.sh cn: status 0
+cn control: proof rejected, as required
+run.sh -n cn: status 0
+cn control: proof rejected, as required
+run.sh -r cn: status 0
+miri status 0
+uptime end:  17:39:30 up 208 days, 10:10,  7 users,  load average: 8.28, 5.24, 6.09
+disk_free_end: 57831M

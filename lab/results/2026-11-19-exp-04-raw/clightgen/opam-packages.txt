@@ -1,0 +1,4 @@
+coq-compcert          3.18        The CompCert C compiler (64 bit)
+menhir                20260209    An LR(1) parser generator
+ocaml-base-compiler   5.4.1       Official release of OCaml 5.4.1
+rocq-core             9.2.0       The Rocq Prover with its prelude

@@ -1,0 +1,75 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+7bba5316d877ee8cae8635b5ffc1ee4cdfd20d036e696db35c4bec111d4ab484  verus/TRUSTED
+8a128b8543759f1e5b76cbd2349f67303544a4875ad754da8a894c54223869ae  verus/build.sh
+9593826dc20f4bccf06b2a1db6efcc270fc67b7e27df99c8f90ed47ef85cba32  verus/negative-control.txt
+cc59cd403c3215c342d228167e5ebc819e3199e001a28b84029d3d8c6b338dcc  verus/src/ffi.rs
+adfa088177fa2ffb9bf5e6ced898fa1b052bff63e9291aa428eb685d464dedce  verus/src/lib.rs
+f03bb2923b92568062ce22fe8be072753bdbc4929715cc245c26a2c816483e96  verus/src/shim.rs
+== build
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+error: `external_body`/`assume_specification` not allowed with `--no-cheating`
+  --> <exp>/build/v2/verus/src/shim.rs:33:1
+   |
+33 | pub fn call_enc_len(f: &EncLenFn, p: *const u8) -> (r: i32) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: `external_body`/`assume_specification` not allowed with `--no-cheating`
+  --> <exp>/build/v2/verus/src/shim.rs:40:1
+   |
+40 | pub fn call_callout(f: &CalloutFn, args: &mut VuArgs, ud: &UserData) -> (r: i32) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: `external_body`/`assume_specification` not allowed with `--no-cheating`
+  --> <exp>/build/v2/verus/src/shim.rs:47:1
+   |
+47 | pub fn call_apply_all(g: &ApplyAllFn, rec: &mut VuFoldRec) -> (r: i32) {
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 3 previous errors
+
+no-cheating: 3 refusals in src/shim.rs, 0 elsewhere
+verification results:: 18 verified, 0 errors
+note: link against the following native artifacts when linking against this static library. The order and any duplication can be significant on some platforms
+
+note: native-static-libs: -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc
+
+(use --output-json for machine-readable output)
+verus-build-info
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+total-time:            1036 ms    (estimated total cpu time 1052 ms)
+    rust-time:                 175 ms
+        init-and-types:             39 ms
+        trait-conflicts:            47 ms
+        compile-time:               88 ms
+    verification-time:         663 ms
+        vir-time:                  538 ms
+            hir-time:                    0 ms
+            import-time:               413 ms
+            rust-to-vir:                49 ms
+        verify-crate-time:         124 ms
+    unaccounted-time:          197 ms
+
+verify-crate-time-breakdown
+    total verify-time:            130 ms   (2 threads)
+        total air-time:                59 ms   (2 threads)
+        total smt-time:                28 ms   (2 threads)
+            total smt-init:                 0 ms,     1274 rlimit (2 threads)
+            total smt-run:                 28 ms,    95036 rlimit (2 threads)
+ldflags: -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc
+libvu.a: 24484576 bytes, sha256 c33e4afeea6e7131773d68077674a8cc816cc8e89c59c8f7797492525afb74cc

@@ -1,0 +1,10 @@
+tool=vst
+run_id=m2-vst
+mode=normal
+jobs=4
+cpus=24-27
+build_seconds=53
+build_status=0
+link=ok
+caller_status=0
+caller_output=same

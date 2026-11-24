@@ -1,0 +1,142 @@
+step: cn
+start_utc: 2026-11-21T17:14:57Z
+cpu_set: 22,23,54,55
+nice: 10
+VU_JOBS: 4 (jobs for this step: 4)
+source cn: f2e8eeb47103a2c9fdf2b73a996969f3da114613
+  ["cerberus-lib.dev" "git+https://github.com/rems-project/cerberus.git#a0f7071"]
+switch cn repositories: default 
+[NOTE] Package cn does not exist in opam repositories registered in the current switch.
+[cn.dev] synchronised (file://<shared-cache>/cn/src)
+The following additional pinnings are required by cn.dev:
+  - cerberus-lib.dev at git+https://github.com/rems-project/cerberus.git#a0f7071
+Pin and install them? [Y/n] y
+[NOTE] Package cerberus-lib does not exist in opam repositories registered in the current switch.
+[cerberus-lib.dev] synchronised (no changes)
+cerberus-lib is now pinned to git+https://github.com/rems-project/cerberus.git#a0f7071 (version dev)
+cn is now pinned to file://<shared-cache>/cn/src (version dev)
+
+The following actions will be performed:
+=== install 40 packages
+  ∗ base                    v0.17.3      [required by ppx_sexp_conv]
+  ∗ cerberus-lib            dev (pinned)
+  ∗ cmdliner                2.1.1        [required by cerberus-lib, cn]
+  ∗ cn                      dev (pinned)
+  ∗ conf-findutils          1            [required by lem]
+  ∗ conf-gmp                5            [required by zarith]
+  ∗ conf-pkg-config         5            [required by zarith]
+  ∗ cppo                    1.8.0        [required by monomorphic, ppx_deriving]
+  ∗ csexp                   1.5.2        [required by dune-configurator]
+  ∗ dune                    3.23.1       [required by cerberus-lib]
+  ∗ dune-configurator       3.23.1       [required by base]
+  ∗ lem                     2026-05-01   [required by cerberus-lib]
+  ∗ menhir                  20260209     [required by cerberus-lib]
+  ∗ menhirCST               20260209     [required by menhir]
+  ∗ menhirGLR               20260209     [required by menhir]
+  ∗ menhirLib               20260209     [required by menhir]
+  ∗ menhirSdk               20260209     [required by menhir]
+  ∗ monomorphic             2.1.0        [required by cerberus-lib, cn]
+  ∗ num                     1.6          [required by lem, sexplib]
+  ∗ ocaml-compiler-libs     v0.17.0      [required by ppxlib]
+  ∗ ocaml_intrinsics_kernel v0.17.3      [required by base]
+  ∗ ocamlbuild              0.16.1       [required by lem]
+  ∗ ocamlfind               1.9.8        [required by lem, ppx_deriving]
+  ∗ ocamlgraph              2.2.0        [required by cn]
+  ∗ parsexp                 v0.17.0      [required by sexplib]
+  ∗ pprint                  20230830     [required by cerberus-lib]
+  ∗ ppx_derivers            1.2.1        [required by ppx_deriving]
+  ∗ ppx_deriving            6.2.0        [required by cerberus-lib, cn]
+  ∗ ppx_deriving_yojson     3.10.0       [required by cn]
+  ∗ ppx_sexp_conv           v0.17.1      [required by cerberus-lib]
+  ∗ ppxlib                  0.39.0       [required by ppx_sexp_conv, ppx_deriving, ppx_deriving_yojson]
+  ∗ ppxlib_jane             v0.17.4      [required by ppx_sexp_conv]
+  ∗ result                  1.5          [required by cerberus-lib]
+  ∗ seq                     base         [required by yojson]
+  ∗ sexplib                 v0.17.0      [required by cerberus-lib]
+  ∗ sexplib0                v0.17.0      [required by ppx_sexp_conv, sexplib]
+  ∗ sha                     1.15.4       [required by cerberus-lib]
+  ∗ stdlib-shims            0.3.0        [required by sha]
+  ∗ yojson                  2.2.2        [required by cerberus-lib, cn]
+  ∗ zarith                  1.14         [required by cerberus-lib, cn]
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+⬇ retrieved base.v0.17.3  (cached)
+⬇ retrieved cmdliner.2.1.1  (cached)
+⬇ retrieved conf-gmp.5  (cached)
+⬇ retrieved conf-pkg-config.5  (cached)
+⬇ retrieved cppo.1.8.0  (cached)
+∗ installed conf-findutils.1
+∗ installed conf-gmp.5
+⬇ retrieved csexp.1.5.2  (cached)
+∗ installed conf-pkg-config.5
+⬇ retrieved cn.dev  (file://<shared-cache>/cn/src)
+⬇ retrieved lem.2026-05-01  (https://opam.ocaml.org/cache)
+⬇ retrieved dune.3.23.1, dune-configurator.3.23.1  (cached)
+⬇ retrieved menhir.20260209, menhirCST.20260209, menhirGLR.20260209, menhirLib.20260209, menhirSdk.20260209  (cached)
+⬇ retrieved num.1.6  (cached)
+⬇ retrieved monomorphic.2.1.0  (https://opam.ocaml.org/cache)
+⬇ retrieved ocaml-compiler-libs.v0.17.0  (cached)
+⬇ retrieved ocaml_intrinsics_kernel.v0.17.3  (cached)
+∗ installed cmdliner.2.1.1
+⬇ retrieved ocamlbuild.0.16.1  (cached)
+⬇ retrieved ocamlfind.1.9.8  (cached)
+⬇ retrieved parsexp.v0.17.0  (cached)
+⬇ retrieved ocamlgraph.2.2.0  (cached)
+⬇ retrieved pprint.20230830  (cached)
+⬇ retrieved ppx_derivers.1.2.1  (cached)
+⬇ retrieved ppx_deriving_yojson.3.10.0  (cached)
+⬇ retrieved ppx_deriving.6.2.0  (cached)
+⬇ retrieved ppx_sexp_conv.v0.17.1  (cached)
+⬇ retrieved ppxlib_jane.v0.17.4  (cached)
+⬇ retrieved cerberus-lib.dev  (no changes)
+⬇ retrieved seq.base  (cached)
+⬇ retrieved sexplib.v0.17.0  (cached)
+⬇ retrieved sexplib0.v0.17.0  (cached)
+⬇ retrieved result.1.5  (https://opam.ocaml.org/cache)
+⬇ retrieved ppxlib.0.39.0  (cached)
+⬇ retrieved stdlib-shims.0.3.0  (cached)
+⬇ retrieved sha.1.15.4  (https://opam.ocaml.org/cache)
+⬇ retrieved zarith.1.14  (cached)
+⬇ retrieved yojson.2.2.2  (https://opam.ocaml.org/cache)
+∗ installed num.1.6
+∗ installed seq.base
+∗ installed ocamlfind.1.9.8
+∗ installed zarith.1.14
+∗ installed ocamlbuild.0.16.1
+∗ installed dune.3.23.1
+∗ installed csexp.1.5.2
+∗ installed menhirCST.20260209
+∗ installed menhirGLR.20260209
+∗ installed cppo.1.8.0
+∗ installed dune-configurator.3.23.1
+∗ installed menhirLib.20260209
+∗ installed menhirSdk.20260209
+∗ installed monomorphic.2.1.0
+∗ installed ocaml_intrinsics_kernel.v0.17.3
+∗ installed ocaml-compiler-libs.v0.17.0
+∗ installed pprint.20230830
+∗ installed ppx_derivers.1.2.1
+∗ installed result.1.5
+∗ installed sexplib0.v0.17.0
+∗ installed stdlib-shims.0.3.0
+∗ installed ocamlgraph.2.2.0
+∗ installed parsexp.v0.17.0
+∗ installed lem.2026-05-01
+∗ installed sexplib.v0.17.0
+∗ installed sha.1.15.4
+∗ installed yojson.2.2.2
+∗ installed menhir.20260209
+∗ installed base.v0.17.3
+∗ installed ppxlib.0.39.0
+∗ installed ppxlib_jane.v0.17.4
+∗ installed ppx_deriving.6.2.0
+∗ installed ppx_sexp_conv.v0.17.1
+∗ installed ppx_deriving_yojson.3.10.0
+∗ installed cerberus-lib.dev
+∗ installed cn.dev
+Done.
+# To update the current shell environment, run: eval $(opam env --root=<shared-cache>/opam)
+unknown [unknown]
+version dev pin     git+https://github.com/rems-project/cerberus.git#a0f7071 
+Z3 version 4.15.3 - 64 bit
+cn: switch 1.1G src 20M

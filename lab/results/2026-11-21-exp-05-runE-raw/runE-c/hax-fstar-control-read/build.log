@@ -1,0 +1,106 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+f54eeec832ce0d91369b09a7ee23928ec4c472ecbb09f7c054e57e1679292c92  hax-fstar/TRUSTED
+a496912f0ceb73a8cc0f38a6ddc85cc9f65f7ecc3850e245d9aa4b2573f3c9e2  hax-fstar/build.sh
+294e9ab876d5aabca784a22b641d0bb7aa91035b74bc4069fdd00f47c9d4060f  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+== build
+== ../hax sources (sha256)
+d15b704d13831b2683cdbe2692dbcda9ed911d7d06cc268d48d0030c2a48db78  hax/Cargo.lock
+a476d0dceeb80012b3304d4807a34c03f232f40ec620b0f7ce4f5a3c1e72abb1  hax/Cargo.toml
+4124f2dde71bce7c32a4043d095f8dbf5cd4bf71c18615b64cd22a251f7a7fcd  hax/build.sh
+c54dcf37c3d5acfabb3ceaee0a1f8a077e08d8df2563506fdf9470efb07a4990  hax/link-check.sh
+df2c70c41755042a033816346b1e88da8528cc915fdddf702a31ea3642569d9b  hax/src/ffi.rs
+b6837abb0a9979d3639b45cb00349a755941f312815f9df7c9741f4b17ad10a4  hax/src/lib.rs
+== versions (0 s)
+hax 
+version=0.5.0
+commit=a045d15a3bf43fe05096146f488668b521a4ae44
+rustc 1.93.0-nightly (843f8ce2e 2025-11-07)
+hax source: a045d15a3bf43fe05096146f488668b521a4ae44
+== 1. source (backend fstar, negative control: 2) (0 s)
+negative control: upper bound test of get_subject_byte removed
+  --- src/lib.rs
+  +++ control-read/lib.rs
+  @@ -312,9 +312,7 @@
+           r == ERR_INVALID_ARGUMENT
+       })]
+   pub fn get_subject_byte(args: &VuArgs, subject: &[u8], i: i32) -> i32 {
+  -    // VU-READ-BEGIN
+  -    if 0 <= i && i < args.subject_len {
+  -    // VU-READ-END
+  +    if 0 <= i {
+           subject[i as usize] as i32
+       } else {
+           ERR_INVALID_ARGUMENT
+== 2. hax into fstar (0 s)
+   Compiling proc-macro2 v1.0.107
+   Compiling quote v1.0.47
+   Compiling unicode-ident v1.0.27
+   Compiling serde_core v1.0.229
+   Compiling libc v0.2.191
+   Compiling zmij v1.0.23
+   Compiling getrandom v0.4.3
+   Compiling autocfg v1.5.1
+   Compiling cfg-if v1.0.5
+   Compiling serde_json v1.0.154
+   Compiling serde v1.0.229
+   Compiling itoa v1.0.19
+   Compiling memchr v2.8.3
+   Compiling hax-lib v0.5.0
+   Compiling num-traits v0.2.19
+   Compiling syn v3.0.10
+   Compiling syn v2.0.119
+    Checking num-integer v0.1.47
+    Checking num-bigint v0.4.8
+   Compiling uuid v1.29.3
+   Compiling serde_derive v1.0.229
+   Compiling hax-lib-macros-types v0.5.0
+   Compiling hax-lib-macros v0.5.0
+    Checking vu v0.1.0 (<exp>/build/runE-c/hax-fstar-control-read/crate)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.72s
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/fstar/extraction/Vu.fst[0m
+extracted proofs/fstar/extraction/Vu.fst: 392 lines, sha256 144cdddfcb6de3f799457150f7e6521329e0abf3ee0fb4de42287b4a6fc08c65
+== 3. F* (6 s)
+F* 2025.10.06
+platform=Linux_x86_64
+compiler=OCaml 4.14.2
+date=2025-10-06 12:00:42 -0700
+commit=7b347386330d0e5a331a220535b6f15288903234
+include <cache>/hax/cargo-hax-v0.5.0/src/hax-lib/proof-libs/fstar/rust_primitives
+include <cache>/hax/cargo-hax-v0.5.0/src/hax-lib/proof-libs/fstar/core
+include <cache>/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hax-lib-0.5.0/proofs/fstar/extraction
+include <exp>/build/runE-c/hax-fstar-control-read/crate/proofs/fstar/extraction
+-- Vu.fst
+fstar.exe --cmi --warn_error -331 --cache_checked_modules --cache_dir <exp>/build/hax-fstar-cache/2025.10.06 --already_cached +Prims+FStar+LowStar+C+Spec.Loops+TestLib --include <cache>/hax/cargo-hax-v0.5.0/src/hax-lib/proof-libs/fstar/rust_primitives --include <cache>/hax/cargo-hax-v0.5.0/src/hax-lib/proof-libs/fstar/core --include <cache>/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/hax-lib-0.5.0/proofs/fstar/extraction --include <exp>/build/runE-c/hax-fstar-control-read/crate/proofs/fstar/extraction --include proofs/fstar/extraction proofs/fstar/extraction/Vu.fst
+* Warning 241 at <cache>/hax/cargo-hax-v0.5.0/src/hax-lib/proof-libs/fstar/rust_primitives/Rust_primitives.Char.fsti(0,0-0,0):
+  - Unable to load
+    <exp>/build/hax-fstar-cache/2025.10.06/Rust_primitives.Char.fsti.checked
+    since checked file
+    <exp>/build/hax-fstar-cache/2025.10.06/Rust_primitives.Char.fsti.checked
+    does not exist; will recheck
+    <cache>/hax/cargo-hax-v0.5.0/src/hax-lib/proof-libs/fstar/rust_primitives/Rust_primitives.Char.fsti
+    (suppressing this warning for further modules)
+
+* Warning 239 at <cache>/hax/cargo-hax-v0.5.0/src/hax-lib/proof-libs/fstar/rust_primitives/Rust_primitives.Float.fsti(5,5-5,10):
+  - Adding an implicit 'assume new' qualifier on Rust_primitives.Float.float
+
+* Error 19 at proofs/fstar/extraction/Vu.fst(227,2-229,29):
+  - Subtyping check failed
+  - Expected type
+      i:
+      Rust_primitives.Integers.usize
+        {Core_models.Ops.Index.f_index_pre subject i}
+    got type Rust_primitives.Integers.usize
+  - The SMT solver could not prove the query. Use --query_stats for more
+    details.
+  - Also see: proofs/fstar/extraction/Vu.fst(228,23-228,38)
+  - Other related locations: <cache>/hax/cargo-hax-v0.5.0/src/hax-lib/proof-libs/fstar/rust_primitives/Rust_primitives.Notations.fsti(7,18-7,33)
+
+1 error was reported (see above)
+status Vu.fst: 1
+F* error codes: 19 
+proof rejected (F* error 19 only)

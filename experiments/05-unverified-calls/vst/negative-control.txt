@@ -1,0 +1,52 @@
+Negative control of the VST + CompCert prototype (experiment #5, milestone 2).
+
+Command: run.sh -n vst m2-vst on the bench host, after the normal run of
+the same RUN_ID passed. build.sh deletes the lines between CLAMP-BEGIN
+and CLAMP-END in vu.c (the clamp of vu_char_len, which then returns the
+callee's raw result r) and in verif_vu.v (the proof steps of the two
+clamp branches; the rest of the proof, including the final return step,
+is unchanged), then checks verif_vu.v with VST 2.17 on Rocq 9.2.0.
+Result: build_status=3 (VU_PROOF_REJECTED), control=rejected, 4 s.
+
+The postcondition lo <= r <= hi is left unproved. The only fact about r
+is H1, the int range that the callee's funspec (enc_len_spec, listed in
+TRUSTED) gives its result: the contract gives the result no other range.
+
+Excerpt of build.log (redacted):
+
+== 1. sources (negative control: 1) (0 s)
+24,29d23
+<   /* CLAMP-BEGIN */
+<   if (r < lo)
+<     return lo;
+<   if (r > hi)
+<     return hi;
+<   /* CLAMP-END */
+364,369d363
+<   (* CLAMP-BEGIN *)
+<   forward_if.
+<   { forward. Exists lo. entailer!. }
+<   forward_if.
+<   { forward. Exists hi. entailer!. }
+<   (* CLAMP-END *)
+(step 2, clightgen and the Clight check, omitted)
+== 3. VST proofs (2 s)
+Unproved goal, with its pure hypotheses:
+   H5 : (value_fits t_enc (Vint (Int.repr lo), Vint (Int.repr hi)))
+   H4 : (field_compatible t_enc [] st)
+   Pf : (isptr f)
+   H3 : (tc_val' tuchar (Vint (Int.repr c)))
+   H2 : (field_compatible tuchar [] p)
+   PNst : (is_pointer_or_null st)
+   PNp : (is_pointer_or_null p)
+   PNf : (is_pointer_or_null f)
+   H1 : (Int.min_signed <= r <= Int.max_signed)
+   H0 : (hi <= Int.max_signed)
+   H : (1 <= lo <= hi)
+   SH0 : (readable_share shs)
+   SH : (readable_share shp)
+  goal: (lo <= r <= hi)
+File "./verif_vu.v", line 368, characters 7-15:
+Error: Tactic failure: postcondition not proved.
+
+proof rejected (error at line 368, inside a proof)

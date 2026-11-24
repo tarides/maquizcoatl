@@ -1,0 +1,7 @@
+== base
+base: status=0 time=0s cache=48G free=69G
+== refinedc
+refinedc: status=40 time=505s cache=54G free=62G
+disk use: cache=32K exp=1.8G
+failed components: refinedc
+SETUP-END m4 status=1

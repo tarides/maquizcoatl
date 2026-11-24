@@ -1,0 +1,25 @@
+cpu: AMD EPYC 7502P 32-Core Processor, 64 hardware threads
+ram: 503 GB
+kernel: 6.8.0-100-generic
+os: Ubuntu 24.04.5 LTS
+scripts commit: 48d5254 + uncommitted milestone-1 scripts (branch exp/06-spec-speed)
+experiment #7 scripts (idle rerun): 2db5715 (main, lab/07-large-tables)
+upstream: f95747b (copy of the submodule, read only)
+upstream test_utf8 (Release build): RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
+onig CMAKE_C_FLAGS_RELEASE: -O3 -DNDEBUG
+opam: 2.6.1
+ocaml: 5.4.1
+zarith: 1.14
+rocq: The Rocq Prover, version 9.3.0
+rocq-stdlib: 9.2.0
+rocq-native: 3
+why3: Why3 platform, version 1.9.0
+fstar: F* 2026.11.15 platform=Linux_x86_64 system=Unix compiler=OCaml 5.3.0 date=2026-11-15 18:52:39 +0000 commit=b92b0f87ce325a6ed0fd78086390fbaf2fc629a1 
+lean: Lean (version 4.36.0, x86_64-unknown-linux-gnu, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+lake: Lake version 5.0.0-src+611c117 (Lean version 4.36.0)
+elan: elan 4.4.0 (3cc76985a 2026-11-18)
+gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+cmake: cmake version 3.28.3
+python: Python 3.12.3
+timing CPUs: 28-31,60-63 (L3 complex 7); untimed work on CPUs 4-7 under nice -n 10
+load average at provenance time: 0.10 0.55 0.73

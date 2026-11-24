@@ -1,0 +1,73 @@
+toolchain: nightly-2026-09-17
+cargo 1.100.0-nightly (495c385d0 2026-09-16)
+miri 0.1.0 (923c95cdf5 2026-09-16)
+sha256:
+f7f32829fab097357602ea441e189104308b40d1ddb6134fc0c24fb185aa612c  miri/client.rs
+67d5937c34dcf26292c6881a785d15d33682d2c64eaca1a02a8f71a3be4028af  miri/erase_verus.py
+4411ca849220ad6d8471f02ed2405861678ba88fd05b53ac66f87573f2f7d909  miri/miri.sh
+adfa088177fa2ffb9bf5e6ced898fa1b052bff63e9291aa428eb685d464dedce  verus/src/lib.rs
+f03bb2923b92568062ce22fe8be072753bdbc4929715cc245c26a2c816483e96  verus/src/shim.rs
+cc59cd403c3215c342d228167e5ebc819e3199e001a28b84029d3d8c6b338dcc  verus/src/ffi.rs
+55c8fc8ac726e0db4471f38a784fef31274af6bc13254be7c43834ab9ca54735  aeneas/src/lib.rs
+41863dbb9e61b7e1c1050de7d34faf4a45fd26a3e2a1c6da4b1dec54d8fb749b  aeneas/src/ffi.rs
+b6837abb0a9979d3639b45cb00349a755941f312815f9df7c9741f4b17ad10a4  hax/src/lib.rs
+df2c70c41755042a033816346b1e88da8528cc915fdddf702a31ea3642569d9b  hax/src/ffi.rs
+a6c584a8334cba667c7c0c97d6295f67cff3a7d414a27e710a808f9af3f8dbc8  creusot/src/lib.rs
+4a678fc8c21cc484d89023562b511a8b2951e4c38fb1f3797a7fbda676656511  creusot/src/ffi.rs
+bfb7b6ceceb9d3d6c7f1ad083fa4f3dff5e72c86ec834370ca0b9e442811c014  refinedrust/src/lib.rs
+bf8d0d6b64a79663d4b3e12de0ad9806ebae59f297c0abae41488bbc8924af7d  refinedrust/src/ffi.rs
+--- client.rs
++++ refinedrust/client.rs
+@@ -75,27 +75,27 @@
+             subject_len: 3,
+             pos: 1,
+             num: 1,
+-            slot: [41, 0, 0, 0, 0],
++            slot0: 41, slot1: 0, slot2: 0, slot3: 0, slot4: 0,
+         };
+         let mut value: c_int = value;
+         let r = unsafe {
+             vu_callout_step(dir, Some(co_slots), &mut a, ptr::addr_of_mut!(value).cast())
+         };
+         assert_eq!(r, expected);
+-        assert_eq!(a.slot, [42, 97, 98, 99, 42]);
++        assert_eq!([a.slot0, a.slot1, a.slot2, a.slot3, a.slot4], [42, 97, 98, 99, 42]);
+         assert!(a.subject == SUBJECT.as_ptr() && a.subject_len == 3 && a.pos == 1 && a.num == 1);
+-        println!("shape (b) dir={dir} callee={value} -> {r} slots={:?}", a.slot);
++        println!("shape (b) dir={dir} callee={value} -> {r} slots={:?}", [a.slot0, a.slot1, a.slot2, a.slot3, a.slot4]);
+     }
+     // The read accessor with a length shorter than the buffer.
+-    let a = VuArgs { subject: SUBJECT.as_ptr(), subject_len: 2, pos: 0, num: 0, slot: [0; 5] };
++    let a = VuArgs { subject: SUBJECT.as_ptr(), subject_len: 2, pos: 0, num: 0, slot0: 0, slot1: 0, slot2: 0, slot3: 0, slot4: 0 };
+     let got: Vec<c_int> = (0..3).map(|i| unsafe { vu_get_subject_byte(&a, i) }).collect();
+     assert_eq!(got, [97, 98, -30]);
+     println!("subject_byte len=2 -> {got:?}");
+     // Shape (a).
+-    let mut rec = VuFoldRec { calls: 0, recorded: 0, from: [0; 8] };
++    let mut rec = VuFoldRec { calls: 0, recorded: 0, from0: 0, from1: 0, from2: 0, from3: 0, from4: 0, from5: 0, from6: 0, from7: 0 };
+     let r = unsafe { vu_fold_all(Some(client_apply_all), &mut rec) };
+     assert_eq!((r, rec.calls, rec.recorded), (0, 4, 2));
+-    assert_eq!(&rec.from[..2], &[0x41, 0x61]);
+-    println!("shape (a) -> {r} calls={} recorded={} from={:x?}", rec.calls, rec.recorded, &rec.from[..2]);
++    assert_eq!(&[rec.from0, rec.from1], &[0x41, 0x61]);
++    println!("shape (a) -> {r} calls={} recorded={} from={:x?}", rec.calls, rec.recorded, &[rec.from0, rec.from1]);
+     println!("miri client: ok");
+ }
+== refinedrust, stacked borrows
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri refinedrust stacked: status=0
+== refinedrust, tree borrows
+shape (b) dir=0 callee=0 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=1 callee=1 -> 0 slots=[42, 97, 98, 99, 42]
+shape (b) dir=2 callee=5 -> 1 slots=[42, 97, 98, 99, 42]
+shape (b) dir=0 callee=2 -> -30 slots=[42, 97, 98, 99, 42]
+subject_byte len=2 -> [97, 98, -30]
+shape (a) -> 0 calls=4 recorded=2 from=[41, 61]
+miri client: ok
+miri refinedrust tree: status=0

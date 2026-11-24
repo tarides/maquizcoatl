@@ -1,0 +1,60 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+2967816b3e02df89ee5f25b309bd42cd0de95c5e8811f403c045718e482abf5a  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+6606672a8004cf92be6173fcd4e1dc25a08dee53ea83fe6f800641278a3d867c  pulse/TRUSTED
+507b3abbd81e0f31c91a52d93534677bab6d96607adf6a595d48490bfd6f60a9  pulse/VU.fst
+efe3e7d9e955565378ecc7dcbf5307520ad60fa871fb9a38930ab9c106fbe78f  pulse/abi_check.c
+529b0b7d9aeb8622eb93766e6dabafd58cbf4a4c9ce033d615ed215ed6a78a73  pulse/build.sh
+8064bcd37c91116bb825fe0dc2f4aa5cd81df767fe5435449406993b90b9d6b6  pulse/layout.c
+cb7247c6ff64e5fb5483d3231ec069f7a656ed8b679000c5ca5f57b2b49beb85  pulse/negative-control.txt
+7c4f400859a670d73fa04e2d3b0b993f730406a54a58368e70caa49dd9f81612  pulse/probes/EtaD.fst
+fd09d5161add8b2c5efda6c06c884a43678cd78994cb8239f42e7aa308d36797  pulse/probes/eta-output.txt
+060e575dfdc739464a2ff75ba1eab19ff1244eaa851d6259f7ed8b74ff46f570  pulse/probes/eta.sh
+29568bd78d6552c895c0ad305c7d1dc397011b9b70449beeb65d143006c9e9b2  pulse/probes/eta_caller.c
+524247490902907365f0827a21f7995a2a3cf4d4d615ce412105dee3aeb02f7d  pulse/probes/fstar-master.sh
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+== build
+== versions (0 s)
+F* 2026.11.15
+commit=b92b0f87ce325a6ed0fd78086390fbaf2fc629a1
+KaRaMeL version: 3384ecaf654baca53b109c2e2665112eaa6d7f00
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 2) (0 s)
+388,390c388
+<   (* READ-BEGIN *)
+<   if (I32.lte 0l i && I32.lt i x.subject_len) {
+<   (* READ-END *)
+---
+>   if (I32.lte 0l i) {
+proof escapes: none
+== 2. F* check (0 s)
+* Error 19 at VU.fst(389,56-391,25):
+  - Ill-typed term
+  - Subtyping check failed
+  - Expected type
+      s:
+      FStar.Ghost.erased (FStar.Seq.Base.seq FStar.UInt8.t)
+        {FStar.SizeT.v j < FStar.Seq.Base.length s}
+    got type FStar.Ghost.erased (FStar.Seq.Base.seq FStar.UInt8.t)
+  - The SMT solver could not prove the query.
+  - Failed to prove: FStar.SizeT.v j < FStar.Seq.Base.length s
+  - In context:
+      args: Pulse.Lib.Reference.ref VU.vu_args
+      i: FStar.Int32.t
+      pa: PulseCore.FractionalPermission.perm
+      a: FStar.Ghost.erased VU.vu_args
+      ps: PulseCore.FractionalPermission.perm
+      s: FStar.Ghost.erased (FStar.Seq.Base.seq FStar.UInt8.t)
+      FStar.Seq.Base.length s == FStar.Int32.v a.subject_len /\
+      FStar.SizeT.fits_u32
+      x: VU.vu_args
+      Pulse.Lib.Core.rewrites_to_p x a
+      FStar.Int32.lte (0l <: FStar.Int32.t) i == true
+      j: FStar.SizeT.t
+      j == FStar.SizeT.uint32_to_sizet (FStar.Int.Cast.int32_to_uint32 i)
+
+1 error was reported (see above)
+proof rejected (F* error 19 only)

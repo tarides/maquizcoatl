@@ -1,0 +1,10 @@
+Why3 platform, version 1.9.0
+alt-ergo --version: v2.6.4-1-g997f541
+z3 for why3: Z3 version 4.15.3 - 64 bit
+Alt-Ergo 
+Alt-Ergo  (BV)
+Alt-Ergo  (FPA)
+Alt-Ergo  (counterexamples)
+Z3 4.15.3
+Z3 4.15.3 (counterexamples)
+Z3 4.15.3 (noBV)

@@ -1,0 +1,40 @@
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+verification results:: 17 verified, 0 errors
+note: link against the following native artifacts when linking against this static library. The order and any duplication can be significant on some platforms
+
+note: native-static-libs: -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc
+
+(use --output-json for machine-readable output)
+verus-build-info
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+total-time:            1071 ms    (estimated total cpu time 1084 ms)
+    rust-time:                 172 ms
+        init-and-types:             36 ms
+        trait-conflicts:            51 ms
+        compile-time:               84 ms
+    verification-time:         678 ms
+        vir-time:                  519 ms
+            hir-time:                    0 ms
+            import-time:               402 ms
+            rust-to-vir:                44 ms
+        verify-crate-time:         158 ms
+    unaccounted-time:          220 ms
+
+verify-crate-time-breakdown
+    total verify-time:            162 ms   (2 threads)
+        total air-time:                80 ms   (2 threads)
+        total smt-time:                25 ms   (2 threads)
+            total smt-init:                 0 ms,     1143 rlimit (2 threads)
+            total smt-run:                 25 ms,    83413 rlimit (2 threads)
+ldflags: -lgcc_s -lutil -lrt -lpthread -lm -ldl -lc
+libvu.a: 24479232 bytes, sha256 135a0186db432c91e89e2b9dd29a018bbd8a56aa66d5db98db4983162fd28ac9

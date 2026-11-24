@@ -1,0 +1,2 @@
+sizeof(OnigSyntaxType) seen by an onigposix.h-only client: 16
+bytes written past the client's object by onig_copy_syntax: 24

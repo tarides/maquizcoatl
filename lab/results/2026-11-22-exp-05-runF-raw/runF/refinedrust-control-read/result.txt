@@ -1,0 +1,9 @@
+tool=refinedrust
+run_id=runF
+mode=negative-control-read
+jobs=6
+cpus=11-13,43-45
+normal_run=passed
+build_seconds=506
+build_status=3
+control=rejected

@@ -1,0 +1,13 @@
+2026-11-20T15:36:53Z
+series: isabelle value run 1
+1.04 1.66 1.47
+busy timing CPUs: 
+2026-11-20T15:37:20Z
+series: isabelle value run 2
+1.27 1.66 1.48
+busy timing CPUs: 
+2026-11-20T15:37:47Z
+series: isabelle value run 3
+1.30 1.64 1.47
+busy timing CPUs: 
+done 2026-11-20T15:38:14Z

@@ -1,0 +1,47 @@
+Negative control of the Why3 prototype (experiment 5, milestone 1).
+Run: run.sh -n why3 m1-why3 on the bench host, after the passing
+normal run m1-why3. Excerpts of <exp>/out/m1-why3/why3-control/.
+
+== Change (build.sh with VU_NEGATIVE_CONTROL=1)
+--- vu.mlw
++++ vu.mlw.control
+@@ -213,9 +213,7 @@
+   = let mn = get_min_len st in
+     let mx = get_max_len st in
+     let r = call_enc_len f p in
+-    (* CLAMP-BEGIN: the negative control replaces these lines by "r". *)
+-    if r < mn then mn else if r > mx then mx else r
+-    (* CLAMP-END *)
++    r
+ 
+   (** {2 vu_callout_step} *)
+ 
+
+== Goals that failed (vu.mlw line 209 is the postcondition
+== "ensures { st.min_len <= result <= st.max_len }" of vu_char_len)
+Alt-Ergo:
+File "<exp>/build/m1-why3/why3-control/src/vu.mlw", line 209, characters 14-48:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Timeout (10.00s, 308592 steps).
+
+Z3:
+File "<exp>/build/m1-why3/why3-control/src/vu.mlw", line 209, characters 14-48:
+Sub-goal Postcondition of goal vu_char_len'vc.
+Prover result is: Timeout (8.76s, 24234788 steps).
+
+
+== Summary
+prover=alt-ergo exit=2 goals=57 valid=56 rejected=1 seconds=13
+prover=z3 exit=2 goals=57 valid=56 rejected=1 seconds=13
+proof status: rejected
+
+== result.txt
+tool=why3
+run_id=m1-why3
+mode=negative-control
+jobs=4
+cpus=56-59
+normal_run=passed
+build_seconds=26
+build_status=3
+control=rejected

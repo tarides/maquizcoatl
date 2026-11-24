@@ -1,0 +1,4 @@
+Second, concurrent run (started 1 s after the first, same view):
+view ready: <shared-cache>/exp05-view
+error: another setup-pipeline.sh run holds the view: refused
+exit status 1

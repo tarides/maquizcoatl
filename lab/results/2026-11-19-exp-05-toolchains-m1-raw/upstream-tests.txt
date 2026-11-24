@@ -1,0 +1,7 @@
+build_time=4s
+test_utf8 exit=0
+RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
+test_back exit=0
+RESULT   SUCC: 1225,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
+upstream_dirty_files=0
+UPSTREAM-END status=0

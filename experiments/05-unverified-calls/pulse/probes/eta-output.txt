@@ -1,0 +1,21 @@
+Verified module: EtaD
+All verification conditions discharged successfully
+== KaRaMeL
+Verified module: EtaD
+All verification conditions discharged successfully
+int32_t (*eta_d(int32_t (*g)(int32_t *x0)))(int32_t *x0)
+{
+  return g;
+}
+
+== Custard direct C
+Verified module: EtaD
+All verification conditions discharged successfully
+int32_t (*eta_d(int32_t (*g)(int32_t *)))(int32_t *) {
+  return g;
+}
+
+
+== C caller against the KaRaMeL output
+eta_d(g, &41) = -1597415063, g called 0 time(s); expected 42, 1
+eta_caller status=1

@@ -1,0 +1,13 @@
+step: hax-fstar
+start_utc: 2026-11-21T17:06:43Z
+cpu_set: 26,27,58,59
+nice: 10
+VU_JOBS: 4 (jobs for this step: 4)
+disk: 69 GB free, install estimate 1 GB, floor 20 GB
+fetched fstar-v2025.10.06-Linux-x86_64.tar.gz sha256=940c187d7a6dc3e95d17fd5159b5eaec17d62981c7f135a7e6c531ce3b59442d
+F* 2025.10.06
+platform=Linux_x86_64
+compiler=OCaml 4.14.2
+date=2025-10-06 12:00:42 -0700
+commit=7b347386330d0e5a331a220535b6f15288903234
+fstar for hax: 537M

@@ -1,0 +1,26 @@
+# The Creusot prototype of experiment #5 (run E): one crate, checked by
+# Creusot (cargo creusot, build.sh) and compiled by rustc into the static
+# library the C caller links.
+[package]
+name = "vu"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+[lib]
+path = "src/lib.rs"
+crate-type = ["staticlib"]
+
+[dependencies]
+creusot-std = "=0.14.0"
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(creusot)'] }
+
+[profile.release]
+opt-level = 2
+overflow-checks = true
+panic = "abort"
+
+[profile.dev]
+panic = "abort"

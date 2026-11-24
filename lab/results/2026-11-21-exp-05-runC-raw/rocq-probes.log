@@ -1,0 +1,51 @@
+== probe struct: src/lib.rs sha256 831cd9130bf89f2bbfbf23a015e92035c77d82caccbf7bc7698c2697e35b4a8c
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 5.58s
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/coq/extraction/Probe_struct.v[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/coq/extraction/_CoqProject[0m
+-- extracted Probe_struct.v:
+(* NotImplementedYet *)
+
+
+
+Record S_record : Type :=
+  {
+    S_f_a : t_i32;
+  }.
+
+
+#[export] Instance settable_S_record : Settable _ :=
+  settable! (Build_S_record) <S_f_a>.
+
+Definition get (s : t_S) : t_i32 :=
+  f_a s.
+
+Definition set (s : t_S) (v : t_i32) : t_S :=
+  let s := s <|t_Sf_a := v |> in
+  s.
+-- rocq compile:
+File "./Probe_struct.v", line 27, characters 20-23:
+Error: The reference t_S was not found in the current environment.
+Did you mean O_S?
+
+probe struct: rocq status=1
+== probe cmp: src/lib.rs sha256 41c3dfda665fffba54341b8bf429e87642aa2e902713657db564d21b1afb9f70
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.21s
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/coq/extraction/Probe_cmp.v[0m
+[1m[94minfo[0m: [1mhax: wrote file ./proofs/coq/extraction/_CoqProject[0m
+-- extracted Probe_cmp.v:
+(* NotImplementedYet *)
+
+
+
+Definition add1 (x : t_u32) `{f_lt (x) ((100 : t_u32)) = true} : t_u32 :=
+  f_add (x) ((1 : t_u32)).
+Lemma add1_ensures (x : t_u32) :
+  forall (H_requires : f_lt (x) ((100 : t_u32)) = true),
+  let r := @add1 (x : t_u32) H_requires in
+  f_eq (r) (f_add (x) ((1 : t_u32))) = true.
+Proof. Admitted.
+-- rocq compile:
+File "./Probe_cmp.v", line 18, characters 30-34:
+Error: Unbound and ungeneralizable variable f_lt.
+
+probe cmp: rocq status=1

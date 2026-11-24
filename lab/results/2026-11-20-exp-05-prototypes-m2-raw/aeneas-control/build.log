@@ -1,0 +1,99 @@
+== versions (0 s)
+charon 0.1.321 (61c67516e7752daf6b4dd403a030d90efbb0b8eb)
+aeneas nightly-2026.11.19-8f4466d
+rustc 1.100.0-nightly (923c95cdf 2026-09-16)
+Lean (version 4.36.0-rc2, x86_64-unknown-linux-gnu, commit b35cb10cf2ced51a2fd1880cfdbf75c71ab7a35a, Release)
+== 1. source (negative control: 1) (1 s)
+negative control: clamp removed
+  --- src/lib.rs
+  +++ control/lib.rs
+  @@ -92,15 +92,7 @@
+   /// shared reference that the callee is not given.
+   pub fn char_len<F: EncLen>(f: &F, p: *const u8, st: &VuEncState) -> i32 {
+       let raw = f.enc_len(p);
+  -    // VU-CLAMP-BEGIN
+  -    if raw < st.min_enc_len {
+  -        st.min_enc_len
+  -    } else if raw > st.max_enc_len {
+  -        st.max_enc_len
+  -    } else {
+  -        raw
+  -    }
+  -    // VU-CLAMP-END
+  +    raw
+   }
+   
+   // -------------------------------------------------------- 2. vu_callout_step
+== 2. Charon (1 s)
+warning: unused variable: `st`
+  --> src/lib.rs:93:49
+   |
+93 | pub fn char_len<F: EncLen>(f: &F, p: *const u8, st: &VuEncState) -> i32 {
+   |                                                 ^^ help: if this is intentional, prefix it with an underscore: `_st`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+
+== 3. Aeneas (1 s)
+[[92mInfo[39m ] Imported: vu.llbc
+[[92mInfo[39m ] Creating missing directory: lean
+[[92mInfo[39m ] Generated: lean/Vu.lean
+[[93mWarn[39m ] The crate contains extracted external, unknown definitions: we advise using the option -split-files to allow manually providing these definitions in separate files.
+[[92mInfo[39m ] Total execution time: 0.858621 seconds
+model lean/Vu.lean: 334 lines, sha256 00a632392c06c4156a54b773934b9aacbf8672ae93c257de975a56e0f5184257
+== 4. Lean, model alone (3 s)
+== 5. Lean, proofs (6 s)
+Proofs.lean:36:49: error: scalar_tac failed to prove the goal below.
+
+Note that scalar_tac is almost equivalent to:
+  scalar_tac_preprocess; omega
+
+Goal: 
+F : Type
+EncLenInst : EncLen F
+f : F
+p : ConstRawPtr U8
+st : VuEncState
+r : I32
+hcall : EncLenInst.enc_len f p = ok r
+hst : ↑st.min_enc_len ≤ ↑st.max_enc_len
+⊢ ↑st.min_enc_len ≤ ↑r ∧ ↑r ≤ ↑st.max_enc_len
+Proofs.lean:33:20: warning: This simp argument is unused:
+  bind_ok
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hcall]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Proofs.lean:45:20: warning: This simp argument is unused:
+  bind_ok
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [hcall]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Proofs.lean:46:6: warning: Unused tactic linter: `(split_ifs <;>
+      first
+      | rfl
+      | scalar_tac)` does not change the goal.
+
+Note: This linter can be disabled with `set_option linter.unusedTactic false`
+Proofs.lean:46:7: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+Proofs.lean:46:21: warning: this tactic is never executed
+
+Note: This linter can be disabled with `set_option linter.unreachableTactic false`
+'vu.char_len_spec' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'vu.char_len_in_bounds' depends on axioms: [propext, Quot.sound]
+'vu.callout_step_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.callout_step_invalid' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.i_apply_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.i_apply_rec_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.fold_all_rec_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.tableClient_respects' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.get_slot_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+'vu.set_slot_spec' depends on axioms: [propext, Classical.choice, Quot.sound]
+proofs: status=1 errors_in_model=0 errors_in_proofs=1 theorems=10 axiom_reports=10 nonstandard_axioms=1
+proof rejected

@@ -1,0 +1,169 @@
+step: creusot
+start_utc: 2026-11-21T17:16:46Z
+cpu_set: 20,21,52,53
+nice: 10
+VU_JOBS: 4 (jobs for this step: 4)
+disk: 62 GB free, install estimate 7 GB, floor 20 GB
+source creusot: 65349025c67e69fcd7479f1f420fa5904f69bc27
+info: syncing channel updates for nightly-2026-08-03-x86_64-unknown-linux-gnu
+info: latest update on 2026-08-03 for version 1.99.0-nightly (11177f223 2026-08-02)
+info: component llvm-tools is up to date
+info: component rustc-dev is up to date
+info: component rustfmt is up to date
+
+  nightly-2026-08-03-x86_64-unknown-linux-gnu unchanged - rustc 1.99.0-nightly (11177f223 2026-08-02)
+
+info: checking for self-update (current version: 1.29.3)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.08s
+     Running `<exp>/build/creusot-target/debug/creusot-install --provers-parallelism 4`
+Installing Why3 and Why3find...
+[NOTE] Package creusot-deps does not exist in opam repositories registered in the current switch.
+The following additional pinnings are required by creusot-deps.dev:
+  - why3.git-05bf4ddf at git+https://gitlab.inria.fr/why3/why3.git#05bf4ddf55cb3042f34c3bc0ed3aff56a226978a
+  - why3-ide.git-05bf4ddf at git+https://gitlab.inria.fr/why3/why3.git#05bf4ddf55cb3042f34c3bc0ed3aff56a226978a
+  - why3find.git-0f054b93 at git+https://github.com/creusot-rs/why3find.git#0f054b93c86ac7ba20bca7df5d1563a9a4434a30
+Pin and install them? [Y/n] y
+[why3.git-05bf4ddf] synchronised (no changes)
+why3 is now pinned to git+https://gitlab.inria.fr/why3/why3.git#05bf4ddf55cb3042f34c3bc0ed3aff56a226978a (version git-05bf4ddf)
+[why3-ide.git-05bf4ddf] synchronised (no changes)
+why3-ide is now pinned to git+https://gitlab.inria.fr/why3/why3.git#05bf4ddf55cb3042f34c3bc0ed3aff56a226978a (version git-05bf4ddf)
+[why3find.git-0f054b93] synchronised (no changes)
+why3find is now pinned to git+https://github.com/creusot-rs/why3find.git#0f054b93c86ac7ba20bca7df5d1563a9a4434a30 (version git-0f054b93)
+creusot-deps is now pinned to file://<shared-cache>/creusot/data (version dev)
+
+<><> Installing new switch packages <><><><><><><><><><><><><><><><><><><><><><>
+Switch invariant: ["ocaml" {>= "4.05.0"}]
+The following actions will be performed:
+=== install 39 packages
+  ∗ base-bigarray         base
+  ∗ base-domains          base
+  ∗ base-effects          base
+  ∗ base-nnp              base
+  ∗ base-threads          base                  [required by dune]
+  ∗ base-unix             base                  [required by dune]
+  ∗ camlzip               1.14                  [required by creusot-deps]
+  ∗ conf-autoconf         1                     [required by why3]
+  ∗ conf-gmp              5                     [required by zarith]
+  ∗ conf-pkg-config       5                     [required by conf-zlib, zarith]
+  ∗ conf-zlib             1                     [required by camlzip]
+  ∗ creusot-deps          dev (pinned)
+  ∗ csexp                 1.5.2                 [required by dune-private-libs]
+  ∗ dune                  3.25.0                [required by why3, ocamlgraph, why3find]
+  ∗ dune-private-libs     3.25.0                [required by dune-site]
+  ∗ dune-site             3.25.0                [required by why3find]
+  ∗ dyn                   3.25.0                [required by dune-private-libs]
+  ∗ fs-io                 3.25.0                [required by stdune]
+  ∗ menhir                20260209              [required by why3]
+  ∗ menhirCST             20260209              [required by menhir]
+  ∗ menhirGLR             20260209              [required by menhir]
+  ∗ menhirLib             20260209              [required by menhir]
+  ∗ menhirSdk             20260209              [required by menhir]
+  ∗ ocaml                 5.3.0
+  ∗ ocaml-base-compiler   5.3.0                 [required by ocaml]
+  ∗ ocaml-compiler        5.3.0                 [required by ocaml-base-compiler]
+  ∗ ocaml-config          3                     [required by ocaml]
+  ∗ ocaml-options-vanilla 1
+  ∗ ocamlfind             1.9.8                 [required by camlzip, why3]
+  ∗ ocamlgraph            2.2.0                 [required by creusot-deps]
+  ∗ ordering              3.25.0                [required by dyn, stdune]
+  ∗ pp                    2.0.0                 [required by dune-private-libs]
+  ∗ stdune                3.25.0                [required by dune-private-libs]
+  ∗ terminal_size         0.2.0                 [required by why3find]
+  ∗ top-closure           3.25.0                [required by stdune]
+  ∗ why3                  git-05bf4ddf (pinned) [required by creusot-deps]
+  ∗ why3find              git-0f054b93 (pinned) [required by creusot-deps]
+  ∗ yojson                3.0.0                 [required by why3find]
+  ∗ zarith                1.14                  [required by creusot-deps]
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+⬇ retrieved conf-gmp.5  (cached)
+⬇ retrieved conf-pkg-config.5  (cached)
+∗ installed base-bigarray.base
+∗ installed base-threads.base
+∗ installed base-unix.base
+⬇ retrieved camlzip.1.14  (cached)
+⬇ retrieved creusot-deps.dev  (file://<shared-cache>/creusot/data)
+⬇ retrieved csexp.1.5.2  (cached)
+∗ installed conf-autoconf.1
+∗ installed conf-gmp.5
+∗ installed conf-pkg-config.5
+∗ installed conf-zlib.1
+⬇ retrieved menhir.20260209, menhirCST.20260209, menhirGLR.20260209, menhirLib.20260209, menhirSdk.20260209  (cached)
+⬇ retrieved ocaml-config.3  (cached)
+∗ installed ocaml-options-vanilla.1
+⬇ retrieved dune.3.25.0, dune-private-libs.3.25.0, dune-site.3.25.0, dyn.3.25.0, fs-io.3.25.0, ordering.3.25.0, stdune.3.25.0, top-closure.3.25.0  (cached)
+⬇ retrieved ocamlfind.1.9.8  (cached)
+⬇ retrieved ocaml-compiler.5.3.0  (https://opam.ocaml.org/cache)
+⬇ retrieved ocamlgraph.2.2.0  (cached)
+⬇ retrieved pp.2.0.0  (cached)
+⬇ retrieved terminal_size.0.2.0  (https://opam.ocaml.org/cache)
+⬇ retrieved yojson.3.0.0  (cached)
+⬇ retrieved zarith.1.14  (cached)
+⬇ retrieved why3find.git-0f054b93  (no changes)
+⬇ retrieved why3.git-05bf4ddf  (no changes)
+∗ installed ocaml-compiler.5.3.0
+∗ installed ocaml-base-compiler.5.3.0
+∗ installed ocaml-config.3
+∗ installed ocaml.5.3.0
+∗ installed base-domains.base
+∗ installed base-effects.base
+∗ installed base-nnp.base
+∗ installed ocamlfind.1.9.8
+∗ installed camlzip.1.14
+∗ installed zarith.1.14
+∗ installed dune.3.25.0
+∗ installed csexp.1.5.2
+∗ installed menhirCST.20260209
+∗ installed fs-io.3.25.0
+∗ installed menhirGLR.20260209
+∗ installed menhirLib.20260209
+∗ installed menhirSdk.20260209
+∗ installed pp.2.0.0
+∗ installed terminal_size.0.2.0
+∗ installed ordering.3.25.0
+∗ installed top-closure.3.25.0
+∗ installed dyn.3.25.0
+∗ installed yojson.3.0.0
+∗ installed ocamlgraph.2.2.0
+∗ installed stdune.3.25.0
+∗ installed menhir.20260209
+∗ installed dune-private-libs.3.25.0
+∗ installed dune-site.3.25.0
+∗ installed why3.git-05bf4ddf
+∗ installed why3find.git-0f054b93
+∗ installed creusot-deps.dev
+Done.
+# To update the current shell environment, run: eval $(opam env --root=<shared-cache>/opam --switch=<shared-cache>/creusot/data)
+   Compiling prelude-generator v0.14.0 (<shared-cache>/creusot/src/prelude-generator)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.31s
+     Running `<exp>/build/creusot-target/debug/prelude-generator`
+Building prelude...
+Installing prelude...
+Installing cargo-creusot...
+Installing creusot-rustc...
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100 29.6M  100 29.6M    0     0  37.8M      0 --:--:-- --:--:-- --:--:-- 37.8M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+ 77 51.8M   77 39.9M    0     0  34.1M      0  0:00:01  0:00:01 --:--:-- 34.1M100 51.8M  100 51.8M    0     0  37.3M      0  0:00:01  0:00:01 --:--:-- 55.3M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  0 20.9M    0  7720    0     0  17601      0  0:20:46 --:--:--  0:20:46 17601100 20.9M  100 20.9M    0     0  19.7M      0  0:00:01  0:00:01 --:--:-- 33.6M
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+  8  112M    8 10.0M    0     0  16.3M      0  0:00:06 --:--:--  0:00:06 16.3M 54  112M   54 61.1M    0     0  38.5M      0  0:00:02  0:00:01  0:00:01 52.6M100  112M  100  112M    0     0  48.8M      0  0:00:02  0:00:02 --:--:-- 60.6M
+Install Alt-Ergo 2.6.4...Install Z3 5.1.0...Install CVC4 1.8...Install CVC5 1.4.1...Generating <cache>/creusot/config/creusot/why3.conf
+Error: `cargo metadata` exited with an error: error: could not find `Cargo.toml` in `<harness>` or any parent directory
+
+alt-ergo
+cvc4
+cvc5
+why3
+why3find
+z3
+creusot: 0 rust: 1.5G

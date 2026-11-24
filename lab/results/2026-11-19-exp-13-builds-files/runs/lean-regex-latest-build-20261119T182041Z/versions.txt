@@ -1,0 +1,29 @@
+$ (cd <bench-workdir>/work/build/lean-regex-latest && ELAN_HOME=<bench-workdir>/work/switches/elan PATH=<bench-workdir>/work/switches/elan/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 lean +leanprover/lean4:v4.36.0 --version)
+Lean (version 4.36.0, x86_64-unknown-linux-gnu, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+# exit 0
+
+$ (cd <bench-workdir>/work/build/lean-regex-latest && ELAN_HOME=<bench-workdir>/work/switches/elan PATH=<bench-workdir>/work/switches/elan/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 lake +leanprover/lean4:v4.36.0 --version)
+Lake version 5.0.0-src+611c117 (Lean version 4.36.0)
+# exit 0
+
+$ (cd <bench-workdir>/work/build/lean-regex-latest && timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 git rev-parse HEAD)
+32af6f33d80e1dad2b072da6981da58e92b08b9e
+# exit 0
+
+$ (cd <bench-workdir>/work/build/lean-regex-latest && timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 git status --short)
+ M correctness/lake-manifest.json
+ M correctness/lakefile.toml
+ M correctness/lean-toolchain
+ M regex/Regex/Data/SparseSet/Bijection.lean
+ M regex/lean-toolchain
+# exit 0
+
+$ (cd <bench-workdir>/work/build/lean-regex-latest && timeout --kill-after=60 300 taskset --cpu-list 16-19 nice -n 10 git diff --stat)
+ correctness/lake-manifest.json            | 25 +++++++++++++------------
+ correctness/lakefile.toml                 |  2 +-
+ correctness/lean-toolchain                |  2 +-
+ regex/Regex/Data/SparseSet/Bijection.lean | 11 ++++++++++-
+ regex/lean-toolchain                      |  2 +-
+ 5 files changed, 26 insertions(+), 16 deletions(-)
+# exit 0
+
