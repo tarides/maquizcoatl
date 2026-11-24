@@ -622,11 +622,15 @@ It is numbered 12 as in the issue body:
     reduced to the product of the two counts
     (`onig_reduce_nested_quantifier`,
     `upstream/src/regparse.c:4449-4455`), and the pattern is rejected
-    with `ONIGERR_TOO_BIG_NUMBER_FOR_REPEAT_RANGE` (-201) only when the
-    product overflows a C `int` (`onig_positive_int_multiply`,
-    `upstream/src/regcomp.c:345-353`). Each written interval stays
-    bounded by `ONIG_MAX_REPEAT_NUM` (100,000). The spec states the
-    bound 2^31-1 on the reduced count explicitly, as a resource limit.
+    with `ONIGERR_TOO_BIG_NUMBER_FOR_REPEAT_RANGE` (-201) iff
+    `outer >= (2^31-1) div inner`, equivalently
+    `(outer+1) x inner > 2^31-1` (`onig_positive_int_multiply` tests
+    `x < INT_MAX / y`, `upstream/src/regcomp.c:345-353`); for example
+    `x{100000}{21474}` (product 2,147,400,000) is rejected. Each
+    written interval stays bounded by `ONIG_MAX_REPEAT_NUM` (100,000).
+    The spec states this test on the reduced count explicitly, as a
+    resource limit. (Wording corrected after the run 3 review; the
+    test itself is unchanged since run 2.)
     No deviation entry: S2 agrees with C on
     `upstream/test/test_utf8.c:1461` (-122, the lookbehind length
     check) and on `:1770-1772` (-201).

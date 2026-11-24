@@ -602,11 +602,13 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
   (* each interval is bounded on its own by ONIG_MAX_REPEAT_NUM
      (upstream/src/regparse.c:4667, :4686).  A fixed interval directly
      on a fixed interval is reduced to the product of the two counts by
-     onig_reduce_nested_quantifier, which fails with -201 only when the
-     product overflows a C int (onig_positive_int_multiply,
-     upstream/src/regparse.c:4449-4455, upstream/src/regcomp.c:345-352).
-     Decision 12 of issue #28: upstream's rule, no deviation; 2^31-1 on
-     the reduced count is a resource limit (run 1's 100,000 dropped). *)
+     onig_reduce_nested_quantifier, which fails with -201 iff
+     outer >= (2^31-1) div inner, i.e. (outer+1) * inner > 2^31-1
+     (onig_positive_int_multiply tests x < INT_MAX / y,
+     upstream/src/regparse.c:4449-4455, upstream/src/regcomp.c:345-353);
+     e.g. x{100000}{21474} (product 2,147,400,000) is rejected.
+     Decision 12 of issue #28: upstream's rule, no deviation; that test
+     on the reduced count is a resource limit (run 1's 100,000 dropped). *)
   let mk_rep mn mx greedy poss t =
     (match t with
      | PRep (a, b, _, _, _) when a = b && mn = mx && mn > 0 && a > 0
