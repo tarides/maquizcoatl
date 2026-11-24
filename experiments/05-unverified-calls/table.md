@@ -250,8 +250,9 @@ callee assumptions, how two read controls fail).
 - VST: `clightgen` (C to Clight, unproven) and the ABI agreement between
   CompCert's object and GCC's `caller.c` stay in the trusted toolchain.
 - Callout postcondition: Why3 (ghost trace), Verus (ghost value), Aeneas
-  (`hcall`) and Isabelle-LLVM (predicate `Q`) tie the result to the value
-  the callee returned. Pulse and VST only say that there is some `int`
+  (`hcall`), Isabelle-LLVM (predicate `Q`) and Bedrock2 (the trace in
+  `spec_of_callout_step`) tie the result to the value the callee
+  returned. Pulse and VST only say that there is some `int`
   `r` with result = rule(dir, r); the code calls the callee once and
   applies the rule to its result, but the specification does not name
   that value.
