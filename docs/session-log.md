@@ -211,3 +211,19 @@ yet: it waits for the CPU set it may use on the bench host.
   function-pointer limit in Isabelle-LLVM (it can call named C
   functions), and in experiment #8 a peak-memory rule the reviewer
   misread, which a recomputation of all 16 cells settled.
+
+## 2026-11-24: experiment #5 closed
+
+- **Experiment #5 (calls to unverified code)** is done and merged
+  (PR #21). Taken back into the pipeline on 2026-11-21, it ran four more
+  milestones on the bench host: every one of the 14 tool rows now has a
+  verdict, and no stack is eliminated. Only hax's Rocq backend fails;
+  hax's Lean backend was not run, by decision. The trusted code ranges
+  from 22 lines (CN) to 152 (RefinedRust). Pulse, VST and RefinedC can
+  lend the subject read-only; the others lend it whole or through
+  trusted glue.
+- Two follow-ups remain: the upstream report of the F\* eta-reduction
+  miscompilation (issue #29, drafted, awaiting the maintainer's
+  approval) and an Isabelle-LLVM model of the C client (issue #30).
+  Experiment #9's tool choice and experiment #6's milestone 2 (issue
+  #28) no longer wait on anything.
