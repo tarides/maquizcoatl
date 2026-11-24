@@ -1,0 +1,7 @@
+id	options	pattern	subject	debug	asan	asan_same	sanitizer
+fl01	FIND_LONGEST	\w+	abc defg hij	M 4-8	M 4-8	yes	none
+fl02	FIND_LONGEST	\w+	ab cd ef	M 0-2	M 0-2	yes	none
+fl03	FIND_LONGEST	a|bcd	abcd	M 1-4	M 1-4	yes	none
+fl04	FIND_LONGEST	a|ab	ab	M 0-2	M 0-2	yes	none
+fl05	NONE	a|bcd	abcd	M 0-1	M 0-1	yes	none
+fl06	NONE	a|ab	ab	M 0-1	M 0-1	yes	none

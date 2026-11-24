@@ -1,0 +1,2 @@
+'Longest.longest_no_shorter' depends on axioms: [propext, Quot.sound]
+'Longest.fl01' depends on axioms: [propext]
