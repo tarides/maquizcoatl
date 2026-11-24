@@ -250,7 +250,8 @@ let step (s:list int) (ln:int) (refs:list int) (st:state) : state =
      | INode (Alt a b) :: k -> Run (INode a :: k) pos rest cs (Frame (INode b :: k) pos rest cs :: bt)
      | INode (Rep mn mx g a) :: k -> rep mn mx g a 0 k pos rest cs bt
      | IIter mn mx g a c p0 c0 :: k ->
-       if c > mn && mx < 0 && pos = p0 && same_refs refs cs c0 then Run k pos rest cs bt
+       (* DEV-008: every loop, bounded or not, also below mn (run 2) *)
+       if pos = p0 && same_refs refs cs c0 then Run k pos rest cs bt
        else rep mn mx g a c k pos rest cs bt
      | INode (Atomic a) :: k -> Run (INode a :: ICut bt :: k) pos rest cs bt
      | ICut bt0 :: k -> Run k pos rest cs bt0

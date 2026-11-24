@@ -13,13 +13,13 @@
 
    The interpreter is a semantics, not a VM: a backtracking search over
    a list of pending items in Oniguruma's priority order.  Captures keep
-   the last iteration.  The empty-iteration rule is DEV-003's
-   (spec/deviations.md): after an optional iteration of an unbounded
-   loop that matched the empty string, the loop stops unless a capture
-   changed during that iteration; only backreferenced groups are
-   compared, the form DEV-003 lists as observably equal (it avoids an
-   exponential search on loops such as (b|)+ whose groups are never
-   referenced).  Atomic groups, possessive quantifiers
+   the last iteration.  The empty-iteration rule is DEV-008's
+   (spec/deviations.md, superseding DEV-003; run 2): after an iteration
+   of any loop, bounded or not and also below its minimum, that matched
+   the empty string, the loop stops unless a group referenced by some
+   backreference of the pattern changed during that iteration (only
+   backreferenced groups are compared: comparing every group of the
+   body is exponential on loops such as (b|)+).  Atomic groups, possessive quantifiers
    and lookaround bodies commit to their first success.  Lookbehind
    tries, for each top-level alternative in order, the nearest start
    first (upstream/src/regexec.c:4481-4504).  Captures are allowed in a
@@ -198,6 +198,7 @@ let err_invalid_group_name = -215
 let err_undefined_name_ref = -217
 let err_invalid_prop_name = -223
 let err_invalid_code_point = -400
+let err_too_long_wide_char = -212
 let max_repeat = 100000
 let look_behind_max = 65535
 
@@ -288,19 +289,85 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
   let check_cp v =
     if v > 0x10ffff || (v >= 0xd800 && v <= 0xdfff) then raise (Invalid err_invalid_code_point);
     v in
-  (* \x{...}, \o{...}: one code point; lists are outside S2 *)
+  (* \x{...}, \o{...}: one code point, or a code point list
+     (experiment #6 milestone 2, run 2: decision 9 on issue #28).  The
+     list "\x{61 62}" is the code points one after the other, each one a
+     token of its own, as upstream's [code_point_continue]
+     (upstream/src/regparse.c:5297-5313, :5583-5594); in a class, "-"
+     between two code points of the list is a range
+     (get_next_code_point, :3864-3897).  The list is validated first, as
+     check_code_point_sequence and check_code_point_sequence_cc do
+     (:3747-3861).  The code points after the first wait in [pend]:
+     `P v (a code point) or `D (a range dash, in a class only). *)
   let no_check = ref false in
-  let parse_brace base digitval maxd =
-    incr pos;
+  let pend : [ `P of int | `D ] list ref = ref [] in
+  let scan_num base digitval maxd =
+    (* at most maxd digits, at least one *)
     let v = ref 0 and k = ref 0 in
-    while not (eof ()) && digitval (peek ()) >= 0 do
-      v := !v * base + digitval (peek ()); incr k; incr pos;
-      if !k > maxd then raise (Out "\\x{} too long")
+    while !k < maxd && not (eof ()) && digitval (peek ()) >= 0 do
+      v := !v * base + digitval (peek ()); incr k; incr pos
     done;
-    if !k = 0 then raise (Out "\\x{} form");
+    if !k = 0 then raise (Invalid err_invalid_code_point);
+    !v in
+  let is_div c = c = 32 || c = 10 in
+  (* the rest of a list, pos after its first number; in_cc: a class,
+     with [range] true when the list completes a range "x-\x{..}" *)
+  let cp_seq base digitval maxd ~in_cc ~range =
+    let els = ref [] and end_digit = ref false in
+    (* 0: empty, 1: start (a code point can open a range), 2: range *)
+    let state = ref (if range then 0 else 1) in
+    let fin = ref false in
+    while not !fin do
+      if eof () then raise (Invalid err_invalid_code_point);
+      let c = ref (peek ()) in incr pos;
+      let rec go () =
+        if !c = Char.code '}' then begin
+          if in_cc && !state = 2 then raise (Invalid err_invalid_code_point);
+          fin := true
+        end
+        else if !c = Char.code '-' && in_cc then begin
+          if !state <> 1 then raise (Invalid err_invalid_code_point);
+          if eof () then raise (Invalid err_invalid_code_point);
+          end_digit := false; state := 2; els := `D :: !els
+        end
+        else begin
+          pos := !pos - 1;
+          let v = scan_num base digitval maxd in
+          els := `P (if !no_check then v else check_cp v) :: !els;
+          end_digit := true;
+          state := if !state = 2 then 0 else 1
+        end in
+      if !c = Char.code '}' then go ()
+      else if is_div !c then begin
+        while not (eof ()) && is_div (peek ()) do incr pos done;
+        if eof () then raise (Invalid err_invalid_code_point);
+        c := peek (); incr pos; go ()
+      end
+      else if !c = Char.code '-' && in_cc then go ()
+      else if !end_digit then begin
+        if digitval !c >= 0 then raise (Invalid err_too_long_wide_char);
+        raise (Invalid err_invalid_code_point)
+      end
+      else go ()
+    done;
+    List.rev !els in
+  let parse_brace ?(in_cc = false) ?(range = false) base digitval maxd =
+    incr pos;
+    let st = !pos in
+    let v = ref 0 and k = ref 0 in
+    while !k < maxd && not (eof ()) && digitval (peek ()) >= 0 do
+      v := !v * base + digitval (peek ()); incr k; incr pos
+    done;
+    if not (eof ()) && digitval (peek ()) >= 0 then raise (Invalid err_too_long_wide_char);
+    if !pos = st then raise (Out "\\x{} form");
     if eof () then raise (Invalid err_invalid_code_point);
-    if peek () <> Char.code '}' then raise (Out "\\x{..}/\\o{..} code point list");
-    incr pos; if !no_check then !v else check_cp !v in
+    let v = if !no_check then !v else check_cp !v in
+    if peek () = Char.code '}' then (incr pos; v)
+    else begin
+      let els = cp_seq base digitval maxd ~in_cc ~range in
+      if els = [] then raise (Invalid err_invalid_code_point);
+      pend := els; v
+    end in
   (* raw bytes \xHH >= 0x80: collect consecutive ones into a character *)
   let raw_bytes first =
     let b = Buffer.create 4 in
@@ -314,8 +381,8 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
     done;
     if Buffer.length b < l then raise (Invalid err_too_short_mb);
     match decode (Buffer.contents b) 0 with Some (c, _) -> c | None -> raise (Invalid err_too_short_mb) in
-  let parse_hex () =
-    if peek () = Char.code '{' then parse_brace 16 hexval 8
+  let parse_hex ?(in_cc = false) ?(range = false) () =
+    if peek () = Char.code '{' then parse_brace ~in_cc ~range 16 hexval 8
     else begin
       let v = ref 0 and k = ref 0 in
       while !k < 2 && not (eof ()) && hexval (peek ()) >= 0 do
@@ -349,7 +416,7 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
     end
     else None in
   (* escapes common to both contexts; returns `C cp | `S cset *)
-  let parse_escape ~in_cc =
+  let parse_escape ?(range = false) ~in_cc () =
     if eof () then raise (Invalid err_end_pattern_at_escape);
     let c = peek () in
     if c >= 0x80 then `C (read_cp ())
@@ -358,14 +425,14 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
       match Char.chr c with
       | 't' -> `C 9 | 'n' -> `C 10 | 'r' -> `C 13 | 'f' -> `C 12 | 'e' -> `C 27
       | 'a' -> `C 7 | 'v' -> `C 11
-      | 'x' -> `C (parse_hex ())
+      | 'x' -> `C (parse_hex ~in_cc ~range ())
       | 'u' ->
         let v = ref 0 in
         for _ = 1 to 4 do
           if eof () || hexval (peek ()) < 0 then raise (Invalid err_invalid_code_point);
           v := !v * 16 + hexval (peek ()); incr pos
         done; `C (check_cp !v)
-      | 'o' when peek () = Char.code '{' -> `C (parse_brace 8 octval 11)
+      | 'o' when peek () = Char.code '{' -> `C (parse_brace ~in_cc ~range 8 octval 11)
       | '0' ->
         let v = ref 0 and k = ref 0 in
         while !k < 2 && octval (peek ()) >= 0 do v := !v * 8 + octval (peek ()); incr k; incr pos done;
@@ -390,6 +457,17 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
     let add s = items := s :: !items in
     let flush () = (match !prev with `Ch p -> add (CR (p, p)) | _ -> ()); prev := `None in
     while not !fin do
+      match !pend with
+      | `P v :: t -> pend := t; flush (); prev := `Ch v; first := false
+      | `D :: `P hi :: t ->
+        pend := t;
+        (match !prev with
+         | `Ch lo ->
+           if hi < lo then raise (Invalid err_empty_range_cc);
+           add (CR (lo, hi)); prev := `None
+         | _ -> raise (Invalid err_invalid_code_point))
+      | `D :: _ -> raise (Invalid err_invalid_code_point)
+      | [] ->
       if eof () then raise (Invalid err_premature_end_cc);
       let c = peek () in
       if c = Char.code ']' && not !first then (incr pos; fin := true)
@@ -409,7 +487,7 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
           end
           else if c = Char.code '\\' then begin
             incr pos;
-            match parse_escape ~in_cc:true with `C v -> `Ch v | `S s -> `Set s
+            match parse_escape ~in_cc:true () with `C v -> `Ch v | `S s -> `Set s
           end
           else if c = Char.code '-' then begin
             incr pos;
@@ -426,7 +504,7 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
                     if d = Char.code '\\' then begin
                       incr pos;
                       no_check := true;
-                      let r = parse_escape ~in_cc:true in
+                      let r = parse_escape ~range:true ~in_cc:true () in
                       no_check := false;
                       match r with
                       | `C v -> v | `S _ -> raise (Out "class range to a ctype")
@@ -521,12 +599,19 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
         end else None in
     (match r with None -> pos := save | Some _ -> ());
     r in
+  (* each interval is bounded on its own by ONIG_MAX_REPEAT_NUM
+     (upstream/src/regparse.c:4667, :4686).  A fixed interval directly
+     on a fixed interval is reduced to the product of the two counts by
+     onig_reduce_nested_quantifier, which fails with -201 only when the
+     product overflows a C int (onig_positive_int_multiply,
+     upstream/src/regparse.c:4449-4455, upstream/src/regcomp.c:345-352).
+     Run 2 replaces run 1's threshold (a product above 100,000), which
+     had no upstream source. *)
   let mk_rep mn mx greedy poss t =
-    (* nested fixed repeats multiply (upstream's reduction) *)
     (match t with
-     | PRep (a, b, _, _, _) when a = b && mn = mx && mn > 0 && a > 0 && a * mn > max_repeat ->
+     | PRep (a, b, _, _, _) when a = b && mn = mx && mn > 0 && a > 0
+                                 && not (mn < 2147483647 / a) ->
        raise (Invalid err_too_big_repeat)
-     | PGroup (_, _, PRep (a, b, _, _, _)) when false && a = b -> ()
      | _ -> ());
     PRep (mn, mx, greedy, poss, t) in
   let rec parse_alt o =
@@ -536,10 +621,10 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
   and parse_seq o =
     let items = ref [] and stop = ref false and o = ref o in
     while not !stop do
-      skip_ext !o;
-      if eof () then stop := true
+      if !pend = [] then skip_ext !o;
+      if !pend = [] && eof () then stop := true
       else begin
-        let c = peek () in
+        let c = if !pend <> [] then 0 else peek () in
         if c = Char.code '|' || c = Char.code ')' then stop := true
         else if c = Char.code '*' || c = Char.code '+' || c = Char.code '?' then
           raise (Invalid err_target_of_repeat_not_specified)
@@ -565,6 +650,7 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
     | [] -> PNode Eps
     | x :: t -> List.fold_left (fun acc y -> PCat (y, acc)) x t
   and parse_quants o atom quantifiable =
+    if !pend <> [] then atom else begin
     skip_ext o;
     let c = peek () in
     let q =
@@ -591,6 +677,7 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
           (incr pos; mk_rep lo hi true true atom)
         else mk_rep lo hi true false atom in
       parse_quants o node true
+    end
   and group_name close =
     let st = !pos in
     while not (eof ()) && peek () <> Char.code close do incr pos done;
@@ -632,6 +719,10 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
     | Some `Iso -> `Opt !o
     | _ -> let b = parse_alt !o in `Atom (close_group !o b, true)
   and parse_atom o : [ `Opt of opts | `Comment | `Atom of pre * bool ] =
+    match !pend with
+    | `P v :: t -> pend := t; `Atom (PNode (lit_node o [ v ]), true)
+    | `D :: _ -> raise (Invalid err_invalid_code_point)
+    | [] ->
     let c = peek () in
     if c = Char.code '(' then begin
       incr pos;
@@ -736,7 +827,7 @@ let parse (syn : syntax) (opt0 : opts) (pat : string) : node * int =
       | 'R' | 'N' | 'O' | 'K' -> raise (Out (Printf.sprintf "\\%c" d))
       | 'Q' when syn = PerlNG -> raise (Out "\\Q")
       | _ ->
-        (match parse_escape ~in_cc:false with
+        (match parse_escape ~in_cc:false () with
          | `C v -> `Atom (PNode (lit_node o [ v ]), true)
          | `S s -> `Atom (PNode (cls_node o s), true))
     end
@@ -929,9 +1020,11 @@ let anchor_ok s a pos =
   | WordB -> word_before s pos <> word_at s pos
   | NotWordB -> word_before s pos = word_at s pos
 
-(* DEV-003, in its observably equal form ("select only groups referenced
-   by some backreference, inside or outside the loop"): an empty
-   iteration stops the loop unless a backreferenced group changed in it.
+(* DEV-008 (supersedes DEV-003): after an iteration of any loop that
+   ended where it started, the loop stops unless a group referenced by
+   some backreference of the pattern (inside or outside the loop)
+   changed in it; this holds for bounded loops and below the minimum
+   too, as upstream's empty check (upstream/src/regcomp.c:5681-5688).
    [cur_refs] holds the backreferenced groups of the current pattern. *)
 let cur_refs : int list ref = ref []
 
@@ -944,6 +1037,19 @@ let rec brefs = function
   | Rep (_, _, _, a) | Atomic a | Ahead (_, a) | Group (_, a) -> brefs a
   | Behind (_, l) -> List.concat_map brefs l
   | _ -> []
+
+(* evidence only (run 2, DEV-008): with G2_EMPTY_ALL_GROUPS=1 the empty
+   check compares every group of the pattern, which is DEV-003's literal
+   form (a group outside a loop cannot change during one of its
+   iterations, so this is "every group of the loop body") *)
+let rec groups_of = function
+  | Group (k, a) -> k :: groups_of a
+  | Cat (a, b) | Alt (a, b) -> groups_of a @ groups_of b
+  | Rep (_, _, _, a) | Atomic a | Ahead (_, a) -> groups_of a
+  | Behind (_, l) -> List.concat_map groups_of l
+  | _ -> []
+
+let empty_all_groups = Sys.getenv_opt "G2_EMPTY_ALL_GROUPS" = Some "1"
 
 let rec step s fuel items pos (caps : caps) =
   if fuel = 0 then NoFuel
@@ -981,7 +1087,8 @@ let rec step s fuel items pos (caps : caps) =
        | r -> r)
     | Node (Rep (mn, mx, g, a)) :: k -> rep s fuel mn mx g a 0 k pos caps
     | Iter (mn, mx, g, a, c, p0, c0) :: k ->
-      if c > mn && mx < 0 && pos = p0 && same_refs caps c0 then step s fuel k pos caps
+      (* DEV-008: every loop, bounded or not, and below [mn] too *)
+      if pos = p0 && same_refs caps c0 then step s fuel k pos caps
       else rep s fuel mn mx g a c k pos caps
     | Node (Atomic a) :: k ->
       (match step s fuel [ Node a ] pos caps with
@@ -1049,7 +1156,7 @@ and behind s fuel alts i caps =
 let fuel0 = 10_000_000
 
 let search re (s : string) =
-  cur_refs := List.sort_uniq compare (brefs re);
+  cur_refs := List.sort_uniq compare (if empty_all_groups then groups_of re else brefs re);
   let len = String.length s in
   let rec go start =
     if start > len then `Mismatch else

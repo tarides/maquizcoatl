@@ -16,9 +16,10 @@ only the ctypes the emitted cases use plus the word ctype (12, for \\b):
 decision trees (no list constant), with the same interface.
 
 usage: python3 -I gen2.py IN-S2.tsv ORACLE.txt TABLES.txt OUTDIR [HEAVY]
-writes OUTDIR/{restricted,full}/{tables.mlw,Tables.fst}, OUTDIR/cases.mlw,
-OUTDIR/Cases.fst, OUTDIR/ids.txt, OUTDIR/used-ctypes.txt; with HEAVY,
-also OUTDIR/heavy/{cases.mlw,Cases.fst,ids.txt}: the property-heavy cases
+writes OUTDIR/{restricted,full}/{tables.mlw,Tables.fst,Tables.v,Tables.lean},
+OUTDIR/{cases.mlw,Cases.fst,Cases.v,Cases.lean}, OUTDIR/ids.txt,
+OUTDIR/used-ctypes.txt (Rocq and Lean modules: run 2); with HEAVY,
+also OUTDIR/heavy/{cases.mlw,Cases.fst,Cases.v,Cases.lean,ids.txt}: the property-heavy cases
 (those whose AST holds a property or ctype other than a POSIX/ASCII
 ctype set by '.', i.e. any CP node).
 """
@@ -233,6 +234,92 @@ def f_node(n):
     if op == "anc": return f"(Anc {FANC[n[1]]})"
     raise ValueError(op)
 
+# ---- Rocq printers (run 2) --------------------------------------------
+
+RANC = ANC
+
+
+def r_nlist(xs):
+    """a list of N"""
+    return "[" + "; ".join(str(x) for x in xs) + "]%N"
+
+
+def r_list(xs):
+    return "[" + "; ".join(xs) + "]"
+
+
+def r_cs(cs):
+    if cs[0] == "r": return f"(CR {cs[1]} {cs[2]})"
+    if cs[0] == "p": return f"(CP {cs[1]})"
+    if cs[0] == "not": return f"(CNot {r_cs(cs[1])})"
+    if cs[0] == "or": return f"(COr {r_list([r_cs(c) for c in cs[1]])})"
+    if cs[0] == "and": return f"(CAnd {r_cs(cs[1])} {r_cs(cs[2])})"
+
+
+def r_node(n):
+    op = n[0]
+    if op == "eps": return "Eps"
+    if op == "lit": return f"(Lit {r_nlist(n[1])})"
+    if op == "liti": return f"(LitI {r_nlist(n[1])})"
+    if op == "cls": return f"(Cls {r_cs(n[1])})"
+    if op == "clsi": return f"(ClsI {r_cs(n[1])} {r_list([r_nlist(m) for m in n[2]])})"
+    if op == "cat": return f"(Cat {r_node(n[1])} {r_node(n[2])})"
+    if op == "alt": return f"(Alt {r_node(n[1])} {r_node(n[2])})"
+    if op == "rep":
+        mx = "None" if n[2] < 0 else f"(Some {n[2]}%N)"
+        return f"(Rep {n[1]} {mx} {'true' if n[3] else 'false'} {r_node(n[4])})"
+    if op == "atomic": return f"(Atomic {r_node(n[1])})"
+    if op == "ahead": return f"(Ahead {'true' if n[1] else 'false'} {r_node(n[2])})"
+    if op == "behind":
+        return f"(Behind {'true' if n[1] else 'false'} {r_list([r_node(a) for a in n[2]])})"
+    if op == "group": return f"(Group {n[1]} {r_node(n[2])})"
+    if op == "bref": return f"(Bref {r_list([str(x) for x in n[1]])} {'true' if n[2] else 'false'})"
+    if op == "anc": return f"(Anc {RANC[n[1]]})"
+    raise ValueError(op)
+
+# ---- Lean printers (run 2) --------------------------------------------
+
+LANC = {"bol": "bol", "eol": "eol", "A": "bufBeg", "z": "bufEnd", "Z": "semiEnd",
+        "G": "searchStart", "b": "wordB", "B": "notWordB"}
+
+
+def l_list(xs):
+    return "[" + ", ".join(xs) + "]"
+
+
+def l_nlist(xs):
+    return l_list([str(x) for x in xs])
+
+
+def l_cs(cs):
+    if cs[0] == "r": return f"(CSet.cr {cs[1]} {cs[2]})"
+    if cs[0] == "p": return f"(CSet.cp {cs[1]})"
+    if cs[0] == "not": return f"(CSet.cnot {l_cs(cs[1])})"
+    if cs[0] == "or": return f"(CSet.cor {l_list([l_cs(c) for c in cs[1]])})"
+    if cs[0] == "and": return f"(CSet.cand {l_cs(cs[1])} {l_cs(cs[2])})"
+
+
+def l_node(n):
+    op = n[0]
+    if op == "eps": return "Node.eps"
+    if op == "lit": return f"(Node.lit {l_nlist(n[1])})"
+    if op == "liti": return f"(Node.litI {l_nlist(n[1])})"
+    if op == "cls": return f"(Node.cls {l_cs(n[1])})"
+    if op == "clsi": return f"(Node.clsI {l_cs(n[1])} {l_list([l_nlist(m) for m in n[2]])})"
+    if op == "cat": return f"(Node.cat {l_node(n[1])} {l_node(n[2])})"
+    if op == "alt": return f"(Node.alt {l_node(n[1])} {l_node(n[2])})"
+    if op == "rep":
+        mx = "none" if n[2] < 0 else f"(some {n[2]})"
+        return f"(Node.rep {n[1]} {mx} {'true' if n[3] else 'false'} {l_node(n[4])})"
+    if op == "atomic": return f"(Node.atomic {l_node(n[1])})"
+    if op == "ahead": return f"(Node.ahead {'true' if n[1] else 'false'} {l_node(n[2])})"
+    if op == "behind":
+        return f"(Node.behind {'true' if n[1] else 'false'} {l_list([l_node(a) for a in n[2]])})"
+    if op == "group": return f"(Node.group {n[1]} {l_node(n[2])})"
+    if op == "bref": return f"(Node.bref {l_nlist(n[1])} {'true' if n[2] else 'false'})"
+    if op == "anc": return f"(Node.anc Anchor.{LANC[n[1]]})"
+    raise ValueError(op)
+
 # ---- tables ---------------------------------------------------------
 
 
@@ -273,6 +360,66 @@ def tree_ranges(rs, ind):
     l = tree_ranges(rs[:m], ind + 1)
     r = tree_ranges(rs[m + 1:], ind + 1)
     return (f"(if c < {lo} then\n{sp}  {l}\n{sp}else if c <= {hi} then true\n{sp}else\n{sp}  {r})")
+
+
+def tree_fold_rl(keys, folds, ind, lang):
+    """balanced decision tree c -> fold list, Rocq ("r") or Lean ("l")"""
+    if not keys:
+        return "[c]"
+    m = len(keys) // 2
+    k = keys[m]
+    v = r_nlist(folds[k]) if lang == "r" else l_nlist(folds[k])
+    lt, eq = ("N.ltb c", "N.eqb c") if lang == "r" else ("c <", "c ==")
+    l = tree_fold_rl(keys[:m], folds, ind + 1, lang)
+    r = tree_fold_rl(keys[m + 1:], folds, ind + 1, lang)
+    sp = "  " * ind
+    return (f"(if {lt} {k} then\n{sp}  {l}\n{sp}else if {eq} {k} then {v}\n{sp}else\n{sp}  {r})")
+
+
+def tree_ranges_rl(rs, ind, lang):
+    if not rs:
+        return "false"
+    m = len(rs) // 2
+    lo, hi = rs[m]
+    sp = "  " * ind
+    lt, le = ("N.ltb c", "N.leb c") if lang == "r" else ("c <", "c ≤")
+    l = tree_ranges_rl(rs[:m], ind + 1, lang)
+    r = tree_ranges_rl(rs[m + 1:], ind + 1, lang)
+    return (f"(if {lt} {lo} then\n{sp}  {l}\n{sp}else if {le} {hi} then true\n{sp}else\n{sp}  {r})")
+
+
+def disp_rl(ps, ind, lang):
+    if not ps: return "false"
+    m = len(ps) // 2
+    sp = "  " * ind
+    lt, eq = ("N.ltb p", "N.eqb p") if lang == "r" else ("p <", "p ==")
+    return (f"(if {lt} {ps[m]} then\n{sp}  {disp_rl(ps[:m], ind + 1, lang)}\n{sp}else if {eq} {ps[m]} then "
+            f"p{ps[m]} c\n{sp}else\n{sp}  {disp_rl(ps[m + 1:], ind + 1, lang)})")
+
+
+HDR = ("generated by cases/gen2.py from tables.txt (Oniguruma f95747b's\n"
+       "   unicode_fold_data.c, unicode_property_data.c and unicode.c;\n"
+       "   Copyright (c) 2002-2025 K.Kosako, BSD-2-Clause; Unicode data)")
+
+
+def rocq_tables(folds, ranges, props):
+    o = [f"(* {HDR} *)\nFrom Stdlib Require Import List NArith.\nImport ListNotations.\n\n"]
+    o.append("Definition fold_of (c : N) : list N :=\n  " +
+             tree_fold_rl(sorted(folds), folds, 1, "r") + ".\n\n")
+    for p in props:
+        o.append(f"Definition p{p} (c : N) : bool :=\n  {tree_ranges_rl(ranges[p], 1, 'r')}.\n\n")
+    o.append("Definition in_prop (p c : N) : bool :=\n  " + disp_rl(sorted(props), 1, "r") + ".\n")
+    return "".join(o)
+
+
+def lean_tables(folds, ranges, props):
+    o = [f"/- {HDR} -/\nnamespace Tables\n\n"]
+    o.append("def foldOf (c : Nat) : List Nat :=\n  " +
+             tree_fold_rl(sorted(folds), folds, 1, "l") + "\n\n")
+    for p in props:
+        o.append(f"def p{p} (c : Nat) : Bool :=\n  {tree_ranges_rl(ranges[p], 1, 'l')}\n\n")
+    o.append("def inProp (p c : Nat) : Bool :=\n  " + disp_rl(sorted(props), 1, "l") + "\n\nend Tables\n")
+    return "".join(o)
 
 
 def why3_tables(folds, ranges, props):
@@ -356,6 +503,39 @@ def fstar_cases(cases):
     return "".join(o)
 
 
+CHUNK = 50
+
+
+def rocq_cases(cases):
+    o = ["(* generated by cases/gen2.py *)\nFrom Stdlib Require Import List NArith.\n"
+         "From S Require Import Spec2.\nImport ListNotations.\n\n"]
+    names = []
+    for j in range(0, len(cases), CHUNK):
+        names.append(f"cases{j // CHUNK}")
+        o.append(f"Definition {names[-1]} : list case := [\n")
+        o.append(";\n".join(
+            f"  ({n}, {r_list([str(x) for x in refs])}, {r_node(a)}, {r_nlist(s)}, "
+            f"{r_list([str(x) for x in e])})"
+            for _, n, refs, a, s, e in cases[j:j + CHUNK]))
+        o.append("\n].\n\n")
+    o.append("Definition cases : list case :=\n  " + " ++\n  ".join(names or ["[]"]) + ".\n")
+    return "".join(o)
+
+
+def lean_cases(cases):
+    o = ["-- generated by cases/gen2.py\nimport Spec2\nopen Spec2\n\n"]
+    names = []
+    for j in range(0, len(cases), CHUNK):
+        names.append(f"cases{j // CHUNK}")
+        o.append(f"def {names[-1]} : List Case := [\n")
+        o.append(",\n".join(
+            f"  ({n}, {l_nlist(refs)}, {l_node(a)}, {l_nlist(s)}, {l_nlist(e)})"
+            for _, n, refs, a, s, e in cases[j:j + CHUNK]))
+        o.append("\n]\n\n")
+    o.append("def cases : List Case :=\n  " + " ++\n  ".join(names or ["[]"]) + "\n")
+    return "".join(o)
+
+
 def main():
     inf, orf, tbf, out = sys.argv[1:5]
     heavy = len(sys.argv) > 5
@@ -377,12 +557,16 @@ def main():
         os.makedirs(f"{out}/{kind}", exist_ok=True)
         open(f"{out}/{kind}/tables.mlw", "w").write(why3_tables(folds, ranges, props))
         open(f"{out}/{kind}/Tables.fst", "w").write(fstar_tables(folds, ranges, props))
+        open(f"{out}/{kind}/Tables.v", "w").write(rocq_tables(folds, ranges, props))
+        open(f"{out}/{kind}/Tables.lean", "w").write(lean_tables(folds, ranges, props))
     open(f"{out}/used-ctypes.txt", "w").write(" ".join(map(str, sorted(used))) + "\n")
     def write(d, cs):
         os.makedirs(d, exist_ok=True)
         open(f"{d}/ids.txt", "w").write("".join(c[0] + "\n" for c in cs))
         open(f"{d}/cases.mlw", "w").write(why3_cases(cs))
         open(f"{d}/Cases.fst", "w").write(fstar_cases(cs))
+        open(f"{d}/Cases.v", "w").write(rocq_cases(cs))
+        open(f"{d}/Cases.lean", "w").write(lean_cases(cs))
     write(out, cases)
     msg = f"{len(cases)} cases; ctypes used {len(used)}; full table {len(ranges)} ctypes"
     if heavy:
