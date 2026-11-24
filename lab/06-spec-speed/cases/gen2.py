@@ -16,10 +16,11 @@ only the ctypes the emitted cases use plus the word ctype (12, for \\b):
 decision trees (no list constant), with the same interface.
 
 usage: python3 -I gen2.py IN-S2.tsv ORACLE.txt TABLES.txt OUTDIR [HEAVY]
-writes OUTDIR/{restricted,full}/{tables.mlw,Tables.fst,Tables.v,Tables.lean},
-OUTDIR/{cases.mlw,Cases.fst,Cases.v,Cases.lean}, OUTDIR/ids.txt,
-OUTDIR/used-ctypes.txt (Rocq and Lean modules: run 2); with HEAVY,
-also OUTDIR/heavy/{cases.mlw,Cases.fst,Cases.v,Cases.lean,ids.txt}: the property-heavy cases
+writes OUTDIR/{restricted,full}/{tables.mlw,Tables.fst,Tables.v,Tables.lean,
+Tables.thy,tables2.rs}, OUTDIR/{cases.mlw,Cases.fst,Cases.v,Cases.lean,
+Cases.thy,cases2.rs}, OUTDIR/ids.txt, OUTDIR/used-ctypes.txt (Rocq and
+Lean modules: run 2; Isabelle/HOL and Verus modules: run 3); with HEAVY,
+also OUTDIR/heavy/{cases.mlw,...,cases2.rs,ids.txt}: the property-heavy cases
 (those whose AST holds a property or ctype other than a POSIX/ASCII
 ctype set by '.', i.e. any CP node).
 """
@@ -320,6 +321,115 @@ def l_node(n):
     if op == "anc": return f"(Node.anc Anchor.{LANC[n[1]]})"
     raise ValueError(op)
 
+# ---- Isabelle/HOL printers (run 3) ------------------------------------
+
+IANC = {"bol": "BolA", "eol": "EolA", "A": "BufBeg", "z": "BufEnd", "Z": "SemiEnd",
+        "G": "SearchStart", "b": "WordB", "B": "NotWordB"}
+
+
+def i_list(xs):
+    return "[" + ", ".join(xs) + "]"
+
+
+def i_nlist(xs):
+    return i_list([str(x) for x in xs])
+
+
+def i_bool(b):
+    return "True" if b else "False"
+
+
+def i_cs(cs):
+    if cs[0] == "r": return f"(CR {cs[1]} {cs[2]})"
+    if cs[0] == "p": return f"(CP {cs[1]})"
+    if cs[0] == "not": return f"(CNot {i_cs(cs[1])})"
+    if cs[0] == "or": return f"(COr {i_list([i_cs(c) for c in cs[1]])})"
+    if cs[0] == "and": return f"(CAnd {i_cs(cs[1])} {i_cs(cs[2])})"
+
+
+def i_node(n):
+    op = n[0]
+    if op == "eps": return "Eps"
+    if op == "lit": return f"(Lit {i_nlist(n[1])})"
+    if op == "liti": return f"(LitI {i_nlist(n[1])})"
+    if op == "cls": return f"(Cls {i_cs(n[1])})"
+    if op == "clsi": return f"(ClsI {i_cs(n[1])} {i_list([i_nlist(m) for m in n[2]])})"
+    if op == "cat": return f"(Cat {i_node(n[1])} {i_node(n[2])})"
+    if op == "alt": return f"(Alt {i_node(n[1])} {i_node(n[2])})"
+    if op == "rep":
+        mx = "None" if n[2] < 0 else f"(Some {n[2]})"
+        return f"(Rep {n[1]} {mx} {i_bool(n[3])} {i_node(n[4])})"
+    if op == "atomic": return f"(Atomic {i_node(n[1])})"
+    if op == "ahead": return f"(Ahead {i_bool(n[1])} {i_node(n[2])})"
+    if op == "behind": return f"(Behind {i_bool(n[1])} {i_list([i_node(a) for a in n[2]])})"
+    if op == "group": return f"(Group {n[1]} {i_node(n[2])})"
+    if op == "bref": return f"(Bref {i_nlist(n[1])} {i_bool(n[2])})"
+    if op == "anc": return f"(Anc {IANC[n[1]]})"
+    raise ValueError(op)
+
+# ---- Verus (Rust) printers (run 3) --------------------------------------
+
+RSANC = {"bol": 0, "eol": 1, "A": 2, "z": 3, "Z": 4, "G": 5, "b": 6, "B": 7}
+
+
+def rust_arena2(ast):
+    """the pattern as spec2.rs's arena: nodes and side pools, children
+    by index (children before parents)"""
+    a = {k: [] for k in ("nodes", "bytes", "cps", "seqs", "kids", "gidx", "csets", "cidx")}
+
+    def pool(k, xs):
+        st = len(a[k]); a[k].extend(xs); return st, len(xs)
+
+    def cset(cs):
+        if cs[0] == "r": d = f"CSet::Cr({cs[1]}, {cs[2]})"
+        elif cs[0] == "p": d = f"CSet::Cp({cs[1]})"
+        elif cs[0] == "not": d = f"CSet::CNot({cset(cs[1])})"
+        elif cs[0] == "or":
+            ch = [cset(c) for c in cs[1]]
+            st, ln = pool("cidx", [str(x) for x in ch]); d = f"CSet::COr({st}, {ln})"
+        elif cs[0] == "and":
+            x, y = cset(cs[1]), cset(cs[2]); d = f"CSet::CAnd({x}, {y})"
+        a["csets"].append(d)
+        return len(a["csets"]) - 1
+
+    def node(n):
+        op = n[0]
+        if op == "eps": d = "Node::Eps"
+        elif op == "lit":
+            st, ln = pool("bytes", [str(x) for x in n[1]]); d = f"Node::Lit({st}, {ln})"
+        elif op == "liti":
+            st, ln = pool("cps", [str(x) for x in n[1]]); d = f"Node::LitI({st}, {ln})"
+        elif op == "cls": d = f"Node::Cls({cset(n[1])})"
+        elif op == "clsi":
+            c = cset(n[1])
+            ms = [pool("cps", [str(x) for x in m]) for m in n[2]]
+            st, ln = pool("seqs", [f"({x}, {y})" for x, y in ms])
+            d = f"Node::ClsI({c}, {st}, {ln})"
+        elif op in ("cat", "alt"):
+            x, y = node(n[1]), node(n[2])
+            d = f"Node::{'Cat' if op == 'cat' else 'Alt'}({x}, {y})"
+        elif op == "rep":
+            mx = "None" if n[2] < 0 else f"Some({n[2]})"
+            d = f"Node::Rep({n[1]}, {mx}, {'true' if n[3] else 'false'}, {node(n[4])})"
+        elif op == "atomic": d = f"Node::Atomic({node(n[1])})"
+        elif op == "ahead": d = f"Node::Ahead({'true' if n[1] else 'false'}, {node(n[2])})"
+        elif op == "behind":
+            ch = [node(x) for x in n[2]]
+            st, ln = pool("kids", [str(x) for x in ch])
+            d = f"Node::Behind({'true' if n[1] else 'false'}, {st}, {ln})"
+        elif op == "group": d = f"Node::Group({n[1]}, {node(n[2])})"
+        elif op == "bref":
+            st, ln = pool("gidx", [str(x) for x in n[1]])
+            d = f"Node::Bref({st}, {ln}, {'true' if n[2] else 'false'})"
+        elif op == "anc": d = f"Node::Anc({RSANC[n[1]]})"
+        else: raise ValueError(op)
+        a["nodes"].append(d)
+        return len(a["nodes"]) - 1
+
+    root = node(ast)
+    return a, root
+
+
 # ---- tables ---------------------------------------------------------
 
 
@@ -459,6 +569,92 @@ def fstar_tables(folds, ranges, props):
     o.append("let in_prop (p c:int) : bool =\n  " + disp(sorted(props), 1) + "\n")
     return "".join(o)
 
+ICHUNK = 32
+
+
+def isa_tree(keys, mk, leaf, empty, name, defs, ret, arg="c"):
+    """balanced decision tree over sorted keys as Isabelle definitions:
+    subtrees of at most ICHUNK keys become definitions of their own, so
+    that no term is large (Isabelle's inner syntax)"""
+    def go(ks, top):
+        if not ks:
+            return empty
+        if len(ks) <= ICHUNK and not top:
+            nm = f"{name}_{len(defs)}"
+            body = inline(ks, 1)
+            defs.append(f'definition {nm} :: "nat \\<Rightarrow> {ret}" where\n'
+                        f'  "{nm} {arg} = {body}"\n\n')
+            return f"{nm} {arg}"
+        m = len(ks) // 2
+        return mk(ks[m], go(ks[:m], False), go(ks[m + 1:], False))
+    def inline(ks, ind):
+        if not ks:
+            return empty
+        m = len(ks) // 2
+        return mk(ks[m], inline(ks[:m], ind + 1), inline(ks[m + 1:], ind + 1))
+    return go(keys, True)
+
+
+def isa_tables(folds, ranges, props):
+    defs = []
+    o = [f"(* {HDR} *)\ntheory Tables\n  imports Main \"HOL-Library.Code_Target_Numeral\"\nbegin\n\n"]
+    fk = sorted(folds)
+    fmk = lambda k, l, r: (f"(if c < {k} then {l} else if c = {k} then {i_nlist(folds[k])} else {r})")
+    root = isa_tree(fk, fmk, None, "[c]", "fold_t", defs, "nat list")
+    o.extend(defs); defs.clear()
+    o.append(f'definition fold_of :: "nat \\<Rightarrow> nat list" where\n  "fold_of c = {root}"\n\n')
+    for p in props:
+        rs = ranges[p]
+        rmk = lambda r, l, rr: (f"(if c < {r[0]} then {l} else if c \\<le> {r[1]} then True else {rr})")
+        root = isa_tree(rs, rmk, None, "False", f"p{p}_t", defs, "bool")
+        o.extend(defs); defs.clear()
+        o.append(f'definition p{p} :: "nat \\<Rightarrow> bool" where\n  "p{p} c = {root}"\n\n')
+    def disp(ps):
+        if not ps: return "False"
+        m = len(ps) // 2
+        return (f"(if p < {ps[m]} then {disp(ps[:m])} else if p = {ps[m]} then p{ps[m]} c "
+                f"else {disp(ps[m + 1:])})")
+    o.append('definition in_prop :: "nat \\<Rightarrow> nat \\<Rightarrow> bool" where\n'
+             f'  "in_prop p c = {disp(sorted(props))}"\n\nend\n')
+    return "".join(o)
+
+
+def rust_tables(folds, ranges, props):
+    o = [f"// {HDR.replace(chr(10) + '   ', chr(10) + '// ')}\nuse vstd::prelude::*;\n\nverus! {{\n\n"]
+    def ftree(ks, ind):
+        sp = "    " * ind
+        if not ks:
+            return "(c, 0, 0, 1)"
+        m = len(ks) // 2
+        k = ks[m]
+        v = folds[k]
+        assert 1 <= len(v) <= 3, (k, v)
+        w = v + [0] * (3 - len(v))
+        return (f"if c < {k} {{\n{sp}    {ftree(ks[:m], ind + 1)}\n{sp}}} else if c == {k} {{ "
+                f"({w[0]}, {w[1]}, {w[2]}, {len(v)}) }} else {{\n{sp}    {ftree(ks[m + 1:], ind + 1)}\n{sp}}}")
+    o.append("#[verifier::external_body]\npub fn fold_of(c: u32) -> (r: (u32, u32, u32, usize))\n"
+             "    ensures r.3 <= 3,\n{\n    " + ftree(sorted(folds), 1) + "\n}\n\n")
+    def rtree(rs, ind):
+        sp = "    " * ind
+        if not rs:
+            return "false"
+        m = len(rs) // 2
+        lo, hi = rs[m]
+        return (f"if c < {lo} {{\n{sp}    {rtree(rs[:m], ind + 1)}\n{sp}}} else if c <= {hi} {{ true }} "
+                f"else {{\n{sp}    {rtree(rs[m + 1:], ind + 1)}\n{sp}}}")
+    for p in props:
+        o.append(f"#[verifier::external_body]\nfn p{p}(c: u32) -> bool {{\n    {rtree(ranges[p], 1)}\n}}\n\n")
+    def disp(ps, ind):
+        sp = "    " * ind
+        if not ps: return "false"
+        m = len(ps) // 2
+        return (f"if p < {ps[m]} {{\n{sp}    {disp(ps[:m], ind + 1)}\n{sp}}} else if p == {ps[m]} {{ "
+                f"p{ps[m]}(c) }} else {{\n{sp}    {disp(ps[m + 1:], ind + 1)}\n{sp}}}")
+    o.append("#[verifier::external_body]\npub fn in_prop(p: u32, c: u32) -> bool {\n    "
+             + disp(sorted(props), 1) + "\n}\n\n} // verus!\n")
+    return "".join(o)
+
+
 # ---- case modules -----------------------------------------------------
 
 
@@ -536,6 +732,39 @@ def lean_cases(cases):
     return "".join(o)
 
 
+def isa_cases(cases):
+    o = ["(* generated by cases/gen2.py *)\ntheory Cases\n  imports Spec2\nbegin\n\n"]
+    names = []
+    for j in range(0, len(cases), CHUNK):
+        names.append(f"cases{j // CHUNK}")
+        o.append(f'definition {names[-1]} :: "tcase list" where\n  "{names[-1]} = [\n')
+        o.append(",\n".join(
+            f"  ({n}, {i_nlist(refs)}, {i_node(a)}, {i_nlist(s)}, {i_nlist(e)})"
+            for _, n, refs, a, s, e in cases[j:j + CHUNK]))
+        o.append(']"\n\n')
+    o.append('definition cases :: "tcase list" where\n  "cases = ' + " @\n    ".join(names or ["[]"]) + '"\n\nend\n')
+    return "".join(o)
+
+
+def rust_cases(cases):
+    o = ["// generated by cases/gen2.py\nuse crate::spec2::{Case, CSet, Node, Re};\n\n"]
+    names = []
+    for j in range(0, len(cases), CHUNK):
+        names.append(f"cases{j // CHUNK}")
+        o.append(f"#[allow(unused_imports)]\nfn {names[-1]}(v: &mut Vec<Case>) {{\n")
+        for _, n, refs, ast, s, e in cases[j:j + CHUNK]:
+            a, root = rust_arena2(ast)
+            pools = ", ".join(f"{k}: vec![{', '.join(a[k])}]" for k in
+                              ("nodes", "bytes", "cps", "seqs", "kids", "gidx", "csets", "cidx"))
+            o.append(f"    v.push(Case {{ ncap: {n}, refs: vec![{', '.join(map(str, refs))}], "
+                     f"re: Re {{ {pools}, root: {root} }}, s: vec![{', '.join(map(str, s))}], "
+                     f"exp: vec![{', '.join(map(str, e))}] }});\n")
+        o.append("}\n\n")
+    o.append("#[allow(unused_imports)]\npub fn cases() -> Vec<Case> {\n    let mut v = Vec::new();\n"
+             + "".join(f"    {nm}(&mut v);\n" for nm in names) + "    v\n}\n")
+    return "".join(o)
+
+
 def main():
     inf, orf, tbf, out = sys.argv[1:5]
     heavy = len(sys.argv) > 5
@@ -559,6 +788,8 @@ def main():
         open(f"{out}/{kind}/Tables.fst", "w").write(fstar_tables(folds, ranges, props))
         open(f"{out}/{kind}/Tables.v", "w").write(rocq_tables(folds, ranges, props))
         open(f"{out}/{kind}/Tables.lean", "w").write(lean_tables(folds, ranges, props))
+        open(f"{out}/{kind}/Tables.thy", "w").write(isa_tables(folds, ranges, props))
+        open(f"{out}/{kind}/tables2.rs", "w").write(rust_tables(folds, ranges, props))
     open(f"{out}/used-ctypes.txt", "w").write(" ".join(map(str, sorted(used))) + "\n")
     def write(d, cs):
         os.makedirs(d, exist_ok=True)
@@ -567,6 +798,8 @@ def main():
         open(f"{d}/Cases.fst", "w").write(fstar_cases(cs))
         open(f"{d}/Cases.v", "w").write(rocq_cases(cs))
         open(f"{d}/Cases.lean", "w").write(lean_cases(cs))
+        open(f"{d}/Cases.thy", "w").write(isa_cases(cs))
+        open(f"{d}/cases2.rs", "w").write(rust_cases(cs))
     write(out, cases)
     msg = f"{len(cases)} cases; ctypes used {len(used)}; full table {len(ranges)} ctypes"
     if heavy:

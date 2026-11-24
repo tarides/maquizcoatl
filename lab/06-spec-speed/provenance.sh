@@ -32,3 +32,5 @@ else
   echo "timing CPUs: 28-31,60-63 (L3 complex 7); untimed work on CPUs 4-7 under nice -n 10"
 fi
 echo "load average at provenance time: $(cut -d' ' -f1-3 /proc/loadavg)"
+echo "verus: $( . "$BENCH_WORKDIR/cache/verus-env.sh"; verus --version 2>&1 | sed -n 's/^ *Version: *//p') ($( . "$BENCH_WORKDIR/cache/verus-env.sh"; rustc --version 2>/dev/null))"
+echo "isabelle: $("$BENCH_WORKDIR/cache/isabelle/bin/isabelle" version 2>/dev/null)"
