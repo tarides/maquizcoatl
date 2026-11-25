@@ -1,0 +1,9 @@
+e 41 {'pass': 37, 'deviation': 4, 'code-differs': 3}
+n 198 {'pass': 198}
+x2 876 {'pass': 876}
+x3 82 {'pass': 81, 'deviation': 1}
+test_utf8:742	x3	deviation	DEV-003	MATCH 0 0 0 0	MATCH 0 1 1 1
+test_utf8:1194	e	deviation	DEV-004	ERR -223	MISMATCH
+test_utf8:1196	e	deviation	DEV-004	ERR -223	MISMATCH
+test_utf8:1200	e	deviation	DEV-004	ERR -223	MISMATCH
+test_utf8:1201	e	deviation	DEV-004	ERR -223	MISMATCH

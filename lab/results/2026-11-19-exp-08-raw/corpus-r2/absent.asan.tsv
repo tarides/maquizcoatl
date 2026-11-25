@@ -1,0 +1,12 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+ab01	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~ab)	abc	M 0-0	M 0-0
+ab02	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~abc)	abc	M 0-0	M 0-0
+ab03	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~abc|ab)	abc	M 0-0	M 0-0
+ab04	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	aaaaa(?~)	aaaaaaaaaa	M 0-5	M 0-5
+ab05	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc|\O*)	abc	M 0-0	M 0-0
+ab06	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~abc)	xabcx	M 0-1	M 0-1
+ab07	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc|\O*)	xabcx	M 0-1	M 0-1
+ab08	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~abc)z	xabz	M 0-4	M 0-4
+ab09	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc|\O*)z	xabz	M 0-4	M 0-4
+ab10	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc).*	xxabcyy	M 0-2	M 0-2
+ab11	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc)(?~|).*	xxabcyy	M 0-7	M 0-7

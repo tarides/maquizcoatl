@@ -9,7 +9,8 @@ X="opam exec --switch=provers --"
 echo "cpu: $(lscpu | sed -n 's/^Model name: *//p'), $(nproc) hardware threads"
 echo "ram: $(free -g | awk '/Mem:/{print $2}') GB"
 echo "kernel: $(uname -r)"; echo "os: $(lsb_release -ds)"
-echo "scripts commit: ${SCRIPTS_COMMIT:-unknown} (branch exp/06-spec-speed)"
+if [ "${M:-1}" = 2 ]; then BR=exp/06-spec-speed-m2; else BR=exp/06-spec-speed; fi
+echo "scripts commit: ${SCRIPTS_COMMIT:-unknown} (branch $BR)"
 echo "experiment #7 scripts (idle rerun): ${E07_COMMIT:-unknown} (main, lab/07-large-tables)"
 echo "upstream: f95747b (copy of the submodule, read only)"
 echo "upstream test_utf8 (Release build): $(cat "$EXP/out/${RID:-m1}/g/test_utf8.txt" 2>/dev/null)"
@@ -25,5 +26,11 @@ echo "lean: $(elan run leanprover/lean4:v4.36.0 lean --version)"
 echo "lake: $(elan run leanprover/lean4:v4.36.0 lake --version)"
 echo "elan: $(elan --version)"
 echo "gcc: $(gcc --version | head -1)"; echo "cmake: $(cmake --version | head -1)"; echo "python: $(python3 --version)"
-echo "timing CPUs: 28-31,60-63 (L3 complex 7); untimed work on CPUs 4-7 under nice -n 10"
+if [ "${M:-1}" = 2 ]; then
+  echo "timing CPUs: 28-31,60-63 (L3 complex 7); untimed work at most 4 jobs on CPUs 0-15 under nice -n 10 (milestone 2)"
+else
+  echo "timing CPUs: 28-31,60-63 (L3 complex 7); untimed work on CPUs 4-7 under nice -n 10"
+fi
 echo "load average at provenance time: $(cut -d' ' -f1-3 /proc/loadavg)"
+echo "verus: $( . "$BENCH_WORKDIR/cache/verus-env.sh"; verus --version 2>&1 | sed -n 's/^ *Version: *//p') ($( . "$BENCH_WORKDIR/cache/verus-env.sh"; rustc --version 2>/dev/null))"
+echo "isabelle: $("$BENCH_WORKDIR/cache/isabelle/bin/isabelle" version 2>/dev/null)"

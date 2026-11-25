@@ -1,0 +1,8 @@
+# Experiment #8, ONIG_OPTION_FIND_LONGEST (forward search). Columns: probes/README.md.
+id	syntax	encoding	options	pattern	subject	js	note
+fl01	Oniguruma	UTF-8	FIND_LONGEST	\w+	abc defg hij		test_options.c:217
+fl02	Oniguruma	UTF-8	FIND_LONGEST	\w+	ab cd ef		written: equal-length tie, first start wins
+fl03	Oniguruma	UTF-8	FIND_LONGEST	a|bcd	abcd		written: longer match at a later start
+fl04	Oniguruma	UTF-8	FIND_LONGEST	a|ab	ab		written: longer through a lower-priority alternative
+fl05	Oniguruma	UTF-8		a|bcd	abcd		written: first-match companion of fl03
+fl06	Oniguruma	UTF-8		a|ab	ab		written: first-match companion of fl04

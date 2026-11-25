@@ -1,0 +1,8 @@
+why3 (provers): Why3 platform, version 1.9.0
+== 1.9.0: some_list ()
+Type mismatch between list.List.list int and int
+== 1.9.0: cons_pair ()
+Type mismatch between Bug.pair and int
+== 1.9.0: some_q ()
+result: option q = (Some (Q 1 2))
+globals: <none>

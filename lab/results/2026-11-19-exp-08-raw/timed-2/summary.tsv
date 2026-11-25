@@ -1,0 +1,16 @@
+timed-2	rocq	Calls	rc=0	wall=1.18s	maxrss_kb=413892
+timed-2	lean	Calls	rc=0	wall=1.28s	maxrss_kb=549952
+timed-2	fstar	Calls	rc=0	wall=1.21s	maxrss_kb=125876
+timed-2	verus	Calls	rc=0	wall=1.69s	maxrss_kb=333944
+timed-2	rocq	Absent	rc=0	wall=1.22s	maxrss_kb=413432
+timed-2	lean	Absent	rc=0	wall=0.88s	maxrss_kb=510928
+timed-2	fstar	Absent	rc=0	wall=1.21s	maxrss_kb=122528
+timed-2	verus	Absent	rc=0	wall=1.37s	maxrss_kb=333312
+timed-2	rocq	Longest	rc=0	wall=1.11s	maxrss_kb=410872
+timed-2	lean	Longest	rc=0	wall=0.72s	maxrss_kb=509420
+timed-2	fstar	Longest	rc=0	wall=0.88s	maxrss_kb=116080
+timed-2	verus	Longest	rc=0	wall=1.30s	maxrss_kb=329728
+timed-2	rocq	Fold	rc=0	wall=0.91s	maxrss_kb=389316
+timed-2	lean	Fold	rc=0	wall=0.63s	maxrss_kb=496492
+timed-2	fstar	Fold	rc=0	wall=3.41s	maxrss_kb=114200
+timed-2	verus	Fold	rc=0	wall=1.21s	maxrss_kb=328192

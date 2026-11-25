@@ -1,0 +1,12 @@
+caller_hdr.c: In function ‘main’:
+caller_hdr.c:9:15: error: too many arguments to function ‘eta_d’; expected 1, have 2
+    9 |   int32_t r = eta_d(g, &x);
+      |               ^~~~~    ~~
+In file included from caller_hdr.c:4:
+kc/Custard.h:13:11: note: declared here
+   13 | int32_t (*eta_d(int32_t (*g)(int32_t *x0)))(int32_t *x0);
+      |           ^~~~~
+caller_hdr.c:9:15: error: initialization of ‘int32_t’ {aka ‘int’} from ‘int32_t (*)(int32_t *)’ {aka ‘int (*)(int *)’} makes integer from pointer without a cast [-Wint-conversion]
+    9 |   int32_t r = eta_d(g, &x);
+      |               ^~~~~
+cc_status=1

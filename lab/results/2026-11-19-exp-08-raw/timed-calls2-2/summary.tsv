@@ -1,0 +1,4 @@
+timed-calls2-2	rocq	Calls	rc=0	wall=1.22s	maxrss_kb=413892
+timed-calls2-2	lean	Calls	rc=0	wall=1.47s	maxrss_kb=578732
+timed-calls2-2	fstar	Calls	rc=0	wall=1.95s	maxrss_kb=155604
+timed-calls2-2	verus	Calls	rc=0	wall=3.29s	maxrss_kb=335032

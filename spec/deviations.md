@@ -198,7 +198,7 @@ bug-free goal (non-compositional result).
 and [opcodes](../lab/results/02-semantic-probes-2026-11-19-r2/raw/empty-iterations.opcodes.tsv)
 (run 2).
 
-**Status.** Decided by the maintainer 2026-11-19.
+**Status.** Decided by the maintainer 2026-11-19; superseded by DEV-008.
 
 ---
 
@@ -408,3 +408,176 @@ documented header.
 `posix_syntax_size.txt` (16 bytes seen, 24 bytes overwritten).
 
 **Status.** Decided by the maintainer 2026-11-19.
+
+---
+
+## DEV-007: The default subexp-call nest limit is 20, as in the code
+
+Origin: experiment #8, hard-feature spec probe (issue #12), deviation
+candidate D-08-1
+([corpus entry](../lab/results/2026-11-19-exp-08-corpus.md)) and
+maintainer decision
+(https://github.com/tarides/maquizcoatl/issues/12#issuecomment-7038399798).
+
+**Upstream behaviour at `f95747b`.** The default limit on the nesting of
+subexpression calls is 20: `DEFAULT_SUBEXP_CALL_MAX_NEST_LEVEL` is 20
+(`upstream/src/regint.h:115`) and initialises `SubexpCallMaxNestLevel`
+(`upstream/src/regexec.c:2874`), which `match_at` compares with the call
+nest counter (`upstream/src/regexec.c:4426`) and which
+`onig_get_subexp_call_max_nest_level` returns
+(`upstream/src/regexec.c:6102-6105`). The documentation of that function
+says "(default: 24)" (`upstream/doc/API:1020`). The definition site of a
+called group is itself compiled as a call
+(`upstream/src/regcomp.c:1704-1713`), so limit k admits k-1 nested
+recursive calls. Case ca06 (`(?<foo>a|\(\g<foo>\))` on a 24-deep
+nesting, default limit) gives `M 5-44`: 19 levels, as limit 20 implies,
+not the 23 that limit 24 would give (`M 1-48`).
+
+**Maquizcoatl behaviour.** The default limit is 20, and
+`onig_get_subexp_call_max_nest_level` returns 20 until
+`onig_set_subexp_call_max_nest_level` changes it. The specification
+takes the code as reference; the "24" of `doc/API` is a documentation
+error.
+
+**Alternatives considered.**
+
+- Follow `doc/API` and make the default 24. This changes the result of
+  every pattern whose recursion depth lies between 20 and 23 compared
+  with the library that clients run today (ca06 would match `M 1-48`
+  instead of `M 5-44`), to agree with a figure that the code of
+  `f95747b` does not use.
+
+**Reason.** Disagreement between documentation and code; the code is
+the reference (CLAUDE.md, "Upstream architecture"). The deviation is
+from upstream's documentation, not from its behaviour.
+
+**Evidence.** Experiment #8's case corpus, run on the Debug and
+ASan/UBSan builds of `f95747b`
+([corpus entry](../lab/results/2026-11-19-exp-08-corpus.md)): case ca06
+(`lab/08-hard-features/cases/calls.tsv`, result in
+[raw/corpus-r2/calls.joined.tsv](../lab/results/2026-11-19-exp-08-raw/corpus-r2/calls.joined.tsv)),
+and the nest-limit cases and scans nc01-nc04, ns01 (limits 0-30) and
+ns02 (limits 0-30) run with `onig_set_subexp_call_max_nest_level`
+(`lab/08-hard-features/cases/nest.tsv`, `cases/nest.c`; results in
+[raw/corpus/nest.joined.tsv](../lab/results/2026-11-19-exp-08-raw/corpus/nest.joined.tsv)):
+ns01 needs limit 4 for 3 recursive calls, and ns02 at limit k matches
+nesting k-1. The four formalisations of experiment #8 take the limit as
+a parameter with default 20 and agree with ca06
+([calls entry](../lab/results/2026-11-19-exp-08-calls.md),
+[review fixes](../lab/results/2026-11-20-exp-08-review-fixes.md)).
+
+**Status.** Decided by the maintainer 2026-11-20
+(https://github.com/tarides/maquizcoatl/issues/12#issuecomment-7038399798).
+
+---
+
+## DEV-008: The empty-loop check compares the backreferenced groups, in every loop
+
+Origin: experiment #6, milestone 2 (issue #28): the form of DEV-003
+that run 1's semantics implemented, the review of run 1
+(https://github.com/tarides/maquizcoatl/issues/28#issuecomment-7135797879,
+problems 2 and 3) and the maintainer's decisions after run 1
+(https://github.com/tarides/maquizcoatl/issues/28#issuecomment-7136902494,
+decisions 7 and 8 of the issue body (1 and 2 of the comment)). Supersedes DEV-003, whose text is kept as it was.
+
+**Upstream behaviour at `f95747b`.** This corrects DEV-003's
+paragraph, which says "an unbounded loop". `tune_quant` marks a
+quantifier for the empty check when its body can match the empty string
+(`node_min_byte_len` is 0) and its upper bound is infinite or at least 1,
+bounded or not (`upstream/src/regcomp.c:5681-5688`). The compiler emits
+the check (`OP_EMPTY_CHECK_START`, then `OP_EMPTY_CHECK_END`, or
+`OP_EMPTY_CHECK_END_MEMST` for the groups DEV-003 describes;
+`upstream/src/regcomp.c:959-1000`) around every iterated copy of the
+body: the loop part of an infinite quantifier
+(`upstream/src/regcomp.c:1434-1515`) and the `OP_REPEAT` form that
+bounded quantifiers get when they are not expanded
+(`compile_range_repeat_node`, `upstream/src/regcomp.c:1285-1308`, called
+at `:1563`). When an iteration was empty, `OP_EMPTY_CHECK_END` skips the
+next instruction (`upstream/src/regexec.c:4227-4257`). In the
+`OP_REPEAT` form that instruction is `OP_REPEAT_INC` /
+`OP_REPEAT_INC_NG` (greedy / non-greedy), the only places where the
+count is compared with `lower` and `upper`
+(`upstream/src/regexec.c:4386-4400`, `:4405-4421`), so the plain check leaves the
+loop even when the count is still below `lower`. Copies that the
+compiler unrolls carry no check: the first `lower` copies of an infinite
+quantifier (`upstream/src/regcomp.c:1459`) and the copies of a small
+greedy bounded quantifier (`upstream/src/regcomp.c:1530-1548`). An empty
+iteration among those copies therefore behaves differently, and which
+form a quantifier gets depends on the compiled size of its body
+(`QUANTIFIER_EXPAND_LIMIT_SIZE`). Example: test_utf8:797,
+`(abc|(def|ghi|jkl|mno|pqr){0,7}?){5}\z` on `adpqrpqrpqr`, gives
+`M 2-11 | 1=11-11 | 2=8-11`. The `{5}` loop has the `OP_REPEAT` form,
+and it ends after its first empty iteration, at 11.
+
+**Maquizcoatl behaviour.** The rule applies to every quantifier whose
+body is iterated (upper bound infinite or at least 1), bounded or not,
+and to every iteration, including the first `lower` ones. Let R be the
+set of groups named by a backreference anywhere in the pattern
+(numbered, named or multiplex, inside or outside the loop). Suppose an
+iteration of the loop ends at the position where it started. If no
+group of R has a different value (set or unset, start, end) from the one
+it had when the iteration started, the loop ends there: matching
+continues after the loop, even below `lower`. Otherwise the loop goes on
+as usual. Groups outside R are not compared. Stack G implements this
+rule in `lab/06-spec-speed/g/g2.ml` (branch `exp/06-spec-speed-m2`):
+the `Iter` item (`:1089-1092`) compares the captures with `same_refs`
+(`:1031`) over the groups that `brefs` (`:1034`) collects from the
+pattern (`:1159`); `rep` (`:1133`) is the usual loop step. Rocq,
+Lean 4, Why3 and F\* transcribe the same test (for example
+`why3/spec2.mlw:326`, `fstar/Spec2.fst:254`). Results:
+test_utf8:742 `(?:\1a|())*` on `a` still gives `M 0-1 | 1=1-1`, a
+difference from upstream that DEV-003 decided and DEV-008 keeps (`\1`
+inside the loop selects group 1). test_utf8:797 gives C's
+`M 2-11 | 1=11-11 | 2=8-11`. Unlike upstream, the rule does not depend
+on whether the compiler unrolls a copy. No upstream test case in S2
+shows this difference. The specification must prove that the loop
+terminates (each continued empty iteration changes a group of R).
+
+**Alternatives considered.**
+
+- DEV-003's literal form (every capture group of the loop body is
+  compared). Dropped for two reasons. First, it makes `a(b|)+d` on `a`
+  followed by 30 `b`s and `cd` (test_utf8:1757, an `n` case)
+  exponential: every empty iteration of `(b|)` changes group 1, so each
+  position offers a continued iteration as well as the exit, and stack
+  G exhausts its fuel of 10,000,000 steps (`LIMIT` instead of no
+  match). Second, it is not observably equal to the form above, which
+  DEV-003 had claimed ("an unreferenced group cannot change the next
+  iteration"). On the 1,243 S2 cases, the literal form (with this
+  entry's loop scope) changes the captures of unreferenced groups on 4
+  cases, where the form above gives C's captures:
+  test_utf8:745 `(?:()|()|()|()|()|())*\2\5` (groups 3 and 4 set
+  instead of unset), 746, 793 `(?:()|()|())*\3\1` (group 2 set) and
+  797 (group 1 `8-11`). The claim fails because the literal form goes
+  on after an empty iteration that changed only an unreferenced group,
+  and that group's new value then stays on the path that finally
+  succeeds. The form above ends the loop there instead, and later
+  backtracking discards the value. These cases are test evidence
+  over S2, not a proof. The form above is chosen because it agrees
+  with C on every S2 case except test_utf8:742, also test evidence, and
+  because it is not exponential on test_utf8:1757.
+- Upstream's selection (only groups referenced by a backreference
+  outside the loop): keeps test_utf8:742, but the result is not
+  compositional (DEV-003's reason, unchanged).
+- Run 1's scope (only unbounded loops, only above `lower`): not
+  upstream's rule. It gives test_utf8:797 group 1 `2-11` instead of C's
+  `11-11`.
+- Reproduce upstream's unrolling (no check on unrolled copies): this
+  makes the result depend on the compiled size of the body, which is not
+  a property of the pattern's meaning.
+
+**Reason.** Bug-free goal: a stated rule that is compositional
+(DEV-003's reason), stays polynomial on `(b|)+`, and agrees with the
+code's check on bounded loops. It also corrects DEV-003's description
+of the upstream code.
+
+**Evidence.** Experiment #6 milestone 2: run 1's
+[agreement entry](../lab/results/2026-11-24-exp-06-m2-agreement.md)
+(test_utf8:797 and 1757) and run 2's
+[agreement entry](../lab/results/2026-11-24-exp-06-m2-run2-agreement.md):
+the C, stack G, Why3, F\*, Rocq and Lean 4 verdicts on the 1,243 S2
+cases, and stack G's verdicts under DEV-003's literal form
+(`G2_EMPTY_ALL_GROUPS=1`, raw file `g/g-verdicts-literal-dev003.txt`).
+
+**Status.** Decided by the maintainer 2026-11-24
+(https://github.com/tarides/maquizcoatl/issues/28#issuecomment-7136902494).

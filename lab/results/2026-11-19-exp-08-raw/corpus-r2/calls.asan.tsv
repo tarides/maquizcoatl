@@ -1,0 +1,7 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+ca01	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(a)\g<1>	aa	M 0-2 | 1=1-2	M 0-2 | 1=1-2
+ca02	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<name_2>ab)\g<name_2>	abab	M 0-4 | 1=2-4	M 0-4 | 1=2-4
+ca03	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	\A(?<n>(a\g<n>)|)\z	aaaa	M 0-4 | 1=0-4	M 0-4 | 1=0-4
+ca04	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<foo>a|\(\g<foo>\))	((((((a))))))	M 0-13 | 1=0-13	M 0-13 | 1=0-13
+ca05	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	\A(?<n>a\g<n>|b)\z	aaab	M 0-4 | 1=0-4	M 0-4 | 1=0-4
+ca06	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?<foo>a|\(\g<foo>\))	((((((((((((((((((((((((a))))))))))))))))))))))))	M 5-44 | 1=5-44	M 5-44 | 1=5-44

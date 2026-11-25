@@ -1,0 +1,8 @@
+{
+  "reused_from_experiment_7": "lab/07-large-tables/pins.json (opam 2.6.1, OCaml 5.4.1 switch 'provers' with rocq-core 9.3.0 + rocq-stdlib, elan v4.4.0 with leanprover/lean4:v4.36.0, F* v2026.11.15 with Pulse)",
+  "verus": {"version": "release/0.2026.11.02.8bf68ee",
+            "url": "https://github.com/verus-lang/verus/releases/download/release/0.2026.11.02.8bf68ee/verus-0.2026.11.02.8bf68ee-x86-linux.zip",
+            "sha256": "f3a0119292df8855e4435da8130bee1873b0e6a60c306accf81a08ea687bba3c"},
+  "rustup": {"url": "https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init", "note": "installs the toolchain the Verus release names (verus --version reports it), under <cache>/rustup and <cache>/cargo"},
+  "onig": {"commit": "f95747b", "builds": ["Debug", "Debug + -fsanitize=address,undefined"]}
+}

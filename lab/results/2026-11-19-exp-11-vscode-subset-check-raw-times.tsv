@@ -1,0 +1,85 @@
+# run	cell	C pid compile_ns n | W warmup_s min_rep_s | T rep s_per_pass passes | S key=value...
+vscode-subset-check	threaded.full.1	W	0.102907	0.5
+vscode-subset-check	threaded.full.1	T	0	0.104515608	5
+vscode-subset-check	threaded.full.1	T	1	0.104318491	5
+vscode-subset-check	threaded.full.1	T	2	0.104444788	5
+vscode-subset-check	threaded.full.1	T	3	0.104521208	5
+vscode-subset-check	threaded.full.1	T	4	0.104645691	5
+vscode-subset-check	threaded.full.1	S	bytes_per_pass=3816964	matches_per_pass=46999	included_patterns=3856
+vscode-subset-check	threaded.pcre2.1	W	0.102611	0.5
+vscode-subset-check	threaded.pcre2.1	T	0	0.101340789	5
+vscode-subset-check	threaded.pcre2.1	T	1	0.101407961	5
+vscode-subset-check	threaded.pcre2.1	T	2	0.101472818	5
+vscode-subset-check	threaded.pcre2.1	T	3	0.101332777	5
+vscode-subset-check	threaded.pcre2.1	T	4	0.101847404	5
+vscode-subset-check	threaded.pcre2.1	S	bytes_per_pass=3802934	matches_per_pass=45970	included_patterns=3823
+vscode-subset-check	threaded.extra.1	W	0.000483	0.5
+vscode-subset-check	threaded.extra.1	T	0	0.000377240	1326
+vscode-subset-check	threaded.extra.1	T	1	0.000377762	1324
+vscode-subset-check	threaded.extra.1	T	2	0.000377451	1325
+vscode-subset-check	threaded.extra.1	T	3	0.000377403	1325
+vscode-subset-check	threaded.extra.1	T	4	0.000377287	1326
+vscode-subset-check	threaded.extra.1	S	bytes_per_pass=14030	matches_per_pass=1029	included_patterns=33
+vscode-subset-check	switch.full.1	W	0.124660	0.5
+vscode-subset-check	switch.full.1	T	0	0.121904156	5
+vscode-subset-check	switch.full.1	T	1	0.121541564	5
+vscode-subset-check	switch.full.1	T	2	0.121590127	5
+vscode-subset-check	switch.full.1	T	3	0.121712860	5
+vscode-subset-check	switch.full.1	T	4	0.121709643	5
+vscode-subset-check	switch.full.1	S	bytes_per_pass=3816964	matches_per_pass=46999	included_patterns=3856
+vscode-subset-check	threaded.pcre2.2	W	0.102498	0.5
+vscode-subset-check	threaded.pcre2.2	T	0	0.101684102	5
+vscode-subset-check	threaded.pcre2.2	T	1	0.101512057	5
+vscode-subset-check	threaded.pcre2.2	T	2	0.101633503	5
+vscode-subset-check	threaded.pcre2.2	T	3	0.101934619	5
+vscode-subset-check	threaded.pcre2.2	T	4	0.102212698	5
+vscode-subset-check	threaded.pcre2.2	S	bytes_per_pass=3802934	matches_per_pass=45970	included_patterns=3823
+vscode-subset-check	threaded.extra.2	W	0.000477	0.5
+vscode-subset-check	threaded.extra.2	T	0	0.000379830	1317
+vscode-subset-check	threaded.extra.2	T	1	0.000379589	1318
+vscode-subset-check	threaded.extra.2	T	2	0.000379910	1317
+vscode-subset-check	threaded.extra.2	T	3	0.000379040	1320
+vscode-subset-check	threaded.extra.2	T	4	0.000378490	1322
+vscode-subset-check	threaded.extra.2	S	bytes_per_pass=14030	matches_per_pass=1029	included_patterns=33
+vscode-subset-check	switch.full.2	W	0.124254	0.5
+vscode-subset-check	switch.full.2	T	0	0.122047061	5
+vscode-subset-check	switch.full.2	T	1	0.121914209	5
+vscode-subset-check	switch.full.2	T	2	0.122136723	5
+vscode-subset-check	switch.full.2	T	3	0.122007220	5
+vscode-subset-check	switch.full.2	T	4	0.122031174	5
+vscode-subset-check	switch.full.2	S	bytes_per_pass=3816964	matches_per_pass=46999	included_patterns=3856
+vscode-subset-check	threaded.full.2	W	0.102673	0.5
+vscode-subset-check	threaded.full.2	T	0	0.107054085	5
+vscode-subset-check	threaded.full.2	T	1	0.107363084	5
+vscode-subset-check	threaded.full.2	T	2	0.107364045	5
+vscode-subset-check	threaded.full.2	T	3	0.107357114	5
+vscode-subset-check	threaded.full.2	T	4	0.107296192	5
+vscode-subset-check	threaded.full.2	S	bytes_per_pass=3816964	matches_per_pass=46999	included_patterns=3856
+vscode-subset-check	threaded.extra.3	W	0.000477	0.5
+vscode-subset-check	threaded.extra.3	T	0	0.000378912	1320
+vscode-subset-check	threaded.extra.3	T	1	0.000378052	1323
+vscode-subset-check	threaded.extra.3	T	2	0.000377500	1325
+vscode-subset-check	threaded.extra.3	T	3	0.000377909	1324
+vscode-subset-check	threaded.extra.3	T	4	0.000378512	1321
+vscode-subset-check	threaded.extra.3	S	bytes_per_pass=14030	matches_per_pass=1029	included_patterns=33
+vscode-subset-check	switch.full.3	W	0.124677	0.5
+vscode-subset-check	switch.full.3	T	0	0.122630227	5
+vscode-subset-check	switch.full.3	T	1	0.122789107	5
+vscode-subset-check	switch.full.3	T	2	0.122921386	5
+vscode-subset-check	switch.full.3	T	3	0.122721070	5
+vscode-subset-check	switch.full.3	T	4	0.122824599	5
+vscode-subset-check	switch.full.3	S	bytes_per_pass=3816964	matches_per_pass=46999	included_patterns=3856
+vscode-subset-check	threaded.full.3	W	0.103158	0.5
+vscode-subset-check	threaded.full.3	T	0	0.105128618	5
+vscode-subset-check	threaded.full.3	T	1	0.105172945	5
+vscode-subset-check	threaded.full.3	T	2	0.105269898	5
+vscode-subset-check	threaded.full.3	T	3	0.105076665	5
+vscode-subset-check	threaded.full.3	T	4	0.105254963	5
+vscode-subset-check	threaded.full.3	S	bytes_per_pass=3816964	matches_per_pass=46999	included_patterns=3856
+vscode-subset-check	threaded.pcre2.3	W	0.102267	0.5
+vscode-subset-check	threaded.pcre2.3	T	0	0.101145311	5
+vscode-subset-check	threaded.pcre2.3	T	1	0.101510151	5
+vscode-subset-check	threaded.pcre2.3	T	2	0.101413214	5
+vscode-subset-check	threaded.pcre2.3	T	3	0.101237311	5
+vscode-subset-check	threaded.pcre2.3	T	4	0.101604342	5
+vscode-subset-check	threaded.pcre2.3	S	bytes_per_pass=3802934	matches_per_pass=45970	included_patterns=3823
