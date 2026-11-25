@@ -10,6 +10,10 @@
 # rocq: ROCQ_FILES (default the five definition files, as rocq/rocq.sh time
 # of run 1; run 4 added this case so that Rocq's time.tsv has the user and
 # system columns and its time.log one "Checked" line per file and run).
+# fstar: FSTAR_FILES (default the five definition files; run 7 passes the
+# definitions and the proof modules ProofA ProofSem ProofSim Proof, in
+# dependency order, each file checked against the .checked files of the
+# ones before it).
 # Output: <exp>/out/<run-id>/<tool>/time.{tsv,load,log,<r>.<file>}.
 # time.log holds the checker's output (rocq: one "Checked <file>.v" line
 # per file and run, printed by chk after rocq compile succeeds; fstar: one "Verified module" line
@@ -33,8 +37,8 @@ case $T in
   rocq)  DEFS=${ROCQ_FILES:-Syntax Sem Compile Vm Statement}
          fresh() { rm -rf "$1"; mkdir -p "$1"; cp "$L"/rocq/*.v "$1/"; }
          chk() { opam exec --switch provers -- rocq compile -R . S "$1.v" && echo "Checked $1.v"; } ;;
-  fstar) DEFS="Syntax Sem Compile Vm Statement"
-         fresh() { rm -rf "$1"; mkdir -p "$1/cache"; cp "$L"/fstar/{Syntax,Sem,Compile,Vm,Statement}.fst "$1/"; }
+  fstar) DEFS=${FSTAR_FILES:-Syntax Sem Compile Vm Statement}
+         fresh() { rm -rf "$1"; mkdir -p "$1/cache"; for f in $DEFS; do cp "$L/fstar/$f.fst" "$1/"; done; }
          chk() { fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 "$1.fst"; } ;;
   verus) DEFS="lib"
          . "$CACHE/verus-env.sh"

@@ -1,12 +1,18 @@
 #!/bin/bash
 # Experiment #9, done-criterion 1 (plan step 5): the axiom/admit report.
-#   BENCH_WORKDIR=<bench-workdir> axioms.sh <tool> <run-id>     tool: rocq
+#   BENCH_WORKDIR=<bench-workdir> axioms.sh <tool> <run-id>     tool: rocq | fstar
 # rocq: a clean build of every .v file of rocq/ that the proof needs
 # (definitions, then ProofA, ProofSem, ProofSim, Proof), then
 # "Print Assumptions main_theorem." (expected: "Closed under the global
 # context"), and a scan of the sources for Admitted, admit, Axiom,
 # Parameter, Conjecture, Hypothesis and Abort (any hit is printed with
 # its file and line; comments are not stripped, so hits are read by hand).
+# fstar (run 7): a clean check of the definitions and the proof modules
+# (ProofA, ProofSem, ProofSim, Proof), one file at a time in dependency
+# order, with --admit_smt_queries false given explicitly (it is the
+# default) and Z3 5.3.0, then a scan of the sources for admit, assume
+# (also "assume val"), magic, --admit_smt_queries true, --lax and #lang-
+# (hits printed with file and line; comments are not stripped).
 # Untimed: nice -n 10, CPUs 4-7.  Output: <exp>/out/<run-id>/<tool>/axioms.txt.
 # Prints no hostnames, addresses or absolute paths.
 set -euo pipefail
@@ -35,6 +41,26 @@ rocq)
     done
     echo "== end of scan"
   } > "$OUT/axioms.txt" 2>&1
+  cat "$OUT/axioms.txt" ;;
+fstar)
+  FILES="Syntax Sem Compile Vm Statement ProofA ProofSem ProofSim Proof"
+  B=$EXP/build/fstar/$RID-axioms; rm -rf "$B"; mkdir -p "$B/cache"; cd "$B"
+  for f in $FILES; do cp "$L/fstar/$f.fst" .; done
+  {
+    echo "== fstar.exe --version"; fstar.exe --version
+    for f in $FILES; do
+      echo "== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false $f.fst"
+      nice -n 10 taskset -c 4-7 fstar.exe --cache_checked_modules --cache_dir cache \
+        --z3version 5.3.0 --admit_smt_queries false "$f.fst" 2>&1
+    done
+    echo "== scan (admit|assume|magic|admit_smt_queries true|--lax|#lang-) in $FILES"
+    for f in $FILES; do
+      grep -nE '\badmit|\bassume\b|\bmagic\b|admit_smt_queries[[:space:]]+true|--lax|#lang-' "$f.fst" \
+        | sed "s|^|$f.fst:|" || true
+    done
+    echo "== end of scan"
+  } > "$OUT/axioms.txt" 2>&1
+  sed -i "s|$BENCH_WORKDIR|<bench-workdir>|g" "$OUT/axioms.txt"
   cat "$OUT/axioms.txt" ;;
 *) echo "unknown tool $T" >&2; exit 2 ;;
 esac

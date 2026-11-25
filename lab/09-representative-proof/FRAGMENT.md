@@ -376,6 +376,22 @@ the initial ones only on `X` and on the ends of open groups. The VM's
 completeness (d) is the existential "some fuel makes `run` return" in
 that conclusion, so no step bound was needed.
 
+**How F\* closed it (run 7)**, same invariants as Rocq, F\* proof:
+`fstar/ProofA.fst` (a), `ProofSem.fst` (fuel monotonicity and
+determinism, (d) for the semantics as the total function `fuel_of` on
+section 4's measure, `decreases %[rem s pos; ww pos acts]`, and the
+elided star `clen0_fm`, stated without an existential), `ProofSim.fst`
+((b) and (c)), `Proof.fst` ((d) for the VM and (e)). `rep` is an
+indexed inductive type whose constructors carry their side conditions
+as `squash` arguments; `capsrel` and `meq` are `opaque_to_smt` and are
+revealed only in ten small lemmas. Existentials are avoided: `sim`
+returns its witnesses (the number of VM steps, through `exe n`, a VM
+that runs exactly `n` steps, and the final captures), with one function
+per case (`case_lit`, `case_alt`, `case_star_null`, ...) that receives
+the induction hypothesis at fuel `f - 1` as a function argument; `sim`
+recurses on `%[f; rep]`. Rlimit 10 everywhere except `case_cat` (20);
+fuel 2, ifuel 1 (fuel 4 for `length_comp`).
+
 ## 9. Cases and harness
 
 - `cases/select.py`: experiment #6's 152 in-subset cases filtered to the
