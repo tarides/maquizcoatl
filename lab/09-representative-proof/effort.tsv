@@ -1,0 +1,15 @@
+run	date	item	kind	attempts	note
+1	2026-11-25	session	wall-clock	-	start 2026-11-25T10:37:44Z, end at the run-1 commit (see notebook entry)
+1	2026-11-25	FRAGMENT.md	design	1	citations re-checked against upstream; 6 line ranges in FRAGMENT.md and 3 in rocq/ comments corrected before commit (comments only, rebuild gave identical verdicts)
+1	2026-11-25	cases/select.py	script	2	first run counted (*VERB as a quantifier with no target; fixed
+1	2026-11-25	cases/agree.py	script	1	
+1	2026-11-25	oracle/oracle_at.c, oracle.sh	script	1	
+1	2026-11-25	rocq/Syntax.v	definition	1	checked first time
+1	2026-11-25	rocq/Sem.v	definition	1	checked first time
+1	2026-11-25	rocq/Compile.v	definition	1	checked first time
+1	2026-11-25	rocq/Vm.v	definition	1	checked first time
+1	2026-11-25	rocq/Statement.v	definition	1	statement only, no proof
+1	2026-11-25	rocq/Extract.v, ExtractSpec2.v, TablesStub.v, main.ml	driver	1	built and agreed first time
+1	2026-11-25	rocq/rocq.sh time phase	script	2	ulimit -v 16G too small for OCaml 5 heap reservation; switched to cgroup MemoryMax
+1	2026-11-25	provenance.sh	script	2	version queries fixed
+1	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)

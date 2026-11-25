@@ -130,6 +130,14 @@ All four tools kept (maintainer decision: run before experiment #5 reports; a to
 | 2026-11-19 | #8 comparison, three timed runs per (tool, feature) (`timed.sh`) | as above | All 16 pairs done, 42 cases per tool agree with C, no admits, no native computation; F\* most economical, Lean smoothest interactive, Rocq's two failures from fuel in conversion | [results/2026-11-19-exp-08-comparison.md](results/2026-11-19-exp-08-comparison.md) |
 | 2026-11-20 | #8 review fixes: corrections to entries 2-7, no rerun | as above | `doc/RE:368` (not 367); Rocq `Qed` timeout stated once (over 60 s, killed twice); Calls rows from reruns `timed-calls2` at `d66233b`, `timed-*` Calls rows superseded, command recorded; peak RSS is the maximum of three runs in all 16 cells (rule now stated) | [results/2026-11-20-exp-08-review-fixes.md](results/2026-11-20-exp-08-review-fixes.md) |
 
+## Experiment #9
+
+| Date | Experiment | Upstream / tools | Finding | Results |
+|------|------------|------------------|---------|---------|
+| 2026-11-25 | experiment #9 run 1: provenance | `f95747b`; opam 2.6.1, OCaml 5.4.1, Rocq 9.3.0, F\* 2026.11.15 (Z3 4.8.5/4.13.3/4.15.3/5.3.0), Verus 0.2026.11.02 (Z3 4.16.0); AMD EPYC 7502P, Linux 6.8.0-100 | Experiments #6-#8's pins unchanged; timed checks on CPUs 28-31,60-63 with a 16 GB cgroup cap (`ulimit -v 16G` too small for OCaml 5) | [results/2026-11-25-exp-09-provenance.md](results/2026-11-25-exp-09-provenance.md) |
+| 2026-11-25 | experiment #9 run 1: the fragment's cases, re-check over the full extraction, C oracle (`onig_search` and `onig_match` at every start position) | as above; C library Release, static | 50 upstream cases (36 x2, 13 x3, 1 n) of #6's 152 (56 class/anychar, 43 multibyte, 3 `e` dropped); independent recogniser finds no other; plus 4 probes of experiment #2 (ei04, ei05, ei07, ei11 as `((a)\|())*`); C agrees with every test expectation, no retry-limit case | [results/2026-11-25-exp-09-cases.md](results/2026-11-25-exp-09-cases.md) |
+| 2026-11-25 | experiment #9 run 1: Rocq M1, AST, semantics (backtracking tree), compiler, VM, theorem statement; extraction and agreement | as above | VM, semantics and #6's `Spec2.v` agree with C on 50/50 searches and 201/201 start positions, probes 4/4 and 10/10; 282 lines of definitions, checked in 2.81 s; all definitions right at the first attempt, 0 interventions | [results/2026-11-25-exp-09-rocq-m1.md](results/2026-11-25-exp-09-rocq-m1.md) |
+
 ## Experiment #11
 
 | Date | Experiment | Finding | Link |
