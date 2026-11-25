@@ -581,3 +581,91 @@ cases, and stack G's verdicts under DEV-003's literal form
 
 **Status.** Decided by the maintainer 2026-11-24
 (https://github.com/tarides/maquizcoatl/issues/28#issuecomment-7136902494).
+
+---
+
+## DEV-009: Below U+0100, the Unicode ctypes follow the Unicode data
+
+Origin: experiment #7, large tables in the prover (issue #11), finding of
+the [fidelity entry](../lab/results/2026-11-19-exp-07-fidelity.md) left
+open by the [review fixes](../lab/results/2026-11-19-exp-07-review-fixes.md),
+the [probe entry](../lab/results/2026-11-25-exp-07-latin1-ctype.md), and
+maintainer decision (a) of 2026-11-25.
+
+**Upstream behaviour at `f95747b`.** Under the Unicode encodings, a
+standard ctype (`ctype <= ONIGENC_MAX_STD_CTYPE`) of a code point below
+256 is answered by `onigenc_unicode_is_code_ctype` from the ISO-8859-1
+ctype table (`upstream/src/unicode.c:1141-1144`), not from the `CR_*`
+ranges generated from the Unicode data. The two disagree on 13 code
+points, all in the ISO table and not in `CR_*`:
+
+| ctype | Code points |
+|-------|-------------|
+| `Word` | U+00B2, U+00B3, U+00B9, U+00BC-U+00BE (superscript digits, vulgar fractions; general category No) |
+| `Print` | U+0009-U+000D, U+0085 (control characters, Cc) |
+| `Cntrl` | U+00AD (soft hyphen, Cf) |
+
+Which answer a pattern sees depends on its form. `\w`, `\W` and
+`\p{Word}` outside a character class become a ctype node
+(`upstream/src/regparse.c:9019-9023`, `:6828-6832`), matched by
+`OP_WORD` / `OP_NO_WORD` through `ONIGENC_IS_MBC_WORD`
+(`upstream/src/regexec.c:3740-3743`, `upstream/src/oniguruma.h:258-259`,
+`:318`), that is, the ISO table; the word-boundary opcodes (`\b`, `\B`)
+answer from the same macro (`OP_WORD_BOUNDARY` and the following
+opcodes, `upstream/src/regexec.c:3776-3820`, through
+`IS_MBC_WORD_ASCII_MODE`, `:38-39`). Inside a
+class (`[\w]`, `[\p{Word}]`, `[[:word:]]`), and for `\p{Print}` and
+`\p{Cntrl}` in every form, the parser builds the class from the `CR_*`
+ranges (`add_ctype_to_cc`, `upstream/src/regparse.c:6615-6634`). So on
+UTF-8 subjects:
+
+- `\w` and `\p{Word}` match U+00B2 (and the other five), `[\w]`,
+  `[\p{Word}]` and `[[:word:]]` do not; `\W` does not match U+00B2,
+  `[\W]` does; `a\b` does not match `a²`, `a\B` does.
+- `\p{Print}`, `[\p{Print}]`, `[[:print:]]`, `\p{Cntrl}`,
+  `[\p{Cntrl}]` and `[[:cntrl:]]` follow `CR_*` on all seven `Print`
+  and `Cntrl` code points: no pattern sees the ISO answer.
+- The public ctype macros (`ONIGENC_IS_CODE_WORD`,
+  `ONIGENC_IS_CODE_PRINT`, `ONIGENC_IS_CODE_CNTRL`, `oniguruma.h`) give
+  the ISO answer for all 13.
+
+**Maquizcoatl behaviour.** Under the Unicode encodings, every standard
+ctype of every code point, below U+0100 included, is the one the `CR_*`
+ranges give (the Unicode data, as the upstream generator produces it).
+Consequences, for the 13 code points only: `\w`, `\p{Word}` and the
+word-boundary assertions treat U+00B2, U+00B3, U+00B9 and U+00BC-U+00BE
+as non-word characters, as `[\w]` already does; the public ctype
+functions and macros answer no for the 13. Patterns that use only
+classes, `\p{Print}` or `\p{Cntrl}` are unchanged. The ISO-8859-1
+encoding itself (`ONIG_ENCODING_ISO_8859_1`) is not concerned.
+
+**Alternatives considered.**
+
+- (b) Reproduce upstream: the ISO table below U+0100 wherever the code
+  consults it. Keeps `\w` and `[\w]` different on six code points, an
+  inconsistent result, which the bug-free goal excludes.
+- (c) Split: `Word` follows the Unicode data, the public ctype answers
+  for `Print` and `Cntrl` keep the ISO table. Smaller change to the
+  C API, but the spec would then carry two definitions of the same
+  ctype, for no pattern-level benefit.
+
+**Reason.** Bug-free goal: upstream gives inconsistent results (`\w`
+and `[\w]`, `\b` and `[\w]`, disagree on the same code point). The
+Unicode data is the definition the rest of the code point range and
+every class form already use, and it agrees with Unicode's own
+definitions (UTS #18 Annex C: `\w` excludes category No; `Print`
+excludes controls; `Cntrl` is category Cc). Deciding it now costs one
+entry; the change only becomes expensive once the drop-in has users,
+since the public ctype functions are part of its API.
+
+**Evidence.** Experiment #7's
+[fidelity entry](../lab/results/2026-11-19-exp-07-fidelity.md) (the 13
+code points, `latin1diff.c`) and the
+[probe entry](../lab/results/2026-11-25-exp-07-latin1-ctype.md)
+(`lab/07-large-tables/latin1ctype.c`, output in
+[raw/out.txt](../lab/results/2026-11-25-exp-07-latin1-ctype-raw/out.txt)).
+Experiment #6's stack G (milestone 2) emits the ctype classes as the code
+computes them, ISO table included; its tables follow this entry when
+the class part of the spec is written.
+
+**Status.** Decided by the maintainer 2026-11-25, option (a).
