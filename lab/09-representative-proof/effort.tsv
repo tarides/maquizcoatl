@@ -42,3 +42,6 @@ run	date	item	kind	attempts	note
 3	2026-11-25	verus/verus.sh	script	1	
 3	2026-11-25	timed.sh (verus case)	script	1	
 3	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+3-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T13:17:18Z (first recorded timestamp, after git pull, reading the review and the run-3 transcript, and the first bench-host reads), end 2026-11-25T13:18:18Z (taken just before the commit); covers the three review fixes and entry 8, not the commit, issue comment, push and dashboard update
+3-fix	2026-11-25	timed.sh, FRAGMENT.md, raw cpu.tsv and verus-threads.txt	correction	1	syntax.rs failure located in the spec fn is_prefix_at (rustc E0308, from the run-3 transcript); time.tsv gains user/sys columns, Verus --num-threads passed (default 7, as run 3 used); header and section 7 fixed; CPU times extracted from the existing time -v files
+3-fix	2026-11-25	human interventions	intervention	0	none

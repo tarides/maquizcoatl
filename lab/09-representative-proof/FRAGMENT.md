@@ -286,8 +286,12 @@ Results compare match or no match, the match end and every group's span
 `rocq/Statement.v` (`main_theorem_statement`), F\*'s is
 `fstar/Statement.fst` (`main_theorem_statement : prop`), Verus's is
 `verus/statement.rs` (`spec fn main_theorem_statement() -> bool`, over
-the spec fns; the exec mirrors are proved equal to them, so the theorem
-carries over to the exec VM). The search
+the spec fns; the exec mirrors are proved equal to them under their
+preconditions `code.len() < usize::MAX - 2`, `s.len() < usize::MAX` and
+`acts_wf`, and `ecompile` returns `None` when a code address overflows
+`usize`, so the theorem carries over to the exec VM only for patterns
+that `ecompile` compiles and subjects within those bounds; see
+`lab/results/2026-11-25-exp-09-verus-m1.md`). The search
 (`Syntax.search`: start positions left to right, the first one that does
 not return `NoMatch`) is the same function of the per-position results
 for the VM and the semantics, so the theorem carries over to it.
