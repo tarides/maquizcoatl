@@ -1,0 +1,27 @@
+Experiment #9 run 14: calibration of Verus's rlimit unit (untimed probe,
+nice -n 10, CPUs 4-7, not part of the matrix; build directory deleted).
+Purpose: convert functions.tsv's per-function rlimit counts into a share
+of the limit the proof is checked with (Verus default --rlimit 10; the
+sources set none).  The brittleness cells never pass --rlimit.
+
+Same ten sources as the matrix (SHA-256 e70d8c41...), Z3 4.16.0 (bundled),
+verus --crate-type=lib --num-threads 4 --output-json --time-expanded
+  --rlimit R --verify-module proof_sim lib.rs
+
+R = 0.3: 46 verified, 2 errors ("resource limit (rlimit) exceeded"):
+  lib::proof_sim::case_chk_null  rlimit count 900000  success false
+  lib::proof_sim::case_star_nn   rlimit count 900000  success false
+  largest successful count: lib::proof_sim::case_star_null 812256
+R = 1:   48 verified, 0 errors; largest count case_star_null 2501172
+
+Both failing functions stop at exactly 0.3 x 3,000,000: one --rlimit unit
+is 3,000,000 Z3 resource units, so the default --rlimit 10 is
+30,000,000 per function check.  The count JSON reports per function
+(all its queries), so count / 30,000,000 is an upper bound on the share
+any single query used.
+
+Earlier attempts (also untimed, not used): the whole crate at R = 0.1
+gave no per-function breakdown (an assert_by_compute recursion-depth VIR
+error ends the run first); two toy crates (a matching loop and a
+nonlinear goal) made Z3 answer "unknown" quickly instead of exhausting
+the limit (counts 514,973 and 2,285 at every R).
