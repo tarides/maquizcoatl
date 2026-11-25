@@ -313,7 +313,9 @@ run 3 wrote the body under the outer quantifier with the trigger
 `sem(0, r, s, p)`, a term the body contains only under a quantifier, so
 Verus could not prove the statement, and run 10 moved the body unchanged
 into the spec fn `main_theorem_at`, the outer quantifier's trigger; a
-trigger is an instantiation hint, not part of the proposition; see
+trigger is an instantiation hint, not part of the proposition;
+accepted by the maintainer as decision 6 of issue #4,
+https://github.com/tarides/maquizcoatl/issues/4#issuecomment-7168019459; see
 `lab/results/2026-11-25-exp-09-verus-m2.md`; the exec mirrors are proved equal to them under their
 preconditions `code.len() < usize::MAX - 2`, `s.len() < usize::MAX` and
 `acts_wf`, and `ecompile` returns `None` when a code address overflows
