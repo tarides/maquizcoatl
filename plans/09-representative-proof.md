@@ -343,7 +343,13 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
    checks and compile invocations are comparable across tools (Rocq
    M2: 19 failed checks, 23 invocations); `effort.tsv`'s per-lemma
    attempts (a clean compile counts once per lemma it contains; Rocq
-   M2: 67) and run 3's per-module Verus rows are not.
+   M2: 67) and run 3's per-module Verus rows are not. Failing
+   invocations are reported beside failed checks (run-7 review): Rocq's
+   19 failed checks are all its failing invocations, while F\*'s 7 leave
+   out 6 failing reruns of an unchanged file that its `invocations.tsv`
+   cannot identify, so the table gives failing invocations (Rocq 19,
+   F\* 13) and failed checks (Rocq 19, F\* 7, the latter resting on the
+   session record).
 
 ## Runs (launched one by one by the maintainer)
 
@@ -396,7 +402,10 @@ Per run, in `effort.tsv` and the notebook entry: session wall-clock
 (start and end, UTC); per lemma the number of attempts (a check that
 fails and leads to an edit counts as one attempt); for each M2 run, the
 UTC timestamps of the first and the last compile of the proof, so the
-proof time per tool is a recorded figure (run-4 review); human
+proof time per tool is a recorded figure (run-4 review); from run 10
+on, each line of an M2 run's `invocations.tsv` also carries the SHA-256
+of the compiled source file, so a rerun of an unchanged file is
+identifiable from the raw file (run-7 review); human
 interventions (count, with a one-line reason each); person-days only for
 work a person did. Session time is engineering effort, reported apart from machine
 time.

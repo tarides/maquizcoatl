@@ -1,0 +1,18 @@
+# Experiment #9, correction 6: untimed recheck of the Verus definitions
+# crate (lib.rs: syntax, sem, compile, vm, statement) with decision 5's
+# statement, on the bench host, from a copy of the run-7 statement-check
+# directory (<bench-workdir>/exp/09-representative-proof/build/verus/r7-stmt).
+# Command: nice -n 10 taskset -c 4-7 verus --crate-type=lib lib.rs
+2026-11-25T15:01:40Z
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+3eef61e31cda751f1bfa6c21032f3dec3a04e8e13436ee16b7b7347cfee946d5  compile.rs
+61f44dd7325421a69335bbf5826e77522a46827f4ecebfaded29ed9d90fe8e0f  lib.rs
+ef188bd6b7b9deefc056feed785e590c4c6e347ff97f4f5d75e94637f4332ca9  sem.rs
+5afb8498df3417c01ee898e85a7a2564b87d412b25421fa3285663eea780ae66  statement.rs
+a1b3b19a29a8761eb1f19aab046be2baa93826727506e3e4205130d855d8c7e9  syntax.rs
+df24f51b224f4c672d36ef498639c1e5b17e3fa56665426679156f1d025e4841  vm.rs
+verification results:: 57 verified, 0 errors
+rc=0
+2026-11-25T15:01:43Z

@@ -86,9 +86,11 @@ run	date	item	kind	attempts	note
 7	2026-11-25	F* M2 proof compiles	timestamps	-	first proof compile 2026-11-25T14:37:22Z (ProofA.fst), last proof compile of the edit loop 2026-11-25T14:43:37Z (Proof.fst); then axioms.sh 14:43:54Z-14:44:27Z, timed.sh 14:44:59Z-14:46:36Z, one untimed --query_stats check of ProofSim.fst
 7	2026-11-25	F* M2 compile invocations	invocations	21	21 untimed fstar.exe invocations of the proof modules in the edit loop (ProofA 5, ProofSem 2, ProofSim 6, Proof 8): 13 failing, 8 clean; of the 13 failing, 7 were failed checks (a failure that led to an edit) and 6 reran an unchanged file to read the error (output truncation in the session's wrapper); raw list: results/2026-11-25-exp-09-fstar-m2-raw/fstar/invocations.tsv
 7	2026-11-25	ProofA.length_comp	lemma	3	SMTPat of length_append did not fire: explicit calls; then fuel 2 too low for the nullable-star layout: --fuel 4 for this lemma
-7	2026-11-25	ProofA.code_at (definition), code_at_app, code_at_shift	lemma	2	missing decreases clauses (termination on the code list instead of the instruction list); one failed check, attributed to code_at
+7	2026-11-25	ProofA.code_at	definition	2	auxiliary definition; missing decreases clauses (termination on the code list instead of the instruction list); one failed check, attributed to code_at (row split in correction 6)
+7	2026-11-25	ProofA.code_at_app, code_at_shift	lemma	1	2 lemmas, each right at its first check (row split from code_at in correction 6)
 7	2026-11-25	ProofA.length_append, append_assoc, code_alt, code_cat, code_group, code_lit, code_star_null, code_star_nn, code_at_prefix, nth_append_len, code_compile	lemma	1	11 lemmas, each right at its first check
-7	2026-11-25	ProofSem.ct_mono, ct_det, is_prefix_length, length_skipn, ct_total, clen0_fm; fuel_of (function)	lemma	1	all right at the first check; fuel_of is lemma (d) for the semantics, a total function returning the fuel
+7	2026-11-25	ProofSem.ct_mono, ct_det, is_prefix_length, length_skipn, ct_total, clen0_fm	lemma	1	6 lemmas, all right at the first check (fuel_of split out in correction 6)
+7	2026-11-25	ProofSem.fuel_of	function	1	right at the first check; lemma (d) for the semantics, a total function returning the fuel (row split in correction 6)
 7	2026-11-25	ProofSim.choice	function	2	binder syntax: the arrow type of the second-branch argument needed parentheses
 7	2026-11-25	ProofSim.case_group	function	2	the group's continuation is represented at pos + minlen a, not pos
 7	2026-11-25	ProofSim.case_cat	function	2	module rlimit lowered from 20 to 10 after the proof closed: case_cat needs 20 (used rlimit 10.24), kept at 20 for case_cat only
@@ -99,3 +101,6 @@ run	date	item	kind	attempts	note
 7	2026-11-25	axioms.sh (fstar case), timed.sh (FSTAR_FILES), lemmas.py (F* rules)	script	1	
 7	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
 7	2026-11-25	session	wall-clock	-	start 2026-11-25T14:27:26Z, end 2026-11-25T14:50:53Z (taken just before the commit); covers the decision-5 statement change, the F* M2 proof, axioms.sh, timed.sh and entries 13-14, not the commit, issue comment, push and dashboard update
+7-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T15:01:40Z (first recorded timestamp, after git pull, reading the review and the run-7 records), end 2026-11-25T15:02:40Z (taken just before the commit); covers the three review fixes, the Verus recheck and entry 15, not the commit, issue comment, push and dashboard update
+7-fix	2026-11-25	effort.tsv, plans/09-representative-proof.md, Verus statement recheck	correction	1	two run-7 rows split by kind; M4 reports failing invocations beside failed checks; invocations.tsv gains a source digest from run 10 on; Verus crate rechecked clean at the first check
+7-fix	2026-11-25	human interventions	intervention	0	none
