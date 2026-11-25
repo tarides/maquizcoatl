@@ -245,3 +245,34 @@ yet: it waits for the CPU set it may use on the bench host.
   whose literal form was exponential on one upstream test.
 - The run also found a type-mismatch bug in `why3 execute`. The
   maintainer handles the upstream report (issue #36).
+
+## 2026-11-25: experiment #9 proves the VM in Rocq and F\*
+
+- **Experiment #9 (representative proof), runs 1-3.** Before run 1, a
+  Fable review of the plan's switch to DEV-008 found that no upstream
+  case of the fragment exercises the empty-loop check. The plan now
+  always adds experiment #2's loop probes. Run 1 wrote `FRAGMENT.md`,
+  the design every tool copies, and selected the 66 upstream cases of
+  the fragment, plus the 4 probes. Runs 1-3 wrote the AST, semantics,
+  compiler and VM in Rocq, F\* and Verus. All three agree with C on every
+  case and start position, and their outputs are byte-identical. Each
+  run took under 30 minutes, with no human intervention.
+- **Run 4: the Rocq theorem is closed** in one run instead of the three
+  planned: 48 lemmas, `Print Assumptions` clean, 872 lines of proof,
+  6.5 s to check. The run found that the statement is false unless the
+  pattern's group numbers are distinct; a pattern parsed from text
+  always satisfies this. The maintainer accepted that hypothesis for
+  all three tools.
+- **Run 7: the F\* theorem is closed**, also in one run: 43 lemmas and
+  17 proof functions, all 503 SMT queries succeed at the first attempt,
+  31.8 s to check (most of it in the simulation proof). Verus is next.
+- **DEV-009.** Experiment #7 had left open 13 code points below U+0100,
+  where the ISO-8859-1 ctype table and the Unicode data disagree. A
+  probe of the C library showed that upstream contradicts itself:
+  `\w` matches `²` but `[\w]` does not. The maintainer chose the Unicode
+  data everywhere (PR #37).
+- **Smaller decisions.** Issue #34 picks its SMT tool after experiment
+  #9's F\* proofs. The maintainer reported the `why3 execute` bug on the
+  why3-club mailing list (issue #36). Issue #25 (Verus and Isabelle
+  builds for experiment #13) entered the pipeline and runs alongside
+  experiment #9, on separate cores.
