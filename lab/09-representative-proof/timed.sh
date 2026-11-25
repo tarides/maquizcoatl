@@ -5,11 +5,13 @@
 # rocq/rocq.sh time: OCaml 5 tools reserve more address space than
 # ulimit -v 16G allows), load average before each check.  Adapted from
 # experiment #8's timed.sh and check.sh.  Run under flock <exp>/timed.lock.
-#   BENCH_WORKDIR=<bench-workdir> timed.sh <tool> <run-id>     tool: fstar
+#   BENCH_WORKDIR=<bench-workdir> timed.sh <tool> <run-id>     tool: fstar | verus
 # (Rocq's timed checks are rocq/rocq.sh time, run 1.)
 # Output: <exp>/out/<run-id>/<tool>/time.{tsv,load,log,<r>.<file>}.
 # time.log holds the checker's output (fstar: one "Verified module" line
-# per file and run, 15 in all); time.tsv, time.load and time.log are
+# per file and run, 15 in all; verus: one "verification results" line
+# per run, 3 in all, since Verus checks the crate lib.rs as one unit,
+# its default thread count being the 8 pinned CPUs); time.tsv, time.load and time.log are
 # copied to the run's lab/results/<entry>-raw/<tool>/ raw set.
 # Prints no hostnames, addresses or absolute paths.
 set -euo pipefail
@@ -24,6 +26,10 @@ case $T in
   fstar) DEFS="Syntax Sem Compile Vm Statement"
          fresh() { rm -rf "$1"; mkdir -p "$1/cache"; cp "$L"/fstar/{Syntax,Sem,Compile,Vm,Statement}.fst "$1/"; }
          chk() { fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 "$1.fst"; } ;;
+  verus) DEFS="lib"
+         . "$CACHE/verus-env.sh"
+         fresh() { rm -rf "$1"; mkdir -p "$1"; cp "$L"/verus/{lib,syntax,sem,compile,vm,statement}.rs "$1/"; }
+         chk() { verus --crate-type=lib "$1.rs"; } ;;
   *) echo "unknown tool $T" >&2; exit 2 ;;
 esac
 export -f chk

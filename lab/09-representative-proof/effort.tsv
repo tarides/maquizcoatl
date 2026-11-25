@@ -32,3 +32,13 @@ run	date	item	kind	attempts	note
 2-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T12:51:53Z (first recorded timestamp, after git pull and reading the files), end 2026-11-25T12:52:26Z (taken just before the commit); covers the three review fixes and entry 6, not the commit, issue comment, push and dashboard update
 2-fix	2026-11-25	effort.tsv, timed.sh, fstar/Extract.fst, raw time.log	correction	1	note, header and comment fixed; time.log copied from the bench run
 2-fix	2026-11-25	human interventions	intervention	0	none
+3	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T12:54:29Z (timestamp of the session's first command, git pull), end 2026-11-25T13:07:23Z (taken just before assembling the raw set and writing entry 7); covers reading, the Verus work and the bench runs; not entry 7, the commit, the results comment, push and dashboard update
+3	2026-11-25	verus/syntax.rs	definition	2	first check failed (nat -> int cast in is_prefix_at's subrange); exec instructions switched to literals borrowed from the pattern before the first check (design, no failure)
+3	2026-11-25	verus/sem.rs	definition	4	spec fns checked first time; the exec mirror needed 3 more: overflow of pos + |l| (hint), espans loop invariant (push hint), esearch_sem (closure value not in the loop invariant, 2 attempts)
+3	2026-11-25	verus/compile.rs	definition	3	spec fns checked first time; exec mirror: postcondition syntax (final(out)), then rlimit exceeded in the single ecomp, split into one helper per construct (no rlimit raised)
+3	2026-11-25	verus/vm.rs	definition	2	spec fns and estep checked first time; epop and evm needed the ghost goal tied to the initial state in their loop invariants
+3	2026-11-25	verus/statement.rs	definition	1	statement only (spec fn), no proof; checked first time
+3	2026-11-25	verus/main.rs, lib.rs	driver	1	verified, compiled and agreed first time
+3	2026-11-25	verus/verus.sh	script	1	
+3	2026-11-25	timed.sh (verus case)	script	1	
+3	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)

@@ -1,0 +1,2 @@
+# grep -nE 'assume|admit|external_body|verifier::external|exec_allows_no_decreases|no_verify' verus/*.rs
+(no match, exit 1)
