@@ -1,0 +1,17 @@
+Creating new z3proc (cmd=[("<bench-workdir>/cache/fstar/lib/fstar/z3-4.15.3/bin/z3", ["-smt2", "-in"])], version=["4.15.3"])
+(Statement.fst(19,2-23,30))	Query-stats (Statement.groups, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.002)
+(Statement.fst(19,2-23,30))	Query-stats (Statement.groups, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.002)
+(Statement.fst(19,2-23,30))	Query-stats (Statement.groups, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.002)
+(Statement.fst(19,2-23,30))	Query-stats (Statement.groups, 1)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.002)
+(Statement.fst(19,2-23,30))	Query-stats (Statement.groups, 1)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.001)
+(Statement.fst(19,2-23,30))	Query-stats (Statement.groups, 1)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.002)
+(Prims.fst(91,23-91,30))	Query-stats (Statement.mem, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.000)
+(Statement.fst(25,13-26,55))	Query-stats (Statement.mem, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.002)
+(Statement.fst(30,2-30,62))	Query-stats (Statement.nodup, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.002)
+(Prims.fst(91,23-91,30))	Query-stats (Statement.main_theorem_statement, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.000)
+(Prims.fst(91,23-91,30))	Query-stats (Statement.main_theorem_statement, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.000)
+(Prims.fst(91,23-91,30))	Query-stats (Statement.main_theorem_statement, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 5 (used rlimit 0.000)
+Killing old z3proc (ask_count=3, old_cmd=[("<bench-workdir>/cache/fstar/lib/fstar/z3-4.15.3/bin/z3", ["-smt2", "-in"])])
+Verified module: Statement
+All verification conditions discharged successfully
+TOTAL TIME 226 ms: fstar.exe --cache_checked_modules --cache_dir cache --z3version 4.15.3 --z3seed 4 --admit_smt_queries false --query_stats Statement.fst

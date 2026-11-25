@@ -1,0 +1,21 @@
+query	max_used_over_limit	cell_of_max	max_5.3.0	max_4.15.3	max_4.13.3
+(ProofSim.case_star_null, 2) goal 29	1.000	4.15.3_4	0.003	1.000	0.819
+(ProofSim.case_chk_null, 2) goal 20	0.906	4.15.3_8	0.740	0.906	0.896
+(ProofSim.case_cat, 2) goal 16	0.589	5.3.0_5	0.589	0.553	0.531
+(ProofSim.case_star_null, 2) goal 34	0.572	4.13.3_1	0.524	0.568	0.572
+(ProofSim.case_star_null, 2) goal 35	0.508	4.13.3_3	0.210	0.502	0.508
+(ProofSim.case_chk_null, 2) goal 9	0.451	4.15.3_8	0.426	0.451	0.330
+(ProofSim.case_alt, 2) goal 32	0.435	4.15.3_8	0.138	0.435	0.434
+(ProofSim.case_star_nn, 2) goal 25	0.414	5.3.0_4	0.414	0.394	0.334
+(ProofSim.case_alt, 2) goal 17	0.356	5.3.0_6	0.356	0.333	0.316
+(ProofSim.case_alt, 2) goal 28	0.314	4.15.3_8	0.103	0.314	0.313
+(ProofSim.case_chk_nn, 2) goal 8	0.290	4.15.3_8	0.256	0.290	0.274
+(ProofSim.case_alt, 2) goal 7	0.266	4.13.3_7	0.256	0.262	0.266
+(ProofSim.case_star_nn, 2) goal 31	0.253	4.15.3_7	0.106	0.253	0.253
+(ProofSim.case_alt, 2) goal 31	0.241	5.3.0_5	0.241	0.167	0.166
+(ProofSim.case_star_null, 2) goal 24	0.222	5.3.0_6	0.222	0.159	0.159
+(ProofSem.fuel_of, 1) goal 31	0.198	4.15.3_7	0.063	0.198	0.054
+(ProofSim.case_star_null, 2) goal 14	0.176	4.15.3_7	0.108	0.176	0.175
+(ProofSim.case_alt, 2) goal 27	0.165	4.15.3_7	0.081	0.165	0.165
+(ProofSim.case_alt, 2) goal 29	0.165	4.15.3_7	0.080	0.165	0.164
+(ProofSim.case_alt, 2) goal 16	0.159	4.13.3_1	0.057	0.156	0.159
