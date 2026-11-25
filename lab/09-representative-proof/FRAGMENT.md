@@ -273,8 +273,10 @@ hits the limit are excluded from the comparison.
 ## 7. Theorem
 
 For every pattern `r` of the fragment whose group numbers are pairwise
-distinct (`NoDup (groups r)`; added in run 4, see below), subject `s`
-and start position `p <= |s|`:
+distinct (`NoDup (groups r)`; added in run 4, see below, and accepted by
+the maintainer as decision 5 of issue #4,
+[comment](https://github.com/tarides/maquizcoatl/issues/4#issuecomment-7165293346)),
+subject `s` and start position `p <= |s|`:
 
 - **soundness:** whenever `vm fv (compile r) (ncap r) s p` returns
   `Match` or `NoMatch`, it equals `sem fs r s p` for every fuel `fs`
@@ -295,8 +297,14 @@ semantics (the outer `AClose` writes last). Rocq checks both results by
 computation (`rocq/Proof.v`, `nested_same_group_vm` and
 `nested_same_group_sem`). The statement therefore carries the
 hypothesis `NoDup (groups r)` (`groups` in `rocq/Statement.v`: the group
-numbers of `r` in pre-order); F\* and Verus transcribe it when their M2
-starts. Rocq's statement is
+numbers of `r` in pre-order). **Decided:** the maintainer accepted the
+hypothesis for the three tools (decision 5 of issue #4,
+[comment](https://github.com/tarides/maquizcoatl/issues/4#issuecomment-7165293346));
+it excludes no real pattern, since the parser numbers groups in order and
+`f95747b` has no branch reset. F\* transcribes it as `nodup (groups r)`
+(`fstar/Statement.fst`, `nodup` a boolean NoDup) and Verus as
+`groups(r).no_duplicates()` (`verus/statement.rs`), each with a `groups`
+that is Rocq's (run 7). Rocq's statement is
 `rocq/Statement.v` (`main_theorem_statement`), F\*'s is
 `fstar/Statement.fst` (`main_theorem_statement : prop`), Verus's is
 `verus/statement.rs` (`spec fn main_theorem_statement() -> bool`, over

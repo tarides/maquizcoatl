@@ -81,3 +81,5 @@ run	date	item	kind	attempts	note
 4-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T14:00:19Z (first recorded timestamp, after git pull and reading the review), end 2026-11-25T14:01:01Z (taken just before the commit); covers the three review fixes and entry 12, not the commit, issue comment, push and dashboard update
 4-fix	2026-11-25	FRAGMENT.md, fstar/Statement.fst, verus/statement.rs, plans/09-representative-proof.md	correction	1	section 8 (d) reworded; header comments; M4 attempt units and M2 proof timestamps added to the plan
 4-fix	2026-11-25	human interventions	intervention	0	none
+7	2026-11-25	session	wall-clock	-	start 2026-11-25T14:27:26Z (first timestamp, at git pull); end recorded in a later row
+7	2026-11-25	fstar/Statement.fst, verus/statement.rs	statement	1	decision 5: hypothesis nodup (groups r) / groups(r).no_duplicates() with Rocq's groups; F* five definition files and Verus crate rechecked once each (14:29:08Z, 14:29:14Z), both clean at the first check; no extracted or exec definition changed, so the agreement drivers were not rerun

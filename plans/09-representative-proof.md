@@ -252,6 +252,13 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
   return a result other than `OutOfFuel`. That is the unbounded VM of
   the issue; the C retry limit is outside the theorem. Results compare
   match/no match, match end and every group's span (unset as -1).
+  "Every pattern of the fragment" means every pattern whose capture
+  group numbers are distinct (`NoDup (groups r)`, decision 5 of issue
+  #4, [comment](https://github.com/tarides/maquizcoatl/issues/4#issuecomment-7165293346)):
+  found necessary by Rocq's run 4 (a group nested in a group of the
+  same number makes the statement false), it excludes no pattern the
+  parser produces; the three statements carry it (`FRAGMENT.md`
+  section 7).
 
 ## Approach
 
