@@ -1,0 +1,49 @@
+2026-11-24T16:16:46Z
+series: C and stack G thr run 1
+0.66 0.93 0.67
+busy timing CPUs: 
+2026-11-24T16:23:16Z
+series: C and stack G thr run 2
+1.04 1.03 0.83
+busy timing CPUs: 
+2026-11-24T16:29:53Z
+series: C and stack G thr run 3
+1.11 1.06 0.93
+busy timing CPUs: 
+2026-11-24T16:36:26Z
+series: extracted thr run 1
+1.00 1.03 0.98
+busy timing CPUs: 
+2026-11-24T16:37:14Z
+series: extracted thr run 2
+1.00 1.02 0.99
+busy timing CPUs: 
+2026-11-24T16:38:01Z
+series: extracted thr run 3
+1.00 1.02 0.99
+busy timing CPUs: 
+2026-11-24T16:38:47Z
+series: in-prover run 1
+1.13 1.05 1.01
+busy timing CPUs: 
+2026-11-24T16:39:31Z
+series: in-prover run 2
+1.10 1.05 1.01
+busy timing CPUs: 
+2026-11-24T16:40:14Z
+series: in-prover run 3
+1.05 1.04 1.00
+busy timing CPUs: 
+2026-11-24T16:40:58Z
+series: tspec run 1
+1.02 1.04 1.00
+busy timing CPUs: 
+2026-11-24T16:43:17Z
+series: tspec run 2
+1.18 1.09 1.02
+busy timing CPUs: 
+2026-11-24T16:45:36Z
+series: tspec run 3
+1.16 1.11 1.03
+busy timing CPUs: 
+done 2026-11-24T16:47:54Z

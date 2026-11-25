@@ -1,0 +1,9 @@
+File "full.ml", line 6743, characters 23-31:
+6743 |                      | p, false -> not p
+                              ^^^^^^^^
+Warning 11 [redundant-case]: this match case is unused.
+
+File "full.ml", line 6744, characters 23-30:
+6744 |                      | p, true -> p;;
+                              ^^^^^^^
+Warning 11 [redundant-case]: this match case is unused.

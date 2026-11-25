@@ -1,0 +1,13 @@
+2026-11-24T15:03:06Z
+series: why3 tspec run 4
+1.00 1.11 1.23
+busy timing CPUs: 
+2026-11-24T15:03:14Z
+series: why3 tspec run 5
+1.00 1.10 1.23
+busy timing CPUs: 
+2026-11-24T15:03:22Z
+series: why3 tspec run 6
+1.00 1.10 1.23
+busy timing CPUs: 
+done 2026-11-24T15:03:29Z

@@ -1,0 +1,15 @@
+fstar-extracted	1	0	0:09.55	8192	1.00 1.03 0.98
+fstar-extracted	2	0	0:09.51	8192	1.00 1.02 0.99
+fstar-extracted	3	0	0:09.37	8192	1.00 1.02 0.99
+fstar-check-tables	1	0	0:24.27	461172	1.29 1.10 1.03
+fstar-check	1	0	0:02.53	232956	1.19 1.09 1.02
+fstar-extract-ocaml	1	0	0:01.78	309800	1.19 1.09 1.02
+fstar-ocamlopt	1	0	0:03.51	315912	1.18 1.09 1.02
+fstar-check-tables	2	0	0:24.47	461172	1.27 1.12 1.03
+fstar-check	2	0	0:02.57	232968	1.19 1.11 1.03
+fstar-extract-ocaml	2	0	0:01.79	310316	1.17 1.11 1.03
+fstar-ocamlopt	2	0	0:03.54	315372	1.17 1.11 1.03
+fstar-check-tables	3	0	0:24.21	461172	1.29 1.14 1.04
+fstar-check	3	0	0:02.55	232960	1.27 1.14 1.05
+fstar-extract-ocaml	3	0	0:01.75	309800	1.25 1.14 1.05
+fstar-ocamlopt	3	0	0:03.53	315744	1.25 1.14 1.05

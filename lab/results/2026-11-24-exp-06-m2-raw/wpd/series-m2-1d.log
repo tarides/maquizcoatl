@@ -1,0 +1,29 @@
+2026-11-24T14:03:35Z
+series: calibration (untimed, CPUs 0-3)
+0.08 0.22 0.16
+busy timing CPUs: 
+2026-11-24T14:04:20Z
+series: lean lake run 1
+0.66 0.36 0.21
+busy timing CPUs: 
+2026-11-24T14:04:33Z
+series: isabelle value run 1
+0.87 0.43 0.24
+busy timing CPUs: 
+2026-11-24T14:05:06Z
+series: lean lake run 2
+1.30 0.58 0.30
+busy timing CPUs: 
+2026-11-24T14:05:18Z
+series: isabelle value run 2
+1.23 0.60 0.31
+busy timing CPUs: 
+2026-11-24T14:05:51Z
+series: lean lake run 3
+3.61 1.18 0.51
+busy timing CPUs: 
+2026-11-24T14:06:04Z
+series: isabelle value run 3
+3.03 1.17 0.52
+busy timing CPUs: 
+done 2026-11-24T14:06:36Z

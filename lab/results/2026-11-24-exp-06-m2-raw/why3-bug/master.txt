@@ -1,0 +1,9 @@
+why3 (master): Why3 platform, version 1.9.0+git
+commit: source-hash 5c30f6091172b75c4f610feb0ff0b4e16ca4db58 pin         git+https://gitlab.inria.fr/why3/why3.git#master 
+== master: some_list ()
+Type mismatch between list.List.list int and int
+== master: cons_pair ()
+Type mismatch between Bug.pair and int
+== master: some_q ()
+result: option q = (Some (Q 1 2))
+globals: <none>

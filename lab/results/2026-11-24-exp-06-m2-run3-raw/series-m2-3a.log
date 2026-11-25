@@ -1,0 +1,37 @@
+2026-11-24T18:28:30Z
+series: compiled thr run 1
+0.86 1.54 0.97
+busy timing CPUs: 
+2026-11-24T18:28:57Z
+series: compiled thr run 2
+0.91 1.49 0.98
+busy timing CPUs: 
+2026-11-24T18:29:24Z
+series: compiled thr run 3
+1.00 1.47 0.98
+busy timing CPUs: 
+2026-11-24T18:29:51Z
+series: in-prover run 1
+1.08 1.44 0.99
+busy timing CPUs: 
+2026-11-24T18:30:43Z
+series: in-prover run 2
+1.70 1.60 1.07
+busy timing CPUs: 
+2026-11-24T18:31:34Z
+series: in-prover run 3
+1.52 1.59 1.10
+busy timing CPUs: 
+2026-11-24T18:32:25Z
+series: tspec run 1
+2.22 1.75 1.18
+busy timing CPUs: 
+2026-11-24T18:33:32Z
+series: tspec run 2
+2.64 1.95 1.29
+busy timing CPUs: 
+2026-11-24T18:34:47Z
+series: tspec run 3
+3.31 2.49 1.54
+busy timing CPUs: 28 5.8 (thread of another process);
+done 2026-11-24T18:36:02Z

@@ -1,0 +1,35 @@
+verification results:: 53 verified, 0 errors
+warning: comparison is useless due to type limits
+    --> tables2.rs:9279:12
+     |
+9279 |         if c < 0 {
+     |            ^^^^^
+     |
+     = note: `#[warn(unused_comparisons)]` on by default
+
+warning: comparison is useless due to type limits
+     --> tables2.rs:22787:8
+      |
+22787 |     if c < 0 {
+      |        ^^^^^
+
+warning: comparison is useless due to type limits
+     --> tables2.rs:22805:44
+      |
+22805 | ...                   if c < 0 {
+      |                          ^^^^^
+
+warning: comparison is useless due to type limits
+     --> tables2.rs:25752:36
+      |
+25752 | ...                   if c < 0 {
+      |                          ^^^^^
+
+warning: comparison is useless due to type limits
+     --> tables2.rs:33763:8
+      |
+33763 |     if c < 0 {
+      |        ^^^^^
+
+warning: 5 warnings emitted
+

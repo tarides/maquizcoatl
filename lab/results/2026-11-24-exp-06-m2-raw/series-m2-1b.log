@@ -1,0 +1,41 @@
+2026-11-24T14:30:17Z
+series: extracted thr run 1
+1.15 1.29 1.13
+busy timing CPUs: 
+2026-11-24T14:30:40Z
+series: extracted thr run 2
+1.11 1.27 1.13
+busy timing CPUs: 
+2026-11-24T14:31:02Z
+series: extracted thr run 3
+1.07 1.25 1.12
+busy timing CPUs: 
+2026-11-24T14:31:25Z
+series: in-prover run 1
+1.05 1.23 1.12
+busy timing CPUs: 
+2026-11-24T14:38:49Z
+series: in-prover run 2
+1.22 1.73 1.49
+busy timing CPUs: 
+2026-11-24T14:46:11Z
+series: in-prover run 3
+1.09 1.23 1.33
+busy timing CPUs: 
+2026-11-24T14:53:34Z
+series: tspec run 1
+2.55 1.68 1.43
+busy timing CPUs: 
+2026-11-24T14:54:14Z
+series: tspec run 2
+1.79 1.59 1.41
+busy timing CPUs: 
+2026-11-24T14:54:54Z
+series: tspec run 3
+1.45 1.53 1.40
+busy timing CPUs: 
+2026-11-24T14:55:34Z
+series: full-table spot check
+1.23 1.46 1.38
+busy timing CPUs: 
+done 2026-11-24T15:03:06Z

@@ -1,0 +1,15 @@
+(* Experiment #6: isolated reproducer of the why3 execute failure seen in
+   milestone 1 (Why3 1.9.0): a value of a polymorphic constructor that
+   holds a list fails with "Type mismatch between ... and int". *)
+module Bug
+  use int.Int
+  use list.List
+  use option.Option
+
+  type pair = P (list int) (list int)
+  type q = Q int int
+
+  let some_list () : option (list int) = Some (Cons 1 (Cons 2 Nil))
+  let cons_pair () : list pair = Cons (P (Cons 1 Nil) Nil) Nil
+  let some_q () : option q = Some (Q 1 2)
+end
