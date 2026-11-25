@@ -155,3 +155,5 @@ run	date	item	kind	attempts	note
 15-fix	2026-11-25	entry 23 fixes (correction 10, draft)	correction	1	fixes 1-5 at the first attempt; largest-item lines recomputed with lemmas.py (F*, Verus) and the same rule for Rocq
 15-fix	2026-11-25	lemmas.py F* admitted count	script	1	output on the branch F* files byte-identical; scratch test file with admit/assume val/magic/comment gives admitted 3 at the first attempt
 15-fix	2026-11-25	human interventions	intervention	0	none
+c11	2026-11-25	run-13 logs.tar.xz repack	data	1	contents verified identical at the first attempt
+c11	2026-11-25	human interventions	intervention	0	none (maintainer decision recorded on issue #4)
