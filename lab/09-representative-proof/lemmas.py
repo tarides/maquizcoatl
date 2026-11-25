@@ -25,6 +25,14 @@ that returns witnesses, such as `ProofSim.sim`, or an auxiliary
 definition) or `example` (an `assert_norm`), with its line count, and
 is not a lemma. Comments are stripped first (loc.py's rule); for every
 item the third column is its kind and the fourth its non-blank lines.
+The F* `admitted` total (run-15 review follow-up; it was a literal 0
+before) is measured as the Verus one is: it counts the items whose
+declaration calls `admit`, `assume` or `magic` (as words, outside
+comments), and every top-level `assume val`; such an item is printed
+with kind `ADMITTED` and still counts as a lemma when its type is a
+`Lemma`. This is a per-item count only: the authoritative admit check
+for F* remains axioms.sh's (`--admit_smt_queries false` and its source
+scan).
 
 Verus (.rs, run 10): a lemma is a `proof fn` (also `broadcast proof
 fn`), whether or not it returns a value (plan step 6). It is automatic
@@ -97,7 +105,8 @@ def lemmas(path):
     return res
 
 
-FTOP = re.compile(r"(?m)^(let|val|type|noeq|open|module|#push-options|#pop-options|\[@@)")
+FTOP = re.compile(r"(?m)^(assume\s+val|let|val|type|noeq|open|module|#push-options|#pop-options|\[@@)")
+FADMIT = re.compile(r"\b(admit|assume|magic)\b")
 
 
 def fstar_head_body(decl):
@@ -136,19 +145,22 @@ def fstar_items(path):
     res = []
     for a, b in zip(starts, starts[1:]):
         decl = text[a:b]
-        m = re.match(r"(let|val)\s+(rec\s+)?([\w']+)", decl)
+        m = re.match(r"(assume\s+val|let|val)\s+(rec\s+)?([\w']+)", decl)
         if not m:
             continue
         name = m.group(3)
         head, body = fstar_head_body(decl)
         nlines = sum(1 for ln in decl.split("\n") if ln.strip())
-        if re.search(r"\bLemma\b", depth0(head)):
+        is_lemma = re.search(r"\bLemma\b", depth0(head)) is not None
+        if FADMIT.search(decl):
+            kind = "ADMITTED"
+        elif is_lemma:
             kind = "automatic" if body.strip() == "()" else "manual"
         elif body.strip().startswith("assert_norm"):
             kind = "example"
         else:
             kind = "function"
-        res.append((name, kind, nlines))
+        res.append((name, kind, nlines, is_lemma))
     return res
 
 
@@ -217,13 +229,15 @@ def main(paths):
             continue
         if p.endswith(".fst"):
             its = fstar_items(p)
-            for name, kind, n in its:
+            for name, kind, n, _ in its:
                 print(f"{p}\t{name}\t{kind}\t{n}")
-            nl = sum(1 for x in its if x[1] in ("automatic", "manual"))
+            nl = sum(1 for x in its if x[1] in ("automatic", "manual")
+                     or (x[1] == "ADMITTED" and x[3]))
             na = sum(1 for x in its if x[1] == "automatic")
+            nd = sum(1 for x in its if x[1] == "ADMITTED")
             nf = sum(1 for x in its if x[1] == "function")
-            print(f"{p}\ttotal {nl}\tautomatic {na}\tadmitted 0\tfunctions {nf}")
-            tot[0] += nl; tot[1] += na
+            print(f"{p}\ttotal {nl}\tautomatic {na}\tadmitted {nd}\tfunctions {nf}")
+            tot[0] += nl; tot[1] += na; tot[2] += nd
             continue
         ls = lemmas(p)
         for name, auto, adm, n in ls:

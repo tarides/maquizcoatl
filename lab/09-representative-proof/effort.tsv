@@ -151,3 +151,7 @@ run	date	item	kind	attempts	note
 15	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T19:08:01Z (first file written, after git pull and reading the plan and issue #4), end 2026-11-25T19:13:50Z (taken just before the commit); covers reading entries 1-22, the raw files and the reviews, the recomputations, entry 23 and the draft of the done-criterion-5 comment; not the commit, issue comment, push and dashboard update
 15	2026-11-25	M4 comparison (entry 23, comment draft)	comparison	1	no prover and no bench-host work; loc.py, lemmas.py, effort.tsv sessions and attempts, brittleness pass counts, medians and margins recomputed on the workstation, all equal to the entries' figures
 15	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+15-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T19:21:57Z (first timestamp taken, after git pull and reading the review), end 2026-11-25T19:23:13Z (taken just before the commit); covers correction 10, the draft edits and the lemmas.py change; not the commit, issue comment, push and dashboard update
+15-fix	2026-11-25	entry 23 fixes (correction 10, draft)	correction	1	fixes 1-5 at the first attempt; largest-item lines recomputed with lemmas.py (F*, Verus) and the same rule for Rocq
+15-fix	2026-11-25	lemmas.py F* admitted count	script	1	output on the branch F* files byte-identical; scratch test file with admit/assume val/magic/comment gives admitted 3 at the first attempt
+15-fix	2026-11-25	human interventions	intervention	0	none
