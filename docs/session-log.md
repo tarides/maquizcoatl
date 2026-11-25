@@ -227,3 +227,21 @@ yet: it waits for the CPU set it may use on the bench host.
   approval) and an Isabelle-LLVM model of the C client (issue #30).
   Experiment #9's tool choice and experiment #6's milestone 2 (issue
   #28) no longer wait on anything.
+
+## 2026-11-25: experiment #6, milestone 2 merged
+
+- **Experiment #6, milestone 2 (issue #28)** is merged (PR #31). Stack G
+  and six provers (Rocq, Lean 4, Why3, F\*, Verus, Isabelle) now run the
+  semantics of experiment #1's first subset S2. Across 1,243 cases they
+  agree with the C library, apart from five logged deviations (DEV-008
+  once, DEV-004 four times). Every execution mode can run 10^6 cases in
+  under 8 hours except Why3's interpreter (75 h) and the F\* normaliser
+  (30 h).
+- The larger spec raised the spec check times, which shrank experiment
+  #7's ratios of table cost to spec cost from 27-101 to 5.1-30. None of
+  its open verdicts is settled.
+- The run produced DEV-008: an empty-loop rule that checks only the
+  groups a backreference names, in every loop. It supersedes DEV-003,
+  whose literal form was exponential on one upstream test.
+- The run also found a type-mismatch bug in `why3 execute`. The
+  maintainer handles the upstream report (issue #36).
