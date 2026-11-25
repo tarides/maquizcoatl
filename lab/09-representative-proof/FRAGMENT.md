@@ -272,8 +272,9 @@ hits the limit are excluded from the comparison.
 
 ## 7. Theorem
 
-For every pattern `r` of the fragment, subject `s` and start position
-`p <= |s|`:
+For every pattern `r` of the fragment whose group numbers are pairwise
+distinct (`NoDup (groups r)`; added in run 4, see below), subject `s`
+and start position `p <= |s|`:
 
 - **soundness:** whenever `vm fv (compile r) (ncap r) s p` returns
   `Match` or `NoMatch`, it equals `sem fs r s p` for every fuel `fs`
@@ -282,7 +283,20 @@ For every pattern `r` of the fragment, subject `s` and start position
   than `OutOfFuel`, and some fuel makes the VM do so.
 
 Results compare match or no match, the match end and every group's span
-(unset as -1 in the case files). Rocq's statement is
+(unset as -1 in the case files).
+
+**Distinct group numbers (run 4).** The parser numbers groups in the
+order of their opening parenthesis (section 1), so no pattern written in
+fragment syntax repeats a number; the AST type does allow it, and the
+theorem is false for a group nested in a group of the same number:
+`Group 1 (Cat (Lit a) (Group 1 (Lit b)))` on `ab` gives `1=1-2` in the
+VM (the inner `OP_MEM_START` overwrites the start) and `1=0-2` in the
+semantics (the outer `AClose` writes last). Rocq checks both results by
+computation (`rocq/Proof.v`, `nested_same_group_vm` and
+`nested_same_group_sem`). The statement therefore carries the
+hypothesis `NoDup (groups r)` (`groups` in `rocq/Statement.v`: the group
+numbers of `r` in pre-order); F\* and Verus transcribe it when their M2
+starts. Rocq's statement is
 `rocq/Statement.v` (`main_theorem_statement`), F\*'s is
 `fstar/Statement.fst` (`main_theorem_statement : prop`), Verus's is
 `verus/statement.rs` (`spec fn main_theorem_statement() -> bool`, over
@@ -328,6 +342,30 @@ for the VM and the semantics, so the theorem carries over to it.
   number of steps bounded by the tree's size times the code length.
 - **(e) Main theorem** from (b)-(d) at `k = []` (code `IEnd`, stack
   `[EFinish]`), and the axiom/admit report (`axioms.sh`).
+
+**How Rocq closed it (run 4)**, for the F\* and Verus transcriptions:
+`rocq/ProofA.v` (a), `ProofSem.v` (fuel monotonicity and determinism of
+`compute_tree`, (d) for the semantics on the measure of section 4, and
+the elided star of code length 0), `ProofSim.v` ((b) and (c) as one
+lemma `sim`), `Proof.v` ((d) for the VM and (e)). `sim` is proved by
+induction on the semantics' fuel, with an inner induction on a relation
+`rep pc acts pos stk P X` ("the code at `pc` implements the pending
+actions `acts`", with `OP_JUMP`s allowed in between): `ARe r` by
+`comp r`, `AClose n` by `OP_MEM_END n`, `ACheck p0 a` by the loop's
+`OP_EMPTY_CHECK_END id` when `a` is nullable (the topmost
+`EEmptyStart id` on the stack holds `p0`; `P` lists the ids these
+checks need, which the code of the pending patterns never pushes) or by
+its bare `OP_JUMP` when it is not (then `p0 + minlen a <= pos`, so the
+semantics never leaves the loop there; `rep`'s position is a lower bound
+on the current one). The captures relation `capsrel m g C X` is exact
+for every group except the non-push groups `X` still to be entered
+(free) and the open groups `C` (only the start is fixed). The
+conclusion: if the tree has a leftmost match, the VM reaches `OP_END`
+with captures that report the same spans; if not, the VM reaches the
+failure of the stack it started from, with captures that differ from
+the initial ones only on `X` and on the ends of open groups. The VM's
+completeness (d) is the existential "some fuel makes `run` return" in
+that conclusion, so no step bound was needed.
 
 ## 9. Cases and harness
 

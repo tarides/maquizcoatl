@@ -1,15 +1,18 @@
 #!/bin/bash
 # Experiment #9: three clean full checks of one tool's definition files
-# (fstar: one file at a time; verus: the whole crate lib.rs as one unit,
-# VERUS_THREADS verifier threads, default 7), pinned to CPUS (default 28-31,60-63, one L3
+# (rocq and fstar: one file at a time; verus: the whole crate lib.rs as
+# one unit, VERUS_THREADS verifier threads, default 7), pinned to CPUS (default 28-31,60-63, one L3
 # complex), /usr/bin/time -v, 16G memory cap (cgroup v2 MemoryMax, as
 # rocq/rocq.sh time: OCaml 5 tools reserve more address space than
 # ulimit -v 16G allows), load average before each check.  Adapted from
 # experiment #8's timed.sh and check.sh.  Run under flock <exp>/timed.lock.
-#   BENCH_WORKDIR=<bench-workdir> timed.sh <tool> <run-id>     tool: fstar | verus
-# (Rocq's timed checks are rocq/rocq.sh time, run 1.)
+#   BENCH_WORKDIR=<bench-workdir> timed.sh <tool> <run-id>     tool: rocq | fstar | verus
+# rocq: ROCQ_FILES (default the five definition files, as rocq/rocq.sh time
+# of run 1; run 4 added this case so that Rocq's time.tsv has the user and
+# system columns and its time.log one "Checked" line per file and run).
 # Output: <exp>/out/<run-id>/<tool>/time.{tsv,load,log,<r>.<file>}.
-# time.log holds the checker's output (fstar: one "Verified module" line
+# time.log holds the checker's output (rocq: one "Checked <file>.v" line
+# per file and run, printed by chk after rocq compile succeeds; fstar: one "Verified module" line
 # per file and run, 15 in all; verus: one "verification results" line
 # per run, 3 in all, since Verus checks the crate lib.rs as one unit);
 # time.tsv's columns are run, file, wall clock, max RSS (kB), user time
@@ -27,6 +30,9 @@ OUT=$EXP/out/$RID/$T; mkdir -p "$OUT"
 CPUS=${CPUS:-28-31,60-63}
 . "$CACHE/env.sh"
 case $T in
+  rocq)  DEFS=${ROCQ_FILES:-Syntax Sem Compile Vm Statement}
+         fresh() { rm -rf "$1"; mkdir -p "$1"; cp "$L"/rocq/*.v "$1/"; }
+         chk() { opam exec --switch provers -- rocq compile -R . S "$1.v" && echo "Checked $1.v"; } ;;
   fstar) DEFS="Syntax Sem Compile Vm Statement"
          fresh() { rm -rf "$1"; mkdir -p "$1/cache"; cp "$L"/fstar/{Syntax,Sem,Compile,Vm,Statement}.fst "$1/"; }
          chk() { fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 "$1.fst"; } ;;

@@ -45,3 +45,36 @@ run	date	item	kind	attempts	note
 3-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T13:17:18Z (first recorded timestamp, after git pull, reading the review and the run-3 transcript, and the first bench-host reads), end 2026-11-25T13:18:18Z (taken just before the commit); covers the three review fixes and entry 8, not the commit, issue comment, push and dashboard update
 3-fix	2026-11-25	timed.sh, FRAGMENT.md, raw cpu.tsv and verus-threads.txt	correction	1	syntax.rs failure located in the spec fn is_prefix_at (rustc E0308, from the run-3 transcript); time.tsv gains user/sys columns, Verus --num-threads passed (default 7, as run 3 used); header and section 7 fixed; CPU times extracted from the existing time -v files
 3-fix	2026-11-25	human interventions	intervention	0	none
+4	2026-11-25	session	wall-clock	-	start 2026-11-25T13:25:52Z (first timestamp, before git pull), end 2026-11-25T13:51:43Z (taken just before the commit); covers reading, the timed check of entry 9, the proof, axioms.sh, the driver rerun, the timed check of entry 11 and entries 9-11; not the commit, issue comment, push and dashboard update
+4	2026-11-25	timed.sh (rocq case)	script	1	first use of the user/sys columns since correction 3: they work; rocq chk prints "Checked <file>.v"
+4	2026-11-25	Statement.v (groups, NoDup hypothesis)	definition	1	added because the theorem is false for a group nested in a group of the same number (Proof.v examples); driver rerun byte-identical
+4	2026-11-25	ProofA.length_comp	lemma	2	first check: rewrite of clen r after destruct found no subterm
+4	2026-11-25	ProofA.comp_star0	lemma	1	
+4	2026-11-25	ProofA.comp_star_null	lemma	1	
+4	2026-11-25	ProofA.comp_star_nn	lemma	1	
+4	2026-11-25	ProofA.code_at_cons	lemma	2	Nat.add_succ_comm used in the wrong direction; replaced by lia
+4	2026-11-25	ProofA.code_at_app	lemma	1	
+4	2026-11-25	ProofA.code_alt	lemma	2	address S (S pc + clen a) against pc + clen a + 2
+4	2026-11-25	ProofA.code_cat	lemma	1	
+4	2026-11-25	ProofA.code_group	lemma	1	
+4	2026-11-25	ProofA.code_lit	lemma	1	
+4	2026-11-25	ProofA.code_star_null	lemma	1	
+4	2026-11-25	ProofA.code_star_nn	lemma	1	
+4	2026-11-25	ProofA.code_compile	lemma	1	
+4	2026-11-25	ProofSem.ct_mono	lemma	1	
+4	2026-11-25	ProofSem.ct_det	lemma	2	apply ... in on the wrong hypothesis
+4	2026-11-25	ProofSem.is_prefix_length	lemma	1	
+4	2026-11-25	ProofSem.length_skipn'	lemma	1	
+4	2026-11-25	ProofSem.ct_total_aux	lemma	1	lemma (d), semantics, on FRAGMENT.md 4's measure
+4	2026-11-25	ProofSem.ct_total	lemma	1	
+4	2026-11-25	ProofSem.clen0_fm	lemma	2	induction premise rewritten by destruct; tree names
+4	2026-11-25	ProofSim.rep_mono	lemma	3	eauto closed a varying number of goals (twice)
+4	2026-11-25	ProofSim.sim	lemma	13	lemmas (b) and (c); 12 failed checks: + 0 addresses, simpl unfolding is_prefix in a hypothesis, evars left before lia (Lit, Cat, Group), star-of-empty evar in simres_fm, star second-branch address, a substituted name, Hrep' on the wrong stack, a stray IH call, a code_cat arity, one misread error
+4	2026-11-25	ProofSim.mget_mset_eq, mget_mset_neq, gget_gset_eq, gget_gset_neq, cls_gs, NoDup_app_disj, meq_refl, meq_trans, capsrel_meq, exec_next, exec_halt, exec_fail, run_mono, exec_det, rep_re', simres_fwd, simres_fm, simres_choice, fresh_sub, npg_nil, capsrel_open, meq_open	lemma	1	22 helper lemmas, each right at its first check
+4	2026-11-25	Proof.vm_det	lemma	1	
+4	2026-11-25	Proof.region_rv	lemma	1	
+4	2026-11-25	Proof.vm_complete	lemma	1	lemma (d), VM
+4	2026-11-25	Proof.main_theorem	lemma	1	lemma (e); Print Assumptions: Closed under the global context
+4	2026-11-25	axioms.sh (rocq case)	script	1	
+4	2026-11-25	lemmas.py	script	1	
+4	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)

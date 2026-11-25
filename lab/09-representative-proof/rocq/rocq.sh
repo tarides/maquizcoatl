@@ -8,6 +8,8 @@
 #                CPUS (default 28-31,60-63), /usr/bin/time -v, 16G memory
 #                cap (cgroup v2 MemoryMax: OCaml 5 reserves more address
 #                space than ulimit -v 16G allows)
+# The proof files (ProofA, ProofSem, ProofSim, Proof; run 4) are checked by
+# ../axioms.sh rocq and timed by ../timed.sh rocq (ROCQ_FILES), not here.
 # Prints no hostnames, addresses or absolute paths.
 set -euo pipefail
 : "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory}"

@@ -1,0 +1,16 @@
+== rocq --version
+The Rocq Prover, version 9.3.0
+compiled with OCaml 5.4.1
+== rocq compile -R . S Syntax.v
+== rocq compile -R . S Sem.v
+== rocq compile -R . S Compile.v
+== rocq compile -R . S Vm.v
+== rocq compile -R . S Statement.v
+== rocq compile -R . S ProofA.v
+== rocq compile -R . S ProofSem.v
+== rocq compile -R . S ProofSim.v
+== rocq compile -R . S Proof.v
+== rocq compile -R . S Axioms.v
+Closed under the global context
+== scan (Admitted|admit|Axiom|Parameter|Conjecture|Hypothesis|Abort) in Syntax Sem Compile Vm Statement ProofA ProofSem ProofSim Proof
+== end of scan
