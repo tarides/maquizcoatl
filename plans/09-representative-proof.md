@@ -57,14 +57,19 @@ recorded in the issue's Decisions section:
    ([comment](https://github.com/tarides/maquizcoatl/issues/4#issuecomment-7140581824)):
    the fragment's compiler equals upstream's on the empty check, so
    `OP_EMPTY_CHECK_END_MEMST` and the capture-change termination measure
-   leave the fragment. DEV-008 is on branch `exp/06-spec-speed-m2`
-   (PR #31) until that PR is merged.
+   leave the fragment. DEV-008 is on `main` (PR #31, merged as
+   `8febe2e`). Consequence, recorded in the comparison (M4): DEV-008's
+   termination obligation (a continued empty iteration must change a
+   group named by a backreference) is exercised by no experiment now,
+   since the fragment has no backreferences; the reason first given for
+   option (a), measuring the capture-change rule, no longer holds.
 
 Order: the maintainer's dependency order (experiments #4 and #5 before
 #9) is satisfied. The report's suggested order also puts #6 and #8
-before #9: experiment #6's milestone 1 is merged and experiment #8 has
-reported (PR #26, open); experiment #6's milestone 2 (issue #28, PR #31)
-does not change the fragment and is not waited for.
+before #9: experiment #6 (milestones 1 and 2) and experiment #8 are
+merged (PRs #24, #31, #26). Milestone 2 changed the spec's empty-loop
+rule (DEV-008, decision 4), which on the fragment is upstream's plain
+check.
 
 ## Where things live
 
@@ -104,10 +109,8 @@ does not change the fragment and is not waited for.
     (done-criterion 4), `provenance.sh`, `pins.json`, `effort.tsv`
     (one line per lemma attempt and per human intervention). Experiment
     #8's `timed.sh`, `check.sh`, `loc.py`, `pins.json` and
-    `provenance.sh` come from branch `exp/08-hard-features` (PR #26,
-    still open), not `main`: `lab/08-hard-features/` at commit
-    `8d7727e`, or the branch head at run 1, whose branch and commit
-    `provenance.sh` records;
+    `provenance.sh` come from `lab/08-hard-features/` on `main` (merged
+    as `6630262`, PR #26); `provenance.sh` records the commit used;
   - build output is gitignored (`_build`, `*.vo*`, `*.checked`,
     `target`, caches).
 
@@ -183,7 +186,12 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
   (`upstream/src/regcomp.c:1399`), `compile_bag_memory_node` (`:1699`),
   alternation in `compile_tree` (`:2575-2598`) and the empty check
   (`:958-1000`); `OP_MEM_START_PUSH` for groups inside an alternation
-  or a variable repeat (`:5819-5821`).
+  or a variable repeat (`:5819-5821`). The star layout follows the
+  infinite-greedy branch of `compile_quantifier_node` (`:1434-1515`).
+  Upstream emits nothing for a body of compiled length zero
+  (`:1407`, `tlen == 0`); fragment syntax cannot write one, but the AST
+  can (`Star` of the empty pattern), so `FRAGMENT.md` states that the
+  fragment's compiler elides it the same way.
 - **Captures** are kept across loop iterations (a group not re-entered
   in the last iteration keeps its earlier span: experiment #2, probe
   ei11, `(?:(a)|())*` on `ab` gives `1=0-1 2=1-1`); the VM restores
@@ -212,18 +220,28 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
   out) if that is cheaper than a structural measure; then completeness
   lemma (d) covers it: some fuel makes the semantics return a result,
   and the result does not change with more fuel. `FRAGMENT.md` says
-  which a tool uses. It is
-  cross-checked on the cases against experiment #6's executable
-  semantics of the same tool
-  (`lab/06-spec-speed/{rocq/Spec.v,fstar/Spec.fst,verus/spec.rs}`),
-  whose subset contains the fragment. Experiment #6's semantics
-  implements the same plain check on the fragment
-  (`lab/06-spec-speed/rocq/Spec.v:120-121`: after an iteration that
-  consumed nothing, stop), so any difference is a bug in one of the two
-  and is analysed before anything else.
+  which a tool uses. The measure is the semantics'; in a
+  continuation-passing presentation the fact that `Star` recurses only
+  at a strictly larger position is hidden in a closure, so the tool
+  either uses the tree form or carries that invariant. The VM itself
+  terminates by fuel only. The cross-check below is kept, as a
+  transcription check (not a check between two rules): the semantics
+  is compared on the cases with experiment #6's executable semantics of
+  the same tool, preferably milestone 2's
+  (`lab/06-spec-speed/{rocq/Spec2.v,fstar/Spec2.fst,verus/spec2.rs}`),
+  which implements DEV-008 itself
+  (`lab/06-spec-speed/rocq/Spec2.v:292`: `same_refs` with no
+  backreferences is the plain check), so the comparison also tests the
+  reduction of DEV-008 to the plain check executably; milestone 1's
+  `Spec.v:120-121` implements the plain check directly. Any difference
+  is a bug in one of the two and is analysed before anything else.
 - **VM:** a function from (bytecode, subject, start position, fuel) to
   `Match (end, captures) | NoMatch | OutOfFuel`, with an explicit
-  backtrack stack bottomed by `OP_FINISH`. Rocq: Gallina; F\*: total F\*
+  backtrack stack bottomed by `OP_FINISH`. `OP_EMPTY_CHECK_END` finds
+  its iteration's start as upstream does, by scanning the stack down to
+  the `STK_EMPTY_CHECK_START` entry with the same id
+  (`upstream/src/regexec.c:2409-2419`, `EMPTY_CHECK_START_SEARCH`;
+  `USE_REPEAT_AND_EMPTY_CHECK_LOCAL_VAR` is off in the default build). Rocq: Gallina; F\*: total F\*
   over lists and sequences (the Pulse imperative VM is experiment #10's
   question, not this one's); Verus: `exec` Rust with `Vec`, proved
   against `spec fn`s.
@@ -312,7 +330,9 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
 8. **M4: comparison** (run 15). The table across the three tools
    (proof effort, lines, check time, automatic share, brittleness,
    agreement), a short verdict per tool, posted on issue #4 after the
-   maintainer's review (done-criterion 5); the draft PR is opened.
+   maintainer's review (done-criterion 5); the draft PR is opened. The
+   comparison states that DEV-008's termination obligation is not
+   covered (decision 4).
 
 ## Runs (launched one by one by the maintainer)
 
@@ -450,6 +470,6 @@ checks named in criterion 1 do not apply; the Verus check is step 5's.)
 | Verus: own list type and large encodings (experiment #8) | more lines, slower interpreter | reuse experiment #6's `spec.rs` types |
 | F\* + Pulse: the selected stack's native-C route is Pulse, but this VM is total F\* | the proof says less about Pulse | stated in the comparison; the Pulse VM is experiment #10's |
 | Verus with another Z3 is unsupported | spurious failures | reported apart from the default-solver results |
-| Too few fragment cases in the upstream suites | weak done-criterion 2 | report the count; add experiment #2's loop probes (ei04, ei05, ei07, ei11) as extra cases, kept separate from the upstream count |
+| No upstream fragment case has a star over a nullable body (none of the 152 in-subset cases does), so the upstream suites never exercise the empty check | done-criterion 2 says nothing about it | always add experiment #2's loop probes (ei04, ei05, ei07, ei11) as extra cases, kept separate from the upstream count; ei11 `(?:(a)\|())*` is not fragment syntax and is transcribed as `((a)\|())*` (group numbers shift by one) |
 | Agreement difference with C | criterion 2 fails | analyse against DEV-008 and experiment #2; raise a deviation candidate on the issue |
 | Bench host load from other experiments | noisy check times | lock, pinning, load average per run; rerun when idle if needed |
