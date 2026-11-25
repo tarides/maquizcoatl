@@ -8,6 +8,9 @@
 #   BENCH_WORKDIR=<bench-workdir> timed.sh <tool> <run-id>     tool: fstar
 # (Rocq's timed checks are rocq/rocq.sh time, run 1.)
 # Output: <exp>/out/<run-id>/<tool>/time.{tsv,load,log,<r>.<file>}.
+# time.log holds the checker's output (fstar: one "Verified module" line
+# per file and run, 15 in all); time.tsv, time.load and time.log are
+# copied to the run's lab/results/<entry>-raw/<tool>/ raw set.
 # Prints no hostnames, addresses or absolute paths.
 set -euo pipefail
 : "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory}"
