@@ -62,7 +62,7 @@ offsets relative to the instruction; the compiler resolves them, so the
 code is the same up to that encoding.
 
 Left out: the peephole variants `OP_PUSH_OR_JUMP_EXACT1` and
-`OP_PUSH_IF_PEEK_NEXT` (`regcomp.c:1444-1485`, emitted by upstream for
+`OP_PUSH_IF_PEEK_NEXT` (`regcomp.c:1464-1488`, and `:1444-1452` for the jump prefix of `lower == 1`; emitted by upstream for
 stars with a literal head or a literal after the loop,
 `USE_OP_PUSH_OR_JUMP_EXACT` is on, `regint.h:92`), `OP_ANYCHAR_STAR*`
 (no anychar in the fragment), the merging of adjacent literals into one
@@ -85,7 +85,7 @@ length (upstream `node_min_byte_len`), `nullable r = (minlen r = 0)`.
 | `Cat a b` | code of `a` at `pc`, then of `b` at `pc + clen a` (ids after `a`'s) | `ND_LIST`, `regcomp.c:2563-2567` |
 | `Alt a b` | `IPush L1; a; IJump end; L1: b; end:` | `ND_ALT`, `regcomp.c:2569-2599` |
 | `Star a`, `clen a = 0` | nothing | `regcomp.c:1407` (`tlen == 0`) |
-| `Star a`, `a` not nullable | `L: IPush out; a; IJump L; out:` | `regcomp.c:1434-1503` (greedy, plain `OP_PUSH` at `:1488-1497`) |
+| `Star a`, `a` not nullable | `L: IPush out; a; IJump L; out:` | `regcomp.c:1434-1503` (greedy, plain `OP_PUSH` at `:1489-1498`) |
 | `Star a`, `a` nullable | `L: IPush out; IEmptyStart id; a; IEmptyEnd id; IJump L; out:` | the same with `compile_quant_body_with_empty_check`, `regcomp.c:958-1004` |
 | `Group k a` | `IMemStart k` or `IMemStartPush k` (if `push`); `a`; `IMemEnd k` | `compile_bag_memory_node`, `regcomp.c:1699-1776` |
 
@@ -119,7 +119,7 @@ Details:
   `OP_MEM_START_PUSH` exactly when some ancestor is an `Alt` or a
   `Star`: the `push` flag above.
 - **`OP_MEM_END`, never `OP_MEM_END_PUSH`.** `push_mem_end =
-  push_mem_start & (backrefed_mem | cap_history)` (`regcomp.c:7550-7557`),
+  push_mem_start & (backrefed_mem | cap_history)` (`regcomp.c:7547-7551`, the `USE_CALLOUT` branch),
   empty without backreferences and capture history.
 - **Stack pop level.** With some `OP_MEM_START_PUSH`, the VM pops at
   `STACK_POP_LEVEL_MEM_START`, else `STACK_POP_LEVEL_FREE`

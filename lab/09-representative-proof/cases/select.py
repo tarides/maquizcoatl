@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Experiment #9: select the fragment's cases.
+r"""Experiment #9: select the fragment's cases.
 
 1. Filter experiment #6's in-subset cases (in.tsv: index id kind pat_hex
    sub_hex a b c ncap ast) down to the fragment of FRAGMENT.md: the AST
@@ -12,8 +12,13 @@
    case it accepts under the fragment's context (UTF-8,
    ONIG_SYNTAX_ONIGURUMA, no options, forward search) must be in
    fragment.tsv with the same AST, and every case of fragment.tsv must be
-   accepted.  Cases with fragment syntax outside the context are counted
-   per reason (informational).
+   accepted.  A case accepted in context that is not in in.tsv at all (a
+   pure ASCII literal written with an escape experiment #6's parser does
+   not read: \cX, \C-X, \o{...}, \uHHHH, several code points in \x{...})
+   is added to fragment.tsv with the recogniser's AST and the
+   extraction's columns; one that is in in.tsv but was dropped there is a
+   re-check failure.  Cases with fragment syntax outside the context are
+   counted per reason (informational).
 
 usage: python3 -I select.py IN.tsv ALL.tsv OUTDIR
 writes OUTDIR/fragment.tsv and OUTDIR/counts.md; exits non-zero if the
@@ -93,6 +98,7 @@ def sexp(n):
 
 META = set(b"\\()|*+?{}[].^$")
 HEX = set(b"0123456789abcdefABCDEF")
+OCT = set(b"01234567")
 
 
 class Out(Exception):
@@ -129,26 +135,73 @@ def recognise(p):
             if e in META or e in b"/-&<>":
                 i += 2
                 return ("L", (e,))
-            if e == 0x78:  # x
-                if i + 2 < len(p) and p[i + 2] == 0x7b:
-                    j = i + 3
-                    while j < len(p) and p[j] in HEX:
+            if e in b"xo" and i + 2 < len(p) and p[i + 2] == 0x7b:
+                # \x{H ...}, \o{O ...}: one or more code points separated
+                # by spaces or newlines, at most 8 hex / 11 octal digits
+                # each, optional separators before the brace
+                # (upstream/src/regparse.c:5855-5903, :3723-3738,
+                # :3811-3859)
+                digits, width, base = (HEX, 8, 16) if e == 0x78 else (OCT, 11, 8)
+                j = i + 3
+                vs = []
+                while True:
+                    k = j
+                    while j < len(p) and p[j] in digits:
                         j += 1
-                    if j == i + 3 or j >= len(p) or p[j] != 0x7d:
-                        raise Out("malformed \\x{}")
-                    v = int(p[i + 3:j], 16)
-                    i = j + 1
-                else:
-                    j = i + 2
-                    while j < len(p) and j < i + 4 and p[j] in HEX:
+                    if j == k or j - k > width:
+                        raise Out(f"malformed \\{chr(e)}{{}}")
+                    vs.append(int(p[k:j], base))
+                    if j < len(p) and p[j] == 0x7d:
+                        break
+                    if j >= len(p) or p[j] not in b" \n":
+                        raise Out(f"malformed \\{chr(e)}{{}}")
+                    while j < len(p) and p[j] in b" \n":
                         j += 1
-                    if j == i + 2:
-                        raise Out("malformed \\x")
-                    v = int(p[i + 2:j], 16)
-                    i = j
+                    if j < len(p) and p[j] == 0x7d:
+                        break
+                i = j + 1
+                if any(v >= 0x80 for v in vs):
+                    raise Out(f"\\{chr(e)}{{}} >= 0x80")
+                if len(vs) == 1:
+                    return ("L", (vs[0],))
+                return ("SEQ", [("L", (v,)) for v in vs])
+            if e == 0x78:  # \xHH, at most 2 digits
+                j = i + 2
+                while j < len(p) and j < i + 4 and p[j] in HEX:
+                    j += 1
+                if j == i + 2:
+                    raise Out("malformed \\x")
+                v = int(p[i + 2:j], 16)
+                i = j
                 if v >= 0x80:
                     raise Out("\\x >= 0x80")
                 return ("L", (v,))
+            if e == 0x75:  # \uHHHH, exactly 4 digits (regparse.c:5917-5927)
+                h = p[i + 2:i + 6]
+                if len(h) != 4 or any(b not in HEX for b in h):
+                    raise Out("malformed \\u")
+                v = int(h, 16)
+                if v >= 0x80:
+                    raise Out("\\u >= 0x80")
+                i += 6
+                return ("L", (v,))
+            if e == 0x63 or (e == 0x43 and p[i + 2:i + 3] == b"-"):
+                # \cX, \C-X: X & 0x9f, X = ? gives 0x7f; X may be an
+                # escaped non-alphanumeric ASCII character, read as itself
+                # (regparse.c:4772-4801)
+                j = i + 2 if e == 0x63 else i + 3
+                if j >= len(p):
+                    raise Out("malformed control escape")
+                x = p[j]
+                if x == 0x5c:
+                    if j + 1 >= len(p) or p[j + 1] >= 0x80 or chr(p[j + 1]).isalnum():
+                        raise Out("control escape over an escape")
+                    j += 1
+                    x = p[j]
+                elif x >= 0x80:
+                    raise Out("non-ASCII control escape")
+                i = j + 1
+                return ("L", (0x7f if x == 0x3f else x & 0x9f,))
             raise Out("escape \\" + chr(e))
         if c >= 0x80:
             raise Out("non-ASCII byte")
@@ -177,7 +230,13 @@ def recognise(p):
                 items[-1] = ("*", items[-1])
                 i += 1
                 continue
-            items.append(atom())
+            a = atom()
+            if a[0] == "SEQ":  # several literals; a quantifier is left out
+                if i < len(p) and p[i] in b"*+?{":
+                    raise Out("quantifier after a code point sequence")
+                items.extend(a[1])
+            else:
+                items.append(a)
         if not items:
             return ("E",)
         r = items[-1]
@@ -221,10 +280,9 @@ def main():
     for f in rows:
         r = drop_reason(f[9])
         (dropped if r else kept).append((f, r))
-    with open(f"{out}/fragment.tsv", "w") as o:
-        for f, _ in kept:
-            o.write("\t".join(f) + "\n")
     frag = {f[1]: f for f, _ in kept}
+    inids = {f[1] for f in rows}
+    added = []
 
     # re-check against the full extraction
     allrows = [l.rstrip("\n").split("\t") for l in open(allf)]
@@ -249,7 +307,14 @@ def main():
             ctx_out[cr] += 1
             continue
         syn_ok[cid] = (row[2], (ast, ncap))
-        if cid not in frag:
+        if cid not in frag and cid not in inids and row[2] != "e" \
+                and drop_reason(sexp(ast)) is None:
+            # outside experiment #6's subset: add with the recogniser's AST
+            f = [str(allrows.index(row)), cid, row[2], row[7], row[8],
+                 row[9], row[10], row[11], str(ncap), sexp(ast)]
+            added.append(f)
+            frag[cid] = f
+        elif cid not in frag:
             problems.append(f"{cid}: fragment syntax in context, not in fragment.tsv")
         elif sexp(ast) != frag[cid][9] or ncap != int(frag[cid][8]):
             problems.append(f"{cid}: AST differs: {sexp(ast)} vs {frag[cid][9]}")
@@ -257,14 +322,23 @@ def main():
         if cid not in syn_ok:
             problems.append(f"{cid}: in fragment.tsv, not recognised in context")
 
+    with open(f"{out}/fragment.tsv", "w") as o:
+        for f in sorted(frag.values(), key=lambda f: int(f[0])):
+            o.write("\t".join(f) + "\n")
+
     kc = Counter(f[2] for f, _ in kept)
+    ka = Counter(f[2] for f in added)
     dc = Counter(r for _, r in dropped)
     dk = Counter((r, f[2]) for f, r in dropped)
     se = sorted(c for c, (k, _) in syn_ok.items() if k == "e")
     lines = ["# Experiment #9: fragment cases (written by cases/select.py)", "",
              f"Input: {len(rows)} in-subset cases of experiment #6.", "",
              "| | x2 | x3 | n | e | total |", "|---|---:|---:|---:|---:|---:|",
-             "| fragment | " + " | ".join(str(kc[k]) for k in KINDS) + f" | {len(kept)} |"]
+             "| fragment, from in.tsv | " + " | ".join(str(kc[k]) for k in KINDS) + f" | {len(kept)} |",
+             "| fragment, added from the full extraction (not in in.tsv) | "
+             + " | ".join(str(ka[k]) for k in KINDS) + f" | {len(added)} |",
+             "| **fragment, total** | " + " | ".join(str(kc[k] + ka[k]) for k in KINDS)
+             + f" | **{len(kept) + len(added)}** |"]
     for r, n in dc.most_common():
         lines.append(f"| dropped: {r} | " + " | ".join(str(dk[(r, k)]) for k in KINDS) + f" | {n} |")
     lines += ["", f"Re-check over the full extraction ({len(allrows)} cases): "
@@ -275,6 +349,9 @@ def main():
               "bytes, so the EUC-JP and UTF-16 counts are byte-level):", "",
               "| Reason | Cases |", "|---|---:|"]
     lines += [f"| {r} | {n} |" for r, n in ctx_out.most_common()]
+    lines += ["", "Added from the full extraction (pure ASCII literals written with escapes "
+              "experiment #6's parser does not read):", ""]
+    lines += [f"- {f[1]}: `{bytes.fromhex(f[3]).decode('ascii').replace(chr(10), '<newline>')}` -> `{f[9]}`" for f in added]
     if problems:
         lines += ["", "Problems:", ""] + ["- " + p for p in problems]
     open(f"{out}/counts.md", "w").write("\n".join(lines) + "\n")

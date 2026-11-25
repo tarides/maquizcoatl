@@ -1,0 +1,66 @@
+test_utf8:157	MATCH 0 0
+test_utf8:167	MATCH 0 1
+test_utf8:168	MATCH 0 1
+test_utf8:169	MATCH 0 1
+test_utf8:171	MATCH 0 0
+test_utf8:172	MATCH 0 1
+test_utf8:173	MATCH 0 1
+test_utf8:174	MATCH 0 2
+test_utf8:175	MATCH 0 3
+test_utf8:176	MATCH 0 35
+test_utf8:177	MATCH 0 2
+test_utf8:178	MATCH 1 2
+test_utf8:179	MATCH 1 3
+test_utf8:182	MATCH 0 1
+test_utf8:302	MATCH 0 2
+test_utf8:368	MATCH 0 0
+test_utf8:369	MATCH 0 1
+test_utf8:370	MATCH 0 3
+test_utf8:371	MATCH 0 0
+test_utf8:496	MATCH 0 1
+test_utf8:497	MATCH 0 1
+test_utf8:498	MATCH 0 0
+test_utf8:499	MATCH 0 0 0 0
+test_utf8:500	MATCH 0 2
+test_utf8:501	MATCH 0 2
+test_utf8:505	MATCH 1 2
+test_utf8:506	MATCH 0 2
+test_utf8:507	MISMATCH
+test_utf8:533	MATCH 0 2
+test_utf8:534	MATCH 0 0
+test_utf8:535	MATCH 0 1
+test_utf8:541	MATCH 0 2 1 2
+test_utf8:605	MATCH 0 1 0 1
+test_utf8:606	MATCH 0 2 0 2
+test_utf8:607	MATCH 0 2 0 2 0 2
+test_utf8:608	MATCH 0 2 0 2 0 2
+test_utf8:609	MATCH 0 2 0 2 0 2
+test_utf8:610	MATCH 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2
+test_utf8:611	MATCH 0 4 0 2 2 4
+test_utf8:612	MATCH 0 4 0 2 2 4
+test_utf8:613	MATCH 0 11 0 0 0 1 3 6
+test_utf8:614	MATCH 0 11 0 11 0 0 0 1 3 6
+test_utf8:616	MATCH 1 2 1 2 -1 -1
+test_utf8:619	MATCH 0 3 0 3
+test_utf8:620	MATCH 0 0 0 0
+test_utf8:625	MATCH 0 3 0 3
+test_utf8:750	MATCH 0 1
+test_utf8:900	MATCH 0 0
+test_utf8:1358	MATCH 0 1
+test_utf8:1359	MATCH 0 1
+test_utf8:1360	MATCH 0 1
+test_utf8:1363	MATCH 0 1
+test_utf8:1603	MATCH 0 1
+test_utf8:1604	MATCH 0 2
+test_utf8:1605	MATCH 0 2
+test_utf8:1606	MATCH 0 2
+test_utf8:1607	MATCH 0 15
+test_utf8:1608	MATCH 0 4
+test_utf8:1609	MATCH 0 4
+test_utf8:1617	MATCH 0 1
+test_utf8:1618	MATCH 0 2
+test_utf8:1619	MATCH 0 2
+test_utf8:1620	MATCH 0 15
+test_utf8:1621	MATCH 0 2
+test_utf8:1679	MATCH 0 2
+test_options:200	MATCH 0 1

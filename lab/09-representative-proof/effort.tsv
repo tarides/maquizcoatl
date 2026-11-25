@@ -13,3 +13,9 @@ run	date	item	kind	attempts	note
 1	2026-11-25	rocq/rocq.sh time phase	script	2	ulimit -v 16G too small for OCaml 5 heap reservation; switched to cgroup MemoryMax
 1	2026-11-25	provenance.sh	script	2	version queries fixed
 1	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+1	2026-11-25	session	wall-clock	-	amendment (entry 4): start no later than 2026-11-25T10:35:00Z (merge commit 1dbf4ba, the run's first recorded action; exact start not recorded), end 2026-11-25T10:50:36Z (run-1 commit 4525896); the 10:37:44Z above was taken after the merge, so its window covers the bench work and the commit, not the merge
+1-fix	2026-11-25	session	wall-clock	-	start 2026-11-25T10:59:48Z (first timestamp, after reading the run-1 review), end 2026-11-25T11:02:57Z (taken just before the commit); covers the three review fixes, reruns, notebook entry 4 and the commit, not the issue comment and dashboard update
+1-fix	2026-11-25	cases/select.py	script	2	recogniser extended to \cX, \C-X, \o{...}, \uHHHH, multi-code-point \x{...}; extraction-only cases added; first run failed (\u in the docstring, made raw)
+1-fix	2026-11-25	FRAGMENT.md	design	1	three citation ranges corrected
+1-fix	2026-11-25	oracle/oracle.sh, rocq/rocq.sh build	rerun	1	66 cases, agreed first time
+1-fix	2026-11-25	human interventions	intervention	0	none
