@@ -1,0 +1,44 @@
+# Experiment #9 run 10: why statement.rs needed a named per-instance body.
+# Toy crates checked on the bench host (Verus 0.2026.11.02.8bf68ee,
+# untimed, nice -n 10, CPUs 4-7, between 15:20:28Z and 15:24:10Z), outside
+# the proof edit loop, so not in invocations.tsv.  The toy reproduces the
+# shape of run 3's main_theorem_statement: an outer forall whose trigger
+# (dummy(x), like sem(0, r, s, p)) occurs nowhere in its body outside a
+# quantifier, and an exists in the body.
+
+## toy 1: statement behind a spec fn, proved by an identical assert forall
+pub open spec fn dummy(x: nat) -> bool { true }
+pub open spec fn f(y: nat, x: nat) -> bool { y > x }
+pub open spec fn st() -> bool { forall|x: nat| #![trigger dummy(x)] x > 3 ==> exists|y: nat| #[trigger] f(y, x) }
+pub proof fn t() ensures st() {
+    assert forall|x: nat| #![trigger dummy(x)] x > 3 ==> exists|y: nat| #[trigger] f(y, x) by { assert(f(x+1, x)); }
+}
+-> error: postcondition not satisfied; verification results:: 0 verified, 1 errors
+
+## toy 2: the same formula written inline in the ensures (t4), and st() from t4 (t8)
+pub proof fn t4() ensures forall|x: nat| #![trigger dummy(x)] x > 3 ==> exists|y: nat| #[trigger] f(y, x) {
+    assert forall|x: nat| #![trigger dummy(x)] x > 3 ==> exists|y: nat| #[trigger] f(y, x) by { assert(f(x+1, x)); }
+}
+pub proof fn t8() ensures st() { t4(); }
+-> error: postcondition not satisfied (t4, line 8); error: postcondition not satisfied (t8, line 12);
+   verification results:: 0 verified, 2 errors
+   (a first version of toy 2 also had a `choose` without a trigger and was
+   rejected before verification: "could not automatically infer triggers")
+
+## toy 3: the body named by a spec fn and used as the outer trigger (the run-10 statement.rs idiom)
+pub open spec fn body(x: nat) -> bool { x > 3 ==> exists|y: nat| #[trigger] f(y, x) }
+pub open spec fn st() -> bool { forall|x: nat| #[trigger] body(x) }
+pub proof fn t() ensures st() {
+    assert forall|x: nat| #[trigger] body(x) by { assert(f(x+1, x)); }
+}
+-> verification results:: 1 verified, 0 errors
+
+# Reading: to refute the negated goal, Z3 must instantiate the asserted
+# forall at the skolem constants of the goal, which needs a ground term
+# matching the trigger.  dummy(x0) (sem(0, r0, s0, p0)) never appears;
+# body(x0) (main_theorem_at(r0, s0, p0)) does.
+
+# Negative test of the evaluated counterexample (proof.rs,
+# nested_same_group_vm), 15:25:xxZ, a throwaway copy of the crate with the
+# expected group-1 span changed from (1, 2) to (0, 2):
+error: expression simplifies to `Match(2, empty().push(Some((1, 2)))) == Match(2, empty().push(Some((0, 2))))`, which evaluates to false

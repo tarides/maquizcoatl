@@ -1,0 +1,6 @@
+$ taskset -c 28-31,60-63 verus --help | grep -A1 -- --num-threads
+        --num-threads INTEGER
+                        Number of threads to use for verification. Default: 7
+$ verus --help | grep -A1 -- --num-threads   (unpinned)
+        --num-threads INTEGER
+                        Number of threads to use for verification. Default: 63

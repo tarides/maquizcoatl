@@ -1,0 +1,36 @@
+== fstar.exe --version
+F* 2026.11.15
+platform=Linux_x86_64
+system=Unix
+compiler=OCaml 5.3.0
+date=2026-11-15 18:52:39 +0000
+commit=b92b0f87ce325a6ed0fd78086390fbaf2fc629a1
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false Syntax.fst
+Verified module: Syntax
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false Sem.fst
+Verified module: Sem
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false Compile.fst
+Verified module: Compile
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false Vm.fst
+Verified module: Vm
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false Statement.fst
+Verified module: Statement
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false ProofA.fst
+Verified module: ProofA
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false ProofSem.fst
+Verified module: ProofSem
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false ProofSim.fst
+Verified module: ProofSim
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false Proof.fst
+Verified module: Proof
+All verification conditions discharged successfully
+== scan (admit|assume|magic|admit_smt_queries true|--lax|#lang-) in Syntax Sem Compile Vm Statement ProofA ProofSem ProofSim Proof
+== end of scan

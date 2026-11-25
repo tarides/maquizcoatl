@@ -1,0 +1,50 @@
+== Syntax
+Verified module: Syntax
+All verification conditions discharged successfully
+== Sem
+Verified module: Sem
+All verification conditions discharged successfully
+== Compile
+Verified module: Compile
+All verification conditions discharged successfully
+== Vm
+Verified module: Vm
+All verification conditions discharged successfully
+== Statement
+Verified module: Statement
+All verification conditions discharged successfully
+== Tables
+Verified module: Tables
+All verification conditions discharged successfully
+== Spec2
+Verified module: Spec2
+All verification conditions discharged successfully
+== Extract
+Verified module: Extract
+All verification conditions discharged successfully
+== extract
+Verified module: Extract
+All verification conditions discharged successfully
+File "Prims.ml", line 56, characters 20-56:
+56 |   fun projectee  -> match projectee with | Left _0 -> _0
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning 8 [partial-match]: this pattern-matching is not exhaustive.
+  Here is an example of a case that is not matched: Right _
+
+File "Prims.ml", line 62, characters 20-57:
+62 |   fun projectee  -> match projectee with | Right _0 -> _0
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning 8 [partial-match]: this pattern-matching is not exhaustive.
+  Here is an example of a case that is not matched: Left _
+
+File "Prims.ml", line 123, characters 20-55:
+123 |   fun projectee  -> match projectee with | hd::tl -> hd
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning 8 [partial-match]: this pattern-matching is not exhaustive.
+  Here is an example of a case that is not matched: []
+
+File "Prims.ml", line 125, characters 20-55:
+125 |   fun projectee  -> match projectee with | hd::tl -> tl
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Warning 8 [partial-match]: this pattern-matching is not exhaustive.
+  Here is an example of a case that is not matched: []

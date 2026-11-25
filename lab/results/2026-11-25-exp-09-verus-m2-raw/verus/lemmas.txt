@@ -1,0 +1,69 @@
+proof_a.rs	lemma_push_last	manual	7
+proof_a.rs	lemma_mget_mset	manual	5
+proof_a.rs	lemma_gget_gset	manual	5
+proof_a.rs	length_comp	manual	29
+proof_a.rs	code_at_app	manual	11
+proof_a.rs	code_at_one	manual	6
+proof_a.rs	code_lit	manual	6
+proof_a.rs	code_cat	manual	9
+proof_a.rs	code_alt	manual	18
+proof_a.rs	code_group	manual	15
+proof_a.rs	code_star_null	manual	22
+proof_a.rs	code_star_nn	manual	18
+proof_a.rs	code_compile	manual	12
+proof_a.rs	total 13	automatic 0	admitted 0	returning 0	examples 0
+proof_sem.rs	ct_mono	manual	40
+proof_sem.rs	ct_det	manual	7
+proof_sem.rs	fuel_of	manual	69	returns
+proof_sem.rs	ct_total	manual	6
+proof_sem.rs	clen0_fm	manual	29
+proof_sem.rs	total 5	automatic 0	admitted 0	returning 1	examples 0
+proof_sim.rs	lemma_contains_add	manual	20
+proof_sim.rs	gsr_groups	manual	44
+proof_sim.rs	disj_sub	manual	8
+proof_sim.rs	disj_union	automatic	5
+proof_sim.rs	nodup_add	manual	18
+proof_sim.rs	gd_of	manual	32
+proof_sim.rs	lemma_cget_push	automatic	4
+proof_sim.rs	cls_none	manual	10
+proof_sim.rs	meq_refl	manual	6
+proof_sim.rs	meq_trans	manual	9
+proof_sim.rs	capsrel_meq	manual	10
+proof_sim.rs	capsrel_open	manual	15
+proof_sim.rs	meq_push	manual	10
+proof_sim.rs	meq_nopush	manual	10
+proof_sim.rs	capsrel_close	manual	10
+proof_sim.rs	meq_close	manual	10
+proof_sim.rs	capsrel_end	manual	9
+proof_sim.rs	capsrel_init	manual	10
+proof_sim.rs	exe_next	automatic	5
+proof_sim.rs	exe_fail1	manual	9
+proof_sim.rs	exe_add	manual	17
+proof_sim.rs	rep_mono	manual	20
+proof_sim.rs	choice	manual	21	returns
+proof_sim.rs	case_end	manual	11	returns
+proof_sim.rs	case_close	manual	23	returns
+proof_sim.rs	case_chk_null	manual	35	returns
+proof_sim.rs	case_chk_nn	manual	27	returns
+proof_sim.rs	case_empty	manual	18	returns
+proof_sim.rs	case_lit	manual	28	returns
+proof_sim.rs	case_cat	manual	40	returns
+proof_sim.rs	case_alt	manual	54	returns
+proof_sim.rs	case_star0	manual	27	returns
+proof_sim.rs	case_star_null	manual	59	returns
+proof_sim.rs	case_star_nn	manual	50	returns
+proof_sim.rs	case_group	manual	77	returns
+proof_sim.rs	sim	manual	42	returns
+proof_sim.rs	total 36	automatic 3	admitted 0	returning 14	examples 0
+proof.rs	run_mono	manual	10
+proof.rs	run_det	manual	7
+proof.rs	exe_run	manual	10
+proof.rs	vm_det	manual	6
+proof.rs	region_spans	manual	10
+proof.rs	vm_complete	manual	38	returns
+proof.rs	main_aux	manual	23
+proof.rs	main_theorem	manual	9
+proof.rs	nested_same_group_vm	example	7
+proof.rs	nested_same_group_sem	example	6
+proof.rs	total 8	automatic 0	admitted 0	returning 1	examples 2
+all	total 62	automatic 3	admitted 0

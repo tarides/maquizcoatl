@@ -1,0 +1,17 @@
+== verus --version
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+== z3 --version (bundled with verus)
+Z3 version 4.16.0 - 64 bit
+== verus --crate-type=lib --num-threads 4  lib.rs
+verification results:: 135 verified, 0 errors
+exit code 0
+== verus --crate-type=lib --num-threads 4 --no-cheating lib.rs
+verification results:: 135 verified, 0 errors
+exit code 0
+== scan (assume|admit|external_body|verifier::external|assume_specification|exec_allows_no_decreases_clause|no_verify|rlimit) in lib syntax sem compile vm statement proof_a proof_sem proof_sim proof
+== end of scan

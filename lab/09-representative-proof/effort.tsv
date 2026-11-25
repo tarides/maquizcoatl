@@ -1,0 +1,159 @@
+run	date	item	kind	attempts	note
+1	2026-11-25	session	wall-clock	-	start 2026-11-25T10:37:44Z, end at the run-1 commit (see notebook entry)
+1	2026-11-25	FRAGMENT.md	design	1	citations re-checked against upstream; 6 line ranges in FRAGMENT.md and 3 in rocq/ comments corrected before commit (comments only, rebuild gave identical verdicts)
+1	2026-11-25	cases/select.py	script	2	first run counted (*VERB as a quantifier with no target; fixed
+1	2026-11-25	cases/agree.py	script	1	
+1	2026-11-25	oracle/oracle_at.c, oracle.sh	script	1	
+1	2026-11-25	rocq/Syntax.v	definition	1	checked first time
+1	2026-11-25	rocq/Sem.v	definition	1	checked first time
+1	2026-11-25	rocq/Compile.v	definition	1	checked first time
+1	2026-11-25	rocq/Vm.v	definition	1	checked first time
+1	2026-11-25	rocq/Statement.v	definition	1	statement only, no proof
+1	2026-11-25	rocq/Extract.v, ExtractSpec2.v, TablesStub.v, main.ml	driver	1	built and agreed first time
+1	2026-11-25	rocq/rocq.sh time phase	script	2	ulimit -v 16G too small for OCaml 5 heap reservation; switched to cgroup MemoryMax
+1	2026-11-25	provenance.sh	script	2	version queries fixed
+1	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+1	2026-11-25	session	wall-clock	-	amendment (entry 4): start no later than 2026-11-25T10:35:00Z (merge commit 1dbf4ba, the run's first recorded action; exact start not recorded), end 2026-11-25T10:50:36Z (run-1 commit 4525896); the 10:37:44Z above was taken after the merge, so its window covers the bench work and the commit, not the merge
+1-fix	2026-11-25	session	wall-clock	-	start 2026-11-25T10:59:48Z (first timestamp, after reading the run-1 review), end 2026-11-25T11:02:57Z (taken just before the commit); covers the three review fixes, reruns, notebook entry 4 and the commit, not the issue comment and dashboard update
+1-fix	2026-11-25	cases/select.py	script	2	recogniser extended to \cX, \C-X, \o{...}, \uHHHH, multi-code-point \x{...}; extraction-only cases added; first run failed (\u in the docstring, made raw)
+1-fix	2026-11-25	FRAGMENT.md	design	1	three citation ranges corrected
+1-fix	2026-11-25	oracle/oracle.sh, rocq/rocq.sh build	rerun	1	66 cases, agreed first time
+1-fix	2026-11-25	human interventions	intervention	0	none
+2	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T12:39:34Z (timestamp of the session's first command, git pull), end 2026-11-25T12:44:11Z (taken just before writing the notebook entry and the commit); covers the issue comment on the bytecode answer, the F* work and the bench runs; not the notebook entry (entry 5), the commit, the results comment, push and dashboard update (note corrected in entry 6)
+2	2026-11-25	fstar/Syntax.fst	definition	1	checked first time
+2	2026-11-25	fstar/Sem.fst	definition	1	checked first time
+2	2026-11-25	fstar/Compile.fst	definition	1	checked first time
+2	2026-11-25	fstar/Vm.fst	definition	1	checked first time
+2	2026-11-25	fstar/Statement.fst	definition	1	statement only (prop), no proof; checked first time
+2	2026-11-25	fstar/Extract.fst, TablesStub.fst, main.ml	driver	1	extracted, compiled and agreed first time
+2	2026-11-25	fstar/fstar.sh	script	1	
+2	2026-11-25	timed.sh	script	1	
+2	2026-11-25	human interventions	intervention	0	none (maintainer launched the run; the answer on the bytecode comparison came with the launch)
+2-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T12:51:53Z (first recorded timestamp, after git pull and reading the files), end 2026-11-25T12:52:26Z (taken just before the commit); covers the three review fixes and entry 6, not the commit, issue comment, push and dashboard update
+2-fix	2026-11-25	effort.tsv, timed.sh, fstar/Extract.fst, raw time.log	correction	1	note, header and comment fixed; time.log copied from the bench run
+2-fix	2026-11-25	human interventions	intervention	0	none
+3	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T12:54:29Z (timestamp of the session's first command, git pull), end 2026-11-25T13:07:23Z (taken just before assembling the raw set and writing entry 7); covers reading, the Verus work and the bench runs; not entry 7, the commit, the results comment, push and dashboard update
+3	2026-11-25	verus/syntax.rs	definition	2	first check failed (nat -> int cast in is_prefix_at's subrange); exec instructions switched to literals borrowed from the pattern before the first check (design, no failure)
+3	2026-11-25	verus/sem.rs	definition	4	spec fns checked first time; the exec mirror needed 3 more: overflow of pos + |l| (hint), espans loop invariant (push hint), esearch_sem (closure value not in the loop invariant, 2 attempts)
+3	2026-11-25	verus/compile.rs	definition	3	spec fns checked first time; exec mirror: postcondition syntax (final(out)), then rlimit exceeded in the single ecomp, split into one helper per construct (no rlimit raised)
+3	2026-11-25	verus/vm.rs	definition	2	spec fns and estep checked first time; epop and evm needed the ghost goal tied to the initial state in their loop invariants
+3	2026-11-25	verus/statement.rs	definition	1	statement only (spec fn), no proof; checked first time
+3	2026-11-25	verus/main.rs, lib.rs	driver	1	verified, compiled and agreed first time
+3	2026-11-25	verus/verus.sh	script	1	
+3	2026-11-25	timed.sh (verus case)	script	1	
+3	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+3-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T13:17:18Z (first recorded timestamp, after git pull, reading the review and the run-3 transcript, and the first bench-host reads), end 2026-11-25T13:18:18Z (taken just before the commit); covers the three review fixes and entry 8, not the commit, issue comment, push and dashboard update
+3-fix	2026-11-25	timed.sh, FRAGMENT.md, raw cpu.tsv and verus-threads.txt	correction	1	syntax.rs failure located in the spec fn is_prefix_at (rustc E0308, from the run-3 transcript); time.tsv gains user/sys columns, Verus --num-threads passed (default 7, as run 3 used); header and section 7 fixed; CPU times extracted from the existing time -v files
+3-fix	2026-11-25	human interventions	intervention	0	none
+4	2026-11-25	session	wall-clock	-	start 2026-11-25T13:25:52Z (first timestamp, before git pull), end 2026-11-25T13:51:43Z (taken just before the commit); covers reading, the timed check of entry 9, the proof, axioms.sh, the driver rerun, the timed check of entry 11 and entries 9-11; not the commit, issue comment, push and dashboard update
+4	2026-11-25	timed.sh (rocq case)	script	1	first use of the user/sys columns since correction 3: they work; rocq chk prints "Checked <file>.v"
+4	2026-11-25	Statement.v (groups, NoDup hypothesis)	definition	1	added because the theorem is false for a group nested in a group of the same number (Proof.v examples); driver rerun byte-identical
+4	2026-11-25	ProofA.length_comp	lemma	2	first check: rewrite of clen r after destruct found no subterm
+4	2026-11-25	ProofA.comp_star0	lemma	1	
+4	2026-11-25	ProofA.comp_star_null	lemma	1	
+4	2026-11-25	ProofA.comp_star_nn	lemma	1	
+4	2026-11-25	ProofA.code_at_cons	lemma	2	Nat.add_succ_comm used in the wrong direction; replaced by lia
+4	2026-11-25	ProofA.code_at_app	lemma	1	
+4	2026-11-25	ProofA.code_alt	lemma	2	address S (S pc + clen a) against pc + clen a + 2
+4	2026-11-25	ProofA.code_cat	lemma	1	
+4	2026-11-25	ProofA.code_group	lemma	1	
+4	2026-11-25	ProofA.code_lit	lemma	1	
+4	2026-11-25	ProofA.code_star_null	lemma	1	
+4	2026-11-25	ProofA.code_star_nn	lemma	1	
+4	2026-11-25	ProofA.code_compile	lemma	1	
+4	2026-11-25	ProofSem.ct_mono	lemma	1	
+4	2026-11-25	ProofSem.ct_det	lemma	2	apply ... in on the wrong hypothesis
+4	2026-11-25	ProofSem.is_prefix_length	lemma	1	
+4	2026-11-25	ProofSem.length_skipn'	lemma	1	
+4	2026-11-25	ProofSem.ct_total_aux	lemma	1	lemma (d), semantics, on FRAGMENT.md 4's measure
+4	2026-11-25	ProofSem.ct_total	lemma	1	
+4	2026-11-25	ProofSem.clen0_fm	lemma	2	induction premise rewritten by destruct; tree names
+4	2026-11-25	ProofSim.rep_mono	lemma	3	eauto closed a varying number of goals (twice)
+4	2026-11-25	ProofSim.sim	lemma	13	lemmas (b) and (c); 12 failed checks: + 0 addresses, simpl unfolding is_prefix in a hypothesis, evars left before lia (Lit, Cat, Group), star-of-empty evar in simres_fm, star second-branch address, a substituted name, Hrep' on the wrong stack, a stray IH call, a code_cat arity, one misread error
+4	2026-11-25	ProofSim.mget_mset_eq, mget_mset_neq, gget_gset_eq, gget_gset_neq, cls_gs, NoDup_app_disj, meq_refl, meq_trans, capsrel_meq, exec_next, exec_halt, exec_fail, run_mono, exec_det, rep_re', simres_fwd, simres_fm, simres_choice, fresh_sub, npg_nil, capsrel_open, meq_open	lemma	1	22 helper lemmas, each right at its first check
+4	2026-11-25	Proof.vm_det	lemma	1	
+4	2026-11-25	Proof.region_rv	lemma	1	
+4	2026-11-25	Proof.vm_complete	lemma	1	lemma (d), VM
+4	2026-11-25	Proof.main_theorem	lemma	1	lemma (e); Print Assumptions: Closed under the global context
+4	2026-11-25	axioms.sh (rocq case)	script	1	
+4	2026-11-25	lemmas.py	script	1	
+4	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+4-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T14:00:19Z (first recorded timestamp, after git pull and reading the review), end 2026-11-25T14:01:01Z (taken just before the commit); covers the three review fixes and entry 12, not the commit, issue comment, push and dashboard update
+4-fix	2026-11-25	FRAGMENT.md, fstar/Statement.fst, verus/statement.rs, plans/09-representative-proof.md	correction	1	section 8 (d) reworded; header comments; M4 attempt units and M2 proof timestamps added to the plan
+4-fix	2026-11-25	human interventions	intervention	0	none
+7	2026-11-25	session	wall-clock	-	start 2026-11-25T14:27:26Z (first timestamp, at git pull); end recorded in a later row
+7	2026-11-25	fstar/Statement.fst, verus/statement.rs	statement	1	decision 5: hypothesis nodup (groups r) / groups(r).no_duplicates() with Rocq's groups; F* five definition files and Verus crate rechecked once each (14:29:08Z, 14:29:14Z), both clean at the first check; no extracted or exec definition changed, so the agreement drivers were not rerun
+7	2026-11-25	F* M2 proof compiles	timestamps	-	first proof compile 2026-11-25T14:37:22Z (ProofA.fst), last proof compile of the edit loop 2026-11-25T14:43:37Z (Proof.fst); then axioms.sh 14:43:54Z-14:44:27Z, timed.sh 14:44:59Z-14:46:36Z, one untimed --query_stats check of ProofSim.fst
+7	2026-11-25	F* M2 compile invocations	invocations	21	21 untimed fstar.exe invocations of the proof modules in the edit loop (ProofA 5, ProofSem 2, ProofSim 6, Proof 8): 13 failing, 8 clean; of the 13 failing, 7 were failed checks (a failure that led to an edit) and 6 reran an unchanged file to read the error (output truncation in the session's wrapper); raw list: results/2026-11-25-exp-09-fstar-m2-raw/fstar/invocations.tsv
+7	2026-11-25	ProofA.length_comp	lemma	3	SMTPat of length_append did not fire: explicit calls; then fuel 2 too low for the nullable-star layout: --fuel 4 for this lemma
+7	2026-11-25	ProofA.code_at	definition	2	auxiliary definition; missing decreases clauses (termination on the code list instead of the instruction list); one failed check, attributed to code_at (row split in correction 6)
+7	2026-11-25	ProofA.code_at_app, code_at_shift	lemma	1	2 lemmas, each right at its first check (row split from code_at in correction 6)
+7	2026-11-25	ProofA.length_append, append_assoc, code_alt, code_cat, code_group, code_lit, code_star_null, code_star_nn, code_at_prefix, nth_append_len, code_compile	lemma	1	11 lemmas, each right at its first check
+7	2026-11-25	ProofSem.ct_mono, ct_det, is_prefix_length, length_skipn, ct_total, clen0_fm	lemma	1	6 lemmas, all right at the first check (fuel_of split out in correction 6)
+7	2026-11-25	ProofSem.fuel_of	function	1	right at the first check; lemma (d) for the semantics, a total function returning the fuel (row split in correction 6)
+7	2026-11-25	ProofSim.choice	function	2	binder syntax: the arrow type of the second-branch argument needed parentheses
+7	2026-11-25	ProofSim.case_group	function	2	the group's continuation is represented at pos + minlen a, not pos
+7	2026-11-25	ProofSim.case_cat	function	2	module rlimit lowered from 20 to 10 after the proof closed: case_cat needs 20 (used rlimit 10.24), kept at 20 for case_cat only
+7	2026-11-25	ProofSim.mem_append, nodup_append, cls_none, meq_refl, meq_trans, capsrel_meq, capsrel_open, meq_push, meq_nopush, capsrel_close, meq_close, capsrel_end, capsrel_init, exe_next, exe_fail1, exe_add	lemma	1	16 lemmas, each right at its first check
+7	2026-11-25	ProofSim.rep_mono, case_end, case_close, case_chk_null, case_chk_nn, case_empty, case_lit, case_alt, case_star0, case_star_null, case_star_nn, sim	function	1	12 proof functions (lemmas (b) and (c)), each right at its first check
+7	2026-11-25	Proof.vm_complete	function	2	the final equation was not derived after a match statement: restructured into one return per branch with intermediate asserts
+7	2026-11-25	Proof.run_mono, run_det, exe_run, vm_det, region_spans, main_aux, main_theorem	lemma	1	7 lemmas, right at the first check; main_theorem is lemma (e)
+7	2026-11-25	axioms.sh (fstar case), timed.sh (FSTAR_FILES), lemmas.py (F* rules)	script	1	
+7	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+7	2026-11-25	session	wall-clock	-	start 2026-11-25T14:27:26Z, end 2026-11-25T14:50:53Z (taken just before the commit); covers the decision-5 statement change, the F* M2 proof, axioms.sh, timed.sh and entries 13-14, not the commit, issue comment, push and dashboard update
+7-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T15:01:40Z (first recorded timestamp, after git pull, reading the review and the run-7 records), end 2026-11-25T15:02:40Z (taken just before the commit); covers the three review fixes, the Verus recheck and entry 15, not the commit, issue comment, push and dashboard update
+7-fix	2026-11-25	effort.tsv, plans/09-representative-proof.md, Verus statement recheck	correction	1	two run-7 rows split by kind; M4 reports failing invocations beside failed checks; invocations.tsv gains a source digest from run 10 on; Verus crate rechecked clean at the first check
+7-fix	2026-11-25	human interventions	intervention	0	none
+10	2026-11-25	session	wall-clock	-	start 2026-11-25T15:06:27Z (first timestamp, at git pull); end recorded in a later row
+10	2026-11-25	Verus M2 proof compiles	timestamps	-	first proof compile 2026-11-25T15:13:04Z (proof_a), last proof compile of the edit loop 2026-11-25T15:25:15Z (proof); then axioms.sh 15:26:50Z-15:27:01Z, timed.sh 15:27:11Z-15:27:27Z, driver rebuild (verus.sh build) 15:27:33Z-15:27:42Z
+10	2026-11-25	Verus M2 compile invocations	invocations	12	12 untimed verus invocations of the crate in the edit loop (--verify-module proof_a 1, proof_sem 2, proof_sim 4, proof 4; full crate 1): 6 failing, 6 clean; every failing one has a source digest (SHA-256) different from the next invocation's, so all 6 are failed checks that led to an edit; raw list with digests: results/2026-11-25-exp-09-verus-m2-raw/verus/invocations.tsv
+10	2026-11-25	Verus toy crates and negative test	invocations	5	outside the proof edit loop, not in invocations.tsv: 5 verus invocations, 4 verified and 1 rejected at trigger inference; 3 toy crates on the statement's trigger (2 failing as expected, 1 clean) plus a first version of toy 2 rejected before verification ("could not automatically infer triggers"; raw: trigger-toy.txt), and 1 negative test of nested_same_group_vm (fails as expected; time not recorded, between 15:25:17Z and 15:26:50Z); was 4 before correction 7, which counted only the verified runs
+10	2026-11-25	statement.rs: main_theorem_at	statement	1	body of main_theorem_statement moved unchanged into the spec fn main_theorem_at(r, s, p), now the outer trigger (run 3's trigger sem(0, r, s, p) made the statement unprovable: 2 failing checks of proof.rs, 15:20:04Z and 15:20:28Z, counted under proof.main_theorem); clean at the first check after the change
+10	2026-11-25	proof_a.lemma_push_last, lemma_mget_mset, lemma_gget_gset, length_comp, code_at_app, code_at_one, code_lit, code_cat, code_alt, code_group, code_star_null, code_star_nn, code_compile	lemma	1	13 lemmas (3 broadcast), each right at its first check
+10	2026-11-25	proof_a.code_at	definition	1	auxiliary spec fn, right at the first check
+10	2026-11-25	proof_sem.fuel_of	lemma	2	returns the fuel; decreases check needed the weight of the two-level push unfolded by an intermediate assert (Cat, Star, Group)
+10	2026-11-25	proof_sem.ct_mono, ct_det, ct_total, clen0_fm	lemma	1	4 lemmas, each right at its first check
+10	2026-11-25	proof_sim.gsr_groups	lemma	4	unfolding of gsr and groups at the matched constructor (Cat/Alt, then Group, then Eps/Lit/Star) given by explicit asserts
+10	2026-11-25	proof_sim.exe_fail1	lemma	2	exe at 0 steps after the match on step, asserted
+10	2026-11-25	proof_sim.rep_mono	lemma	2	same_checks for the inner derivation of RChkNull, by an assert forall
+10	2026-11-25	proof_sim.case_cat	lemma	3	two-level unfolding of hx and cls (intermediate asserts), then uniq of the split actions through the helper lemmas disj_sub and disj_union
+10	2026-11-25	proof_sim.case_alt	lemma	3	hacts and hx of the RJump derivation asserted, then uniq of each branch through disj_sub
+10	2026-11-25	proof_sim.case_group	lemma	3	membership facts for uniq (gsr of the group, assert forall over its body's groups), then cls and hx of the RClose derivation asserted
+10	2026-11-25	proof_sim.case_star_null, case_star_nn	lemma	2	hx and cls of the check derivation asserted (one failed check each)
+10	2026-11-25	proof_sim.disj_sub, disj_union	lemma	1	2 helper lemmas added in the second check of proof_sim, right at their first check
+10	2026-11-25	proof_sim.lemma_contains_add, nodup_add, gd_of, lemma_cget_push, cls_none, meq_refl, meq_trans, capsrel_meq, capsrel_open, meq_push, meq_nopush, capsrel_close, meq_close, capsrel_end, capsrel_init, exe_next, exe_add, choice, case_end, case_close, case_chk_null, case_chk_nn, case_empty, case_lit, case_star0, sim	lemma	1	26 lemmas, each right at its first check (choice, the case fns and sim return their witnesses)
+10	2026-11-25	proof_sim.Rep, hpc, hacts, hp, hx, rep, cls, cget, capsrel, meq, gs, uniq, topg, gsr, gd, fresh, exe, simres	definition	1	auxiliary types and spec fns, right at the first check
+10	2026-11-25	proof.vm_complete	lemma	3	hacts of the initial derivation and cls/gs/uniq of the empty action list asserted (two failed checks)
+10	2026-11-25	proof.main_theorem	lemma	3	two failed checks with run 3's statement (outer trigger sem(0, r, s, p) not in the body), toy crates, then the statement row above; clean after it
+10	2026-11-25	proof.run_mono, run_det, exe_run, vm_det, region_spans, main_aux	lemma	1	6 lemmas, each right at the first check
+10	2026-11-25	proof.nested_same_group_vm, nested_same_group_sem	example	1	evaluated counterexample checks (by (compute_only)), right at the first check; negative test as above
+10	2026-11-25	axioms.sh (verus case), timed.sh (proof modules), lemmas.py (Verus rules)	script	1	lemmas.py output for the Rocq and F* proof files unchanged (diffed against runs 4 and 7's lemmas.txt)
+10	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+10	2026-11-25	session	wall-clock	-	start 2026-11-25T15:06:27Z, end 2026-11-25T15:31:43Z (taken just before the commit); covers the Verus M2 proof, the statement's trigger change, axioms.sh, timed.sh, the driver rebuild and entries 16-17, not the commit, issue comment, push and dashboard update
+10-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T15:41:15Z (first recorded timestamp, after git pull and reading the review), end 2026-11-25T15:43:42Z (taken just before the commit); covers the three review fixes, the axioms.sh recheck and entry 18, not the commit, issue comment, push and dashboard update
+10-fix	2026-11-25	lemmas.py, axioms.sh, timed.sh, verus.sh, plans/09-representative-proof.md, effort.tsv	correction	1	lemmas.py measures Verus admits (output on the run-10 proof files unchanged); Verus cases record the bundled z3 --version (axioms.sh rechecked clean at the first run, 135 verified twice); out-of-loop invocations 5, not 4
+10-fix	2026-11-25	human interventions	intervention	0	none
+13	2026-11-25	session	wall-clock	-	start 2026-11-25T16:32:10Z, end 2026-11-25T16:57:21Z (taken just before the commit); covers reading, brittle.sh, the 33-cell matrix (16:34:31Z-16:54:06Z), the replication of the failing cell and entry 19, not the commit, issue comment, push and dashboard update
+13	2026-11-25	brittle.sh	script	2	failure parser rewritten after a throwaway probe of F*'s error and Query-stats format (untimed, CPUs 4-7), before the first cell; 1 failing invocation (script not executable)
+13	2026-11-25	F* brittleness matrix	measurement	1	33 cells (Z3 5.3.0, 4.15.3, 4.13.3 x default seed and 1..10), each run once; 1 labelled replication of the failing cell (4.15.3/4, rep1); no failure retried away
+13	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+13-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T17:03:36Z (first recorded timestamp, after git pull and reading the review and the run-13 records), end 2026-11-25T17:05:51Z (taken just before the commit); covers the two review fixes, the re-derivation of run 13's failing columns and entry 20, not the commit, issue comment, push and dashboard update
+13-fix	2026-11-25	brittle.sh fail_items	correction	2	first version read the warning header's fields with the tab separator and matched no Warning 241/247; fixed after the test on run 13's logs, before anything was recorded; same output on the bench host's gawk
+13-fix	2026-11-25	human interventions	intervention	0	none
+14	2026-11-25	session	wall-clock	-	start 2026-11-25T18:24:56Z, end 2026-11-25T18:40:56Z (taken just before the commit); covers reading, the brittle.sh Verus mode, the rlimit calibration, the 34-cell matrix (18:30:14Z-18:38:49Z, two passes) and entry 21, not the commit, issue comment, push and dashboard update
+14	2026-11-25	brittle.sh (verus mode), brittle_verus.py	script	3	first test showed no per-function data (--time-expanded added); refusal row's label fixed; the z3 sampler stopped the script after 5 checks in the matrix run (set -e on a vanished process), fixed and the 5 cells rerun (both runs pass, first runs kept in script-error/); fstar mode unchanged
+14	2026-11-25	rlimit calibration	measurement	4	untimed probe, CPUs 4-7: two toy crates and a whole-crate run at --rlimit 0.1 gave no usable figure; --verify-module proof_sim at --rlimit 0.3 gave 3,000,000 units per rlimit unit
+14	2026-11-25	Verus brittleness matrix	measurement	1	33 cells (Z3 4.16.0 bundled, 5.3.0 and 4.15.3 via VERUS_Z3_PATH with the opt-out x default seed and 1..10) plus the refusal cell, each recorded once; 5 cells run twice because of the script stop, both passing; no failure, none retried
+14	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+14-fix	2026-11-25	session	wall-clock	-	start 2026-11-25T18:48:16Z (first recorded timestamp, after git pull and reading the review and entry 21), end 2026-11-25T18:49:01Z (taken just before the commit); covers the three review fixes, the recomputation from entry 21's raw files and entry 22, not the commit, issue comment, push and dashboard update
+14-fix	2026-11-25	entry 22 figures	correction	1	max_fn tally and compile:: rows recomputed from checks.tsv/functions.tsv at the first attempt; found that case_alt tops one cell (5.3.0 seed 8), against the review
+14-fix	2026-11-25	human interventions	intervention	0	none
+15	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T19:08:01Z (first file written, after git pull and reading the plan and issue #4), end 2026-11-25T19:13:50Z (taken just before the commit); covers reading entries 1-22, the raw files and the reviews, the recomputations, entry 23 and the draft of the done-criterion-5 comment; not the commit, issue comment, push and dashboard update
+15	2026-11-25	M4 comparison (entry 23, comment draft)	comparison	1	no prover and no bench-host work; loc.py, lemmas.py, effort.tsv sessions and attempts, brittleness pass counts, medians and margins recomputed on the workstation, all equal to the entries' figures
+15	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+15-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T19:21:57Z (first timestamp taken, after git pull and reading the review), end 2026-11-25T19:23:13Z (taken just before the commit); covers correction 10, the draft edits and the lemmas.py change; not the commit, issue comment, push and dashboard update
+15-fix	2026-11-25	entry 23 fixes (correction 10, draft)	correction	1	fixes 1-5 at the first attempt; largest-item lines recomputed with lemmas.py (F*, Verus) and the same rule for Rocq
+15-fix	2026-11-25	lemmas.py F* admitted count	script	1	output on the branch F* files byte-identical; scratch test file with admit/assume val/magic/comment gives admitted 3 at the first attempt
+15-fix	2026-11-25	human interventions	intervention	0	none
+c11	2026-11-25	run-13 logs.tar.xz repack	data	1	contents verified identical at the first attempt
+c11	2026-11-25	human interventions	intervention	0	none (maintainer decision recorded on issue #4)

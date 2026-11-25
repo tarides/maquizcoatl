@@ -1,0 +1,710 @@
+Creating new z3proc (cmd=[("<bench-workdir>/cache/fstar/lib/fstar/z3-4.15.3/bin/z3", ["-smt2", "-in"])], version=["4.15.3"])
+(ProofSim.fst(30,10-30,58))	Query-stats (ProofSim.mem_append, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(29,20-32,56))	Query-stats (ProofSim.mem_append, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(ProofSim.fst(30,10-30,58))	Query-stats (ProofSim.mem_append, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.013)
+(ProofSim.fst(38,19-38,27))	Query-stats (ProofSim.nodup_append, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(ProofSim.fst(38,31-38,39))	Query-stats (ProofSim.nodup_append, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(ProofSim.fst(38,43-38,53))	Query-stats (ProofSim.nodup_append, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.005)
+(ProofSim.fst(36,22-39,56))	Query-stats (ProofSim.nodup_append, 1)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(ProofSim.fst(37,20-37,40))	Query-stats (ProofSim.nodup_append, 1)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.007)
+(ProofSim.fst(38,19-38,27))	Query-stats (ProofSim.nodup_append, 1)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.010)
+(ProofSim.fst(38,31-38,39))	Query-stats (ProofSim.nodup_append, 1)	goal 7 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(38,43-38,53))	Query-stats (ProofSim.nodup_append, 1)	goal 8 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.012)
+(ProofSim.fst(51,2-55,28))	Query-stats (ProofSim.cls, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(51,2-55,28))	Query-stats (ProofSim.cls, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(51,2-55,28))	Query-stats (ProofSim.cls, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(51,2-55,28))	Query-stats (ProofSim.cls, 1)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(Prims.fst(91,23-91,30))	Query-stats (ProofSim.cget, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(57,14-60,55))	Query-stats (ProofSim.cget, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(ProofSim.fst(58,2-60,55))	Query-stats (ProofSim.cget, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(79,2-83,27))	Query-stats (ProofSim.gs, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(79,2-83,27))	Query-stats (ProofSim.gs, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(79,2-83,27))	Query-stats (ProofSim.gs, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(79,2-83,27))	Query-stats (ProofSim.gs, 1)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(86,2-90,51))	Query-stats (ProofSim.uniq, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.004)
+(ProofSim.fst(86,2-90,51))	Query-stats (ProofSim.uniq, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.004)
+(ProofSim.fst(86,2-90,51))	Query-stats (ProofSim.uniq, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(ProofSim.fst(86,2-90,51))	Query-stats (ProofSim.uniq, 1)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(94,2-97,28))	Query-stats (ProofSim.topg, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(94,2-97,28))	Query-stats (ProofSim.topg, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(94,2-97,28))	Query-stats (ProofSim.topg, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.002)
+(ProofSim.fst(104,49-104,71))	Query-stats (ProofSim.cls_none, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(103,18-109,39))	Query-stats (ProofSim.cls_none, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.004)
+(ProofSim.fst(104,20-104,38))	Query-stats (ProofSim.cls_none, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.007)
+(ProofSim.fst(104,49-104,71))	Query-stats (ProofSim.cls_none, 1)	goal 4 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.027)
+(ProofSim.fst(103,18-109,39))	Query-stats (ProofSim.cls_none, 1)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.004)
+(ProofSim.fst(104,20-104,38))	Query-stats (ProofSim.cls_none, 1)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.015)
+(ProofSim.fst(104,49-104,71))	Query-stats (ProofSim.cls_none, 1)	goal 7 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.035)
+(ProofSim.fst(103,18-109,39))	Query-stats (ProofSim.cls_none, 1)	goal 8 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.004)
+(ProofSim.fst(104,20-104,38))	Query-stats (ProofSim.cls_none, 1)	goal 9 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.008)
+(ProofSim.fst(104,49-104,71))	Query-stats (ProofSim.cls_none, 1)	goal 10 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.010)
+(ProofSim.fst(105,4-109,39))	Query-stats (ProofSim.cls_none, 1)	goal 11 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.008)
+(ProofSim.fst(111,65-111,78))	Query-stats (ProofSim.meq_refl, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(115,60-115,72))	Query-stats (ProofSim.meq_trans, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.020)
+(ProofSim.fst(121,62-121,78))	Query-stats (ProofSim.capsrel_meq, 1)	goal 1 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.018)
+(Prims.fst(91,23-91,30))	Query-stats (ProofSim.capsrel_open, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(130,19-130,60))	Query-stats (ProofSim.capsrel_open, 2)	goal 1 succeeded in 0.04 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.120)
+(ProofSim.fst(137,19-137,51))	Query-stats (ProofSim.meq_push, 1)	goal 1 succeeded in 0.02 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.074)
+(ProofSim.fst(145,19-145,38))	Query-stats (ProofSim.meq_nopush, 1)	goal 1 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.055)
+(ProofSim.fst(151,19-151,89))	Query-stats (ProofSim.capsrel_close, 1)	goal 1 succeeded in 0.05 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.194)
+(ProofSim.fst(157,19-157,44))	Query-stats (ProofSim.meq_close, 1)	goal 1 succeeded in 0.02 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.111)
+(ProofSim.fst(162,64-162,89))	Query-stats (ProofSim.capsrel_end, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.021)
+(ProofSim.fst(165,38-165,58))	Query-stats (ProofSim.capsrel_init, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.012)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.exe, 1)	goal 1 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.026)
+(ProofSim.fst(171,2-174,25))	Query-stats (ProofSim.exe, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.008)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.exe_next, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.005)
+(ProofSim.fst(177,57-177,98))	Query-stats (ProofSim.exe_next, 2)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.016)
+(ProofSim.fst(181,59-181,88))	Query-stats (ProofSim.exe_fail1, 1)	goal 1 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.043)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.exe_add, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.004)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.exe_add, 2)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(185,19-186,85))	Query-stats (ProofSim.exe_add, 2)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.008)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.exe_add, 2)	goal 3 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.024)
+(ProofSim.fst(188,4-191,23))	Query-stats (ProofSim.exe_add, 2)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.008)
+(ProofSim.fst(185,19-186,85))	Query-stats (ProofSim.exe_add, 2)	goal 5 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.094)
+(ProofSim.fst(185,19-186,85))	Query-stats (ProofSim.exe_add, 2)	goal 6 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.027)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.rep, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.005)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.__proj__RClose__item___9, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.010)
+(ProofSim.fst(197,19-197,51))	Query-stats (ProofSim.rep_mono, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(228,4-237,83))	Query-stats (ProofSim.rep_mono, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.011)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.rep_mono, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.010)
+(ProofSim.fst(226,63-226,102))	Query-stats (ProofSim.rep_mono, 1)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.012)
+(ProofSim.fst(223,38-229,14))	Query-stats (ProofSim.rep_mono, 1)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.008)
+(ProofSim.fst(223,48-229,22))	Query-stats (ProofSim.rep_mono, 1)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(224,19-229,28))	Query-stats (ProofSim.rep_mono, 1)	goal 7 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(224,22-229,30))	Query-stats (ProofSim.rep_mono, 1)	goal 8 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(200,18-200,44))	Query-stats (ProofSim.rep_mono, 1)	goal 9 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(223,38-230,13))	Query-stats (ProofSim.rep_mono, 1)	goal 10 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.007)
+(ProofSim.fst(200,60-223,52))	Query-stats (ProofSim.rep_mono, 1)	goal 11 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.005)
+(ProofSim.fst(200,71-224,20))	Query-stats (ProofSim.rep_mono, 1)	goal 12 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.005)
+(ProofSim.fst(200,74-224,23))	Query-stats (ProofSim.rep_mono, 1)	goal 13 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(203,18-203,54))	Query-stats (ProofSim.rep_mono, 1)	goal 14 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(203,58-203,81))	Query-stats (ProofSim.rep_mono, 1)	goal 15 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(204,18-204,36))	Query-stats (ProofSim.rep_mono, 1)	goal 16 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(204,40-204,62))	Query-stats (ProofSim.rep_mono, 1)	goal 17 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.018)
+(ProofSim.fst(228,4-237,83))	Query-stats (ProofSim.rep_mono, 1)	goal 18 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.012)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.rep_mono, 1)	goal 19 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(226,63-226,102))	Query-stats (ProofSim.rep_mono, 1)	goal 20 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.015)
+(ProofSim.fst(223,38-231,12))	Query-stats (ProofSim.rep_mono, 1)	goal 21 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.011)
+(ProofSim.fst(205,53-223,52))	Query-stats (ProofSim.rep_mono, 1)	goal 22 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.009)
+(ProofSim.fst(224,19-231,31))	Query-stats (ProofSim.rep_mono, 1)	goal 23 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.009)
+(ProofSim.fst(205,76-224,23))	Query-stats (ProofSim.rep_mono, 1)	goal 24 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.012)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.rep_mono, 1)	goal 25 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.009)
+(ProofSim.fst(208,20-208,53))	Query-stats (ProofSim.rep_mono, 1)	goal 26 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(228,4-237,83))	Query-stats (ProofSim.rep_mono, 1)	goal 27 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.011)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.rep_mono, 1)	goal 28 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.011)
+(ProofSim.fst(226,63-226,102))	Query-stats (ProofSim.rep_mono, 1)	goal 29 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.012)
+(ProofSim.fst(223,38-233,15))	Query-stats (ProofSim.rep_mono, 1)	goal 30 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.008)
+(ProofSim.fst(209,60-223,52))	Query-stats (ProofSim.rep_mono, 1)	goal 31 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.008)
+(ProofSim.fst(224,19-233,28))	Query-stats (ProofSim.rep_mono, 1)	goal 32 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.007)
+(ProofSim.fst(224,22-233,30))	Query-stats (ProofSim.rep_mono, 1)	goal 33 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(212,23-212,64))	Query-stats (ProofSim.rep_mono, 1)	goal 34 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(212,68-212,79))	Query-stats (ProofSim.rep_mono, 1)	goal 35 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(212,83-212,93))	Query-stats (ProofSim.rep_mono, 1)	goal 36 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(213,23-213,53))	Query-stats (ProofSim.rep_mono, 1)	goal 37 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(213,57-213,87))	Query-stats (ProofSim.rep_mono, 1)	goal 38 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.085)
+(ProofSim.fst(214,23-214,32))	Query-stats (ProofSim.rep_mono, 1)	goal 39 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.016)
+(ProofSim.fst(214,36-214,56))	Query-stats (ProofSim.rep_mono, 1)	goal 40 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(214,60-214,84))	Query-stats (ProofSim.rep_mono, 1)	goal 41 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(214,88-214,98))	Query-stats (ProofSim.rep_mono, 1)	goal 42 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(228,4-237,83))	Query-stats (ProofSim.rep_mono, 1)	goal 43 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.013)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.rep_mono, 1)	goal 44 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(226,63-226,102))	Query-stats (ProofSim.rep_mono, 1)	goal 45 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.078)
+(ProofSim.fst(223,38-234,17))	Query-stats (ProofSim.rep_mono, 1)	goal 46 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.012)
+(ProofSim.fst(215,58-223,52))	Query-stats (ProofSim.rep_mono, 1)	goal 47 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.010)
+(ProofSim.fst(215,85-224,20))	Query-stats (ProofSim.rep_mono, 1)	goal 48 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.012)
+(ProofSim.fst(224,22-234,43))	Query-stats (ProofSim.rep_mono, 1)	goal 49 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.010)
+(ProofSim.fst(218,21-218,62))	Query-stats (ProofSim.rep_mono, 1)	goal 50 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(218,66-218,77))	Query-stats (ProofSim.rep_mono, 1)	goal 51 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(218,81-218,97))	Query-stats (ProofSim.rep_mono, 1)	goal 52 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(219,21-219,51))	Query-stats (ProofSim.rep_mono, 1)	goal 53 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(219,55-219,75))	Query-stats (ProofSim.rep_mono, 1)	goal 54 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.019)
+(ProofSim.fst(220,21-220,41))	Query-stats (ProofSim.rep_mono, 1)	goal 55 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(220,45-220,69))	Query-stats (ProofSim.rep_mono, 1)	goal 56 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(220,73-220,83))	Query-stats (ProofSim.rep_mono, 1)	goal 57 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(228,4-237,83))	Query-stats (ProofSim.rep_mono, 1)	goal 58 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.013)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.rep_mono, 1)	goal 59 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(226,63-226,102))	Query-stats (ProofSim.rep_mono, 1)	goal 60 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.016)
+(ProofSim.fst(223,38-236,15))	Query-stats (ProofSim.rep_mono, 1)	goal 61 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.011)
+(ProofSim.fst(221,56-223,52))	Query-stats (ProofSim.rep_mono, 1)	goal 62 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.012)
+(ProofSim.fst(224,19-236,39))	Query-stats (ProofSim.rep_mono, 1)	goal 63 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.009)
+(ProofSim.fst(224,22-236,41))	Query-stats (ProofSim.rep_mono, 1)	goal 64 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.009)
+(ProofSim.fst(244,2-247,89))	Query-stats (ProofSim.simres, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.choice, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.013)
+(ProofSim.fst(266,27-266,75))	Query-stats (ProofSim.choice, 1)	goal 2 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.215)
+(ProofSim.fst(262,26-262,38))	Query-stats (ProofSim.choice, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.choice, 1)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(115,20-115,33))	Query-stats (ProofSim.choice, 1)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.choice, 1)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.006)
+(ProofSim.fst(266,27-266,75))	Query-stats (ProofSim.choice, 1)	goal 7 succeeded in 0.05 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.298)
+(ProofSim.fst(162,20-162,37))	Query-stats (ProofSim.case_end, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(283,27-283,76))	Query-stats (ProofSim.case_end, 1)	goal 2 succeeded in 0.05 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.316)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_close, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_close, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.009)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_close, 1)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(104,20-104,38))	Query-stats (ProofSim.case_close, 2)	goal 1 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.089)
+(ProofSim.fst(150,20-150,48))	Query-stats (ProofSim.case_close, 2)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(150,52-150,68))	Query-stats (ProofSim.case_close, 2)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_close, 2)	goal 4 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.070)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_close, 2)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_close, 2)	goal 6 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.086)
+(ProofSim.fst(177,20-177,46))	Query-stats (ProofSim.case_close, 2)	goal 7 succeeded in 0.04 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.205)
+(ProofSim.fst(156,20-156,68))	Query-stats (ProofSim.case_close, 2)	goal 8 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_close, 2)	goal 9 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.011)
+(ProofSim.fst(293,27-293,78))	Query-stats (ProofSim.case_close, 2)	goal 10 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.205)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_chk_null, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_chk_null, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(91,20-91,31))	Query-stats (ProofSim.case_chk_null, 2)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(91,35-91,45))	Query-stats (ProofSim.case_chk_null, 2)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(91,49-91,90))	Query-stats (ProofSim.case_chk_null, 2)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(Prims.fst(91,23-91,30))	Query-stats (ProofSim.case_chk_null, 2)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.case_chk_null, 2)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_chk_null, 2)	goal 6 succeeded in 0.05 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.291)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_chk_null, 2)	goal 7 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_chk_null, 2)	goal 8 succeeded in 0.04 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.284)
+(ProofSim.fst(177,20-177,46))	Query-stats (ProofSim.case_chk_null, 2)	goal 9 succeeded in 0.38 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 2.064)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_chk_null, 2)	goal 10 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.015)
+(ProofSim.fst(314,27-314,67))	Query-stats (ProofSim.case_chk_null, 2)	goal 11 succeeded in 0.12 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.729)
+(ProofSim.fst(203,58-203,81))	Query-stats (ProofSim.case_chk_null, 2)	goal 12 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(204,18-204,36))	Query-stats (ProofSim.case_chk_null, 2)	goal 13 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(204,40-204,62))	Query-stats (ProofSim.case_chk_null, 2)	goal 14 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.024)
+(ProofSim.fst(205,76-306,49))	Query-stats (ProofSim.case_chk_null, 2)	goal 15 succeeded in 0.02 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.168)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_chk_null, 2)	goal 16 succeeded in 0.06 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.360)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_chk_null, 2)	goal 17 succeeded in 0.06 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.369)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_chk_null, 2)	goal 18 succeeded in 0.11 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.618)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_chk_null, 2)	goal 19 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.025)
+(ProofSim.fst(177,20-177,46))	Query-stats (ProofSim.case_chk_null, 2)	goal 20 succeeded in 0.99 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 4.726)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_chk_null, 2)	goal 21 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.016)
+(ProofSim.fst(177,20-177,46))	Query-stats (ProofSim.case_chk_null, 2)	goal 22 succeeded in 0.22 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.177)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_chk_null, 2)	goal 23 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.016)
+(ProofSim.fst(314,27-314,67))	Query-stats (ProofSim.case_chk_null, 2)	goal 24 succeeded in 0.21 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.214)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_chk_nn, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_chk_nn, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(101,20-101,31))	Query-stats (ProofSim.case_chk_nn, 2)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(101,35-101,51))	Query-stats (ProofSim.case_chk_nn, 2)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(101,55-101,96))	Query-stats (ProofSim.case_chk_nn, 2)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(203,58-203,81))	Query-stats (ProofSim.case_chk_nn, 2)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(204,18-204,36))	Query-stats (ProofSim.case_chk_nn, 2)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(204,40-204,62))	Query-stats (ProofSim.case_chk_nn, 2)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.022)
+(ProofSim.fst(205,76-331,47))	Query-stats (ProofSim.case_chk_nn, 2)	goal 7 succeeded in 0.02 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.130)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_chk_nn, 2)	goal 8 succeeded in 0.31 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.492)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_chk_nn, 2)	goal 9 succeeded in 0.04 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.229)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_chk_nn, 2)	goal 10 succeeded in 0.08 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.437)
+(ProofSim.fst(177,20-177,46))	Query-stats (ProofSim.case_chk_nn, 2)	goal 11 succeeded in 0.07 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.406)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_chk_nn, 2)	goal 12 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.015)
+(ProofSim.fst(339,27-339,67))	Query-stats (ProofSim.case_chk_nn, 2)	goal 13 succeeded in 0.10 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.581)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_empty, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_empty, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.case_empty, 2)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.027)
+(ProofSim.fst(358,32-358,67))	Query-stats (ProofSim.case_empty, 2)	goal 2 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.194)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_empty, 2)	goal 3 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.181)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_empty, 2)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.026)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_empty, 2)	goal 5 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.046)
+(ProofSim.fst(363,27-363,90))	Query-stats (ProofSim.case_empty, 2)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.028)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_lit, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_lit, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(86,20-86,27))	Query-stats (ProofSim.case_lit, 2)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(86,31-86,73))	Query-stats (ProofSim.case_lit, 2)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_lit, 2)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.019)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.case_lit, 2)	goal 4 succeeded in 0.02 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.118)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_lit, 2)	goal 5 succeeded in 0.02 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.131)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_lit, 2)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.028)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_lit, 2)	goal 7 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.070)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_lit, 2)	goal 8 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.020)
+(ProofSim.fst(177,20-177,46))	Query-stats (ProofSim.case_lit, 2)	goal 9 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.050)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_lit, 2)	goal 10 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.013)
+(ProofSim.fst(372,27-372,96))	Query-stats (ProofSim.case_lit, 2)	goal 11 succeeded in 0.09 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.476)
+(ProofSim.fst(181,20-181,48))	Query-stats (ProofSim.case_lit, 2)	goal 12 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.017)
+(ProofSim.fst(372,27-372,96))	Query-stats (ProofSim.case_lit, 2)	goal 13 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.178)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_cat, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.003)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_cat, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.000)
+(ProofA.fst(73,20-73,64))	Query-stats (ProofSim.case_cat, 2)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.000)
+(ProofSim.fst(37,20-37,40))	Query-stats (ProofSim.case_cat, 2)	goal 2 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.195)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_cat, 2)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.018)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_cat, 2)	goal 4 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.016)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_cat, 2)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.023)
+(ProofSim.fst(203,18-203,54))	Query-stats (ProofSim.case_cat, 2)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.000)
+(ProofSim.fst(203,58-203,81))	Query-stats (ProofSim.case_cat, 2)	goal 7 succeeded in 0.05 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.317)
+(ProofSim.fst(204,18-204,36))	Query-stats (ProofSim.case_cat, 2)	goal 8 succeeded in 0.12 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.627)
+(ProofSim.fst(204,40-204,62))	Query-stats (ProofSim.case_cat, 2)	goal 9 succeeded in 0.05 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.299)
+(ProofSim.fst(205,76-395,10))	Query-stats (ProofSim.case_cat, 2)	goal 10 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.000)
+(ProofSim.fst(203,18-203,54))	Query-stats (ProofSim.case_cat, 2)	goal 11 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.000)
+(ProofSim.fst(203,58-203,81))	Query-stats (ProofSim.case_cat, 2)	goal 12 succeeded in 0.06 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.368)
+(ProofSim.fst(204,40-204,62))	Query-stats (ProofSim.case_cat, 2)	goal 13 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.000)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_cat, 2)	goal 14 succeeded in 0.08 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.489)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_cat, 2)	goal 15 succeeded in 0.12 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.678)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_cat, 2)	goal 16 succeeded in 2.37 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 9.801)
+(ProofSim.fst(391,27-391,98))	Query-stats (ProofSim.case_cat, 2)	goal 17 succeeded in 0.14 seconds with fuel 2 and ifuel 1 and rlimit 20 (used rlimit 0.674)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_alt, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_alt, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(64,20-64,64))	Query-stats (ProofSim.case_alt, 2)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(37,20-37,40))	Query-stats (ProofSim.case_alt, 2)	goal 2 succeeded in 0.07 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.404)
+(FStar.Pervasives.Native.fst(33,4-33,8))	Query-stats (ProofSim.case_alt, 2)	goal 3 succeeded in 0.24 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.084)
+(FStar.Pervasives.Native.fst(33,4-33,8))	Query-stats (ProofSim.case_alt, 2)	goal 4 succeeded in 0.26 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.175)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_alt, 2)	goal 5 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.017)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_alt, 2)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.018)
+(ProofSim.fst(197,19-197,51))	Query-stats (ProofSim.case_alt, 2)	goal 7 succeeded in 0.13 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.646)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.case_alt, 2)	goal 8 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(226,63-226,102))	Query-stats (ProofSim.case_alt, 2)	goal 9 succeeded in 0.06 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.358)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_alt, 2)	goal 10 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(203,18-203,54))	Query-stats (ProofSim.case_alt, 2)	goal 11 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(203,58-203,81))	Query-stats (ProofSim.case_alt, 2)	goal 12 succeeded in 0.23 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.124)
+(ProofSim.fst(204,40-204,62))	Query-stats (ProofSim.case_alt, 2)	goal 13 succeeded in 0.26 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.149)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_alt, 2)	goal 14 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.020)
+(ProofSim.fst(203,18-203,54))	Query-stats (ProofSim.case_alt, 2)	goal 15 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(203,58-203,81))	Query-stats (ProofSim.case_alt, 2)	goal 16 succeeded in 0.34 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.555)
+(ProofSim.fst(204,18-204,36))	Query-stats (ProofSim.case_alt, 2)	goal 17 succeeded in 0.83 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 3.333)
+(ProofSim.fst(204,40-204,62))	Query-stats (ProofSim.case_alt, 2)	goal 18 succeeded in 0.26 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.190)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_alt, 2)	goal 19 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.157)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_alt, 2)	goal 20 succeeded in 0.12 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.604)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_alt, 2)	goal 21 succeeded in 0.35 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.511)
+(ProofSim.fst(177,20-177,46))	Query-stats (ProofSim.case_alt, 2)	goal 22 succeeded in 0.13 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.720)
+(ProofSim.fst(261,29-261,67))	Query-stats (ProofSim.case_alt, 2)	goal 23 succeeded in 0.14 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.711)
+(ProofSim.fst(121,20-121,35))	Query-stats (ProofSim.case_alt, 2)	goal 24 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.062)
+(ProofSim.fst(121,39-121,51))	Query-stats (ProofSim.case_alt, 2)	goal 25 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_alt, 2)	goal 26 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.180)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_alt, 2)	goal 27 succeeded in 0.32 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.648)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_alt, 2)	goal 28 succeeded in 0.75 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 3.096)
+(ProofSim.fst(262,60-262,97))	Query-stats (ProofSim.case_alt, 2)	goal 29 succeeded in 0.34 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.639)
+(ProofSim.fst(264,19-264,77))	Query-stats (ProofSim.case_alt, 2)	goal 30 succeeded in 0.07 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.428)
+(ProofSim.fst(265,39-265,79))	Query-stats (ProofSim.case_alt, 2)	goal 31 succeeded in 0.35 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.661)
+(ProofSim.fst(409,27-409,98))	Query-stats (ProofSim.case_alt, 2)	goal 32 succeeded in 1.09 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 4.130)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star0, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star0, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(FStar.Pervasives.Native.fst(33,4-33,8))	Query-stats (ProofSim.case_star0, 2)	goal 1 succeeded in 0.04 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.238)
+(ProofSem.fst(106,20-106,30))	Query-stats (ProofSim.case_star0, 2)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSem.fst(106,34-106,77))	Query-stats (ProofSim.case_star0, 2)	goal 3 succeeded in 0.04 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.242)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star0, 2)	goal 4 succeeded in 0.06 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.311)
+(ProofSem.fst(36,20-36,56))	Query-stats (ProofSim.case_star0, 2)	goal 5 succeeded in 0.05 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.205)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.case_star0, 2)	goal 6 succeeded in 0.05 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.284)
+(ProofSim.fst(430,32-430,67))	Query-stats (ProofSim.case_star0, 2)	goal 7 succeeded in 0.04 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.257)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_star0, 2)	goal 8 succeeded in 0.02 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.118)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_star0, 2)	goal 9 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.030)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_star0, 2)	goal 10 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.077)
+(ProofSim.fst(434,27-434,97))	Query-stats (ProofSim.case_star0, 2)	goal 11 succeeded in 0.20 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.023)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star_null, 1)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.003)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star_null, 1)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(91,20-91,31))	Query-stats (ProofSim.case_star_null, 2)	goal 1 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(91,35-91,45))	Query-stats (ProofSim.case_star_null, 2)	goal 2 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofA.fst(91,49-91,90))	Query-stats (ProofSim.case_star_null, 2)	goal 3 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(FStar.Pervasives.Native.fst(33,4-33,8))	Query-stats (ProofSim.case_star_null, 2)	goal 4 succeeded in 0.14 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.684)
+(FStar.Pervasives.Native.fst(33,4-33,8))	Query-stats (ProofSim.case_star_null, 2)	goal 5 succeeded in 0.15 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.728)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star_null, 2)	goal 6 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.015)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star_null, 2)	goal 7 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.015)
+(ProofSim.fst(213,23-213,53))	Query-stats (ProofSim.case_star_null, 2)	goal 8 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(213,57-213,87))	Query-stats (ProofSim.case_star_null, 2)	goal 9 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.195)
+(ProofSim.fst(214,23-214,32))	Query-stats (ProofSim.case_star_null, 2)	goal 10 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(214,60-214,84))	Query-stats (ProofSim.case_star_null, 2)	goal 11 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(214,88-214,98))	Query-stats (ProofSim.case_star_null, 2)	goal 12 succeeded in 0.11 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.563)
+(ProofSim.fst(226,19-226,30))	Query-stats (ProofSim.case_star_null, 2)	goal 13 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(226,63-226,102))	Query-stats (ProofSim.case_star_null, 2)	goal 14 succeeded in 0.34 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.547)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star_null, 2)	goal 15 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star_null, 2)	goal 16 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.017)
+(ProofSim.fst(203,18-203,54))	Query-stats (ProofSim.case_star_null, 2)	goal 17 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(203,58-203,81))	Query-stats (ProofSim.case_star_null, 2)	goal 18 succeeded in 0.07 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.410)
+(ProofSim.fst(204,40-204,62))	Query-stats (ProofSim.case_star_null, 2)	goal 19 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.025)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_star_null, 2)	goal 20 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.189)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_star_null, 2)	goal 21 succeeded in 0.14 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.746)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_star_null, 2)	goal 22 succeeded in 0.30 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.415)
+(Prims.fst(477,18-477,24))	Query-stats (ProofSim.case_star_null, 2)	goal 23 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.019)
+(ProofSim.fst(177,20-177,46))	Query-stats (ProofSim.case_star_null, 2)	goal 24 succeeded in 0.30 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.496)
+(ProofSim.fst(177,20-177,46))	Query-stats (ProofSim.case_star_null, 2)	goal 25 succeeded in 0.25 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.244)
+(ProofSim.fst(261,29-261,67))	Query-stats (ProofSim.case_star_null, 2)	goal 26 succeeded in 0.21 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 1.021)
+(ProofSim.fst(121,20-121,35))	Query-stats (ProofSim.case_star_null, 2)	goal 27 succeeded in 0.01 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.052)
+(ProofSim.fst(121,39-121,51))	Query-stats (ProofSim.case_star_null, 2)	goal 28 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(444,36-454,11))	Query-stats (ProofSim.case_star_null, 2)	goal 29 failed {reason-unknown=unknown because canceled} in 2.51 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 10.000)
+(ProofSim.fst(254,14-254,51))	Query-stats (ProofSim.case_star_null, 2)	goal 30 succeeded in 0.03 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.157)
+(ProofSim.fst(254,55-254,79))	Query-stats (ProofSim.case_star_null, 2)	goal 31 succeeded in 0.00 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.000)
+(ProofSim.fst(254,83-254,92))	Query-stats (ProofSim.case_star_null, 2)	goal 32 succeeded in 0.07 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.417)
+(ProofSim.fst(264,19-264,77))	Query-stats (ProofSim.case_star_null, 2)	goal 33 succeeded in 0.08 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 0.444)
+(ProofSim.fst(265,39-265,79))	Query-stats (ProofSim.case_star_null, 2)	goal 34 succeeded in 1.30 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 5.359)
+(ProofSim.fst(449,27-449,97))	Query-stats (ProofSim.case_star_null, 2)	goal 35 succeeded in 1.23 seconds with fuel 2 and ifuel 1 and rlimit 10 (used rlimit 4.843)
+* Error 19 at ProofSim.fst(466,78-466,99):
+  - Subtyping check failed
+  - Expected type rep code pcB k pos stk p x0
+    got type rep code pc' k pos stk p x0
+  - SMT solver says:
+      unknown because canceled (rlimit=10; fuel=2; ifuel=1)
+    Note:
+      - 'canceled' or 'resource limits reached' means the SMT query timed out,
+      so you might want to increase the rlimit
+      - 'incomplete quantifiers' means Z3 could not prove the query, so try to
+      spell out your proof out in greater detail, increase fuel or ifuel
+      - 'unknown' means Z3 provided no further reason for the proof failing
+  - Failed to prove: pc' == pcB
+  - In context:
+      code: Prims.list Syntax.instr
+      s: Prims.list Prims.nat
+      f: Prims.pos
+      ih: ProofSim.ih_t code s (f - 1)
+      a: Syntax.regex
+      eid: Prims.nat
+      push: Prims.bool
+      k: Prims.list Sem.action
+      pos: Prims.nat
+      stk: Prims.list Vm.entry
+      p: Prims.list Prims.nat
+      x0: Prims.list Prims.nat
+      pc': Prims.nat
+      pos': Prims.nat
+      g: Sem.gmap
+      t: Sem.tree
+      pc: Prims.nat
+      m: Vm.mcaps
+      h': ProofSim.rep code pc' k pos' stk p x0
+      ProofSim.re_pre code s f (Syntax.Star a) eid push k pos p x0 pc' pos' g t
+        pc m /\ Compile.clen a <> 0 /\ Compile.nullable a
+      Compile.clen a <> 0 /\ Compile.nullable a /\
+      ProofA.code_at code pc (Compile.comp (Syntax.Star a) pc eid push)
+      Syntax.nth code pc ==
+      FStar.Pervasives.Native.Some (Syntax.IPush (pc + Compile.clen a + 4)) /\
+      Syntax.nth code (pc + 1) ==
+      FStar.Pervasives.Native.Some (Syntax.IEmptyStart eid) /\
+      ProofA.code_at code (pc + 2) (Compile.comp a (pc + 2) (eid + 1) true) /\
+      Syntax.nth code (pc + 2 + Compile.clen a) ==
+      FStar.Pervasives.Native.Some (Syntax.IEmptyEnd eid) /\
+      Syntax.nth code (pc + 3 + Compile.clen a) ==
+      FStar.Pervasives.Native.Some (Syntax.IJump pc) /\
+      Compile.clen (Syntax.Star a) == Compile.clen a + 4 /\
+      Compile.nchecks (Syntax.Star a) == Compile.nchecks a + 1
+      f1: Prims.nat
+      f - 1 == f1
+      Some? (Sem.compute_tree f1 s (Sem.ARe a :: Sem.ACheck pos a :: k) pos g)
+      t1: Sem.tree
+      (Sem.compute_tree f1 s (Sem.ARe a :: Sem.ACheck pos a :: k) pos g).v == t1
+      Some? (Sem.compute_tree f1 s k pos g)
+      t2: Sem.tree
+      (Sem.compute_tree f1 s k pos g).v == t2
+      pcB: Prims.int
+      pc + Compile.clen a + 4 == pcB
+      pcB >= 0
+      stk2: Prims.list Vm.entry
+      Vm.EEmptyStart eid pos :: Vm.EAlt pcB pos :: stk == stk2
+      pc + 2 + Compile.clen a >= 0
+      Vm.empty_start eid stk2 == FStar.Pervasives.Native.Some pos
+      pos <= pos
+      pc' == pc + Compile.clen (Syntax.Star a)
+      pos' <= pos
+      pos' <= pos'
+      hchk:
+      ProofSim.rep code
+          (pc + 2 + Compile.clen a)
+          (Sem.ACheck pos a :: k)
+          pos
+          stk2
+          (eid :: p)
+          x0
+      ProofSim.RChkNull (pc + 2 + Compile.clen a)
+        pc
+        a
+        eid
+        push
+        pos
+        k
+        pos
+        stk2
+        p
+        x0
+        pc'
+        pos'
+        ()
+        (ProofSim.rep_mono h' pos' stk2) ==
+      hchk
+      pc + 2 >= 0
+      eid + 1 >= 0
+      ProofA.code_at code (pc + 2) (Compile.comp a (pc + 2) (eid + 1) true)
+      pos <= pos + Compile.minlen a
+      ha:
+      ProofSim.rep code
+          (pc + 2)
+          (Sem.ARe a :: Sem.ACheck pos a :: k)
+          pos
+          stk2
+          (eid :: p)
+          (Syntax.append (ProofSim.npg a true) x0)
+      ProofSim.RRe (pc + 2)
+        a
+        (eid + 1)
+        true
+        (Sem.ACheck pos a :: k)
+        pos
+        stk2
+        (eid :: p)
+        x0
+        (pc + 2 + Compile.clen a)
+        pos
+        ()
+        hchk ==
+      ha
+      Sem.compute_tree (f - 1) s (Sem.ARe a :: Sem.ACheck pos a :: k) pos g ==
+      FStar.Pervasives.Native.Some t1
+      ProofSim.uniq (Sem.ARe a :: Sem.ACheck pos a :: k)
+      oA:
+      _:
+        (Prims.nat & Vm.mcaps)
+          { ProofSim.simres code s
+              (ProofSim.cls (Sem.ARe a :: Sem.ACheck pos a :: k)) x0 (pc + 2)
+              pos m stk2 t1 _ }
+      ih (Sem.ARe a :: Sem.ACheck pos a :: k) pos g t1 (pc + 2) stk2 (eid :: p)
+        x0 m ha ==
+      oA
+      pc + 1 >= 0
+      Vm.step code s (Vm.St (pc + 1) pos m (Vm.EAlt pcB pos :: stk)) ==
+      Vm.Next (Vm.St (pc + 2) pos m stk2)
+      ProofSim.exe code s 1 (Vm.St (pc + 1) pos m (Vm.EAlt pcB pos :: stk)) ==
+      ProofSim.exe code s 0 (Vm.St (pc + 2) pos m stk2)
+      Vm.step code s (Vm.St pc pos m stk) ==
+      Vm.Next (Vm.St (pc + 1) pos m (Vm.EAlt pcB pos :: stk))
+      ProofSim.exe code s 2 (Vm.St pc pos m stk) ==
+      ProofSim.exe code s 1 (Vm.St (pc + 1) pos m (Vm.EAlt pcB pos :: stk))
+      ProofSim.simres code s (ProofSim.cls (Sem.ARe a :: Sem.ACheck pos a :: k))
+        x0 (pc + 2) pos m stk2 t1 oA ==>
+      ProofSim.simres code s (ProofSim.cls k) x0 (pc + 2) pos m stk2 t1 oA
+      m1: m1: Vm.mcaps{ProofSim.meq (ProofSim.cls k) x0 m1 m}
+      ProofSim.capsrel m1 g (ProofSim.cls k) x0
+  - VC =
+      Compile.clen a <> 0 /\ Compile.nullable a /\
+      ProofA.code_at code pc (Compile.comp (Syntax.Star a) pc eid push) /\
+      (Syntax.nth code pc ==
+        FStar.Pervasives.Native.Some (Syntax.IPush (pc + Compile.clen a + 4)) /\
+        Syntax.nth code (pc + 1) ==
+        FStar.Pervasives.Native.Some (Syntax.IEmptyStart eid) /\
+        ProofA.code_at code (pc + 2) (Compile.comp a (pc + 2) (eid + 1) true) /\
+        Syntax.nth code (pc + 2 + Compile.clen a) ==
+        FStar.Pervasives.Native.Some (Syntax.IEmptyEnd eid) /\
+        Syntax.nth code (pc + 3 + Compile.clen a) ==
+        FStar.Pervasives.Native.Some (Syntax.IJump pc) /\
+        Compile.clen (Syntax.Star a) == Compile.clen a + 4 /\
+        Compile.nchecks (Syntax.Star a) == Compile.nchecks a + 1 ==>
+        (forall (f1: Prims.nat).
+            f - 1 == f1 ==>
+            Some? (Sem.compute_tree f1
+                  s
+                  (Sem.ARe a :: Sem.ACheck pos a :: k)
+                  pos
+                  g) /\
+            (forall (t1: Sem.tree).
+                (Sem.compute_tree f1
+                    s
+                    (Sem.ARe a :: Sem.ACheck pos a :: k)
+                    pos
+                    g)
+                  .v ==
+                t1 ==>
+                Some? (Sem.compute_tree f1 s k pos g) /\
+                (forall (t2: Sem.tree).
+                    (Sem.compute_tree f1 s k pos g).v == t2 ==>
+                    (forall (pcB: Prims.int).
+                        pc + Compile.clen a + 4 == pcB ==>
+                        pcB >= 0 /\
+                        (forall (stk2: Prims.list Vm.entry).
+                            Vm.EEmptyStart eid pos :: Vm.EAlt pcB pos :: stk ==
+                            stk2 ==>
+                            pc + 2 + Compile.clen a >= 0 /\
+                            ProofSim.fresh eid
+                              (Compile.nchecks (Syntax.Star a))
+                              p /\
+                            (Vm.empty_start eid stk2 ==
+                              FStar.Pervasives.Native.Some pos) /\
+                            (pos <= pos) /\
+                            (pc' == pc + Compile.clen (Syntax.Star a)) /\
+                            (pos' <= pos) /\
+                            ((pos' <= pos') /\
+                            (forall (i: Prims.nat).
+                                Statement.mem i p ==>
+                                Vm.empty_start i stk2 == Vm.empty_start i stk)) /\
+                            (forall (hchk:
+                                ProofSim.rep code
+                                  (pc + 2 + Compile.clen a)
+                                  (Sem.ACheck pos a :: k)
+                                  pos
+                                  stk2
+                                  (eid :: p)
+                                  x0).
+                                ProofSim.RChkNull (pc + 2 + Compile.clen a)
+                                  pc
+                                  a
+                                  eid
+                                  push
+                                  pos
+                                  k
+                                  pos
+                                  stk2
+                                  p
+                                  x0
+                                  pc'
+                                  pos'
+                                  ()
+                                  (ProofSim.rep_mono h' pos' stk2) ==
+                                hchk ==>
+                                pc + 2 >= 0 /\
+                                (eid + 1 >= 0) /\
+                                (ProofA.code_at code
+                                  (pc + 2)
+                                  (Compile.comp a (pc + 2) (eid + 1) true) /\
+                                ProofSim.fresh (eid + 1)
+                                  (Compile.nchecks a)
+                                  (eid :: p) /\
+                                (pos <= pos + Compile.minlen a)) /\
+                                (forall (ha:
+                                    ProofSim.rep code
+                                      (pc + 2)
+                                      (Sem.ARe a :: Sem.ACheck pos a :: k)
+                                      pos
+                                      stk2
+                                      (eid :: p)
+                                      (Syntax.append (ProofSim.npg a true) x0)).
+                                    ProofSim.RRe (pc + 2)
+                                      a
+                                      (eid + 1)
+                                      true
+                                      (Sem.ACheck pos a :: k)
+                                      pos
+                                      stk2
+                                      (eid :: p)
+                                      x0
+                                      (pc + 2 + Compile.clen a)
+                                      pos
+                                      ()
+                                      hchk ==
+                                    ha ==>
+                                    Sem.compute_tree (f - 1)
+                                      s
+                                      (Sem.ARe a :: Sem.ACheck pos a :: k)
+                                      pos
+                                      g ==
+                                    FStar.Pervasives.Native.Some t1 /\
+                                    ProofSim.capsrel m
+                                      g
+                                      (ProofSim.cls (Sem.ARe a ::
+                                            Sem.ACheck pos a :: k))
+                                      x0 /\
+                                    ProofSim.uniq (Sem.ARe a ::
+                                        Sem.ACheck pos a :: k) /\
+                                    (forall (oA:
+                                        _:
+                                        (Prims.nat & Vm.mcaps)
+                                          { ProofSim.simres code s
+                                              (ProofSim.cls (Sem.ARe a ::
+                                                    Sem.ACheck pos a :: k)) x0
+                                              (pc + 2) pos m stk2 t1 _ }).
+                                        ih (Sem.ARe a :: Sem.ACheck pos a :: k)
+                                          pos g t1 (pc + 2) stk2 (eid :: p) x0 m
+                                          ha ==
+                                        oA ==>
+                                        pc + 1 >= 0 /\
+                                        Vm.step code
+                                          s
+                                          (Vm.St (pc + 1)
+                                              pos
+                                              m
+                                              (Vm.EAlt pcB pos :: stk)) ==
+                                        Vm.Next (Vm.St (pc + 2) pos m stk2) /\
+                                        (ProofSim.exe code
+                                            s
+                                            1
+                                            (Vm.St (pc + 1)
+                                                pos
+                                                m
+                                                (Vm.EAlt pcB pos :: stk)) ==
+                                          ProofSim.exe code
+                                            s
+                                            0
+                                            (Vm.St (pc + 2) pos m stk2) ==>
+                                          Vm.step code s (Vm.St pc pos m stk) ==
+                                          Vm.Next
+                                          (Vm.St (pc + 1)
+                                              pos
+                                              m
+                                              (Vm.EAlt pcB pos :: stk)) /\
+                                          (ProofSim.exe code
+                                              s
+                                              2
+                                              (Vm.St pc pos m stk) ==
+                                            ProofSim.exe code
+                                              s
+                                              1
+                                              (Vm.St (pc + 1)
+                                                  pos
+                                                  m
+                                                  (Vm.EAlt pcB pos :: stk)) ==>
+                                            (ProofSim.simres code s
+                                                (ProofSim.cls (Sem.ARe a ::
+                                                      Sem.ACheck pos a :: k)) x0
+                                                (pc + 2) pos m stk2 t1 oA ==>
+                                              ProofSim.simres code s
+                                                (ProofSim.cls k) x0 (pc + 2) pos
+                                                m stk2 t1 oA) /\
+                                            (forall (m1:
+                                                Vm.mcaps
+                                                  { ProofSim.meq (ProofSim.cls k
+                                                      )
+                                                      x0
+                                                      m1
+                                                      m }).
+                                                (* - Could not prove post-condition *)
+                                                ProofSim.capsrel m
+                                                  g
+                                                  (ProofSim.cls k)
+                                                  x0 /\
+                                                ProofSim.meq (ProofSim.cls k)
+                                                  x0
+                                                  m1
+                                                  m /\
+                                                (ProofSim.capsrel m1
+                                                    g
+                                                    (ProofSim.cls k)
+                                                    x0 ==>
+                                                  pc' == pcB /\
+                                                  (Sem.compute_tree (f - 1)
+                                                      s
+                                                      k
+                                                      pos
+                                                      g ==
+                                                    FStar.Pervasives.Native.Some
+                                                    t2) /\
+                                                  ProofSim.capsrel m1
+                                                    g
+                                                    (ProofSim.cls k)
+                                                    x0 /\
+                                                  ProofSim.uniq k)) /\
+                                            ((ProofSim.exe code
+                                                s
+                                                2
+                                                (Vm.St pc pos m stk) ==
+                                              Vm.Next
+                                              (Vm.St (pc + 2) pos m stk2)) /\
+                                            (forall (m1: Vm.mcaps).
+                                                Vm.fail stk2 m1 ==
+                                                Vm.Next (Vm.St pcB pos m1 stk))) /\
+                                            (ProofSim.simres code s
+                                                (ProofSim.cls k) x0 pc pos m stk
+                                                (Sem.TChoice t1 t2)
+                                                (ProofSim.choice code s
+                                                    (ProofSim.cls k) x0 pc pos m
+                                                    stk stk2 (pc + 2) pcB t1 t2
+                                                    2 oA
+                                                    (fun m1 ->
+                                                        ih k pos g t2 pcB stk p
+                                                          x0 m1
+                                                          (ProofSim.rep_mono h'
+                                                              pos
+                                                              stk))) ==>
+                                              ProofSim.simres code s
+                                                (ProofSim.cls k)
+                                                (Syntax.append (ProofSim.npg (Syntax.Star
+                                                          a)
+                                                        push)
+                                                    x0) pc pos m stk t
+                                                (ProofSim.choice code s
+                                                    (ProofSim.cls k) x0 pc pos m
+                                                    stk stk2 (pc + 2) pcB t1 t2
+                                                    2 oA
+                                                    (fun m1 ->
+                                                        ih k pos g t2 pcB stk p
+                                                          x0 m1
+                                                          (ProofSim.rep_mono h'
+                                                              pos
+                                                              stk)))))))))))))))
+  - See also ProofSim.fst(444,36-454,11)
+
+1 error was reported (see above)

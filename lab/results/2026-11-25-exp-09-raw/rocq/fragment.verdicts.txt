@@ -1,0 +1,753 @@
+test_utf8:157	0	vm	MATCH 0 0
+test_utf8:157	0	sem	MATCH 0 0
+test_utf8:157	0	e06	MATCH 0 0
+test_utf8:157	search	vm	MATCH 0 0
+test_utf8:157	search	sem	MATCH 0 0
+test_utf8:157	search	e06	MATCH 0 0
+test_utf8:171	0	vm	MATCH 0 0
+test_utf8:171	0	sem	MATCH 0 0
+test_utf8:171	0	e06	MATCH 0 0
+test_utf8:171	1	vm	MATCH 1 1
+test_utf8:171	1	sem	MATCH 1 1
+test_utf8:171	1	e06	MATCH 1 1
+test_utf8:171	search	vm	MATCH 0 0
+test_utf8:171	search	sem	MATCH 0 0
+test_utf8:171	search	e06	MATCH 0 0
+test_utf8:172	0	vm	MATCH 0 1
+test_utf8:172	0	sem	MATCH 0 1
+test_utf8:172	0	e06	MATCH 0 1
+test_utf8:172	1	vm	MISMATCH
+test_utf8:172	1	sem	MISMATCH
+test_utf8:172	1	e06	MISMATCH
+test_utf8:172	search	vm	MATCH 0 1
+test_utf8:172	search	sem	MATCH 0 1
+test_utf8:172	search	e06	MATCH 0 1
+test_utf8:173	0	vm	MATCH 0 1
+test_utf8:173	0	sem	MATCH 0 1
+test_utf8:173	0	e06	MATCH 0 1
+test_utf8:173	1	vm	MISMATCH
+test_utf8:173	1	sem	MISMATCH
+test_utf8:173	1	e06	MISMATCH
+test_utf8:173	search	vm	MATCH 0 1
+test_utf8:173	search	sem	MATCH 0 1
+test_utf8:173	search	e06	MATCH 0 1
+test_utf8:174	0	vm	MATCH 0 2
+test_utf8:174	0	sem	MATCH 0 2
+test_utf8:174	0	e06	MATCH 0 2
+test_utf8:174	1	vm	MISMATCH
+test_utf8:174	1	sem	MISMATCH
+test_utf8:174	1	e06	MISMATCH
+test_utf8:174	2	vm	MISMATCH
+test_utf8:174	2	sem	MISMATCH
+test_utf8:174	2	e06	MISMATCH
+test_utf8:174	search	vm	MATCH 0 2
+test_utf8:174	search	sem	MATCH 0 2
+test_utf8:174	search	e06	MATCH 0 2
+test_utf8:175	0	vm	MATCH 0 3
+test_utf8:175	0	sem	MATCH 0 3
+test_utf8:175	0	e06	MATCH 0 3
+test_utf8:175	1	vm	MISMATCH
+test_utf8:175	1	sem	MISMATCH
+test_utf8:175	1	e06	MISMATCH
+test_utf8:175	2	vm	MISMATCH
+test_utf8:175	2	sem	MISMATCH
+test_utf8:175	2	e06	MISMATCH
+test_utf8:175	3	vm	MISMATCH
+test_utf8:175	3	sem	MISMATCH
+test_utf8:175	3	e06	MISMATCH
+test_utf8:175	search	vm	MATCH 0 3
+test_utf8:175	search	sem	MATCH 0 3
+test_utf8:175	search	e06	MATCH 0 3
+test_utf8:176	0	vm	MATCH 0 35
+test_utf8:176	0	sem	MATCH 0 35
+test_utf8:176	0	e06	MATCH 0 35
+test_utf8:176	1	vm	MISMATCH
+test_utf8:176	1	sem	MISMATCH
+test_utf8:176	1	e06	MISMATCH
+test_utf8:176	2	vm	MISMATCH
+test_utf8:176	2	sem	MISMATCH
+test_utf8:176	2	e06	MISMATCH
+test_utf8:176	3	vm	MISMATCH
+test_utf8:176	3	sem	MISMATCH
+test_utf8:176	3	e06	MISMATCH
+test_utf8:176	4	vm	MISMATCH
+test_utf8:176	4	sem	MISMATCH
+test_utf8:176	4	e06	MISMATCH
+test_utf8:176	5	vm	MISMATCH
+test_utf8:176	5	sem	MISMATCH
+test_utf8:176	5	e06	MISMATCH
+test_utf8:176	6	vm	MISMATCH
+test_utf8:176	6	sem	MISMATCH
+test_utf8:176	6	e06	MISMATCH
+test_utf8:176	7	vm	MISMATCH
+test_utf8:176	7	sem	MISMATCH
+test_utf8:176	7	e06	MISMATCH
+test_utf8:176	8	vm	MISMATCH
+test_utf8:176	8	sem	MISMATCH
+test_utf8:176	8	e06	MISMATCH
+test_utf8:176	9	vm	MISMATCH
+test_utf8:176	9	sem	MISMATCH
+test_utf8:176	9	e06	MISMATCH
+test_utf8:176	10	vm	MISMATCH
+test_utf8:176	10	sem	MISMATCH
+test_utf8:176	10	e06	MISMATCH
+test_utf8:176	11	vm	MISMATCH
+test_utf8:176	11	sem	MISMATCH
+test_utf8:176	11	e06	MISMATCH
+test_utf8:176	12	vm	MISMATCH
+test_utf8:176	12	sem	MISMATCH
+test_utf8:176	12	e06	MISMATCH
+test_utf8:176	13	vm	MISMATCH
+test_utf8:176	13	sem	MISMATCH
+test_utf8:176	13	e06	MISMATCH
+test_utf8:176	14	vm	MISMATCH
+test_utf8:176	14	sem	MISMATCH
+test_utf8:176	14	e06	MISMATCH
+test_utf8:176	15	vm	MISMATCH
+test_utf8:176	15	sem	MISMATCH
+test_utf8:176	15	e06	MISMATCH
+test_utf8:176	16	vm	MISMATCH
+test_utf8:176	16	sem	MISMATCH
+test_utf8:176	16	e06	MISMATCH
+test_utf8:176	17	vm	MISMATCH
+test_utf8:176	17	sem	MISMATCH
+test_utf8:176	17	e06	MISMATCH
+test_utf8:176	18	vm	MISMATCH
+test_utf8:176	18	sem	MISMATCH
+test_utf8:176	18	e06	MISMATCH
+test_utf8:176	19	vm	MISMATCH
+test_utf8:176	19	sem	MISMATCH
+test_utf8:176	19	e06	MISMATCH
+test_utf8:176	20	vm	MISMATCH
+test_utf8:176	20	sem	MISMATCH
+test_utf8:176	20	e06	MISMATCH
+test_utf8:176	21	vm	MISMATCH
+test_utf8:176	21	sem	MISMATCH
+test_utf8:176	21	e06	MISMATCH
+test_utf8:176	22	vm	MISMATCH
+test_utf8:176	22	sem	MISMATCH
+test_utf8:176	22	e06	MISMATCH
+test_utf8:176	23	vm	MISMATCH
+test_utf8:176	23	sem	MISMATCH
+test_utf8:176	23	e06	MISMATCH
+test_utf8:176	24	vm	MISMATCH
+test_utf8:176	24	sem	MISMATCH
+test_utf8:176	24	e06	MISMATCH
+test_utf8:176	25	vm	MISMATCH
+test_utf8:176	25	sem	MISMATCH
+test_utf8:176	25	e06	MISMATCH
+test_utf8:176	26	vm	MISMATCH
+test_utf8:176	26	sem	MISMATCH
+test_utf8:176	26	e06	MISMATCH
+test_utf8:176	27	vm	MISMATCH
+test_utf8:176	27	sem	MISMATCH
+test_utf8:176	27	e06	MISMATCH
+test_utf8:176	28	vm	MISMATCH
+test_utf8:176	28	sem	MISMATCH
+test_utf8:176	28	e06	MISMATCH
+test_utf8:176	29	vm	MISMATCH
+test_utf8:176	29	sem	MISMATCH
+test_utf8:176	29	e06	MISMATCH
+test_utf8:176	30	vm	MISMATCH
+test_utf8:176	30	sem	MISMATCH
+test_utf8:176	30	e06	MISMATCH
+test_utf8:176	31	vm	MISMATCH
+test_utf8:176	31	sem	MISMATCH
+test_utf8:176	31	e06	MISMATCH
+test_utf8:176	32	vm	MISMATCH
+test_utf8:176	32	sem	MISMATCH
+test_utf8:176	32	e06	MISMATCH
+test_utf8:176	33	vm	MISMATCH
+test_utf8:176	33	sem	MISMATCH
+test_utf8:176	33	e06	MISMATCH
+test_utf8:176	34	vm	MISMATCH
+test_utf8:176	34	sem	MISMATCH
+test_utf8:176	34	e06	MISMATCH
+test_utf8:176	35	vm	MISMATCH
+test_utf8:176	35	sem	MISMATCH
+test_utf8:176	35	e06	MISMATCH
+test_utf8:176	search	vm	MATCH 0 35
+test_utf8:176	search	sem	MATCH 0 35
+test_utf8:176	search	e06	MATCH 0 35
+test_utf8:177	0	vm	MATCH 0 2
+test_utf8:177	0	sem	MATCH 0 2
+test_utf8:177	0	e06	MATCH 0 2
+test_utf8:177	1	vm	MISMATCH
+test_utf8:177	1	sem	MISMATCH
+test_utf8:177	1	e06	MISMATCH
+test_utf8:177	2	vm	MISMATCH
+test_utf8:177	2	sem	MISMATCH
+test_utf8:177	2	e06	MISMATCH
+test_utf8:177	search	vm	MATCH 0 2
+test_utf8:177	search	sem	MATCH 0 2
+test_utf8:177	search	e06	MATCH 0 2
+test_utf8:178	0	vm	MISMATCH
+test_utf8:178	0	sem	MISMATCH
+test_utf8:178	0	e06	MISMATCH
+test_utf8:178	1	vm	MATCH 1 2
+test_utf8:178	1	sem	MATCH 1 2
+test_utf8:178	1	e06	MATCH 1 2
+test_utf8:178	2	vm	MISMATCH
+test_utf8:178	2	sem	MISMATCH
+test_utf8:178	2	e06	MISMATCH
+test_utf8:178	search	vm	MATCH 1 2
+test_utf8:178	search	sem	MATCH 1 2
+test_utf8:178	search	e06	MATCH 1 2
+test_utf8:179	0	vm	MISMATCH
+test_utf8:179	0	sem	MISMATCH
+test_utf8:179	0	e06	MISMATCH
+test_utf8:179	1	vm	MATCH 1 3
+test_utf8:179	1	sem	MATCH 1 3
+test_utf8:179	1	e06	MATCH 1 3
+test_utf8:179	2	vm	MISMATCH
+test_utf8:179	2	sem	MISMATCH
+test_utf8:179	2	e06	MISMATCH
+test_utf8:179	3	vm	MISMATCH
+test_utf8:179	3	sem	MISMATCH
+test_utf8:179	3	e06	MISMATCH
+test_utf8:179	search	vm	MATCH 1 3
+test_utf8:179	search	sem	MATCH 1 3
+test_utf8:179	search	e06	MATCH 1 3
+test_utf8:182	0	vm	MATCH 0 1
+test_utf8:182	0	sem	MATCH 0 1
+test_utf8:182	0	e06	MATCH 0 1
+test_utf8:182	1	vm	MISMATCH
+test_utf8:182	1	sem	MISMATCH
+test_utf8:182	1	e06	MISMATCH
+test_utf8:182	search	vm	MATCH 0 1
+test_utf8:182	search	sem	MATCH 0 1
+test_utf8:182	search	e06	MATCH 0 1
+test_utf8:302	0	vm	MATCH 0 2
+test_utf8:302	0	sem	MATCH 0 2
+test_utf8:302	0	e06	MATCH 0 2
+test_utf8:302	1	vm	MISMATCH
+test_utf8:302	1	sem	MISMATCH
+test_utf8:302	1	e06	MISMATCH
+test_utf8:302	2	vm	MISMATCH
+test_utf8:302	2	sem	MISMATCH
+test_utf8:302	2	e06	MISMATCH
+test_utf8:302	search	vm	MATCH 0 2
+test_utf8:302	search	sem	MATCH 0 2
+test_utf8:302	search	e06	MATCH 0 2
+test_utf8:368	0	vm	MATCH 0 0
+test_utf8:368	0	sem	MATCH 0 0
+test_utf8:368	0	e06	MATCH 0 0
+test_utf8:368	search	vm	MATCH 0 0
+test_utf8:368	search	sem	MATCH 0 0
+test_utf8:368	search	e06	MATCH 0 0
+test_utf8:369	0	vm	MATCH 0 1
+test_utf8:369	0	sem	MATCH 0 1
+test_utf8:369	0	e06	MATCH 0 1
+test_utf8:369	1	vm	MATCH 1 1
+test_utf8:369	1	sem	MATCH 1 1
+test_utf8:369	1	e06	MATCH 1 1
+test_utf8:369	search	vm	MATCH 0 1
+test_utf8:369	search	sem	MATCH 0 1
+test_utf8:369	search	e06	MATCH 0 1
+test_utf8:370	0	vm	MATCH 0 3
+test_utf8:370	0	sem	MATCH 0 3
+test_utf8:370	0	e06	MATCH 0 3
+test_utf8:370	1	vm	MATCH 1 3
+test_utf8:370	1	sem	MATCH 1 3
+test_utf8:370	1	e06	MATCH 1 3
+test_utf8:370	2	vm	MATCH 2 3
+test_utf8:370	2	sem	MATCH 2 3
+test_utf8:370	2	e06	MATCH 2 3
+test_utf8:370	3	vm	MATCH 3 3
+test_utf8:370	3	sem	MATCH 3 3
+test_utf8:370	3	e06	MATCH 3 3
+test_utf8:370	search	vm	MATCH 0 3
+test_utf8:370	search	sem	MATCH 0 3
+test_utf8:370	search	e06	MATCH 0 3
+test_utf8:371	0	vm	MATCH 0 0
+test_utf8:371	0	sem	MATCH 0 0
+test_utf8:371	0	e06	MATCH 0 0
+test_utf8:371	1	vm	MATCH 1 5
+test_utf8:371	1	sem	MATCH 1 5
+test_utf8:371	1	e06	MATCH 1 5
+test_utf8:371	2	vm	MATCH 2 5
+test_utf8:371	2	sem	MATCH 2 5
+test_utf8:371	2	e06	MATCH 2 5
+test_utf8:371	3	vm	MATCH 3 5
+test_utf8:371	3	sem	MATCH 3 5
+test_utf8:371	3	e06	MATCH 3 5
+test_utf8:371	4	vm	MATCH 4 5
+test_utf8:371	4	sem	MATCH 4 5
+test_utf8:371	4	e06	MATCH 4 5
+test_utf8:371	5	vm	MATCH 5 5
+test_utf8:371	5	sem	MATCH 5 5
+test_utf8:371	5	e06	MATCH 5 5
+test_utf8:371	search	vm	MATCH 0 0
+test_utf8:371	search	sem	MATCH 0 0
+test_utf8:371	search	e06	MATCH 0 0
+test_utf8:496	0	vm	MATCH 0 1
+test_utf8:496	0	sem	MATCH 0 1
+test_utf8:496	0	e06	MATCH 0 1
+test_utf8:496	1	vm	MISMATCH
+test_utf8:496	1	sem	MISMATCH
+test_utf8:496	1	e06	MISMATCH
+test_utf8:496	search	vm	MATCH 0 1
+test_utf8:496	search	sem	MATCH 0 1
+test_utf8:496	search	e06	MATCH 0 1
+test_utf8:497	0	vm	MATCH 0 1
+test_utf8:497	0	sem	MATCH 0 1
+test_utf8:497	0	e06	MATCH 0 1
+test_utf8:497	1	vm	MISMATCH
+test_utf8:497	1	sem	MISMATCH
+test_utf8:497	1	e06	MISMATCH
+test_utf8:497	search	vm	MATCH 0 1
+test_utf8:497	search	sem	MATCH 0 1
+test_utf8:497	search	e06	MATCH 0 1
+test_utf8:498	0	vm	MATCH 0 0
+test_utf8:498	0	sem	MATCH 0 0
+test_utf8:498	0	e06	MATCH 0 0
+test_utf8:498	1	vm	MATCH 1 1
+test_utf8:498	1	sem	MATCH 1 1
+test_utf8:498	1	e06	MATCH 1 1
+test_utf8:498	search	vm	MATCH 0 0
+test_utf8:498	search	sem	MATCH 0 0
+test_utf8:498	search	e06	MATCH 0 0
+test_utf8:499	0	vm	MATCH 0 0 0 0
+test_utf8:499	0	sem	MATCH 0 0 0 0
+test_utf8:499	0	e06	MATCH 0 0 0 0
+test_utf8:499	1	vm	MATCH 1 1 1 1
+test_utf8:499	1	sem	MATCH 1 1 1 1
+test_utf8:499	1	e06	MATCH 1 1 1 1
+test_utf8:499	search	vm	MATCH 0 0 0 0
+test_utf8:499	search	sem	MATCH 0 0 0 0
+test_utf8:499	search	e06	MATCH 0 0 0 0
+test_utf8:500	0	vm	MATCH 0 2
+test_utf8:500	0	sem	MATCH 0 2
+test_utf8:500	0	e06	MATCH 0 2
+test_utf8:500	1	vm	MISMATCH
+test_utf8:500	1	sem	MISMATCH
+test_utf8:500	1	e06	MISMATCH
+test_utf8:500	2	vm	MISMATCH
+test_utf8:500	2	sem	MISMATCH
+test_utf8:500	2	e06	MISMATCH
+test_utf8:500	search	vm	MATCH 0 2
+test_utf8:500	search	sem	MATCH 0 2
+test_utf8:500	search	e06	MATCH 0 2
+test_utf8:501	0	vm	MATCH 0 2
+test_utf8:501	0	sem	MATCH 0 2
+test_utf8:501	0	e06	MATCH 0 2
+test_utf8:501	1	vm	MISMATCH
+test_utf8:501	1	sem	MISMATCH
+test_utf8:501	1	e06	MISMATCH
+test_utf8:501	2	vm	MISMATCH
+test_utf8:501	2	sem	MISMATCH
+test_utf8:501	2	e06	MISMATCH
+test_utf8:501	search	vm	MATCH 0 2
+test_utf8:501	search	sem	MATCH 0 2
+test_utf8:501	search	e06	MATCH 0 2
+test_utf8:505	0	vm	MISMATCH
+test_utf8:505	0	sem	MISMATCH
+test_utf8:505	0	e06	MISMATCH
+test_utf8:505	1	vm	MATCH 1 2
+test_utf8:505	1	sem	MATCH 1 2
+test_utf8:505	1	e06	MATCH 1 2
+test_utf8:505	2	vm	MISMATCH
+test_utf8:505	2	sem	MISMATCH
+test_utf8:505	2	e06	MISMATCH
+test_utf8:505	search	vm	MATCH 1 2
+test_utf8:505	search	sem	MATCH 1 2
+test_utf8:505	search	e06	MATCH 1 2
+test_utf8:506	0	vm	MATCH 0 2
+test_utf8:506	0	sem	MATCH 0 2
+test_utf8:506	0	e06	MATCH 0 2
+test_utf8:506	1	vm	MISMATCH
+test_utf8:506	1	sem	MISMATCH
+test_utf8:506	1	e06	MISMATCH
+test_utf8:506	2	vm	MISMATCH
+test_utf8:506	2	sem	MISMATCH
+test_utf8:506	2	e06	MISMATCH
+test_utf8:506	3	vm	MISMATCH
+test_utf8:506	3	sem	MISMATCH
+test_utf8:506	3	e06	MISMATCH
+test_utf8:506	search	vm	MATCH 0 2
+test_utf8:506	search	sem	MATCH 0 2
+test_utf8:506	search	e06	MATCH 0 2
+test_utf8:507	0	vm	MISMATCH
+test_utf8:507	0	sem	MISMATCH
+test_utf8:507	0	e06	MISMATCH
+test_utf8:507	1	vm	MISMATCH
+test_utf8:507	1	sem	MISMATCH
+test_utf8:507	1	e06	MISMATCH
+test_utf8:507	2	vm	MISMATCH
+test_utf8:507	2	sem	MISMATCH
+test_utf8:507	2	e06	MISMATCH
+test_utf8:507	search	vm	MISMATCH
+test_utf8:507	search	sem	MISMATCH
+test_utf8:507	search	e06	MISMATCH
+test_utf8:533	0	vm	MATCH 0 2
+test_utf8:533	0	sem	MATCH 0 2
+test_utf8:533	0	e06	MATCH 0 2
+test_utf8:533	1	vm	MATCH 1 2
+test_utf8:533	1	sem	MATCH 1 2
+test_utf8:533	1	e06	MATCH 1 2
+test_utf8:533	2	vm	MATCH 2 2
+test_utf8:533	2	sem	MATCH 2 2
+test_utf8:533	2	e06	MATCH 2 2
+test_utf8:533	search	vm	MATCH 0 2
+test_utf8:533	search	sem	MATCH 0 2
+test_utf8:533	search	e06	MATCH 0 2
+test_utf8:534	0	vm	MATCH 0 0
+test_utf8:534	0	sem	MATCH 0 0
+test_utf8:534	0	e06	MATCH 0 0
+test_utf8:534	1	vm	MATCH 1 2
+test_utf8:534	1	sem	MATCH 1 2
+test_utf8:534	1	e06	MATCH 1 2
+test_utf8:534	2	vm	MATCH 2 2
+test_utf8:534	2	sem	MATCH 2 2
+test_utf8:534	2	e06	MATCH 2 2
+test_utf8:534	search	vm	MATCH 0 0
+test_utf8:534	search	sem	MATCH 0 0
+test_utf8:534	search	e06	MATCH 0 0
+test_utf8:535	0	vm	MATCH 0 1
+test_utf8:535	0	sem	MATCH 0 1
+test_utf8:535	0	e06	MATCH 0 1
+test_utf8:535	1	vm	MATCH 1 1
+test_utf8:535	1	sem	MATCH 1 1
+test_utf8:535	1	e06	MATCH 1 1
+test_utf8:535	2	vm	MATCH 2 2
+test_utf8:535	2	sem	MATCH 2 2
+test_utf8:535	2	e06	MATCH 2 2
+test_utf8:535	search	vm	MATCH 0 1
+test_utf8:535	search	sem	MATCH 0 1
+test_utf8:535	search	e06	MATCH 0 1
+test_utf8:541	0	vm	MATCH 0 2 1 2
+test_utf8:541	0	sem	MATCH 0 2 1 2
+test_utf8:541	0	e06	MATCH 0 2 1 2
+test_utf8:541	1	vm	MATCH 1 2 1 2
+test_utf8:541	1	sem	MATCH 1 2 1 2
+test_utf8:541	1	e06	MATCH 1 2 1 2
+test_utf8:541	2	vm	MATCH 2 2 -1 -1
+test_utf8:541	2	sem	MATCH 2 2 -1 -1
+test_utf8:541	2	e06	MATCH 2 2 -1 -1
+test_utf8:541	search	vm	MATCH 0 2 1 2
+test_utf8:541	search	sem	MATCH 0 2 1 2
+test_utf8:541	search	e06	MATCH 0 2 1 2
+test_utf8:605	0	vm	MATCH 0 1 0 1
+test_utf8:605	0	sem	MATCH 0 1 0 1
+test_utf8:605	0	e06	MATCH 0 1 0 1
+test_utf8:605	1	vm	MISMATCH
+test_utf8:605	1	sem	MISMATCH
+test_utf8:605	1	e06	MISMATCH
+test_utf8:605	search	vm	MATCH 0 1 0 1
+test_utf8:605	search	sem	MATCH 0 1 0 1
+test_utf8:605	search	e06	MATCH 0 1 0 1
+test_utf8:606	0	vm	MATCH 0 2 0 2
+test_utf8:606	0	sem	MATCH 0 2 0 2
+test_utf8:606	0	e06	MATCH 0 2 0 2
+test_utf8:606	1	vm	MISMATCH
+test_utf8:606	1	sem	MISMATCH
+test_utf8:606	1	e06	MISMATCH
+test_utf8:606	2	vm	MISMATCH
+test_utf8:606	2	sem	MISMATCH
+test_utf8:606	2	e06	MISMATCH
+test_utf8:606	search	vm	MATCH 0 2 0 2
+test_utf8:606	search	sem	MATCH 0 2 0 2
+test_utf8:606	search	e06	MATCH 0 2 0 2
+test_utf8:607	0	vm	MATCH 0 2 0 2 0 2
+test_utf8:607	0	sem	MATCH 0 2 0 2 0 2
+test_utf8:607	0	e06	MATCH 0 2 0 2 0 2
+test_utf8:607	1	vm	MISMATCH
+test_utf8:607	1	sem	MISMATCH
+test_utf8:607	1	e06	MISMATCH
+test_utf8:607	2	vm	MISMATCH
+test_utf8:607	2	sem	MISMATCH
+test_utf8:607	2	e06	MISMATCH
+test_utf8:607	search	vm	MATCH 0 2 0 2 0 2
+test_utf8:607	search	sem	MATCH 0 2 0 2 0 2
+test_utf8:607	search	e06	MATCH 0 2 0 2 0 2
+test_utf8:608	0	vm	MATCH 0 2 0 2 0 2
+test_utf8:608	0	sem	MATCH 0 2 0 2 0 2
+test_utf8:608	0	e06	MATCH 0 2 0 2 0 2
+test_utf8:608	1	vm	MISMATCH
+test_utf8:608	1	sem	MISMATCH
+test_utf8:608	1	e06	MISMATCH
+test_utf8:608	2	vm	MISMATCH
+test_utf8:608	2	sem	MISMATCH
+test_utf8:608	2	e06	MISMATCH
+test_utf8:608	search	vm	MATCH 0 2 0 2 0 2
+test_utf8:608	search	sem	MATCH 0 2 0 2 0 2
+test_utf8:608	search	e06	MATCH 0 2 0 2 0 2
+test_utf8:609	0	vm	MATCH 0 2 0 2 0 2
+test_utf8:609	0	sem	MATCH 0 2 0 2 0 2
+test_utf8:609	0	e06	MATCH 0 2 0 2 0 2
+test_utf8:609	1	vm	MISMATCH
+test_utf8:609	1	sem	MISMATCH
+test_utf8:609	1	e06	MISMATCH
+test_utf8:609	2	vm	MISMATCH
+test_utf8:609	2	sem	MISMATCH
+test_utf8:609	2	e06	MISMATCH
+test_utf8:609	search	vm	MATCH 0 2 0 2 0 2
+test_utf8:609	search	sem	MATCH 0 2 0 2 0 2
+test_utf8:609	search	e06	MATCH 0 2 0 2 0 2
+test_utf8:610	0	vm	MATCH 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2
+test_utf8:610	0	sem	MATCH 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2
+test_utf8:610	0	e06	MATCH 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2
+test_utf8:610	1	vm	MISMATCH
+test_utf8:610	1	sem	MISMATCH
+test_utf8:610	1	e06	MISMATCH
+test_utf8:610	2	vm	MISMATCH
+test_utf8:610	2	sem	MISMATCH
+test_utf8:610	2	e06	MISMATCH
+test_utf8:610	search	vm	MATCH 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2
+test_utf8:610	search	sem	MATCH 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2
+test_utf8:610	search	e06	MATCH 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2 0 2
+test_utf8:611	0	vm	MATCH 0 4 0 2 2 4
+test_utf8:611	0	sem	MATCH 0 4 0 2 2 4
+test_utf8:611	0	e06	MATCH 0 4 0 2 2 4
+test_utf8:611	1	vm	MISMATCH
+test_utf8:611	1	sem	MISMATCH
+test_utf8:611	1	e06	MISMATCH
+test_utf8:611	2	vm	MISMATCH
+test_utf8:611	2	sem	MISMATCH
+test_utf8:611	2	e06	MISMATCH
+test_utf8:611	3	vm	MISMATCH
+test_utf8:611	3	sem	MISMATCH
+test_utf8:611	3	e06	MISMATCH
+test_utf8:611	4	vm	MISMATCH
+test_utf8:611	4	sem	MISMATCH
+test_utf8:611	4	e06	MISMATCH
+test_utf8:611	search	vm	MATCH 0 4 0 2 2 4
+test_utf8:611	search	sem	MATCH 0 4 0 2 2 4
+test_utf8:611	search	e06	MATCH 0 4 0 2 2 4
+test_utf8:612	0	vm	MATCH 0 4 0 2 2 4
+test_utf8:612	0	sem	MATCH 0 4 0 2 2 4
+test_utf8:612	0	e06	MATCH 0 4 0 2 2 4
+test_utf8:612	1	vm	MISMATCH
+test_utf8:612	1	sem	MISMATCH
+test_utf8:612	1	e06	MISMATCH
+test_utf8:612	2	vm	MISMATCH
+test_utf8:612	2	sem	MISMATCH
+test_utf8:612	2	e06	MISMATCH
+test_utf8:612	3	vm	MISMATCH
+test_utf8:612	3	sem	MISMATCH
+test_utf8:612	3	e06	MISMATCH
+test_utf8:612	4	vm	MISMATCH
+test_utf8:612	4	sem	MISMATCH
+test_utf8:612	4	e06	MISMATCH
+test_utf8:612	search	vm	MATCH 0 4 0 2 2 4
+test_utf8:612	search	sem	MATCH 0 4 0 2 2 4
+test_utf8:612	search	e06	MATCH 0 4 0 2 2 4
+test_utf8:613	0	vm	MATCH 0 11 0 0 0 1 3 6
+test_utf8:613	0	sem	MATCH 0 11 0 0 0 1 3 6
+test_utf8:613	0	e06	MATCH 0 11 0 0 0 1 3 6
+test_utf8:613	1	vm	MISMATCH
+test_utf8:613	1	sem	MISMATCH
+test_utf8:613	1	e06	MISMATCH
+test_utf8:613	2	vm	MISMATCH
+test_utf8:613	2	sem	MISMATCH
+test_utf8:613	2	e06	MISMATCH
+test_utf8:613	3	vm	MISMATCH
+test_utf8:613	3	sem	MISMATCH
+test_utf8:613	3	e06	MISMATCH
+test_utf8:613	4	vm	MISMATCH
+test_utf8:613	4	sem	MISMATCH
+test_utf8:613	4	e06	MISMATCH
+test_utf8:613	5	vm	MISMATCH
+test_utf8:613	5	sem	MISMATCH
+test_utf8:613	5	e06	MISMATCH
+test_utf8:613	6	vm	MISMATCH
+test_utf8:613	6	sem	MISMATCH
+test_utf8:613	6	e06	MISMATCH
+test_utf8:613	7	vm	MISMATCH
+test_utf8:613	7	sem	MISMATCH
+test_utf8:613	7	e06	MISMATCH
+test_utf8:613	8	vm	MISMATCH
+test_utf8:613	8	sem	MISMATCH
+test_utf8:613	8	e06	MISMATCH
+test_utf8:613	9	vm	MISMATCH
+test_utf8:613	9	sem	MISMATCH
+test_utf8:613	9	e06	MISMATCH
+test_utf8:613	10	vm	MISMATCH
+test_utf8:613	10	sem	MISMATCH
+test_utf8:613	10	e06	MISMATCH
+test_utf8:613	11	vm	MISMATCH
+test_utf8:613	11	sem	MISMATCH
+test_utf8:613	11	e06	MISMATCH
+test_utf8:613	search	vm	MATCH 0 11 0 0 0 1 3 6
+test_utf8:613	search	sem	MATCH 0 11 0 0 0 1 3 6
+test_utf8:613	search	e06	MATCH 0 11 0 0 0 1 3 6
+test_utf8:614	0	vm	MATCH 0 11 0 11 0 0 0 1 3 6
+test_utf8:614	0	sem	MATCH 0 11 0 11 0 0 0 1 3 6
+test_utf8:614	0	e06	MATCH 0 11 0 11 0 0 0 1 3 6
+test_utf8:614	1	vm	MISMATCH
+test_utf8:614	1	sem	MISMATCH
+test_utf8:614	1	e06	MISMATCH
+test_utf8:614	2	vm	MISMATCH
+test_utf8:614	2	sem	MISMATCH
+test_utf8:614	2	e06	MISMATCH
+test_utf8:614	3	vm	MISMATCH
+test_utf8:614	3	sem	MISMATCH
+test_utf8:614	3	e06	MISMATCH
+test_utf8:614	4	vm	MISMATCH
+test_utf8:614	4	sem	MISMATCH
+test_utf8:614	4	e06	MISMATCH
+test_utf8:614	5	vm	MISMATCH
+test_utf8:614	5	sem	MISMATCH
+test_utf8:614	5	e06	MISMATCH
+test_utf8:614	6	vm	MISMATCH
+test_utf8:614	6	sem	MISMATCH
+test_utf8:614	6	e06	MISMATCH
+test_utf8:614	7	vm	MISMATCH
+test_utf8:614	7	sem	MISMATCH
+test_utf8:614	7	e06	MISMATCH
+test_utf8:614	8	vm	MISMATCH
+test_utf8:614	8	sem	MISMATCH
+test_utf8:614	8	e06	MISMATCH
+test_utf8:614	9	vm	MISMATCH
+test_utf8:614	9	sem	MISMATCH
+test_utf8:614	9	e06	MISMATCH
+test_utf8:614	10	vm	MISMATCH
+test_utf8:614	10	sem	MISMATCH
+test_utf8:614	10	e06	MISMATCH
+test_utf8:614	11	vm	MISMATCH
+test_utf8:614	11	sem	MISMATCH
+test_utf8:614	11	e06	MISMATCH
+test_utf8:614	search	vm	MATCH 0 11 0 11 0 0 0 1 3 6
+test_utf8:614	search	sem	MATCH 0 11 0 11 0 0 0 1 3 6
+test_utf8:614	search	e06	MATCH 0 11 0 11 0 0 0 1 3 6
+test_utf8:616	0	vm	MISMATCH
+test_utf8:616	0	sem	MISMATCH
+test_utf8:616	0	e06	MISMATCH
+test_utf8:616	1	vm	MATCH 1 2 1 2 -1 -1
+test_utf8:616	1	sem	MATCH 1 2 1 2 -1 -1
+test_utf8:616	1	e06	MATCH 1 2 1 2 -1 -1
+test_utf8:616	2	vm	MISMATCH
+test_utf8:616	2	sem	MISMATCH
+test_utf8:616	2	e06	MISMATCH
+test_utf8:616	search	vm	MATCH 1 2 1 2 -1 -1
+test_utf8:616	search	sem	MATCH 1 2 1 2 -1 -1
+test_utf8:616	search	e06	MATCH 1 2 1 2 -1 -1
+test_utf8:619	0	vm	MATCH 0 3 0 3
+test_utf8:619	0	sem	MATCH 0 3 0 3
+test_utf8:619	0	e06	MATCH 0 3 0 3
+test_utf8:619	1	vm	MATCH 1 3 1 3
+test_utf8:619	1	sem	MATCH 1 3 1 3
+test_utf8:619	1	e06	MATCH 1 3 1 3
+test_utf8:619	2	vm	MATCH 2 3 2 3
+test_utf8:619	2	sem	MATCH 2 3 2 3
+test_utf8:619	2	e06	MATCH 2 3 2 3
+test_utf8:619	3	vm	MATCH 3 3 3 3
+test_utf8:619	3	sem	MATCH 3 3 3 3
+test_utf8:619	3	e06	MATCH 3 3 3 3
+test_utf8:619	search	vm	MATCH 0 3 0 3
+test_utf8:619	search	sem	MATCH 0 3 0 3
+test_utf8:619	search	e06	MATCH 0 3 0 3
+test_utf8:620	0	vm	MATCH 0 0 0 0
+test_utf8:620	0	sem	MATCH 0 0 0 0
+test_utf8:620	0	e06	MATCH 0 0 0 0
+test_utf8:620	search	vm	MATCH 0 0 0 0
+test_utf8:620	search	sem	MATCH 0 0 0 0
+test_utf8:620	search	e06	MATCH 0 0 0 0
+test_utf8:625	0	vm	MATCH 0 3 0 3
+test_utf8:625	0	sem	MATCH 0 3 0 3
+test_utf8:625	0	e06	MATCH 0 3 0 3
+test_utf8:625	1	vm	MATCH 1 1 -1 -1
+test_utf8:625	1	sem	MATCH 1 1 -1 -1
+test_utf8:625	1	e06	MATCH 1 1 -1 -1
+test_utf8:625	2	vm	MATCH 2 2 -1 -1
+test_utf8:625	2	sem	MATCH 2 2 -1 -1
+test_utf8:625	2	e06	MATCH 2 2 -1 -1
+test_utf8:625	3	vm	MATCH 3 3 -1 -1
+test_utf8:625	3	sem	MATCH 3 3 -1 -1
+test_utf8:625	3	e06	MATCH 3 3 -1 -1
+test_utf8:625	search	vm	MATCH 0 3 0 3
+test_utf8:625	search	sem	MATCH 0 3 0 3
+test_utf8:625	search	e06	MATCH 0 3 0 3
+test_utf8:900	0	vm	MATCH 0 0
+test_utf8:900	0	sem	MATCH 0 0
+test_utf8:900	0	e06	MATCH 0 0
+test_utf8:900	1	vm	MATCH 1 1
+test_utf8:900	1	sem	MATCH 1 1
+test_utf8:900	1	e06	MATCH 1 1
+test_utf8:900	2	vm	MATCH 2 2
+test_utf8:900	2	sem	MATCH 2 2
+test_utf8:900	2	e06	MATCH 2 2
+test_utf8:900	3	vm	MATCH 3 3
+test_utf8:900	3	sem	MATCH 3 3
+test_utf8:900	3	e06	MATCH 3 3
+test_utf8:900	search	vm	MATCH 0 0
+test_utf8:900	search	sem	MATCH 0 0
+test_utf8:900	search	e06	MATCH 0 0
+test_utf8:1358	0	vm	MATCH 0 1
+test_utf8:1358	0	sem	MATCH 0 1
+test_utf8:1358	0	e06	MATCH 0 1
+test_utf8:1358	1	vm	MISMATCH
+test_utf8:1358	1	sem	MISMATCH
+test_utf8:1358	1	e06	MISMATCH
+test_utf8:1358	search	vm	MATCH 0 1
+test_utf8:1358	search	sem	MATCH 0 1
+test_utf8:1358	search	e06	MATCH 0 1
+test_utf8:1359	0	vm	MATCH 0 1
+test_utf8:1359	0	sem	MATCH 0 1
+test_utf8:1359	0	e06	MATCH 0 1
+test_utf8:1359	1	vm	MISMATCH
+test_utf8:1359	1	sem	MISMATCH
+test_utf8:1359	1	e06	MISMATCH
+test_utf8:1359	search	vm	MATCH 0 1
+test_utf8:1359	search	sem	MATCH 0 1
+test_utf8:1359	search	e06	MATCH 0 1
+test_utf8:1360	0	vm	MATCH 0 1
+test_utf8:1360	0	sem	MATCH 0 1
+test_utf8:1360	0	e06	MATCH 0 1
+test_utf8:1360	1	vm	MISMATCH
+test_utf8:1360	1	sem	MISMATCH
+test_utf8:1360	1	e06	MISMATCH
+test_utf8:1360	search	vm	MATCH 0 1
+test_utf8:1360	search	sem	MATCH 0 1
+test_utf8:1360	search	e06	MATCH 0 1
+test_utf8:1603	0	vm	MATCH 0 1
+test_utf8:1603	0	sem	MATCH 0 1
+test_utf8:1603	0	e06	MATCH 0 1
+test_utf8:1603	1	vm	MISMATCH
+test_utf8:1603	1	sem	MISMATCH
+test_utf8:1603	1	e06	MISMATCH
+test_utf8:1603	search	vm	MATCH 0 1
+test_utf8:1603	search	sem	MATCH 0 1
+test_utf8:1603	search	e06	MATCH 0 1
+test_utf8:1679	0	vm	MATCH 0 2
+test_utf8:1679	0	sem	MATCH 0 2
+test_utf8:1679	0	e06	MATCH 0 2
+test_utf8:1679	1	vm	MATCH 1 2
+test_utf8:1679	1	sem	MATCH 1 2
+test_utf8:1679	1	e06	MATCH 1 2
+test_utf8:1679	2	vm	MATCH 2 2
+test_utf8:1679	2	sem	MATCH 2 2
+test_utf8:1679	2	e06	MATCH 2 2
+test_utf8:1679	3	vm	MATCH 3 3
+test_utf8:1679	3	sem	MATCH 3 3
+test_utf8:1679	3	e06	MATCH 3 3
+test_utf8:1679	4	vm	MATCH 4 7
+test_utf8:1679	4	sem	MATCH 4 7
+test_utf8:1679	4	e06	MATCH 4 7
+test_utf8:1679	5	vm	MATCH 5 7
+test_utf8:1679	5	sem	MATCH 5 7
+test_utf8:1679	5	e06	MATCH 5 7
+test_utf8:1679	6	vm	MATCH 6 7
+test_utf8:1679	6	sem	MATCH 6 7
+test_utf8:1679	6	e06	MATCH 6 7
+test_utf8:1679	7	vm	MATCH 7 7
+test_utf8:1679	7	sem	MATCH 7 7
+test_utf8:1679	7	e06	MATCH 7 7
+test_utf8:1679	search	vm	MATCH 0 2
+test_utf8:1679	search	sem	MATCH 0 2
+test_utf8:1679	search	e06	MATCH 0 2
+test_options:200	0	vm	MATCH 0 1
+test_options:200	0	sem	MATCH 0 1
+test_options:200	0	e06	MATCH 0 1
+test_options:200	1	vm	MISMATCH
+test_options:200	1	sem	MISMATCH
+test_options:200	1	e06	MISMATCH
+test_options:200	2	vm	MISMATCH
+test_options:200	2	sem	MISMATCH
+test_options:200	2	e06	MISMATCH
+test_options:200	3	vm	MISMATCH
+test_options:200	3	sem	MISMATCH
+test_options:200	3	e06	MISMATCH
+test_options:200	search	vm	MATCH 0 1
+test_options:200	search	sem	MATCH 0 1
+test_options:200	search	e06	MATCH 0 1

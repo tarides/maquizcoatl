@@ -1,0 +1,2 @@
+     10 Creating new z3proc (cmd=[("<bench-workdir>/cache/fstar/lib/fstar/z3-4.15.3/bin/z3", ["-smt2", "-in"])], version=["4.15.3"])
+Z3 version 4.15.3 - 64 bit

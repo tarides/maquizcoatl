@@ -1,0 +1,4 @@
+probe:ei04	MATCH 0 2 2 2
+probe:ei05	MATCH 0 0 0 0
+probe:ei07	MATCH 0 0 0 0
+probe:ei11t	MATCH 0 1 1 1 0 1 1 1

@@ -1,0 +1,12 @@
+== 2026-11-25T15:41:38Z verus --version
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+== z3 --version (the z3 binary bundled next to verus in the release directory)
+Z3 version 4.16.0 - 64 bit
+== sha256 of the bundled z3
+e583c4186a45e72411fa2cb2048401eed03f0f8e5f24694676a8f6271a50b765
+== VERUS_Z3_PATH=unset

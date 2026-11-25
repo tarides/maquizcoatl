@@ -1,0 +1,7 @@
+The case files of experiment #9 (lab/09-representative-proof/cases/
+fragment.tsv and extra.tsv) and the verdict files of this directory
+identify test cases taken from upstream/test/*.c of Oniguruma f95747b;
+fragment.tsv holds their patterns and subjects (hex-encoded). They are
+distributed under Oniguruma's licence (BSD-2-Clause, see
+upstream/COPYING): Copyright (c) 2002-2025 K.Kosako. extra.tsv holds
+experiment #2's probes ei04, ei05, ei07 and ei11 (transcribed).
