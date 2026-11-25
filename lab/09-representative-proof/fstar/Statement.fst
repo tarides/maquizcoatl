@@ -2,7 +2,10 @@ module Statement
 (* Experiment #9, F*: the statement of the main theorem (FRAGMENT.md 7),
    transcribed from rocq/Statement.v, as a proposition; the proof is
    milestone M2's (runs 7-9).  Proving it means proving
-   [main_theorem : unit -> Lemma main_theorem_statement]. *)
+   [main_theorem : unit -> Lemma main_theorem_statement].
+   NOT YET FRAGMENT.md 7: it lacks the hypothesis NoDup (groups r) added
+   in run 4 (see section 7, "Distinct group numbers (run 4)"); without
+   it the statement is false; transcribed once the maintainer accepts it. *)
 
 open Syntax
 open Sem

@@ -336,10 +336,11 @@ for the VM and the semantics, so the theorem carries over to it.
   induction on `mu` (section 4): one iteration followed by `IEmptyEnd`
   simulates `ACheck pos a`; the empty case skips the `IJump` exactly as
   `ACheck` leaves the loop.
-- **(d) Completeness** (fuel): the semantics finishes with fuel larger
-  than a bound computed from `mu` (the depth of the tree), and its
-  result does not change with more fuel; the VM finishes within a
-  number of steps bounded by the tree's size times the code length.
+- **(d) Completeness** (fuel): two existence claims. Some fuel makes
+  the semantics finish (with a bound computed from `mu`, the depth of
+  the tree), and its result does not change with more fuel; some fuel
+  makes the VM finish. No bound on the VM's steps is needed (run 4's
+  review: Rocq proved none, and the theorem only asks for existence).
 - **(e) Main theorem** from (b)-(d) at `k = []` (code `IEnd`, stack
   `[EFinish]`), and the axiom/admit report (`axioms.sh`).
 

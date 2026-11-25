@@ -2,6 +2,9 @@
 // transcribed from fstar/Statement.fst, as a spec-level proposition over
 // the spec fns; the proof is milestone M2's (runs 10-12).  Proving it
 // means proving a `proof fn main_theorem() ensures main_theorem_statement()`.
+// NOT YET FRAGMENT.md 7: it lacks the hypothesis NoDup (groups r) added in
+// run 4 (see section 7, "Distinct group numbers (run 4)"); without it the
+// statement is false; transcribed once the maintainer accepts it.
 use vstd::prelude::*;
 use crate::syntax::*;
 use crate::sem::*;

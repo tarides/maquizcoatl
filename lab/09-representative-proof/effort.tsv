@@ -78,3 +78,6 @@ run	date	item	kind	attempts	note
 4	2026-11-25	axioms.sh (rocq case)	script	1	
 4	2026-11-25	lemmas.py	script	1	
 4	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+4-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T14:00:19Z (first recorded timestamp, after git pull and reading the review), end 2026-11-25T14:01:01Z (taken just before the commit); covers the three review fixes and entry 12, not the commit, issue comment, push and dashboard update
+4-fix	2026-11-25	FRAGMENT.md, fstar/Statement.fst, verus/statement.rs, plans/09-representative-proof.md	correction	1	section 8 (d) reworded; header comments; M4 attempt units and M2 proof timestamps added to the plan
+4-fix	2026-11-25	human interventions	intervention	0	none

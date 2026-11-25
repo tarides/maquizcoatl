@@ -332,7 +332,11 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
    agreement), a short verdict per tool, posted on issue #4 after the
    maintainer's review (done-criterion 5); the draft PR is opened. The
    comparison states that DEV-008's termination obligation is not
-   covered (decision 4).
+   covered (decision 4). Each attempt figure names its unit (run-4 review): failed
+   checks and compile invocations are comparable across tools (Rocq
+   M2: 19 failed checks, 23 invocations); `effort.tsv`'s per-lemma
+   attempts (a clean compile counts once per lemma it contains; Rocq
+   M2: 67) and run 3's per-module Verus rows are not.
 
 ## Runs (launched one by one by the maintainer)
 
@@ -383,9 +387,11 @@ experiments:
 
 Per run, in `effort.tsv` and the notebook entry: session wall-clock
 (start and end, UTC); per lemma the number of attempts (a check that
-fails and leads to an edit counts as one attempt); human interventions
-(count, with a one-line reason each); person-days only for work a person
-did. Session time is engineering effort, reported apart from machine
+fails and leads to an edit counts as one attempt); for each M2 run, the
+UTC timestamps of the first and the last compile of the proof, so the
+proof time per tool is a recorded figure (run-4 review); human
+interventions (count, with a one-line reason each); person-days only for
+work a person did. Session time is engineering effort, reported apart from machine
 time.
 
 ## Lab notebook
