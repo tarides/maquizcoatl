@@ -1,7 +1,7 @@
 """Lemma count and automatic share (plan step 6, experiment #9).
 
-Usage: python3 -I lemmas.py <file.v|file.fst>...   (Rocq; F* added in
-run 7; Verus is added when its M2 closes)
+Usage: python3 -I lemmas.py <file.v|file.fst|file.rs>...   (Rocq; F*
+added in run 7; Verus in run 10)
 
 A lemma is a named statement: Rocq `Lemma`, `Theorem`, `Corollary`,
 `Fact`, `Proposition` (not `Example`, `Definition`, `Fixpoint`,
@@ -25,6 +25,19 @@ that returns witnesses, such as `ProofSim.sim`, or an auxiliary
 definition) or `example` (an `assert_norm`), with its line count, and
 is not a lemma. Comments are stripped first (loc.py's rule); for every
 item the third column is its kind and the fourth its non-blank lines.
+
+Verus (.rs, run 10): a lemma is a `proof fn` (also `broadcast proof
+fn`), whether or not it returns a value (plan step 6). It is automatic
+when its body, the first brace block at bracket depth 0 after the name
+(the parameters, return type and specification clauses are inside
+parentheses or have no braces at depth 0), is empty: the default SMT
+discharge with no explicit step. A proof fn that returns a value (a
+witness, such as `proof_sim::sim`) is a lemma by this definition and is
+marked `returns` in a fifth column. A proof fn whose body is one
+`assert(...) by (compute)` or `by (compute_only)` (an evaluated check,
+Rocq's `Example`, F*'s `assert_norm`) has kind `example` and is not a
+lemma. Comments (`//`, `/* */`) are
+stripped first (loc.py's rule).
 """
 import re
 import sys
@@ -133,9 +146,63 @@ def fstar_items(path):
     return res
 
 
+VTOP = re.compile(r"(?m)^\s*(pub\s+)?(broadcast\s+)?proof\s+fn\s+(\w+)")
+
+
+def verus_items(path):
+    text = open(path, encoding="utf-8").read()
+    text = re.sub(r"/\*.*?\*/", lambda m: "\n" * m.group(0).count("\n"), text, flags=re.S)
+    text = re.sub(r"//[^\n]*", "", text)
+    res = []
+    for m in VTOP.finditer(text):
+        depth, i, body_start = 0, m.end(), None
+        while i < len(text):
+            ch = text[i]
+            if ch == "{" and depth == 0:
+                body_start = i
+                break
+            if ch in "([{":
+                depth += 1
+            elif ch in ")]}":
+                depth -= 1
+            i += 1
+        depth, j = 0, body_start
+        while j < len(text):
+            if text[j] == "{":
+                depth += 1
+            elif text[j] == "}":
+                depth -= 1
+                if depth == 0:
+                    break
+            j += 1
+        head = text[m.start():body_start]
+        body = text[body_start + 1:j]
+        nlines = sum(1 for ln in text[m.start():j + 1].split("\n") if ln.strip())
+        if not body.strip():
+            kind = "automatic"
+        elif re.fullmatch(r"\s*assert\s*\(.*\)\s*by\s*\(compute(_only)?\)\s*;\s*", body, flags=re.S):
+            kind = "example"
+        else:
+            kind = "manual"
+        ret = "returns" if re.search(r"->\s*\(\w+\s*:", head) else ""
+        res.append((m.group(3), kind, nlines, ret))
+    return res
+
+
 def main(paths):
     tot = [0, 0, 0]
     for p in paths:
+        if p.endswith(".rs"):
+            its = verus_items(p)
+            for name, kind, n, ret in its:
+                print(f"{p}\t{name}\t{kind}\t{n}\t{ret}".rstrip("\t"))
+            nl = sum(1 for x in its if x[1] in ("automatic", "manual"))
+            na = sum(1 for x in its if x[1] == "automatic")
+            nr = sum(1 for x in its if x[3] and x[1] != "example")
+            ne = sum(1 for x in its if x[1] == "example")
+            print(f"{p}\ttotal {nl}\tautomatic {na}\tadmitted 0\treturning {nr}\texamples {ne}")
+            tot[0] += nl; tot[1] += na
+            continue
         if p.endswith(".fst"):
             its = fstar_items(p)
             for name, kind, n in its:

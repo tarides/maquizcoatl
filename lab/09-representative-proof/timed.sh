@@ -18,7 +18,9 @@
 # time.log holds the checker's output (rocq: one "Checked <file>.v" line
 # per file and run, printed by chk after rocq compile succeeds; fstar: one "Verified module" line
 # per file and run, 15 in all; verus: one "verification results" line
-# per run, 3 in all, since Verus checks the crate lib.rs as one unit);
+# per run, 3 in all, since Verus checks the crate lib.rs as one unit;
+# from run 10 the crate also holds the proof modules proof_a, proof_sem,
+# proof_sim and proof, copied with the definitions);
 # time.tsv's columns are run, file, wall clock, max RSS (kB), user time
 # (s), system time (s) (user and system added in correction 3, entry 8;
 # run 3 ran Verus on its default, 7 threads under the 8 pinned CPUs,
@@ -42,7 +44,7 @@ case $T in
          chk() { fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 "$1.fst"; } ;;
   verus) DEFS="lib"
          . "$CACHE/verus-env.sh"
-         fresh() { rm -rf "$1"; mkdir -p "$1"; cp "$L"/verus/{lib,syntax,sem,compile,vm,statement}.rs "$1/"; }
+         fresh() { rm -rf "$1"; mkdir -p "$1"; cp "$L"/verus/{lib,syntax,sem,compile,vm,statement,proof_a,proof_sem,proof_sim,proof}.rs "$1/"; }
          chk() { verus --crate-type=lib --num-threads "${VERUS_THREADS:-7}" "$1.rs"; } ;;
   *) echo "unknown tool $T" >&2; exit 2 ;;
 esac

@@ -1,0 +1,22 @@
+# python3 -I loc.py on the whole files
+file	spec	proof	cases
+lab/09-representative-proof/verus/syntax.rs	171	2	0
+lab/09-representative-proof/verus/sem.rs	313	17	0
+lab/09-representative-proof/verus/compile.rs	267	19	0
+lab/09-representative-proof/verus/vm.rs	365	17	0
+lab/09-representative-proof/verus/statement.rs	31	0	0
+lab/09-representative-proof/verus/lib.rs	9	0	0
+lab/09-representative-proof/verus/proof_a.rs	30	148	0
+lab/09-representative-proof/verus/proof_sem.rs	34	152	0
+lab/09-representative-proof/verus/proof_sim.rs	244	800	0
+lab/09-representative-proof/verus/proof.rs	21	127	0
+lab/09-representative-proof/verus/main.rs	148	0	0
+# spec part (before '// ---- exec'; one added closing line per file) and exec part (two added header lines per file)
+compile_spec.rs	77	0	0
+sem_spec.rs	94	0	0
+syntax_spec.rs	60	0	0
+vm_spec.rs	132	0	0
+compile_exec.rs	193	19	0
+sem_exec.rs	222	17	0
+syntax_exec.rs	114	2	0
+vm_exec.rs	236	17	0

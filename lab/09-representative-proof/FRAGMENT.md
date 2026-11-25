@@ -308,7 +308,13 @@ that is Rocq's (run 7). Rocq's statement is
 `rocq/Statement.v` (`main_theorem_statement`), F\*'s is
 `fstar/Statement.fst` (`main_theorem_statement : prop`), Verus's is
 `verus/statement.rs` (`spec fn main_theorem_statement() -> bool`, over
-the spec fns; the exec mirrors are proved equal to them under their
+the spec fns, `forall r s p. main_theorem_at(r, s, p)` since run 10:
+run 3 wrote the body under the outer quantifier with the trigger
+`sem(0, r, s, p)`, a term the body contains only under a quantifier, so
+Verus could not prove the statement, and run 10 moved the body unchanged
+into the spec fn `main_theorem_at`, the outer quantifier's trigger; a
+trigger is an instantiation hint, not part of the proposition; see
+`lab/results/2026-11-25-exp-09-verus-m2.md`; the exec mirrors are proved equal to them under their
 preconditions `code.len() < usize::MAX - 2`, `s.len() < usize::MAX` and
 `acts_wf`, and `ecompile` returns `None` when a code address overflows
 `usize`, so the theorem carries over to the exec VM only for patterns
@@ -391,6 +397,29 @@ per case (`case_lit`, `case_alt`, `case_star_null`, ...) that receives
 the induction hypothesis at fuel `f - 1` as a function argument; `sim`
 recurses on `%[f; rep]`. Rlimit 10 everywhere except `case_cat` (20);
 fuel 2, ifuel 1 (fuel 4 for `length_comp`).
+
+**How Verus closed it (run 10)**, same invariants as Rocq and F\*,
+Verus proof: `verus/proof_a.rs` (a), `proof_sem.rs` (fuel monotonicity
+and determinism, (d) for the semantics as the proof fn `fuel_of`, which
+returns the fuel, `decreases rem(s, pos), ww(pos, acts)`, and the elided
+star `clen0_fm`), `proof_sim.rs` ((b) and (c)), `proof.rs` ((d) for the
+VM, (e), and the two counterexample checks by evaluation, `by
+(compute_only)`). The lists are `Seq`s with their head at the end, so
+`proof_a.rs` starts with broadcast lemmas for `push`/`drop_last` and for
+the capture lookups `mget`/`gget` after a write. `rep` is not an
+inductive relation: the derivation is a datatype `Rep` (one constructor
+per rule of Rocq's `rep`), the pc, pending actions, needed empty-check
+ids `hp` and free groups `hx` are spec fns of it, and the spec fn `rep
+code h pos stk` checks its side conditions; `rep_mono` is a lemma on it.
+Group numbers are sets (`gsr`, `gs`, `topg`, the distinctness predicate
+`gd`), linked once to the statement's `groups(r).no_duplicates()` by
+`gd_of`. `capsrel` and `meq` are `#[verifier::opaque]`, each a `forall`
+over a named per-group predicate (`capsrel_at`, `meq_at`, the trigger),
+revealed only in ten small lemmas. As in F\*, `sim` and one proof fn per
+construct return their witnesses (VM steps, final captures); `sim` and
+the case fns are mutually recursive, `decreases f, h, 1` for `sim` and
+`f, h, 0` for the cases. Default rlimit (10) everywhere, no
+`#[verifier::rlimit]`.
 
 ## 9. Cases and harness
 

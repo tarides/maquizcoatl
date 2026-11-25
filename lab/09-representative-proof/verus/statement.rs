@@ -29,10 +29,14 @@ pub open spec fn groups(r: Regex) -> Seq<nat>
     }
 }
 
-// The outer trigger (`sem` at fuel 0) only names a term with r, s and p
-// that Verus accepts; M2's proof does not depend on it.
-pub open spec fn main_theorem_statement() -> bool {
-    forall|r: Regex, s: Seq<u8>, p: nat| #![trigger sem(0, r, s, p)]
+// The statement for one pattern r, subject s and start position p.
+// Run 10 (M2) named it so that the outer quantifier can be triggered on
+// it: run 3's outer trigger `sem(0, r, s, p)` occurs nowhere in the body
+// outside a quantifier, so no proof could instantiate the statement at
+// the arbitrary r, s, p of its own negation and the statement could not
+// be proved in Verus.  Triggers carry no logical meaning; the body below
+// is run 3's (with decision 5's hypothesis), unchanged.
+pub open spec fn main_theorem_at(r: Regex, s: Seq<u8>, p: nat) -> bool {
         groups(r).no_duplicates() ==> p <= s.len() ==> {
             // soundness: a VM result other than OutOfFuel is the
             // semantics' result, for any fuel the semantics completes with
@@ -43,6 +47,10 @@ pub open spec fn main_theorem_statement() -> bool {
             &&& exists|fs: nat| #[trigger] sem(fs, r, s, p) != Res::OutOfFuel
             &&& exists|fv: nat| #[trigger] vm(fv, compile(r), ncap(r), s, p) != Res::OutOfFuel
         }
+}
+
+pub open spec fn main_theorem_statement() -> bool {
+    forall|r: Regex, s: Seq<u8>, p: nat| #[trigger] main_theorem_at(r, s, p)
 }
 
 } // verus!

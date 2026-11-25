@@ -104,3 +104,29 @@ run	date	item	kind	attempts	note
 7-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T15:01:40Z (first recorded timestamp, after git pull, reading the review and the run-7 records), end 2026-11-25T15:02:40Z (taken just before the commit); covers the three review fixes, the Verus recheck and entry 15, not the commit, issue comment, push and dashboard update
 7-fix	2026-11-25	effort.tsv, plans/09-representative-proof.md, Verus statement recheck	correction	1	two run-7 rows split by kind; M4 reports failing invocations beside failed checks; invocations.tsv gains a source digest from run 10 on; Verus crate rechecked clean at the first check
 7-fix	2026-11-25	human interventions	intervention	0	none
+10	2026-11-25	session	wall-clock	-	start 2026-11-25T15:06:27Z (first timestamp, at git pull); end recorded in a later row
+10	2026-11-25	Verus M2 proof compiles	timestamps	-	first proof compile 2026-11-25T15:13:04Z (proof_a), last proof compile of the edit loop 2026-11-25T15:25:15Z (proof); then axioms.sh 15:26:50Z-15:27:01Z, timed.sh 15:27:11Z-15:27:27Z, driver rebuild (verus.sh build) 15:27:33Z-15:27:42Z
+10	2026-11-25	Verus M2 compile invocations	invocations	12	12 untimed verus invocations of the crate in the edit loop (--verify-module proof_a 1, proof_sem 2, proof_sim 4, proof 4; full crate 1): 6 failing, 6 clean; every failing one has a source digest (SHA-256) different from the next invocation's, so all 6 are failed checks that led to an edit; raw list with digests: results/2026-11-25-exp-09-verus-m2-raw/verus/invocations.tsv
+10	2026-11-25	Verus toy crates and negative test	invocations	4	outside the proof edit loop, not in invocations.tsv: 3 toy crates on the statement's trigger (2 failing as expected, 1 clean; raw: trigger-toy.txt) and 1 negative test of nested_same_group_vm (fails as expected)
+10	2026-11-25	statement.rs: main_theorem_at	statement	1	body of main_theorem_statement moved unchanged into the spec fn main_theorem_at(r, s, p), now the outer trigger (run 3's trigger sem(0, r, s, p) made the statement unprovable: 2 failing checks of proof.rs, 15:20:04Z and 15:20:28Z, counted under proof.main_theorem); clean at the first check after the change
+10	2026-11-25	proof_a.lemma_push_last, lemma_mget_mset, lemma_gget_gset, length_comp, code_at_app, code_at_one, code_lit, code_cat, code_alt, code_group, code_star_null, code_star_nn, code_compile	lemma	1	13 lemmas (3 broadcast), each right at its first check
+10	2026-11-25	proof_a.code_at	definition	1	auxiliary spec fn, right at the first check
+10	2026-11-25	proof_sem.fuel_of	lemma	2	returns the fuel; decreases check needed the weight of the two-level push unfolded by an intermediate assert (Cat, Star, Group)
+10	2026-11-25	proof_sem.ct_mono, ct_det, ct_total, clen0_fm	lemma	1	4 lemmas, each right at its first check
+10	2026-11-25	proof_sim.gsr_groups	lemma	4	unfolding of gsr and groups at the matched constructor (Cat/Alt, then Group, then Eps/Lit/Star) given by explicit asserts
+10	2026-11-25	proof_sim.exe_fail1	lemma	2	exe at 0 steps after the match on step, asserted
+10	2026-11-25	proof_sim.rep_mono	lemma	2	same_checks for the inner derivation of RChkNull, by an assert forall
+10	2026-11-25	proof_sim.case_cat	lemma	3	two-level unfolding of hx and cls (intermediate asserts), then uniq of the split actions through the helper lemmas disj_sub and disj_union
+10	2026-11-25	proof_sim.case_alt	lemma	3	hacts and hx of the RJump derivation asserted, then uniq of each branch through disj_sub
+10	2026-11-25	proof_sim.case_group	lemma	3	membership facts for uniq (gsr of the group, assert forall over its body's groups), then cls and hx of the RClose derivation asserted
+10	2026-11-25	proof_sim.case_star_null, case_star_nn	lemma	2	hx and cls of the check derivation asserted (one failed check each)
+10	2026-11-25	proof_sim.disj_sub, disj_union	lemma	1	2 helper lemmas added in the second check of proof_sim, right at their first check
+10	2026-11-25	proof_sim.lemma_contains_add, nodup_add, gd_of, lemma_cget_push, cls_none, meq_refl, meq_trans, capsrel_meq, capsrel_open, meq_push, meq_nopush, capsrel_close, meq_close, capsrel_end, capsrel_init, exe_next, exe_add, choice, case_end, case_close, case_chk_null, case_chk_nn, case_empty, case_lit, case_star0, sim	lemma	1	26 lemmas, each right at its first check (choice, the case fns and sim return their witnesses)
+10	2026-11-25	proof_sim.Rep, hpc, hacts, hp, hx, rep, cls, cget, capsrel, meq, gs, uniq, topg, gsr, gd, fresh, exe, simres	definition	1	auxiliary types and spec fns, right at the first check
+10	2026-11-25	proof.vm_complete	lemma	3	hacts of the initial derivation and cls/gs/uniq of the empty action list asserted (two failed checks)
+10	2026-11-25	proof.main_theorem	lemma	3	two failed checks with run 3's statement (outer trigger sem(0, r, s, p) not in the body), toy crates, then the statement row above; clean after it
+10	2026-11-25	proof.run_mono, run_det, exe_run, vm_det, region_spans, main_aux	lemma	1	6 lemmas, each right at the first check
+10	2026-11-25	proof.nested_same_group_vm, nested_same_group_sem	example	1	evaluated counterexample checks (by (compute_only)), right at the first check; negative test as above
+10	2026-11-25	axioms.sh (verus case), timed.sh (proof modules), lemmas.py (Verus rules)	script	1	lemmas.py output for the Rocq and F* proof files unchanged (diffed against runs 4 and 7's lemmas.txt)
+10	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+10	2026-11-25	session	wall-clock	-	start 2026-11-25T15:06:27Z, end 2026-11-25T15:31:43Z (taken just before the commit); covers the Verus M2 proof, the statement's trigger change, axioms.sh, timed.sh, the driver rebuild and entries 16-17, not the commit, issue comment, push and dashboard update
