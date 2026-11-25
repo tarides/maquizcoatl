@@ -37,7 +37,13 @@ marked `returns` in a fifth column. A proof fn whose body is one
 `assert(...) by (compute)` or `by (compute_only)` (an evaluated check,
 Rocq's `Example`, F*'s `assert_norm`) has kind `example` and is not a
 lemma. Comments (`//`, `/* */`) are
-stripped first (loc.py's rule).
+stripped first (loc.py's rule). The `admitted` total (correction 7,
+from the run-10 review) is measured: it counts the items whose body
+calls `assume(` or `admit(`, or whose attributes (the `#[...]` lines
+just above the item) or head carry `external_body` or
+`verifier::external`; such an item is printed with kind `ADMITTED`.
+This is a per-item count only: the authoritative admit check for Verus
+remains axioms.sh's (the `--no-cheating` check and its source scan).
 """
 import re
 import sys
@@ -177,8 +183,13 @@ def verus_items(path):
             j += 1
         head = text[m.start():body_start]
         body = text[body_start + 1:j]
+        attrs = re.search(r"((?:^[ \t]*#\[[^\n]*\n)*)\Z", text[:m.start()], flags=re.M).group(1)
+        admitted = (re.search(r"\b(assume|admit)\s*\(", body) is not None
+                    or re.search(r"external_body|verifier::external", attrs + head) is not None)
         nlines = sum(1 for ln in text[m.start():j + 1].split("\n") if ln.strip())
-        if not body.strip():
+        if admitted:
+            kind = "ADMITTED"
+        elif not body.strip():
             kind = "automatic"
         elif re.fullmatch(r"\s*assert\s*\(.*\)\s*by\s*\(compute(_only)?\)\s*;\s*", body, flags=re.S):
             kind = "example"
@@ -196,12 +207,13 @@ def main(paths):
             its = verus_items(p)
             for name, kind, n, ret in its:
                 print(f"{p}\t{name}\t{kind}\t{n}\t{ret}".rstrip("\t"))
-            nl = sum(1 for x in its if x[1] in ("automatic", "manual"))
+            nl = sum(1 for x in its if x[1] in ("automatic", "manual", "ADMITTED"))
             na = sum(1 for x in its if x[1] == "automatic")
+            nd = sum(1 for x in its if x[1] == "ADMITTED")
             nr = sum(1 for x in its if x[3] and x[1] != "example")
             ne = sum(1 for x in its if x[1] == "example")
-            print(f"{p}\ttotal {nl}\tautomatic {na}\tadmitted 0\treturning {nr}\texamples {ne}")
-            tot[0] += nl; tot[1] += na
+            print(f"{p}\ttotal {nl}\tautomatic {na}\tadmitted {nd}\treturning {nr}\texamples {ne}")
+            tot[0] += nl; tot[1] += na; tot[2] += nd
             continue
         if p.endswith(".fst"):
             its = fstar_items(p)

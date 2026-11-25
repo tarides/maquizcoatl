@@ -21,6 +21,9 @@
 # for assume, admit, external_body, verifier::external,
 # assume_specification, exec_allows_no_decreases_clause, no_verify and
 # rlimit (hits printed with file and line; comments are not stripped).
+# From correction 7 (run-10 review) it also prints the version of the Z3
+# that Verus runs: the z3 binary bundled next to verus in the release
+# directory, or $VERUS_Z3_PATH when set (Verus's own lookup).
 # Untimed: nice -n 10, CPUs 4-7.  Output: <exp>/out/<run-id>/<tool>/axioms.txt.
 # Prints no hostnames, addresses or absolute paths.
 set -euo pipefail
@@ -77,6 +80,8 @@ verus)
   for f in $FILES; do cp "$L/verus/$f.rs" .; done
   {
     echo "== verus --version"; verus --version
+    Z3=${VERUS_Z3_PATH:-$(dirname "$(command -v verus)")/z3}
+    echo "== z3 --version (${VERUS_Z3_PATH:+VERUS_Z3_PATH}${VERUS_Z3_PATH:-bundled with verus})"; "$Z3" --version
     for opt in "" "--no-cheating"; do
       echo "== verus --crate-type=lib --num-threads 4 $opt lib.rs"
       rc=0; nice -n 10 taskset -c 4-7 verus --crate-type=lib --num-threads 4 $opt lib.rs 2>&1 || rc=$?

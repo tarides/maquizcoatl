@@ -20,7 +20,7 @@ build)
   B=$EXP/build/verus/$RID; rm -rf "$B"; mkdir -p "$B"; cd "$B"
   cp "$L"/verus/*.rs "$E06/spec2.rs" "$E06/stub/tables2.rs" .
   U="nice -n 10 taskset -c 4-7"
-  verus --version > "$OUT/version.txt" 2>&1
+  { verus --version; "${VERUS_Z3_PATH:-$(dirname "$(command -v verus)")/z3}" --version; } > "$OUT/version.txt" 2>&1
   { echo "== lib"; $U verus --crate-type=lib lib.rs
     echo "== driver"; $U verus main.rs --compile -- -C opt-level=3 -o verus_e09
   } > "$OUT/build.log" 2>&1

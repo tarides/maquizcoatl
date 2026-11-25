@@ -334,6 +334,9 @@ Written once in `FRAGMENT.md` (run 1) and transcribed per tool:
    runs 13-14). `brittle.sh`: full check for each solver version above
    and each seed 1..10 plus the default, serial, pinned; every failure
    recorded with the failing query or function, solver version and seed.
+   For Verus, `brittle.sh` records in the raw files the `z3 --version` of
+   the solver each check runs (the bundled binary next to `verus`, or
+   `VERUS_Z3_PATH`), beside `verus --version` (correction 7).
 8. **M4: comparison** (run 15). The table across the three tools
    (proof effort, lines, check time, automatic share, brittleness,
    agreement), a short verdict per tool, posted on issue #4 after the
