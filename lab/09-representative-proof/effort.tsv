@@ -137,3 +137,6 @@ run	date	item	kind	attempts	note
 13	2026-11-25	brittle.sh	script	2	failure parser rewritten after a throwaway probe of F*'s error and Query-stats format (untimed, CPUs 4-7), before the first cell; 1 failing invocation (script not executable)
 13	2026-11-25	F* brittleness matrix	measurement	1	33 cells (Z3 5.3.0, 4.15.3, 4.13.3 x default seed and 1..10), each run once; 1 labelled replication of the failing cell (4.15.3/4, rep1); no failure retried away
 13	2026-11-25	human interventions	intervention	0	none (maintainer launched the run)
+13-fix	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T17:03:36Z (first recorded timestamp, after git pull and reading the review and the run-13 records), end 2026-11-25T17:05:51Z (taken just before the commit); covers the two review fixes, the re-derivation of run 13's failing columns and entry 20, not the commit, issue comment, push and dashboard update
+13-fix	2026-11-25	brittle.sh fail_items	correction	2	first version read the warning header's fields with the tab separator and matched no Warning 241/247; fixed after the test on run 13's logs, before anything was recorded; same output on the bench host's gawk
+13-fix	2026-11-25	human interventions	intervention	0	none

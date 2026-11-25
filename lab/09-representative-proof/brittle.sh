@@ -16,8 +16,13 @@
 # and no other option: the rlimits, fuel and ifuel are the #push-options
 # the proof was written with (not raised).  A module that fails does not
 # stop the check: the later modules are still run, and the per-module rows
-# say which ones failed (a later module may then fail on the missing
-# .checked file of a failed dependency; its log says so).
+# say which ones failed.  A later module whose dependency failed does
+# not fail on the missing .checked file: F* reports Warning 241 (cannot
+# load the dependency's .checked file, will recheck it), rechecks the
+# dependency without sending its queries to the solver, checks the module
+# itself, reports Warning 247 (its own .checked file not written) and
+# exits 0.  Its row then has exit 0, and its failing column carries
+# dep-missing:<Dep>(Warning241) and not-written:<Module>(Warning247).
 # Pinning: taskset -c $CPUS (default 28-31,60-63, one L3 complex),
 # /usr/bin/time -v (CPU time includes the Z3 child), 16G cgroup memory
 # cap (as timed.sh), a 30-minute timeout per module (exit 124).  Before
@@ -32,12 +37,20 @@
 #                status (0 if every module checked), modules ok/9, wall
 #                s, user s, sys s (sums over the nine modules), peak RSS
 #                kB, queries (Query-stats lines), failed query attempts,
-#                failing items (module.definition of each failed query
-#                attempt, and the location of each reported error),
+#                failing items (module: items of the modules.tsv
+#                failing column, for each module that has any or exits
+#                non-zero),
 #                SHA-256 of the nine sources concatenated in order;
 #   modules.tsv  one row per call and module: version, seed, label,
 #                module, exit status, wall, user, sys, RSS, SHA-256 of
-#                the file, queries, failed attempts, failing items;
+#                the file, queries, failed attempts, failing items:
+#                failed:<definition>,<index>,goal<n> xK for a query (the
+#                Query-stats key) that never succeeded after K failed
+#                attempts, recovered:<key> xK for one that succeeded on
+#                F*'s own fuel/ifuel retry after K failed attempts,
+#                Error<n>@<file>(<range>) for each reported error, and
+#                dep-missing:<Dep>(Warning241) / not-written:<M>(Warning247)
+#                when a dependency's .checked file was missing;
 #   <version>_<seed>[_<label>]/<module>.log  the checker's output
 #                (query stats and errors), <module>.time (time -v).
 # Prints no hostnames, addresses or absolute paths (the work directory
@@ -72,17 +85,21 @@ START=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 B=$EXP/build/fstar/$RID-brittle-$TAG; rm -rf "$B"; mkdir -p "$B/cache"; cd "$B"
 for m in $MODS; do cp "$L/fstar/$m.fst" .; done
 SHA_ALL=$(for m in $MODS; do cat "$m.fst"; done | sha256sum | cut -c1-64)
-fail_items() { # from one log: queries that never succeeded (failed:
-  # definition, by Query-stats key (definition, query, goal)), queries that
-  # failed and then succeeded on F*'s own fuel/ifuel retry (recovered:),
-  # and the reported errors (Error<n>@<file>(<range>))
-  awk -F'\t' '/Query-stats/ { k=$2" "$3; sub(/ (succeeded|failed).*/, "", k); n=$2; sub(/.*Query-stats \(/, "", n); sub(/, [0-9]+\).*/, "", n)
-                 name[k]=n; if ($3 ~ /succeeded/) ok[k]=1; else bad[k]=1 }
+fail_items() { # from one log: queries that never succeeded (failed:),
+  # queries that failed and then succeeded on F*'s own fuel/ifuel retry
+  # (recovered:), both by Query-stats key (definition, index, goal) with the
+  # number of failed attempts, the reported errors (Error<n>@<file>(<range>)),
+  # and the missing-dependency warnings 241 and 247 (see the header)
+  awk -F'\t' '/Query-stats/ { n=$2; sub(/.*Query-stats \(/, "", n); sub(/\).*/, "", n); sub(/, /, ",", n)
+                 g=$3; sub(/^goal /, "", g); sub(/ .*/, "", g); k=n",goal"g
+                 if ($3 ~ /succeeded/) ok[k]=1; else bad[k]++ }
        /^\* Error [0-9]+ at / { e=$0; sub(/^\* Error /, "Error", e); sub(/ at /, "@", e); sub(/:$/, "", e); err[++ne]=e }
-       END { for (k in bad) if (k in ok) r[name[k]]++; else f[name[k]]++
-             for (x in f) printf "failed:%s x%d\n", x, f[x]
-             for (x in r) printf "recovered:%s x%d\n", x, r[x]
-             for (i=1;i<=ne;i++) print err[i] }' "$1" | sort | paste -sd';' | sed 's/;/; /g'
+       /^\* Warning (241|247) at / { split($0, a, " "); f=a[5]; sub(/\.fst\(.*/, "", f); wl=a[3]; next }
+       wl==241 && /\.checked does not exist/ { print "dep-missing:" f "(Warning241)"; wl=""; next }
+       wl==247 && /Reason: checked file .*\.checked does not exist/ { print "not-written:" f "(Warning247)"; wl=""; next }
+       /^\* / { wl="" }
+       END { for (k in bad) printf "%s:%s x%d\n", (k in ok) ? "recovered" : "failed", k, bad[k]
+             for (i=1;i<=ne;i++) print err[i] }' "$1" | sort -u | paste -sd';' | sed 's/;/; /g'
 }
 EXIT=0 OK=0 W=0 U=0 S=0 RSS=0 Q=0 F=0 FAILING=""
 for m in $MODS; do
