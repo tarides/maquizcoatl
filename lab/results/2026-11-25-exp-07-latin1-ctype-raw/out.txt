@@ -1,0 +1,30 @@
+U+00B2	\w=1	[\w]=0	\p{Word}=1	[\p{Word}]=0	[[:word:]]=0
+U+00B3	\w=1	[\w]=0	\p{Word}=1	[\p{Word}]=0	[[:word:]]=0
+U+00B9	\w=1	[\w]=0	\p{Word}=1	[\p{Word}]=0	[[:word:]]=0
+U+00BC	\w=1	[\w]=0	\p{Word}=1	[\p{Word}]=0	[[:word:]]=0
+U+00BD	\w=1	[\w]=0	\p{Word}=1	[\p{Word}]=0	[[:word:]]=0
+U+00BE	\w=1	[\w]=0	\p{Word}=1	[\p{Word}]=0	[[:word:]]=0
+U+0009	\p{Print}=0	[\p{Print}]=0	[[:print:]]=0
+U+000A	\p{Print}=0	[\p{Print}]=0	[[:print:]]=0
+U+000B	\p{Print}=0	[\p{Print}]=0	[[:print:]]=0
+U+000C	\p{Print}=0	[\p{Print}]=0	[[:print:]]=0
+U+000D	\p{Print}=0	[\p{Print}]=0	[[:print:]]=0
+U+0085	\p{Print}=0	[\p{Print}]=0	[[:print:]]=0
+U+00AD	\p{Cntrl}=0	[\p{Cntrl}]=0	[[:cntrl:]]=0
+search a\b on a U+00B2 -> -1
+search a\B on a U+00B2 -> 0
+search \W on U+00B2 -> -1
+search [\W] on U+00B2 -> 0
+API ONIGENC_IS_CODE_WORD(U+00B2)=1
+API ONIGENC_IS_CODE_WORD(U+00B3)=1
+API ONIGENC_IS_CODE_WORD(U+00B9)=1
+API ONIGENC_IS_CODE_WORD(U+00BC)=1
+API ONIGENC_IS_CODE_WORD(U+00BD)=1
+API ONIGENC_IS_CODE_WORD(U+00BE)=1
+API ONIGENC_IS_CODE_PRINT(U+0009)=1
+API ONIGENC_IS_CODE_PRINT(U+000A)=1
+API ONIGENC_IS_CODE_PRINT(U+000B)=1
+API ONIGENC_IS_CODE_PRINT(U+000C)=1
+API ONIGENC_IS_CODE_PRINT(U+000D)=1
+API ONIGENC_IS_CODE_PRINT(U+0085)=1
+API ONIGENC_IS_CODE_CNTRL(U+00AD)=1
