@@ -19,3 +19,13 @@ run	date	item	kind	attempts	note
 1-fix	2026-11-25	FRAGMENT.md	design	1	three citation ranges corrected
 1-fix	2026-11-25	oracle/oracle.sh, rocq/rocq.sh build	rerun	1	66 cases, agreed first time
 1-fix	2026-11-25	human interventions	intervention	0	none
+2	2026-11-25	session	wall-clock	-	start no later than 2026-11-25T12:39:34Z (timestamp of the session's first command, git pull), end 2026-11-25T12:44:11Z (taken just before writing the notebook entry and the commit); covers the issue comment on the bytecode answer, the F* work, the bench runs and the entry; not the results comment, push and dashboard update after the commit
+2	2026-11-25	fstar/Syntax.fst	definition	1	checked first time
+2	2026-11-25	fstar/Sem.fst	definition	1	checked first time
+2	2026-11-25	fstar/Compile.fst	definition	1	checked first time
+2	2026-11-25	fstar/Vm.fst	definition	1	checked first time
+2	2026-11-25	fstar/Statement.fst	definition	1	statement only (prop), no proof; checked first time
+2	2026-11-25	fstar/Extract.fst, TablesStub.fst, main.ml	driver	1	extracted, compiled and agreed first time
+2	2026-11-25	fstar/fstar.sh	script	1	
+2	2026-11-25	timed.sh	script	1	
+2	2026-11-25	human interventions	intervention	0	none (maintainer launched the run; the answer on the bytecode comparison came with the launch)

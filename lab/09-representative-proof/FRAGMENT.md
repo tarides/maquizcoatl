@@ -184,8 +184,11 @@ tool either uses this action-list form or carries that invariant.
 
 **Fuel, per tool.** Rocq: `compute_tree` takes fuel (one unit per call,
 `None` when it runs out), and lemma (d) states that some fuel suffices
-and that more fuel does not change the result. F\* and Verus: decided
-in their M1 runs and written here then.
+and that more fuel does not change the result. F\* (run 2): the same,
+`Sem.compute_tree` with a `nat` fuel and `decreases fuel`, one unit per
+call, `None` when it runs out, so that the two transcriptions and their
+lemma (d) stay parallel. Verus: decided in its M1 run and written here
+then.
 
 ## 5. The VM
 
@@ -273,7 +276,8 @@ For every pattern `r` of the fragment, subject `s` and start position
 
 Results compare match or no match, the match end and every group's span
 (unset as -1 in the case files). Rocq's statement is
-`rocq/Statement.v` (`main_theorem_statement`). The search
+`rocq/Statement.v` (`main_theorem_statement`), F\*'s is
+`fstar/Statement.fst` (`main_theorem_statement : prop`). The search
 (`Syntax.search`: start positions left to right, the first one that does
 not return `NoMatch`) is the same function of the per-position results
 for the VM and the semantics, so the theorem carries over to it.
@@ -330,4 +334,5 @@ for the VM and the semantics, so the theorem carries over to it.
   test's expectation.
 - Transcription cross-check: the same comparison for experiment #6's
   milestone-2 semantics of the same tool (Rocq: `Spec2.v`, with `Star a`
-  as `Rep 0 None true a` and no backreferenced group).
+  as `Rep 0 None true a`; F\*: `Spec2.fst`, with `Star a` as
+  `Rep 0 (-1) true a`; no backreferenced group).
