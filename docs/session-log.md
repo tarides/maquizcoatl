@@ -276,3 +276,28 @@ yet: it waits for the CPU set it may use on the bench host.
   why3-club mailing list (issue #36). Issue #25 (Verus and Isabelle
   builds for experiment #13) entered the pipeline and runs alongside
   experiment #9, on separate cores.
+
+## 2026-11-25: experiment #9 done, Verus closes the third proof
+
+- **Run 10: the Verus theorem is closed**, again in one run: 62 lemmas,
+  1,556 lines of proof, 5.3 s to check on 7 threads. As first written,
+  the statement could never be used by Verus's solver: its trigger only
+  occurred under inner quantifiers. The maintainer accepted moving the
+  body unchanged into a named spec function, which carries the trigger.
+- **Runs 13-14: SMT brittleness.** The two SMT-based proofs were
+  rechecked with three Z3 versions and 11 seeds each. Verus passes all
+  33 checks, with wide margins; it refuses any Z3 but its own unless
+  an opt-out flag is given. F\* passes 32 of 33: with Z3 4.15.3 and
+  seed 4, one goal of the loop case runs out of solver budget, every
+  time. The maintainer kept the proof as written, so the comparison
+  reports the failure instead of hiding it.
+- **Run 15: the comparison** of the three tools is posted on issue #4.
+  Each tool needed one proof run of the three planned, about 25
+  minutes, with no human intervention. Rocq automates least but checks
+  fast and trusts no solver; F\* has the smallest proof but the slowest
+  check and the only brittleness failure; Verus has the largest proof
+  but the fastest check and an executable Rust VM for experiment #10.
+  The comparison does not choose a stack.
+- **Housekeeping.** Run 13's log archive recorded a local account name
+  in its tar headers; the maintainer had it repacked, as a documented
+  exception to the append-only rule. PR #32 is ready for review.
