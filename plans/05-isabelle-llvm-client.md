@@ -60,10 +60,11 @@ leaving it out (by analogy with Aeneas, whose instantiation
 `Respects ApplyAllInst g` sits in the hypothesis of `fold_all_rec_ok`
 and is not counted) keeps 108. This plan does not choose: the question
 is put on issue #30 with the label `needs-decision`. The proof work does
-not depend on it; only the TRUSTED range and the count in `table.md` do,
-and they are written after the answer. Whatever the answer, the number
-written is the output of `./count-trusted.sh isabelle-llvm`, never a
-hand computation.
+not depend on it; only the TRUSTED range and the count in `table.md` do.
+Both candidate TRUSTED entries are written now ("Updates to the
+record"), so that after the answer the change is a one-line edit.
+Whatever the answer, the number written is the output of
+`./count-trusted.sh isabelle-llvm`, never a hand computation.
 
 ## The model and the lemmas
 
@@ -133,8 +134,22 @@ recorded in the results (outcome and failing lemma), not added to
   it also copies `VU_Client.thy` into `$src`, and the proof-escape check
   (`sorry`, `axiomatization`, `oracle`, `quick_and_dirty`,
   `skip_proofs`) also reads `VU_Client.thy`. The negative controls edit
-  `VU.thy` only, as today; with a rejected `VU`, `VU_Client` is not
-  checked, and the build's error classification is unchanged.
+  `VU.thy` only, as today. With a rejected `VU`, `VU_Client` is not
+  checked, but Isabelle reports it as an error of its own,
+  `Failed to load theory "VU.VU_Client" (unresolved "VU.VU")`
+  (`src/Pure/Build/build.ML`, `join_parents`), which reaches
+  `errors.log`. As `build.sh` stands, that head lands in `others`
+  (`build.sh:99-109`), the build exits 1 instead of
+  `VU_PROOF_REJECTED`, and `run.sh:175-177` records `control=error`.
+  So the `others` filter (`build.sh:102-103`) also drops heads matching
+  `^\*\*\* Failed to load theory .* \(unresolved `: such a head only
+  follows another error. The requirement that at least one failed-proof
+  head exists is kept: the test becomes `[ -n "$proofs" ] && [ -z
+  "$others" ]`, with `proofs` the failed-proof heads, so a build whose
+  only heads are unresolved-theory ones is still an error (exit 1).
+  The rename's TRUSTED range moves by the lines added. Phase 3 ends
+  with one `-n` and one `-r` development run that check this before the
+  recorded run.
 - **`isabelle-llvm/TRUSTED`**: the line range of the symbol rename,
   `build.sh:138-143`, moves by the lines added above (same 6 lines, same
   content); the contract's range moves with decision 1; its comment is
@@ -200,7 +215,12 @@ pull --ff-only` on the bench host, then
 `out/runB/isabelle-llvm/result.txt`, plus the new theory, clang and the
 link). The proof errors are read from `errors.log` in the build
 directory. Development outputs (`dev-<n>`) are not recorded, except the
-number of round trips. CPUs 20-23,52-55: outside 28-31,60-63 and outside
+number of round trips. At the end of phase 3, after the last normal
+`dev-<n>` run passes, one `run.sh -n isabelle-llvm dev-<n>` and one
+`run.sh -r isabelle-llvm dev-<n>` (same run ID, same CPUs, about two
+minutes) check that both controls end with `VU_PROOF_REJECTED` now
+that `VU_Client` is in `ROOT`; the development loop otherwise runs
+normal builds only. CPUs 20-23,52-55: outside 28-31,60-63 and outside
 `lib.sh`'s reserved `4-7,36-39`; `run.sh` refuses the set if another
 process is pinned there (`vu_check_cpus`).
 
@@ -217,7 +237,10 @@ From a fresh `git pull` of the final commit, with run ID `i30-run1`:
 `ulimit -v` for Isabelle-LLVM, `run.sh:146`), and `/usr/bin/time -v`.
 Expected: the normal run builds, links with `caller.c` and prints
 `caller/expected.txt` (`caller_output=same`); both controls end with
-`VU_PROOF_REJECTED` (status 3) on the same lemmas as in run B. Before and
+`VU_PROOF_REJECTED` (status 3) on the same lemmas as in run B
+(`VU.thy:127` for `-n`; for `-r`, the lemma of run B's `VU.thy:526`,
+whose line moves with the restatement: the results name the new line).
+Before and
 after the three builds: load average, and `ps -eLo user,psr,pcpu,comm`
 restricted to the timed set, recorded. Then, locally on the committed
 tree, `./count-trusted.sh isabelle-llvm` and `./count-trusted.sh aeneas`
@@ -235,6 +258,14 @@ row in `lab/notebook.md`, section "Experiment #5":
 - the raw `build.log`, `build.time` and `result.txt` of the normal run
   and of both controls (proofs accepted; controls rejected and on which
   lemma);
+- the "generated vu.ll" line of the normal run's `build.log`: its
+  sha256 must equal run B's,
+  `0a963ae345731c4765236ab15030e8d144fd35e62a5c423b7894d27fbf0148cb`
+  (`lab/results/2026-11-21-exp-05-runB-raw/isabelle-llvm/build.log`),
+  next to the ABI diff, as the check that the export is unchanged;
+- the controls' failing lines: `-n` at `VU.thy:127`, `-r` at the new
+  line of run B's `VU.thy:526` lemma (named, not only "the same
+  lemmas");
 - `build_seconds` against run B's 42 s on CPUs 20-23,52-55 (not a
   like-for-like comparison: different CPU set; stated as such);
 - size of the work: counted lines of `VU_Client.thy` (`count-trusted.sh`'s
@@ -254,7 +285,7 @@ row in `lab/notebook.md`, section "Experiment #5":
 | --- | --- | --- |
 | 1. `df` check, clone of the branch in `<exp>` | none | 0:05 |
 | 2. `VU.thy` restatement (decision 1); `vu_fold_all_composed` builds unchanged | 20-23,52-55 | 0:20 |
-| 3. `VU_Client.thy`, lemmas 1-3, `build.sh` and `ROOT` changes, sanity check | 20-23,52-55 | 2:30 |
+| 3. `VU_Client.thy`, lemmas 1-3, `build.sh` and `ROOT` changes, sanity check; one `-n` and one `-r` dev run | 20-23,52-55 | 2:30 |
 | 4. Recorded run: normal, `-n`, `-r` | 24-27,56-59 | 0:10 |
 | 5. Copy back, count, results and notebook row; `TRUSTED` and `table.md` if the open point is answered | local | 0:30 |
 
@@ -276,13 +307,38 @@ free space is below 21 GB.
 After the recorded run (and, for the count, the answer to the open
 point):
 
-- `isabelle-llvm/TRUSTED`: the contract's new range and reworded comment
-  ("Assumed of the C client, checked nowhere (`table_client_respects`
-  and `stop_client_respects` in `VU_Client.thy` show that models of
-  both of caller.c's apply-all clients meet it)"); the rename range of
-  `build.sh`.
+- `isabelle-llvm/TRUSTED`: the contract's new range and reworded comment;
+  the rename range of `build.sh`. Both candidate entries are written
+  here now, so that phase 5 is a one-line edit whichever way the open
+  point goes. Same comment text for both:
+
+      # Contract of the client's apply_all_case_fold (hypothesis of
+      # vu_fold_all_composed): assumed of the C client, checked nowhere
+      # (table_client_respects and stop_client_respects in VU_Client.thy
+      # show that models of both of caller.c's apply-all clients meet
+      # it). The client reaches the record only through the vu_i_apply
+      # it is given, so it preserves every property that vu_i_apply
+      # preserves.
+
+  followed by, for answer (b), 108: the `respects_at` range alone,
+
+      VU.thy:<respects_at, 8 lines>
+
+  and for answer (a), 109: that range plus the one-line definition of
+  `respects_i_apply`,
+
+      VU.thy:<respects_at, 8 lines>
+      VU.thy:<respects_i_apply definition line>
+
+  The placeholders become the line numbers of the final `VU.thy`, read
+  in the file and then checked by `count-trusted.sh`.
 - `table.md`, Isabelle-LLVM row: trusted count (from
-  `count-trusted.sh`); callee-assumption column ending "... for (a),
+  `count-trusted.sh`), and the breakdown in its parenthesis "(C shim 8
+  and its declaration 7, callee hypotheses and their predicates 20,
+  hand-written ABI mapping 67, symbol rename 6)" following it, each
+  figure taken from `count-trusted.sh`'s per-range lines: callee
+  hypotheses and predicates 21 under answer (a), 20 under (b);
+  callee-assumption column ending "... for (a),
   reaches the record only through the `vu_i_apply` it is given; models
   of both of `caller.c`'s apply-all clients meet it"; re-entrancy (a)
   column: "... proved under a client contract (`respects_i_apply`),
@@ -291,7 +347,8 @@ point):
   says of its Lean model. The "Last update" paragraph gets a new head
   sentence for this follow-up (issue #30, the results entry); the
   earlier paragraphs stay.
-- `docs/experiments.md`: the row of issue #30 says "pipeline" (done in
+- `docs/experiments.md`: the row of issue #30 says "pipeline" and has
+  PR #41 in its PR column, as the other follow-up rows with a PR (done in
   this plan's PR, since the work has started).
 - The Bedrock2 row also states its contract as `respects_i_apply` "as
   Isabelle-LLVM"; it has no client model and is not changed (out of
@@ -316,15 +373,23 @@ point):
 
 ## Risks
 
-- **VCG and HOL `if`.** `vcg'` may not split a HOL `if` inside `doM`;
-  the fallback is `split: if_splits` after `vcg'`, then `llc_if` with
-  `ll_icmp_eq` in the model (closer to the C, same proof shape).
+- **VCG and HOL `if`** (confirmed behaviour, no longer a risk). HOL
+  `if` is a VCG decomposition rule in Isabelle-LLVM `e42f4781`:
+  `wpa_ifI[vcg_decomp_rules]` (`thys/vcg/Sep_Generic_Wp.thy:357-360`),
+  with `if_split` removed from the normaliser's splits
+  (`thys/lib/Basic_VCG.thy:152`). The fallback stays: `llc_if`
+  (`thys/basic/kernel/LLVM_Shallow.thy:612`, `llc_if_simp` in
+  `vcg_normalize_simps`, `thys/vcg/LLVM_Shallow_RS.thy:898`) with
+  `ll_icmp_eq` in the model.
 - **Hypothesis shape.** The contract's hypothesis on `ai` has `P r`
   outside the precondition; `vcg'` needs it as a rule with a pure
   precondition. A local restatement lemma (one consequence rule, as `vu_i_apply_rec_wf` uses `cons_post_rule`) is planned;
-  if the frame inference still fails, the `Cons` step is done with
-  explicit `htriple_bind` style rules instead of `vcg'`. Cost: more
-  round trips, not a change of method.
+  if the frame inference still fails, the `Cons` step is done by hand.
+  Bind is handled by the normaliser's `wp_bind[vcg_normalize_simps]`
+  (`thys/vcg/Sep_Generic_Wp.thy:87`); the manual fallback is single
+  steps with `vcg_step'` (`thys/lib/Basic_VCG.thy:594`) and
+  `cons_post_rule` (`Sep_Generic_Wp.thy:450`, already used at
+  `VU.thy:365`). Cost: more round trips, not a change of method.
 - **Generalisation.** The induction must generalise the record value
   `r` (and `P`'s witness), as Aeneas's `generalizing rec`; forgetting it
   gives an unprovable `Cons` goal, recognisable on the first round trip.
