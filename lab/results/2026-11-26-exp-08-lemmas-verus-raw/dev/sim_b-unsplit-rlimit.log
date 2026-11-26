@@ -1,0 +1,104 @@
+note: verifying module absent_proof
+
+error: assertion failed
+    --> absent_proof.rs:1704:16
+     |
+1704 |         assert(stp(s, DRe::DChr(ch), p, rr));
+     |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^ assertion failed
+
+error: postcondition not satisfied
+    --> absent_proof.rs:1836:13
+     |
+1829 | / pub proof fn simple_ends_b(s: L<nat>, fp: nat, n: nat, k2: L<Item>, n2: L<(nat, nat)>, d2: L<DItem>, sv: L<(nat, nat)>,
+1830 | |                            rr: nat, top: nat, xt: nat, i: nat)
+     | |______________________________________________________________- at the end of the function body
+...
+1836 |       ensures forall|e: nat| i <= e <= top ==> {
+     |  _____________^
+1837 | |                 &&& #[trigger] m(s, mmax(s, k2, rr, (top - i) as nat, i).0, mmax(s, k2, rr, (top - i) as nat, i).1, k2, e, rr) i...
+1838 | |                 &&& ends((md(s, fp, ur(n, d2), e, reg(top, xt, rr, e), cons((n, rr), sv))->0).0)
+1839 | |                     == m(s, mmax(s, k2, rr, (top - i) as nat, i).0, mmax(s, k2, rr, (top - i) as nat, i).1, k2, e, rr)->0
+1840 | |             },
+     | |_____________^ failed this postcondition
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+    --> absent_proof.rs:1714:1
+     |
+1714 | / pub proof fn sim_b(s: L<nat>, ff: nat, dks: L<DItem>, i: nat, rr: nat, sv: L<(nat, nat)>, rs: L<DRes>, x: nat,
+1715 | |                    ks: L<Item>, ns: L<(nat, nat)>) -> (gf: (nat, nat))
+     | |_____________________________________________________________________^
+
+note: automatically chose triggers for this expression:
+   --> absent_proof.rs:900:5
+    |
+900 |     choose|gf: (nat, nat)| m(s, gf.0, gf.1, ks, e, rr) is Some
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note:   trigger 1 of 1:
+   --> absent_proof.rs:900:28
+    |
+900 |     choose|gf: (nat, nat)| m(s, gf.0, gf.1, ks, e, rr) is Some
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> absent_proof.rs:842:14
+    |
+842 |       requires forall|e: nat| q <= e <= q + d ==>
+    |  ______________^
+843 | |         ends((#[trigger] md(s, fu, uu, e, reg(top, xt, y, e), sv)->0).0) == m(s, g, f, ks, e, rr)->0,
+    | |____________________________________________________________________________________________________^
+
+note:   trigger 1 of 1:
+   --> absent_proof.rs:843:77
+    |
+843 |         ends((#[trigger] md(s, fu, uu, e, reg(top, xt, y, e), sv)->0).0) == m(s, g, f, ks, e, rr)->0,
+    |                                                                             ^^^^^^^^^^^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+    --> absent_proof.rs:2058:13
+     |
+2058 | /             exists|f2: nat, rs: L<DRes>| md(s, f2, cons(DItem::DR(desugar(r, 0).0), L::Nil), i, rr, L::Nil) == Some((rs, rr))
+2059 | |                 && ends(rs) == m(s, g, f, cons(Item::R(r), L::Nil), i, rr)->0,
+     | |_____________________________________________________________________________^
+
+note:   trigger 1 of 1:
+    --> absent_proof.rs:2058:42
+     |
+2058 |             exists|f2: nat, rs: L<DRes>| md(s, f2, cons(DItem::DR(desugar(r, 0).0), L::Nil), i, rr, L::Nil) == Some((rs, rr))
+     |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2059 |                 && ends(rs) == m(s, g, f, cons(Item::R(r), L::Nil), i, rr)->0,
+     |                    ^^^^^^^^
+
+note: automatically chose triggers for this expression:
+    --> absent_proof.rs:2070:9
+     |
+2070 |         exists|f2: nat, rs: L<DRes>| md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0 by {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note:   trigger 1 of 1:
+    --> absent_proof.rs:2070:38
+     |
+2070 |         exists|f2: nat, rs: L<DRes>| md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0 by {
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^
+
+note: Verus printed one or more automatically chosen quantifier triggers
+      because it had low confidence in the chosen triggers.
+      To suppress these messages, do one of the following:
+        (1) manually annotate a single desired trigger using `#[trigger]`
+            (example: `forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)`),
+        (2) manually annotate multiple desired triggers using `#![trigger ...]`
+            (example: `forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)`),
+        (3) accept the automatically chosen trigger using `#![auto]`
+            (example: `forall|i: int, j: int| #![auto] f(i) && g(i) && h(j)`)
+        (4) use the `--triggers-mode silent` command-line option to suppress all printing of triggers.
+      (Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;
+      the theorem prover instantiates a quantifier whenever some expression matches the
+      pattern specified by one of the quantifier's triggers.)
+    --> absent_proof.rs:2070:9
+     |
+2070 |         exists|f2: nat, rs: L<DRes>| md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0 by {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+verification results:: 87 verified, 3 errors (partial verification with `--verify-*`)
+error: aborting due to 3 previous errors
+

@@ -58,6 +58,11 @@ segment list, not on `w`, so it needs no lemma about `unr`; the bound
 is the number of alternatives of `unravel w` plus 2 (`cost`), which is 7
 for `[0xDF]`, the bound of (F1).
 
+**Run 3 (Verus): closed** (`verus/fold_proof.rs`, `sharp_s_sym` at
+`f >= 7` in `requires`, and `fold_lit` with the same bound). The
+unfolding of `unravel` on the concrete literals is a `compute_only`
+assertion; `fold_rel` is a recursive spec fn with an existential.
+
 ## Lemma 2: absent desugaring equivalence
 
 ### The desugaring
@@ -311,6 +316,28 @@ from the register of its choice point, as in the direct semantics.
 induction (one case of 5 to 6 lines in each direction, plus four
 unfolding and inversion lemmas of about 35 lines), so it is in scope,
 not named out.
+
+**Run 3 (Verus), the same plan with a different encoding.** `verus/`
+transcribes the definitions (`absent.rs` with C1-C6, `desugar.rs`,
+`cases.rs`, whose 29 cases agree by `compute_only`) and the lemma plan
+lemma by lemma: `absent_mono.rs` for (b); `core_k`, `term_core`,
+`attempt` for (a)/(c); `scan_a`/`scan_b` for (d); `sim_a`/`sim_b` for
+(g). The encoding differs where Verus has no inductive predicates:
+- Rocq's `Forall2` over the ends of a scan is replaced by one fuel for
+  every end (monotonicity) and the concatenation of the results at that
+  fuel (`dcat`, `mcat`).
+- The per-end fuels of the induction hypothesis are merged by `choose`
+  and a maximum over the range.
+- `rel` is a recursive spec fn that takes the ids of each item as a
+  list.
+- The absent cases of `sim_a`/`sim_b` are functions of their own,
+  mutually recursive with the main induction (`decreases f, 0/1`).
+- (2b)'s `Alt` and `Star` cases were split off after the unsplit
+  `sim_b` exceeded the default rlimit.
+
+The range clear closes in Verus too, in about 90 lines (four helper
+lemmas, one case per direction), so it stays in scope in both tools.
+Results: `lab/results/2026-11-26-exp-08-lemmas-verus.md`.
 
 ## Changes to experiment #8's definitions
 

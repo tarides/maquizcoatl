@@ -1,0 +1,4 @@
+2026-11-26T15:59:32Z
+load average: 2.05, 0.99, 0.52
+threads above 1% on CPUs 24-27,56-59:
+end

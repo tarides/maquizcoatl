@@ -15,3 +15,15 @@ run	date	item	kind	attempts	note
 2	2026-11-26	rocq/AbsentProof.v inversions, sim_b (2b), absent_desugar_eq	proof	3	1 failing build (exact for reflexivity in gen_inv)
 2	2026-11-26	rocq/FoldProof.v fold_lit (stretch)	proof	1	built first time
 2	2026-11-26	mutants (29 cases)	check	1	eight run-1 mutants plus a control on Desugar.v, ab28-ab29 added to the drivers
+3	2026-11-26	session	wall-clock	-	start 2026-11-26T15:30:31Z; first proof check 15:36:30Z, last 15:56:35Z; measurements 15:59Z-16:02Z; end at the run-3 notebook commit
+3	2026-11-26	verus/absent.rs, desugar.rs, cases.rs	definition, agreement	1	checked first time with the 29 compute_only cases (15:34:20Z)
+3	2026-11-26	verus/fold_proof.rs sharp_s_sym (F1, F2)	proof	2	1 failed check (m_seg fuel bound len + 2, should be len + 1)
+3	2026-11-26	verus/absent_mono.rs (b) monotonicity, determinism	proof	2	1 failing invocation before verification (parse error on ->0.1)
+3	2026-11-26	verus/absent_proof.rs (a)/(c) core_k, term_core, attempt	proof	3	2 failed checks: embs, core_items, mu need fuel 2-3; small-fuel case of attempt_inv
+3	2026-11-26	verus/absent_proof.rs (d) scan_a, scan_b, list lemmas	proof	4	2 rejected before verification (let variable in a trigger, ->t projection), 1 failed check (unfoldings of downs, dcat)
+3	2026-11-26	verus/absent_proof.rs direct side, dmax/mmax	proof	4	1 rejected before verification (trigger not inferable under exists), 2 failed checks (m_ends_a, ends_dcat unfoldings)
+3	2026-11-26	verus/absent_proof.rs rel, md equations	proof	2	1 failed check (lookup needs fuel 2)
+3	2026-11-26	verus/absent_proof.rs sim_a (2a) and its case lemmas	proof	2	1 failed check (ends needs fuel 2 in the Nil case)
+3	2026-11-26	verus/absent_proof.rs inversions, sim_b (2b), absent_desugar_eq	proof	2	1 failed check: rlimit exceeded on the unsplit sim_b (fixed by moving Alt and Star into sim_b_alt, sim_b_star), plus 2 assertions (simple_top, simple_ends_b)
+3	2026-11-26	verus/fold_proof.rs fold_lit (stretch)	proof	1	checked first time
+3	2026-11-26	full crate and absent.rs header recheck	check	2	full crate 179 verified (15:56:35Z); absent module after a header-comment edit (15:57:49Z)
