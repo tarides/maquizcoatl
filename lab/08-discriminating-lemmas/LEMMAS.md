@@ -176,7 +176,13 @@ of ends at every start, at `G = F = 1000`, by `vm_compute`. Results:
 `lab/results/2026-11-26-exp-08-lemmas-cases.md`.
 
 A mutation check (raw data of that entry) removed one restore at a time
-from `desugar` and found, for each restore, which cases detect it:
+from `desugar` and found, for each restore, which cases detect it. It
+ran on the first 27 cases (ab01-ab27), before ab28-ab29 (the loops
+around an absent construct) were added; the detections below hold on
+29, but the two no-effect statements (the atomic group changes no first
+match; the two removals that change nothing) were not checked on the
+loop cases, and ab29 is the only stopper inside a loop. Run 2 reruns the
+eight mutants on the 29 cases. Detections:
 the engine restore `UpdRRFromStack id; Fail` (ab13, ab14, ab15), the
 tail's re-install through `id3` (ab20), the tail's restore through `id1`
 (ab21, ab22, ab25, ab27), the range clear's restore (ab23), the simple
