@@ -28,12 +28,19 @@ VU.thy:51-52
 # ... and the subject assertion it lends (run B, read accessor).
 VU.thy:61-65
 # Contract of the client's apply_all_case_fold (hypothesis of
-# vu_fold_all_composed, run B): the client reaches the record only
-# through the vu_i_apply it is given, so it preserves every property
-# that vu_i_apply preserves. vu_fold_all_composed derives the hypothesis
-# of vu_fold_all_correct (record well formed) from it and
-# vu_i_apply_correct, so that hypothesis is no longer trusted.
-VU.thy:349-356
+# vu_fold_all_composed): assumed of the C client, checked nowhere
+# (table_client_respects and stop_client_respects in VU_Client.thy
+# show that models of both of caller.c's apply-all clients meet
+# it). The client reaches the record only through the vu_i_apply
+# it is given, so it preserves every property that vu_i_apply
+# preserves. The contract is respects_at, stated for any apply
+# function, and the one-line definition of respects_i_apply, which
+# instantiates it with vu_i_apply and the shim (issue #30).
+# vu_fold_all_composed derives the hypothesis of vu_fold_all_correct
+# (record well formed) from it and vu_i_apply_correct, so that
+# hypothesis is no longer trusted (run B).
+VU.thy:352-359
+VU.thy:361-361
 # ABI mapping from proto.h to the LLVM that export_llvm emits, written
 # by hand: the declare and define lines vu.ll must contain (counted raw).
 abi.expected
@@ -42,7 +49,7 @@ abi.expected
 # is trusted.
 layout.c:18-78
 # Renaming of the exported symbols (VU_<name> to <name>) in vu.o.
-build.sh:138-143
+build.sh:146-151
 #
 # Not counted: the toolchain (Isabelle2026, the AFP, Isabelle-LLVM's VCG
 # and code generator export_llvm, clang/LLVM 23, objcopy, the C

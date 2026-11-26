@@ -1,0 +1,18 @@
+tool=isabelle-llvm
+run_id=sanity
+mode=normal
+jobs=4
+cpus=20-23,52-55
+build_seconds=47
+build_status=3
+verdict=build-failed
+== diff of VU_Client.thy (committed vs sanity copy)
+34a35
+>      ll_store (0, 9, 0, 0, 0, 0, 0, 0, 0, 0) rc;
+== heads of errors.log
+Error (line 79 of "<exp>/sanity/build/sanity/isabelle-llvm/src/VU_Client.thy"):
+*** Failed to finish proof (line 79 of "<exp>/sanity/build/sanity/isabelle-llvm/src/VU_Client.thy"):
+*** Failed to finish proof (line 79 of "<exp>/sanity/build/sanity/isabelle-llvm/src/VU_Client.thy"):
+*** At command "by" (line 79 of "<exp>/sanity/build/sanity/isabelle-llvm/src/VU_Client.thy")
+== build.log verdict
+proof rejected: 1 failed proof(s), no other error

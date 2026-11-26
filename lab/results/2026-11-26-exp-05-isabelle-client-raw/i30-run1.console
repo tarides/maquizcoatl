@@ -1,0 +1,19 @@
+commit: 1bad3063e637bcc75b54b9847f260b421190764f
+cpu: AMD EPYC 7502P 32-Core Processor, nproc 64
+== before: 2026-11-26T13:53:55Z
+load average: 2.35 1.97 1.11
+ps -eLo user,psr,pcpu,comm on 24-27,56-59 (pcpu > 0.5):
+df: 41G free
+== run.sh  isabelle-llvm i30-run1: 2026-11-26T13:53:55Z
+isabelle-llvm: caller output equals expected.txt
+exit: 0
+== run.sh -n isabelle-llvm i30-run1: 2026-11-26T13:54:38Z
+isabelle-llvm control: proof rejected, as required
+exit: 0
+== run.sh -r isabelle-llvm i30-run1: 2026-11-26T13:55:27Z
+isabelle-llvm control: proof rejected, as required
+exit: 0
+== after: 2026-11-26T13:56:15Z
+load average: 2.20 2.03 1.25
+ps -eLo user,psr,pcpu,comm on 24-27,56-59 (pcpu > 0.5):
+df: 41G free

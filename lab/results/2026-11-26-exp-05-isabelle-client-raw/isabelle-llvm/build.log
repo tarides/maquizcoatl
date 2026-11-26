@@ -1,0 +1,49 @@
+== harness sources (sha256)
+8e5f70d0262fd0e428c4972053a22d37d2b334e6592a7eeff6a1240b0b87d60e  caller/caller.c
+e7a4129d78dd50eedb1b133d1d3b7ddba45b8847c98068b5e13de463602da8fd  caller/expected.txt
+34005e008cf9b8947adf61b484d944b9a311917c55f56fa265d070721446b242  caller/reference.c
+f1b942beb578f1096d848cded340e95bd9018d3720662468d903c53142c16c97  isabelle-llvm/ROOT
+cf66dcbb6487fa791ec4f381805745746bf2c9b7dc64a855584b93af125f6908  isabelle-llvm/TRUSTED
+0a2899f8fa9f49b53103881633803fe9646bd387aa6637f4221a455153fe9d20  isabelle-llvm/VU.thy
+e6c2d4110a9e4e04ded54ef489894bbf8da5cda1b191886e5faaece1bd54350a  isabelle-llvm/VU_Client.thy
+a4e59d1fad51f21917d0267b15f095e364281adc266d4a74d54a8f99dbac079c  isabelle-llvm/abi.expected
+f18d570905a32fd59cc0081b371245e68d14738f6b047ba69980786149b76cf6  isabelle-llvm/build.sh
+344b71c32fa9b62f48e535fb1819a79fcb1c0f08e9fee1b411091e84497bba1d  isabelle-llvm/layout.c
+b2c1fb72b3d59f385544c81e069b39c1349da1f1f06da3d40fb3dd730b471fb7  isabelle-llvm/negative-control.txt
+4e213786a915675ce895b93ce79a4d7c62e9b4a97bf69e31cfe029658527c987  isabelle-llvm/shim.c
+69fd04d331b40761a87b65080115b44c1c45dda17e41d1730ae468f4bf090ce1  lib.sh
+619d43446ab214ff24bc18b7f6066838927588fa836d6ba0884ebd033058c2fb  proto.h
+feba786c2d5b0dc202360835e7196bea8d75805e2e597e30088b53f68775f671  run.sh
+== build
+== versions (0 s)
+Isabelle2026
+isabelle_llvm commit: e42f478118988ff38676ff01215be26f3018f015
+afp: afp-2026-11-19
+clang version 23.1.5 (https://github.com/llvm/llvm-project 392dfff97d29b59d77e5cac6d4b6ef2585fe7117)
+cc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+== 1. source (negative control: 0) (1 s)
+proof escapes: none
+== 2. isabelle build (proofs and export_llvm) (1 s)
+Cleaned VU
+Running VU ...
+Finished VU (0:00:24 elapsed time, 0:00:41 cpu time, factor 1.70)
+0:00:37 elapsed time, 0:00:41 cpu time, factor 1.10
+generated vu.ll: 709 lines, 33824 bytes, sha256 0a963ae345731c4765236ab15030e8d144fd35e62a5c423b7894d27fbf0148cb
+== 3. ABI checks (42 s)
+abi: vu.ll declares and defines what abi.expected lists
+layout: same
+== 4. compile (42 s)
+exported: vu_callout_step
+exported: vu_char_len
+exported: vu_fold_all
+exported: vu_get_slot
+exported: vu_get_subject_byte
+exported: vu_i_apply
+exported: vu_set_slot
+exported: vu_call_apply_all
+exported: vu_call_callout
+exported: vu_call_enc_len
+external: vu_call_apply_all
+external: vu_call_callout
+external: vu_call_enc_len
+== done (42 s)

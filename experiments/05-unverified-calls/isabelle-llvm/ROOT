@@ -1,4 +1,4 @@
 (* Session of the Isabelle-LLVM prototype of experiment #5. *)
 session VU = Isabelle_LLVM +
   options [document = false]
-  theories VU
+  theories VU VU_Client
