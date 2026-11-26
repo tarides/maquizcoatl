@@ -54,9 +54,12 @@ each release tag; recorded again at run time by the driver's probes):
 | 0.2026.11.22.1ce6a59 | 1.100.0 | 4.16.0 | 37,884,042 bytes |
 
 The step crosses the Z3 4.16.0 upgrade (Verus PR 2578), which Anvil's
-`febab3b` later adapted to. Isabelle2026 bundles `z3-4.4.0pre-8`,
-`cvc5-1.3.4` and `verit-2026.05` (its `contrib/`); Isabelle2025-2's
-components are read from its `contrib/` at install time.
+`febab3b` later adapted to. Isabelle2026's components `z3-4.4.0pre-8`,
+`cvc5-1.3.4` and `verit-2026.05` are read from the Isabelle mirror's
+development `Admin/components/main` (the GitHub mirror has no
+`Isabelle2026` tag), so they are to be confirmed from the installed
+`contrib/` by the driver's probes; Isabelle2025-2's components are read
+from its `contrib/` at install time in the same way.
 
 **Anvil at `3c95bbb`** is one crate, `verifiable-controllers` (with a
 `Cargo.lock`), whose `lib.rs` holds the shared modules
@@ -68,8 +71,13 @@ depends on `vstd` from crates.io and on `verus_temporal_logic`
 (`anvil-verifier/verus-tla` at `8bb157b`), which itself pins
 `vstd = "=0.0.0-2026-07-12-0122"`. Its CI job `full-verification` runs
 `cargo verus verify --lib` with no `--rlimit` (the `--rlimit 100` came
-later, at `e83ea0f`); on 2026-07-23 that job took 30 minutes on a GitHub
-runner for this very commit (run 29982674823). Issue #25's "subset of
+later, at `e83ea0f`); on 2026-07-23 that job took 30 minutes (29:43) on a
+GitHub runner for this very commit (run 29982674823). That run was the
+first with the `0.2026.07.12` cache key, so `target` was empty when the
+job started: the 29:43 include compiling the `kube` crates and verifying
+`vstd` and `verus_temporal_logic`, which this plan moves to the untimed
+`prepare`. The probe's figure (Anvil's crate only) is therefore expected
+below it. Issue #25's "subset of
 crates" therefore means a subset of **modules** of this one crate
 (Verus `--verify-module`).
 
@@ -78,7 +86,9 @@ crates" therefore means a subset of **modules** of this one crate
 `Formula_Derivatives`, `Formula_Derivatives-Examples`,
 `MSO_Regex_Equivalence`, `Functional-Automata`. Their ROOT files at
 `fa30b560ab75` require `HOL-Library`, `Efficient-Mergesort`
-(and `HOL-Data_Structures`), `SpecCheck`, `List-Index`, `Deriving` (which
+(and `HOL-Data_Structures`), `Show` (which requires
+`HOL-Computational_Algebra`; needed by `Formula_Derivatives-Examples`),
+`SpecCheck`, `List-Index`, `Deriving` (which
 requires `Collections`, hence the Refinement Framework sessions),
 `Coinductive_Languages`, and the sessions `While_Default`, `FSet_More` and
 `List_More`. `Coinductive_Languages` itself requires `Regular-Sets`, so it
@@ -91,12 +101,23 @@ As fixed in issue #25's body.
 
 - **Verus:** `cargo verus verify --lib`, as Anvil's CI job, with
   `cargo -j 8` and the Verus arguments `--num-threads 8 --time-expanded`
-  forwarded to Anvil's crate only (`--time-expanded` gives per-module
-  times, used for the subset rule and for a partial ratio). The e2e tests
-  (`kind`, a Kubernetes cluster) are out of scope.
-- **Isabelle:** `isabelle build -b -o document=false -j 2 -o threads=4
-  -d <afp>/thys` of the seven sessions (plus `Coinductive_Languages`),
-  with `-c` so that the timed sessions are rebuilt from scratch.
+  forwarded to Anvil's crate only, that is with cargo-verus's
+  `--fwd-verus-args-to roots` (cargo-verus 0.2026.07.12, `cli.rs`; its
+  default is `all`, which would pass them to `vstd` and
+  `verus_temporal_logic` too). The same selector is used for every Verus
+  argument of this plan: `--no-verify` in `prepare`, `--verify-module`,
+  `--num-threads` and `--time-expanded` (`--time-expanded` gives
+  per-module times, used for the subset rule and for a partial ratio).
+  The e2e tests (`kind`, a Kubernetes cluster) are out of scope.
+- **Isabelle:** `isabelle build -b -o document=false -j 2 -o threads=4`
+  with one `-d <afp>/thys/<entry>` per checked-out entry, of the seven
+  sessions (plus `Coinductive_Languages`), with `-c` so that the timed
+  sessions are rebuilt from scratch. A single `-d <afp>/thys` is not
+  usable on the sparse checkout: `Sessions.load_root_files` checks every
+  entry of `thys/ROOTS` and stops with "Bad session root directory" on a
+  missing one. Passing one `-d` per entry (each has its own `ROOT`) is
+  chosen over pruning `thys/ROOTS`, so that the AFP checkout is not
+  edited; the driver records the list of entries and the `-d` options.
 
 ### Untimed preparation and measured step
 
@@ -107,7 +128,8 @@ experiment #13.
   `build/anvil-<side>`; on the latest side apply the dependency edits
   (below); `cargo fetch`; build and verify the dependencies (`vstd`,
   `verus_temporal_logic`, `kube` and the other Rust crates) with Anvil's own
-  verification off (forwarded `--no-verify` to Anvil's crate only), then
+  verification off (`--no-verify` forwarded to Anvil's crate only, with
+  `--fwd-verus-args-to roots`), then
   `cargo clean -p verifiable-controllers` (the driver's `stale` rule for
   Anvil). The probe checks in cargo's log that the measured run that
   follows finds the dependencies `Fresh`, so that the timed scope is
@@ -118,7 +140,12 @@ experiment #13.
   requirements at `fa30b560ab75` in `build/afp-regex-<side>`; build the
   requirements of the seven sessions that do not descend from any of them
   (`isabelle build -b -o document=false -R -x <each of the seven>` on the
-  seven; the session list is first printed with `-n` and recorded), into an
+  seven, with the same `-d` options; the session list is first printed
+  with `-n` and recorded). `-R` alone already leaves out the seven
+  selected sessions; the `-x` options are there to remove their
+  descendants too, among them `Coinductive_Languages` (a descendant of
+  `Regular-Sets`), which is thus built in the timed phase. The build goes
+  into an
   Isabelle user home of the experiment (`USER_HOME` under `switches/`), so
   that no heap goes into the shared cache.
 - **Isabelle, measured:** the build above. Per-session times are read from
@@ -165,6 +192,11 @@ with them; the notebook says which.
   driver's `Limits`. Before each timed pair: no other process on those
   CPUs (`ps -eLo user,psr,pcpu,comm`, recorded), load average recorded
   before and after each side.
+- **Difference from experiment #13's builds:** those used `-j 4` on four
+  cores with their SMT siblings idle; this plan uses 8-way parallelism on
+  four cores plus their siblings. The ratio of criterion 4 is still taken
+  within one project on one set, but the notebook states the difference
+  next to the figures of experiment #13 wherever they are put side by side.
 - **Untimed work** (installs, checkouts, preparation, port re-runs): at most
   4 jobs, or 12 for slow installs (the Isabelle dependency heaps), under
   `nice -n 10` on CPUs 8-19,40-51; never on 28-31,60-63 (reserved for
@@ -254,7 +286,7 @@ most 30 GB, budgeted at 25 GB under `<bench-workdir>/exp/13-upgrade-builds-df/`:
 | Cargo registry and git checkouts | 1 GB |
 | Two Anvil `target/` directories | 8 GB |
 | Isabelle2025-2 (tarball 1.2 GB, removed after unpacking; 2.8 GB unpacked) | 3 GB |
-| Heaps of both sides (Collections and Refinement Framework included) | 4 GB |
+| Heaps of both sides (Collections, Refinement Framework and `HOL-Computational_Algebra` included) | 4 GB |
 | AFP 2025-2 sparse checkout, logs | 1 GB |
 | Total | about 21 GB |
 
