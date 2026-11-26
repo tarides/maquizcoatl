@@ -1,0 +1,40 @@
+# Supplementary no-cases timing of run 3 (issue #34), recovered from the
+# bench host's run-3 work directory (<bench-workdir>/exp/08-discriminating-lemmas)
+# on 2026-11-26 after the run-3 review. Times are file modification times, UTC.
+
+## Main timed.sh series (for reference)
+precheck.txt written          2026-11-26T15:59:32Z
+build r3-t1 / t2 / t3 created 15:59:36Z / 16:00:09Z / 16:00:42Z
+time.tsv (series end)         16:01:15Z
+
+## No-cases series (out/r3/verus-nocases)
+precheck.busy (= 0) written   16:01:25Z
+build r3-nocases-t1 created   16:01:25Z, time.1.lib 16:01:38Z
+build r3-nocases-t2 created   16:01:38Z, time.2.lib 16:01:52Z
+build r3-nocases-t3 created   16:01:52Z, time.3.lib 16:02:06Z
+window                        16:01:25Z - 16:02:06Z (41 s), 10 s after the main series
+
+## Command (from time.log, "Command being timed"), in each build copy, under
+## flock <exp>/timed.lock, /usr/bin/time -v, the 16 GB cgroup of timed.sh:
+taskset -c 24-27,56-59 verus --crate-type=lib --num-threads 7 lib.rs
+
+## Sources: the eight files at 2242606 copied as by timed.sh, with one edit
+## to lib.rs (diff r3-t1/lib.rs r3-nocases-t1/lib.rs):
+12d11
+< pub mod cases;
+lib.rs at 2242606   c2ed696c9ef62512f734d714796cb70c8826d91349249a5d2b112350fce35e0f
+lib.rs, no cases    ecf6017dd14fda1f195a0a1dc6755559fc7ca58042e1ec55178e4dd1e353a653  (t1, t2, t3 identical)
+other six sources   identical to sha256.txt of entry 6 (cases.rs not copied)
+
+## Toolchain: the Verus binary and its Z3 in the shared cache are dated
+## 2026-11-02T04:35:38Z, unchanged since; version.txt of the main series
+## (15:59:36Z, Verus 0.2026.11.02.8bf68ee, Z3 4.16.0) applies.
+
+## Not recoverable: a precheck.txt thread listing for this series (only the
+## busy-thread count, 0, was written).
+
+## time.tsv (run, target, wall, max RSS KB, user s, system s)
+1	lib	0:13.72	519380	14.27	0.82
+2	lib	0:13.74	518880	14.25	0.83
+3	lib	0:13.65	519376	14.15	0.83
+median wall 13.72 s, median peak RSS 519,376 KB, median user 14.25 s, median system 0.83 s
