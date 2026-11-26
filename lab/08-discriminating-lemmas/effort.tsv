@@ -1,1 +1,8 @@
 run	date	item	kind	attempts	note
+1	2026-11-26	session	wall-clock	-	start 2026-11-26T13:45:22Z, end at the run-1 notebook commit
+1	2026-11-26	LEMMAS.md	design	1	upstream citations re-checked against f95747b before commit; 9 line references corrected in the draft (comments only, nothing built from them)
+1	2026-11-26	cases/absent-restore.tsv	cases	2	16 cases first; ab28-ab29 (loops around an absent construct) added after the first agreement
+1	2026-11-26	rocq/Absent.v	definition	1	changes C1-C6 built first time
+1	2026-11-26	rocq/Desugar.v	definition	1	built first time
+1	2026-11-26	rocq/Cases.v	agreement	3	1 failing build (a *) inside a pattern in a comment); list-of-ends check added after the mutation check; ab28-ab29 added
+1	2026-11-26	mutants (scratch)	check	3	2 failing builds of the scratch files (String import order; length ambiguity)
