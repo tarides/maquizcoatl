@@ -320,3 +320,20 @@ yet: it waits for the CPU set it may use on the bench host.
   Verus's does. Issue #29 is closed, the F\* bug being filed upstream.
   Archives whose tar headers named local accounts were repacked
   (experiment #9's run 13, experiment #11's r2-r4, PR #38).
+
+## 2026-11-26: Verus's automation strains, Isabelle-LLVM client
+
+- **Issue #34 (experiment #8 follow-up)** proved two lemmas over
+  symbolic subjects in Rocq and in Verus: lemma F (a literal prefix
+  check) and lemma 2 (two desugarings of the absent operator agree).
+  Both tools closed both, once lemma 2 gained the hypothesis
+  `i <= rr <= length s` after Rocq found a counterexample without it.
+  Lemma F costs Verus about 1% of its solver budget, so it does not
+  tell the tools apart; lemma 2 does. Rocq took a 71-minute session and
+  1,222 lines with no automation; Verus took 34 minutes and 2,142
+  lines, but one function needs 64% of its solver budget (11% at most
+  in experiment #9), and another fails at 2 of 11 seeds under a newer
+  Z3. The comparison is on issue #34; PR #40 is ready for review.
+- **Issue #30 (experiment #5 follow-up)** modelled caller.c's two
+  clients in Isabelle-LLVM and proved they meet `respects_i_apply`
+  (PR #41, merged); the trusted line count is 109.
