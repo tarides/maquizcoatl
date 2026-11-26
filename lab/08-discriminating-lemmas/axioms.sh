@@ -5,9 +5,10 @@
 # this experiment has no F* files.
 #   BENCH_WORKDIR=<bench-workdir> axioms.sh <tool> <run-id>     tool: rocq | verus
 # rocq: a clean build of Fold FoldProof Absent Desugar AbsentMono
-# AbsentProof, then "Print Assumptions" of FoldProof.sharp_s_sym and
-# AbsentProof.absent_desugar_eq (expected: "Closed under the global
-# context"), and a scan of the sources for Admitted, admit, Axiom,
+# AbsentProof, then "Print Assumptions" of FoldProof.sharp_s_sym,
+# AbsentProof.absent_desugar_eq, and (from run 5, decision 8)
+# AbsentProof.m_term and AbsentProof.absent_desugar_total (expected:
+# "Closed under the global context"), and a scan of the sources for Admitted, admit, Axiom,
 # Parameter, Conjecture, Hypothesis and Abort (any hit is printed with
 # its file and line; comments are not stripped, so hits are read by hand).
 # verus: a full check of the crate lib.rs (the eight files of verus/; no
@@ -33,7 +34,7 @@ rocq)
   FILES="Fold FoldProof Absent Desugar AbsentMono AbsentProof"
   B=$EXP/build/rocq/$RID-axioms; rm -rf "$B"; mkdir -p "$B"; cd "$B"
   for f in $FILES; do cp "$L/rocq/$f.v" .; done
-  printf 'From S Require FoldProof AbsentProof.\nPrint Assumptions FoldProof.sharp_s_sym.\nPrint Assumptions AbsentProof.absent_desugar_eq.\n' > Axioms.v
+  printf 'From S Require FoldProof AbsentProof.\nPrint Assumptions FoldProof.sharp_s_sym.\nPrint Assumptions AbsentProof.absent_desugar_eq.\nPrint Assumptions AbsentProof.m_term.\nPrint Assumptions AbsentProof.absent_desugar_total.\n' > Axioms.v
   {
     echo "== rocq --version"; opam exec --switch provers -- rocq --version
     for f in $FILES Axioms; do

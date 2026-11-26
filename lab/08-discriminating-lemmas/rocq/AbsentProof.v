@@ -1281,3 +1281,190 @@ Proof.
 Qed.
 
 Print Assumptions absent_desugar_eq.
+
+(* ---------------------------------------------------------------- *)
+(* Termination of the direct matcher (issue #34, decision 8, run 5):
+   on an in-scope pattern, m returns a complete list at some fuels g, f;
+   with direction (2a), md on the desugared tree returns one too, and
+   lemma 2 holds without assuming either side complete.
+   Item stacks: in-scope R and Chk items, and SetRR k items whose k is at
+   most max q (length s) (an AbsExp's restore; no Ends below the top).
+   Measure: (length s - q, tmu) lexicographically, as term_core's, with
+   AbsExp weighed by its exp; an AbsRep's Ends branches either stay at q
+   (the rest of the stack, a smaller tmu) or move forward, below the
+   subject length since the cut is at most the register. *)
+Fixpoint tsz (r : re) : nat :=
+  match r with
+  | Seq a b | Alt a b => S (tsz a + tsz b)
+  | Star a => S (S (tsz a))
+  | AbsExp _ e => S (S (tsz e))
+  | _ => 1
+  end.
+Definition tw (it : item) (q : nat) : nat :=
+  match it with R x => tsz x | Chk i0 x => if Nat.eqb i0 q then 1 else tsz x + 3 | _ => 1 end.
+Fixpoint tmu (ks : list item) (q : nat) : nat :=
+  match ks with [] => 0 | it :: ks => tw it q + tmu ks q end.
+Definition tok (b : nat) (it : item) : bool :=
+  match it with R x | Chk _ x => in_scope x | SetRR k => Nat.leb k b | Ends _ => false end.
+
+Lemma tsz_pos : forall r, 1 <= tsz r.
+Proof. destruct r; simpl; lia. Qed.
+
+Lemma toks_mono : forall ks b b', b <= b' -> forallb (tok b) ks = true -> forallb (tok b') ks = true.
+Proof.
+  induction ks as [|it ks IH]; intros b b' Hb H; simpl in *; auto.
+  apply andb_prop in H as [H1 H2]. rewrite (IH b b' Hb H2), andb_true_r.
+  destruct it; simpl in *; auto. apply Nat.leb_le. apply Nat.leb_le in H1. lia.
+Qed.
+
+Lemma at_len : forall s i rr c, at_ s i rr = Some c -> i < length s.
+Proof.
+  unfold at_. intros s i rr c H. destruct (Nat.ltb i rr); [|discriminate].
+  apply nth_error_Some. congruence.
+Qed.
+
+Lemma scan_le : forall P k p c, scan P k p = Some c -> c <= p + k.
+Proof.
+  induction k; intros p c H; simpl in H; [injection H; lia|].
+  destruct (P p) as [[|]|]; [injection H; lia| |discriminate].
+  specialize (IHk (S p) c H). lia.
+Qed.
+
+(* The Ends item of an AbsRep: complete if each end's branch is. *)
+Lemma ends_term : forall s es ks i rr,
+  (forall e, In e es -> exists g f l, m s g f ks e rr = Some l) ->
+  exists g f l, m s g f (Ends es :: ks) i rr = Some l.
+Proof.
+  intros s es ks i rr. induction es as [|e es IH]; intros H; [exists 0, 1, []; reflexivity|].
+  destruct (H e (or_introl eq_refl)) as (g1 & f1 & l1 & H1).
+  destruct IH as (g2 & f2 & l2 & H2); [intros e' He'; apply H; right; exact He'|].
+  exists (max g1 g2), (S (f1 + f2)), (l1 ++ l2). simpl.
+  rewrite (m_mono s f1 (f1 + f2) g1 (max g1 g2) _ _ _ _ ltac:(lia) ltac:(lia) H1).
+  rewrite (m_mono s f2 (f1 + f2) g2 (max g1 g2) _ _ _ _ ltac:(lia) ltac:(lia) H2). reflexivity.
+Qed.
+
+Lemma oapp_term : forall s g1 f1 k1 g2 f2 k2 q r1 r2 l1 l2,
+  m s g1 f1 k1 q r1 = Some l1 -> m s g2 f2 k2 q r2 = Some l2 ->
+  oapp (m s (max g1 g2) (f1 + f2) k1 q r1) (m s (max g1 g2) (f1 + f2) k2 q r2) = Some (l1 ++ l2).
+Proof.
+  intros s g1 f1 k1 g2 f2 k2 q r1 r2 l1 l2 H1 H2.
+  rewrite (m_mono s f1 (f1 + f2) g1 (max g1 g2) _ _ _ _ ltac:(lia) ltac:(lia) H1).
+  rewrite (m_mono s f2 (f1 + f2) g2 (max g1 g2) _ _ _ _ ltac:(lia) ltac:(lia) H2). reflexivity.
+Qed.
+
+Section T.
+Variable s : list nat.
+
+Lemma m_term_stack : forall N M ks q rr, length s - q <= N -> tmu ks q <= M ->
+  rr <= max q (length s) -> forallb (tok (max q (length s))) ks = true ->
+  exists g f l, m s g f ks q rr = Some l.
+Proof.
+  intros N. induction N as [N IHN] using (well_founded_induction lt_wf).
+  intros M. induction M as [|M IHM]; intros ks q rr HN HM Hr Hk.
+  - destruct ks as [|it ks]; [exists 0, 1, [q]; reflexivity|].
+    simpl in HM. destruct it; simpl in HM; try (pose proof (tsz_pos x)); try destruct (Nat.eqb i q); lia.
+  - destruct ks as [|it ks]; [exists 0, 1, [q]; reflexivity|].
+    simpl in Hk. apply andb_prop in Hk as [Hy Hks]. simpl in HM. unfold tw in HM.
+    (* a consuming step: the position moves forward, below length s *)
+    assert (Hfwd : forall c, at_ s q rr = Some c -> exists g f l, m s g f ks (S q) rr = Some l).
+    { intros c Ea. pose proof (at_len s q rr c Ea) as Hl.
+      apply (IHN (length s - S q) ltac:(lia) (tmu ks (S q)) ks (S q) rr); auto; try lia.
+      apply (toks_mono ks (max q (length s))); auto. lia. }
+    destruct it as [y|i0 y|n|es]; simpl in Hy; try discriminate.
+    + destruct y as [|c| | |a b|a b|a|a|a e|a|]; simpl in Hy, HM.
+      * destruct (IHM ks q rr) as (g & f & l & H); auto; [lia|].
+        exists g, (S f), l. exact H.
+      * destruct (at_ s q rr) as [c'|] eqn:Ea; [destruct (Nat.eqb c c') eqn:Ec|].
+        -- destruct (Hfwd c' eq_refl) as (g & f & l & H).
+           exists g, (S f), l. simpl. rewrite Ea, Ec. exact H.
+        -- exists 0, 1, []. simpl. rewrite Ea, Ec. reflexivity.
+        -- exists 0, 1, []. simpl. rewrite Ea. reflexivity.
+      * destruct (at_ s q rr) as [c'|] eqn:Ea; [destruct (Nat.eqb c' 10) eqn:Ec|].
+        -- exists 0, 1, []. simpl. rewrite Ea, Ec. reflexivity.
+        -- destruct (Hfwd c' eq_refl) as (g & f & l & H).
+           exists g, (S f), l. simpl. rewrite Ea, Ec. exact H.
+        -- exists 0, 1, []. simpl. rewrite Ea. reflexivity.
+      * destruct (at_ s q rr) as [c'|] eqn:Ea.
+        -- destruct (Hfwd c' eq_refl) as (g & f & l & H).
+           exists g, (S f), l. simpl. rewrite Ea. exact H.
+        -- exists 0, 1, []. simpl. rewrite Ea. reflexivity.
+      * apply andb_prop in Hy as [Hy1 Hy2].
+        destruct (IHM (R a :: R b :: ks) q rr) as (g & f & l & H); simpl; auto; [lia|rewrite Hy1, Hy2; auto|].
+        exists g, (S f), l. exact H.
+      * apply andb_prop in Hy as [Hy1 Hy2].
+        destruct (IHM (R a :: ks) q rr) as (g1 & f1 & l1 & H1); simpl; auto; [lia|rewrite Hy1; auto|].
+        destruct (IHM (R b :: ks) q rr) as (g2 & f2 & l2 & H2); simpl; auto; [lia|rewrite Hy2; auto|].
+        exists (max g1 g2), (S (f1 + f2)), (l1 ++ l2). simpl. apply oapp_term; auto.
+      * destruct (IHM (R a :: Chk q a :: ks) q rr) as (g1 & f1 & l1 & H1); simpl;
+          [lia|rewrite Nat.eqb_refl; lia|auto|rewrite Hy; auto|].
+        destruct (IHM ks q rr) as (g2 & f2 & l2 & H2); auto; [lia|].
+        exists (max g1 g2), (S (f1 + f2)), (l1 ++ l2). simpl. apply oapp_term; auto.
+      * (* AbsRep *)
+        destruct (cut_term s a q rr Hy) as (G & c & Hc).
+        assert (Hcl : c <= q + (rr - q)) by (unfold cut in Hc; exact (scan_le _ _ _ _ Hc)).
+        assert (Hcg : q <= c) by (unfold cut in Hc; exact (scan_ge _ _ _ _ Hc)).
+        destruct (ends_term s (downs (c - q) q) ks q rr) as (g1 & f1 & l1 & H1).
+        { intros e He. apply downs_mem in He.
+          destruct (Nat.eq_dec e q) as [->|Hne].
+          - apply (IHM ks q rr); auto. lia.
+          - apply (IHN (length s - e) ltac:(lia) (tmu ks e) ks e rr); auto; try lia.
+            apply (toks_mono ks (max q (length s))); auto. lia. }
+        exists (max G g1), (S f1), l1. rewrite m_absrep_eq.
+        rewrite (cut_mono s G (max G g1) a q rr c ltac:(lia) Hc).
+        exact (m_mono s f1 f1 g1 (max G g1) _ _ _ _ ltac:(lia) ltac:(lia) H1).
+      * (* AbsExp *)
+        apply andb_prop in Hy as [Hya Hye].
+        destruct (cut_term s a q rr Hya) as (G & c & Hc).
+        assert (Hcl : c <= q + (rr - q)) by (unfold cut in Hc; exact (scan_le _ _ _ _ Hc)).
+        destruct (IHM (R e :: SetRR rr :: ks) q c) as (g1 & f1 & l1 & H1); simpl;
+          [lia|lia|lia|rewrite (core_in_scope e Hye); apply Nat.leb_le in Hr; rewrite Hr; auto|].
+        exists (max G g1), (S f1), l1. rewrite m_absexp_eq.
+        rewrite (cut_mono s G (max G g1) a q rr c ltac:(lia) Hc).
+        exact (m_mono s f1 f1 g1 (max G g1) _ _ _ _ ltac:(lia) ltac:(lia) H1).
+      * (* Stopper *)
+        destruct (cut_term s a q rr Hy) as (G & c & Hc).
+        assert (Hcl : c <= q + (rr - q)) by (unfold cut in Hc; exact (scan_le _ _ _ _ Hc)).
+        destruct (IHM ks q c) as (g1 & f1 & l1 & H1); auto; [lia|lia|].
+        exists (max G g1), (S f1), l1. rewrite m_stopper_eq.
+        rewrite (cut_mono s G (max G g1) a q rr c ltac:(lia) Hc).
+        exact (m_mono s f1 f1 g1 (max G g1) _ _ _ _ ltac:(lia) ltac:(lia) H1).
+      * (* RClear *)
+        destruct (IHM ks q (length s)) as (g & f & l & H); auto; [lia|lia|].
+        exists g, (S f), l. exact H.
+    + destruct (Nat.eqb i0 q) eqn:Eq; cbv iota in HM.
+      * apply Nat.eqb_eq in Eq; subst i0.
+        destruct (IHM ks q rr) as (g & f & l & H); auto; [lia|].
+        exists g, (S f), l. simpl. rewrite Nat.eqb_refl. exact H.
+      * destruct (IHM (R (Star y) :: ks) q rr) as (g & f & l & H); simpl; auto; [lia|rewrite Hy; auto|].
+        exists g, (S f), l. simpl. rewrite Nat.eqb_sym, Eq. exact H.
+    + apply Nat.leb_le in Hy.
+      destruct (IHM ks q n) as (g & f & l & H); auto; [lia|].
+      exists g, (S f), l. exact H.
+Qed.
+End T.
+
+(* Decision 8: the direct matcher terminates on every in-scope pattern. *)
+Theorem m_term : forall s r i rr, in_scope r = true -> i <= rr -> rr <= length s ->
+  exists g f l, m s g f [R r] i rr = Some l.
+Proof.
+  intros s r i rr Hr Hi Hrr.
+  apply (m_term_stack s (length s - i) (tsz r) [R r] i rr); simpl; auto; try lia.
+  rewrite Hr. reflexivity.
+Qed.
+
+(* Lemma 2 without its condition: on every in-scope pattern, the direct
+   matcher and md on the desugared tree both return a complete result,
+   with the same list of ends, md ending with the register it started
+   with (m_term, then direction (2a) of absent_desugar_eq). *)
+Theorem absent_desugar_total : forall s r i rr, in_scope r = true -> i <= rr -> rr <= length s ->
+  exists g f l f' rs, m s g f [R r] i rr = Some l
+    /\ md s f' [DR (fst (desugar r 0))] i rr [] = Some (rs, rr) /\ ends rs = l.
+Proof.
+  intros s r i rr Hr Hi Hrr.
+  destruct (m_term s r i rr Hr Hi Hrr) as (g & f & l & H).
+  destruct (proj1 (absent_desugar_eq s r i rr Hr Hi Hrr) g f l H) as (f' & rs & H' & He).
+  exists g, f, l, f', rs. auto.
+Qed.
+
+Print Assumptions m_term.
+Print Assumptions absent_desugar_total.

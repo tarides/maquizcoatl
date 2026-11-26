@@ -2104,4 +2104,250 @@ pub proof fn absent_desugar_eq(s: L<nat>, r: Re, i: nat, rr: nat)
     }
 }
 
+// ---------------------------------------------------------------- //
+// Termination of the direct matcher (issue #34, decision 8, run 5);
+// transcription of the same section of rocq/AbsentProof.v.  On an
+// in-scope pattern, m returns a complete list at some fuels g, f; with
+// direction (2a), md on the desugared tree returns one too, and lemma 2
+// holds without assuming either side complete.  Item stacks: in-scope R
+// and Chk items, and SetRR k items whose k is at most nmax(q, len(s)) (an
+// AbsExp's restore; no Ends below the top).  Measure: (len(s) - q, tmu)
+// lexicographically, as term_core's, with AbsExp weighed by its exp; an
+// AbsRep's Ends branches either stay at q (the rest of the stack, a
+// smaller tmu) or move forward, below the subject length since the cut is
+// at most the register.
+
+pub open spec fn tsz(r: Re) -> nat decreases r {
+    match r {
+        Re::Seq(a, b) => 1 + tsz(*a) + tsz(*b),
+        Re::Alt(a, b) => 1 + tsz(*a) + tsz(*b),
+        Re::Star(a) => 2 + tsz(*a),
+        Re::AbsExp(_, e) => 2 + tsz(*e),
+        _ => 1,
+    }
+}
+pub open spec fn tw(it: Item, q: nat) -> nat {
+    match it { Item::R(x) => tsz(x), Item::Chk(i0, x) => if i0 == q { 1 } else { tsz(x) + 3 }, _ => 1 }
+}
+pub open spec fn tmu(ks: L<Item>, q: nat) -> nat decreases ks {
+    match ks { L::Nil => 0, L::Cons(it, t) => tw(it, q) + tmu(*t, q) }
+}
+pub open spec fn tok(b: nat, it: Item) -> bool {
+    match it { Item::R(x) => in_scope(x), Item::Chk(_, x) => in_scope(x), Item::SetRR(k) => k <= b, Item::Ends(_) => false }
+}
+pub open spec fn toks(b: nat, ks: L<Item>) -> bool decreases ks {
+    match ks { L::Nil => true, L::Cons(it, t) => tok(b, it) && toks(b, *t) }
+}
+pub open spec fn tgap(s: L<nat>, q: nat) -> nat { if len(s) >= q { (len(s) - q) as nat } else { 0 } }
+
+pub proof fn tsz_pos(r: Re) ensures 1 <= tsz(r) { }
+
+pub proof fn toks_mono(b: nat, b2: nat, ks: L<Item>)
+    requires b <= b2, toks(b, ks),
+    ensures toks(b2, ks),
+    decreases ks
+{
+    if let L::Cons(_, t) = ks { toks_mono(b, b2, *t); }
+}
+
+pub proof fn nth_len(s: L<nat>, p: nat)
+    requires nth(s, p) is Some,
+    ensures p < len(s),
+    decreases s
+{
+    if let L::Cons(_, t) = s { if p > 0 { nth_len(*t, (p - 1) as nat); } }
+}
+
+pub proof fn at_len(s: L<nat>, i: nat, rr: nat)
+    requires at_(s, i, rr) is Some,
+    ensures i < len(s),
+{
+    nth_len(s, i);
+}
+
+pub proof fn scan_le(a: Re, s: L<nat>, g: nat, rr: nat, k: nat, p: nat, c: nat)
+    requires scan(a, s, g, rr, k, p) == Some(c),
+    ensures c <= p + k,
+    decreases k
+{
+    if k > 0 && occ(a, s, g, p, rr) == Some(false) { scan_le(a, s, g, rr, (k - 1) as nat, p + 1, c); }
+}
+
+// The cut is between i and the register (or i itself when the register
+// is below i).
+pub proof fn cut_bounds(s: L<nat>, g: nat, a: Re, i: nat, rr: nat)
+    requires cut(a, s, g, i, rr) is Some,
+    ensures i <= cut(a, s, g, i, rr)->0, cut(a, s, g, i, rr)->0 <= nmax(i, rr),
+{
+    let k = if rr >= i { (rr - i) as nat } else { 0 };
+    let c = cut(a, s, g, i, rr)->0;
+    scan_ge(a, s, g, rr, k, i, c);
+    scan_le(a, s, g, rr, k, i, c);
+}
+
+pub proof fn m_term_stack(s: L<nat>, ks: L<Item>, q: nat, rr: nat) -> (res: (nat, nat))
+    requires rr <= nmax(q, len(s)), toks(nmax(q, len(s)), ks),
+    ensures m(s, res.0, res.1, ks, q, rr) is Some,
+    decreases tgap(s, q), tmu(ks, q)
+{
+    let b = nmax(q, len(s));
+    match ks {
+        L::Nil => (0, 1),
+        L::Cons(it, t0) => {
+            let t = *t0;
+            match it {
+                Item::R(y) => match y {
+                    Re::Eps => { let (g, f) = m_term_stack(s, t, q, rr); (g, f + 1) },
+                    Re::Chr(c) => if at_(s, q, rr) == Some(c) {
+                        at_len(s, q, rr);
+                        toks_mono(b, nmax(q + 1, len(s)), t);
+                        let (g, f) = m_term_stack(s, t, q + 1, rr);
+                        (g, f + 1)
+                    } else { (0, 1) },
+                    Re::Any => if at_(s, q, rr) is Some && at_(s, q, rr) != Some(10nat) {
+                        at_len(s, q, rr);
+                        toks_mono(b, nmax(q + 1, len(s)), t);
+                        let (g, f) = m_term_stack(s, t, q + 1, rr);
+                        (g, f + 1)
+                    } else { (0, 1) },
+                    Re::AnyO => if at_(s, q, rr) is Some {
+                        at_len(s, q, rr);
+                        toks_mono(b, nmax(q + 1, len(s)), t);
+                        let (g, f) = m_term_stack(s, t, q + 1, rr);
+                        (g, f + 1)
+                    } else { (0, 1) },
+                    Re::Seq(a, bb) => {
+                        let k2 = cons(Item::R(*a), cons(Item::R(*bb), t));
+                        assert(toks(b, k2)) by { reveal_with_fuel(toks, 3); }
+                        assert(tmu(k2, q) < tmu(ks, q)) by { reveal_with_fuel(tmu, 3); }
+                        let (g, f) = m_term_stack(s, k2, q, rr);
+                        (g, f + 1)
+                    },
+                    Re::Alt(a, bb) => {
+                        let ka = cons(Item::R(*a), t);
+                        let kb = cons(Item::R(*bb), t);
+                        assert(tmu(ka, q) < tmu(ks, q) && tmu(kb, q) < tmu(ks, q)) by { tsz_pos(*a); tsz_pos(*bb); }
+                        let (g1, f1) = m_term_stack(s, ka, q, rr);
+                        let (g2, f2) = m_term_stack(s, kb, q, rr);
+                        let gm = nmax(g1, g2);
+                        m_mono(s, g1, gm, f1, f1 + f2, ka, q, rr);
+                        m_mono(s, g2, gm, f2, f1 + f2, kb, q, rr);
+                        (gm, f1 + f2 + 1)
+                    },
+                    Re::Star(a) => {
+                        let ka = cons(Item::R(*a), cons(Item::Chk(q, *a), t));
+                        assert(toks(b, ka)) by { reveal_with_fuel(toks, 3); }
+                        assert(tmu(ka, q) < tmu(ks, q)) by { reveal_with_fuel(tmu, 3); }
+                        let (g1, f1) = m_term_stack(s, ka, q, rr);
+                        let (g2, f2) = m_term_stack(s, t, q, rr);
+                        let gm = nmax(g1, g2);
+                        m_mono(s, g1, gm, f1, f1 + f2, ka, q, rr);
+                        m_mono(s, g2, gm, f2, f1 + f2, t, q, rr);
+                        (gm, f1 + f2 + 1)
+                    },
+                    Re::AbsRep(a) => {
+                        let g0 = cut_term(s, *a, q, rr);
+                        cut_bounds(s, g0, *a, q, rr);
+                        let c = cut(*a, s, g0, q, rr)->0;
+                        let d = (c - q) as nat;
+                        assert forall|e: nat| q <= e <= q + d implies #[trigger] mterm(s, t, e, rr) by {
+                            if e == q {
+                                let (ge, fe) = m_term_stack(s, t, q, rr);
+                                assert(m(s, ge, fe, t, e, rr) is Some);
+                            } else {
+                                toks_mono(b, nmax(e, len(s)), t);
+                                let (ge, fe) = m_term_stack(s, t, e, rr);
+                                assert(m(s, ge, fe, t, e, rr) is Some);
+                            }
+                        }
+                        mmax_ok(s, t, rr, d, q);
+                        let (gm, hm) = mmax(s, t, rr, d, q);
+                        let es = downs(d, q);
+                        assert forall|e: nat| mem(e, es) implies #[trigger] m(s, gm, hm, t, e, rr) is Some by {
+                            mem_downs(d, q, e);
+                            assert(mterm(s, t, e, rr));
+                        }
+                        m_ends_b(s, gm, hm, es, t, q, rr);
+                        let fe = hm + len(es) + 1;
+                        let g2 = nmax(gm, g0);
+                        cut_mono(*a, s, g0, g2, q, rr);
+                        m_mono(s, gm, g2, fe, fe, cons(Item::Ends(es), t), q, rr);
+                        (g2, fe + 1)
+                    },
+                    Re::AbsExp(a, e) => {
+                        let g0 = cut_term(s, *a, q, rr);
+                        cut_bounds(s, g0, *a, q, rr);
+                        let c = cut(*a, s, g0, q, rr)->0;
+                        core_in_scope(*e);
+                        let k2 = cons(Item::R(*e), cons(Item::SetRR(rr), t));
+                        assert(toks(b, k2)) by { reveal_with_fuel(toks, 3); }
+                        assert(tmu(k2, q) < tmu(ks, q)) by { reveal_with_fuel(tmu, 3); }
+                        let (g1, f1) = m_term_stack(s, k2, q, c);
+                        let g2 = nmax(g1, g0);
+                        cut_mono(*a, s, g0, g2, q, rr);
+                        m_mono(s, g1, g2, f1, f1, k2, q, c);
+                        (g2, f1 + 1)
+                    },
+                    Re::Stopper(a) => {
+                        let g0 = cut_term(s, *a, q, rr);
+                        cut_bounds(s, g0, *a, q, rr);
+                        let c = cut(*a, s, g0, q, rr)->0;
+                        let (g1, f1) = m_term_stack(s, t, q, c);
+                        let g2 = nmax(g1, g0);
+                        cut_mono(*a, s, g0, g2, q, rr);
+                        m_mono(s, g1, g2, f1, f1, t, q, c);
+                        (g2, f1 + 1)
+                    },
+                    Re::RClear => { let (g, f) = m_term_stack(s, t, q, len(s)); (g, f + 1) },
+                },
+                Item::Chk(i0, y) => {
+                    if q == i0 { let (g, f) = m_term_stack(s, t, q, rr); (g, f + 1) }
+                    else {
+                        let ka = cons(Item::R(Re::Star(Box::new(y))), t);
+                        let (g, f) = m_term_stack(s, ka, q, rr);
+                        (g, f + 1)
+                    }
+                },
+                Item::SetRR(n) => { let (g, f) = m_term_stack(s, t, q, n); (g, f + 1) },
+                Item::Ends(_) => (0, 0),
+            }
+        }
+    }
+}
+
+// Decision 8: the direct matcher terminates on every in-scope pattern.
+pub proof fn m_term(s: L<nat>, r: Re, i: nat, rr: nat)
+    requires in_scope(r), i <= rr, rr <= len(s),
+    ensures exists|g: nat, f: nat| #[trigger] m(s, g, f, cons(Item::R(r), L::Nil), i, rr) is Some,
+{
+    let ks = cons(Item::R(r), L::Nil);
+    assert(toks(nmax(i, len(s)), ks)) by { reveal_with_fuel(toks, 2); }
+    let (g, f) = m_term_stack(s, ks, i, rr);
+    assert(m(s, g, f, ks, i, rr) is Some);
+}
+
+// Lemma 2 without its condition: on every in-scope pattern, the direct
+// matcher and md on the desugared tree both return a complete result,
+// with the same list of ends, md ending with the register it started
+// with (m_term, then direction (2a) of absent_desugar_eq).
+pub proof fn absent_desugar_total(s: L<nat>, r: Re, i: nat, rr: nat)
+    requires in_scope(r), i <= rr, rr <= len(s),
+    ensures
+        exists|g: nat, f: nat, f2: nat, rs: L<DRes>|
+            #![trigger m(s, g, f, cons(Item::R(r), L::Nil), i, rr), md(s, f2, cons(DItem::DR(desugar(r, 0).0), L::Nil), i, rr, L::Nil), ends(rs)]
+            m(s, g, f, cons(Item::R(r), L::Nil), i, rr) is Some
+            && md(s, f2, cons(DItem::DR(desugar(r, 0).0), L::Nil), i, rr, L::Nil) == Some((rs, rr))
+            && ends(rs) == m(s, g, f, cons(Item::R(r), L::Nil), i, rr)->0,
+{
+    let ks = cons(Item::R(r), L::Nil);
+    let dks = cons(DItem::DR(desugar(r, 0).0), L::Nil);
+    m_term(s, r, i, rr);
+    let (g, f) = choose|g: nat, f: nat| #[trigger] m(s, g, f, ks, i, rr) is Some;
+    absent_desugar_eq(s, r, i, rr);
+    assert(m(s, g, f, ks, i, rr) is Some);
+    let (f2, rs) = choose|f2: nat, rs: L<DRes>| #![trigger md(s, f2, dks, i, rr, L::Nil), ends(rs)]
+        md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0;
+    assert(md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0);
+}
+
 } // verus!
