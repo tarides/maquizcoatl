@@ -1,0 +1,7 @@
+# cargo verus verify, dependencies
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.07.12.0b42f4c/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 21600 taskset --cpu-list 12-15,44-47 nice -n 10 cargo verus verify --fwd-verus-args-to roots --lib -j 4 -- --no-verify)
+# start 2026-11-26T08:25:29Z
+
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.25s
+
+# ok

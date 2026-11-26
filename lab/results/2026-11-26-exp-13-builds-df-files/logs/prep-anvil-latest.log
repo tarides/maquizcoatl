@@ -1,0 +1,10 @@
+anvil-latest-prepare, logs in <bench-workdir>/exp/13-upgrade-builds-df/work/logs/anvil-latest-prepare-20261126T075453Z
+[1/11] mkdir build: ok (0.0 s)
+[2/11] clone: ok (1.6 s)
+[3/11] checkout: ok (0.6 s)
+[4/11] mkdir build: ok (0.0 s)
+[5/11] clone: ok (0.5 s)
+[6/11] checkout: ok (0.4 s)
+[7/11] edits verus-tla: ok (0.0 s)
+[8/11] edits: error: Cargo.toml: "\n[package.metadata.verus]\n" and "\n[patch.\"https://github.com/anvil-verifier/verus-tla\"]\nverus_temporal_logic = { path = \"../anvil-latest-verus-tla\" }\n\n[package.metadata.verus]\n" overlap (0.0 s)
+anvil-latest-prepare: error, row added to <bench-workdir>/exp/13-upgrade-builds-df/results/2026-11-26-exp-13-builds-df.csv

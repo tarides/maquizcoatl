@@ -1,0 +1,43 @@
+    Checking verifiable-controllers v0.1.0 (<bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-port)
+note: verifying module vreplicaset_controller::proof::liveness::resource_match, function verifiable_controllers::vreplicaset_controller::proof::liveness::resource_match::lemma_inductive_current_state_matches_preserves_from_s_to_s_prime (selected functions)
+
+error: assertion failed
+    --> src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs:3117:28
+     |
+3117 |                     assert(inductive_current_state_matches(vrs, controller_id)(s_prime)); // PORT-LOC-3
+     |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ assertion failed
+
+verification results:: 0 verified, 1 errors (partial verification with `--verify-*`)
+(use --output-json for machine-readable output)
+verus-build-info
+Verus
+  Version: 0.2026.11.22.1ce6a59
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.100.0-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+total-time:           48228 ms
+    rust-time:                8891 ms
+        init-and-types:           8731 ms
+        trait-conflicts:           160 ms
+        compile-time:                0 ms
+    verification-time:       35541 ms
+        vir-time:                11576 ms
+            hir-time:                    0 ms
+            import-time:               436 ms
+            rust-to-vir:              7247 ms
+        verify-crate-time:       23965 ms
+    unaccounted-time:         3794 ms
+
+verify-crate-time-breakdown
+    total verify-time:          20726 ms   (1 threads)
+      1. vreplicaset_controller::proof::liveness::resource_match      20726 ms
+        total air-time:               749 ms   (1 threads)
+      1. vreplicaset_controller::proof::liveness::resource_match        749 ms
+        total smt-time:             19494 ms   (1 threads)
+            total smt-init:                 0 ms,     3621 rlimit (1 threads)
+                1. vreplicaset_controller::proof::liveness::resource_match          0 ms
+            total smt-run:              19494 ms,  6602242 rlimit (1 threads)
+                1. vreplicaset_controller::proof::liveness::resource_match      19494 ms,  6602242 rlimit
+error: could not compile `verifiable-controllers` (lib) due to 1 previous error
+exit 101

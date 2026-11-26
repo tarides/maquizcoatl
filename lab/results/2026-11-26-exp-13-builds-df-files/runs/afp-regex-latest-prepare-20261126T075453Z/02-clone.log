@@ -1,0 +1,7 @@
+# clone
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build && timeout --kill-after=60 21600 taskset --cpu-list 18-23,50-55 nice -n 10 git clone --filter=blob:none --no-checkout https://github.com/isabelle-prover/mirror-afp-2025-2.git <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest)
+# start 2026-11-26T07:54:53Z
+
+Cloning into '<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest'...
+
+# ok

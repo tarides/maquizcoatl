@@ -1,0 +1,7 @@
+# checkout
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-pinned && timeout --kill-after=60 21600 taskset --cpu-list 12-17,44-49 nice -n 10 git -c advice.detachedHead=false checkout --detach fa30b560ab754bfbb7a721ee45a921d4b3c04358)
+# start 2026-11-26T07:53:22Z
+
+HEAD is now at fa30b560a New entry RG_VDM_Garbage_Collector
+
+# ok

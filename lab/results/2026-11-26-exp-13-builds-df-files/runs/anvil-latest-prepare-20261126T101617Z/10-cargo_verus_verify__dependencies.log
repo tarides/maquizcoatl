@@ -1,0 +1,8 @@
+# cargo verus verify, dependencies
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 21600 taskset --cpu-list 12-15,44-47 nice -n 10 cargo verus verify --fwd-verus-args-to roots --lib -j 4 -- --no-verify)
+# start 2026-11-26T10:16:17Z
+
+    Checking verifiable-controllers v0.1.0 (<bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 33.15s
+
+# ok

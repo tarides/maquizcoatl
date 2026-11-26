@@ -1,0 +1,30 @@
+check anvil pinned (probe) 2026-11-26T07:53:58Z timed-set-busy=[: ]
+start anvil pinned (probe) 2026-11-26T07:53:58Z load 1.38 1.26 0.65
+end anvil pinned (probe) 2026-11-26T08:07:40Z load 13.16 14.34 9.39 exit=0
+check afp-regex pinned (pair) 2026-11-26T08:07:53Z timed-set-busy=[sshd:1.9 ]
+start afp-regex pinned (pair) 2026-11-26T08:07:53Z load 12.24 14.08 9.38
+end afp-regex pinned (pair) 2026-11-26T08:21:00Z load 4.77 7.05 8.63 exit=0
+check afp-regex latest (pair) 2026-11-26T08:21:00Z timed-set-busy=[: ]
+start afp-regex latest (pair) 2026-11-26T08:21:00Z load 4.77 7.05 8.63
+end afp-regex latest (pair) 2026-11-26T08:25:29Z load 2.61 5.15 7.51 exit=3
+check anvil pinned (pair) 2026-11-26T08:25:30Z timed-set-busy=[: ]
+start anvil pinned (pair) 2026-11-26T08:25:30Z load 2.61 5.15 7.51
+end anvil pinned (pair) 2026-11-26T08:39:13Z load 12.89 10.77 9.81 exit=0
+check anvil latest (pair) 2026-11-26T08:39:14Z timed-set-busy=[: ]
+start anvil latest (pair) 2026-11-26T08:39:14Z load 12.89 10.77 9.81
+end anvil latest (pair) 2026-11-26T09:00:49Z load 2.67 5.76 9.72 exit=3
+done
+check afp-regex pinned (final) 2026-11-26T09:50:32Z timed-set-busy=[: ]
+start afp-regex pinned (final) 2026-11-26T09:50:32Z load 0.72 0.75 1.01
+end afp-regex pinned (final) 2026-11-26T10:03:29Z load 5.62 10.24 7.67 exit=0
+check afp-regex latest (final) 2026-11-26T10:03:29Z timed-set-busy=[: ]
+start afp-regex latest (final) 2026-11-26T10:03:29Z load 5.62 10.24 7.67
+end afp-regex latest (final) 2026-11-26T10:16:11Z load 2.93 4.63 5.96 exit=0
+done final-afp
+check anvil pinned (final) 2026-11-26T10:16:51Z timed-set-busy=[: ]
+start anvil pinned (final) 2026-11-26T10:16:51Z load 2.10 4.20 5.76
+end anvil pinned (final) 2026-11-26T10:30:29Z load 4.75 7.08 6.90 exit=0
+check anvil latest (final) 2026-11-26T10:30:29Z timed-set-busy=[: ]
+start anvil latest (final) 2026-11-26T10:30:29Z load 4.75 7.08 6.90
+end anvil latest (final) 2026-11-26T10:46:23Z load 3.38 6.46 7.05 exit=0
+done final-anvil

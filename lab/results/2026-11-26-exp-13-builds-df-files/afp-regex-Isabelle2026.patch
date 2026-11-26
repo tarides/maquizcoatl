@@ -1,0 +1,192 @@
+diff --git a/thys/Deriving/Comparator_Generator/comparator_generator.ML b/thys/Deriving/Comparator_Generator/comparator_generator.ML
+index 0f8e00b7a..de41bcbbf 100644
+--- a/thys/Deriving/Comparator_Generator/comparator_generator.ML
++++ b/thys/Deriving/Comparator_Generator/comparator_generator.ML
+@@ -232,7 +232,7 @@ fun generate_comparators_from_bnf_fp tyco lthy =
+       lthy
+       |> Local_Theory.begin_nested
+       |> snd
+-      |> (BNF_LFP_Rec_Sugar.primrec false [] bindings
++      |> (BNF_LFP_Rec_Sugar.primrec {verbose = false} [] bindings
+           (map (fn t => ((Binding.empty_atts, t), [], [])) eqs))
+       |> Local_Theory.end_nested_result (fn phi => fn (pcomps, _, pcomp_simps) => (map (Morphism.term phi) pcomps, map (Morphism.fact phi) pcomp_simps))
+ 
+diff --git a/thys/Deriving/Equality_Generator/equality_generator.ML b/thys/Deriving/Equality_Generator/equality_generator.ML
+index de6bcc5a8..e36d6080f 100644
+--- a/thys/Deriving/Equality_Generator/equality_generator.ML
++++ b/thys/Deriving/Equality_Generator/equality_generator.ML
+@@ -221,7 +221,7 @@ fun generate_equalitys_from_bnf_fp tyco lthy =
+       lthy
+       |> Local_Theory.begin_nested
+       |> snd
+-      |> (BNF_LFP_Rec_Sugar.primrec false [] bindings
++      |> (BNF_LFP_Rec_Sugar.primrec {verbose = false} [] bindings
+           (map (fn t => ((Binding.empty_atts, t), [], [])) eqs))
+       |> Local_Theory.end_nested_result
+           (fn phi => fn (pcomps, _, pcomp_simps) => (map (Morphism.term phi) pcomps, map (Morphism.fact phi) pcomp_simps))
+diff --git a/thys/Deriving/Hash_Generator/hash_generator.ML b/thys/Deriving/Hash_Generator/hash_generator.ML
+index 21a9bb858..7839957f0 100644
+--- a/thys/Deriving/Hash_Generator/hash_generator.ML
++++ b/thys/Deriving/Hash_Generator/hash_generator.ML
+@@ -208,7 +208,7 @@ fun generate_hashs_from_bnf_fp tyco lthy =
+       lthy
+       |> Local_Theory.begin_nested
+       |> snd
+-      |> BNF_LFP_Rec_Sugar.primrec false [] bindings
++      |> BNF_LFP_Rec_Sugar.primrec {verbose = false} [] bindings
+           (map (fn t => ((Binding.empty_atts, t), [], [])) eqs)
+       |> Local_Theory.end_nested_result
+           (fn phi => fn (phashs, _, phash_simps) => (map (Morphism.term phi) phashs, map (Morphism.fact phi) phash_simps))
+diff --git a/thys/Efficient-Mergesort/Efficient_Sort.thy b/thys/Efficient-Mergesort/Efficient_Sort.thy
+index 9b0bc1efa..2da894a1a 100644
+--- a/thys/Efficient-Mergesort/Efficient_Sort.thy
++++ b/thys/Efficient-Mergesort/Efficient_Sort.thy
+@@ -243,7 +243,7 @@ end
+ text \<open>
+   Replace existing code equations for \<^const>\<open>sort_key\<close> by \<^const>\<open>msort_key\<close>.
+ \<close>
+-declare sort_key_by_quicksort_code [code del]
++declare sort_key_by_quicksort_code [code drop]
+ declare sort_key_msort_key_conv [code]
+ 
+ end
+diff --git a/thys/Formula_Derivatives/Examples/WS1S_Alt_Examples.thy b/thys/Formula_Derivatives/Examples/WS1S_Alt_Examples.thy
+index bb6701a10..5d31c88ab 100644
+--- a/thys/Formula_Derivatives/Examples/WS1S_Alt_Examples.thy
++++ b/thys/Formula_Derivatives/Examples/WS1S_Alt_Examples.thy
+@@ -27,7 +27,7 @@ abbreviation FLess (\<open>x\<^sub>_ < x\<^sub>_\<close> [65, 66] 65) where "FLe
+ abbreviation FIn (\<open>x\<^sub>_ \<in> X\<^bsub>_\<^esub>\<close> [65, 66] 65) where "FIn m M \<equiv> FBase (In m M)"
+ abbreviation FQ (\<open>[x\<^sub>_]\<close> [66] 65) where "FQ m \<equiv> FBase (Fo m)"
+ 
+-declare check_eqv_code[code del]
++declare check_eqv_code[code drop]
+ 
+ (*true in M2L, false in WS1S*)
+ definition "M2L = (FEx SO (FAll FO (FBase (In 0 0))) :: formula)"
+diff --git a/thys/Formula_Derivatives/Presburger_Formula.thy b/thys/Formula_Derivatives/Presburger_Formula.thy
+index 4fdfd3013..1a29c0616 100644
+--- a/thys/Formula_Derivatives/Presburger_Formula.thy
++++ b/thys/Formula_Derivatives/Presburger_Formula.thy
+@@ -674,7 +674,7 @@ lemma check_eqv_code[code]: "check_eqv idx r s =
+   | Some (a # list, x) \<Rightarrow> False))"
+   unfolding check_eqv_def Presb.check_eqv_def Presb.step_alt ..
+ 
+-definition while where [code del, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
++definition while where [code drop, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
+ declare while_default_code[of "fut_default idx \<phi>" for idx \<phi>, folded while_def, code]
+ 
+ lemma check_eqv_sound: 
+diff --git a/thys/Formula_Derivatives/WS1S_Alt_Formula.thy b/thys/Formula_Derivatives/WS1S_Alt_Formula.thy
+index 3f4b19096..862c3d1ef 100644
+--- a/thys/Formula_Derivatives/WS1S_Alt_Formula.thy
++++ b/thys/Formula_Derivatives/WS1S_Alt_Formula.thy
+@@ -328,7 +328,7 @@ lemma check_eqv_code[code]: "check_eqv idx r s =
+   | Some (a # list, x) \<Rightarrow> False))"
+   unfolding check_eqv_def WS1S_Alt.check_eqv_def WS1S_Alt.step_alt ..
+ 
+-definition while where [code del, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
++definition while where [code drop, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
+ declare while_default_code[of "fut_default idx \<phi>" for idx \<phi>, folded while_def, code]
+ 
+ lemma check_eqv_sound: 
+diff --git a/thys/Formula_Derivatives/WS1S_Formula.thy b/thys/Formula_Derivatives/WS1S_Formula.thy
+index e54e1607b..8c1aef285 100644
+--- a/thys/Formula_Derivatives/WS1S_Formula.thy
++++ b/thys/Formula_Derivatives/WS1S_Formula.thy
+@@ -758,7 +758,7 @@ lemma check_eqv_code[code]: "check_eqv idx r s =
+   | Some (a # list, x) \<Rightarrow> False))"
+   unfolding check_eqv_def WS1S.check_eqv_def WS1S.step_alt ..
+ 
+-definition while where [code del, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
++definition while where [code drop, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
+ declare while_default_code[of "fut_default idx \<phi>" for idx \<phi>, folded while_def, code]
+ 
+ lemma check_eqv_sound: 
+diff --git a/thys/Formula_Derivatives/WS1S_Prelim.thy b/thys/Formula_Derivatives/WS1S_Prelim.thy
+index 7079fafd1..39cde326d 100644
+--- a/thys/Formula_Derivatives/WS1S_Prelim.thy
++++ b/thys/Formula_Derivatives/WS1S_Prelim.thy
+@@ -8,7 +8,6 @@ imports
+   "List-Index.List_Index"
+ begin
+ 
+-hide_const (open) cut
+ (*>*)
+ 
+ definition "eval P x = (x |\<in>| P)"
+diff --git a/thys/Posix-Lexing/Extensions/Positions3.thy b/thys/Posix-Lexing/Extensions/Positions3.thy
+index 482238f51..161a16a0e 100644
+--- a/thys/Posix-Lexing/Extensions/Positions3.thy
++++ b/thys/Posix-Lexing/Extensions/Positions3.thy
+@@ -166,7 +166,7 @@ proof -
+   from assms obtain p p'
+     where as: "v1 \<sqsubset>val p v2" "v2 \<sqsubset>val p' v3" unfolding PosOrd_ex_def by blast
+   then have pos: "p \<in> Pos v1" "p' \<in> Pos v2" unfolding PosOrd_def pflat_len_def
+-    by (metis (full_types) int_ops(2) not_int_zless_negative verit_comp_simplify1(1))
++    by (metis (full_types) int_ops(2) not_int_zless_negative alethe_comp_simplify1(1))
+        (metis PosOrd_def2 as(2) int_ops(2) not_int_zless_negative order_less_irrefl pflat_len_def)
+   have "p = p' \<or> p \<sqsubset>lex p' \<or> p' \<sqsubset>lex p"
+     by (rule lex_trichotomous)
+diff --git a/thys/Posix-Lexing/Positions.thy b/thys/Posix-Lexing/Positions.thy
+index bf2dda942..2d30262c1 100644
+--- a/thys/Posix-Lexing/Positions.thy
++++ b/thys/Posix-Lexing/Positions.thy
+@@ -163,8 +163,8 @@ proof -
+     where as: "v1 \<sqsubset>val p v2" "v2 \<sqsubset>val p' v3" unfolding PosOrd_ex_def by blast
+   then have pos: "p \<in> Pos v1" "p' \<in> Pos v2" unfolding PosOrd_def pflat_len_def
+     by (metis (full_types) not_int_zless_negative[of "length (flat (at v2 p))"] zero_less_one
+-        verit_comp_simplify1(1)[of "- 1"] pos_int_cases[of "1"])
+-       (metis PosOrd_def as(2) int_ops(2) not_int_zless_negative pflat_len_def verit_comp_simplify1(1))
++        alethe_comp_simplify1(1)[of "- 1"] pos_int_cases[of "1"])
++       (metis PosOrd_def as(2) int_ops(2) not_int_zless_negative pflat_len_def alethe_comp_simplify1(1))
+   have "p = p' \<or> p \<sqsubset>lex p' \<or> p' \<sqsubset>lex p"
+     by (rule lex_trichotomous)
+   moreover
+diff --git a/thys/Show/Show.thy b/thys/Show/Show.thy
+index a65e441d8..a31e6c5fb 100644
+--- a/thys/Show/Show.thy
++++ b/thys/Show/Show.thy
+@@ -115,7 +115,7 @@ where
+ 
+ definition showsp_list :: "'a showsp \<Rightarrow> nat \<Rightarrow> 'a list \<Rightarrow> shows"
+ where
+-  [code del]: "showsp_list s p = pshowsp_list p o map (s 0)"
++  [code drop]: "showsp_list s p = pshowsp_list p o map (s 0)"
+ 
+ lemma showsp_list_code [code]:
+   "showsp_list s p xs = shows_list_gen (s 0) ''[]'' ''['' '', '' '']'' xs"
+diff --git a/thys/Show/Show_Instances.thy b/thys/Show/Show_Instances.thy
+index 7b98dccc7..0119fb71f 100644
+--- a/thys/Show/Show_Instances.thy
++++ b/thys/Show/Show_Instances.thy
+@@ -48,7 +48,7 @@ redundant parentheses in the output, but seems unavoidable in the current setup,
+ i.e., pshowsp via primrec followed by defining showsp via pshowsp composed with map).*)
+ definition showsp_prod :: "'a showsp \<Rightarrow> 'b showsp \<Rightarrow> ('a \<times> 'b) showsp"
+   where
+-    [code del]: "showsp_prod s1 s2 p = pshowsp_prod p o map_prod (s1 1) (s2 1)"
++    [code drop]: "showsp_prod s1 s2 p = pshowsp_prod p o map_prod (s1 1) (s2 1)"
+ 
+ lemma showsp_prod_simps [simp, code]:
+   "showsp_prod s1 s2 p (x, y) =
+diff --git a/thys/Show/show_generator.ML b/thys/Show/show_generator.ML
+index 983311691..00a0f7811 100644
+--- a/thys/Show/show_generator.ML
++++ b/thys/Show/show_generator.ML
+@@ -107,7 +107,7 @@ fun mk_shows_parens _ [t] = t
+       (\<^Const>\<open>shows_pl for p\<close> :: separate \<^Const>\<open>shows_space\<close> ts @ [\<^Const>\<open>shows_pr for p\<close>])
+ 
+ fun simp_only_tac ctxt ths =
+-  CHANGED o full_simp_tac (clear_simpset (put_simpset HOL_basic_ss ctxt) addsimps ths)
++  CHANGED o full_simp_tac (put_simpset HOL_basic_ss ctxt |> Simplifier.clear_simpset |> Simplifier.add_simps ths)
+ 
+ fun generate_showsp tyco lthy =
+   let
+@@ -173,7 +173,7 @@ fun generate_showsp tyco lthy =
+       lthy
+       |> Local_Theory.begin_nested
+       |> snd
+-      |> BNF_LFP_Rec_Sugar.primrec false [] bindings
++      |> BNF_LFP_Rec_Sugar.primrec {verbose = false} [] bindings
+           (map (fn t => ((Binding.empty_atts, t), [], [])) eqs)
+       |> Local_Theory.end_nested_result
+           (fn phi => fn (pshows, _, pshow_simps) => (map (Morphism.term phi) pshows, map (Morphism.fact phi) pshow_simps))

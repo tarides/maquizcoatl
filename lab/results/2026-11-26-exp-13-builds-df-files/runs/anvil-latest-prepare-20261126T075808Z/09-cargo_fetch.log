@@ -1,0 +1,6 @@
+# cargo fetch
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 21600 taskset --cpu-list 8-11,40-43 nice -n 10 cargo fetch)
+# start 2026-11-26T07:58:08Z
+
+
+# ok

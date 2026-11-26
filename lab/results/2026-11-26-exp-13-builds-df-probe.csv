@@ -1,0 +1,2 @@
+project,side,variant,phase,toolchain,outcome,steps,failed_steps,first_failure,failing_files,failing_list,wall_s,user_s,sys_s,jobs,cpus,nice,timeout_s,host,cpu_model,processors,load_before,load_after,start,log_dir
+anvil,pinned,,build,verus-0.2026.07.12.0b42f4c,ok,1,0,,0,,822.6,6025.7,38.1,8,"24-27,56-59",10,4500,bench-host,AMD EPYC 7502P 32-Core Processor,64,1.38,13.16,2026-11-26T07:53:58Z,<bench-workdir>/exp/13-upgrade-builds-df/work/logs/anvil-pinned-build-20261126T075358Z

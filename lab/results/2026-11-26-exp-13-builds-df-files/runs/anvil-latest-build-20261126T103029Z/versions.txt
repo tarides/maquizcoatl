@@ -1,0 +1,460 @@
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 cat <bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux/version.json)
+{
+  "verus": {
+    "profile": "release",
+    "version": "0.2026.11.22.1ce6a59",
+    "platform": {
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    "toolchain": "1.100.0-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)",
+    "commit": "1ce6a59bd72713cf486a7660097fe5ac57519617"
+  }
+}
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 z3 --version)
+Z3 version 4.16.0 - 64 bit
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 rustc +1.100.0 --version)
+rustc 1.100.0 (0ef1bc386 2026-11-09)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 cargo +1.100.0 --version)
+cargo 1.100.0 (3acc79c0c 2026-11-05)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 rustup --version)
+rustup 1.29.3 (edbc831ce 2026-11-02)
+info: This is the version for the rustup toolchain manager, not the rustc compiler.
+info: the currently active `rustc` version is `rustc 1.100.0 (0ef1bc386 2026-11-09)`
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 rustc --version)
+rustc 1.100.0 (0ef1bc386 2026-11-09)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git rev-parse HEAD)
+3c95bbbe812dfa488ac59b341932f1858d01f343
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git status --short)
+ M Cargo.lock
+ M Cargo.toml
+ M rust-toolchain.toml
+ M src/controllers/rabbitmq_controller/proof/liveness/resource_match.rs
+ M src/controllers/vdeployment_controller/proof/helper_invariants/proof.rs
+ M src/controllers/vdeployment_controller/proof/liveness/api_actions.rs
+ M src/controllers/vreplicaset_controller/proof/guarantee.rs
+ M src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs
+ M src/controllers/vstatefulset_controller/proof/helper_invariants.rs
+ M src/controllers/vstatefulset_controller/proof/liveness/proof.rs
+ M src/controllers/vstatefulset_controller/proof/liveness/resource_match.rs
+ M src/kubernetes_cluster/proof/req_resp.rs
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git diff --stat)
+ Cargo.lock                                         | 50 ++++++++++------------
+ Cargo.toml                                         |  4 +-
+ rust-toolchain.toml                                |  2 +-
+ .../proof/liveness/resource_match.rs               |  1 +
+ .../proof/helper_invariants/proof.rs               |  2 +
+ .../proof/liveness/api_actions.rs                  |  1 +
+ .../vreplicaset_controller/proof/guarantee.rs      |  1 +
+ .../proof/liveness/resource_match.rs               | 11 +++++
+ .../proof/helper_invariants.rs                     |  1 +
+ .../proof/liveness/proof.rs                        |  5 +++
+ .../proof/liveness/resource_match.rs               |  2 +
+ src/kubernetes_cluster/proof/req_resp.rs           |  1 +
+ 12 files changed, 51 insertions(+), 30 deletions(-)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git diff)
+diff --git a/Cargo.lock b/Cargo.lock
+index d9df912..4281066 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -336,6 +336,12 @@ dependencies = [
+  "crossbeam-utils",
+ ]
+ 
++[[package]]
++name = "convert_case"
++version = "0.4.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "6245d59a3e82a7fc217c5828a6692dbc6dfb63a0c8c90495621f7b9d79704a0e"
++
+ [[package]]
+ name = "core-foundation"
+ version = "0.9.4"
+@@ -673,7 +679,7 @@ dependencies = [
+  "futures-sink",
+  "futures-util",
+  "http 0.2.12",
+- "indexmap 2.13.0",
++ "indexmap",
+  "slab",
+  "tokio",
+  "tokio-util",
+@@ -965,16 +971,6 @@ dependencies = [
+  "unicode-normalization",
+ ]
+ 
+-[[package]]
+-name = "indexmap"
+-version = "1.9.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "bd070e393353796e801d209ad339e89596eb4c8d430d18ede6a1cced8fafbd99"
+-dependencies = [
+- "autocfg",
+- "hashbrown 0.12.3",
+-]
+-
+ [[package]]
+ name = "indexmap"
+ version = "2.13.0"
+@@ -2029,7 +2025,7 @@ version = "0.9.29"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "a15e0ef66bf939a7c890a0bf6d5a733c70202225f9888a89ed5c62298b019129"
+ dependencies = [
+- "indexmap 2.13.0",
++ "indexmap",
+  "itoa",
+  "ryu",
+  "serde",
+@@ -2342,7 +2338,7 @@ version = "0.25.4+spec-1.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "7193cbd0ce53dc966037f54351dbbcf0d5a642c7f0038c382ef9e677ce8c13f2"
+ dependencies = [
+- "indexmap 2.13.0",
++ "indexmap",
+  "toml_datetime",
+  "toml_parser",
+  "winnow 0.7.13",
+@@ -2641,16 +2637,17 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
+ 
+ [[package]]
+ name = "verus_builtin"
+-version = "0.0.0-2026-05-17-0151"
++version = "0.0.0-2026-11-22-0344"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "cab9266bfb5cf45a080f425c560b0e0be2bf81194f0e80258990c49c1829d8b9"
++checksum = "dd4bce6a5fe5fb9bfca2949a689a7b92e80d35f50e2ba3e9ba87dfb63f2337e1"
+ 
+ [[package]]
+ name = "verus_builtin_macros"
+-version = "0.0.0-2026-07-12-0122"
++version = "0.0.0-2026-11-22-0344"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3fb60e3a141ababe618fbdb759f14aa8544f6346a98a44c1e3a7dbe20b1f2892"
++checksum = "1aa86fd414dfa7694a49811c7b907a7500d129d2a5b4c3a6c0671af0defec2a0"
+ dependencies = [
++ "convert_case",
+  "proc-macro2",
+  "quote",
+  "syn 2.0.117",
+@@ -2661,9 +2658,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "verus_prettyplease"
+-version = "0.0.0-2026-05-31-0205"
++version = "0.0.0-2026-11-01-0251"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3ffdc94c89109a67c59646f6b6e71b49de394020f45294247dd716470523245b"
++checksum = "2b2cf0618d8d5ed0cde78122effaf56f5be0a0d0e0f9066735fa9f17d6ba6a4a"
+ dependencies = [
+  "proc-macro2",
+  "verus_syn",
+@@ -2671,11 +2668,11 @@ dependencies = [
+ 
+ [[package]]
+ name = "verus_state_machines_macros"
+-version = "0.0.0-2026-06-14-0213"
++version = "0.0.0-2026-11-22-0344"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6704a9ce586a5027f87933d9a84817411c937804090a9585c28bf335ac37eefc"
++checksum = "eed47dcce51e4881a43825d2fab07089bf90a3df53ec887be86171a0114abb61"
+ dependencies = [
+- "indexmap 1.9.3",
++ "indexmap",
+  "proc-macro2",
+  "quote",
+  "verus_syn",
+@@ -2683,9 +2680,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "verus_syn"
+-version = "0.0.0-2026-05-31-0205"
++version = "0.0.0-2026-11-01-0251"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "030b774330d5ec618691c2cd6fba8bbb13bd538f3884a1143450baec25749706"
++checksum = "461620a5ec0fb547ba398e42fb25a017bd8764798a32099eed73c77dd979ac39"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+@@ -2695,16 +2692,15 @@ dependencies = [
+ [[package]]
+ name = "verus_temporal_logic"
+ version = "0.1.0"
+-source = "git+https://github.com/anvil-verifier/verus-tla?rev=8bb157b50b6200296d4b04d1302644d269e29443#8bb157b50b6200296d4b04d1302644d269e29443"
+ dependencies = [
+  "vstd",
+ ]
+ 
+ [[package]]
+ name = "vstd"
+-version = "0.0.0-2026-07-12-0122"
++version = "0.0.0-2026-11-22-0344"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "dd0a0d328e1d6382af99a65f71677cf4b9200ec24e09fcafa7b1a3af8c8f5111"
++checksum = "66760ffdbcefb8a21dd2fb99d72c4bad27b4bd3217bcab50f36dc9f6b7dbe330"
+ dependencies = [
+  "verus_builtin",
+  "verus_builtin_macros",
+diff --git a/Cargo.toml b/Cargo.toml
+index c6449f1..d9d94b3 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -12,8 +12,8 @@ runtime = ["kube/runtime"]
+ ws = ["kube/ws"]
+ 
+ [dependencies]
+-vstd = "=0.0.0-2026-07-12-0122"
+-verus_temporal_logic = { git = "https://github.com/anvil-verifier/verus-tla", rev = "8bb157b50b6200296d4b04d1302644d269e29443" }
++vstd = "=0.0.0-2026-11-22-0344"
++verus_temporal_logic = { path = "../anvil-latest-verus-tla" }
+ 
+ kube = { version = "0.91.0", default-features = false, features = ["admission"] }
+ kube-client = { version = "0.91.0", default-features = false }
+diff --git a/rust-toolchain.toml b/rust-toolchain.toml
+index 6840092..529423f 100644
+--- a/rust-toolchain.toml
++++ b/rust-toolchain.toml
+@@ -1,4 +1,4 @@
+ # this should be synchronized with the Verus version, since we need to combine
+ # k8s compiled with rustc and our own code compiled with rust-verify.sh
+ [toolchain]
+-channel = "1.96.0"
++channel = "1.100.0"
+diff --git a/src/controllers/rabbitmq_controller/proof/liveness/resource_match.rs b/src/controllers/rabbitmq_controller/proof/liveness/resource_match.rs
+index 10928ca..884b334 100644
+--- a/src/controllers/rabbitmq_controller/proof/liveness/resource_match.rs
++++ b/src/controllers/rabbitmq_controller/proof/liveness/resource_match.rs
+@@ -1387,6 +1387,7 @@ ensures
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ proof fn lemma_inductive_current_state_matches_preserves_from_s_to_s_prime_during_controller_step_this_cr(
+     controller_id: int, cluster: Cluster, sub_resource: SubResource, rabbitmq: RabbitmqClusterView,
+     s: ClusterState, s_prime: ClusterState, input: (int, Option<Message>, Option<ObjectRef>)
+diff --git a/src/controllers/vdeployment_controller/proof/helper_invariants/proof.rs b/src/controllers/vdeployment_controller/proof/helper_invariants/proof.rs
+index b1af240..4d58b4b 100644
+--- a/src/controllers/vdeployment_controller/proof/helper_invariants/proof.rs
++++ b/src/controllers/vdeployment_controller/proof/helper_invariants/proof.rs
+@@ -1003,6 +1003,8 @@ ensures vrs_objects_in_local_reconcile_state_are_controllerly_owned_by_vd_with_k
+ }
+ 
+ 
++#[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ proof fn lemma_vrs_objects_in_local_reconcile_state_are_controllerly_owned_by_vd_with_key_preserves_from_s_to_s_prime_during_api_server_step(
+     cluster: Cluster, controller_id: int, s: ClusterState, s_prime: ClusterState, key: ObjectRef, current_req_msg: Message
+ )
+diff --git a/src/controllers/vdeployment_controller/proof/liveness/api_actions.rs b/src/controllers/vdeployment_controller/proof/liveness/api_actions.rs
+index f911898..72e8a90 100644
+--- a/src/controllers/vdeployment_controller/proof/liveness/api_actions.rs
++++ b/src/controllers/vdeployment_controller/proof/liveness/api_actions.rs
+@@ -153,6 +153,7 @@ ensures
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn lemma_list_vrs_request_returns_ok_with_objs_matching_vd_with_nv_status_matching_replicas(
+     s: ClusterState, s_prime: ClusterState, vd: VDeploymentView, cluster: Cluster, controller_id: int, req_msg: Message, new_vrs: VReplicaSetView, diff: nat
+ ) -> (resp_msg: Message)
+diff --git a/src/controllers/vreplicaset_controller/proof/guarantee.rs b/src/controllers/vreplicaset_controller/proof/guarantee.rs
+index cd6816a..e307bec 100644
+--- a/src/controllers/vreplicaset_controller/proof/guarantee.rs
++++ b/src/controllers/vreplicaset_controller/proof/guarantee.rs
+@@ -72,6 +72,7 @@ pub open spec fn local_pods_are_bound_to_vrs_with_key(controller_id: int, cr_key
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn lemma_local_pods_are_bound_to_vrs_with_key_preserves_from_s_to_s_prime(
+     cluster: Cluster, controller_id: int, cr_key: ObjectRef, s: ClusterState, s_prime: ClusterState
+ )
+diff --git a/src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs b/src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs
+index 4654b7d..97327a7 100644
+--- a/src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs
++++ b/src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs
+@@ -22,6 +22,7 @@ verus! {
+ 
+ // -------------- Leads-to Chaining Reasoning --------------
+ 
++#[verifier::rlimit(100)]
+ pub proof fn lemma_from_diff_and_init_to_current_state_matches(
+     vrs: VReplicaSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int, diff: int
+ )
+@@ -2120,6 +2121,7 @@ pub proof fn lemma_from_after_receive_list_pods_resp_to_send_delete_pod_req(
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn lemma_from_after_send_delete_pod_req_to_receive_ok_resp(
+     vrs: VReplicaSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int,
+     req_msg: Message, diff: int
+@@ -2293,6 +2295,7 @@ pub proof fn lemma_from_after_send_delete_pod_req_to_receive_ok_resp(
+ 
+ // TODO: investigate flaky proof
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn lemma_from_after_receive_ok_resp_to_send_delete_pod_req(
+     vrs: VReplicaSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int,
+     resp_msg: Message, diff: int
+@@ -2962,6 +2965,8 @@ pub proof fn lemma_current_state_matches_is_stable(
+ }
+ 
+ // this proof is flaky
++#[verifier::rlimit(100)]
++#[verifier(spinoff_prover)]
+ pub proof fn lemma_inductive_current_state_matches_preserves_from_s_to_s_prime(
+     vrs: VReplicaSetView, cluster: Cluster, controller_id: int, s: ClusterState, s_prime: ClusterState
+ )
+@@ -3107,6 +3112,12 @@ ensures
+                 } else {
+                     assert(s_prime.ongoing_reconciles(controller_id)[vrs.object_ref()] == s.ongoing_reconciles(controller_id)[vrs.object_ref()]);
+                     assert(s_prime.resources() == s.resources());
++                    assert forall |msg| #[trigger] s_prime.in_flight().contains(msg) && msg.src is APIServer
++                        implies s.in_flight().contains(msg) by {
++                        if !s.in_flight().contains(msg) {
++                            assert(s_prime.in_flight().sub(s.in_flight()).contains(msg));
++                        }
++                    }
+                 }
+             } else if s_prime.ongoing_reconciles(controller_id).contains_key(vrs.object_ref()) {
+                 assert(inductive_current_state_matches(vrs, controller_id)(s_prime));
+diff --git a/src/controllers/vstatefulset_controller/proof/helper_invariants.rs b/src/controllers/vstatefulset_controller/proof/helper_invariants.rs
+index 7484f9d..f6b4b2a 100644
+--- a/src/controllers/vstatefulset_controller/proof/helper_invariants.rs
++++ b/src/controllers/vstatefulset_controller/proof/helper_invariants.rs
+@@ -279,6 +279,7 @@ pub open spec fn all_pod_requests_from_vsts_controller_carry_only_vsts_owner_ref
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ proof fn lemma_eventually_always_all_pod_requests_from_vsts_controller_carry_only_vsts_owner_ref_inductive_step(
+     cluster: Cluster, controller_id: int, vsts: VStatefulSetView, s: ClusterState, s_prime: ClusterState
+ )
+diff --git a/src/controllers/vstatefulset_controller/proof/liveness/proof.rs b/src/controllers/vstatefulset_controller/proof/liveness/proof.rs
+index d09a95c..66a0d26 100644
+--- a/src/controllers/vstatefulset_controller/proof/liveness/proof.rs
++++ b/src/controllers/vstatefulset_controller/proof/liveness/proof.rs
+@@ -434,6 +434,7 @@ pub proof fn spec_entails_pending_request_invariants_part3(spec: TempPred<Cluste
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn spec_entails_pending_request_invariants_part3_get_pvc(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+     requires
+         spec.entails(lift_state(cluster.init())),
+@@ -508,6 +509,7 @@ pub proof fn spec_entails_pending_request_invariants_part4(spec: TempPred<Cluste
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn spec_entails_pending_request_invariants_part4_create_needed(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+     requires
+         spec.entails(lift_state(cluster.init())),
+@@ -528,6 +530,7 @@ pub proof fn spec_entails_pending_request_invariants_part4_create_needed(spec: T
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn spec_entails_pending_request_invariants_part4_update_needed(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+     requires
+         spec.entails(lift_state(cluster.init())),
+@@ -548,6 +551,7 @@ pub proof fn spec_entails_pending_request_invariants_part4_update_needed(spec: T
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn spec_entails_pending_request_invariants_part5(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+     requires
+         spec.entails(lift_state(cluster.init())),
+@@ -604,6 +608,7 @@ pub proof fn spec_entails_pending_request_invariants_part6(spec: TempPred<Cluste
+     spec_entails_always_tla_forall_equality(spec, |vsts: VStatefulSetView| lift_state(Cluster::pending_req_in_flight_or_resp_in_flight_at_reconcile_state(controller_id, vsts.object_ref(), at_step_or![AfterCreatePVC])));
+ }
+ 
++#[verifier::rlimit(100)]
+ pub proof fn spec_entails_pending_request_invariants_part7(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+     requires
+         spec.entails(lift_state(cluster.init())),
+diff --git a/src/controllers/vstatefulset_controller/proof/liveness/resource_match.rs b/src/controllers/vstatefulset_controller/proof/liveness/resource_match.rs
+index 551160c..247bb99 100644
+--- a/src/controllers/vstatefulset_controller/proof/liveness/resource_match.rs
++++ b/src/controllers/vstatefulset_controller/proof/liveness/resource_match.rs
+@@ -2546,6 +2546,7 @@ ensures
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn lemma_spec_entails_delete_condemned_leads_to_after_delete_condemned_request(
+     vsts: VStatefulSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int, condemned_index: nat, condemned_len: nat, outdated_len: nat
+ )
+@@ -2618,6 +2619,7 @@ ensures
+ }
+ 
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(100)]
+ pub proof fn lemma_spec_entails_after_delete_condemned_request_leads_to_response(
+     vsts: VStatefulSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int, condemned_index: nat, condemned_len: nat, outdated_len: nat
+ )
+diff --git a/src/kubernetes_cluster/proof/req_resp.rs b/src/kubernetes_cluster/proof/req_resp.rs
+index 0f972d5..d01fcfc 100644
+--- a/src/kubernetes_cluster/proof/req_resp.rs
++++ b/src/kubernetes_cluster/proof/req_resp.rs
+@@ -77,6 +77,7 @@ pub open spec fn object_in_ok_get_resp_is_same_as_etcd_with_same_rv(key: ObjectR
+     }
+ }
+ 
++#[verifier::rlimit(100)]
+ pub proof fn lemma_always_object_in_ok_get_resp_is_same_as_etcd_with_same_rv(self, spec: TempPred<ClusterState>, key: ObjectRef)
+     requires
+         spec.entails(lift_state(self.init())),
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest-verus-tla && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git rev-parse HEAD)
+8bb157b50b6200296d4b04d1302644d269e29443
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest-verus-tla && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git diff)
+diff --git a/Cargo.toml b/Cargo.toml
+index 156a0e6..c5c1b07 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -6,7 +6,7 @@ license = "MIT"
+ description = "A Verus embedding of TLA+ temporal logic, ported from the Anvil verifier."
+ 
+ [dependencies]
+-vstd = "=0.0.0-2026-07-12-0122"
++vstd = "=0.0.0-2026-11-22-0344"
+ 
+ [[bin]]
+ name = "mutex_example"
+diff --git a/src/rules.rs b/src/rules.rs
+index a3c36da..3b3497b 100644
+--- a/src/rules.rs
++++ b/src/rules.rs
+@@ -2170,6 +2170,7 @@ proof fn eventually_always_tla_forall_apply_ex<T, A>(ex: Execution<T>, a_to_p: s
+ 
+ // domain maps state to a finite set
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(30)]
+ pub proof fn spec_entails_eventually_always_within_dynamic_finite_domain<T, A>(
+     spec: TempPred<T>, next: ActionPred<T>, a_to_p: spec_fn(A) -> StatePred<T>, domain: spec_fn(T) -> Set<A>
+ )
+# exit 0
+

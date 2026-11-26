@@ -1,0 +1,3 @@
+anvil-pinned-build, logs in <bench-workdir>/exp/13-upgrade-builds-df/work/logs/anvil-pinned-build-20261126T101651Z
+[1/1] cargo verus verify: ok (817.8 s)
+anvil-pinned-build: ok, row added to <bench-workdir>/exp/13-upgrade-builds-df/results/2026-11-26-exp-13-builds-df.csv

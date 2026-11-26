@@ -1,0 +1,4 @@
+index,label,outcome,start,wall_s,user_s,sys_s,log,command
+1,mkdir switches,ok,2026-11-26T07:49:29Z,0.0,0.0,0.0,,mkdir -p <bench-workdir>/exp/13-upgrade-builds-df/work/switches
+2,link the shared Isabelle2026,ok,2026-11-26T07:49:29Z,0.0,0.0,0.0,<bench-workdir>/exp/13-upgrade-builds-df/work/logs/install-isabelle-Isabelle2026-20261126T074929Z/02-link_the_shared_Isabelle2026.log,"(cd <bench-workdir>/exp/13-upgrade-builds-df/work/switches && timeout --kill-after=60 21600 taskset --cpu-list 12-15,44-47 nice -n 10 ln -s <bench-workdir>/cache/isabelle/dist/Isabelle2026 <bench-workdir>/exp/13-upgrade-builds-df/work/switches/isabelle-Isabelle2026)"
+3,mkdir isabelle-home,ok,2026-11-26T07:49:29Z,0.0,0.0,0.0,,mkdir -p <bench-workdir>/exp/13-upgrade-builds-df/work/switches/isabelle-home

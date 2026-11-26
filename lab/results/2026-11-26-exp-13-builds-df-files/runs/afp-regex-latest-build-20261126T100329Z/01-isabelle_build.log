@@ -1,0 +1,31 @@
+# isabelle build
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest && USER_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/isabelle-home PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/isabelle-Isabelle2026/bin:"$PATH" timeout --kill-after=60 2700 taskset --cpu-list 24-27,56-59 nice -n 10 isabelle build -b -o document=false -j 2 -o threads=4 -c -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Automatic_Refinement -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Binomial-Heaps -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/CAVA_Automata -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Coinductive_Languages -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Collections -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Containers -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Datatype_Order_Generator -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Deriving -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Efficient-Mergesort -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Finger-Trees -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Formula_Derivatives -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Functional-Automata -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/List-Index -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/MSO_Regex_Equivalence -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Native_Word -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Refine_Monadic -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Regex_Equivalence -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Regular-Sets -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Show -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/SpecCheck -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Trie -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Word_Lib Regular-Sets Regex_Equivalence Posix-Lexing Formula_Derivatives Formula_Derivatives-Examples MSO_Regex_Equivalence Functional-Automata Coinductive_Languages)
+# start 2026-11-26T10:03:29Z
+
+Cleaned Regular-Sets
+Cleaned Regex_Equivalence
+Cleaned Posix-Lexing
+Cleaned MSO_Regex_Equivalence
+Cleaned Functional-Automata
+Cleaned Coinductive_Languages
+Cleaned Formula_Derivatives
+Cleaned Formula_Derivatives-Examples
+Building MSO_Regex_Equivalence ...
+Building Formula_Derivatives ...
+Finished Formula_Derivatives (0:04:57 elapsed time, 0:13:15 cpu time, factor 2.67)
+Building Functional-Automata ...
+Finished Functional-Automata (0:00:23 elapsed time, 0:00:59 cpu time, factor 2.47)
+Building Regex_Equivalence ...
+Finished Regex_Equivalence (0:01:11 elapsed time, 0:03:22 cpu time, factor 2.82)
+Building Regular-Sets ...
+Finished Regular-Sets (0:00:42 elapsed time, 0:01:52 cpu time, factor 2.65)
+Building Posix-Lexing ...
+Finished Posix-Lexing (0:03:20 elapsed time, 0:06:56 cpu time, factor 2.08)
+Building Coinductive_Languages ...
+Finished Coinductive_Languages (0:00:18 elapsed time, 0:00:51 cpu time, factor 2.80)
+Building Formula_Derivatives-Examples ...
+Finished Formula_Derivatives-Examples (0:00:36 elapsed time, 0:01:25 cpu time, factor 2.34)
+Finished MSO_Regex_Equivalence (0:12:23 elapsed time, 0:21:17 cpu time, factor 1.72)
+0:12:37 elapsed time, 0:50:00 cpu time, factor 3.96
+
+# ok

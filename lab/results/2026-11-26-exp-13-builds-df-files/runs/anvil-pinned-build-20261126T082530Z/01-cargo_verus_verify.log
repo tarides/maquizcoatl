@@ -1,0 +1,48 @@
+# cargo verus verify
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.07.12.0b42f4c/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 2700 taskset --cpu-list 24-27,56-59 nice -n 10 cargo verus verify --fwd-verus-args-to roots --lib -j 8 -- --num-threads 8 --time-expanded)
+# start 2026-11-26T08:25:30Z
+
+    Checking verifiable-controllers v0.1.0 (<bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned)
+verification results:: 911 verified, 0 errors
+(use --output-json for machine-readable output)
+verus-build-info
+Verus
+  Version: 0.2026.07.12.0b42f4c
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.96.0-x86_64-unknown-linux-gnu
+
+total-time:          820738 ms    (estimated total cpu time 6046279 ms)
+    rust-time:               15729 ms
+        init-and-types:           8693 ms
+        trait-conflicts:           175 ms
+        compile-time:             6861 ms
+    verification-time:      801142 ms
+        vir-time:                18567 ms
+            hir-time:                 3287 ms
+            import-time:               345 ms
+            rust-to-vir:              4245 ms
+        verify-crate-time:      782574 ms
+    unaccounted-time:         3866 ms
+
+verify-crate-time-breakdown
+    total verify-time:        6006096 ms   (8 threads)
+      1. vstatefulset_controller::proof::liveness::resource_match     302233 ms
+      2. rabbitmq_controller::proof::liveness::resource_match     280944 ms
+      3. vreplicaset_controller::proof::liveness::resource_match     238464 ms
+        total air-time:            113212 ms   (8 threads)
+      1. vstatefulset_controller::proof::liveness::resource_match       2265 ms
+      2. vreplicaset_controller::proof::liveness::resource_match       1813 ms
+      3. rabbitmq_controller::proof::liveness::resource_match       1664 ms
+        total smt-time:           5745480 ms   (8 threads)
+            total smt-init:                66 ms,   559347 rlimit (8 threads)
+                1. vstatefulset_controller::proof::liveness::resource_match          2 ms
+                2. vstatefulset_controller::exec::reconciler          4 ms
+                3. kubernetes_api_objects::exec::api_method          2 ms
+            total smt-run:            5745414 ms, 2826853581 rlimit (8 threads)
+                1. vstatefulset_controller::proof::liveness::resource_match    1199872 ms, 599946789 rlimit
+                2. rabbitmq_controller::proof::liveness::resource_match     717962 ms, 257504811 rlimit
+                3. vdeployment_controller::proof::liveness::resource_match     649015 ms, 305220009 rlimit
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 13m 43s
+
+# ok

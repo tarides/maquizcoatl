@@ -1,0 +1,25 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 156a0e6..c5c1b07 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -6,7 +6,7 @@ license = "MIT"
+ description = "A Verus embedding of TLA+ temporal logic, ported from the Anvil verifier."
+ 
+ [dependencies]
+-vstd = "=0.0.0-2026-07-12-0122"
++vstd = "=0.0.0-2026-11-22-0344"
+ 
+ [[bin]]
+ name = "mutex_example"
+diff --git a/src/rules.rs b/src/rules.rs
+index a3c36da..3b3497b 100644
+--- a/src/rules.rs
++++ b/src/rules.rs
+@@ -2170,6 +2170,7 @@ proof fn eventually_always_tla_forall_apply_ex<T, A>(ex: Execution<T>, a_to_p: s
+ 
+ // domain maps state to a finite set
+ #[verifier(spinoff_prover)]
++#[verifier::rlimit(30)]
+ pub proof fn spec_entails_eventually_always_within_dynamic_finite_domain<T, A>(
+     spec: TempPred<T>, next: ActionPred<T>, a_to_p: spec_fn(A) -> StatePred<T>, domain: spec_fn(T) -> Set<A>
+ )

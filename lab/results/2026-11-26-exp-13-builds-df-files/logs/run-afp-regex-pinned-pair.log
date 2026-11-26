@@ -1,0 +1,3 @@
+afp-regex-pinned-build, logs in <bench-workdir>/exp/13-upgrade-builds-df/work/logs/afp-regex-pinned-build-20261126T080753Z
+[1/1] isabelle build: ok (786.7 s)
+afp-regex-pinned-build: ok, row added to <bench-workdir>/exp/13-upgrade-builds-df/results/2026-11-26-exp-13-builds-df.csv

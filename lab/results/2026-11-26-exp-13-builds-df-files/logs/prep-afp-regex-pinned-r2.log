@@ -1,0 +1,7 @@
+afp-regex-pinned-prepare, logs in <bench-workdir>/exp/13-upgrade-builds-df/work/logs/afp-regex-pinned-prepare-20261126T075217Z
+[1/6] mkdir build: ok (0.0 s)
+[2/6] clone: ok (1.9 s)
+[3/6] sparse checkout: ok (0.0 s)
+[4/6] checkout: ok (1.4 s)
+[5/6] isabelle build -n, requirements: exit 1 (14.1 s)
+afp-regex-pinned-prepare: failed, row added to <bench-workdir>/exp/13-upgrade-builds-df/results/2026-11-26-exp-13-builds-df.csv

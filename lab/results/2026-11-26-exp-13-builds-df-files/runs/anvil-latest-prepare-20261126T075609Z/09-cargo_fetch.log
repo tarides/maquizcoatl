@@ -1,0 +1,24 @@
+# cargo fetch
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 21600 taskset --cpu-list 8-11,40-43 nice -n 10 cargo fetch)
+# start 2026-11-26T07:56:09Z
+
+    Updating crates.io index
+     Locking 8 packages to highest compatible versions
+      Adding convert_case v0.4.0
+    Updating verus_builtin v0.0.0-2026-05-17-0151 -> v0.0.0-2026-11-22-0344
+    Updating verus_builtin_macros v0.0.0-2026-07-12-0122 -> v0.0.0-2026-11-22-0344
+    Updating verus_prettyplease v0.0.0-2026-05-31-0205 -> v0.0.0-2026-11-01-0251
+    Updating verus_state_machines_macros v0.0.0-2026-06-14-0213 -> v0.0.0-2026-11-22-0344
+    Updating verus_syn v0.0.0-2026-05-31-0205 -> v0.0.0-2026-11-01-0251
+      Adding verus_temporal_logic v0.1.0 (<bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest-verus-tla)
+    Updating vstd v0.0.0-2026-07-12-0122 -> v0.0.0-2026-11-22-0344
+ Downloading crates ...
+  Downloaded convert_case v0.4.0
+  Downloaded verus_prettyplease v0.0.0-2026-11-01-0251
+  Downloaded verus_builtin v0.0.0-2026-11-22-0344
+  Downloaded verus_state_machines_macros v0.0.0-2026-11-22-0344
+  Downloaded verus_builtin_macros v0.0.0-2026-11-22-0344
+  Downloaded vstd v0.0.0-2026-11-22-0344
+  Downloaded verus_syn v0.0.0-2026-11-01-0251
+
+# ok

@@ -1,0 +1,8 @@
+# checkout
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest-verus-tla && timeout --kill-after=60 21600 taskset --cpu-list 8-11,40-43 nice -n 10 git -c advice.detachedHead=false checkout --detach 8bb157b50b6200296d4b04d1302644d269e29443)
+# start 2026-11-26T07:56:09Z
+
+HEAD is now at 8bb157b Merge pull request #8 from anvil-verifier/update-vstd-2026-07-12
+M	Cargo.toml
+
+# ok

@@ -1,0 +1,511 @@
+diff --git a/thys/Collections/ICF/tools/Locale_Code_Ex.thy b/thys/Collections/ICF/tools/Locale_Code_Ex.thy
+index f8fc90f7d..5fa6deda5 100644
+--- a/thys/Collections/ICF/tools/Locale_Code_Ex.thy
++++ b/thys/Collections/ICF/tools/Locale_Code_Ex.thy
+@@ -6,7 +6,7 @@ imports
+   "HOL-Library.Code_Bit_Shifts_for_Arithmetic"
+ begin
+ 
+-definition [simp, code del]: "NOCODE \<equiv> id"
++definition [simp, code drop]: "NOCODE \<equiv> id"
+ 
+ locale test = 
+   fixes a b :: nat
+diff --git a/thys/Collections/Iterator/It_to_It.thy b/thys/Collections/Iterator/It_to_It.thy
+index bdba9d605..0b1d85b58 100644
+--- a/thys/Collections/Iterator/It_to_It.thy
++++ b/thys/Collections/Iterator/It_to_It.thy
+@@ -14,7 +14,7 @@ begin
+   text \<open>The following constant converts an iterator over list-state
+     to an iterator over arbitrary state\<close>
+   definition it_to_it :: "('x,'x list) set_iterator \<Rightarrow> ('x,'\<sigma>) set_iterator"
+-    where [code del]: "it_to_it it 
++    where [code drop]: "it_to_it it 
+     \<equiv> (foldli (it (\<lambda>_. True) (\<lambda>x l. l@[x]) []))"
+ 
+   lemma pi_it_to_it[icf_proper_iteratorI]: "proper_it (it_to_it I) (it_to_it I)"
+diff --git a/thys/Collections/Lib/Assoc_List.thy b/thys/Collections/Lib/Assoc_List.thy
+index 8652a6cea..f66a0c5b9 100644
+--- a/thys/Collections/Lib/Assoc_List.thy
++++ b/thys/Collections/Lib/Assoc_List.thy
+@@ -30,16 +30,16 @@ by(rule impl_of_inverse)
+ subsection \<open>Primitive operations\<close>
+ 
+ definition empty :: "('k, 'v) assoc_list"
+-where [code del]: "empty = Assoc_List []"
++where [code drop]: "empty = Assoc_List []"
+ 
+ definition lookup :: "('k, 'v) assoc_list \<Rightarrow> 'k \<Rightarrow> 'v option"
+ where [code]: "lookup al = map_of (impl_of al)" 
+ 
+ definition update_with :: "'v \<Rightarrow> 'k \<Rightarrow> ('v \<Rightarrow> 'v) \<Rightarrow> ('k, 'v) assoc_list \<Rightarrow> ('k, 'v) assoc_list"
+-where [code del]: "update_with v k f al = Assoc_List (AList.update_with_aux v k f (impl_of al))"
++where [code drop]: "update_with v k f al = Assoc_List (AList.update_with_aux v k f (impl_of al))"
+ 
+ definition delete :: "'k \<Rightarrow> ('k, 'v) assoc_list \<Rightarrow> ('k, 'v) assoc_list"
+-where [code del]: "delete k al = Assoc_List (AList.delete_aux k (impl_of al))"
++where [code drop]: "delete k al = Assoc_List (AList.delete_aux k (impl_of al))"
+ 
+ definition iteratei :: "('k, 'v) assoc_list \<Rightarrow> ('s\<Rightarrow>bool) \<Rightarrow> ('k \<times> 'v \<Rightarrow> 's \<Rightarrow> 's) \<Rightarrow> 's \<Rightarrow> 's" 
+ where [code]: "iteratei al c f = foldli (impl_of al) c f"
+diff --git a/thys/Collections/Lib/Diff_Array.thy b/thys/Collections/Lib/Diff_Array.thy
+index 783bd9b35..e7c6a7ab1 100644
+--- a/thys/Collections/Lib/Diff_Array.thy
++++ b/thys/Collections/Lib/Diff_Array.thy
+@@ -456,15 +456,15 @@ subsection \<open>Code Generator Setup\<close>
+ 
+ subsubsection \<open>Code-Numeral Preparation\<close>
+ 
+-definition [code del]: "new_array' v == new_array v o nat_of_integer"
+-definition [code del]: "array_length' == integer_of_nat o array_length"
+-definition [code del]: "array_get' a == array_get a o nat_of_integer"
+-definition [code del]: "array_set' a == array_set a o nat_of_integer"
+-definition [code del]: "array_grow' a == array_grow a o nat_of_integer"
+-definition [code del]: "array_shrink' a == array_shrink a o nat_of_integer"
+-definition [code del]:
++definition [code drop]: "new_array' v == new_array v o nat_of_integer"
++definition [code drop]: "array_length' == integer_of_nat o array_length"
++definition [code drop]: "array_get' a == array_get a o nat_of_integer"
++definition [code drop]: "array_set' a == array_set a o nat_of_integer"
++definition [code drop]: "array_grow' a == array_grow a o nat_of_integer"
++definition [code drop]: "array_shrink' a == array_shrink a o nat_of_integer"
++definition [code drop]:
+   "array_get_oo' x a == array_get_oo x a o nat_of_integer"
+-definition [code del]:
++definition [code drop]:
+   "array_set_oo' f a == array_set_oo f a o nat_of_integer"
+ 
+ 
+diff --git a/thys/Containers/Collection_Order.thy b/thys/Containers/Collection_Order.thy
+index 3aed8aca5..5ed193df3 100644
+--- a/thys/Containers/Collection_Order.thy
++++ b/thys/Containers/Collection_Order.thy
+@@ -138,10 +138,10 @@ by(simp add: is_ccompare_def ccompare_set_def ID_def)
+ 
+ 
+ definition cless_eq_set :: "'a :: ccompare set \<Rightarrow> 'a set \<Rightarrow> bool" 
+-where [simp, code del]: "cless_eq_set = le_of_comp (the (ID CCOMPARE('a set)))"
++where [simp, code drop]: "cless_eq_set = le_of_comp (the (ID CCOMPARE('a set)))"
+ 
+ definition cless_set :: "'a :: ccompare set \<Rightarrow> 'a set \<Rightarrow> bool"
+-where [simp, code del]: "cless_set = lt_of_comp (the (ID CCOMPARE('a set)))"
++where [simp, code drop]: "cless_set = lt_of_comp (the (ID CCOMPARE('a set)))"
+ 
+ lemma ccompare_set_code [code]:
+   "CCOMPARE('a :: ccompare set) = 
+diff --git a/thys/Containers/Containers_Userguide.thy b/thys/Containers/Containers_Userguide.thy
+index 81544da64..949dd83ea 100644
+--- a/thys/Containers/Containers_Userguide.thy
++++ b/thys/Containers/Containers_Userguide.thy
+@@ -419,13 +419,13 @@ text \<open>
+   LC keeps complements of such enumerated set comprehensions, i.e., @{term "- {b. b = True}"} evaluates to @{value "- {b. b = True}"}.
+   If you want that the complement operation actually computes the elements of the complements, you have to replace the code equations for @{term uminus} as follows:
+ \<close>
+-declare Set_uminus_code[code del] Set_uminus_cenum[code]
++declare Set_uminus_code[code drop] Set_uminus_cenum[code]
+ (*<*)value "- {b. b = True}"(*>*)
+ text \<open>
+   Then, @{term "- {b. b = True}"} becomes @{value "- {b. b = True}"}, but this applies to all complement invocations.
+   For example, @{term [source] "UNIV :: bool set"} becomes @{value "UNIV :: bool set"}.
+ \<close>
+-(*<*)declare Set_uminus_cenum[code del] Set_uminus_code[code](*>*)
++(*<*)declare Set_uminus_cenum[code drop] Set_uminus_code[code](*>*)
+ 
+ subsection \<open>Nested sets\<close>
+ text_raw \<open>\label{subsection:finite_UNIV} \label{subsection:card_UNIV} \label{subsection:cproper_interval}\<close>
+@@ -783,7 +783,7 @@ text \<open>
+ \<close>
+ 
+ definition Trie_Mapping :: "('k :: cbl, 'v) trie \<Rightarrow> ('k, 'v) mapping" 
+-where [simp, code del]: "Trie_Mapping t = Mapping.Mapping (lookup t)"
++where [simp, code drop]: "Trie_Mapping t = Mapping.Mapping (lookup t)"
+ 
+ code_datatype Assoc_List_Mapping RBT_Mapping Mapping Trie_Mapping
+ 
+@@ -1086,7 +1086,7 @@ text_raw \<open>
+     \par
+ \<close>
+ lemma empty_Set_Monad: "{} = Set_Monad []" by simp
+-declare tiny_set_code[code del, unfolded empty_Set_Monad, code]
++declare tiny_set_code[code drop, unfolded empty_Set_Monad, code]
+ text_raw \<open>
+     \isastyletext
+     \par
+diff --git a/thys/Containers/Lexicographic_Order.thy b/thys/Containers/Lexicographic_Order.thy
+index 71ea89b3a..0cab51a1a 100644
+--- a/thys/Containers/Lexicographic_Order.thy
++++ b/thys/Containers/Lexicographic_Order.thy
+@@ -52,10 +52,10 @@ subsection \<open>Setup for list fusion\<close>
+ context ord begin
+ 
+ definition lexord_fusion :: "('a, 's1) generator \<Rightarrow> ('a, 's2) generator \<Rightarrow> 's1 \<Rightarrow> 's2 \<Rightarrow> bool"
+-where [code del]: "lexord_fusion g1 g2 s1 s2 = lexordp (list.unfoldr g1 s1) (list.unfoldr g2 s2)"
++where [code drop]: "lexord_fusion g1 g2 s1 s2 = lexordp (list.unfoldr g1 s1) (list.unfoldr g2 s2)"
+ 
+ definition lexord_eq_fusion :: "('a, 's1) generator \<Rightarrow> ('a, 's2) generator \<Rightarrow> 's1 \<Rightarrow> 's2 \<Rightarrow> bool"
+-where [code del]: "lexord_eq_fusion g1 g2 s1 s2 = lexordp_eq (list.unfoldr g1 s1) (list.unfoldr g2 s2)"
++where [code drop]: "lexord_eq_fusion g1 g2 s1 s2 = lexordp_eq (list.unfoldr g1 s1) (list.unfoldr g2 s2)"
+ 
+ lemma lexord_fusion_code:
+   "lexord_fusion g1 g2 s1 s2 \<longleftrightarrow>
+diff --git a/thys/Containers/RBT_ext.thy b/thys/Containers/RBT_ext.thy
+index f55dc7574..e38317f01 100644
+--- a/thys/Containers/RBT_ext.thy
++++ b/thys/Containers/RBT_ext.thy
+@@ -229,7 +229,7 @@ lemma RBT_Impl_fold1_simps [simp, code]:
+ by(simp_all add: RBT_Impl_fold1_def RBT_Impl.keys_def fold_map RBT_Impl.fold_def split_def o_def tl_append hd_def split: list.split)
+ 
+ definition RBT_Impl_rbt_all :: "('a \<Rightarrow> 'b \<Rightarrow> bool) \<Rightarrow> ('a, 'b) rbt \<Rightarrow> bool"
+-where [code del]: "RBT_Impl_rbt_all P rbt = (\<forall>(k, v) \<in> set (RBT_Impl.entries rbt). P k v)"
++where [code drop]: "RBT_Impl_rbt_all P rbt = (\<forall>(k, v) \<in> set (RBT_Impl.entries rbt). P k v)"
+ 
+ lemma RBT_Impl_rbt_all_simps [simp, code]:
+   "RBT_Impl_rbt_all P rbt.Empty \<longleftrightarrow> True"
+@@ -237,7 +237,7 @@ lemma RBT_Impl_rbt_all_simps [simp, code]:
+ by(auto simp add: RBT_Impl_rbt_all_def)
+ 
+ definition RBT_Impl_rbt_ex :: "('a \<Rightarrow> 'b \<Rightarrow> bool) \<Rightarrow> ('a, 'b) rbt \<Rightarrow> bool"
+-where [code del]: "RBT_Impl_rbt_ex P rbt = (\<exists>(k, v) \<in> set (RBT_Impl.entries rbt). P k v)"
++where [code drop]: "RBT_Impl_rbt_ex P rbt = (\<exists>(k, v) \<in> set (RBT_Impl.entries rbt). P k v)"
+ 
+ lemma RBT_Impl_rbt_ex_simps [simp, code]:
+   "RBT_Impl_rbt_ex P rbt.Empty \<longleftrightarrow> False"
+diff --git a/thys/Containers/Set_Impl.thy b/thys/Containers/Set_Impl.thy
+index 6845c78e3..d09ed859b 100644
+--- a/thys/Containers/Set_Impl.thy
++++ b/thys/Containers/Set_Impl.thy
+@@ -1786,10 +1786,10 @@ subsection \<open>Type class instantiations\<close>
+ 
+ datatype set_impl = Set_IMPL
+ declare
+-  set_impl.eq.simps [code del]
+-  set_impl.size [code del]
+-  set_impl.rec [code del]
+-  set_impl.case [code del]
++  set_impl.eq.simps [code drop]
++  set_impl.size [code drop]
++  set_impl.rec [code drop]
++  set_impl.case [code drop]
+ 
+ lemma [code, set_base_code]: 
+   fixes x :: set_impl
+diff --git a/thys/Deriving/Comparator_Generator/comparator_generator.ML b/thys/Deriving/Comparator_Generator/comparator_generator.ML
+index 0f8e00b7a..de41bcbbf 100644
+--- a/thys/Deriving/Comparator_Generator/comparator_generator.ML
++++ b/thys/Deriving/Comparator_Generator/comparator_generator.ML
+@@ -232,7 +232,7 @@ fun generate_comparators_from_bnf_fp tyco lthy =
+       lthy
+       |> Local_Theory.begin_nested
+       |> snd
+-      |> (BNF_LFP_Rec_Sugar.primrec false [] bindings
++      |> (BNF_LFP_Rec_Sugar.primrec {verbose = false} [] bindings
+           (map (fn t => ((Binding.empty_atts, t), [], [])) eqs))
+       |> Local_Theory.end_nested_result (fn phi => fn (pcomps, _, pcomp_simps) => (map (Morphism.term phi) pcomps, map (Morphism.fact phi) pcomp_simps))
+ 
+diff --git a/thys/Deriving/Equality_Generator/equality_generator.ML b/thys/Deriving/Equality_Generator/equality_generator.ML
+index de6bcc5a8..e36d6080f 100644
+--- a/thys/Deriving/Equality_Generator/equality_generator.ML
++++ b/thys/Deriving/Equality_Generator/equality_generator.ML
+@@ -221,7 +221,7 @@ fun generate_equalitys_from_bnf_fp tyco lthy =
+       lthy
+       |> Local_Theory.begin_nested
+       |> snd
+-      |> (BNF_LFP_Rec_Sugar.primrec false [] bindings
++      |> (BNF_LFP_Rec_Sugar.primrec {verbose = false} [] bindings
+           (map (fn t => ((Binding.empty_atts, t), [], [])) eqs))
+       |> Local_Theory.end_nested_result
+           (fn phi => fn (pcomps, _, pcomp_simps) => (map (Morphism.term phi) pcomps, map (Morphism.fact phi) pcomp_simps))
+diff --git a/thys/Deriving/Hash_Generator/hash_generator.ML b/thys/Deriving/Hash_Generator/hash_generator.ML
+index 21a9bb858..7839957f0 100644
+--- a/thys/Deriving/Hash_Generator/hash_generator.ML
++++ b/thys/Deriving/Hash_Generator/hash_generator.ML
+@@ -208,7 +208,7 @@ fun generate_hashs_from_bnf_fp tyco lthy =
+       lthy
+       |> Local_Theory.begin_nested
+       |> snd
+-      |> BNF_LFP_Rec_Sugar.primrec false [] bindings
++      |> BNF_LFP_Rec_Sugar.primrec {verbose = false} [] bindings
+           (map (fn t => ((Binding.empty_atts, t), [], [])) eqs)
+       |> Local_Theory.end_nested_result
+           (fn phi => fn (phashs, _, phash_simps) => (map (Morphism.term phi) phashs, map (Morphism.fact phi) phash_simps))
+diff --git a/thys/Efficient-Mergesort/Efficient_Sort.thy b/thys/Efficient-Mergesort/Efficient_Sort.thy
+index 9b0bc1efa..2da894a1a 100644
+--- a/thys/Efficient-Mergesort/Efficient_Sort.thy
++++ b/thys/Efficient-Mergesort/Efficient_Sort.thy
+@@ -243,7 +243,7 @@ end
+ text \<open>
+   Replace existing code equations for \<^const>\<open>sort_key\<close> by \<^const>\<open>msort_key\<close>.
+ \<close>
+-declare sort_key_by_quicksort_code [code del]
++declare sort_key_by_quicksort_code [code drop]
+ declare sort_key_msort_key_conv [code]
+ 
+ end
+diff --git a/thys/Finger-Trees/FingerTree.thy b/thys/Finger-Trees/FingerTree.thy
+index 738d42d3b..a6507d880 100644
+--- a/thys/Finger-Trees/FingerTree.thy
++++ b/thys/Finger-Trees/FingerTree.thy
+@@ -743,7 +743,7 @@ text \<open>Finger trees viewed as a double-ended queue. The head and tail funct
+   empty finger trees.\<close>
+ text "Check for emptiness"
+ definition isEmpty :: "('e,'a) FingerTreeStruc \<Rightarrow> bool" where
+-  [code del]: "isEmpty t = (t = Empty)"
++  [code drop]: "isEmpty t = (t = Empty)"
+ lemma isEmpty_correct: "isEmpty t \<longleftrightarrow> toList t = []"
+   unfolding isEmpty_def by (simp add: toList_empty)
+ \<comment> \<open>Avoid comparison with @{text "(=)"}, and thus unnecessary equality-class
+diff --git a/thys/Formula_Derivatives/Examples/WS1S_Alt_Examples.thy b/thys/Formula_Derivatives/Examples/WS1S_Alt_Examples.thy
+index bb6701a10..5d31c88ab 100644
+--- a/thys/Formula_Derivatives/Examples/WS1S_Alt_Examples.thy
++++ b/thys/Formula_Derivatives/Examples/WS1S_Alt_Examples.thy
+@@ -27,7 +27,7 @@ abbreviation FLess (\<open>x\<^sub>_ < x\<^sub>_\<close> [65, 66] 65) where "FLe
+ abbreviation FIn (\<open>x\<^sub>_ \<in> X\<^bsub>_\<^esub>\<close> [65, 66] 65) where "FIn m M \<equiv> FBase (In m M)"
+ abbreviation FQ (\<open>[x\<^sub>_]\<close> [66] 65) where "FQ m \<equiv> FBase (Fo m)"
+ 
+-declare check_eqv_code[code del]
++declare check_eqv_code[code drop]
+ 
+ (*true in M2L, false in WS1S*)
+ definition "M2L = (FEx SO (FAll FO (FBase (In 0 0))) :: formula)"
+diff --git a/thys/Formula_Derivatives/Presburger_Formula.thy b/thys/Formula_Derivatives/Presburger_Formula.thy
+index 4fdfd3013..1a29c0616 100644
+--- a/thys/Formula_Derivatives/Presburger_Formula.thy
++++ b/thys/Formula_Derivatives/Presburger_Formula.thy
+@@ -674,7 +674,7 @@ lemma check_eqv_code[code]: "check_eqv idx r s =
+   | Some (a # list, x) \<Rightarrow> False))"
+   unfolding check_eqv_def Presb.check_eqv_def Presb.step_alt ..
+ 
+-definition while where [code del, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
++definition while where [code drop, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
+ declare while_default_code[of "fut_default idx \<phi>" for idx \<phi>, folded while_def, code]
+ 
+ lemma check_eqv_sound: 
+diff --git a/thys/Formula_Derivatives/WS1S_Alt_Formula.thy b/thys/Formula_Derivatives/WS1S_Alt_Formula.thy
+index 3f4b19096..862c3d1ef 100644
+--- a/thys/Formula_Derivatives/WS1S_Alt_Formula.thy
++++ b/thys/Formula_Derivatives/WS1S_Alt_Formula.thy
+@@ -328,7 +328,7 @@ lemma check_eqv_code[code]: "check_eqv idx r s =
+   | Some (a # list, x) \<Rightarrow> False))"
+   unfolding check_eqv_def WS1S_Alt.check_eqv_def WS1S_Alt.step_alt ..
+ 
+-definition while where [code del, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
++definition while where [code drop, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
+ declare while_default_code[of "fut_default idx \<phi>" for idx \<phi>, folded while_def, code]
+ 
+ lemma check_eqv_sound: 
+diff --git a/thys/Formula_Derivatives/WS1S_Formula.thy b/thys/Formula_Derivatives/WS1S_Formula.thy
+index e54e1607b..8c1aef285 100644
+--- a/thys/Formula_Derivatives/WS1S_Formula.thy
++++ b/thys/Formula_Derivatives/WS1S_Formula.thy
+@@ -758,7 +758,7 @@ lemma check_eqv_code[code]: "check_eqv idx r s =
+   | Some (a # list, x) \<Rightarrow> False))"
+   unfolding check_eqv_def WS1S.check_eqv_def WS1S.step_alt ..
+ 
+-definition while where [code del, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
++definition while where [code drop, code_abbrev]: "while idx \<phi> = while_default (fut_default idx \<phi>)"
+ declare while_default_code[of "fut_default idx \<phi>" for idx \<phi>, folded while_def, code]
+ 
+ lemma check_eqv_sound: 
+diff --git a/thys/Formula_Derivatives/WS1S_Prelim.thy b/thys/Formula_Derivatives/WS1S_Prelim.thy
+index 7079fafd1..39cde326d 100644
+--- a/thys/Formula_Derivatives/WS1S_Prelim.thy
++++ b/thys/Formula_Derivatives/WS1S_Prelim.thy
+@@ -8,7 +8,6 @@ imports
+   "List-Index.List_Index"
+ begin
+ 
+-hide_const (open) cut
+ (*>*)
+ 
+ definition "eval P x = (x |\<in>| P)"
+diff --git a/thys/Native_Word/Uint.thy b/thys/Native_Word/Uint.thy
+index 315177fc9..0deea40a5 100644
+--- a/thys/Native_Word/Uint.thy
++++ b/thys/Native_Word/Uint.thy
+@@ -44,7 +44,7 @@ abbreviation "dflt_size \<equiv> len_of (TYPE (dflt_size))"
+ 
+ context includes integer.lifting begin
+ lift_definition dflt_size_integer :: integer is "int dflt_size" .
+-declare dflt_size_integer_def[code del]
++declare dflt_size_integer_def[code drop]
+   \<comment> \<open>The code generator will substitute a machine-dependent value for this constant\<close>
+ 
+ lemma dflt_size_by_int[code]: "dflt_size = nat_of_integer dflt_size_integer"
+@@ -565,17 +565,17 @@ including undefined_transfer unfolding uint_mod_def uint_divmod_def
+ by transfer(simp add: word_mod_def)
+ 
+ definition uint_sdiv :: "uint \<Rightarrow> uint \<Rightarrow> uint"
+-where [code del]:
++where [code drop]:
+   "uint_sdiv x y =
+    (if y = 0 then undefined ((div) :: uint \<Rightarrow> _) x (0 :: uint)
+     else Abs_uint (Rep_uint x sdiv Rep_uint y))"
+ 
+ definition div0_uint :: "uint \<Rightarrow> uint"
+-where [code del]: "div0_uint x = undefined ((div) :: uint \<Rightarrow> _) x (0 :: uint)"
++where [code drop]: "div0_uint x = undefined ((div) :: uint \<Rightarrow> _) x (0 :: uint)"
+ declare [[code abort: div0_uint]]
+ 
+ definition mod0_uint :: "uint \<Rightarrow> uint"
+-where [code del]: "mod0_uint x = undefined ((mod) :: uint \<Rightarrow> _) x (0 :: uint)"
++where [code drop]: "mod0_uint x = undefined ((mod) :: uint \<Rightarrow> _) x (0 :: uint)"
+ declare [[code abort: mod0_uint]]
+ 
+ definition wivs_overflow_uint :: uint 
+diff --git a/thys/Native_Word/Uint32.thy b/thys/Native_Word/Uint32.thy
+index d424dc84a..106ddf2df 100644
+--- a/thys/Native_Word/Uint32.thy
++++ b/thys/Native_Word/Uint32.thy
+@@ -419,17 +419,17 @@ including undefined_transfer unfolding uint32_mod_def uint32_divmod_def
+ by transfer (simp add: word_mod_def)
+ 
+ definition uint32_sdiv :: "uint32 \<Rightarrow> uint32 \<Rightarrow> uint32"
+-where [code del]:
++where [code drop]:
+   "uint32_sdiv x y =
+    (if y = 0 then undefined ((div) :: uint32 \<Rightarrow> _) x (0 :: uint32)
+     else Abs_uint32 (Rep_uint32 x sdiv Rep_uint32 y))"
+ 
+ definition div0_uint32 :: "uint32 \<Rightarrow> uint32"
+-where [code del]: "div0_uint32 x = undefined ((div) :: uint32 \<Rightarrow> _) x (0 :: uint32)"
++where [code drop]: "div0_uint32 x = undefined ((div) :: uint32 \<Rightarrow> _) x (0 :: uint32)"
+ declare [[code abort: div0_uint32]]
+ 
+ definition mod0_uint32 :: "uint32 \<Rightarrow> uint32"
+-where [code del]: "mod0_uint32 x = undefined ((mod) :: uint32 \<Rightarrow> _) x (0 :: uint32)"
++where [code drop]: "mod0_uint32 x = undefined ((mod) :: uint32 \<Rightarrow> _) x (0 :: uint32)"
+ declare [[code abort: mod0_uint32]]
+ 
+ lemma uint32_divmod_code [code]:
+diff --git a/thys/Native_Word/Uint64.thy b/thys/Native_Word/Uint64.thy
+index 73a82a16e..a43c927d5 100644
+--- a/thys/Native_Word/Uint64.thy
++++ b/thys/Native_Word/Uint64.thy
+@@ -610,17 +610,17 @@ including undefined_transfer unfolding uint64_mod_def uint64_divmod_def
+ by transfer (simp add: word_mod_def)
+ 
+ definition uint64_sdiv :: "uint64 \<Rightarrow> uint64 \<Rightarrow> uint64"
+-where [code del]:
++where [code drop]:
+   "uint64_sdiv x y =
+    (if y = 0 then undefined ((div) :: uint64 \<Rightarrow> _) x (0 :: uint64)
+     else Abs_uint64 (Rep_uint64 x sdiv Rep_uint64 y))"
+ 
+ definition div0_uint64 :: "uint64 \<Rightarrow> uint64"
+-where [code del]: "div0_uint64 x = undefined ((div) :: uint64 \<Rightarrow> _) x (0 :: uint64)"
++where [code drop]: "div0_uint64 x = undefined ((div) :: uint64 \<Rightarrow> _) x (0 :: uint64)"
+ declare [[code abort: div0_uint64]]
+ 
+ definition mod0_uint64 :: "uint64 \<Rightarrow> uint64"
+-where [code del]: "mod0_uint64 x = undefined ((mod) :: uint64 \<Rightarrow> _) x (0 :: uint64)"
++where [code drop]: "mod0_uint64 x = undefined ((mod) :: uint64 \<Rightarrow> _) x (0 :: uint64)"
+ declare [[code abort: mod0_uint64]]
+ 
+ lemma uint64_divmod_code [code]:
+diff --git a/thys/Native_Word/Uint8.thy b/thys/Native_Word/Uint8.thy
+index 94229df79..4fff4a6f3 100644
+--- a/thys/Native_Word/Uint8.thy
++++ b/thys/Native_Word/Uint8.thy
+@@ -347,11 +347,11 @@ where
+     else Abs_uint8 (Rep_uint8 x sdiv Rep_uint8 y))"
+ 
+ definition div0_uint8 :: "uint8 \<Rightarrow> uint8"
+-where [code del]: "div0_uint8 x = undefined ((div) :: uint8 \<Rightarrow> _) x (0 :: uint8)"
++where [code drop]: "div0_uint8 x = undefined ((div) :: uint8 \<Rightarrow> _) x (0 :: uint8)"
+ declare [[code abort: div0_uint8]]
+ 
+ definition mod0_uint8 :: "uint8 \<Rightarrow> uint8"
+-where [code del]: "mod0_uint8 x = undefined ((mod) :: uint8 \<Rightarrow> _) x (0 :: uint8)"
++where [code drop]: "mod0_uint8 x = undefined ((mod) :: uint8 \<Rightarrow> _) x (0 :: uint8)"
+ declare [[code abort: mod0_uint8]]
+ 
+ lemma uint8_divmod_code [code]:
+diff --git a/thys/Posix-Lexing/Extensions/Positions3.thy b/thys/Posix-Lexing/Extensions/Positions3.thy
+index 482238f51..161a16a0e 100644
+--- a/thys/Posix-Lexing/Extensions/Positions3.thy
++++ b/thys/Posix-Lexing/Extensions/Positions3.thy
+@@ -166,7 +166,7 @@ proof -
+   from assms obtain p p'
+     where as: "v1 \<sqsubset>val p v2" "v2 \<sqsubset>val p' v3" unfolding PosOrd_ex_def by blast
+   then have pos: "p \<in> Pos v1" "p' \<in> Pos v2" unfolding PosOrd_def pflat_len_def
+-    by (metis (full_types) int_ops(2) not_int_zless_negative verit_comp_simplify1(1))
++    by (metis (full_types) int_ops(2) not_int_zless_negative alethe_comp_simplify1(1))
+        (metis PosOrd_def2 as(2) int_ops(2) not_int_zless_negative order_less_irrefl pflat_len_def)
+   have "p = p' \<or> p \<sqsubset>lex p' \<or> p' \<sqsubset>lex p"
+     by (rule lex_trichotomous)
+diff --git a/thys/Posix-Lexing/Positions.thy b/thys/Posix-Lexing/Positions.thy
+index bf2dda942..2d30262c1 100644
+--- a/thys/Posix-Lexing/Positions.thy
++++ b/thys/Posix-Lexing/Positions.thy
+@@ -163,8 +163,8 @@ proof -
+     where as: "v1 \<sqsubset>val p v2" "v2 \<sqsubset>val p' v3" unfolding PosOrd_ex_def by blast
+   then have pos: "p \<in> Pos v1" "p' \<in> Pos v2" unfolding PosOrd_def pflat_len_def
+     by (metis (full_types) not_int_zless_negative[of "length (flat (at v2 p))"] zero_less_one
+-        verit_comp_simplify1(1)[of "- 1"] pos_int_cases[of "1"])
+-       (metis PosOrd_def as(2) int_ops(2) not_int_zless_negative pflat_len_def verit_comp_simplify1(1))
++        alethe_comp_simplify1(1)[of "- 1"] pos_int_cases[of "1"])
++       (metis PosOrd_def as(2) int_ops(2) not_int_zless_negative pflat_len_def alethe_comp_simplify1(1))
+   have "p = p' \<or> p \<sqsubset>lex p' \<or> p' \<sqsubset>lex p"
+     by (rule lex_trichotomous)
+   moreover
+diff --git a/thys/Show/Show.thy b/thys/Show/Show.thy
+index a65e441d8..a31e6c5fb 100644
+--- a/thys/Show/Show.thy
++++ b/thys/Show/Show.thy
+@@ -115,7 +115,7 @@ where
+ 
+ definition showsp_list :: "'a showsp \<Rightarrow> nat \<Rightarrow> 'a list \<Rightarrow> shows"
+ where
+-  [code del]: "showsp_list s p = pshowsp_list p o map (s 0)"
++  [code drop]: "showsp_list s p = pshowsp_list p o map (s 0)"
+ 
+ lemma showsp_list_code [code]:
+   "showsp_list s p xs = shows_list_gen (s 0) ''[]'' ''['' '', '' '']'' xs"
+diff --git a/thys/Show/Show_Instances.thy b/thys/Show/Show_Instances.thy
+index 7b98dccc7..0119fb71f 100644
+--- a/thys/Show/Show_Instances.thy
++++ b/thys/Show/Show_Instances.thy
+@@ -48,7 +48,7 @@ redundant parentheses in the output, but seems unavoidable in the current setup,
+ i.e., pshowsp via primrec followed by defining showsp via pshowsp composed with map).*)
+ definition showsp_prod :: "'a showsp \<Rightarrow> 'b showsp \<Rightarrow> ('a \<times> 'b) showsp"
+   where
+-    [code del]: "showsp_prod s1 s2 p = pshowsp_prod p o map_prod (s1 1) (s2 1)"
++    [code drop]: "showsp_prod s1 s2 p = pshowsp_prod p o map_prod (s1 1) (s2 1)"
+ 
+ lemma showsp_prod_simps [simp, code]:
+   "showsp_prod s1 s2 p (x, y) =
+diff --git a/thys/Show/show_generator.ML b/thys/Show/show_generator.ML
+index 983311691..00a0f7811 100644
+--- a/thys/Show/show_generator.ML
++++ b/thys/Show/show_generator.ML
+@@ -107,7 +107,7 @@ fun mk_shows_parens _ [t] = t
+       (\<^Const>\<open>shows_pl for p\<close> :: separate \<^Const>\<open>shows_space\<close> ts @ [\<^Const>\<open>shows_pr for p\<close>])
+ 
+ fun simp_only_tac ctxt ths =
+-  CHANGED o full_simp_tac (clear_simpset (put_simpset HOL_basic_ss ctxt) addsimps ths)
++  CHANGED o full_simp_tac (put_simpset HOL_basic_ss ctxt |> Simplifier.clear_simpset |> Simplifier.add_simps ths)
+ 
+ fun generate_showsp tyco lthy =
+   let
+@@ -173,7 +173,7 @@ fun generate_showsp tyco lthy =
+       lthy
+       |> Local_Theory.begin_nested
+       |> snd
+-      |> BNF_LFP_Rec_Sugar.primrec false [] bindings
++      |> BNF_LFP_Rec_Sugar.primrec {verbose = false} [] bindings
+           (map (fn t => ((Binding.empty_atts, t), [], [])) eqs)
+       |> Local_Theory.end_nested_result
+           (fn phi => fn (pshows, _, pshow_simps) => (map (Morphism.term phi) pshows, map (Morphism.fact phi) pshow_simps))
+diff --git a/thys/Word_Lib/Word_Lemmas.thy b/thys/Word_Lib/Word_Lemmas.thy
+index 571d69af6..1ed27a845 100644
+--- a/thys/Word_Lib/Word_Lemmas.thy
++++ b/thys/Word_Lib/Word_Lemmas.thy
+@@ -245,7 +245,7 @@ lemma le_shiftr:
+ 
+ lemma le_shiftr':
+   "\<lbrakk> u >> n \<le> v >> n ; u >> n \<noteq> v >> n \<rbrakk> \<Longrightarrow> (u::'a::len word) \<le> v"
+-  by (metis le_cases le_shiftr verit_la_disequality)
++  by (metis le_cases le_shiftr alethe_la_disequality)
+ 
+ lemma shiftr_mask_le:
+   "n \<le> m \<Longrightarrow> mask n >> m = (0 :: 'a::len word)"
