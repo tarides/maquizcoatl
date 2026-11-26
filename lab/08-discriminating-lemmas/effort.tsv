@@ -6,3 +6,12 @@ run	date	item	kind	attempts	note
 1	2026-11-26	rocq/Desugar.v	definition	1	built first time
 1	2026-11-26	rocq/Cases.v	agreement	3	1 failing build (a *) inside a pattern in a comment); list-of-ends check added after the mutation check; ab28-ab29 added
 1	2026-11-26	mutants (scratch)	check	3	2 failing builds of the scratch files (String import order; length ambiguity)
+2	2026-11-26	session	wall-clock	-	start 2026-11-26T14:11:22Z; first proof compile 14:21:57Z, last 15:16:31Z; end 2026-11-26T15:22:01Z (run-2 notebook commit)
+2	2026-11-26	rocq/FoldProof.v sharp_s_sym (F1, F2)	proof	2	1 failing build (untyped bool binder in in_if)
+2	2026-11-26	rocq/AbsentMono.v (b) monotonicity, determinism	proof	9	6 failing builds and 2 interrupted (a generic destruct/rewrite tactic looped: on constructor scrutinees, then on its own equations); fixed by restricting it to the main hypothesis with fresh names
+2	2026-11-26	rocq/AbsentProof.v (a)/(c) core_K, term_core, attempt	proof	8	7 failing builds: explicit IH arguments, measure not simplified after destruct, side-goal order
+2	2026-11-26	rocq/AbsentProof.v (d) scan_a, scan_b; direct-side scan, Ends, x*	proof	11	10 failing builds: fuel names after destruct, downs base case, simpl unfolding Nat.eqb (S q) q (replaced by equation lemmas)
+2	2026-11-26	rocq/AbsentProof.v rel, equations, sim_a (2a)	proof	6	4 failing builds (pair destructs in ds_seq, small-fuel cases of md_Ur_inv, eqb orientation in lookup lemmas); sim_a itself built first time
+2	2026-11-26	rocq/AbsentProof.v inversions, sim_b (2b), absent_desugar_eq	proof	3	1 failing build (exact for reflexivity in gen_inv)
+2	2026-11-26	rocq/FoldProof.v fold_lit (stretch)	proof	1	built first time
+2	2026-11-26	mutants (29 cases)	check	1	eight run-1 mutants plus a control on Desugar.v, ab28-ab29 added to the drivers

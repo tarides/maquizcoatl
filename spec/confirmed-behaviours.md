@@ -96,7 +96,11 @@ library on all 11 absent cases
 **Limits.** This is corpus agreement on three pairs, not a proof. No
 lemma states that the direct absent semantics equals the
 `make_absent_engine` desugaring, on either code path. That equivalence
-stays open as a follow-up (issue #34). Nested absent functions are out
+stays open as a follow-up (issue #34). Update 2026-11-26: issue #34's
+run 2 proves it in Rocq (`absent_desugar_eq`, both code paths, for
+`i <= rr <= length s`) against a model of the C desugaring checked on 29
+cases ([Rocq entry](../lab/results/2026-11-26-exp-08-lemmas-rocq.md)).
+Nested absent functions are out
 of scope: `upstream/doc/RE:385` leaves them undefined.
 
 **Status.** Decided by the maintainer 2026-11-20
