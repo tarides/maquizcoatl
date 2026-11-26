@@ -301,3 +301,22 @@ yet: it waits for the CPU set it may use on the bench host.
 - **Housekeeping.** Run 13's log archive recorded a local account name
   in its tar headers; the maintainer had it repacked, as a documented
   exception to the append-only rule. PR #32 is ready for review.
+
+## 2026-11-26: upgrade cost for Verus and Isabelle, housekeeping
+
+- **Issue #25 (experiment #13 follow-up)** measured what one upgrade
+  costs on the two stacks experiment #13 could not build. Anvil, a
+  Verus project pinned to a July release, fails on the release 16
+  versions later, mostly on solver resource limits; porting it took 26
+  changed lines and about two hours, and the ported proof checks 17%
+  slower. The AFP regex entries fail on the next Isabelle release, half
+  of the breakage in their AFP dependencies; porting took 34 minutes,
+  and the AFP's own release made the same changes. One run on the bench
+  host covered both. A fix agent answered two review questions on its
+  own; the maintainer confirmed both answers afterwards, and the
+  workflows now say that an answer covers only its own question.
+- **Smaller items.** Issue #34 (discriminating lemmas) uses Rocq and
+  Verus: experiment #9 found where F\* automation breaks, not where
+  Verus's does. Issue #29 is closed, the F\* bug being filed upstream.
+  Archives whose tar headers named local accounts were repacked
+  (experiment #9's run 13, experiment #11's r2-r4, PR #38).
