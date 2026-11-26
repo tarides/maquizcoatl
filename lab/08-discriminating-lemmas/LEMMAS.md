@@ -140,7 +140,10 @@ the lookup takes the newest entry (below), as the C does.
   is `data_range`, `end` for a forward search of the whole subject,
   `:5660-5663`),
   written only by `OP_UPDATE_VAR` (`:4548-4580`) and read by
-  `DATA_ENSURE` (`:2725-2727`): every consuming node checks `i < rr`.
+  `DATA_ENSURE*` (`:2725-2727`): every consuming node checks `i < rr`.
+  Outside this scope it is also read by
+  `CHECK_POSITION_CURRENT_RIGHT_RANGE` (`:3994-3995`, look-behind) and by
+  callout arguments (`:1188`, `:1207`).
   Backtracking does not restore it: `md` returns the ordered list of
   results together with the register at final failure, and the
   alternative tried next starts from the register the previous one
@@ -231,12 +234,21 @@ register `rr`"; the statement is false without `rr <= length s`. On the
 empty subject at `i = 0`, `rr = 2`, `m` on `AbsRep (Chr 7)` returns the
 ends `[2; 1; 0]` (the cut scans up to the register), and `md` on its
 desugaring returns `[0]` (the engine's `\O` step stops at the subject
-end): `Rcheck.v` in run 2's raw data. Every start of a search satisfies
-the hypothesis (`rr = length s`, `i <= length s`), and both matchers
-preserve it (a consuming step needs `i < rr`; a cut lies between the
+end): `Rcheck.v` in run 2's raw data. For a forward search of the whole
+subject (`onig_search` with `range = end`) and for `onig_match`, every
+start has `rr = length s` and `i <= length s`, and both matchers preserve
+the hypothesis (a consuming step needs `i < rr`; a cut lies between the
 position and the register; `RClear` sets the register to `length s`), so
-the theorem covers every pattern a search runs. The change is to the
-statement written in run 1, not to a decision.
+the theorem applies at every start. It is stated per start, with fuels
+chosen per start; no corollary relating `search` and `dsearch` is proved,
+and `dsearch` does not model `search_in_range`'s choice of starts
+(`regexec.c:5730-5930`). When the caller passes `range < end`, or searches
+backward, the C starts the register at `in_right_range` and the range
+clear resets it there (`regexec.c:5660-5663`, `:5972`, `:5987`,
+`:4576-4577`), not at the subject end: those calls are not modelled, and
+the comments of `Desugar.v` and `desugar.rs` on `INIT_RIGHT_RANGE` mean
+the subject end of a forward search of the whole subject. The change is
+to the statement written in run 1, not to a decision.
 
 Rocq name `absent_desugar_eq` (the conjunction), in `AbsentProof.v`.
 A continuation is a pattern too (`Seq r k`), so the statement covers the
@@ -253,6 +265,13 @@ side's fuel. They rest on monotonicity and determinism for both matchers
 `scan`, `cut` and `m`, so a complete list on either side implies that
 every `occ` it evaluated was complete. Fuel adequacy (fuel as a function
 of the input) is later work.
+
+Termination is not proved either: neither matcher is shown to return a
+complete result at some fuel on an in-scope pattern (`mb_term`,
+`cut_term` and `term_core` cover only the absent-free parts). The
+theorem is conditional, and says nothing at a start where `m` and `md`
+both run out of fuel at every fuel. Non-vacuity is shown only on the 29
+cases, at fuel 1000 (`Cases.v`, `cases.rs`).
 
 **The invariant.** The core of the proof relates a direct item stack and
 register to a desugared item stack, register and save store: after a

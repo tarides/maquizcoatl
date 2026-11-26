@@ -64,6 +64,12 @@ answered 2026-11-26 by the maintainer, each with the recommended option):
 6. **Lemma F: (c).** The scoped lemma F is the done-criterion; the
    one-level fold statement for every literal `w` is attempted if time
    remains, and the outcome is reported either way.
+7. **Simple-path `e` in lemma 2: (a).** Raised by the plan review
+   ([comment](https://github.com/tarides/maquizcoatl/issues/34#issuecomment-7193435054));
+   the maintainer's answer is recorded in the issue body. Lemma 2 covers
+   every absent-free `e`, both the simple path (a greedy one-character
+   repeat, `Star (Chr c)`) and the general path, with lemma (d) stated
+   for a general step.
 
 Nothing else is decided here. A question that comes up during a run and
 is not covered by one of these answers is raised on issue #34, not

@@ -1,4 +1,5 @@
-"""Lemma count and automatic share (plan step 6, experiment #9).
+"""Lemma count and automatic share (experiment #9's plan step 6; copied
+for experiment #8's follow-up, issue #34, with the Verus body rule fixed).
 
 Usage: python3 -I lemmas.py <file.v|file.fst|file.rs>...   (Rocq; F*
 added in run 7; Verus in run 10)
@@ -36,10 +37,14 @@ scan).
 
 Verus (.rs, run 10): a lemma is a `proof fn` (also `broadcast proof
 fn`), whether or not it returns a value (plan step 6). It is automatic
-when its body, the first brace block at bracket depth 0 after the name
-(the parameters, return type and specification clauses are inside
-parentheses or have no braces at depth 0), is empty: the default SMT
-discharge with no explicit step. A proof fn that returns a value (a
+when its body is empty: the default SMT discharge with no explicit
+step. The body is the first brace block at bracket depth 0 after the
+name that is not followed by `,`, `else`, a clause keyword (`ensures`,
+`decreases`, `returns`) or another block; such a block belongs to the
+specification clauses (`if .. { } else { }`, `match .. { }`,
+`==> { &&& .. }` in `requires` or `ensures`). Experiment #9's copy takes
+the first block at depth 0; issue #34's run-3 review fixes found seven
+lemmas it misreads here, and `realbody.py` there checked this rule. A proof fn that returns a value (a
 witness, such as `proof_sim::sim`) is a lemma by this definition and is
 marked `returns` in a fifth column. A proof fn whose body is one
 `assert(...) by (compute)` or `by (compute_only)` (an evaluated check,
@@ -177,6 +182,22 @@ def verus_items(path):
         while i < len(text):
             ch = text[i]
             if ch == "{" and depth == 0:
+                # a brace block inside requires/ensures (`if .. { } else { }`,
+                # `match .. { }`, `==> { &&& .. }`) is followed by `,`,
+                # `else`, a clause keyword or another block: skip it
+                k, d = i, 0
+                while True:
+                    if text[k] == "{":
+                        d += 1
+                    elif text[k] == "}":
+                        d -= 1
+                        if d == 0:
+                            break
+                    k += 1
+                after = text[k + 1:].lstrip()
+                if after[:1] in (",", "{") or re.match(r"(else|ensures|decreases|returns)\b", after):
+                    i = k + 1
+                    continue
                 body_start = i
                 break
             if ch in "([{":

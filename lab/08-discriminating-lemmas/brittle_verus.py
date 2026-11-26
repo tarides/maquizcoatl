@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-# Experiment #9, run 14 (plan step 7, M3): the Verus side of brittle.sh.
+# Experiment #8 follow-up (issue #34): the Verus side of brittle.sh, copied
+# unchanged from experiment #9's run 14.
 # Reads one check's output (Verus --output-json on stdout, diagnostics on
 # stderr) and prints, tab-separated, on one line:
 #   verified errors smt_run_ms rlimit_run max_fn_rlimit max_fn failing

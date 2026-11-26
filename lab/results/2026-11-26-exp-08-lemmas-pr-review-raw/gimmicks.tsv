@@ -1,0 +1,7 @@
+ab13	save-val RIGHT_RANGE id:0,save-val S id:1,save-val S id:2,update-var RIGHT_RANGE_FROM_S_STACK id:2,update-var RIGHT_RANGE_FROM_STACK id:0,update-var S_FROM_STACK id:1,save-val RIGHT_RANGE id:3,update-var RIGHT_RANGE_FROM_STACK id:0,update-var RIGHT_RANGE_FROM_STACK id:3
+ab14	save-val RIGHT_RANGE id:0,save-val S id:1,save-val S id:2,update-var RIGHT_RANGE_FROM_S_STACK id:2,update-var RIGHT_RANGE_FROM_STACK id:0,update-var S_FROM_STACK id:1
+ab15	save-val RIGHT_RANGE id:0,save-val S id:1,save-val S id:2,update-var RIGHT_RANGE_FROM_S_STACK id:2,update-var RIGHT_RANGE_FROM_STACK id:0,update-var S_FROM_STACK id:1
+ab16	save-val RIGHT_RANGE id:0,save-val S id:1,update-var RIGHT_RANGE_FROM_S_STACK id:1,update-var RIGHT_RANGE_FROM_STACK id:0,update-var RIGHT_RANGE_FROM_STACK id:0
+ab17	save-val RIGHT_RANGE id:0,save-val S id:1,update-var RIGHT_RANGE_FROM_S_STACK id:1,update-var RIGHT_RANGE_FROM_STACK id:0,update-var RIGHT_RANGE_FROM_STACK id:0
+ab18	save-val RIGHT_RANGE id:0,save-val S id:1,update-var RIGHT_RANGE_FROM_S_STACK id:1,update-var RIGHT_RANGE_FROM_STACK id:0,update-var RIGHT_RANGE_FROM_STACK id:0
+ab19	save-val RIGHT_RANGE id:0,save-val S id:1,update-var RIGHT_RANGE_FROM_S_STACK id:1,update-var RIGHT_RANGE_FROM_STACK id:0,update-var RIGHT_RANGE_FROM_STACK id:0

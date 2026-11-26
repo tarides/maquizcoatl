@@ -1,38 +1,24 @@
 #!/bin/bash
-# Experiment #9: three clean full checks of one tool's definition files
-# (rocq and fstar: one file at a time; verus: the whole crate lib.rs as
-# one unit, VERUS_THREADS verifier threads, default 7), pinned to CPUS (default 28-31,60-63, one L3
-# complex), /usr/bin/time -v, 16G memory cap (cgroup v2 MemoryMax, as
-# rocq/rocq.sh time: OCaml 5 tools reserve more address space than
-# ulimit -v 16G allows), load average before each check.  Adapted from
-# experiment #8's timed.sh and check.sh.  Run under flock <exp>/timed.lock.
-#   BENCH_WORKDIR=<bench-workdir> timed.sh <tool> <run-id>     tool: rocq | fstar | verus
-# rocq: ROCQ_FILES (default the five definition files, as rocq/rocq.sh time
-# of run 1; run 4 added this case so that Rocq's time.tsv has the user and
-# system columns and its time.log one "Checked" line per file and run).
-# fstar: FSTAR_FILES (default the five definition files; run 7 passes the
-# definitions and the proof modules ProofA ProofSem ProofSim Proof, in
-# dependency order, each file checked against the .checked files of the
-# ones before it).
+# Experiment #8 follow-up (issue #34, plans/08-discriminating-lemmas.md):
+# three clean full checks of one tool's files, pinned to CPUS (default
+# 24-27,56-59), /usr/bin/time -v, 16G memory cap (cgroup v2 MemoryMax:
+# OCaml 5 tools reserve more address space than ulimit -v 16G allows),
+# load average before each check.  Copied from experiment #9's timed.sh
+# (lab/09-representative-proof/timed.sh); its F* case is dropped, since
+# this experiment has no F* files.  Run under flock <exp>/timed.lock.
+#   BENCH_WORKDIR=<bench-workdir> timed.sh <tool> <run-id>     tool: rocq | verus
+# rocq: ROCQ_FILES (default Fold FoldProof Absent Desugar AbsentMono
+# AbsentProof, in dependency order), one file at a time.
+# verus: the whole crate lib.rs (the eight files of verus/) as one unit,
+# VERUS_THREADS verifier threads (default 7, under the 8 pinned CPUs);
+# also writes version.txt, the output of verus --version and of the z3
+# Verus runs (the binary bundled next to verus, or $VERUS_Z3_PATH).
 # Output: <exp>/out/<run-id>/<tool>/time.{tsv,load,log,<r>.<file>}.
 # time.log holds the checker's output (rocq: one "Checked <file>.v" line
-# per file and run, printed by chk after rocq compile succeeds; fstar: one "Verified module" line
-# per file and run, 15 in all; verus: one "verification results" line
-# per run, 3 in all, since Verus checks the crate lib.rs as one unit;
-# from run 10 the crate also holds the proof modules proof_a, proof_sem,
-# proof_sim and proof, copied with the definitions);
-# time.tsv's columns are run, file, wall clock, max RSS (kB), user time
-# (s), system time (s) (user and system added in correction 3, entry 8;
-# run 3 ran Verus on its default, 7 threads under the 8 pinned CPUs,
-# now passed explicitly as --num-threads); time.tsv, time.load and
-# time.log are copied to the run's lab/results/<entry>-raw/<tool>/ raw set.
-# verus (correction 7, run-10 review): also writes version.txt, the
-# output of verus --version and of the z3 Verus runs (the binary bundled
-# next to verus, or $VERUS_Z3_PATH when set), copied to the raw set too.
+# per file and run, printed by chk after rocq compile succeeds; verus: one
+# "verification results" line per run).  time.tsv's columns are run,
+# file, wall clock, max RSS (kB), user time (s), system time (s).
 # Prints no hostnames, addresses or absolute paths.
-# Adapted for experiment #8's follow-up (issue #34, plans/08-discriminating-lemmas.md):
-# only the file lists, the EXP path, the Print Assumptions targets and the
-# CPU defaults change (timed CPUS 24-27,56-59; untimed and sampler CPUs 8-11, 8).
 set -euo pipefail
 : "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory}"
 T=${1:?tool} RID=${2:?run-id}
@@ -45,9 +31,6 @@ case $T in
   rocq)  DEFS=${ROCQ_FILES:-Fold FoldProof Absent Desugar AbsentMono AbsentProof}
          fresh() { rm -rf "$1"; mkdir -p "$1"; cp "$L"/rocq/*.v "$1/"; }
          chk() { opam exec --switch provers -- rocq compile -R . S "$1.v" && echo "Checked $1.v"; } ;;
-  fstar) DEFS=${FSTAR_FILES:-Syntax Sem Compile Vm Statement}
-         fresh() { rm -rf "$1"; mkdir -p "$1/cache"; for f in $DEFS; do cp "$L/fstar/$f.fst" "$1/"; done; }
-         chk() { fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 "$1.fst"; } ;;
   verus) DEFS="lib"
          . "$CACHE/verus-env.sh"
          { verus --version; "${VERUS_Z3_PATH:-$(dirname "$(command -v verus)")/z3}" --version; } > "$OUT/version.txt" 2>&1

@@ -1,12 +1,11 @@
 #!/bin/bash
-# Experiment #9: provenance for the notebook (CPU, kernel, OS, tool and
-# solver versions, commits).  Adapted from experiment #8's provenance.sh
-# (lab/08-hard-features/provenance.sh, main at 6630262).
+# Experiment #8 follow-up (issue #34, plans/08-discriminating-lemmas.md):
+# provenance for the notebook (CPU, kernel, OS, tool and solver versions,
+# commits).  Copied from experiment #9's provenance.sh
+# (lab/09-representative-proof/provenance.sh); F* is listed only for the
+# Z3 binaries of its release, which brittle.sh passes to Verus.
 # Prints no hostnames, addresses or absolute paths.
 #   BENCH_WORKDIR=<bench-workdir> provenance.sh
-# Adapted for experiment #8's follow-up (issue #34, plans/08-discriminating-lemmas.md):
-# only the file lists, the EXP path, the Print Assumptions targets and the
-# CPU defaults change (timed CPUS 24-27,56-59; untimed and sampler CPUs 8-11, 8).
 set -uo pipefail
 : "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory, <bench-workdir>}"
 CACHE=$BENCH_WORKDIR/cache; EXP=${EXP:-$BENCH_WORKDIR/exp/08-discriminating-lemmas}
