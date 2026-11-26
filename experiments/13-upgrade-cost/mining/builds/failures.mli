@@ -10,11 +10,15 @@ type format =
   | Fstar
       (** F*: [* Error n at p(l,c-l,c):] and the older [p(l,c-l,c): (Error n)].
       *)
+  | Rustc
+      (** rustc and Verus ([cargo verus]): an [error] line, then the first
+          [--> p:l:c] line before the next [warning] or [error]. *)
+  | Isabelle  (** Isabelle: [*** ... (line n of "p")] lines. *)
   | Failed_steps
       (** No log parsing: the failing files are the labels of the failed steps
           (one Why3 session per step). *)
 
 val files : format -> string -> string list
 (** [files fmt log] is the distinct files with an error in [log], sorted, with
-    leading [./] removed from Rocq and Lean paths. It is [[]] for
+    leading [./] removed from Rocq, Lean and Rust paths. It is [[]] for
     [Failed_steps]. *)

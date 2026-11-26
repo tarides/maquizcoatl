@@ -19,8 +19,9 @@ type phase =
 val phase_to_string : phase -> string
 (** [phase_to_string p] is [prepare] or [build]. *)
 
-val builds_file : out:string -> date:string -> string
-(** [builds_file ~out ~date] is [out/<date>-exp-13-builds.csv]. *)
+val builds_file : ?table:string -> out:string -> date:string -> unit -> string
+(** [builds_file ~table ~out ~date ()] is [out/<date>-exp-13-<table>.csv];
+    [table] defaults to [builds]. *)
 
 val plan : config -> Step.t list -> string
 (** [plan c steps] is [steps] numbered and described as they would run under
@@ -32,6 +33,7 @@ val install : config -> Toolchain.t list -> (unit, string) result
     before any step runs, if [taskset] rejects the CPU set of [c.limits]. *)
 
 val run :
+  ?table:string ->
   config ->
   phase ->
   out:string ->
@@ -40,13 +42,13 @@ val run :
   Target.side ->
   variant:string option ->
   (bool, string) result
-(** [run c phase ~out ~date t side ~variant] runs [phase] of the side [side] of
-    [t], records its row, and is [Ok true] if every step succeeded, [Ok false]
-    if one failed or the driver was interrupted (see {!Exec.with_interrupts}):
-    the failure is a result, recorded in the row. It is an error, found before
-    any step runs, if the variant is unknown, the steps cannot be listed,
-    [taskset] rejects the CPU set, the row could not be written ({!Row.check}),
-    or, for a [Build], the checkout is missing, holds outputs of an earlier
-    build ({!Target.stale}) or does not find its pins in the switch
-    ({!Target.check_pins}). It is also an error if the row cannot be written
-    after all. A dry run is [Ok true]. *)
+(** [run ~table c phase ~out ~date t side ~variant] runs [phase] of the side
+    [side] of [t], records its row, and is [Ok true] if every step succeeded,
+    [Ok false] if one failed or the driver was interrupted (see
+    {!Exec.with_interrupts}): the failure is a result, recorded in the row. It
+    is an error, found before any step runs, if the variant is unknown, the
+    steps cannot be listed, [taskset] rejects the CPU set, the row could not be
+    written ({!Row.check}), or, for a [Build], the checkout is missing, holds
+    outputs of an earlier build ({!Target.stale}) or does not find its pins in
+    the switch ({!Target.check_pins}). It is also an error if the row cannot be
+    written after all. A dry run is [Ok true]. *)
