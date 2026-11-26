@@ -52,6 +52,12 @@ number of alternatives of `unravel w` plus its number of segments plus
 induction on `w` through `unr`. Attempted only after (F1), (F2) and
 lemma 2 are closed in that tool.
 
+**Run 2 (Rocq): closed** (`FoldProof.v`, `fold_lit`). The induction is
+on the list of segments and on each segment's alternatives, for any
+segment list, not on `w`, so it needs no lemma about `unr`; the bound
+is the number of alternatives of `unravel w` plus 2 (`cost`), which is 7
+for `[0xDF]`, the bound of (F1).
+
 ## Lemma 2: absent desugaring equivalence
 
 ### The desugaring
@@ -181,9 +187,11 @@ ran on the first 27 cases (ab01-ab27), before ab28-ab29 (the loops
 around an absent construct) were added; the detections below hold on
 29, but the two no-effect statements (the atomic group changes no first
 match; the two removals that change nothing) were not checked on the
-loop cases, and ab29 is the only stopper inside a loop. Run 2 reruns the
-eight mutants on the 29 cases. Detections:
-the engine restore `UpdRRFromStack id; Fail` (ab13, ab14, ab15), the
+loop cases, and ab29 is the only stopper inside a loop. Run 2 reran the
+eight mutants on the 29 cases (`lab/results/2026-11-26-exp-08-lemmas-rocq.md`):
+the two no-effect statements hold on all 29, and ab29 also detects the
+engine restore. Detections on 29 cases:
+the engine restore `UpdRRFromStack id; Fail` (ab13, ab14, ab15, ab29), the
 tail's re-install through `id3` (ab20), the tail's restore through `id1`
 (ab21, ab22, ab25, ab27), the range clear's restore (ab23), the simple
 path's final `UpdRRFromStack id1` (ab16, ab26), the rewind
@@ -202,13 +210,28 @@ the register).
 `Stopper a` and `RClear`, where `a` and `e` are absent-free (nested
 absent is out of scope, as in experiment #8: `upstream/doc/RE:385` calls
 it undefined). For every `r` with `in_scope r`, every subject `s`,
-position `i` and register `rr`, writing `d = fst (desugar r 0)` and
+position `i` and register `rr` with `i <= rr <= length s` (run 2, see
+below), writing `d = fst (desugar r 0)` and
 `ends rs = map (fun '(e, _, _) => e) rs`:
 
 - **(2a)** for all `g f l`, if `m s g f [R r] i rr = Some l` then there
-  is `f'` with `md s f' [DR d] i rr [] = Some (rs, x)` and `ends rs = l`;
+  is `f'` with `md s f' [DR d] i rr [] = Some (rs, rr)` and `ends rs = l`
+  (the register at final failure is the starting one);
 - **(2b)** for all `f' rs x`, if `md s f' [DR d] i rr [] = Some (rs, x)`
-  then there are `g f` with `m s g f [R r] i rr = Some (ends rs)`.
+  then `x = rr` and there are `g f` with
+  `m s g f [R r] i rr = Some (ends rs)`.
+
+**Run 2: the hypothesis `i <= rr <= length s`.** Run 1 wrote "every
+register `rr`"; the statement is false without `rr <= length s`. On the
+empty subject at `i = 0`, `rr = 2`, `m` on `AbsRep (Chr 7)` returns the
+ends `[2; 1; 0]` (the cut scans up to the register), and `md` on its
+desugaring returns `[0]` (the engine's `\O` step stops at the subject
+end): `Rcheck.v` in run 2's raw data. Every start of a search satisfies
+the hypothesis (`rr = length s`, `i <= length s`), and both matchers
+preserve it (a consuming step needs `i < rr`; a cut lies between the
+position and the register; `RClear` sets the register to `length s`), so
+the theorem covers every pattern a search runs. The change is to the
+statement written in run 1, not to a decision.
 
 Rocq name `absent_desugar_eq` (the conjunction), in `AbsentProof.v`.
 A continuation is a pattern too (`Seq r k`), so the statement covers the
@@ -262,6 +285,32 @@ makes the global register behave like experiment #8's per-branch `rr`.
   the item stacks.
 - (h) Range clear, as one more case of (g) if it closes in a few lines in
   each tool; otherwise named out of scope with the reason.
+
+**Run 2 (Rocq), how the plan was carried out.** `AbsentMono.v` proves
+(b). `AbsentProof.v` proves (a) and (c) together for an absent-free
+stack followed by the engine's continuation `UpdRRFromS j; Fail`
+(`core_K`: `md` ends with `p` if `mb` finds a result, with the starting
+register otherwise), and its termination (`term_core`, by induction on
+`(rr - i, size)`; it also gives the termination of `mb` on absent-free
+patterns, which the simple path needs because its scan can stop before
+the cut, at the first position that is not `c`). (d) is `scan_a`/`scan_b`
+for a general step, `AnyO` or `Chr c`, followed by a continuation whose
+final register is a function `h` of the register it is entered with
+(constant on the simple path, the identity for the atomic scan of the
+general path and the stopper, where the continuation is empty). (g) is
+`sim_a`/`sim_b`, by strong induction on the fuel of `m` (for (2a)) or
+of `md` (for (2b)), over a relation `rel` between the two item stacks:
+items related one by one (each with its own id base, since every lookup
+of a desugared construct reads an id that the construct saved itself),
+a `SetRR k` (the end of `AbsExp`'s `exp`) related to the tail with the
+store holding `k` under `id1`, and only absent-free items above it. The
+invariant of the design note holds as stated: `md` on a related stack
+ends with the register it started with, so the next alternative starts
+from the register of its choice point, as in the direct semantics.
+(e), (f) and (h) are cases of (g): the range clear closes in the same
+induction (one case of 5 to 6 lines in each direction, plus four
+unfolding and inversion lemmas of about 35 lines), so it is in scope,
+not named out.
 
 ## Changes to experiment #8's definitions
 
