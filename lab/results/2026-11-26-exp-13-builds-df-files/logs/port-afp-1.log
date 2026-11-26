@@ -1,0 +1,823 @@
+Building Regular-Sets ...
+Building Coinductive_Languages ...
+Building Functional-Automata ...
+Finished Coinductive_Languages (0:00:20 elapsed time, 0:00:56 cpu time, factor 2.71)
+Building Formula_Derivatives ...
+Finished Functional-Automata (0:00:24 elapsed time, 0:01:00 cpu time, factor 2.42)
+Building MSO_Regex_Equivalence ...
+Finished Regular-Sets (0:00:44 elapsed time, 0:01:53 cpu time, factor 2.55)
+Building Posix-Lexing ...
+Formula_Derivatives FAILED (see also "isabelle build_log -H Error Formula_Derivatives")
+*** Failed to load theory "Formula_Derivatives.WS1S_Alt_Formula" (unresolved "Formula_Derivatives.WS1S_Prelim")
+*** Failed to load theory "Formula_Derivatives.WS1S_Formula" (unresolved "Formula_Derivatives.WS1S_Prelim")
+*** Failed to load theory "Formula_Derivatives.WS1S_Nameful" (unresolved "Formula_Derivatives.WS1S_Formula")
+*** Failed to load theory "Formula_Derivatives.WS1S_Presburger_Equivalence" (unresolved "Formula_Derivatives.Presburger_Formula", "Formula_Derivatives.WS1S_Formula")
+*** Bad arguments for attribute "code" (line 677 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-port/thys/Formula_Derivatives/Presburger_Formula.thy"):
+***   del
+*** At command "definition" (line 677 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-port/thys/Formula_Derivatives/Presburger_Formula.thy")
+*** Undefined constant: "cut" (line 11 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-port/thys/Formula_Derivatives/WS1S_Prelim.thy")
+*** At command "hide_const" (line 11 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-port/thys/Formula_Derivatives/WS1S_Prelim.thy")
+Building Regex_Equivalence ...
+Finished Regex_Equivalence (0:01:11 elapsed time, 0:03:19 cpu time, factor 2.78)
+Formula_Derivatives-Examples CANCELLED
+Finished Posix-Lexing (0:03:31 elapsed time, 0:06:59 cpu time, factor 1.98)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+*** Failure of consumer thread "Isabelle.export":
+*** [SQLITE_READONLY_DBMOVED] The database file has been moved since it was opened (attempt to write a readonly database)
+Finished MSO_Regex_Equivalence (0:11:18 elapsed time, 0:19:59 cpu time, factor 1.77)
+Unfinished session(s): Formula_Derivatives, Formula_Derivatives-Examples
+0:11:57 elapsed time, 0:36:35 cpu time, factor 3.06
+exit 1

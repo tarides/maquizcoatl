@@ -1,5 +1,6 @@
-(** The five projects of Part A, their two sides, and the steps preparing,
-    building and checking them (plan, "Part A: builds").
+(** The projects of Part A (five) and of its follow-up for Verus and Isabelle
+    (issue #25, two), their two sides, and the steps preparing, building and
+    checking them (plan, "Part A: builds").
 
     Each project is checked out at its commit at the snapshot date in
     [build/<project>-<side>] (with the variant's name appended when the variant
@@ -23,7 +24,27 @@
     - [why3-gallery] (Why3 1.8.2, 1.9.0): the sessions of tag 1.8.2 (sparse
       checkout of [examples/]); one measured [why3 replay] per session (see
       {!Why3_sessions}), each one run whatever the previous ones gave, with
-      [running_provers_max] set to the run's number of jobs. *)
+      [running_provers_max] set to the run's number of jobs;
+    - [anvil] (Verus 0.2026.07.12.0b42f4c, 0.2026.11.22.1ce6a59): Anvil at
+      [3c95bbb]; the latest side moves [rust-toolchain.toml] to Rust 1.100.0 and
+      [vstd] to the release's version, and replaces the git dependency
+      [verus_temporal_logic] by a path dependency on a checkout of verus-tla
+      [8bb157b] next to it ([build/anvil-latest-verus-tla]) with the same [vstd]
+      move; preparation runs [cargo fetch], then [cargo verus verify --lib] with
+      [--no-verify] forwarded to Anvil's crate only
+      ([--fwd-verus-args-to roots]), so that the dependencies are built and
+      verified, then [cargo clean -p verifiable-controllers]; the measured step
+      is [cargo verus verify --lib -j N] with [--num-threads N --time-expanded]
+      forwarded to Anvil's crate only;
+    - [afp-regex] (Isabelle2025-2, Isabelle2026): the six AFP regex entries of
+      AFP 2025-2 and the entries they require (sparse checkout of
+      [isabelle-prover/mirror-afp-2025-2] at [fa30b560ab75]), one [-d] per
+      entry; preparation builds the requirements of the seven sessions that do
+      not descend from them ([isabelle build -R -x ...], listed first with
+      [isabelle sessions]); the measured step is
+      [isabelle build -b -o document=false -c] of the seven sessions and
+      [Coinductive_Languages], with [-j N/4] and [-o threads=4] (from 8 jobs:
+      [-j 2 -o threads=4]). *)
 
 type side = Pinned | Latest
 
@@ -33,7 +54,7 @@ val side_to_string : side -> string
 type t
 
 val all : t list
-(** [all] is the five projects, in the plan's order. *)
+(** [all] is the seven projects, in the plans' order. *)
 
 val name : t -> string
 (** [name t] is [t]'s name on the command line ([warblre], [lean-regex]...). *)
@@ -85,7 +106,9 @@ val stale : Layout.t -> t -> side -> variant option -> string list
     checkout (relative paths): [_build] for Rocq, [regex/.lake/build] and
     [correctness/.lake/build] for lean-regex (not the packages), the top
     [_cache] and [_output] of the Pulse examples. A measured build must start
-    without them, or it would be incremental. The Why3 gallery has none. *)
+    without them, or it would be incremental. For [anvil], the cargo
+    fingerprints of [verifiable-controllers] under [target/]. The Why3 gallery
+    and [afp-regex] ([-c] cleans the measured sessions) have none. *)
 
 val measured :
   Layout.t ->

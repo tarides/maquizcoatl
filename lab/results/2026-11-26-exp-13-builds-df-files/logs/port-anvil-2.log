@@ -1,0 +1,11 @@
+partial verification selector: `--verify-module`
+partial verification selector: `--verify-module`
+partial verification selector: `--verify-module`
+partial verification selector: `--verify-module`
+partial verification selector: `--verify-module`
+partial verification selector: `--verify-module`
+partial verification selector: `--verify-module`
+partial verification selector: `--verify-module`
+partial verification selector: `--verify-module`
+Error: Partial verification must use `cargo verus focus`
+exit 1

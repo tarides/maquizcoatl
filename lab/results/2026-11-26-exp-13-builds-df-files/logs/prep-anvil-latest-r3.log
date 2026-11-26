@@ -1,0 +1,13 @@
+anvil-latest-prepare, logs in <bench-workdir>/exp/13-upgrade-builds-df/work/logs/anvil-latest-prepare-20261126T075808Z
+[1/11] mkdir build: ok (0.0 s)
+[2/11] clone: skipped (0.0 s)
+[3/11] checkout: ok (0.0 s)
+[4/11] mkdir build: ok (0.0 s)
+[5/11] clone: skipped (0.0 s)
+[6/11] checkout: ok (0.0 s)
+[7/11] edits verus-tla: ok (0.0 s)
+[8/11] edits: ok (0.0 s)
+[9/11] cargo fetch: ok (0.2 s)
+[10/11] cargo verus verify, dependencies: ok (40.6 s)
+[11/11] cargo clean -p verifiable-controllers: ok (0.1 s)
+anvil-latest-prepare: ok, row added to <bench-workdir>/exp/13-upgrade-builds-df/results/2026-11-26-exp-13-builds-df.csv

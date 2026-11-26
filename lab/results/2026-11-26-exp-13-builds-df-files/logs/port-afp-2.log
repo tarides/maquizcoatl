@@ -1,0 +1,17 @@
+Building Regex_Equivalence ...
+Building Formula_Derivatives ...
+Building MSO_Regex_Equivalence ...
+Finished Regex_Equivalence (0:01:24 elapsed time, 0:03:46 cpu time, factor 2.68)
+Finished Formula_Derivatives (0:04:10 elapsed time, 0:10:30 cpu time, factor 2.52)
+Building Formula_Derivatives-Examples ...
+Formula_Derivatives-Examples FAILED (see also "isabelle build_log -H Error Formula_Derivatives-Examples")
+*** Failed to load theory "Show.Show_Instances" (unresolved "Show.Show")
+*** Failed to load theory "Formula_Derivatives-Examples.WS1S_Nameful_Examples" (unresolved "Show.Show_Instances")
+*** ML error (line 110 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-port/thys/Show/show_generator.ML"):
+*** Value or constructor (clear_simpset) has not been declared
+*** ML error (line 110 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-port/thys/Show/show_generator.ML"):
+*** Value or constructor (addsimps) has not been declared
+*** 
+*** At command "ML_file" (line 170 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-port/thys/Show/Show.thy")
+*** [SQLITE_CONSTRAINT_PRIMARYKEY] A PRIMARY KEY constraint failed (UNIQUE constraint failed: isabelle_sources.session_name, isabelle_sources.name)
+exit 2

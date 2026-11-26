@@ -1,0 +1,6 @@
+# unpack verus-0.2026.11.22.1ce6a59-x86-linux.zip
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59 && timeout --kill-after=60 21600 taskset --cpu-list 8-11,40-43 nice -n 10 unzip -q -o <bench-workdir>/exp/13-upgrade-builds-df/work/downloads/verus-0.2026.11.22.1ce6a59-x86-linux.zip -d <bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59)
+# start 2026-11-26T07:49:30Z
+
+
+# ok

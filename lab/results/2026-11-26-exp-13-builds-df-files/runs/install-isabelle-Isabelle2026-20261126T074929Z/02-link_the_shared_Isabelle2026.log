@@ -1,0 +1,6 @@
+# link the shared Isabelle2026
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/switches && timeout --kill-after=60 21600 taskset --cpu-list 12-15,44-47 nice -n 10 ln -s <bench-workdir>/cache/isabelle/dist/Isabelle2026 <bench-workdir>/exp/13-upgrade-builds-df/work/switches/isabelle-Isabelle2026)
+# start 2026-11-26T07:49:29Z
+
+
+# ok

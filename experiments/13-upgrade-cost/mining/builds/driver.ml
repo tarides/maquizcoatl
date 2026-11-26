@@ -3,7 +3,9 @@ type phase = Prepare | Build
 
 let phase_to_string = function Prepare -> "prepare" | Build -> "build"
 let ( / ) = Filename.concat
-let builds_file ~out ~date = out / (date ^ "-exp-13-builds.csv")
+
+let builds_file ?(table = "builds") ~out ~date () =
+  out / Printf.sprintf "%s-exp-13-%s.csv" date table
 
 let plan c steps =
   let prefix = Limits.prefix c.limits in
@@ -133,7 +135,7 @@ let check_pins c target side v =
             (fun msg -> msg ^ ": prepare this side again")
             (Target.check_pins target v output))
 
-let run c phase ~out ~date target side ~variant =
+let run ?table c phase ~out ~date target side ~variant =
   let open Result.Syntax in
   let* v = Target.variant target variant in
   let variant_name = Option.fold ~none:"" ~some:Target.variant_name v in
@@ -153,7 +155,7 @@ let run c phase ~out ~date target side ~variant =
     | Prepare -> Ok (Target.prepare c.layout c.limits target side v)
     | Build -> Target.measured c.layout c.limits target side v
   in
-  let file = builds_file ~out ~date in
+  let file = builds_file ?table ~out ~date () in
   if c.dry_run then (
     Printf.printf "# %s (toolchain %s)\n%s" what
       (Toolchain.name (Target.toolchain target side))

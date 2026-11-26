@@ -1,0 +1,7 @@
+# clone
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build && timeout --kill-after=60 21600 taskset --cpu-list 8-11,40-43 nice -n 10 git clone --filter=blob:none --no-checkout https://github.com/anvil-verifier/anvil.git <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest)
+# start 2026-11-26T07:54:53Z
+
+Cloning into '<bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest'...
+
+# ok

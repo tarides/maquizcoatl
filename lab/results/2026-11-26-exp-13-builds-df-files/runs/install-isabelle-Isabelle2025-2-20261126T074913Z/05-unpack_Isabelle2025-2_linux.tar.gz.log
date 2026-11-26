@@ -1,0 +1,6 @@
+# unpack Isabelle2025-2_linux.tar.gz
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/switches/isabelle-Isabelle2025-2 && timeout --kill-after=60 21600 taskset --cpu-list 12-15,44-47 nice -n 10 tar -xzf <bench-workdir>/exp/13-upgrade-builds-df/work/downloads/Isabelle2025-2_linux.tar.gz -C <bench-workdir>/exp/13-upgrade-builds-df/work/switches/isabelle-Isabelle2025-2 --strip-components=1)
+# start 2026-11-26T07:49:14Z
+
+
+# ok

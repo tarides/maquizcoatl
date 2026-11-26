@@ -1,0 +1,25 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index c6449f1..d9d94b3 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -12,8 +12,8 @@ runtime = ["kube/runtime"]
+ ws = ["kube/ws"]
+ 
+ [dependencies]
+-vstd = "=0.0.0-2026-07-12-0122"
+-verus_temporal_logic = { git = "https://github.com/anvil-verifier/verus-tla", rev = "8bb157b50b6200296d4b04d1302644d269e29443" }
++vstd = "=0.0.0-2026-11-22-0344"
++verus_temporal_logic = { path = "../anvil-latest-verus-tla" }
+ 
+ kube = { version = "0.91.0", default-features = false, features = ["admission"] }
+ kube-client = { version = "0.91.0", default-features = false }
+diff --git a/rust-toolchain.toml b/rust-toolchain.toml
+index 6840092..529423f 100644
+--- a/rust-toolchain.toml
++++ b/rust-toolchain.toml
+@@ -1,4 +1,4 @@
+ # this should be synchronized with the Verus version, since we need to combine
+ # k8s compiled with rustc and our own code compiled with rust-verify.sh
+ [toolchain]
+-channel = "1.96.0"
++channel = "1.100.0"

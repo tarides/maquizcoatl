@@ -1,0 +1,7 @@
+# checkout
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && timeout --kill-after=60 21600 taskset --cpu-list 12-15,44-47 nice -n 10 git -c advice.detachedHead=false checkout --detach 3c95bbbe812dfa488ac59b341932f1858d01f343)
+# start 2026-11-26T10:16:16Z
+
+HEAD is now at 3c95bbb Update vstd to 0.0.0-2026-07-12-0122 and pin Verus release in CI (#817)
+
+# ok

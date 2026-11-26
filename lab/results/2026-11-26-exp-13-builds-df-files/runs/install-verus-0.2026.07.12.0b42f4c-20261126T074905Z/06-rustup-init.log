@@ -1,0 +1,53 @@
+# rustup-init
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/downloads && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 21600 taskset --cpu-list 8-11,40-43 nice -n 10 <bench-workdir>/exp/13-upgrade-builds-df/work/downloads/rustup-init -y --no-modify-path --default-toolchain none)
+# start 2026-11-26T07:49:05Z
+
+info: profile set to default
+info: default host tuple is x86_64-unknown-linux-gnu
+info: skipping toolchain installation
+
+
+Rust is installed now. Great!
+
+To get started you need Cargo's bin directory 
+(<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin)
+in your PATH
+environment variable. This has not been done automatically.
+
+To configure your current shell, you need to source
+the corresponding env file under 
+<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo.
+
+Consider running the right command for your shell (note the leading DOT):
+. 
+"<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/env"
+# For sh/ash/dash/pdksh/bash
+cargo:rerun-if-env-changed=CC_x86_64-unknown-linux-gnu
+CC_x86_64-unknown-linux-gnu = None
+cargo:rerun-if-env-changed=CC_x86_64_unknown_linux_gnu
+CC_x86_64_unknown_linux_gnu = None
+cargo:rerun-if-env-changed=HOST_CC
+HOST_CC = None
+cargo:rerun-if-env-changed=CC
+CC = None
+cargo:rerun-if-env-changed=CC_ENABLE_DEBUG_OUTPUT
+cargo:rerun-if-env-changed=CPATH
+cargo:rerun-if-env-changed=C_INCLUDE_PATH
+cargo:rerun-if-env-changed=CPLUS_INCLUDE_PATH
+cargo:rerun-if-env-changed=OBJC_INCLUDE_PATH
+cargo:rerun-if-env-changed=OBJCPLUS_INCLUDE_PATH
+cargo:rerun-if-env-changed=COMPILER_PATH
+cargo:rerun-if-env-changed=SOURCE_DATE_EPOCH
+cargo:rerun-if-env-changed=GCC_EXEC_PREFIX
+cargo:rerun-if-env-changed=CRATE_CC_NO_DEFAULTS
+CRATE_CC_NO_DEFAULTS = None
+cargo:rerun-if-env-changed=CFLAGS
+CFLAGS = None
+cargo:rerun-if-env-changed=HOST_CFLAGS
+HOST_CFLAGS = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64_unknown_linux_gnu
+CFLAGS_x86_64_unknown_linux_gnu = None
+cargo:rerun-if-env-changed=CFLAGS_x86_64-unknown-linux-gnu
+CFLAGS_x86_64-unknown-linux-gnu = None
+
+# ok

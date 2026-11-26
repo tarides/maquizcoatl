@@ -1,0 +1,191 @@
+# cargo verus verify
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 2700 taskset --cpu-list 24-27,56-59 nice -n 10 cargo verus verify --fwd-verus-args-to roots --lib -j 8 -- --num-threads 8 --time-expanded)
+# start 2026-11-26T08:39:14Z
+
+    Checking verifiable-controllers v0.1.0 (<bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest)
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+  --> src/kubernetes_cluster/proof/req_resp.rs:80:1
+   |
+80 | pub proof fn lemma_always_object_in_ok_get_resp_is_same_as_etcd_with_same_rv(self, spec: TempPred<ClusterState>, key: ObjectRef)
+   | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+   --> src/controllers/vstatefulset_controller/proof/liveness/proof.rs:607:1
+    |
+607 | pub proof fn spec_entails_pending_request_invariants_part7(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+  --> src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs:25:1
+   |
+25 | / pub proof fn lemma_from_diff_and_init_to_current_state_matches(
+26 | |     vrs: VReplicaSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int, diff: int
+27 | | )
+   | |_^
+
+error: assertion failed
+    --> src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs:3114:20
+     |
+3114 |             assert(inductive_current_state_matches(vrs, controller_id)(s_prime));
+     |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ assertion failed
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+   --> src/controllers/vdeployment_controller/proof/liveness/api_actions.rs:156:1
+    |
+156 | / pub proof fn lemma_list_vrs_request_returns_ok_with_objs_matching_vd_with_nv_status_matching_replicas(
+157 | |     s: ClusterState, s_prime: ClusterState, vd: VDeploymentView, cluster: Cluster, controller_id: int, req_msg: Message, new_vrs:...
+158 | | ) -> (resp_msg: Message)
+    | |_______________________^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+    --> src/controllers/rabbitmq_controller/proof/liveness/resource_match.rs:1390:7
+     |
+1390 |   proof fn lemma_inductive_current_state_matches_preserves_from_s_to_s_prime_during_controller_step_this_cr(
+     |  _______^
+1391 | |     controller_id: int, cluster: Cluster, sub_resource: SubResource, rabbitmq: RabbitmqClusterView,
+1392 | |     s: ClusterState, s_prime: ClusterState, input: (int, Option<Message>, Option<ObjectRef>)
+1393 | | )
+     | |_^
+
+error: assertion failed
+    --> src/controllers/vdeployment_controller/proof/helper_invariants/proof.rs:1127:19
+     |
+1127 |           } implies {
+     |  ___________________^
+1128 | |             let resp_obj = msg.content.get_create_response().res.unwrap();
+1129 | |             let new_vrs = VReplicaSetView::unmarshal(resp_obj)->Ok_0;
+1130 | |             let controller_owners = new_vrs.metadata.owner_references->0.filter(controller_owner_filter());
+...    |
+1134 | |             &&& controller_owners == controller_owner_singleton
+1135 | |         } by {
+     | |_________^ assertion failed
+
+note: recommendation not met
+    --> src/controllers/vdeployment_controller/proof/helper_invariants/proof.rs:1036:17
+     |
+1036 |     let state = VDeploymentReconcileState::unmarshal(s.ongoing_reconciles(controller_id)[key].local_state).unwrap();
+     |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+     |
+    ::: <bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/registry/src/index.crates.io-1949cf8c6b5b557f/vstd-0.0.0-2026-11-22-0344/std_specs/result.rs:171:9
+     |
+ 171 |         result is Ok,
+     |         ------------ recommendation not met
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+  --> src/controllers/vreplicaset_controller/proof/guarantee.rs:75:1
+   |
+75 | / pub proof fn lemma_local_pods_are_bound_to_vrs_with_key_preserves_from_s_to_s_prime(
+76 | |     cluster: Cluster, controller_id: int, cr_key: ObjectRef, s: ClusterState, s_prime: ClusterState
+77 | | )
+   | |_^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+    --> src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs:2296:1
+     |
+2296 | / pub proof fn lemma_from_after_receive_ok_resp_to_send_delete_pod_req(
+2297 | |     vrs: VReplicaSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int,
+2298 | |     resp_msg: Message, diff: int
+2299 | | )
+     | |_^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+    --> src/controllers/vreplicaset_controller/proof/liveness/resource_match.rs:2123:1
+     |
+2123 | / pub proof fn lemma_from_after_send_delete_pod_req_to_receive_ok_resp(
+2124 | |     vrs: VReplicaSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int,
+2125 | |     req_msg: Message, diff: int
+2126 | | )
+     | |_^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+   --> src/controllers/vstatefulset_controller/proof/helper_invariants.rs:282:7
+    |
+282 |   proof fn lemma_eventually_always_all_pod_requests_from_vsts_controller_carry_only_vsts_owner_ref_inductive_step(
+    |  _______^
+283 | |     cluster: Cluster, controller_id: int, vsts: VStatefulSetView, s: ClusterState, s_prime: ClusterState
+284 | | )
+    | |_^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+   --> src/controllers/vstatefulset_controller/proof/liveness/proof.rs:437:1
+    |
+437 | pub proof fn spec_entails_pending_request_invariants_part3_get_pvc(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+   --> src/controllers/vstatefulset_controller/proof/liveness/proof.rs:511:1
+    |
+511 | pub proof fn spec_entails_pending_request_invariants_part4_create_needed(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+   --> src/controllers/vstatefulset_controller/proof/liveness/proof.rs:531:1
+    |
+531 | pub proof fn spec_entails_pending_request_invariants_part4_update_needed(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+   --> src/controllers/vstatefulset_controller/proof/liveness/proof.rs:551:1
+    |
+551 | pub proof fn spec_entails_pending_request_invariants_part5(spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int)
+    | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+    --> src/controllers/vstatefulset_controller/proof/liveness/resource_match.rs:2621:1
+     |
+2621 | / pub proof fn lemma_spec_entails_after_delete_condemned_request_leads_to_response(
+2622 | |     vsts: VStatefulSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int, condemned_index: nat, condemned_...
+2623 | | )
+     | |_^
+
+error: function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details
+    --> src/controllers/vstatefulset_controller/proof/liveness/resource_match.rs:2549:1
+     |
+2549 | / pub proof fn lemma_spec_entails_delete_condemned_leads_to_after_delete_condemned_request(
+2550 | |     vsts: VStatefulSetView, spec: TempPred<ClusterState>, cluster: Cluster, controller_id: int, condemned_index: nat, condemned_...
+2551 | | )
+     | |_^
+
+verification results:: 894 verified, 17 errors
+(use --output-json for machine-readable output)
+verus-build-info
+Verus
+  Version: 0.2026.11.22.1ce6a59
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.100.0-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+total-time:         1294294 ms    (estimated total cpu time 7234103 ms)
+    rust-time:                8871 ms
+        init-and-types:           8704 ms
+        trait-conflicts:           167 ms
+        compile-time:                0 ms
+    verification-time:     1281680 ms
+        vir-time:                11401 ms
+            hir-time:                    0 ms
+            import-time:               432 ms
+            rust-to-vir:              7204 ms
+        verify-crate-time:     1270278 ms
+    unaccounted-time:         3742 ms
+
+verify-crate-time-breakdown
+    total verify-time:        7207583 ms   (8 threads)
+      1. vdeployment_controller::proof::helper_invariants::proof    1188316 ms
+      2. rabbitmq_controller::proof::liveness::terminate     293043 ms
+      3. vreplicaset_controller::proof::liveness::resource_match     290874 ms
+        total air-time:            120696 ms   (8 threads)
+      1. vreplicaset_controller::proof::liveness::resource_match       2981 ms
+      2. vdeployment_controller::proof::helper_invariants::proof       2792 ms
+      3. vstatefulset_controller::proof::liveness::resource_match       2568 ms
+        total smt-time:           6901223 ms   (8 threads)
+            total smt-init:                69 ms,   570908 rlimit (8 threads)
+                1. vstatefulset_controller::proof::liveness::resource_match          2 ms
+                2. vstatefulset_controller::exec::reconciler          3 ms
+                3. kubernetes_cluster::proof::garbage_collector          3 ms
+            total smt-run:            6901154 ms, 2906778964 rlimit (8 threads)
+                1. vdeployment_controller::proof::helper_invariants::proof    1242535 ms, 113859833 rlimit
+                2. vstatefulset_controller::proof::liveness::resource_match    1145346 ms, 612853801 rlimit
+                3. rabbitmq_controller::proof::liveness::resource_match     646349 ms, 249255051 rlimit
+error: could not compile `verifiable-controllers` (lib) due to 17 previous errors
+
+# exit 101

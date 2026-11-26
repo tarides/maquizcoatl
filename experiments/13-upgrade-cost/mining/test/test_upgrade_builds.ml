@@ -311,7 +311,46 @@ Bar.fst(3,0-3,5): (Error 189) Expected type
 make[1]: *** [Makefile:12: _cache/Bar.fst.checked] Error 1
 |}
 
+(* Verus through cargo verus: the primary location of each error. *)
+let rustc_log =
+  {|   Compiling verifiable-controllers v0.1.0 (/x/anvil-latest)
+error: assertion failed
+   --> src/vreplicaset_controller/proof/liveness.rs:120:9
+    |
+120 |         assert(x);
+    |         ^^^^^^ assertion failed
+   ::: src/kubernetes_cluster/spec/cluster.rs:44:5
+    |
+note: see also
+   --> src/kubernetes_cluster/spec/other.rs:3:1
+error[E0425]: cannot find value `y` in this scope
+  --> ./src/vstd_ext/seq_lib.rs:7:5
+warning: unused variable
+  --> src/shim_layer/mod.rs:1:1
+error: aborting due to 2 previous errors
+|}
+
+(* isabelle build, failed sessions. *)
+let isabelle_log =
+  {|Running Posix-Lexing ...
+Posix-Lexing FAILED (see also "isabelle build_log -H Error Posix-Lexing")
+*** Undefined fact: "verit_sko_ex" (line 120 of "/x/thys/Posix-Lexing/Positions.thy")
+*** At command "by" (line 120 of "/x/thys/Posix-Lexing/Positions.thy")
+*** Failed to finish proof (line 7 of "$AFP/Formula_Derivatives/WS1S.thy"):
+Finished Regular-Sets (0:01:02 elapsed time)
+|}
+
 let test_failures () =
+  Alcotest.check strings "rustc and Verus"
+    [
+      "src/vreplicaset_controller/proof/liveness.rs"; "src/vstd_ext/seq_lib.rs";
+    ]
+    (Failures.files Failures.Rustc rustc_log);
+  Alcotest.check strings "Isabelle"
+    [
+      "$AFP/Formula_Derivatives/WS1S.thy"; "/x/thys/Posix-Lexing/Positions.thy";
+    ]
+    (Failures.files Failures.Isabelle isabelle_log);
   Alcotest.check strings "dune and Rocq"
     [ "Engine/Foo.v"; "Semantics/Baz.v" ]
     (Failures.files Failures.Dune_rocq dune_log);
@@ -442,6 +481,9 @@ let test_run_without_process () =
 (* Toolchain *)
 
 let layout dir = Layout.make dir
+
+let () =
+  Unix.putenv "UPGRADE_BUILDS_ISABELLE2026" "/cache/isabelle/dist/Isabelle2026"
 
 let test_toolchain_names () =
   List.iter
@@ -577,7 +619,15 @@ let target name =
 
 let test_targets () =
   Alcotest.check strings "projects"
-    [ "warblre"; "linden"; "lean-regex"; "pulse-examples"; "why3-gallery" ]
+    [
+      "warblre";
+      "linden";
+      "lean-regex";
+      "pulse-examples";
+      "why3-gallery";
+      "anvil";
+      "afp-regex";
+    ]
     (List.map Target.name Target.all);
   List.iter
     (fun t ->
@@ -649,6 +699,187 @@ let test_lean_regex () =
   Alcotest.(check bool)
     "elan" true
     (env_has build "ELAN_HOME" "/w/switches/elan")
+
+let test_verus_install () =
+  let l = layout "/w" in
+  let steps =
+    ok
+      (Toolchain.install l (limits ()) (Toolchain.Verus "0.2026.11.22.1ce6a59"))
+  in
+  Alcotest.check strings "rust toolchain"
+    [ "rustup"; "toolchain"; "install"; "1.100.0"; "--profile"; "default" ]
+    (argv (run_labelled "rustup toolchain install 1.100.0" steps));
+  Alcotest.(check bool)
+    "rustup home" true
+    (env_has
+       (run_labelled "rustup toolchain install 1.100.0" steps)
+       "RUSTUP_HOME" "/w/switches/rust/rustup");
+  Alcotest.check strings "digests"
+    [
+      "b1c8cb14e30889e7e2999e6b69e62d9e9b9ffc0f4df8180564d306d9680e6c55";
+      "c955d5958877f4f907cce80aa996d4239a481984829d82e325938c7bf242b0db";
+    ]
+    (List.filter_map
+       (function Step.Sha256 { expected; _ } -> Some expected | _ -> None)
+       steps);
+  check_error "Verus without digest"
+    (Toolchain.install l (limits ()) (Toolchain.Verus "0.2025.01.01.0000000"));
+  let c =
+    Toolchain.command l (Toolchain.Verus "0.2026.07.12.0b42f4c") ~cwd:"/x"
+      "cargo" []
+  in
+  Alcotest.(check bool)
+    "cargo home" true
+    (env_has c "CARGO_HOME" "/w/switches/rust/cargo");
+  let isa =
+    ok (Toolchain.install l (limits ()) (Toolchain.Isabelle "Isabelle2026"))
+  in
+  Alcotest.check strings "shared Isabelle2026 linked"
+    [
+      "ln";
+      "-s";
+      "/cache/isabelle/dist/Isabelle2026";
+      "/w/switches/isabelle-Isabelle2026";
+    ]
+    (argv (run_labelled "link the shared Isabelle2026" isa));
+  Alcotest.(check bool)
+    "no digest step on the shared cache" true
+    (List.for_all (function Step.Sha256 _ -> false | _ -> true) isa);
+  let isa2 =
+    ok (Toolchain.install l (limits ()) (Toolchain.Isabelle "Isabelle2025-2"))
+  in
+  Alcotest.(check bool)
+    "tarball removed after unpacking" true
+    (List.mem (Step.Remove "/w/downloads/Isabelle2025-2_linux.tar.gz") isa2);
+  Alcotest.(check bool)
+    "user home" true
+    (env_has
+       (Toolchain.command l (Toolchain.Isabelle "Isabelle2025-2") ~cwd:"/x"
+          "isabelle" [])
+       "USER_HOME" "/w/switches/isabelle-home")
+
+let anvil_cargo =
+  {|[dependencies]
+vstd = "=0.0.0-2026-07-12-0122"
+verus_temporal_logic = { git = "https://github.com/anvil-verifier/verus-tla", rev = "8bb157b50b6200296d4b04d1302644d269e29443" }
+|}
+
+let test_anvil () =
+  let l = layout "/w" and t = target "anvil" in
+  let latest = Target.prepare l (limits ~jobs:8 ()) t Target.Latest None in
+  let edits = edits_of latest in
+  Alcotest.(check string)
+    "manifest"
+    "[dependencies]\n\
+     vstd = \"=0.0.0-2026-11-22-0344\"\n\
+     verus_temporal_logic = { path = \"../anvil-latest-verus-tla\" }\n"
+    (apply_all edits "Cargo.toml" anvil_cargo);
+  Alcotest.(check string)
+    "toolchain" "channel = \"1.100.0\"\n"
+    (apply_all edits "rust-toolchain.toml" "channel = \"1.96.0\"\n");
+  let tla_edits =
+    List.concat_map
+      (function
+        | Step.Edit { label = "edits verus-tla"; dir; edits } ->
+            Alcotest.(check string)
+              "verus-tla next to the checkout" "/w/build/anvil-latest-verus-tla"
+              dir;
+            edits
+        | _ -> [])
+      latest
+  in
+  Alcotest.(check string)
+    "verus-tla vstd" "vstd = \"=0.0.0-2026-11-22-0344\"\n"
+    (apply_all tla_edits "Cargo.toml" "vstd = \"=0.0.0-2026-07-12-0122\"\n");
+  let pinned = Target.prepare l (limits ~jobs:8 ()) t Target.Pinned None in
+  Alcotest.(check int) "no edit when pinned" 0 (List.length (edits_of pinned));
+  Alcotest.(check bool)
+    "no verus-tla checkout when pinned" false
+    (List.exists (fun (label, _, _) -> label = "edits verus-tla") (runs pinned));
+  Alcotest.check strings "dependencies, Anvil not verified"
+    [
+      "cargo";
+      "verus";
+      "verify";
+      "--fwd-verus-args-to";
+      "roots";
+      "--lib";
+      "-j";
+      "8";
+      "--";
+      "--no-verify";
+    ]
+    (argv (run_labelled "cargo verus verify, dependencies" pinned));
+  Alcotest.check strings "clean"
+    [ "cargo"; "clean"; "-p"; "verifiable-controllers" ]
+    (argv (run_labelled "cargo clean -p verifiable-controllers" pinned));
+  let measured =
+    ok (Target.measured l (limits ~jobs:8 ()) t Target.Pinned None)
+  in
+  Alcotest.check strings "measured"
+    [
+      "cargo";
+      "verus";
+      "verify";
+      "--fwd-verus-args-to";
+      "roots";
+      "--lib";
+      "-j";
+      "8";
+      "--";
+      "--num-threads";
+      "8";
+      "--time-expanded";
+    ]
+    (argv (run_labelled "cargo verus verify" measured));
+  Alcotest.(check bool)
+    "failure format" true
+    (Target.failure_format t = Failures.Rustc);
+  with_temp_dir (fun dir ->
+      let l = layout dir in
+      let d = Target.dir l t Target.Pinned None in
+      Exec.mkdir_p (d / "target/debug/.fingerprint/vstd-1");
+      Alcotest.check strings "no fingerprint" []
+        (Target.stale l t Target.Pinned None);
+      Exec.mkdir_p (d / "target/debug/.fingerprint/verifiable-controllers-2");
+      Alcotest.check strings "fingerprint"
+        [ "target/debug/.fingerprint/verifiable-controllers-2" ]
+        (Target.stale l t Target.Pinned None))
+
+let test_afp_regex () =
+  let l = layout "/w" and t = target "afp-regex" in
+  let measured =
+    ok (Target.measured l (limits ~jobs:8 ()) t Target.Latest None)
+  in
+  let a = argv (run_labelled "isabelle build" measured) in
+  let rec after x = function
+    | y :: z :: _ when y = x -> Some z
+    | _ :: r -> after x r
+    | [] -> None
+  in
+  Alcotest.(check (option string))
+    "sessions in parallel" (Some "2") (after "-j" a);
+  Alcotest.(check bool) "threads" true (List.mem "threads=4" a);
+  Alcotest.(check bool) "clean build" true (List.mem "-c" a);
+  Alcotest.(check bool) "documents off" true (List.mem "document=false" a);
+  Alcotest.(check bool)
+    "one -d per entry" true
+    (List.mem "/w/build/afp-regex-latest/thys/Posix-Lexing" a
+    && not (List.mem "/w/build/afp-regex-latest/thys" a));
+  Alcotest.(check bool)
+    "Coinductive_Languages measured" true
+    (List.mem "Coinductive_Languages" a);
+  let prepare = Target.prepare l (limits ~jobs:12 ()) t Target.Pinned None in
+  let p = argv (run_labelled "isabelle build, requirements" prepare) in
+  Alcotest.(check (option string))
+    "untimed parallelism" (Some "3") (after "-j" p);
+  Alcotest.(check bool) "requirements only" true (List.mem "-R" p);
+  Alcotest.(check (option string))
+    "descendants excluded" (Some "Regular-Sets") (after "-x" p);
+  Alcotest.(check bool) "no clean" false (List.mem "-c" p);
+  Alcotest.(check bool)
+    "failure format" true
+    (Target.failure_format t = Failures.Isabelle)
 
 let linden_opam =
   {|pin-depends: [
@@ -991,7 +1222,7 @@ let test_dry_run () =
            (target "warblre") Target.Pinned ~variant:(Some "x"));
       Alcotest.(check string)
         "builds file" "/r/2026-11-19-exp-13-builds.csv"
-        (Driver.builds_file ~out:"/r" ~date:"2026-11-19"))
+        (Driver.builds_file ~out:"/r" ~date:"2026-11-19" ()))
 
 let test_check () =
   with_temp_dir (fun dir ->
@@ -1267,6 +1498,7 @@ let () =
           Alcotest.test_case "names" `Quick test_toolchain_names;
           Alcotest.test_case "install" `Quick test_toolchain_install;
           Alcotest.test_case "commands" `Quick test_toolchain_command;
+          Alcotest.test_case "verus and isabelle" `Quick test_verus_install;
         ] );
       ( "target",
         [
@@ -1278,6 +1510,8 @@ let () =
           Alcotest.test_case "pulse examples" `Quick test_pulse;
           Alcotest.test_case "why3 gallery" `Quick test_why3_gallery;
           Alcotest.test_case "pins" `Quick test_pins;
+          Alcotest.test_case "anvil" `Quick test_anvil;
+          Alcotest.test_case "afp-regex" `Quick test_afp_regex;
         ] );
       ( "results",
         [

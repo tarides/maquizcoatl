@@ -1,0 +1,50 @@
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 cat <bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.07.12.0b42f4c/verus-x86-linux/version.json)
+{
+  "verus": {
+    "profile": "release",
+    "version": "0.2026.07.12.0b42f4c",
+    "platform": {
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    "toolchain": "1.96.0-x86_64-unknown-linux-gnu",
+    "commit": "0b42f4cee92a178937608cf55e512371d2fd8cd4"
+  }
+}
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.07.12.0b42f4c/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 z3 --version)
+Z3 version 4.12.5 - 64 bit
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.07.12.0b42f4c/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 rustc +1.96.0 --version)
+rustc 1.96.0 (ac68faa20 2026-05-25)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.07.12.0b42f4c/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 cargo +1.96.0 --version)
+cargo 1.96.0 (30a34c682 2026-05-25)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.07.12.0b42f4c/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 rustup --version)
+rustup 1.29.3 (edbc831ce 2026-11-02)
+info: This is the version for the rustup toolchain manager, not the rustc compiler.
+info: the currently active `rustc` version is `rustc 1.96.0 (ac68faa20 2026-05-25)`
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.07.12.0b42f4c/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 rustc --version)
+rustc 1.96.0 (ac68faa20 2026-05-25)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git rev-parse HEAD)
+3c95bbbe812dfa488ac59b341932f1858d01f343
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git status --short)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git diff --stat)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-pinned && timeout --kill-after=60 300 taskset --cpu-list 24-27,56-59 nice -n 10 git diff)
+# exit 0
+

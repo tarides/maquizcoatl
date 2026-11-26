@@ -1,0 +1,6 @@
+# sparse checkout
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-pinned && timeout --kill-after=60 21600 taskset --cpu-list 12-17,44-49 nice -n 10 git sparse-checkout set --cone thys/Automatic_Refinement thys/Binomial-Heaps thys/CAVA_Automata thys/Coinductive_Languages thys/Collections thys/Containers thys/Datatype_Order_Generator thys/Deriving thys/Efficient-Mergesort thys/Finger-Trees thys/Formula_Derivatives thys/Functional-Automata thys/List-Index thys/MSO_Regex_Equivalence thys/Native_Word thys/Posix-Lexing thys/Refine_Monadic thys/Regex_Equivalence thys/Regular-Sets thys/Show thys/SpecCheck thys/Trie thys/Word_Lib)
+# start 2026-11-26T07:54:22Z
+
+
+# ok

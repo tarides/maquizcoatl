@@ -1,0 +1,13 @@
+# rustup toolchain install 1.100.0
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 21600 taskset --cpu-list 8-11,40-43 nice -n 10 rustup toolchain install 1.100.0 --profile default)
+# start 2026-11-26T07:49:18Z
+
+info: syncing channel updates for 1.100.0-x86_64-unknown-linux-gnu
+info: latest update on 2026-11-12 for version 1.100.0 (0ef1bc386 2026-11-09)
+info: downloading 6 components
+
+  1.100.0-x86_64-unknown-linux-gnu installed - rustc 1.100.0 (0ef1bc386 2026-11-09)
+
+info: checking for self-update (current version: 1.29.3)
+
+# ok

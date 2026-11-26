@@ -1,0 +1,13 @@
+install isabelle-Isabelle2025-2, logs in <bench-workdir>/exp/13-upgrade-builds-df/work/logs/install-isabelle-Isabelle2025-2-20261126T074913Z
+[1/8] mkdir downloads: ok (0.0 s)
+[2/8] download Isabelle2025-2_linux.tar.gz: skipped (0.0 s)
+[3/8] rename to Isabelle2025-2_linux.tar.gz: skipped (0.0 s)
+[4/8] sha256 Isabelle2025-2_linux.tar.gz: ok (0.0 s)
+[5/8] unpack Isabelle2025-2_linux.tar.gz: ok (14.3 s)
+[6/8] touch .upgrade_builds-done: ok (0.0 s)
+[7/8] remove <bench-workdir>/exp/13-upgrade-builds-df/work/downloads/Isabelle2025-2_linux.tar.gz: ok (0.0 s)
+[8/8] mkdir isabelle-home: ok (0.0 s)
+install isabelle-Isabelle2026, logs in <bench-workdir>/exp/13-upgrade-builds-df/work/logs/install-isabelle-Isabelle2026-20261126T074929Z
+[1/3] mkdir switches: ok (0.0 s)
+[2/3] link the shared Isabelle2026: ok (0.0 s)
+[3/3] mkdir isabelle-home: ok (0.0 s)

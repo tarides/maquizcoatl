@@ -11,19 +11,28 @@ type variant = {
   vpins : (string * string) list;  (** Replace the pins of the same packages. *)
 }
 
-type kind =
-  | Rocq of { rocqchk : Command.arg list; dune_targets : string list }
-      (** [dune_targets]: what [dune build] builds; [[]] for its default. *)
-  | Lean
-  | Pulse
-  | Why3_gallery
-
 type source = {
   url : string;
   commit : string;
   tag : string option;  (** Shallow clone of this tag, which is [commit]. *)
   sparse : string list;  (** Cone of a sparse checkout; [[]] for all. *)
 }
+
+(* A dependency checked out next to the latest side, [<dir>-<cname>], and
+   edited: verus-tla for Anvil. *)
+type dep_checkout = { cname : string; csource : source; cedits : Edit.t list }
+
+type kind =
+  | Rocq of { rocqchk : Command.arg list; dune_targets : string list }
+      (** [dune_targets]: what [dune build] builds; [[]] for its default. *)
+  | Lean
+  | Pulse
+  | Why3_gallery
+  | Verus of { crate : string; latest_deps : dep_checkout list }
+      (** [crate]: the package whose verification is measured. *)
+  | Isabelle_afp of { entries : string list; sessions : string list }
+      (** [entries]: the AFP entries checked out (one [-d] each); [sessions]:
+          the sessions built in the measured run. *)
 
 type t = {
   name : string;
@@ -215,7 +224,148 @@ let why3_gallery =
     kind = Why3_gallery;
   }
 
-let all = [ warblre; linden; lean_regex; pulse_examples; why3_gallery ]
+(* Anvil at 3c95bbb (2026-07-23), its last commit pinning a Verus release
+   (decision 1 of issue #25). verus-tla at 8bb157b is its
+   verus_temporal_logic dependency, which pins the same vstd. *)
+let anvil_vstd_pinned = "=0.0.0-2026-07-12-0122"
+let anvil_vstd_latest = "=0.0.0-2026-11-22-0344"
+let verus_tla_url = "https://github.com/anvil-verifier/verus-tla"
+let verus_tla_commit = "8bb157b50b6200296d4b04d1302644d269e29443"
+
+let vstd_bump file =
+  Edit.Replace
+    {
+      file;
+      old = Printf.sprintf "vstd = %S" anvil_vstd_pinned;
+      by = Printf.sprintf "vstd = %S" anvil_vstd_latest;
+    }
+
+let anvil =
+  {
+    name = "anvil";
+    source =
+      {
+        url = "https://github.com/anvil-verifier/anvil.git";
+        commit = "3c95bbbe812dfa488ac59b341932f1858d01f343";
+        tag = None;
+        sparse = [];
+      };
+    pinned = Toolchain.Verus "0.2026.07.12.0b42f4c";
+    latest = Toolchain.Verus "0.2026.11.22.1ce6a59";
+    latest_edits =
+      [
+        Edit.Replace
+          {
+            file = "rust-toolchain.toml";
+            old = {|channel = "1.96.0"|};
+            by = {|channel = "1.100.0"|};
+          };
+        vstd_bump "Cargo.toml";
+        (* verus-tla 8bb157b, checked out next to the checkout with the same
+           bump, replaces the git dependency on the same commit. (Edit.Replace
+           cannot add a [patch] section: the new text would contain the old.) *)
+        Edit.Replace
+          {
+            file = "Cargo.toml";
+            old =
+              Printf.sprintf "verus_temporal_logic = { git = %S, rev = \"%s\" }"
+                verus_tla_url verus_tla_commit;
+            by =
+              {|verus_temporal_logic = { path = "../anvil-latest-verus-tla" }|};
+          };
+      ];
+    variants = [];
+    pins = [];
+    kind =
+      Verus
+        {
+          crate = "verifiable-controllers";
+          latest_deps =
+            [
+              {
+                cname = "verus-tla";
+                csource =
+                  {
+                    url = verus_tla_url ^ ".git";
+                    commit = verus_tla_commit;
+                    tag = None;
+                    sparse = [];
+                  };
+                cedits = [ vstd_bump "Cargo.toml" ];
+              };
+            ];
+        };
+  }
+
+(* The six AFP regex entries of AFP 2025-2 and the entries that the sessions
+   of every listed entry require, as parent or in [sessions] (computed from
+   the ROOT files at fa30b560ab75): [isabelle build] reads every session of
+   each [-d] directory, so an entry's other sessions need their entries too
+   (Show's [Old_Datatype_Show] needs Datatype_Order_Generator). *)
+let afp_regex =
+  let entries =
+    [
+      "Automatic_Refinement";
+      "Binomial-Heaps";
+      "CAVA_Automata";
+      "Coinductive_Languages";
+      "Collections";
+      "Containers";
+      "Datatype_Order_Generator";
+      "Deriving";
+      "Efficient-Mergesort";
+      "Finger-Trees";
+      "Formula_Derivatives";
+      "Functional-Automata";
+      "List-Index";
+      "MSO_Regex_Equivalence";
+      "Native_Word";
+      "Posix-Lexing";
+      "Refine_Monadic";
+      "Regex_Equivalence";
+      "Regular-Sets";
+      "Show";
+      "SpecCheck";
+      "Trie";
+      "Word_Lib";
+    ]
+  in
+  {
+    name = "afp-regex";
+    source =
+      {
+        url = "https://github.com/isabelle-prover/mirror-afp-2025-2.git";
+        commit = "fa30b560ab754bfbb7a721ee45a921d4b3c04358";
+        tag = None;
+        sparse = List.map (fun e -> "thys/" ^ e) entries;
+      };
+    pinned = Toolchain.Isabelle "Isabelle2025-2";
+    latest = Toolchain.Isabelle "Isabelle2026";
+    latest_edits = [];
+    variants = [];
+    pins = [];
+    kind =
+      Isabelle_afp
+        {
+          entries;
+          sessions =
+            [
+              "Regular-Sets";
+              "Regex_Equivalence";
+              "Posix-Lexing";
+              "Formula_Derivatives";
+              "Formula_Derivatives-Examples";
+              "MSO_Regex_Equivalence";
+              "Functional-Automata";
+            ];
+        };
+  }
+
+let all =
+  [
+    warblre; linden; lean_regex; pulse_examples; why3_gallery; anvil; afp_regex;
+  ]
+
 let name t = t.name
 let find n = List.find_opt (fun t -> t.name = n) all
 let toolchain t = function Pinned -> t.pinned | Latest -> t.latest
@@ -281,10 +431,9 @@ let edits t side v =
   (match side with Pinned -> [] | Latest -> t.latest_edits)
   @ match v with Some { change = Edits e; _ } -> e | _ -> []
 
-let checkout l t dir =
+let checkout_source l s dir =
   let build = Layout.build l in
   let git args = Command.v ~cwd:dir "git" args in
-  let s = t.source in
   [
     Step.Mkdir build;
     Step.run ~creates:(dir / ".git") "clone"
@@ -310,6 +459,24 @@ let checkout l t dir =
            ]);
     ]
 
+let checkout l t dir = checkout_source l t.source dir
+let dep_dir d c = d ^ "-" ^ c.cname
+
+(* Isabelle: [-j] sessions in parallel with [threads] each, from the run's
+   jobs: 8 jobs give [-j 2 -o threads=4], as the plan fixes. *)
+let isabelle_parallel n =
+  let threads = min n 4 in
+  [
+    "-j";
+    string_of_int (max 1 (Int.div n threads));
+    "-o";
+    Printf.sprintf "threads=%d" threads;
+  ]
+
+let isabelle_dirs d entries =
+  List.concat_map (fun e -> [ "-d"; d / "thys" / e ]) entries
+
+let isabelle_build_options = [ "-b"; "-o"; "document=false" ]
 let why3_config = "upgrade_builds.why3.conf"
 let jobs (lim : Limits.t) = string_of_int lim.jobs
 let pulse_examples_dir = "pulse/share/pulse/examples"
@@ -323,7 +490,7 @@ let outputs t =
   | Rocq _ -> [ "_build" ]
   | Lean -> [ "regex/.lake/build"; "correctness/.lake/build" ]
   | Pulse -> [ pulse_examples_dir / "_cache"; pulse_examples_dir / "_output" ]
-  | Why3_gallery -> []
+  | Why3_gallery | Verus _ | Isabelle_afp _ -> []
 
 let clean l t side v =
   let d = dir l t side v in
@@ -334,8 +501,15 @@ let clean l t side v =
           (Toolchain.command l (toolchain t side) ~cwd:d "make"
              (lits [ "-C"; pulse_examples_dir; "clean" ]));
       ]
-  | Rocq _ | Lean | Why3_gallery ->
+  | Rocq _ | Lean | Why3_gallery | Isabelle_afp _ ->
       List.map (fun p -> Step.Remove (d / p)) (outputs t)
+  | Verus { crate; _ } ->
+      [
+        Step.run
+          ("cargo clean -p " ^ crate)
+          (Toolchain.command l (toolchain t side) ~cwd:d "cargo"
+             (lits [ "clean"; "-p"; crate ]));
+      ]
 
 let prepare l lim t side v =
   let d = dir l t side v in
@@ -373,11 +547,83 @@ let prepare l lim t side v =
           | Latest -> [ lake "lake update" [ "update" ] ])
         @ [ lake "mathlib cache" [ "exe"; "cache"; "get" ] ]
     | Pulse | Why3_gallery -> []
+    | Verus _ ->
+        (* Dependencies built and verified ([vstd], [verus_temporal_logic],
+           the kube crates); the measured crate type-checked only. *)
+        [
+          Step.run "cargo fetch"
+            (Toolchain.command l tc ~cwd:d "cargo" (lits [ "fetch" ]));
+          Step.run "cargo verus verify, dependencies"
+            (Toolchain.command l tc ~cwd:d "cargo"
+               (lits
+                  [
+                    "verus";
+                    "verify";
+                    "--fwd-verus-args-to";
+                    "roots";
+                    "--lib";
+                    "-j";
+                    jobs lim;
+                    "--";
+                    "--no-verify";
+                  ]));
+        ]
+    | Isabelle_afp { entries; sessions } ->
+        let isabelle label args =
+          Step.run label (Toolchain.command l tc ~cwd:d "isabelle" (lits args))
+        in
+        let selection =
+          isabelle_dirs d entries @ [ "-R" ]
+          @ List.concat_map (fun s -> [ "-x"; s ]) sessions
+          @ sessions
+        in
+        [
+          isabelle "isabelle sessions, requirements" ("sessions" :: selection);
+          isabelle "isabelle build, requirements"
+            ([ "build" ] @ isabelle_build_options
+            @ isabelle_parallel (lim : Limits.t).jobs
+            @ selection);
+        ]
   in
-  checkout l t d @ edit_steps @ deps @ clean l t side v
+  let deps_checkouts =
+    match (t.kind, side) with
+    | Verus { latest_deps; _ }, Latest ->
+        List.concat_map
+          (fun c ->
+            let cd = dep_dir d c in
+            checkout_source l c.csource cd
+            @ [
+                Step.Edit
+                  { label = "edits " ^ c.cname; dir = cd; edits = c.cedits };
+              ])
+          latest_deps
+    | _ -> []
+  in
+  checkout l t d @ deps_checkouts @ edit_steps @ deps @ clean l t side v
+
+(* The cargo fingerprints of [crate]'s library in [target/*/.fingerprint]. *)
+let crate_fingerprints d crate =
+  let target = d / "target" in
+  let entries p = try Array.to_list (Sys.readdir p) with Sys_error _ -> [] in
+  let prefix = String.map (function '-' -> '_' | c -> c) crate ^ "-" in
+  let prefix' = crate ^ "-" in
+  List.concat_map
+    (fun profile ->
+      let fp = "target" / profile / ".fingerprint" in
+      List.filter_map
+        (fun e ->
+          if
+            String.starts_with ~prefix e || String.starts_with ~prefix:prefix' e
+          then Some (fp / e)
+          else None)
+        (entries (d / fp)))
+    (List.filter (fun p -> Sys.is_directory (target / p)) (entries target))
 
 let stale l t side v =
-  List.filter (fun p -> Sys.file_exists (dir l t side v / p)) (outputs t)
+  let d = dir l t side v in
+  match t.kind with
+  | Verus { crate; _ } -> crate_fingerprints d crate
+  | _ -> List.filter (fun p -> Sys.file_exists (d / p)) (outputs t)
 
 let measured l lim t side v =
   let d = dir l t side v in
@@ -448,6 +694,37 @@ let measured l lim t side v =
                         ([ "replay"; "-q"; "--extra-config"; d / why3_config ]
                         @ options @ [ session ])))
                  sessions))
+  | Verus _ ->
+      Ok
+        [
+          run "cargo verus verify" "cargo"
+            (lits
+               [
+                 "verus";
+                 "verify";
+                 "--fwd-verus-args-to";
+                 "roots";
+                 "--lib";
+                 "-j";
+                 jobs lim;
+                 "--";
+                 "--num-threads";
+                 jobs lim;
+                 "--time-expanded";
+               ]);
+        ]
+  | Isabelle_afp { entries; sessions } ->
+      (* Coinductive_Languages requires Regular-Sets: it is built here, and
+         named so that -c rebuilds it too. *)
+      Ok
+        [
+          run "isabelle build" "isabelle"
+            (lits
+               ([ "build" ] @ isabelle_build_options
+              @ isabelle_parallel lim.jobs @ [ "-c" ] @ isabelle_dirs d entries
+              @ sessions
+               @ [ "Coinductive_Languages" ]));
+        ]
 
 let failure_format t =
   match t.kind with
@@ -455,6 +732,8 @@ let failure_format t =
   | Lean -> Failures.Lake
   | Pulse -> Failures.Fstar
   | Why3_gallery -> Failures.Failed_steps
+  | Verus _ -> Failures.Rustc
+  | Isabelle_afp _ -> Failures.Isabelle
 
 let probes l t side v =
   let d = dir l t side v in
@@ -468,4 +747,18 @@ let probes l t side v =
   @
   match t.kind with
   | Pulse -> [ git [ "rev-parse"; "HEAD:karamel" ] ]
+  | Verus { latest_deps; _ } -> (
+      [ git [ "diff" ] ]
+      @
+      match side with
+      | Pinned -> []
+      | Latest ->
+          List.concat_map
+            (fun c ->
+              let cd = dep_dir d c in
+              [
+                Command.v ~cwd:cd "git" [ "rev-parse"; "HEAD" ];
+                Command.v ~cwd:cd "git" [ "diff" ];
+              ])
+            latest_deps)
   | _ -> []

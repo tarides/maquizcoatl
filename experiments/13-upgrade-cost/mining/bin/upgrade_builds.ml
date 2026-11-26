@@ -180,12 +180,27 @@ let phase_cmd name phase ~doc =
       & info [ "date" ] ~docv:"DATE"
           ~doc:"Date in the name of the result file (default: today, UTC).")
   in
+  let table =
+    Arg.(
+      value & opt string "builds"
+      & info [ "table" ] ~docv:"NAME"
+          ~doc:
+            "Name of the result table: rows go to \
+             $(b,<date>-exp-13-<NAME>.csv) ($(b,builds-df) for the Verus and \
+             Isabelle follow-up).")
+  in
   let term =
-    let+ config and+ target and+ side and+ variant and+ out and+ date in
+    let+ config
+    and+ target
+    and+ side
+    and+ variant
+    and+ out
+    and+ date
+    and+ table in
     guard (fun () ->
         let open Result.Syntax in
         let* c = config in
-        let+ ok = Driver.run c phase ~out ~date target side ~variant in
+        let+ ok = Driver.run ~table c phase ~out ~date target side ~variant in
         if ok then 0 else exit_failed)
   in
   Cmd.make (Cmd.info name ~doc ~exits) term

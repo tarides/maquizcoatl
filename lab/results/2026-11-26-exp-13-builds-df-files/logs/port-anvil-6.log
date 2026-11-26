@@ -1,0 +1,43 @@
+    Checking verifiable-controllers v0.1.0 (<bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-port)
+verification results:: 911 verified, 0 errors
+(use --output-json for machine-readable output)
+verus-build-info
+Verus
+  Version: 0.2026.11.22.1ce6a59
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.100.0-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+total-time:          634135 ms    (estimated total cpu time 6424419 ms)
+    rust-time:               16368 ms
+        init-and-types:           8709 ms
+        trait-conflicts:           165 ms
+        compile-time:             7493 ms
+    verification-time:      613809 ms
+        vir-time:                11530 ms
+            hir-time:                    0 ms
+            import-time:               434 ms
+            rust-to-vir:              7332 ms
+        verify-crate-time:      602278 ms
+    unaccounted-time:         3958 ms
+
+verify-crate-time-breakdown
+    total verify-time:        6390050 ms   (12 threads)
+      1. vdeployment_controller::proof::helper_invariants::proof     283517 ms
+      2. rabbitmq_controller::proof::liveness::terminate     277096 ms
+      3. vreplicaset_controller::proof::liveness::resource_match     258054 ms
+        total air-time:            122407 ms   (12 threads)
+      1. vstatefulset_controller::proof::liveness::resource_match       2522 ms
+      2. vreplicaset_controller::proof::liveness::resource_match       2015 ms
+      3. rabbitmq_controller::proof::helper_invariants::proof       1722 ms
+        total smt-time:           6095868 ms   (12 threads)
+            total smt-init:                85 ms,   566785 rlimit (12 threads)
+                1. vstatefulset_controller::exec::reconciler          9 ms
+                2. kubernetes_cluster::proof::retentive_cluster          5 ms
+                3. vstatefulset_controller::proof::liveness::resource_match          2 ms
+            total smt-run:            6095783 ms, 3154375212 rlimit (12 threads)
+                1. vstatefulset_controller::proof::liveness::resource_match    1116915 ms, 620059905 rlimit
+                2. vstatefulset_controller::proof::liveness::proof     630955 ms, 404752834 rlimit
+                3. rabbitmq_controller::proof::liveness::resource_match     624637 ms, 262779871 rlimit
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 10m 35s
+exit 0

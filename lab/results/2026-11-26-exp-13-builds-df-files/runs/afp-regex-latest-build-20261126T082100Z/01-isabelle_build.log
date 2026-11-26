@@ -1,0 +1,92 @@
+# isabelle build
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest && USER_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/isabelle-home PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/isabelle-Isabelle2026/bin:"$PATH" timeout --kill-after=60 2700 taskset --cpu-list 24-27,56-59 nice -n 10 isabelle build -b -o document=false -j 2 -o threads=4 -c -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Automatic_Refinement -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Binomial-Heaps -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/CAVA_Automata -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Coinductive_Languages -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Collections -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Containers -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Datatype_Order_Generator -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Deriving -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Efficient-Mergesort -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Finger-Trees -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Formula_Derivatives -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Functional-Automata -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/List-Index -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/MSO_Regex_Equivalence -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Native_Word -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Refine_Monadic -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Regex_Equivalence -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Regular-Sets -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Show -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/SpecCheck -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Trie -d <bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Word_Lib Regular-Sets Regex_Equivalence Posix-Lexing Formula_Derivatives Formula_Derivatives-Examples MSO_Regex_Equivalence Functional-Automata Coinductive_Languages)
+# start 2026-11-26T08:21:00Z
+
+Building MSO_Regex_Equivalence ...
+Building Formula_Derivatives ...
+Formula_Derivatives FAILED (see also "isabelle build_log -H Error Formula_Derivatives")
+*** Failed to load theory "Deriving.Compare_Generator" (unresolved "Deriving.Comparator_Generator")
+*** Failed to load theory "Deriving.Compare_Instances" (unresolved "Deriving.Compare_Generator")
+*** Failed to load theory "Formula_Derivatives.WS1S_Prelim" (unresolved "Deriving.Compare_Instances")
+*** Failed to load theory "Formula_Derivatives.Abstract_Formula" (unresolved "Deriving.Compare_Instances")
+*** Failed to load theory "Formula_Derivatives.Presburger_Formula" (unresolved "Formula_Derivatives.Abstract_Formula")
+*** Failed to load theory "Formula_Derivatives.WS1S_Alt_Formula" (unresolved "Formula_Derivatives.Abstract_Formula", "Formula_Derivatives.WS1S_Prelim")
+*** Failed to load theory "Formula_Derivatives.WS1S_Formula" (unresolved "Formula_Derivatives.Abstract_Formula", "Formula_Derivatives.WS1S_Prelim")
+*** Failed to load theory "Formula_Derivatives.WS1S_Nameful" (unresolved "Formula_Derivatives.WS1S_Formula")
+*** Failed to load theory "Formula_Derivatives.WS1S_Presburger_Equivalence" (unresolved "Formula_Derivatives.Presburger_Formula", "Formula_Derivatives.WS1S_Formula")
+*** ML error (line 235 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Deriving/Comparator_Generator/comparator_generator.ML"):
+*** Type error in function application.
+***    Function: BNF_LFP_Rec_Sugar.primrec :
+***       {verbose: bool} ->
+***         BNF_LFP_Rec_Sugar.rec_option list ->
+***           (binding * typ option * mixfix) list ->
+***             Specification.multi_specs ->
+***               local_theory ->
+***                 (term list * thm list * thm list list) * local_theory
+***    Argument: false : bool
+***    Reason: Can't unify bool to {verbose: bool} (Incompatible types)
+*** 
+*** At command "ML_file" (line 249 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Deriving/Comparator_Generator/Comparator_Generator.thy")
+Building Functional-Automata ...
+MSO_Regex_Equivalence FAILED (see also "isabelle build_log -H Error MSO_Regex_Equivalence")
+*** Failed to load theory "Deriving.Compare_Generator" (unresolved "Deriving.Comparator_Generator")
+*** Failed to load theory "Deriving.Compare_Instances" (unresolved "Deriving.Compare_Generator")
+*** Failed to load theory "MSO_Regex_Equivalence.Pi_Regular_Exp" (unresolved "Deriving.Compare_Instances")
+*** Failed to load theory "MSO_Regex_Equivalence.Init_Normalization" (unresolved "MSO_Regex_Equivalence.Pi_Regular_Exp")
+*** Failed to load theory "MSO_Regex_Equivalence.Pi_Derivatives" (unresolved "MSO_Regex_Equivalence.Pi_Regular_Exp")
+*** Failed to load theory "MSO_Regex_Equivalence.PNormalization" (unresolved "MSO_Regex_Equivalence.Pi_Derivatives")
+*** Failed to load theory "MSO_Regex_Equivalence.Pi_Regular_Exp_Dual" (unresolved "MSO_Regex_Equivalence.Pi_Derivatives")
+*** Failed to load theory "MSO_Regex_Equivalence.Pi_Regular_Operators" (unresolved "MSO_Regex_Equivalence.Pi_Derivatives")
+*** Failed to load theory "MSO_Regex_Equivalence.Formula" (unresolved "MSO_Regex_Equivalence.Pi_Regular_Operators")
+*** Failed to load theory "MSO_Regex_Equivalence.M2L" (unresolved "MSO_Regex_Equivalence.Formula")
+*** Failed to load theory "MSO_Regex_Equivalence.M2L_Normalization" (unresolved "MSO_Regex_Equivalence.M2L")
+*** Failed to load theory "MSO_Regex_Equivalence.WS1S" (unresolved "MSO_Regex_Equivalence.Formula", "MSO_Regex_Equivalence.Pi_Regular_Operators")
+*** Failed to load theory "MSO_Regex_Equivalence.WS1S_Normalization" (unresolved "MSO_Regex_Equivalence.WS1S")
+*** Failed to load theory "MSO_Regex_Equivalence.Pi_Equivalence_Checking" (unresolved "MSO_Regex_Equivalence.Pi_Regular_Exp")
+*** Failed to load theory "MSO_Regex_Equivalence.M2L_Equivalence_Checking" (unresolved "MSO_Regex_Equivalence.Init_Normalization", "MSO_Regex_Equivalence.M2L_Normalization", "MSO_Regex_Equivalence.PNormalization", "MSO_Regex_Equivalence.Pi_Equivalence_Checking", "MSO_Regex_Equivalence.Pi_Regular_Exp_Dual")
+*** Failed to load theory "MSO_Regex_Equivalence.M2L_Examples" (unresolved "MSO_Regex_Equivalence.M2L_Equivalence_Checking")
+*** Failed to load theory "MSO_Regex_Equivalence.WS1S_Equivalence_Checking" (unresolved "MSO_Regex_Equivalence.Init_Normalization", "MSO_Regex_Equivalence.PNormalization", "MSO_Regex_Equivalence.Pi_Equivalence_Checking", "MSO_Regex_Equivalence.Pi_Regular_Exp_Dual", "MSO_Regex_Equivalence.WS1S_Normalization")
+*** Failed to load theory "MSO_Regex_Equivalence.WS1S_Examples" (unresolved "MSO_Regex_Equivalence.WS1S_Equivalence_Checking")
+*** ML error (line 235 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Deriving/Comparator_Generator/comparator_generator.ML"):
+*** Type error in function application.
+***    Function: BNF_LFP_Rec_Sugar.primrec :
+***       {verbose: bool} ->
+***         BNF_LFP_Rec_Sugar.rec_option list ->
+***           (binding * typ option * mixfix) list ->
+***             Specification.multi_specs ->
+***               local_theory ->
+***                 (term list * thm list * thm list list) * local_theory
+***    Argument: false : bool
+***    Reason: Can't unify bool to {verbose: bool} (Incompatible types)
+*** 
+*** At command "ML_file" (line 249 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Deriving/Comparator_Generator/Comparator_Generator.thy")
+Building Regex_Equivalence ...
+Finished Functional-Automata (0:00:28 elapsed time, 0:01:00 cpu time, factor 2.16)
+Building Regular-Sets ...
+Regex_Equivalence FAILED (see also "isabelle build_log -H Error Regex_Equivalence")
+*** Failed to load theory "Regex_Equivalence.Regex_Equivalence" (unresolved "Efficient-Mergesort.Efficient_Sort")
+*** Failed to load theory "Regex_Equivalence.Examples" (unresolved "Regex_Equivalence.Regex_Equivalence")
+*** Failed to load theory "Regex_Equivalence.Benchmark" (unresolved "Regex_Equivalence.Regex_Equivalence")
+*** Bad arguments for attribute "code" (line 246 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Efficient-Mergesort/Efficient_Sort.thy"):
+***   del
+*** At command "declare" (line 246 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Efficient-Mergesort/Efficient_Sort.thy")
+Building Coinductive_Languages ...
+Finished Regular-Sets (0:00:46 elapsed time, 0:01:56 cpu time, factor 2.50)
+Building Posix-Lexing ...
+Finished Coinductive_Languages (0:00:20 elapsed time, 0:00:54 cpu time, factor 2.69)
+Formula_Derivatives-Examples CANCELLED
+Posix-Lexing FAILED (see also "isabelle build_log -H Error Posix-Lexing")
+*** Undefined fact: "verit_comp_simplify1" (line 169 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Extensions/Positions3.thy")
+*** At command "by" (line 169 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Extensions/Positions3.thy")
+*** At command "unused_thms" (line 1057 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Extensions/Positions3.thy")
+*** Undefined fact: "verit_comp_simplify1" (line 169 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Extensions/Positions3.thy")
+*** At command "by" (line 169 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Extensions/Positions3.thy")
+*** Undefined fact: "verit_comp_simplify1" (line 166 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Positions.thy")
+*** At command "by" (line 165 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Positions.thy")
+*** At command "unused_thms" (line 779 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Positions.thy")
+*** Undefined fact: "verit_comp_simplify1" (line 166 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Positions.thy")
+*** At command "by" (line 165 of "<bench-workdir>/exp/13-upgrade-builds-df/work/build/afp-regex-latest/thys/Posix-Lexing/Positions.thy")
+Unfinished session(s): Formula_Derivatives, Formula_Derivatives-Examples, MSO_Regex_Equivalence, Posix-Lexing, Regex_Equivalence
+0:04:24 elapsed time, 0:13:21 cpu time, factor 3.03
+
+# exit 1

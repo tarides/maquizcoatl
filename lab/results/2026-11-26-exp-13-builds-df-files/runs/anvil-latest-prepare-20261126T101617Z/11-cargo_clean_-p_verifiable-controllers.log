@@ -1,0 +1,7 @@
+# cargo clean -p verifiable-controllers
+# (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 21600 taskset --cpu-list 12-15,44-47 nice -n 10 cargo clean -p verifiable-controllers)
+# start 2026-11-26T10:16:50Z
+
+     Removed 13 files, 98.8MiB total
+
+# ok

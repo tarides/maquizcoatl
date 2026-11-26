@@ -1,0 +1,8 @@
+anvil-pinned-prepare, logs in <bench-workdir>/exp/13-upgrade-builds-df/work/logs/anvil-pinned-prepare-20261126T075107Z
+[1/6] mkdir build: ok (0.0 s)
+[2/6] clone: ok (0.7 s)
+[3/6] checkout: ok (0.7 s)
+[4/6] cargo fetch: ok (4.4 s)
+[5/6] cargo verus verify, dependencies: ok (102.0 s)
+[6/6] cargo clean -p verifiable-controllers: ok (0.2 s)
+anvil-pinned-prepare: ok, row added to <bench-workdir>/exp/13-upgrade-builds-df/results/2026-11-26-exp-13-builds-df.csv

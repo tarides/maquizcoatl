@@ -1,4 +1,4 @@
-type format = Dune_rocq | Lake | Fstar | Failed_steps
+type format = Dune_rocq | Lake | Fstar | Rustc | Isabelle | Failed_steps
 
 let lines s = String.split_on_char '\n' s
 
@@ -72,12 +72,68 @@ let fstar log =
         | _ -> None)
     (lines log)
 
+(* rustc and Verus: an [error] line, then the first [--> p:l:c] line before
+   the next [warning] or [error]: the primary location. Secondary locations
+   ([::: p:l:c]) and notes are not counted. *)
+let rustc log =
+  let location line =
+    let line = String.trim line in
+    if String.starts_with ~prefix:"--> " line then
+      let loc = String.trim (String.sub line 4 (String.length line - 4)) in
+      match List.rev (String.split_on_char ':' loc) with
+      | c :: l :: (_ :: _ as file) when Text.is_digits l && Text.is_digits c ->
+          Some (String.concat ":" (List.rev file))
+      | _ -> None
+    else None
+  in
+  let _, files =
+    List.fold_left
+      (fun (in_error, files) line ->
+        if String.starts_with ~prefix:"error" line then (true, files)
+        else if String.starts_with ~prefix:"warning" line then (false, files)
+        else
+          match (in_error, location line) with
+          | true, Some file -> (false, strip_dot_slash file :: files)
+          | _ -> (in_error, files))
+      (false, []) (lines log)
+  in
+  files
+
+(* Isabelle: [*** ... (line n of "p")] lines, as [isabelle build] prints the
+   errors of a failed session. *)
+let isabelle log =
+  let marker = "(line " in
+  List.filter_map
+    (fun line ->
+      let line = String.trim line in
+      if String.starts_with ~prefix:"***" line then
+        let rec find i =
+          if i + String.length marker > String.length line then None
+          else if String.sub line i (String.length marker) = marker then
+            let rest = String.sub line i (String.length line - i) in
+            match String.index_opt rest '"' with
+            | Some j -> (
+                let after =
+                  String.sub rest (j + 1) (String.length rest - j - 1)
+                in
+                match String.index_opt after '"' with
+                | Some k when k > 0 -> Some (String.sub after 0 k)
+                | _ -> None)
+            | None -> None
+          else find (i + 1)
+        in
+        find 0
+      else None)
+    (lines log)
+
 let files format log =
   let found =
     match format with
     | Dune_rocq -> dune_rocq log
     | Lake -> lake log
     | Fstar -> fstar log
+    | Rustc -> rustc log
+    | Isabelle -> isabelle log
     | Failed_steps -> []
   in
   List.sort_uniq String.compare found

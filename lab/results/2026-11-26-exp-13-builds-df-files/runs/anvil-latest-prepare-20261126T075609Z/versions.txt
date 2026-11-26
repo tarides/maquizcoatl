@@ -1,0 +1,243 @@
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 cat <bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux/version.json)
+{
+  "verus": {
+    "profile": "release",
+    "version": "0.2026.11.22.1ce6a59",
+    "platform": {
+      "os": "linux",
+      "arch": "x86_64"
+    },
+    "toolchain": "1.100.0-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)",
+    "commit": "1ce6a59bd72713cf486a7660097fe5ac57519617"
+  }
+}
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 z3 --version)
+Z3 version 4.16.0 - 64 bit
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 rustc +1.100.0 --version)
+rustc 1.100.0 (0ef1bc386 2026-11-09)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 cargo +1.100.0 --version)
+cargo 1.100.0 (3acc79c0c 2026-11-05)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 rustup --version)
+rustup 1.29.3 (edbc831ce 2026-11-02)
+info: This is the version for the rustup toolchain manager, not the rustc compiler.
+info: the currently active `rustc` version is `rustc 1.100.0 (0ef1bc386 2026-11-09)`
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && RUSTUP_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/rustup CARGO_HOME=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo PATH=<bench-workdir>/exp/13-upgrade-builds-df/work/switches/verus-0.2026.11.22.1ce6a59/verus-x86-linux:<bench-workdir>/exp/13-upgrade-builds-df/work/switches/rust/cargo/bin:"$PATH" timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 rustc --version)
+rustc 1.100.0 (0ef1bc386 2026-11-09)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 git rev-parse HEAD)
+3c95bbbe812dfa488ac59b341932f1858d01f343
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 git status --short)
+ M Cargo.lock
+ M Cargo.toml
+ M rust-toolchain.toml
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 git diff --stat)
+ Cargo.lock          | 50 +++++++++++++++++++++++---------------------------
+ Cargo.toml          |  4 ++--
+ rust-toolchain.toml |  2 +-
+ 3 files changed, 26 insertions(+), 30 deletions(-)
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest && timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 git diff)
+diff --git a/Cargo.lock b/Cargo.lock
+index d9df912..4281066 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -336,6 +336,12 @@ dependencies = [
+  "crossbeam-utils",
+ ]
+ 
++[[package]]
++name = "convert_case"
++version = "0.4.0"
++source = "registry+https://github.com/rust-lang/crates.io-index"
++checksum = "6245d59a3e82a7fc217c5828a6692dbc6dfb63a0c8c90495621f7b9d79704a0e"
++
+ [[package]]
+ name = "core-foundation"
+ version = "0.9.4"
+@@ -673,7 +679,7 @@ dependencies = [
+  "futures-sink",
+  "futures-util",
+  "http 0.2.12",
+- "indexmap 2.13.0",
++ "indexmap",
+  "slab",
+  "tokio",
+  "tokio-util",
+@@ -965,16 +971,6 @@ dependencies = [
+  "unicode-normalization",
+ ]
+ 
+-[[package]]
+-name = "indexmap"
+-version = "1.9.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "bd070e393353796e801d209ad339e89596eb4c8d430d18ede6a1cced8fafbd99"
+-dependencies = [
+- "autocfg",
+- "hashbrown 0.12.3",
+-]
+-
+ [[package]]
+ name = "indexmap"
+ version = "2.13.0"
+@@ -2029,7 +2025,7 @@ version = "0.9.29"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "a15e0ef66bf939a7c890a0bf6d5a733c70202225f9888a89ed5c62298b019129"
+ dependencies = [
+- "indexmap 2.13.0",
++ "indexmap",
+  "itoa",
+  "ryu",
+  "serde",
+@@ -2342,7 +2338,7 @@ version = "0.25.4+spec-1.1.0"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+ checksum = "7193cbd0ce53dc966037f54351dbbcf0d5a642c7f0038c382ef9e677ce8c13f2"
+ dependencies = [
+- "indexmap 2.13.0",
++ "indexmap",
+  "toml_datetime",
+  "toml_parser",
+  "winnow 0.7.13",
+@@ -2641,16 +2637,17 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
+ 
+ [[package]]
+ name = "verus_builtin"
+-version = "0.0.0-2026-05-17-0151"
++version = "0.0.0-2026-11-22-0344"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "cab9266bfb5cf45a080f425c560b0e0be2bf81194f0e80258990c49c1829d8b9"
++checksum = "dd4bce6a5fe5fb9bfca2949a689a7b92e80d35f50e2ba3e9ba87dfb63f2337e1"
+ 
+ [[package]]
+ name = "verus_builtin_macros"
+-version = "0.0.0-2026-07-12-0122"
++version = "0.0.0-2026-11-22-0344"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3fb60e3a141ababe618fbdb759f14aa8544f6346a98a44c1e3a7dbe20b1f2892"
++checksum = "1aa86fd414dfa7694a49811c7b907a7500d129d2a5b4c3a6c0671af0defec2a0"
+ dependencies = [
++ "convert_case",
+  "proc-macro2",
+  "quote",
+  "syn 2.0.117",
+@@ -2661,9 +2658,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "verus_prettyplease"
+-version = "0.0.0-2026-05-31-0205"
++version = "0.0.0-2026-11-01-0251"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "3ffdc94c89109a67c59646f6b6e71b49de394020f45294247dd716470523245b"
++checksum = "2b2cf0618d8d5ed0cde78122effaf56f5be0a0d0e0f9066735fa9f17d6ba6a4a"
+ dependencies = [
+  "proc-macro2",
+  "verus_syn",
+@@ -2671,11 +2668,11 @@ dependencies = [
+ 
+ [[package]]
+ name = "verus_state_machines_macros"
+-version = "0.0.0-2026-06-14-0213"
++version = "0.0.0-2026-11-22-0344"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "6704a9ce586a5027f87933d9a84817411c937804090a9585c28bf335ac37eefc"
++checksum = "eed47dcce51e4881a43825d2fab07089bf90a3df53ec887be86171a0114abb61"
+ dependencies = [
+- "indexmap 1.9.3",
++ "indexmap",
+  "proc-macro2",
+  "quote",
+  "verus_syn",
+@@ -2683,9 +2680,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "verus_syn"
+-version = "0.0.0-2026-05-31-0205"
++version = "0.0.0-2026-11-01-0251"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "030b774330d5ec618691c2cd6fba8bbb13bd538f3884a1143450baec25749706"
++checksum = "461620a5ec0fb547ba398e42fb25a017bd8764798a32099eed73c77dd979ac39"
+ dependencies = [
+  "proc-macro2",
+  "quote",
+@@ -2695,16 +2692,15 @@ dependencies = [
+ [[package]]
+ name = "verus_temporal_logic"
+ version = "0.1.0"
+-source = "git+https://github.com/anvil-verifier/verus-tla?rev=8bb157b50b6200296d4b04d1302644d269e29443#8bb157b50b6200296d4b04d1302644d269e29443"
+ dependencies = [
+  "vstd",
+ ]
+ 
+ [[package]]
+ name = "vstd"
+-version = "0.0.0-2026-07-12-0122"
++version = "0.0.0-2026-11-22-0344"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "dd0a0d328e1d6382af99a65f71677cf4b9200ec24e09fcafa7b1a3af8c8f5111"
++checksum = "66760ffdbcefb8a21dd2fb99d72c4bad27b4bd3217bcab50f36dc9f6b7dbe330"
+ dependencies = [
+  "verus_builtin",
+  "verus_builtin_macros",
+diff --git a/Cargo.toml b/Cargo.toml
+index c6449f1..d9d94b3 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -12,8 +12,8 @@ runtime = ["kube/runtime"]
+ ws = ["kube/ws"]
+ 
+ [dependencies]
+-vstd = "=0.0.0-2026-07-12-0122"
+-verus_temporal_logic = { git = "https://github.com/anvil-verifier/verus-tla", rev = "8bb157b50b6200296d4b04d1302644d269e29443" }
++vstd = "=0.0.0-2026-11-22-0344"
++verus_temporal_logic = { path = "../anvil-latest-verus-tla" }
+ 
+ kube = { version = "0.91.0", default-features = false, features = ["admission"] }
+ kube-client = { version = "0.91.0", default-features = false }
+diff --git a/rust-toolchain.toml b/rust-toolchain.toml
+index 6840092..529423f 100644
+--- a/rust-toolchain.toml
++++ b/rust-toolchain.toml
+@@ -1,4 +1,4 @@
+ # this should be synchronized with the Verus version, since we need to combine
+ # k8s compiled with rustc and our own code compiled with rust-verify.sh
+ [toolchain]
+-channel = "1.96.0"
++channel = "1.100.0"
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest-verus-tla && timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 git rev-parse HEAD)
+8bb157b50b6200296d4b04d1302644d269e29443
+# exit 0
+
+$ (cd <bench-workdir>/exp/13-upgrade-builds-df/work/build/anvil-latest-verus-tla && timeout --kill-after=60 300 taskset --cpu-list 8-11,40-43 nice -n 10 git diff)
+diff --git a/Cargo.toml b/Cargo.toml
+index 156a0e6..c5c1b07 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -6,7 +6,7 @@ license = "MIT"
+ description = "A Verus embedding of TLA+ temporal logic, ported from the Anvil verifier."
+ 
+ [dependencies]
+-vstd = "=0.0.0-2026-07-12-0122"
++vstd = "=0.0.0-2026-11-22-0344"
+ 
+ [[bin]]
+ name = "mutex_example"
+# exit 0
+
