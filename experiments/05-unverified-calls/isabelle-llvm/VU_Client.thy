@@ -61,8 +61,12 @@ lemma table_client_rule:
     (\<lambda>_. EXS r'. \<upharpoonleft>ll_pto r' rc ** \<up>(P r'))"
 proof (induction tbl arbitrary: r)
   case Nil
+  text \<open>The VCG splits the record of the postcondition into its ten
+    fields: so is the record of the precondition.\<close>
+  obtain c m f0 f1 f2 f3 f4 f5 f6 f7 where A: "r = (c, m, f0, f1, f2, f3, f4, f5, f6, f7)"
+    by (metis surj_pair)
   show ?case
-    unfolding table_client.simps
+    unfolding table_client.simps A
     by vcg'
 next
   case (Cons e t)
