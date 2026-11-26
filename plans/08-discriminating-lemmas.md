@@ -79,8 +79,10 @@ answered by the pipeline.
   (read only, never built inside), per-tool build directories
   (`<exp>/build/<tool>/`) and raw outputs (`<exp>/out/<run-id>/`). The
   two C builds of experiment #8 (`<bench-workdir>/exp/08-hard-features/build/onig-debug/`
-  and `.../onig-asan/`, both `f95747b`) are reused read-only through
-  experiment #8's `cases/run-cases.sh`; if either is missing, run 1
+  and `.../onig-asan/`, both `f95747b`) are reused read-only, passed
+  as arguments to the adapted `cases/run-cases.sh` (see the scripts
+  item below), which builds its harness under `<exp>/build/` and writes
+  nothing under experiment #8's directory; if either is missing, run 1
   rebuilds it under `<exp>/build/` with
   `lab/08-hard-features/setup.sh onig`, and says so in the notebook.
 - **Workstation.** `<workdir>` is the work directory outside the
@@ -94,8 +96,8 @@ answered by the pipeline.
     statements, the desugaring function, the state-threaded matcher, the
     lemma plan, all with `upstream/` citations;
   - `cases/absent-restore.tsv`: the new absent cases, in experiment #2's
-    eight-column format (`probes/README.md`), run on C with experiment
-    #8's `run-cases.sh` and `join.py`;
+    eight-column format (`probes/README.md`), run on C with the adapted
+    `cases/run-cases.sh` (below) and experiment #8's `join.py`, unchanged;
   - `rocq/`: `Fold.v` and `Absent.v` copied from
     `lab/08-hard-features/rocq/` (unchanged except where a definition
     must take the fuel or `occ`'s inner fuel as a parameter, recorded per
@@ -110,11 +112,19 @@ answered by the pipeline.
   - scripts adapted from experiment #9 (`lab/09-representative-proof/`,
     on `main`): `timed.sh`, `axioms.sh`, `brittle.sh` (with
     `brittle_verus.py` unchanged), `loc.py`, `lemmas.py` unchanged,
-    `provenance.sh`, `pins.json`, `effort.tsv`. The three shell scripts
-    hard-code experiment #9's file lists, experiment directory and
-    theorem name; the adaptation changes only those (file lists, `EXP`
-    path, `Print Assumptions` targets, `CPUS` default) and is a commit of
-    its own, so the diff against experiment #9's scripts is reviewable;
+    `provenance.sh`, `pins.json`, `effort.tsv`; and experiment #8's
+    `lab/08-hard-features/cases/run-cases.sh`, copied to `cases/`. The
+    three shell scripts of experiment #9 hard-code experiment #9's file
+    lists, experiment directory and theorem name; the adaptation changes
+    only those (file lists, `EXP` path, `Print Assumptions` targets,
+    `CPUS` default). `run-cases.sh` hard-codes experiment #8's five case
+    files (`for a in calls absent find-longest iso-fold nest`), reads
+    them from its own directory and builds its harness under
+    `EXP=<bench-workdir>/exp/08-hard-features`; its adaptation changes
+    only those (the case-file list, the harness under `<exp>/build/`,
+    the two C build directories passed in instead of derived from
+    `EXP`). All four adaptations are one commit of their own, so the
+    diff against the originals is reviewable;
   - build output is gitignored (`*.vo*`, `*.glob`, `target`, caches).
 
 Scripts take `<bench-workdir>` from `BENCH_WORKDIR` and never print
@@ -143,8 +153,11 @@ A newer release of a tool appearing before a run does not change the pin
 
 On `m` of `lab/08-hard-features/rocq/Fold.v` and `verus/fold.rs`, under
 IGNORECASE, for every subject `s`, position `i` and fuel `f >= k` (`k` a
-fixed small bound, fixed in `LEMMAS.md`; written `S (S ... f)` in Rocq and
-with `reveal_with_fuel` on the variable fuel in Verus):
+fixed small bound, fixed in `LEMMAS.md`; written `S (S ... f)` in Rocq;
+in Verus the fuel argument `f` stays symbolic with `f >= k` in
+`requires`, and `reveal_with_fuel(m, k)` takes the literal unfolding
+depth `k`, since it fixes how many times the solver may unfold `m`, not
+a variable):
 
 - (F1) `i + 2` is in `m s f [R (ILit [0xDF])] i` iff `s[i..i+2)` is one
   of `ss`, `SS`, `sS`, `Ss`;
@@ -180,11 +193,26 @@ emits, and `desugar : re -> dre` follows `upstream/src/regparse.c` at
   (`make_absent_tree` enters it at `:3317-3328`;
   `make_absent_tree_for_simple_one_char_repeat`, `:3252-3296`):
   `SaveRR id1; Engine(id1, a, AnyO, non-possessive); UpdRRFromStack id1`;
-- `(?~|absent|\O*)` (`AbsExp a (Star AnyO)`; `\O*` is rejected by
-  `is_simple_one_char_repeat`, `:3215-3236`), general path
-  (`:3347-3384`): `SaveRR id1; SaveS id2; Engine(id1, a, AnyO, possessive);
-  UpdSFromStack id2; e; Tail(id1)`; the plan covers every `AbsExp a e`
-  with `e` absent-free, not only `\O*`;
+- `(?~|absent|exp)` (`AbsExp a e`): `make_absent_tree` first calls
+  `is_simple_one_char_repeat` on `exp` (`:3331`), which accepts a
+  greedy `ND_QUANT` (or a `BAG_STOP_BACKTRACK` around one, then
+  possessive) whose body is a one-character `ND_STRING` or an
+  `ND_CCLASS` (`:3194-3236`), and dispatches on it; `desugar` follows
+  the same dispatch:
+  - simple path, `e = Star (Chr c)` (the AST has no classes, other
+    quantifiers or possessive groups, so this is its only simple case;
+    `:3252-3296`, with the character as the engine's step and the
+    quantifier's bounds): `SaveRR id1; Engine(id1, a, Chr c,
+    non-possessive); UpdRRFromStack id1`, with no `SaveS` and no tail;
+  - general path, every other absent-free `e`, `\O*` included (`\O*`
+    is rejected by `is_simple_one_char_repeat`, `:3215-3236`;
+    `:3347-3384`): `SaveRR id1; SaveS id2; Engine(id1, a, AnyO,
+    possessive); UpdSFromStack id2; e; Tail(id1)`;
+  `LEMMAS.md` cites `:3331` and `:3194-3236` for the dispatch. Whether
+  the simple-path `e` stays in lemma 2's scope is an open question on
+  issue #34; the dispatch is needed either way, so that `md (desugar r)`
+  is the tree C builds for every case of the corpus, including
+  `(?~|abc|x*)y`;
 - the stopper `(?~|absent)` (`Stopper a`): the general path without the
   tail (the four-node list, `:3371-3373`), the engine's alternative
   flagged `SUPER`;
@@ -226,7 +254,9 @@ needs them distinct per construct, and `LEMMAS.md` states that.
   no effect on the patterns of the lemma; `LEMMAS.md` states this as a
   scope condition;
 - fuel: `md` takes a fuel, and `occ` (experiment #8's `mb fuel [R a]`)
-  takes its inner fuel as a parameter `g` in both matchers (decision 3).
+  takes its inner fuel as a parameter `g` in both matchers (decision 3);
+  `mb` returns `option bool` (`None` for out of fuel), see the
+  statement below.
 
 ### Validation before any proof (run 1)
 
@@ -251,8 +281,11 @@ the C library. The new cases exercise each restore at least once:
 Run 1 fixes the exact list (at least 10 new cases) and their C results.
 Agreement is required on every case for C, `m` and `md`, in Rocq (by
 `vm_compute` in `Cases.v`, at a fuel above what the cases need) before
-any proof starts, and in Verus (by `assert(...) by (compute)` or an
-`exec` mirror, as experiment #8 did) before Verus's proofs. A
+any proof starts, and in Verus (by `assert(...) by (compute_only)`, as
+experiment #8 did, `lab/08-hard-features/verus/absent.rs:168-180` and
+`verus/fold.rs:122-133`; not `by (compute)`, which falls back to Z3 and
+would hide an interpreter failure behind a solver result) before
+Verus's proofs. A
 disagreement between C and the direct semantics on a new case is a
 deviation-log candidate: it is raised on issue #34 with the case, and the
 pipeline stops for that construct until the maintainer answers. A
@@ -277,7 +310,16 @@ experiment #8), every subject `s`, position `i` and continuation:
   `option (list _)` (`None` for out of fuel), as experiment #9's
   `compute_tree` does (`lab/09-representative-proof/rocq/ProofSem.v`,
   `ct_mono`, `ct_det`), so that "equal results" is about complete lists;
-  the change is recorded and the 11 cases are re-run after it.
+  the change is recorded and the 11 cases are re-run after it. It also
+  applies to `occ`: experiment #8's `mb` is a `bool`
+  (`lab/08-hard-features/rocq/Absent.v:18-37`, `verus/absent.rs:29-55`)
+  and returns `false` both for no match and for out of fuel, so with a
+  too-small inner fuel `g` the direct matcher could return a complete
+  list with a wrong `cut`, and (2a) would be false. `mb` therefore
+  returns `option bool` (`None` for out of fuel), and `None` is
+  propagated by `scan`, `cut` and `m` (and by `md`'s engine), so a
+  complete list on either side implies that every `occ` it evaluated was
+  complete at `g`.
 
 The register value seen by the continuation is related by an invariant:
 after a desugared absent construct the register equals the direct
@@ -296,9 +338,12 @@ is never written); (b) fuel monotonicity and determinism for both
 matchers (after `ProofSem`); (c) the scan: the engine's possessive or
 greedy scan with `SaveS j; a; UpdRRFromS j; Fail` leaves the register at
 `cut a i rr` (`occ` at the inner fuel `g`) and restores nothing else;
-(d) `AbsRep`: the non-possessive scan yields the ends `[c, ..., i]` in
-that order, then the restore; (e) `AbsExp`: `e` under the cut, then the
-tail's two branches; (f) stopper; (g) the main theorem by induction on
+(d) the simple path for a general step (`AnyO` for `AbsRep`, `Chr c`
+for `AbsExp a (Star (Chr c))`; the engine model takes `step` as a
+parameter): the non-possessive scan yields the ends of the step's
+repetitions under the cut, longest first, then the restore;
+(e) `AbsExp` on the general path: `e` under the cut, then the tail's two
+branches; (f) stopper; (g) the main theorem by induction on
 the continuation and the fuel; (h) range clear, if kept.
 
 ## Approach and runs
@@ -317,8 +362,11 @@ A run that ends early leaves the rest to the next run in the list.
 | 5 | Reserve: continues whichever tool's proofs are still open after its run | as runs 2 or 3 |
 
 **Stop rule (experiment #9's, under decision 5).** A tool gets at most
-three proof runs. If its lemmas are still open after the third, or when
-the five runs are spent, whichever comes first, the pipeline stops that
+three proof runs; within the five-run budget the effective bound is two
+(its own proof run, 2 or 3, and the reserve run 5), so no third proof
+run is planned. If its lemmas are still open when the five runs are
+spent (after run 5, or after its own proof run when run 5 went to the
+other tool), the pipeline stops that
 tool, records the open lemmas (with their statement and the last error)
 in the notebook, and asks the maintainer on issue #34 (more runs, or
 report as is). The reserve run 5 counts as a proof run of the tool it
@@ -467,7 +515,7 @@ comparison):
 | Rocq: kernel unfolds a large fuel at `Qed` (experiment #8) | slow or failing checks | no constant fuel in any statement; `Cases.v` computations by `vm_compute` only, in their own file |
 | Verus: the `occ`/`cut` scan with a symbolic register needs many unfoldings | rlimit failures, the experiment's target | recorded as data (attempts, rlimit shares); a split into smaller `proof fn`s is the first remedy, raising `rlimit` the last, and every `rlimit` attribute is reported by the scan |
 | Verus: own list type and large encodings (experiment #8) | more lines | reuse experiment #8's `verus/absent.rs` types; lines split into reused and new |
-| Proofs exceed three runs for a tool or five in total | done-criterion 1 unfinished | stop rule: record open lemmas and ask |
+| Proofs exceed two runs for a tool (its own and the reserve) or five in total | done-criterion 1 unfinished | stop rule: record open lemmas and ask |
 | Stretch lemma consumes the proof run | scoped lemma F unrecorded | stretch only after F1-F2 and lemma 2 are closed in that tool |
 | Bench host load from other work | noisy times | lock, pinning to 24-27,56-59, busy-share check, rerun when idle |
 | Disk falls under 20 GB | run stops | `df` before each run and before brittleness |
