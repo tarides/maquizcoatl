@@ -253,3 +253,6 @@ ratio is the same to two decimals.
    0.98, same knobs and CPU set on both sides.
 
 _Drafted by Claude Code (Opus 5.5) as part of the experiment pipeline._
+
+Erratum (2026-11-26, after the results review): corrections in
+[`2026-11-26-exp-13-builds-df-correction.md`](2026-11-26-exp-13-builds-df-correction.md).

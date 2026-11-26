@@ -37,3 +37,6 @@ summary (agent-estimated shares, errata) still apply to the copied cells.
 | Fill the Verus and Isabelle cells through a new results file plus an erratum pointer | met | this file; pointer appended to `2026-11-19-exp-13-summary.md` |
 
 _Drafted by Claude Code (Opus 5.5) as part of the experiment pipeline._
+
+Erratum (2026-11-26, after the results review): corrections in
+[`2026-11-26-exp-13-builds-df-correction.md`](2026-11-26-exp-13-builds-df-correction.md).
