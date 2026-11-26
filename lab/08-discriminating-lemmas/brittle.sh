@@ -102,14 +102,17 @@
 #   version.txt    verus --version;
 #   <version>_<seed>[_<label>][_nooptout]/  out.json, err.txt, cmd.txt,
 #                  verus.time, z3exe.txt (z3 executables seen, with counts).
+# Adapted for experiment #8's follow-up (issue #34, plans/08-discriminating-lemmas.md):
+# only the file lists, the EXP path, the Print Assumptions targets and the
+# CPU defaults change (timed CPUS 24-27,56-59; untimed and sampler CPUs 8-11, 8).
 set -euo pipefail
 : "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory}"
 T=${1:?tool} V=${2:?z3 version} SEED=${3:?seed} RID=${4:?run-id} LABEL=${5:-}
 case $T in fstar|verus) ;; *) echo "brittle.sh: tool is fstar or verus" >&2; exit 2 ;; esac
 case $SEED in default|[0-9]*) ;; *) echo "bad seed $SEED" >&2; exit 2 ;; esac
-CACHE=$BENCH_WORKDIR/cache; EXP=$BENCH_WORKDIR/exp/09-representative-proof
-L=$EXP/repo/lab/09-representative-proof
-CPUS=${CPUS:-28-31,60-63}
+CACHE=$BENCH_WORKDIR/cache; EXP=$BENCH_WORKDIR/exp/08-discriminating-lemmas
+L=$EXP/repo/lab/08-discriminating-lemmas
+CPUS=${CPUS:-24-27,56-59}
 OUT=$EXP/out/$RID/$T/brittle; mkdir -p "$OUT"
 SFX=; [ "$T" = verus ] && [ "${VERSION_CHECK:-}" = keep ] && SFX=_nooptout
 TAG=${V}_${SEED}${LABEL:+_$LABEL}$SFX
@@ -144,7 +147,7 @@ verus_check() { # run 14: one full check of the Verus crate (see the header)
   local VOPT=()
   if [ "$SRC" = VERUS_Z3_PATH ] && [ "${VERSION_CHECK:-}" != keep ]; then VOPT=(-V no-solver-version-check); VC=off; else VC=on; fi
   local SEEDOPT=(); [ "$SEED" = default ] || SEEDOPT=(--smt-option "smt.random_seed=$SEED")
-  local VMODS="lib syntax sem compile vm statement proof_a proof_sem proof_sim proof"
+  local VMODS="lib fold fold_proof absent desugar absent_mono absent_proof cases"
   [ -f "$OUT/checks.tsv" ] || printf 'version\tseed\tlabel\tsolver_source\tversion_check\tz3_version\tz3_started\tthreads\tstart_utc\tload1\tpinned_busy_pct\texit\tverified\terrors\twall_s\tuser_s\tsys_s\tmax_rss_kb\tsmt_run_ms\trlimit_run\tmax_fn_rlimit\tmax_fn\tfailing\tsha256_sources\n' > "$OUT/checks.tsv"
   [ -f "$OUT/functions.tsv" ] || printf 'version\tseed\tlabel\tmodule\tfunction\tmode\ttime_ms\trlimit\tsuccess\n' > "$OUT/functions.tsv"
   [ -f "$OUT/version.txt" ] || verus --version > "$OUT/version.txt" 2>&1
@@ -160,7 +163,7 @@ verus_check() { # run 14: one full check of the Verus crate (see the header)
   ( while :; do for p in $(pgrep -u "$(id -u)" -x z3); do
         if [ "$(readlink "/proc/$p/cwd" 2>/dev/null)" = "$B" ]; then readlink "/proc/$p/exe" || true; fi; done; sleep 0.1; done ) \
     > "$D/z3exe.raw" 2>/dev/null & local WP=$!
-  taskset -pc 4 "$WP" > /dev/null
+  taskset -pc 8 "$WP" > /dev/null
   set +e
   systemd-run --user --scope --quiet -p MemoryMax=16G -p MemorySwapMax=0 \
     /usr/bin/time -v -o "$D/verus.time" \

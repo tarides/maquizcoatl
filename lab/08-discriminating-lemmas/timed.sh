@@ -30,16 +30,19 @@
 # output of verus --version and of the z3 Verus runs (the binary bundled
 # next to verus, or $VERUS_Z3_PATH when set), copied to the raw set too.
 # Prints no hostnames, addresses or absolute paths.
+# Adapted for experiment #8's follow-up (issue #34, plans/08-discriminating-lemmas.md):
+# only the file lists, the EXP path, the Print Assumptions targets and the
+# CPU defaults change (timed CPUS 24-27,56-59; untimed and sampler CPUs 8-11, 8).
 set -euo pipefail
 : "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory}"
 T=${1:?tool} RID=${2:?run-id}
-CACHE=$BENCH_WORKDIR/cache; EXP=$BENCH_WORKDIR/exp/09-representative-proof
-L=$EXP/repo/lab/09-representative-proof
+CACHE=$BENCH_WORKDIR/cache; EXP=$BENCH_WORKDIR/exp/08-discriminating-lemmas
+L=$EXP/repo/lab/08-discriminating-lemmas
 OUT=$EXP/out/$RID/$T; mkdir -p "$OUT"
-CPUS=${CPUS:-28-31,60-63}
+CPUS=${CPUS:-24-27,56-59}
 . "$CACHE/env.sh"
 case $T in
-  rocq)  DEFS=${ROCQ_FILES:-Syntax Sem Compile Vm Statement}
+  rocq)  DEFS=${ROCQ_FILES:-Fold FoldProof Absent Desugar AbsentMono AbsentProof}
          fresh() { rm -rf "$1"; mkdir -p "$1"; cp "$L"/rocq/*.v "$1/"; }
          chk() { opam exec --switch provers -- rocq compile -R . S "$1.v" && echo "Checked $1.v"; } ;;
   fstar) DEFS=${FSTAR_FILES:-Syntax Sem Compile Vm Statement}
@@ -48,7 +51,7 @@ case $T in
   verus) DEFS="lib"
          . "$CACHE/verus-env.sh"
          { verus --version; "${VERUS_Z3_PATH:-$(dirname "$(command -v verus)")/z3}" --version; } > "$OUT/version.txt" 2>&1
-         fresh() { rm -rf "$1"; mkdir -p "$1"; cp "$L"/verus/{lib,syntax,sem,compile,vm,statement,proof_a,proof_sem,proof_sim,proof}.rs "$1/"; }
+         fresh() { rm -rf "$1"; mkdir -p "$1"; cp "$L"/verus/{lib,fold,fold_proof,absent,desugar,absent_mono,absent_proof,cases}.rs "$1/"; }
          chk() { verus --crate-type=lib --num-threads "${VERUS_THREADS:-7}" "$1.rs"; } ;;
   *) echo "unknown tool $T" >&2; exit 2 ;;
 esac

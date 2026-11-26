@@ -26,24 +26,27 @@
 # directory, or $VERUS_Z3_PATH when set (Verus's own lookup).
 # Untimed: nice -n 10, CPUs 4-7.  Output: <exp>/out/<run-id>/<tool>/axioms.txt.
 # Prints no hostnames, addresses or absolute paths.
+# Adapted for experiment #8's follow-up (issue #34, plans/08-discriminating-lemmas.md):
+# only the file lists, the EXP path, the Print Assumptions targets and the
+# CPU defaults change (timed CPUS 24-27,56-59; untimed and sampler CPUs 8-11, 8).
 set -euo pipefail
 : "${BENCH_WORKDIR:?set BENCH_WORKDIR to the bench work directory}"
 T=${1:?tool} RID=${2:?run-id}
-CACHE=$BENCH_WORKDIR/cache; EXP=$BENCH_WORKDIR/exp/09-representative-proof
-L=$EXP/repo/lab/09-representative-proof
+CACHE=$BENCH_WORKDIR/cache; EXP=$BENCH_WORKDIR/exp/08-discriminating-lemmas
+L=$EXP/repo/lab/08-discriminating-lemmas
 OUT=$EXP/out/$RID/$T; mkdir -p "$OUT"
 . "$CACHE/env.sh"
 case $T in
 rocq)
-  FILES="Syntax Sem Compile Vm Statement ProofA ProofSem ProofSim Proof"
+  FILES="Fold FoldProof Absent Desugar AbsentMono AbsentProof"
   B=$EXP/build/rocq/$RID-axioms; rm -rf "$B"; mkdir -p "$B"; cd "$B"
   for f in $FILES; do cp "$L/rocq/$f.v" .; done
-  printf 'From S Require Import Proof.\nPrint Assumptions main_theorem.\n' > Axioms.v
+  printf 'From S Require FoldProof AbsentProof.\nPrint Assumptions FoldProof.sharp_s_sym.\nPrint Assumptions AbsentProof.absent_desugar_eq.\n' > Axioms.v
   {
     echo "== rocq --version"; opam exec --switch provers -- rocq --version
     for f in $FILES Axioms; do
       echo "== rocq compile -R . S $f.v"
-      nice -n 10 taskset -c 4-7 opam exec --switch provers -- rocq compile -R . S "$f.v" 2>&1
+      nice -n 10 taskset -c 8-11 opam exec --switch provers -- rocq compile -R . S "$f.v" 2>&1
     done
     echo "== scan (Admitted|admit|Axiom|Parameter|Conjecture|Hypothesis|Abort) in $FILES"
     for f in $FILES; do
@@ -61,7 +64,7 @@ fstar)
     echo "== fstar.exe --version"; fstar.exe --version
     for f in $FILES; do
       echo "== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --admit_smt_queries false $f.fst"
-      nice -n 10 taskset -c 4-7 fstar.exe --cache_checked_modules --cache_dir cache \
+      nice -n 10 taskset -c 8-11 fstar.exe --cache_checked_modules --cache_dir cache \
         --z3version 5.3.0 --admit_smt_queries false "$f.fst" 2>&1
     done
     echo "== scan (admit|assume|magic|admit_smt_queries true|--lax|#lang-) in $FILES"
@@ -75,7 +78,7 @@ fstar)
   cat "$OUT/axioms.txt" ;;
 verus)
   . "$CACHE/verus-env.sh"
-  FILES="lib syntax sem compile vm statement proof_a proof_sem proof_sim proof"
+  FILES="lib fold fold_proof absent desugar absent_mono absent_proof cases"
   B=$EXP/build/verus/$RID-axioms; rm -rf "$B"; mkdir -p "$B"; cd "$B"
   for f in $FILES; do cp "$L/verus/$f.rs" .; done
   {
@@ -84,7 +87,7 @@ verus)
     echo "== z3 --version (${VERUS_Z3_PATH:+VERUS_Z3_PATH}${VERUS_Z3_PATH:-bundled with verus})"; "$Z3" --version
     for opt in "" "--no-cheating"; do
       echo "== verus --crate-type=lib --num-threads 4 $opt lib.rs"
-      rc=0; nice -n 10 taskset -c 4-7 verus --crate-type=lib --num-threads 4 $opt lib.rs 2>&1 || rc=$?
+      rc=0; nice -n 10 taskset -c 8-11 verus --crate-type=lib --num-threads 4 $opt lib.rs 2>&1 || rc=$?
       echo "exit code $rc"
     done
     echo "== scan (assume|admit|external_body|verifier::external|assume_specification|exec_allows_no_decreases_clause|no_verify|rlimit) in $FILES"

@@ -1,8 +1,7 @@
 {
-  "experiment": 9,
-  "reused_from_experiment_8": "lab/08-hard-features/pins.json (main at 6630262): opam 2.6.1, OCaml 5.4.1 switch 'provers' with rocq-core 9.3.0 + rocq-stdlib, F* v2026.11.15 (Pulse included, Z3 4.8.5/4.13.3/4.15.3/5.3.0 bundled), Verus release/0.2026.11.02.8bf68ee (Rust 1.99.1, Z3 4.16.0 bundled)",
-  "onig": {"commit": "f95747b", "builds": ["Release, static, out of tree"]},
-  "cases": {"source": "lab/results/2026-11-20-exp-06-raw/in.tsv (sha256 46c625c2...5fca)",
-            "full_extraction": "lab/06-spec-speed/cases/extract.py on upstream f95747b, all.tsv sha256 d0386ccfc3bef15e78468763e2d4d2fddb0b3dc0cacabf6d3896efacb4ecc88f"},
-  "cross_check": "lab/06-spec-speed/rocq/Spec2.v (experiment #6 milestone 2, main at 8febe2e), unchanged"
+  "experiment": "8 follow-up (issue #34)",
+  "reused_from_experiment_9": "lab/09-representative-proof/pins.json and its provenance entry (lab/results/2026-11-25-exp-09-provenance.md): opam 2.6.1, OCaml 5.4.1 switch 'provers' with rocq-core 9.3.0 + rocq-stdlib 9.2.0, Verus release/0.2026.11.02.8bf68ee (Rust 1.99.1, Z3 4.16.0 bundled), F* v2026.11.15 release for its bundled Z3 5.3.0 and 4.15.3 (brittleness only)",
+  "onig": {"commit": "f95747b", "builds": ["experiment #8's Debug and ASan/UBSan builds, shared, out of tree, reused read-only"]},
+  "semantics": "lab/08-hard-features (main at 6630262): SEMANTICS.md, rocq/Fold.v, rocq/Absent.v, verus/fold.rs, verus/absent.rs",
+  "cases": ["lab/08-hard-features/cases/absent.tsv (ab01-ab11)", "lab/08-discriminating-lemmas/cases/absent-restore.tsv (new)"]
 }
