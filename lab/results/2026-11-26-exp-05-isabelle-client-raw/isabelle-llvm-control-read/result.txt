@@ -1,0 +1,9 @@
+tool=isabelle-llvm
+run_id=i30-run1
+mode=negative-control-read
+jobs=4
+cpus=24-27,56-59
+normal_run=passed
+build_seconds=47
+build_status=3
+control=rejected
