@@ -1,0 +1,69 @@
+== 4.16.0_default 16:18:29Z load 0.04 0.06 0.22
+4.16.0	default		0	179	0	33.09	12224746	lib::absent_proof::term_core	-
+== 4.16.0_1 16:19:05Z load 0.83 0.26 0.29
+4.16.0	1		0	179	0	33.03	10968407	lib::absent_proof::term_core	-
+== 4.16.0_2 16:19:40Z load 1.15 0.40 0.34
+4.16.0	2		0	179	0	33.13	2485333	lib::absent_proof::sim_b	-
+== 4.16.0_3 16:20:16Z load 1.25 0.52 0.38
+4.16.0	3		0	179	0	32.99	3812100	lib::absent_proof::term_core	-
+== 4.16.0_4 16:20:51Z load 3.81 1.15 0.59
+4.16.0	4		0	179	0	32.94	5051072	lib::absent_proof::sim_a	-
+== 4.16.0_5 16:21:27Z load 2.70 1.16 0.62
+4.16.0	5		0	179	0	32.91	3974070	lib::absent_proof::sim_b_xs	-
+== 4.16.0_6 16:22:02Z load 2.31 1.23 0.66
+4.16.0	6		0	179	0	33.11	14517574	lib::absent_proof::term_core	-
+== 4.16.0_7 16:22:38Z load 2.13 1.33 0.72
+4.16.0	7		0	179	0	33.10	1902020	lib::absent_proof::scan_a	-
+== 4.16.0_8 16:23:13Z load 2.41 1.50 0.80
+4.16.0	8		0	179	0	33.08	2497643	lib::absent_proof::sim_b	-
+== 4.16.0_9 16:23:49Z load 2.10 1.53 0.84
+4.16.0	9		0	179	0	33.11	9082877	lib::absent_proof::term_core	-
+== 4.16.0_10 16:24:25Z load 2.33 1.67 0.91
+4.16.0	10		0	179	0	33.05	19164869	lib::absent_proof::term_core	-
+== 5.3.0_default_nooptout 16:25:00Z load 2.27 1.72 0.96
+5.3.0	default	nooptout	134	0	0	3.30	0	-	no-json; Error"expected z3 version 4.16.0, found 5.3.0"
+== 5.3.0_default 16:25:06Z load 2.25 1.73 0.97
+5.3.0	default		1	178	1	48.19	30000000	lib::absent_proof::sim_a	failed:lib::absent_proof::sim_a; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:1296(sim_a)
+== 5.3.0_1 16:25:57Z load 2.34 1.83 1.04
+5.3.0	1		0	179	0	32.99	7819958	lib::absent_proof::scan_a	-
+== 5.3.0_2 16:26:32Z load 2.39 1.90 1.10
+5.3.0	2		0	179	0	32.96	7036466	lib::absent_proof::sim_b_rep	-
+== 5.3.0_3 16:27:07Z load 2.30 1.93 1.14
+5.3.0	3		0	179	0	33.10	8888849	lib::absent_proof::sim_b_rep	-
+== 5.3.0_4 16:27:43Z load 2.17 1.96 1.18
+5.3.0	4		0	179	0	32.92	7894797	lib::absent_proof::scan_a	-
+== 5.3.0_5 16:28:18Z load 2.22 2.00 1.23
+5.3.0	5		0	179	0	33.10	8757265	lib::absent_proof::scan_a	-
+== 5.3.0_6 16:28:54Z load 2.10 2.00 1.26
+5.3.0	6		0	179	0	33.23	10723559	lib::absent_proof::scan_a	-
+== 5.3.0_7 16:29:30Z load 3.28 2.33 1.39
+5.3.0	7		0	179	0	38.52	18485145	lib::absent_proof::sim_a	-
+== 5.3.0_8 16:30:11Z load 3.04 2.38 1.45
+5.3.0	8		0	179	0	33.05	7801453	lib::absent_proof::sim_b_rep	-
+== 5.3.0_9 16:30:46Z load 2.41 2.31 1.46
+5.3.0	9		0	179	0	32.84	7804360	lib::absent_proof::scan_a	-
+== 5.3.0_10 16:31:22Z load 2.50 2.35 1.51
+5.3.0	10		1	178	1	44.50	30000000	lib::absent_proof::sim_a	failed:lib::absent_proof::sim_a; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:1296(sim_a)
+== 4.15.3_default 16:32:09Z load 2.30 2.31 1.54
+4.15.3	default		0	179	0	32.97	4209481	lib::absent_proof::scan_a	-
+== 4.15.3_1 16:32:44Z load 2.66 2.40 1.60
+4.15.3	1		0	179	0	32.94	4910294	lib::absent_proof::sim_a	-
+== 4.15.3_2 16:33:19Z load 3.16 2.56 1.69
+4.15.3	2		0	179	0	33.00	13019343	lib::absent_proof::term_core	-
+== 4.15.3_3 16:33:55Z load 4.20 2.92 1.84
+4.15.3	3		0	179	0	32.90	3946459	lib::absent_proof::scan_a	-
+== 4.15.3_4 16:34:30Z load 3.78 2.96 1.90
+4.15.3	4		0	179	0	32.95	6107778	lib::absent_proof::term_core	-
+== 4.15.3_5 16:35:06Z load 3.53 2.98 1.95
+4.15.3	5		0	179	0	32.94	4344741	lib::absent_proof::scan_a	-
+== 4.15.3_6 16:35:41Z load 3.18 2.97 1.98
+4.15.3	6		0	179	0	32.91	6022715	lib::absent_proof::sim_a	-
+== 4.15.3_7 16:36:17Z load 3.24 3.00 2.03
+4.15.3	7		0	179	0	32.90	4826152	lib::absent_proof::scan_a	-
+== 4.15.3_8 16:36:52Z load 3.02 2.97 2.06
+4.15.3	8		0	179	0	32.94	4853012	lib::absent_proof::scan_a	-
+== 4.15.3_9 16:37:27Z load 3.05 2.99 2.10
+4.15.3	9		0	179	0	32.84	4072880	lib::absent_proof::scan_a	-
+== 4.15.3_10 16:38:03Z load 2.58 2.88 2.10
+4.15.3	10		0	179	0	32.98	3564623	lib::absent_proof::scan_a	-
+== done 16:38:37Z

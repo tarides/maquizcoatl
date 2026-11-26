@@ -27,3 +27,8 @@ run	date	item	kind	attempts	note
 3	2026-11-26	verus/absent_proof.rs inversions, sim_b (2b), absent_desugar_eq	proof	2	1 failed check: rlimit exceeded on the unsplit sim_b (fixed by moving Alt and Star into sim_b_alt, sim_b_star), plus 2 assertions (simple_top, simple_ends_b)
 3	2026-11-26	verus/fold_proof.rs fold_lit (stretch)	proof	1	checked first time
 3	2026-11-26	full crate and absent.rs header recheck	check	2	full crate 179 verified (15:56:35Z); absent module after a header-comment edit (15:57:49Z)
+4	2026-11-26	session	wall-clock	-	first bench-host command 2026-11-26T16:17:41Z; matrix 16:18:29Z-16:38:37Z; replications 16:39:17Z-16:41:55Z; calibration after; end 2026-11-26T16:45:42Z (before the run-4 commit)
+4	2026-11-26	brittle.sh verus, brittle_verus.py	script	1	unchanged since run 1, ran at the first attempt; drivers drive.sh and drive-rep.sh written for run 4, each ran once
+4	2026-11-26	brittleness matrix	check	36	33 cells + refusal cell + 2 labelled replications (rep1) of the two failing 5.3.0 cells; no cell retried; 31 of 33 pass
+4	2026-11-26	rlimit unit recheck	check	1	untimed, --rlimit 0.3 --verify-module absent_proof: four functions stop at exactly 900,000
+4	2026-11-26	comparison entry and draft comment	writing	1	no prover run; figures from entries 2-8 and experiment #9 comment on issue #4

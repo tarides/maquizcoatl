@@ -1,0 +1,41 @@
+
+thread '<unnamed>' (3779720) panicked at air/src/smt_verify.rs:204:21:
+The verifier expects z3 version "4.16.0", found version "5.3.0"
+error: expected z3 version 4.16.0, found 5.3.0
+
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+thread '<unnamed>' (3779720) panicked at rust_verify/src/verifier.rs:437:17:
+dropped, expected call to `into_inner` instead
+stack backtrace:
+   0:     0x7764c031f476 - <<std[68c81ae915296b05]::sys::backtrace::BacktraceLock>::print::DisplayBacktrace as core[efd5e57aef94d71e]::fmt::Display>::fmt
+   1:     0x7764c0a0eecf - core[efd5e57aef94d71e]::fmt::write
+   2:     0x7764c1c5ce2c - <std[68c81ae915296b05]::sys::stdio::unix::Stderr as core[efd5e57aef94d71e]::io::write::Write>::write_fmt
+   3:     0x7764c02f28da - std[68c81ae915296b05]::panicking::default_hook::{closure#0}
+   4:     0x7764c0313723 - std[68c81ae915296b05]::panicking::default_hook
+   5:     0x7764c0313b8b - std[68c81ae915296b05]::panicking::panic_with_hook
+   6:     0x7764c02f29c4 - std[68c81ae915296b05]::panicking::panic_handler::{closure#0}
+   7:     0x7764c02e9879 - std[68c81ae915296b05]::sys::backtrace::__rust_end_short_backtrace::<std[68c81ae915296b05]::panicking::panic_handler::{closure#0}, !>
+   8:     0x7764c02f439d - __rustc[3d2f79520d6fa809]::rust_begin_unwind
+   9:     0x7764bc6dcccc - core[efd5e57aef94d71e]::panicking::panic_fmt
+  10:     0x5f428e408eb3 - core[efd5e57aef94d71e]::ptr::drop_glue::<core[efd5e57aef94d71e]::option::Option<rust_verify[9b302856cd332a3b]::verifier::util::PanicOnDropVec<(alloc[c23e483dde3f7cfb]::sync::Arc<vir[71ceb8c51f4b19f0]::messages::MessageX>, air[2aa98ccf8ac8cf48]::messages::MessageLevel)>>>
+  11:     0x5f428e3f6fda - <rust_verify[9b302856cd332a3b]::verifier::Verifier>::verify_bucket::<rust_verify[9b302856cd332a3b]::verifier::QueuedReporter>
+  12:     0x5f428e415928 - std[68c81ae915296b05]::sys::backtrace::__rust_begin_short_backtrace::<<rust_verify[9b302856cd332a3b]::verifier::Verifier>::verify_crate_inner::{closure#2}, (rust_verify[9b302856cd332a3b]::verifier::Verifier, alloc[c23e483dde3f7cfb]::vec::Vec<core[efd5e57aef94d71e]::result::Result<vir[71ceb8c51f4b19f0]::context::GlobalCtx, ()>>)>
+  13:     0x5f428e47802e - <std[68c81ae915296b05]::thread::lifecycle::spawn_unchecked<<rust_verify[9b302856cd332a3b]::verifier::Verifier>::verify_crate_inner::{closure#2}, (rust_verify[9b302856cd332a3b]::verifier::Verifier, alloc[c23e483dde3f7cfb]::vec::Vec<core[efd5e57aef94d71e]::result::Result<vir[71ceb8c51f4b19f0]::context::GlobalCtx, ()>>)>::{closure#1} as core[efd5e57aef94d71e]::ops::function::FnOnce<()>>::call_once::{shim:vtable#0}
+  14:     0x7764c1e0c607 - <std[68c81ae915296b05]::sys::thread::unix::Thread>::new::thread_start
+  15:     0x7764bb09cb64 - start_thread
+                               at ./nptl/pthread_create.c:447:8
+  16:     0x7764bb129e8c - clone3
+                               at ./misc/../sysdeps/unix/sysv/linux/x86_64/clone3.S:78:0
+  17:                0x0 - <unknown>
+
+thread '<unnamed>' (3779724) panicked at air/src/smt_verify.rs:204:21:
+The verifier expects z3 version "4.16.0", found version "5.3.0"
+
+thread '<unnamed>' (3779720) panicked at /rustc/58cf8f9c35b355199727627d07ae34a4e2846d67/library/core/src/panicking.rs:233:5:
+panic in a destructor during cleanup
+thread caused non-unwinding panic. aborting.
+
+thread '<unnamed>' (3779726) panicked at air/src/smt_verify.rs:204:21:
+The verifier expects z3 version "4.16.0", found version "5.3.0"
+timeout: the monitored command dumped core

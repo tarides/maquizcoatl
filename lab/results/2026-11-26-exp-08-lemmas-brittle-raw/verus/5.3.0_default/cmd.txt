@@ -1,0 +1,9 @@
+verus --version:
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+solver (VERUS_Z3_PATH): Z3 version 5.3.0 - 64 bit
+command: verus --crate-type=lib --num-threads 7 --output-json --time-expanded -V no-solver-version-check  lib.rs
