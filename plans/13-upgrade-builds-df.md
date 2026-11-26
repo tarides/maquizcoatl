@@ -239,6 +239,11 @@ so that it can show by how much it exceeds 45 minutes and still print
 - **Probe killed at 75 minutes:** the subset is the shared modules plus
   `vreplicaset_controller`.
 
+**Probe result (2026-11-26, run 1):** the probe took 822.6 s (13.7
+minutes) on the timed set, `cargo verus verify --lib` ok, dependencies
+fresh (only `Checking verifiable-controllers` in cargo's log): within 45
+minutes, so the full crate is built on both sides and no subset is used.
+
 In both subset cases this plan is amended (section "Subset", with the
 probe's times and the module list) and the amendment is committed and
 pushed before the first timed pair. The probe's wall-clock time is
