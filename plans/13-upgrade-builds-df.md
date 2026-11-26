@@ -25,6 +25,13 @@ and the maintainer's answer after it):
 2. **Verification time: A.** One untimed full build on the pinned side
    first; a fixed subset only if it exceeds the driver's timeout, chosen
    and recorded in this plan before any timed pair.
+3. **Port time box against the run cap: A** (2026-11-26,
+   https://github.com/tarides/maquizcoatl/pull/39#issuecomment-7185641767
+   and the maintainer's answer on issue #25). The half-day of hands-on
+   port work per project is counted across runs: a port interrupted by
+   the 4-hour cap continues in a second run, which ends with the final
+   timed rebuild of the latest side; the cumulative hands-on time is
+   recorded.
 
 ## Snapshot
 
@@ -173,8 +180,14 @@ repairs, like the mathlib bump of lean-regex or Linden's Warblre move.
 ### Porting (criterion 3)
 
 A failure on the latest side starts the port, by Claude Code, within the
-issue's half-day hands-on time box per project **and** the run's 4-hour
-cap, whichever comes first. Recorded: failing files (driver's
+issue's half-day hands-on time box per project, counted across runs
+(decision 3): the 4-hour cap ends a run, not the port. A port the cap
+interrupts is recorded as interrupted (errors fixed, errors left, hands-on
+time so far) and continues in a second run of at most 4 hours, on the
+untimed CPUs, which ends with the final timed rebuild of the latest side
+on the timed set (with a fresh timed rebuild of the pinned side just
+before it, so that the pair stays back to back). The cumulative hands-on
+time of both runs is recorded against the half-day. Recorded: failing files (driver's
 `Failures.files`), error categories, patch (`git diff --stat` and the
 patch file), hands-on time. During the port, re-runs are restricted to
 the failing modules (Verus `--verify-module`) or sessions (Isabelle) and
@@ -307,10 +320,12 @@ blocked if free space would fall below 20 GB.
 
 The worst cases cannot all happen at once (a probe over 45 minutes implies
 a subset of at most 30 minutes per side), so phases 1 to 5 fit in 3:40 at
-worst. At 3:45 the ports stop where they are and are recorded as
-incomplete (errors fixed, errors left). If the Verus latest side fails and
-no full rerun fits, criterion 4 is reported as the ratio over the modules
-verified on both sides (from `--time-expanded`), labelled as partial.
+worst. At 3:45 a port still under way stops where it is and is recorded as
+interrupted (errors fixed, errors left, hands-on time so far); it
+continues in a second run (decision 3), which ends with the final timed
+pair. If the Verus latest side fails, the first run already reports the
+ratio over the modules verified on both sides (from `--time-expanded`),
+labelled as partial; the second run's final pair replaces it.
 
 ## Where things live
 
@@ -367,8 +382,9 @@ hands-on time against the time box. Redacted raw logs go with them. In
 
 - **The Verus latest side fails broadly.** Expected (the mining found proof
   repairs at `aa757c8`, `febab3b`, `2edac69`, `e83ea0f` after this commit),
-  and the datum wanted. The port is bounded by the time box and the run cap;
-  an incomplete port is a result, recorded with what is left.
+  and the datum wanted. The port is bounded by the half-day time box,
+  counted across runs (decision 3); a port left unfinished at the end of
+  the time box is a result, recorded with what is left.
 - **Two `vstd` versions.** If the `verus-tla` patch does not make cargo
   resolve a single `vstd`, the latest side cannot even build its
   dependencies; that is recorded as a dependency failure, with the edit
