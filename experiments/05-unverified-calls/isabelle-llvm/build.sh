@@ -6,7 +6,8 @@
 # VU_OUT/libvu.a.
 #
 # Steps, each timed in the log:
-#   1. copy ROOT and VU.thy to VU_OUT/src; with VU_NEGATIVE_CONTROL=1,
+#   1. copy ROOT, VU.thy and VU_Client.thy (the proof-only models of
+#      the C client) to VU_OUT/src; with VU_NEGATIVE_CONTROL=1,
 #      replace the lines between CLAMP-BEGIN and CLAMP-END (the clamp of
 #      vu_char_len) by a definition that returns the callee's raw
 #      result; with VU_NEGATIVE_CONTROL=2, replace the lines between
@@ -15,8 +16,8 @@
 #      oracles and quick_and_dirty;
 #   2. isabelle build of the session VU (a clean build, -c, so that
 #      export_llvm writes vu.ll again). A failed build whose errors are
-#      all failed proofs exits with VU_PROOF_REJECTED, any other failure
-#      with 1;
+#      all failed proofs (and theories left unloaded because of them)
+#      exits with VU_PROOF_REJECTED, any other failure with 1;
 #   3. ABI: the declare and define lines of vu.ll must equal
 #      abi.expected, and layout.c must compile against proto.h;
 #   4. compile vu.ll (clang) and shim.c (cc), and archive both.
@@ -52,6 +53,7 @@ cc --version | head -1
 
 step "1. source (negative control: $VU_NEGATIVE_CONTROL)"
 cp ROOT "$src/ROOT"
+cp VU_Client.thy "$src/VU_Client.thy"
 if [ "$VU_NEGATIVE_CONTROL" = 1 ]; then
   [ "$(grep -c 'CLAMP-BEGIN\|CLAMP-END' VU.thy)" = 2 ] ||
     { echo "clamp markers not found"; exit 1; }
@@ -73,8 +75,8 @@ fi
 # proof. The shim functions are constants with no definition, and their
 # contracts are theorem hypotheses, so none of this is needed.
 if grep -nwE 'sorry|axiomatization|oracle|quick_and_dirty|skip_proofs' \
-  "$src/VU.thy" "$src/ROOT"; then
-  echo "VU.thy or ROOT skips or assumes a proof, refused"
+  "$src/VU.thy" "$src/VU_Client.thy" "$src/ROOT"; then
+  echo "VU.thy, VU_Client.thy or ROOT skips or assumes a proof, refused"
   exit 1
 fi
 echo "proof escapes: none"
@@ -96,13 +98,19 @@ if [ "$status" != 0 ]; then
   # capital letter. Goals ("*** goal", "***  1."), locations ("*** At
   # command") and the "A total of N subgoals" note are not messages. The
   # log lists an error under its theory and again under "Build errors".
+  # When VU fails, VU_Client, which imports it, is reported as an error
+  # of its own ("Failed to load theory ... (unresolved ...)"): that head
+  # only follows another error, so it is neither a failed proof nor
+  # another error, and at least one failed proof is still required.
   heads=$(grep -E '^\*\*\* [A-Z]' "$src/errors.log" |
     grep -v -E '^\*\*\* (At command|A total of [0-9]+ subgoals)' |
     sort -u || true)
-  others=$(printf '%s\n' "$heads" | grep -v -E \
-    '^\*\*\* Failed to (finish proof|apply (initial |terminal )?proof method)' || true)
-  if [ -n "$heads" ] && [ -z "$others" ]; then
-    echo "proof rejected: $(printf '%s\n' "$heads" | wc -l) failed proof(s), no other error"
+  failed='^\*\*\* Failed to (finish proof|apply (initial |terminal )?proof method)'
+  proofs=$(printf '%s\n' "$heads" | grep -E "$failed" || true)
+  others=$(printf '%s\n' "$heads" | grep -v -E "$failed" |
+    grep -v -E '^\*\*\* Failed to load theory .* \(unresolved ' || true)
+  if [ -n "$proofs" ] && [ -z "$others" ]; then
+    echo "proof rejected: $(printf '%s\n' "$proofs" | wc -l) failed proof(s), no other error"
     exit "$VU_PROOF_REJECTED"
   fi
   echo "isabelle build failed for another reason than a failed proof"

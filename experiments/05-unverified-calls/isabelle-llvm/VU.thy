@@ -345,15 +345,20 @@ text \<open>The client contract of re-entrancy shape (a), stated on the
   reaches the record only through vu_i_apply (which the shim hands it),
   so it preserves every property of the record that every call of
   vu_i_apply preserves. Assumed of the C client, checked nowhere; it is
-  the same contract as Aeneas's Respects.\<close>
-definition respects_i_apply :: "8 word ptr \<Rightarrow> fold_rec ptr \<Rightarrow> bool" where
-  "respects_i_apply g rc \<longleftrightarrow> (\<forall>P.
+  the same contract as Aeneas's Respects. It is stated for any apply
+  function ai and apply-all function apply_all (respects_at), so that a
+  model of a client can be proved to meet it (VU_Client.thy), and
+  instantiated (respects_i_apply) with vu_i_apply and the shim.\<close>
+definition respects_at :: "(32 word \<Rightarrow> 32 word ptr \<Rightarrow> 32 word \<Rightarrow> fold_rec ptr \<Rightarrow> 32 word llM) \<Rightarrow> (fold_rec ptr \<Rightarrow> 32 word llM) \<Rightarrow> fold_rec ptr \<Rightarrow> bool" where
+  "respects_at ai apply_all rc \<longleftrightarrow> (\<forall>P.
     (\<forall>fr to to_len r. P r \<longrightarrow> llvm_htriple
-       (\<upharpoonleft>ll_pto r rc) (vu_i_apply fr to to_len rc)
+       (\<upharpoonleft>ll_pto r rc) (ai fr to to_len rc)
        (\<lambda>_. EXS r'. \<upharpoonleft>ll_pto r' rc ** \<up>(P r'))) \<longrightarrow>
     (\<forall>r. llvm_htriple
-       (\<upharpoonleft>ll_pto r rc ** \<up>(P r)) (vu_call_apply_all g rc)
+       (\<upharpoonleft>ll_pto r rc ** \<up>(P r)) (apply_all rc)
        (\<lambda>_. EXS r'. \<upharpoonleft>ll_pto r' rc ** \<up>(P r'))))"
+
+definition respects_i_apply where "respects_i_apply g rc \<longleftrightarrow> respects_at vu_i_apply (vu_call_apply_all g) rc"
 
 text \<open>Every call of vu_i_apply keeps the record well formed: a
   consequence of vu_i_apply_correct.\<close>
@@ -385,7 +390,7 @@ proof -
   with assms have "\<And>r. llvm_htriple
      (\<upharpoonleft>ll_pto r rc ** \<up>(rec_wf r)) (vu_call_apply_all g rc)
      (\<lambda>_. EXS r'. \<upharpoonleft>ll_pto r' rc ** \<up>(rec_wf r'))"
-    unfolding respects_i_apply_def by blast
+    unfolding respects_i_apply_def respects_at_def by blast
   then show ?thesis by (rule vu_fold_all_correct)
 qed
 
