@@ -1,4 +1,4 @@
-# Plan: experiment #10, settling stack A against stack C
+# Plan: experiment #10, proved C VM, stack A vs stack C
 
 Issue: [#8](https://github.com/tarides/maquizcoatl/issues/8). The issue
 body is the reference for scope, inputs, measurement protocol and
