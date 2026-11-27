@@ -1,0 +1,147 @@
+short ('c', 'jq') rc=0 wall=0.51 ns_per_call=122.274
+short ('c', 'php') rc=0 wall=0.50 ns_per_call=93.702
+short ('c', 'vscode') rc=0 wall=0.59 ns_per_call=67.347
+short ('c', 'longphp') rc=0 wall=0.52 ns_per_call=132.489
+short ('stubs', 'jq') rc=0 wall=0.51 ns_per_call=133.530
+short ('stubs', 'php') rc=0 wall=0.51 ns_per_call=105.356
+short ('stubs', 'vscode') rc=0 wall=0.60 ns_per_call=76.757
+short ('stubs', 'longphp') rc=0 wall=0.63 ns_per_call=174.779
+short ('ctypes', 'jq') rc=0 wall=0.51 ns_per_call=743.165
+short ('ctypes', 'php') rc=0 wall=0.51 ns_per_call=706.030
+short ('ctypes', 'vscode') rc=0 wall=0.68 ns_per_call=666.537
+short ('ctypes', 'longphp') rc=0 wall=0.64 ns_per_call=790.660
+short ('vm', 'jq') rc=0 wall=0.51 ns_per_call=82.050
+short ('vm', 'php') rc=0 wall=0.51 ns_per_call=89.046
+short ('vm', 'vscode') rc=0 wall=0.65 ns_per_call=489.763
+short ('vm', 'longphp') rc=0 wall=0.63 ns_per_call=52.884
+short ('rocq', 'jq') rc=0 wall=0.51 ns_per_call=194.427
+short ('rocq', 'php') rc=0 wall=0.51 ns_per_call=189.496
+short ('rocq', 'vscode') rc=0 wall=0.98 ns_per_call=1754.405
+short ('rocq-scan', 'longphp') rc=0 wall=0.71 ns_per_call=102.098
+short ('fstar', 'jq') rc=0 wall=0.51 ns_per_call=347.872
+short ('fstar', 'php') rc=0 wall=0.51 ns_per_call=311.776
+short ('fstar', 'vscode') rc=0 wall=1.10 ns_per_call=3963.231
+short ('fstar-scan', 'longphp') rc=0 wall=0.72 ns_per_call=145.814
+short ('vm-flambda', 'jq') rc=0 wall=0.51 ns_per_call=72.870
+short ('vm-flambda', 'php') rc=0 wall=0.51 ns_per_call=81.135
+short ('vm-flambda', 'vscode') rc=0 wall=0.64 ns_per_call=436.729
+short ('vm-flambda', 'longphp') rc=0 wall=0.62 ns_per_call=47.037
+short ('rocq-flambda', 'jq') rc=0 wall=0.51 ns_per_call=160.038
+short ('rocq-flambda', 'php') rc=0 wall=0.51 ns_per_call=152.768
+short ('rocq-flambda', 'vscode') rc=0 wall=0.84 ns_per_call=1194.673
+short ('rocq-flambda-scan', 'longphp') rc=0 wall=0.71 ns_per_call=86.215
+short ('fstar-flambda', 'jq') rc=0 wall=0.51 ns_per_call=366.131
+short ('fstar-flambda', 'php') rc=0 wall=0.51 ns_per_call=325.613
+short ('fstar-flambda', 'vscode') rc=0 wall=1.12 ns_per_call=4078.867
+short ('fstar-flambda-scan', 'longphp') rc=0 wall=0.71 ns_per_call=151.134
+large ('c', 'log', '1m', 107) rc=0 wall=0.01 Bps=253822590.7 m=828
+large ('stubs', 'log', '1m', 107) rc=0 wall=0.01 Bps=254608796.2 m=828
+large ('ctypes', 'log', '1m', 107) rc=0 wall=0.02 Bps=200452317.8 m=828
+large ('vm', 'log', '1m', 107) rc=0 wall=0.12 Bps=17856484.2 m=828
+large ('rocq-scan', 'log', '1m', 107) rc=0 wall=0.82 Bps=2731704.3 m=828
+large ('fstar-scan', 'log', '1m', 107) rc=0 wall=2.00 Bps=1085338.7 m=828
+large ('c', 'log', '16m', 107) rc=0 wall=0.15 Bps=252938690.2 m=7543
+large ('stubs', 'log', '16m', 107) rc=0 wall=0.15 Bps=251802847.0 m=7543
+large ('ctypes', 'log', '16m', 107) rc=0 wall=0.17 Bps=232497212.2 m=7543
+large ('vm', 'log', '16m', 107) rc=0 wall=1.93 Bps=17566038.7 m=7543
+large ('c', 'log', '1m', 94) rc=0 wall=0.01 Bps=997122367.8 m=0
+large ('stubs', 'log', '1m', 94) rc=0 wall=0.01 Bps=985858986.6 m=0
+large ('ctypes', 'log', '1m', 94) rc=0 wall=0.01 Bps=990364907.5 m=0
+large ('vm', 'log', '1m', 94) rc=0 wall=0.04 Bps=61044216.2 m=0
+large ('rocq-scan', 'log', '1m', 94) rc=0 wall=0.13 Bps=27099033.2 m=0
+large ('fstar-scan', 'log', '1m', 94) rc=0 wall=0.16 Bps=20308766.4 m=0
+large ('c', 'log', '16m', 94) rc=0 wall=0.05 Bps=992669472.3 m=0
+large ('stubs', 'log', '16m', 94) rc=0 wall=0.05 Bps=993971265.0 m=0
+large ('ctypes', 'log', '16m', 94) rc=0 wall=0.05 Bps=994903875.1 m=0
+large ('vm', 'log', '16m', 94) rc=0 wall=0.57 Bps=61024470.4 m=0
+large ('c', 'log', '1m', 103) rc=0 wall=0.01 Bps=257527436.2 m=0
+large ('stubs', 'log', '1m', 103) rc=0 wall=0.01 Bps=258939554.3 m=0
+large ('ctypes', 'log', '1m', 103) rc=0 wall=0.01 Bps=262182737.0 m=0
+large ('vm', 'log', '1m', 103) rc=0 wall=0.10 Bps=22131971.5 m=0
+large ('rocq-scan', 'log', '1m', 103) rc=0 wall=0.56 Bps=4184435.3 m=0
+large ('fstar-scan', 'log', '1m', 103) rc=0 wall=1.36 Bps=1604701.3 m=0
+large ('c', 'log', '16m', 103) rc=0 wall=0.15 Bps=256121787.1 m=0
+large ('stubs', 'log', '16m', 103) rc=0 wall=0.15 Bps=256300798.6 m=0
+large ('ctypes', 'log', '16m', 103) rc=0 wall=0.15 Bps=256319868.3 m=0
+large ('vm', 'log', '16m', 103) rc=0 wall=1.57 Bps=21613032.2 m=0
+large ('c', 'log', '1m', 99) rc=0 wall=0.01 Bps=262265563.0 m=0
+large ('stubs', 'log', '1m', 99) rc=0 wall=0.01 Bps=259672721.1 m=0
+large ('ctypes', 'log', '1m', 99) rc=0 wall=0.01 Bps=260650669.0 m=0
+large ('vm', 'log', '1m', 99) rc=0 wall=0.09 Bps=24448606.3 m=0
+large ('rocq-scan', 'log', '1m', 99) rc=0 wall=0.40 Bps=6085574.3 m=0
+large ('fstar-scan', 'log', '1m', 99) rc=0 wall=0.93 Bps=2395576.3 m=0
+large ('c', 'log', '16m', 99) rc=0 wall=0.15 Bps=256914888.4 m=0
+large ('stubs', 'log', '16m', 99) rc=0 wall=0.15 Bps=256876696.4 m=0
+large ('ctypes', 'log', '16m', 99) rc=0 wall=0.15 Bps=256852345.1 m=0
+large ('vm', 'log', '16m', 99) rc=0 wall=1.40 Bps=24392375.3 m=0
+large ('c', 'src', '1m', 107) rc=0 wall=0.03 Bps=95774486.8 m=45702
+large ('stubs', 'src', '1m', 107) rc=0 wall=0.03 Bps=84086808.3 m=45702
+large ('ctypes', 'src', '1m', 107) rc=0 wall=0.09 Bps=24411900.4 m=45702
+large ('vm', 'src', '1m', 107) rc=0 wall=0.13 Bps=16877814.5 m=45702
+large ('rocq-scan', 'src', '1m', 107) rc=0 wall=0.83 Bps=2722293.3 m=45702
+large ('fstar-scan', 'src', '1m', 107) rc=0 wall=1.97 Bps=1098638.5 m=45702
+large ('c', 'src', '16m', 107) rc=0 wall=0.27 Bps=129043111.6 m=454304
+large ('stubs', 'src', '16m', 107) rc=0 wall=0.31 Bps=114178470.8 m=454304
+large ('ctypes', 'src', '16m', 107) rc=0 wall=0.95 Bps=35957571.1 m=454304
+large ('vm', 'src', '16m', 107) rc=0 wall=1.98 Bps=17123981.3 m=454304
+large ('c', 'src', '1m', 94) rc=0 wall=0.01 Bps=875843461.6 m=1
+large ('stubs', 'src', '1m', 94) rc=0 wall=0.01 Bps=878099682.3 m=1
+large ('ctypes', 'src', '1m', 94) rc=0 wall=0.01 Bps=888975934.0 m=1
+large ('vm', 'src', '1m', 94) rc=0 wall=0.04 Bps=60576242.6 m=1
+large ('rocq-scan', 'src', '1m', 94) rc=0 wall=0.13 Bps=27400869.5 m=1
+large ('fstar-scan', 'src', '1m', 94) rc=0 wall=0.16 Bps=19669636.2 m=1
+large ('c', 'src', '16m', 94) rc=0 wall=0.05 Bps=874190983.6 m=8959
+large ('stubs', 'src', '16m', 94) rc=0 wall=0.06 Bps=858251785.3 m=8959
+large ('ctypes', 'src', '16m', 94) rc=0 wall=0.07 Bps=648595445.0 m=8959
+large ('vm', 'src', '16m', 94) rc=0 wall=0.57 Bps=60728738.9 m=8959
+large ('c', 'src', '1m', 103) rc=0 wall=0.01 Bps=217193374.1 m=6306
+large ('stubs', 'src', '1m', 103) rc=0 wall=0.02 Bps=206240382.7 m=6306
+large ('ctypes', 'src', '1m', 103) rc=0 wall=0.03 Bps=110326381.2 m=6306
+large ('vm', 'src', '1m', 103) rc=0 wall=0.10 Bps=21441532.8 m=6306
+large ('rocq-scan', 'src', '1m', 103) rc=0 wall=0.56 Bps=4188204.4 m=6306
+large ('fstar-scan', 'src', '1m', 103) rc=0 wall=1.36 Bps=1600329.3 m=6306
+large ('c', 'src', '16m', 103) rc=0 wall=0.17 Bps=221959970.9 m=82639
+large ('stubs', 'src', '16m', 103) rc=0 wall=0.18 Bps=213312832.9 m=82639
+large ('ctypes', 'src', '16m', 103) rc=0 wall=0.30 Bps=122454675.7 m=82639
+large ('vm', 'src', '16m', 103) rc=0 wall=1.59 Bps=21465651.2 m=82639
+large ('c', 'src', '1m', 99) rc=0 wall=0.01 Bps=260962367.7 m=13
+large ('stubs', 'src', '1m', 99) rc=0 wall=0.01 Bps=261339688.8 m=13
+large ('ctypes', 'src', '1m', 99) rc=0 wall=0.01 Bps=259803177.0 m=13
+large ('vm', 'src', '1m', 99) rc=0 wall=0.09 Bps=24140068.4 m=13
+large ('rocq-scan', 'src', '1m', 99) rc=0 wall=0.41 Bps=6006961.1 m=13
+large ('fstar-scan', 'src', '1m', 99) rc=0 wall=0.97 Bps=2297769.5 m=13
+large ('c', 'src', '16m', 99) rc=0 wall=0.15 Bps=258510490.5 m=591
+large ('stubs', 'src', '16m', 99) rc=0 wall=0.15 Bps=258360508.7 m=591
+large ('ctypes', 'src', '16m', 99) rc=0 wall=0.15 Bps=253694014.7 m=591
+large ('vm', 'src', '16m', 99) rc=0 wall=1.41 Bps=24468470.1 m=591
+large ('c', 'src', '1m', 101) rc=0 wall=0.01 Bps=219260410.5 m=5876
+large ('stubs', 'src', '1m', 101) rc=0 wall=0.02 Bps=208648108.2 m=5876
+large ('ctypes', 'src', '1m', 101) rc=0 wall=0.03 Bps=111368813.9 m=5876
+large ('vm', 'src', '1m', 101) rc=0 wall=0.14 Bps=15907165.1 m=5876
+large ('rocq-scan', 'src', '1m', 101) rc=0 wall=1.00 Bps=2231852.4 m=5876
+large ('fstar-scan', 'src', '1m', 101) rc=0 wall=2.29 Bps=939742.3 m=5876
+large ('c', 'src', '16m', 101) rc=0 wall=0.17 Bps=219124805.2 m=88332
+large ('stubs', 'src', '16m', 101) rc=0 wall=0.18 Bps=209682280.9 m=88332
+large ('ctypes', 'src', '16m', 101) rc=0 wall=0.31 Bps=114575706.4 m=88332
+large ('vm', 'src', '16m', 101) rc=0 wall=2.13 Bps=15880251.3 m=88332
+projection: extracted 16 MiB cells, 16 x 1 MiB wall: 257 s in all, max 37 s; large series 10 x pilot x 1.1 = 53.6 min
+large ('rocq-scan', 'log', '16m', 107) rc=0 wall=13.20 Bps=2701564.6 m=7543
+large ('fstar-scan', 'log', '16m', 107) rc=0 wall=31.93 Bps=1077897.7 m=7543
+large ('rocq-scan', 'log', '16m', 94) rc=0 wall=1.98 Bps=28636145.2 m=0
+large ('fstar-scan', 'log', '16m', 94) rc=0 wall=2.43 Bps=20050000.8 m=0
+large ('rocq-scan', 'log', '16m', 103) rc=0 wall=8.67 Bps=4244957.7 m=0
+large ('fstar-scan', 'log', '16m', 103) rc=0 wall=21.61 Bps=1613878.1 m=0
+large ('rocq-scan', 'log', '16m', 99) rc=0 wall=6.39 Bps=5951929.8 m=0
+large ('fstar-scan', 'log', '16m', 99) rc=0 wall=14.83 Bps=2390070.4 m=0
+large ('rocq-scan', 'src', '16m', 107) rc=0 wall=13.45 Bps=2639926.8 m=454304
+large ('fstar-scan', 'src', '16m', 107) rc=0 wall=31.82 Bps=1073564.4 m=454304
+large ('rocq-scan', 'src', '16m', 94) rc=0 wall=2.00 Bps=27280158.8 m=8959
+large ('fstar-scan', 'src', '16m', 94) rc=0 wall=2.49 Bps=19457678.6 m=8959
+large ('rocq-scan', 'src', '16m', 103) rc=0 wall=8.83 Bps=4149079.3 m=82639
+large ('fstar-scan', 'src', '16m', 103) rc=0 wall=21.76 Bps=1599332.1 m=82639
+large ('rocq-scan', 'src', '16m', 99) rc=0 wall=6.36 Bps=6003974.8 m=591
+large ('fstar-scan', 'src', '16m', 99) rc=0 wall=14.89 Bps=2379548.3 m=591
+large ('rocq-scan', 'src', '16m', 101) rc=0 wall=15.77 Bps=2240659.7 m=88332
+large ('fstar-scan', 'src', '16m', 101) rc=0 wall=36.17 Bps=949705.3 m=88332
+TOTAL one run per cell (s): {'short': 22.2, 'large': 290.1}
+PROJECTION 10 runs + 10% (min): {'short': 4.1, 'large': 53.6}

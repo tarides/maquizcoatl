@@ -45,3 +45,22 @@ applied after the loss of host contact). `run22.py catafuel x1 10` was
 not run in `x1`. The plan's intended sequence has `run22.py large x1 10`
 (every rank) and `run22.py catafuel x1 10` after `cata`.
     summarise22.py <copy of <exp>/out/x1> lab/results/2026-11-19-exp-12-raw/summary <out>
+
+Replay of run `x2` (issue #22 decisions 7 and 8), on run `x1`'s build
+and work files; its series are those of
+`lab/results/2026-11-27-exp-12-followup-run2-raw/series.sh`, in that
+order:
+
+    setup.sh switch-flambda x2; setup.sh engines-flambda x2
+    run22.py reuse x2 x1
+    FLAMBDA=1 run22.py checks x2; FLAMBDA=1 run22.py agree x2
+    FLAMBDA=1 run22.py pilot2 x2 ">10"
+    FLAMBDA=1 run22.py short x2 10; FLAMBDA=1 run22.py repeat x2 short
+    run22.py large x2 10 ">10"; run22.py repeat x2 large
+    run22.py catafuel x2 10 512
+    provenance.sh x2
+    summarise22.py <copy of <exp>/out/x1> lab/results/2026-11-19-exp-12-raw/summary <out> <copy of <exp>/out/x2>
+
+`engines-flambda` builds the staging tree in `ffi-flambda` and adds
+experiment #12's `oflags.sexp` (`-O3` under flambda) to the extracted
+libraries, the adapters and `x22` in that copy only.

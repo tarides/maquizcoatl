@@ -1,0 +1,39 @@
+conditions {'tag': 'short-start', 'time': '2026-11-27T14:24:06Z', 'load1': '0.87', 'load5': '0.80', 'load15': '0.54', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run1', 'time': '2026-11-27T14:24:29Z', 'load1': '0.97', 'load5': '0.83', 'load15': '0.56', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run2', 'time': '2026-11-27T14:24:51Z', 'load1': '0.98', 'load5': '0.85', 'load15': '0.57', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run3', 'time': '2026-11-27T14:25:13Z', 'load1': '0.99', 'load5': '0.86', 'load15': '0.58', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run4', 'time': '2026-11-27T14:25:36Z', 'load1': '0.99', 'load5': '0.87', 'load15': '0.59', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run5', 'time': '2026-11-27T14:25:59Z', 'load1': '1.00', 'load5': '0.88', 'load15': '0.61', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run6', 'time': '2026-11-27T14:26:21Z', 'load1': '1.06', 'load5': '0.91', 'load15': '0.62', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run7', 'time': '2026-11-27T14:26:44Z', 'load1': '1.04', 'load5': '0.91', 'load15': '0.63', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run8', 'time': '2026-11-27T14:27:06Z', 'load1': '1.03', 'load5': '0.92', 'load15': '0.64', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run9', 'time': '2026-11-27T14:27:29Z', 'load1': '1.08', 'load5': '0.94', 'load15': '0.66', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-run10', 'time': '2026-11-27T14:27:51Z', 'load1': '1.20', 'load5': '0.98', 'load15': '0.68', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'short-end', 'time': '2026-11-27T14:27:51Z', 'load1': '1.20', 'load5': '0.98', 'load15': '0.68', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+short: 0 noisy cells: []
+conditions {'tag': 'large-start', 'time': '2026-11-27T14:27:54Z', 'load1': '1.10', 'load5': '0.96', 'load15': '0.67', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run1', 'time': '2026-11-27T14:32:44Z', 'load1': '1.08', 'load5': '1.24', 'load15': '0.92', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run2', 'time': '2026-11-27T14:37:33Z', 'load1': '1.21', 'load5': '1.15', 'load15': '0.97', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run3', 'time': '2026-11-27T14:42:22Z', 'load1': '1.27', 'load5': '1.39', 'load15': '1.14', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run4', 'time': '2026-11-27T14:47:12Z', 'load1': '1.84', 'load5': '1.44', 'load15': '1.21', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run5', 'time': '2026-11-27T14:52:01Z', 'load1': '1.42', 'load5': '1.66', 'load15': '1.38', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run6', 'time': '2026-11-27T14:56:50Z', 'load1': '4.03', 'load5': '2.69', 'load15': '1.83', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run7', 'time': '2026-11-27T15:01:44Z', 'load1': '5.50', 'load5': '3.61', 'load15': '2.43', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run8', 'time': '2026-11-27T15:06:40Z', 'load1': '3.29', 'load5': '4.70', 'load15': '3.32', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run9', 'time': '2026-11-27T15:11:30Z', 'load1': '1.74', 'load5': '2.75', 'load15': '2.84', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-run10', 'time': '2026-11-27T15:16:20Z', 'load1': '2.79', 'load5': '2.13', 'load15': '2.50', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'large-end', 'time': '2026-11-27T15:16:20Z', 'load1': '2.79', 'load5': '2.13', 'load15': '2.50', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+large: 0 noisy cells: []
+conditions {'tag': 'catafuel-start', 'time': '2026-11-27T15:16:22Z', 'load1': '2.79', 'load5': '2.13', 'load15': '2.50', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run1', 'time': '2026-11-27T15:18:27Z', 'load1': '1.22', 'load5': '1.74', 'load15': '2.30', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run2', 'time': '2026-11-27T15:20:30Z', 'load1': '1.14', 'load5': '1.53', 'load15': '2.15', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run3', 'time': '2026-11-27T15:22:37Z', 'load1': '1.02', 'load5': '1.35', 'load15': '2.00', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run4', 'time': '2026-11-27T15:24:42Z', 'load1': '1.06', 'load5': '1.24', 'load15': '1.88', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run5', 'time': '2026-11-27T15:26:47Z', 'load1': '1.00', 'load5': '1.15', 'load15': '1.76', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run6', 'time': '2026-11-27T15:28:50Z', 'load1': '1.00', 'load5': '1.10', 'load15': '1.66', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run7', 'time': '2026-11-27T15:30:53Z', 'load1': '1.02', 'load5': '1.07', 'load15': '1.58', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run8', 'time': '2026-11-27T15:32:58Z', 'load1': '1.00', 'load5': '1.04', 'load15': '1.50', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run9', 'time': '2026-11-27T15:35:03Z', 'load1': '1.00', 'load5': '1.02', 'load15': '1.43', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-run10', 'time': '2026-11-27T15:37:07Z', 'load1': '1.00', 'load5': '1.01', 'load15': '1.37', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+conditions {'tag': 'catafuel-end', 'time': '2026-11-27T15:37:07Z', 'load1': '1.00', 'load5': '1.01', 'load15': '1.37', 'cpu2_governor': 'schedutil', 'others': 'none-detected'}
+SERIES-DONE 2026-11-27T15:37:07Z

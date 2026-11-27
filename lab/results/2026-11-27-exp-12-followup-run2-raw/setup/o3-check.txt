@@ -1,0 +1,7 @@
+gen/rocq/.rocq_extracted.objs/native/frag.cmx: -O3 x1
+gen/fstar/.fstar_extracted.objs/native/custard.cmx: -O3 x1
+gen/fstar/.fstar_extracted.objs/native/prims.cmx: -O3 x1
+22-extracted-ocaml/adapter/.extracted22.objs/native/extracted22__Engine22.cmx: -O3 x1
+22-extracted-ocaml/adapter/.extracted22.objs/native/extracted22__Rocq22.cmx: -O3 x1
+22-extracted-ocaml/adapter/.extracted22.objs/native/extracted22__Fstar22.cmx: -O3 x1
+12-ffi-vs-native/vm/.vm.objs/native/vm.cmx: -O3 x1

@@ -56,6 +56,16 @@ From the issue's Decisions section (maintainer, 2026-11-27; binding):
    fuel `max_int` under the 60 s `timeout`, as a second comparable
    point; a 60 s `cap` is recorded as such. The `cata-fuel` rows stay
    for the other lengths.
+7. **Run 2 for what run 1 cut: (a)** (raised by the run-1 review,
+   [comment](https://github.com/tarides/maquizcoatl/issues/22#issuecomment-7220109195)).
+   Run 2 reruns the large-series patterns run 1 dropped (log ranks 11,
+   12, 15, 16; source ranks 11, 12, 14, 15, 16) and the `cata-fuel` rows
+   for n = 32-512; the longer fuel lengths are recorded from run 1's
+   pilot as not run.
+8. **Flambda row in run 2: yes.** The four F\* packages, at the `ffi`
+   switch's versions, are installed into `ffi-flambda`, and run 2's
+   short-shape series adds the Rocq and F\* columns built with flambda.
+   This amends decision 5 for run 2.
 
 The issue review's fixes are the issue's "Plan requirements" 1-11;
 each one is implemented below and mapped in the last table. Three
@@ -102,7 +112,8 @@ not carried over.
     changed, the opam root is never upgraded, no `opam update` is run;
     every command goes through `opam exec --switch <name> --`. Switch
     `provers` is used unchanged (extraction). Switch `ffi` receives the
-    F\* column's packages (Tools); `ffi-flambda` is not touched.
+    F\* column's packages (Tools); `ffi-flambda` is not touched in run
+    1, and run 2 installs the same packages into it (decision 8).
   - `<bench-workdir>/exp/12-extracted-ocaml/` (written `<exp>`): a
     clone of this branch with `upstream/` at `f95747b` (`<exp>/repo/`,
     `upstream/` read only); out-of-tree C builds `<exp>/build/onig-release/`,
@@ -546,7 +557,7 @@ the notebook entries and a push. Nothing starts automatically.
 | Run | Content | Done when |
 |-----|---------|-----------|
 | 1 | Steps 2-14 | every entry recorded, or step 6 failed (then: what failed is recorded and run 2 is needed) |
-| 2 (only if needed) | Steps 6-14 after a fix | as run 1 |
+| 2 (decisions 7 and 8) | On run 1's build and work files: the four packages into `ffi-flambda` and the harness built there (`setup.sh switch-flambda`, `engines-flambda`); step 6 and 7 for the new columns; a pilot of run 2's cells with decision 4's gate; the short series with the flambda columns; the large series for the dropped ranks; `cata-fuel` at n = 32-512; steps 13-14, merging both runs (`lab/22-extracted-ocaml/README.md`, replay of `x2`) | as run 1 |
 
 ## Machine budget
 

@@ -1,0 +1,4 @@
+2026-11-27T14:18:44Z pilot2 load=0.66 0.39 0.33 cpu2_util=0.0% own_threads=[] other_account_threads=0 idle
+2026-11-27T14:24:06Z short load=0.87 0.80 0.54 cpu2_util=0.0% own_threads=[] other_account_threads=1 idle
+2026-11-27T14:27:54Z large load=1.10 0.96 0.67 cpu2_util=0.0% own_threads=[] other_account_threads=0 idle
+2026-11-27T15:16:22Z catafuel load=2.79 2.13 2.50 cpu2_util=0.0% own_threads=[] other_account_threads=0 idle

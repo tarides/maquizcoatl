@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Issue #22: result tables from one run directory.
+"""Issue #22: result tables from one run directory, or from run 1 and run 2.
 
-usage: python3 -I summarise22.py RUN_DIR E12_SUMMARY_DIR OUT_DIR
+usage: python3 -I summarise22.py RUN_DIR E12_SUMMARY_DIR OUT_DIR [RUN2_DIR]
 
 RUN_DIR is a copy of <exp>/out/<run-id>/ (work/, work12/, agree/,
 short.csv, large.csv, cata.csv, catafuel.csv, conv.csv,
@@ -9,6 +9,14 @@ conv-subject.txt, and the *-repeat.csv files of noisy cells).
 E12_SUMMARY_DIR is experiment #12's summary directory
 (lab/results/2026-11-19-exp-12-raw/summary), for context columns.
 Writes Markdown tables and CSVs to OUT_DIR.
+
+With RUN2_DIR (run 2, decisions 7 and 8): the large tables merge the
+patterns of both runs (run 2 times the ranks run 1 dropped; no pattern
+is in both), the not-comparable catastrophic rows come from run 2's
+catafuel.csv, and run 2's short series (with the columns built in
+ffi-flambda) and agreement get their own tables (short-x2.md,
+agreement-x2.md), run 1's medians beside them.  The short rows of
+costs.md and conclusion.md stay run 1's.
 """
 import csv, os, statistics, sys
 from collections import Counter, defaultdict
@@ -214,14 +222,17 @@ def costs(s, cv, out):
 
 # ---------------------------------------------------------------- large
 
-def large(rd, e12, out):
-    rs = rows(rd, "large.csv")
+def large(rds, e12, out):
+    rd = rds[0]
+    rs = [dict(r, runid=os.path.basename(os.path.normpath(d))) for d in rds for r in rows(d, "large.csv")]
     lst = [l.split() for l in open(os.path.join(rd, "work", "large.list"))][1:]
     rank = {(s, int(p)): (int(r), h) for s, r, p, fam, calls, h in lst}
     cell, aux, bad = defaultdict(list), defaultdict(list), Counter()
     matches = defaultdict(set)
+    runof = {}
     for r in rs:
         k = (col(r["engine"]), r["source"], r["size"], int(r["pid"]))
+        runof.setdefault(k, set()).add(r["runid"])
         if r["rc"] != "0" or not r["bytes_per_sec"]:
             bad[(r["engine"], r["source"], r["size"], "timeout" if r["rc"] == "124" else f"rc {r['rc']}")] += 1
             continue
@@ -229,14 +240,14 @@ def large(rd, e12, out):
         aux[k].append(float(r["minor_per_match"]))
         matches[k[1:]].add((k[0], r["matches"]))
     rep = defaultdict(list)
-    for r in rows(rd, "large-repeat.csv"):
+    for r in [r for d in rds for r in rows(d, "large-repeat.csv")]:
         if r["rc"] == "0" and r["bytes_per_sec"]:
             rep[(col(r["engine"]), r["source"], r["size"], int(r["pid"]))].append(float(r["bytes_per_sec"]))
     per = {}
     with open(os.path.join(out, "large-patterns.csv"), "w", newline="") as f:
         w = csv.writer(f)
         w.writerow(["column", "source", "size", "pid", "rank", "pattern_hex", "runs", "min_Bps", "median_Bps",
-                    "iqr_Bps", "minor_per_match", "repeated", "noisy"])
+                    "iqr_Bps", "minor_per_match", "repeated", "noisy"] + (["run"] if len(rds) > 1 else []))
         for k, xs in sorted(cell.items()):
             mn, md, iqr = q(xs)
             repd = False
@@ -245,7 +256,8 @@ def large(rd, e12, out):
                 repd = True
             per[k] = (md, iqr)
             w.writerow(list(k) + [rank[(k[1], k[3])][0], rank[(k[1], k[3])][1], len(xs), mn, md, iqr,
-                                  statistics.median(aux[k]), repd, iqr > 0.1 * md])
+                                  statistics.median(aux[k]), repd, iqr > 0.1 * md]
+                       + (["+".join(sorted(runof[k]))] if len(rds) > 1 else []))
     # Context: experiment #12's medians over the patterns this run timed
     # (after a reduction, a subset of work/large.list), not over the list.
     timed = {(k[1], k[3]) for k in cell}
@@ -278,13 +290,28 @@ def large(rd, e12, out):
               + ("identical across columns" if not mism else "DIFFER: " + "; ".join(f"{k}: {sorted(v)}" for k, v in mism.items()))]
     if bad:
         lines += ["", "Runs without a result: " + ", ".join(f"{k}: {n}" for k, n in sorted(bad.items()))]
+    if len(rds) > 1:
+        # per run: the patterns each run timed, and the merged median
+        ids = sorted({x for v in runof.values() for x in v})
+        lines += ["", "Median over patterns of the per-pattern medians (MB/s), by the run that timed the "
+                  "patterns, and over both runs' patterns:", "",
+                  "| Source | Size | Column | " + " | ".join(f"{i} (patterns)" for i in ids) + " | both runs (patterns) |",
+                  "|---|---|---|" + "---:|" * (len(ids) + 1)]
+        for src in ["log", "src"]:
+            for size in ["1m", "16m"]:
+                for c in [col(x) for x in LARGE]:
+                    cs = []
+                    for i in ids + [None]:
+                        ks = [k for k in per if k[:3] == (c, src, size) and (i is None or i in runof[k])]
+                        cs.append(f"{statistics.median(per[k][0] for k in ks) / 1e6:,.2f} ({len(ks)})" if ks else "not run")
+                    lines.append(f"| {src} | {size} | {c} | " + " | ".join(cs) + " |")
     open(os.path.join(out, "large.md"), "w").write("\n".join(lines) + "\n")
     return agg
 
 
 # ---------------------------------------------------------------- catastrophic
 
-def cata(rd, out):
+def cata(rd, out, rd2=None):
     cell = defaultdict(list)
     for r in rows(rd, "cata.csv"):
         cell[(r["engine"], r["family"], int(r["len"]))].append((r["outcome"] or f"rc{r['rc']}", float(r["sec"] or "nan")))
@@ -311,7 +338,7 @@ def cata(rd, out):
               "libonig, whose optimiser rejects both subjects before backtracking; `c-noopt` is the same driver "
               "on the `-DONIG_DONT_OPTIMIZE` build. `rocq`, `fstar`: fuel `max_int`."]
     fcell = defaultdict(list)
-    for r in rows(rd, "catafuel.csv"):
+    for r in rows(rd, "catafuel.csv") + (rows(rd2, "catafuel.csv") if rd2 else []):
         fcell[(r["engine"], r["family"], int(r["len"]))].append((r["outcome"] or f"rc{r['rc']}", float(r["sec"] or "nan")))
     lines += ["", "Not comparable: time until `OutOfFuel` with a stated fuel of 10,000,000 VM instructions per start "
               "position (fuel counts instructions; the C budget counts backtracks):", "",
@@ -329,6 +356,82 @@ def cata(rd, out):
             lines.append(f"| `{pat}` | {n} | " + " | ".join(cs) + " |")
     open(os.path.join(out, "cata.md"), "w").write("\n".join(lines) + "\n")
     return summ
+
+
+FL = ["vm-flambda", "rocq-flambda", "fstar-flambda"]
+
+
+def short2(rd2, s1, out):
+    """Run 2's short series: every ffi column again and the columns built
+    in ffi-flambda, interleaved; run 1's median beside each ffi column."""
+    cell, aux, bad = cells_of(rd2, "short.csv", ["engine", "family"], "ns_per_call",
+                              ["minor_per_call", "major_per_call"])
+    rcell, raux, _ = cells_of(rd2, "short-repeat.csv", ["engine", "family"], "ns_per_call",
+                              ["minor_per_call", "major_per_call"])
+    summ = {}
+    lines = ["| Family | Column | runs | min ns/call | median ns/call | IQR/median | minor words/call | major words/call | run 1 median ns/call |",
+             "|---|---|---:|---:|---:|---:|---:|---:|---:|"]
+    with open(os.path.join(out, "short-x2-summary.csv"), "w", newline="") as f:
+        w = csv.writer(f)
+        w.writerow(["family", "column", "engine", "runs", "min", "median", "iqr", "minor", "major", "repeated", "noisy"])
+        for fam in FAM:
+            for c in COLS + FL:
+                scan = fam == "longphp" and c in ("rocq", "fstar", "rocq-flambda", "fstar-flambda")
+                e = c + "-scan" if scan else c
+                xs, ax, rep = cell.get((e, fam)), aux.get((e, fam)), ""
+                if not xs:
+                    continue
+                mn, md, iqr = q(xs)
+                if iqr > 0.1 * md and (e, fam) in rcell:
+                    xs, ax, rep = rcell[(e, fam)], raux[(e, fam)], " (repeated)"
+                    mn, md, iqr = q(xs)
+                noisy = iqr > 0.1 * md
+                mi = statistics.median(a for a, _ in ax)
+                ma = statistics.median(b for _, b in ax)
+                summ[(c, fam)] = (md, mi, ma)
+                name = e if e == c else f"{c} ({e})"
+                r1 = s1.get((c, fam), (None,))[0]
+                lines.append(f"| {fam} | {name} | {len(xs)} | {fmt(mn)} | {fmt(md)} | {100 * iqr / md:.1f}%"
+                             f"{' noisy' if noisy else ''}{rep} | {mi:.2f} | {ma:.4f} | {fmt(r1)} |")
+                w.writerow([fam, c, e, len(xs), mn, md, iqr, mi, ma, bool(rep), noisy])
+    if bad:
+        lines += ["", "Runs without a result: " + ", ".join(f"{k}: {n}" for k, n in bad.items())]
+    lines += ["", "Extraction cost by compiler (run 2's medians, ns per call; factor = ratio of medians):", "",
+              "| Family | VM ffi | VM flambda | Rocq - VM, ffi | Rocq - VM, flambda | F\\* - VM, ffi | F\\* - VM, flambda | flambda / ffi: VM | Rocq | F\\* |",
+              "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|"]
+    for fam in FAM:
+        g = lambda e: summ.get((e, fam), (None,))[0]
+        v, vf, r, rf, fs, ff = g("vm"), g("vm-flambda"), g("rocq"), g("rocq-flambda"), g("fstar"), g("fstar-flambda")
+        if None in (v, vf, r, rf, fs, ff):
+            continue
+        d = lambda x, y: f"{fmt(x - y)} ({x / y:.1f}x)"
+        lines.append(f"| {fam} | {fmt(v)} | {fmt(vf)} | {d(r, v)} | {d(rf, vf)} | {d(fs, v)} | {d(ff, vf)} | "
+                     f"{vf / v:.2f} | {rf / r:.2f} | {ff / fs:.2f} |")
+    open(os.path.join(out, "short-x2.md"), "w").write("\n".join(lines) + "\n")
+    return summ
+
+
+def agreement2(rd2, out):
+    engines = ["stubs", "ctypes", "vm", "rocq", "fstar"] + FL
+    lines = ["| Family | Calls | " + " | ".join(f"{e} = C" for e in engines) + " | scan modes = C | C limit codes | agreed (timed) | agree outputs = run 1's |",
+             "|---|---:|" + "---:|" * len(engines) + "---|---:|---:|---|"]
+    for fam in FAM:
+        rd_ = lambda e: dict(l.rstrip("\n").split(" ", 1) for l in open(os.path.join(rd2, "agree", f"{fam}.{e}")))
+        c = rd_("c")
+        cnt = {e: sum(1 for k, v in rd_(e).items() if c.get(k) == v and k in c) for e in engines}
+        scans = ["rocq-scan", "fstar-scan", "rocq-flambda-scan", "fstar-flambda-scan"] if fam == "longphp" else []
+        sc = " ".join(f"{e}: {sum(1 for k, v in rd_(e).items() if c.get(k) == v):,}" for e in scans) or "-"
+        lim = sum(1 for v in c.values() if v.split()[0] in ("-15", "-17", "-18"))
+        agreed = sum(1 for l in open(os.path.join(rd2, "work", f"{fam}.agreed.work")) if l.startswith("C "))
+        same = "-"
+        p1 = os.path.join(os.path.dirname(os.path.normpath(rd2)), "x1", "agree")
+        if os.path.isdir(p1):
+            olds = ["c", "stubs", "ctypes", "vm", "rocq", "fstar"] + (["rocq-scan", "fstar-scan"] if fam == "longphp" else [])
+            same = "yes" if all(open(os.path.join(p1, f"{fam}.{e}"), "rb").read() ==
+                                open(os.path.join(rd2, "agree", f"{fam}.{e}"), "rb").read() for e in olds) else "NO"
+        lines.append(f"| {fam} | {len(c):,} | " + " | ".join(f"{cnt[e]:,}" for e in engines)
+                     + f" | {sc} | {lim} | {agreed:,} | {same} |")
+    open(os.path.join(out, "agreement-x2.md"), "w").write("\n".join(lines) + "\n")
 
 
 def conclusion(s, lg, out):
@@ -364,9 +467,13 @@ def main():
     s = short(rd, e12, out)
     cv = conv(rd, out)
     costs(s, cv, out)
-    lg = large(rd, e12, out)
-    cata(rd, out)
+    rd2 = sys.argv[4] if len(sys.argv) > 4 else None
+    lg = large([rd] + ([rd2] if rd2 else []), e12, out)
+    cata(rd, out, rd2)
     conclusion(s, lg, out)
+    if rd2:
+        agreement2(rd2, out)
+        short2(rd2, s, out)
 
 
 if __name__ == "__main__":
