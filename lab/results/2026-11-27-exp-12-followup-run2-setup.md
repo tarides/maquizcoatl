@@ -32,9 +32,11 @@ decided on 2026-11-27:
   `71ca7cf` adds run 2's subcommands to `run22.py` (`reuse`, `pilot2`,
   `large ... ">N"`, `catafuel ... MAXLEN`, and `FLAMBDA=1` for the
   columns built in `ffi-flambda`) and two subcommands to `setup.sh`
-  (`switch-flambda`, `engines-flambda`). The `provenance.sh` line for
-  `ffi-flambda` and the merge of the two runs in `summarise22.py` are
-  in the commit of these entries.
+  (`switch-flambda`, `engines-flambda`). `provenance.sh` gained its
+  `ffi-flambda` line in `b49f057`, pulled into the clone after the
+  series and before `provenance.sh x2` ran (hence `repo_commit:
+  b49f057` in `provenance.txt`); the merge of the two runs in
+  `summarise22.py` is in `9930a1e`, with these entries.
 - **Run 1's build.** Run 2 reuses `<exp>/bin/main-ffi.exe`, `x22.exe`,
   `cdriver` and `cdriver-noopt` of run 1, unchanged (built 10:48 UTC),
   together with the libonig builds and the subjects. `run22.py reuse x2
