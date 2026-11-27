@@ -78,6 +78,10 @@ answered 2026-11-26 by the maintainer, each with the recommended option):
    `in_scope r`), so that lemma 2, through direction (2a), also gives
    the termination of `md` and is no longer conditional; new axioms
    check. Done in run 5, the plan's reserve run.
+9. **Verus brittleness after run 5: (b).** Raised by the run-5 review;
+   the maintainer's answer is recorded in the issue body. Keep 25 of 33
+   (entry 12) as the outcome; splitting `m_term_stack` and rerunning
+   the matrix is later work. No sixth run.
 
 Nothing else is decided here. A question that comes up during a run and
 is not covered by one of these answers is raised on issue #34, not
