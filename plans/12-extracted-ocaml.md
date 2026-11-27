@@ -66,6 +66,11 @@ From the issue's Decisions section (maintainer, 2026-11-27; binding):
    switch's versions, are installed into `ffi-flambda`, and run 2's
    short-shape series adds the Rocq and F\* columns built with flambda.
    This amends decision 5 for run 2.
+9. **`vm-flambda` column in run 2: (a), accepted** (raised by the run-2
+   review). The flambda short series also times the hand-written VM
+   built in `ffi-flambda`, so the extracted flambda columns are
+   compared with a VM built by the same compiler. This amends
+   decision 8.
 
 The issue review's fixes are the issue's "Plan requirements" 1-11;
 each one is implemented below and mapped in the last table. Three
