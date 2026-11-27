@@ -100,6 +100,13 @@ let engine_of = function
   | "stubs" -> (module Stubs_engine : ENGINE)
   | "ctypes" -> (module Ctypes_engine : ENGINE)
   | "re" -> (module Re_engine : ENGINE)
+  (* issue #22: experiment #9's Rocq- and F*-extracted VMs
+     (lab/22-extracted-ocaml); stand-ins answering Error 1 when that
+     library is absent (bench/extracted.none.ml) *)
+  | "rocq" -> (module Extracted.Rocq : ENGINE)
+  | "rocq-scan" -> (module Extracted.Rocq_scan : ENGINE)
+  | "fstar" -> (module Extracted.Fstar : ENGINE)
+  | "fstar-scan" -> (module Extracted.Fstar_scan : ENGINE)
   | e -> failwith ("unknown engine " ^ e)
 
 (* ---------------------------------------------------------------- *)

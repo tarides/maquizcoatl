@@ -1,0 +1,35 @@
+The following actions will be simulated:
+=== install 10 packages
+  ∗ conf-gmp            5       [required by zarith]
+  ∗ cppo                1.8.0   [required by ppx_deriving]
+  ∗ ocaml-compiler-libs v0.17.0 [required by ppxlib]
+  ∗ ppx_derivers        1.2.1   [required by ppx_deriving]
+  ∗ ppx_deriving        6.2.0
+  ∗ ppx_deriving_yojson 3.10.0
+  ∗ ppxlib              0.39.0  [required by ppx_deriving, ppx_deriving_yojson]
+  ∗ sexplib0            v0.17.0 [required by ppxlib]
+  ∗ yojson              3.0.0
+  ∗ zarith              1.14
+
+<><> Processing actions <><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+Installing ppx_derivers.1.2.1.
+∗ installed ppx_derivers.1.2.1
+Installing sexplib0.v0.17.0.
+∗ installed sexplib0.v0.17.0
+Installing yojson.3.0.0.
+∗ installed yojson.3.0.0
+Installing ocaml-compiler-libs.v0.17.0.
+∗ installed ocaml-compiler-libs.v0.17.0
+Installing ppxlib.0.39.0.
+∗ installed ppxlib.0.39.0
+Installing cppo.1.8.0.
+∗ installed cppo.1.8.0
+Installing ppx_deriving.6.2.0.
+∗ installed ppx_deriving.6.2.0
+Installing ppx_deriving_yojson.3.10.0.
+∗ installed ppx_deriving_yojson.3.10.0
+Installing conf-gmp.5.
+∗ installed conf-gmp.5
+Installing zarith.1.14.
+∗ installed zarith.1.14
+Done.

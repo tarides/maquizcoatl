@@ -1,0 +1,16 @@
+oflags.sexp: (-O3)
+== gen/rocq
+(flags (-w -40)) (ocamlc_flags (-g)) (ocamlopt_flags (-g)) (melange.compile_flags (-g)) (c_flags (-O2 -fno-strict-aliasing -fwrapv -fPIC -pthread -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always)) (cxx_flags (-x c++ -std=gnu++11 -O2 -fno-strict-aliasing -fwrapv -fPIC -pthread -Wall -fdiagnostics-color=always)) (link_flags ()) (menhir_flags ()) (menhir_explain ()) (rocq_flags (-q)) (rocqdep_flags ()) (rocqdoc_flags (--toc)) (rocqdoc_header ()) (rocqdoc_footer ()) (js_of_ocaml_flags ()) (js_of_ocaml_build_runtime_flags ()) (js_of_ocaml_link_flags ()) (wasm_of_ocaml_flags ()) (wasm_of_ocaml_build_runtime_flags ()) (wasm_of_ocaml_link_flags ()) 
+ (ocamlopt_flags (:standard (:include ../../12-ffi-vs-native/oflags.sexp)))  (wrapped false)  (modules frag)  (flags   (:standard -w -a))) 
+== gen/fstar
+(flags (-w -40)) (ocamlc_flags (-g)) (ocamlopt_flags (-g)) (melange.compile_flags (-g)) (c_flags (-O2 -fno-strict-aliasing -fwrapv -fPIC -pthread -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always)) (cxx_flags (-x c++ -std=gnu++11 -O2 -fno-strict-aliasing -fwrapv -fPIC -pthread -Wall -fdiagnostics-color=always)) (link_flags ()) (menhir_flags ()) (menhir_explain ()) (rocq_flags (-q)) (rocqdep_flags ()) (rocqdoc_flags (--toc)) (rocqdoc_header ()) (rocqdoc_footer ()) (js_of_ocaml_flags ()) (js_of_ocaml_build_runtime_flags ()) (js_of_ocaml_link_flags ()) (wasm_of_ocaml_flags ()) (wasm_of_ocaml_build_runtime_flags ()) (wasm_of_ocaml_link_flags ()) 
+ (ocamlopt_flags (:standard (:include ../../12-ffi-vs-native/oflags.sexp)))  (wrapped false)  (modules Prims Custard)  (libraries zarith yojson) --  (flags   (:standard -w -a))) 
+== 22-extracted-ocaml/adapter
+
+ (ocamlopt_flags (:standard (:include ../../12-ffi-vs-native/oflags.sexp)))  (optional)  (libraries rocq_extracted fstar_extracted zarith)) 
+== 12-ffi-vs-native/vm
+
+ (ocamlopt_flags   (:standard    (:include ../oflags.sexp)))) 
+== 12-ffi-vs-native/bench
+
+ (ocamlopt_flags   (:standard    (:include ../oflags.sexp)))  (libraries   vm   onig 

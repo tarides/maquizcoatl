@@ -1,0 +1,500 @@
+short ('c', 'jq') rc=0 wall=0.50 ns_per_call=122.858
+short ('c', 'php') rc=0 wall=0.50 ns_per_call=93.150
+short ('c', 'vscode') rc=0 wall=0.59 ns_per_call=67.180
+short ('c', 'longphp') rc=0 wall=0.52 ns_per_call=131.939
+short ('stubs', 'jq') rc=0 wall=0.51 ns_per_call=134.335
+short ('stubs', 'php') rc=0 wall=0.51 ns_per_call=105.221
+short ('stubs', 'vscode') rc=0 wall=0.60 ns_per_call=76.364
+short ('stubs', 'longphp') rc=0 wall=0.63 ns_per_call=173.036
+short ('ctypes', 'jq') rc=0 wall=0.51 ns_per_call=734.416
+short ('ctypes', 'php') rc=0 wall=0.51 ns_per_call=761.084
+short ('ctypes', 'vscode') rc=0 wall=0.67 ns_per_call=657.762
+short ('ctypes', 'longphp') rc=0 wall=0.63 ns_per_call=789.126
+short ('vm', 'jq') rc=0 wall=0.51 ns_per_call=81.237
+short ('vm', 'php') rc=0 wall=0.51 ns_per_call=85.056
+short ('vm', 'vscode') rc=0 wall=0.65 ns_per_call=491.210
+short ('vm', 'longphp') rc=0 wall=0.63 ns_per_call=53.587
+short ('rocq', 'jq') rc=0 wall=0.51 ns_per_call=195.361
+short ('rocq', 'php') rc=0 wall=0.51 ns_per_call=190.867
+short ('rocq', 'vscode') rc=0 wall=0.98 ns_per_call=1757.427
+short ('rocq-scan', 'longphp') rc=0 wall=0.71 ns_per_call=106.849
+short ('fstar', 'jq') rc=0 wall=0.51 ns_per_call=342.918
+short ('fstar', 'php') rc=0 wall=0.51 ns_per_call=319.821
+short ('fstar', 'vscode') rc=0 wall=1.55 ns_per_call=3805.238
+short ('fstar-scan', 'longphp') rc=0 wall=0.71 ns_per_call=148.032
+large ('c', 'log', '1m', 92) rc=0 wall=0.01 Bps=663963404.3 m=0
+large ('stubs', 'log', '1m', 92) rc=0 wall=0.01 Bps=661332235.0 m=0
+large ('ctypes', 'log', '1m', 92) rc=0 wall=0.01 Bps=648102328.3 m=0
+large ('vm', 'log', '1m', 92) rc=0 wall=0.04 Bps=72776796.1 m=0
+large ('rocq-scan', 'log', '1m', 92) rc=0 wall=0.13 Bps=27195585.4 m=0
+large ('fstar-scan', 'log', '1m', 92) rc=0 wall=0.16 Bps=20903330.8 m=0
+large ('c', 'log', '16m', 92) rc=0 wall=0.07 Bps=661974808.6 m=1
+large ('stubs', 'log', '16m', 92) rc=0 wall=0.07 Bps=664488430.5 m=1
+large ('ctypes', 'log', '16m', 92) rc=0 wall=0.07 Bps=664320219.9 m=1
+large ('vm', 'log', '16m', 92) rc=0 wall=0.48 Bps=72982893.5 m=1
+large ('c', 'log', '1m', 93) rc=0 wall=0.01 Bps=662223979.4 m=0
+large ('stubs', 'log', '1m', 93) rc=0 wall=0.01 Bps=665344058.0 m=0
+large ('ctypes', 'log', '1m', 93) rc=0 wall=0.01 Bps=662890910.0 m=0
+large ('vm', 'log', '1m', 93) rc=0 wall=0.03 Bps=72769760.3 m=0
+large ('rocq-scan', 'log', '1m', 93) rc=0 wall=0.13 Bps=28091833.6 m=0
+large ('fstar-scan', 'log', '1m', 93) rc=0 wall=0.16 Bps=20680689.0 m=0
+large ('c', 'log', '16m', 93) rc=0 wall=0.07 Bps=664309435.0 m=10
+large ('stubs', 'log', '16m', 93) rc=0 wall=0.07 Bps=664203735.3 m=10
+large ('ctypes', 'log', '16m', 93) rc=0 wall=0.07 Bps=663762443.3 m=10
+large ('vm', 'log', '16m', 93) rc=0 wall=0.49 Bps=71927540.8 m=10
+large ('c', 'log', '1m', 109) rc=0 wall=0.01 Bps=520500160.8 m=3127
+large ('stubs', 'log', '1m', 109) rc=0 wall=0.01 Bps=486731924.3 m=3127
+large ('ctypes', 'log', '1m', 109) rc=0 wall=0.02 Bps=239578218.5 m=3127
+large ('vm', 'log', '1m', 109) rc=0 wall=0.04 Bps=71369679.6 m=3127
+large ('rocq-scan', 'log', '1m', 109) rc=0 wall=0.13 Bps=27084777.7 m=3127
+large ('fstar-scan', 'log', '1m', 109) rc=0 wall=0.17 Bps=18899638.7 m=3127
+large ('c', 'log', '16m', 109) rc=0 wall=0.08 Bps=514029919.4 m=50809
+large ('stubs', 'log', '16m', 109) rc=0 wall=0.09 Bps=482005890.8 m=50809
+large ('ctypes', 'log', '16m', 109) rc=0 wall=0.16 Bps=239763341.7 m=50809
+large ('vm', 'log', '16m', 109) rc=0 wall=0.49 Bps=71646778.4 m=50809
+large ('c', 'log', '1m', 95) rc=0 wall=0.01 Bps=663714595.9 m=0
+large ('stubs', 'log', '1m', 95) rc=0 wall=0.01 Bps=663491583.4 m=0
+large ('ctypes', 'log', '1m', 95) rc=0 wall=0.01 Bps=660626810.2 m=0
+large ('vm', 'log', '1m', 95) rc=0 wall=0.04 Bps=71307136.0 m=0
+large ('rocq-scan', 'log', '1m', 95) rc=0 wall=0.13 Bps=27944790.5 m=0
+large ('fstar-scan', 'log', '1m', 95) rc=0 wall=0.16 Bps=20810739.9 m=0
+large ('c', 'log', '16m', 95) rc=0 wall=0.07 Bps=664182936.0 m=0
+large ('stubs', 'log', '16m', 95) rc=0 wall=0.07 Bps=664547783.7 m=0
+large ('ctypes', 'log', '16m', 95) rc=0 wall=0.07 Bps=664896905.4 m=0
+large ('vm', 'log', '16m', 95) rc=0 wall=0.48 Bps=72824606.2 m=0
+large ('c', 'log', '1m', 110) rc=0 wall=0.01 Bps=663226767.1 m=0
+large ('stubs', 'log', '1m', 110) rc=0 wall=0.01 Bps=661411913.9 m=0
+large ('ctypes', 'log', '1m', 110) rc=0 wall=0.01 Bps=662580513.5 m=0
+large ('vm', 'log', '1m', 110) rc=0 wall=0.04 Bps=72359060.2 m=0
+large ('rocq-scan', 'log', '1m', 110) rc=0 wall=0.13 Bps=27149362.4 m=0
+large ('fstar-scan', 'log', '1m', 110) rc=0 wall=0.16 Bps=20766908.8 m=0
+large ('c', 'log', '16m', 110) rc=0 wall=0.07 Bps=663364278.6 m=59
+large ('stubs', 'log', '16m', 110) rc=0 wall=0.07 Bps=663207962.1 m=59
+large ('ctypes', 'log', '16m', 110) rc=0 wall=0.07 Bps=659955801.2 m=59
+large ('vm', 'log', '16m', 110) rc=0 wall=0.48 Bps=72871799.9 m=59
+large ('c', 'log', '1m', 106) rc=0 wall=0.01 Bps=991885431.1 m=0
+large ('stubs', 'log', '1m', 106) rc=0 wall=0.01 Bps=997083491.8 m=0
+large ('ctypes', 'log', '1m', 106) rc=0 wall=0.01 Bps=995651934.5 m=0
+large ('vm', 'log', '1m', 106) rc=0 wall=0.04 Bps=60957761.9 m=0
+large ('rocq-scan', 'log', '1m', 106) rc=0 wall=0.13 Bps=28606284.3 m=0
+large ('fstar-scan', 'log', '1m', 106) rc=0 wall=0.17 Bps=19044941.4 m=0
+large ('c', 'log', '16m', 106) rc=0 wall=0.05 Bps=996008739.6 m=0
+large ('stubs', 'log', '16m', 106) rc=0 wall=0.05 Bps=995850532.0 m=0
+large ('ctypes', 'log', '16m', 106) rc=0 wall=0.05 Bps=994825117.4 m=0
+large ('vm', 'log', '16m', 106) rc=0 wall=0.57 Bps=60992622.9 m=0
+large ('c', 'log', '1m', 105) rc=0 wall=0.01 Bps=991960500.7 m=0
+large ('stubs', 'log', '1m', 105) rc=0 wall=0.01 Bps=993599845.4 m=0
+large ('ctypes', 'log', '1m', 105) rc=0 wall=0.01 Bps=991265603.6 m=0
+large ('vm', 'log', '1m', 105) rc=0 wall=0.04 Bps=60902312.1 m=0
+large ('rocq-scan', 'log', '1m', 105) rc=0 wall=0.13 Bps=27882415.9 m=0
+large ('fstar-scan', 'log', '1m', 105) rc=0 wall=0.16 Bps=20425674.0 m=0
+large ('c', 'log', '16m', 105) rc=0 wall=0.05 Bps=992959646.7 m=0
+large ('stubs', 'log', '16m', 105) rc=0 wall=0.05 Bps=994583435.7 m=0
+large ('ctypes', 'log', '16m', 105) rc=0 wall=0.05 Bps=994491877.4 m=0
+large ('vm', 'log', '16m', 105) rc=0 wall=0.57 Bps=60859784.3 m=0
+large ('c', 'log', '1m', 96) rc=0 wall=0.01 Bps=987206730.7 m=0
+large ('stubs', 'log', '1m', 96) rc=0 wall=0.01 Bps=991528068.3 m=0
+large ('ctypes', 'log', '1m', 96) rc=0 wall=0.01 Bps=990795389.5 m=0
+large ('vm', 'log', '1m', 96) rc=0 wall=0.04 Bps=59744302.4 m=0
+large ('rocq-scan', 'log', '1m', 96) rc=0 wall=0.13 Bps=28034096.1 m=0
+large ('fstar-scan', 'log', '1m', 96) rc=0 wall=0.16 Bps=19592613.9 m=0
+large ('c', 'log', '16m', 96) rc=0 wall=0.05 Bps=990424033.9 m=0
+large ('stubs', 'log', '16m', 96) rc=0 wall=0.05 Bps=990613860.8 m=0
+large ('ctypes', 'log', '16m', 96) rc=0 wall=0.05 Bps=988807900.8 m=0
+large ('vm', 'log', '16m', 96) rc=0 wall=0.58 Bps=59986957.8 m=0
+large ('c', 'log', '1m', 111) rc=0 wall=0.01 Bps=514602774.5 m=3134
+large ('stubs', 'log', '1m', 111) rc=0 wall=0.01 Bps=484415568.8 m=3134
+large ('ctypes', 'log', '1m', 111) rc=0 wall=0.02 Bps=242072183.5 m=3134
+large ('vm', 'log', '1m', 111) rc=0 wall=0.04 Bps=70992113.5 m=3134
+large ('rocq-scan', 'log', '1m', 111) rc=0 wall=0.13 Bps=27050512.7 m=3134
+large ('fstar-scan', 'log', '1m', 111) rc=0 wall=0.16 Bps=19568970.6 m=3134
+large ('c', 'log', '16m', 111) rc=0 wall=0.08 Bps=515145668.1 m=51117
+large ('stubs', 'log', '16m', 111) rc=0 wall=0.09 Bps=482965778.7 m=51117
+large ('ctypes', 'log', '16m', 111) rc=0 wall=0.16 Bps=238532015.8 m=51117
+large ('vm', 'log', '16m', 111) rc=0 wall=0.49 Bps=71594107.0 m=51117
+large ('c', 'log', '1m', 97) rc=0 wall=0.01 Bps=1216521195.3 m=0
+large ('stubs', 'log', '1m', 97) rc=0 wall=0.01 Bps=1209490830.2 m=0
+large ('ctypes', 'log', '1m', 97) rc=0 wall=0.01 Bps=1201008196.6 m=0
+large ('vm', 'log', '1m', 97) rc=0 wall=0.04 Bps=54990519.7 m=0
+large ('rocq-scan', 'log', '1m', 97) rc=0 wall=0.13 Bps=27775312.8 m=0
+large ('fstar-scan', 'log', '1m', 97) rc=0 wall=0.16 Bps=19677598.6 m=0
+large ('c', 'log', '16m', 97) rc=0 wall=0.04 Bps=1227236066.0 m=0
+large ('stubs', 'log', '16m', 97) rc=0 wall=0.05 Bps=1223796966.6 m=0
+large ('ctypes', 'log', '16m', 97) rc=0 wall=0.05 Bps=1223273893.1 m=0
+large ('vm', 'log', '16m', 97) rc=0 wall=0.58 Bps=59467960.1 m=0
+large ('c', 'log', '1m', 107) rc=0 wall=0.01 Bps=253102489.9 m=828
+large ('stubs', 'log', '1m', 107) rc=0 wall=0.01 Bps=251807626.5 m=828
+large ('ctypes', 'log', '1m', 107) rc=0 wall=0.02 Bps=198910682.9 m=828
+large ('vm', 'log', '1m', 107) rc=0 wall=0.12 Bps=17755496.2 m=828
+large ('rocq-scan', 'log', '1m', 107) rc=0 wall=0.82 Bps=2739763.2 m=828
+large ('fstar-scan', 'log', '1m', 107) rc=0 wall=2.00 Bps=1080266.9 m=828
+large ('c', 'log', '16m', 107) rc=0 wall=0.15 Bps=252702821.7 m=7543
+large ('stubs', 'log', '16m', 107) rc=0 wall=0.15 Bps=251568906.2 m=7543
+large ('ctypes', 'log', '16m', 107) rc=0 wall=0.17 Bps=231942070.8 m=7543
+large ('vm', 'log', '16m', 107) rc=0 wall=1.91 Bps=17847568.5 m=7543
+large ('c', 'log', '1m', 94) rc=0 wall=0.01 Bps=996173143.4 m=0
+large ('stubs', 'log', '1m', 94) rc=0 wall=0.01 Bps=995850516.0 m=0
+large ('ctypes', 'log', '1m', 94) rc=0 wall=0.01 Bps=995518645.6 m=0
+large ('vm', 'log', '1m', 94) rc=0 wall=0.04 Bps=60858144.2 m=0
+large ('rocq-scan', 'log', '1m', 94) rc=0 wall=0.13 Bps=28660878.8 m=0
+large ('fstar-scan', 'log', '1m', 94) rc=0 wall=0.16 Bps=20098030.8 m=0
+large ('c', 'log', '16m', 94) rc=0 wall=0.05 Bps=994413951.2 m=0
+large ('stubs', 'log', '16m', 94) rc=0 wall=0.05 Bps=993152798.6 m=0
+large ('ctypes', 'log', '16m', 94) rc=0 wall=0.05 Bps=996125476.5 m=0
+large ('vm', 'log', '16m', 94) rc=0 wall=0.57 Bps=61059601.8 m=0
+large ('c', 'log', '1m', 103) rc=0 wall=0.01 Bps=254697979.2 m=0
+large ('stubs', 'log', '1m', 103) rc=0 wall=0.01 Bps=257303849.7 m=0
+large ('ctypes', 'log', '1m', 103) rc=0 wall=0.01 Bps=259166506.2 m=0
+large ('vm', 'log', '1m', 103) rc=0 wall=0.10 Bps=22298047.1 m=0
+large ('rocq-scan', 'log', '1m', 103) rc=0 wall=0.55 Bps=4250948.2 m=0
+large ('fstar-scan', 'log', '1m', 103) rc=0 wall=1.37 Bps=1599768.1 m=0
+large ('c', 'log', '16m', 103) rc=0 wall=0.15 Bps=256102371.5 m=0
+large ('stubs', 'log', '16m', 103) rc=0 wall=0.15 Bps=256256921.5 m=0
+large ('ctypes', 'log', '16m', 103) rc=0 wall=0.15 Bps=256391434.6 m=0
+large ('vm', 'log', '16m', 103) rc=0 wall=1.65 Bps=20247050.6 m=0
+large ('c', 'log', '1m', 99) rc=0 wall=0.01 Bps=259681081.5 m=0
+large ('stubs', 'log', '1m', 99) rc=0 wall=0.01 Bps=262379296.2 m=0
+large ('ctypes', 'log', '1m', 99) rc=0 wall=0.01 Bps=257590132.8 m=0
+large ('vm', 'log', '1m', 99) rc=0 wall=0.09 Bps=24312509.2 m=0
+large ('rocq-scan', 'log', '1m', 99) rc=0 wall=0.40 Bps=6066740.9 m=0
+large ('fstar-scan', 'log', '1m', 99) rc=0 wall=0.93 Bps=2401461.7 m=0
+large ('c', 'log', '16m', 99) rc=0 wall=0.15 Bps=256642832.0 m=0
+large ('stubs', 'log', '16m', 99) rc=0 wall=0.15 Bps=256950860.4 m=0
+large ('ctypes', 'log', '16m', 99) rc=0 wall=0.15 Bps=256907968.3 m=0
+large ('vm', 'log', '16m', 99) rc=0 wall=1.40 Bps=24185228.8 m=0
+large ('c', 'src', '1m', 92) rc=0 wall=0.01 Bps=504377700.7 m=3536
+large ('stubs', 'src', '1m', 92) rc=0 wall=0.01 Bps=470706223.6 m=3536
+large ('ctypes', 'src', '1m', 92) rc=0 wall=0.02 Bps=222981337.3 m=3536
+large ('vm', 'src', '1m', 92) rc=0 wall=0.04 Bps=70835165.3 m=3536
+large ('rocq-scan', 'src', '1m', 92) rc=0 wall=0.13 Bps=27336214.8 m=3536
+large ('fstar-scan', 'src', '1m', 92) rc=0 wall=0.16 Bps=19578633.9 m=3536
+large ('c', 'src', '16m', 92) rc=0 wall=0.09 Bps=434819796.7 m=93522
+large ('stubs', 'src', '16m', 92) rc=0 wall=0.10 Bps=396132577.7 m=93522
+large ('ctypes', 'src', '16m', 92) rc=0 wall=0.24 Bps=156200525.4 m=93522
+large ('vm', 'src', '16m', 92) rc=0 wall=0.49 Bps=70737003.3 m=93522
+large ('c', 'src', '1m', 93) rc=0 wall=0.01 Bps=607019317.2 m=1064
+large ('stubs', 'src', '1m', 93) rc=0 wall=0.01 Bps=586487227.2 m=1064
+large ('ctypes', 'src', '1m', 93) rc=0 wall=0.01 Bps=417275291.6 m=1064
+large ('vm', 'src', '1m', 93) rc=0 wall=0.04 Bps=72196287.7 m=1064
+large ('rocq-scan', 'src', '1m', 93) rc=0 wall=0.14 Bps=25885065.0 m=1064
+large ('fstar-scan', 'src', '1m', 93) rc=0 wall=0.16 Bps=19657123.1 m=1064
+large ('c', 'src', '16m', 93) rc=0 wall=0.08 Bps=560400841.4 m=33024
+large ('stubs', 'src', '16m', 93) rc=0 wall=0.08 Bps=533458179.7 m=33024
+large ('ctypes', 'src', '16m', 93) rc=0 wall=0.13 Bps=313644764.2 m=33024
+large ('vm', 'src', '16m', 93) rc=0 wall=0.49 Bps=71668511.1 m=33024
+large ('c', 'src', '1m', 109) rc=0 wall=0.01 Bps=322470284.6 m=11917
+large ('stubs', 'src', '1m', 109) rc=0 wall=0.01 Bps=275366341.9 m=11917
+large ('ctypes', 'src', '1m', 109) rc=0 wall=0.03 Bps=87157125.9 m=11917
+large ('vm', 'src', '1m', 109) rc=0 wall=0.04 Bps=68946316.5 m=11917
+large ('rocq-scan', 'src', '1m', 109) rc=0 wall=0.14 Bps=25479002.2 m=11917
+large ('fstar-scan', 'src', '1m', 109) rc=0 wall=0.17 Bps=19083611.8 m=11917
+large ('c', 'src', '16m', 109) rc=0 wall=0.11 Bps=350458207.0 m=164109
+large ('stubs', 'src', '16m', 109) rc=0 wall=0.13 Bps=300850071.0 m=164109
+large ('ctypes', 'src', '16m', 109) rc=0 wall=0.36 Bps=100550983.0 m=164109
+large ('vm', 'src', '16m', 109) rc=0 wall=0.50 Bps=69894542.3 m=164109
+large ('c', 'src', '1m', 95) rc=0 wall=0.01 Bps=637316322.3 m=407
+large ('stubs', 'src', '1m', 95) rc=0 wall=0.01 Bps=634302891.5 m=407
+large ('ctypes', 'src', '1m', 95) rc=0 wall=0.01 Bps=488964311.5 m=407
+large ('vm', 'src', '1m', 95) rc=0 wall=0.04 Bps=71942453.0 m=407
+large ('rocq-scan', 'src', '1m', 95) rc=0 wall=0.14 Bps=25771728.6 m=407
+large ('fstar-scan', 'src', '1m', 95) rc=0 wall=0.16 Bps=19609971.2 m=407
+large ('c', 'src', '16m', 95) rc=0 wall=0.07 Bps=580482213.3 m=25982
+large ('stubs', 'src', '16m', 95) rc=0 wall=0.08 Bps=557414899.1 m=25982
+large ('ctypes', 'src', '16m', 95) rc=0 wall=0.12 Bps=347182838.9 m=25982
+large ('vm', 'src', '16m', 95) rc=0 wall=0.49 Bps=71752798.7 m=25982
+large ('c', 'src', '1m', 110) rc=0 wall=0.01 Bps=420922732.0 m=6627
+large ('stubs', 'src', '1m', 110) rc=0 wall=0.01 Bps=371707022.1 m=6627
+large ('ctypes', 'src', '1m', 110) rc=0 wall=0.02 Bps=139451032.8 m=6627
+large ('vm', 'src', '1m', 110) rc=0 wall=0.04 Bps=70086412.5 m=6627
+large ('rocq-scan', 'src', '1m', 110) rc=0 wall=0.13 Bps=26927162.5 m=6627
+large ('fstar-scan', 'src', '1m', 110) rc=0 wall=0.16 Bps=19330921.0 m=6627
+large ('c', 'src', '16m', 110) rc=0 wall=0.09 Bps=448765297.8 m=85365
+large ('stubs', 'src', '16m', 110) rc=0 wall=0.10 Bps=409943126.6 m=85365
+large ('ctypes', 'src', '16m', 110) rc=0 wall=0.22 Bps=167395346.1 m=85365
+large ('vm', 'src', '16m', 110) rc=0 wall=0.49 Bps=71138949.3 m=85365
+large ('c', 'src', '1m', 106) rc=0 wall=0.01 Bps=989094188.4 m=31
+large ('stubs', 'src', '1m', 106) rc=0 wall=0.01 Bps=988198349.2 m=31
+large ('ctypes', 'src', '1m', 106) rc=0 wall=0.01 Bps=919285589.7 m=31
+large ('vm', 'src', '1m', 106) rc=0 wall=0.04 Bps=57956265.0 m=31
+large ('rocq-scan', 'src', '1m', 106) rc=0 wall=0.13 Bps=26893770.9 m=31
+large ('fstar-scan', 'src', '1m', 106) rc=0 wall=0.16 Bps=20220311.8 m=31
+large ('c', 'src', '16m', 106) rc=0 wall=0.05 Bps=983796474.5 m=816
+large ('stubs', 'src', '16m', 106) rc=0 wall=0.05 Bps=980849757.2 m=816
+large ('ctypes', 'src', '16m', 106) rc=0 wall=0.06 Bps=922635012.7 m=816
+large ('vm', 'src', '16m', 106) rc=0 wall=0.57 Bps=60966489.3 m=816
+large ('c', 'src', '1m', 105) rc=0 wall=0.01 Bps=745963605.2 m=2058
+large ('stubs', 'src', '1m', 105) rc=0 wall=0.01 Bps=712695852.4 m=2058
+large ('ctypes', 'src', '1m', 105) rc=0 wall=0.01 Bps=354518700.4 m=2058
+large ('vm', 'src', '1m', 105) rc=0 wall=0.04 Bps=59542322.2 m=2058
+large ('rocq-scan', 'src', '1m', 105) rc=0 wall=0.13 Bps=27328383.1 m=2058
+large ('fstar-scan', 'src', '1m', 105) rc=0 wall=0.17 Bps=19207994.9 m=2058
+large ('c', 'src', '16m', 105) rc=0 wall=0.05 Bps=928089173.5 m=4199
+large ('stubs', 'src', '16m', 105) rc=0 wall=0.06 Bps=911294342.1 m=4199
+large ('ctypes', 'src', '16m', 105) rc=0 wall=0.06 Bps=791842147.2 m=4199
+large ('vm', 'src', '16m', 105) rc=0 wall=0.57 Bps=60470963.8 m=4199
+large ('c', 'src', '1m', 96) rc=0 wall=0.01 Bps=958411866.8 m=0
+large ('stubs', 'src', '1m', 96) rc=0 wall=0.01 Bps=962953711.0 m=0
+large ('ctypes', 'src', '1m', 96) rc=0 wall=0.01 Bps=961846864.6 m=0
+large ('vm', 'src', '1m', 96) rc=0 wall=0.04 Bps=60588476.5 m=0
+large ('rocq-scan', 'src', '1m', 96) rc=0 wall=0.13 Bps=27071480.8 m=0
+large ('fstar-scan', 'src', '1m', 96) rc=0 wall=0.16 Bps=19905636.4 m=0
+large ('c', 'src', '16m', 96) rc=0 wall=0.05 Bps=963639202.1 m=54
+large ('stubs', 'src', '16m', 96) rc=0 wall=0.05 Bps=964185806.7 m=54
+large ('ctypes', 'src', '16m', 96) rc=0 wall=0.05 Bps=953659977.5 m=54
+large ('vm', 'src', '16m', 96) rc=0 wall=0.57 Bps=60575925.1 m=54
+large ('c', 'src', '1m', 111) rc=0 wall=0.01 Bps=525415227.0 m=3005
+large ('stubs', 'src', '1m', 111) rc=0 wall=0.01 Bps=485860448.7 m=3005
+large ('ctypes', 'src', '1m', 111) rc=0 wall=0.02 Bps=252379273.2 m=3005
+large ('vm', 'src', '1m', 111) rc=0 wall=0.04 Bps=70394574.9 m=3005
+large ('rocq-scan', 'src', '1m', 111) rc=0 wall=0.13 Bps=27045592.6 m=3005
+large ('fstar-scan', 'src', '1m', 111) rc=0 wall=0.16 Bps=19555093.6 m=3005
+large ('c', 'src', '16m', 111) rc=0 wall=0.10 Bps=395146299.1 m=119977
+large ('stubs', 'src', '16m', 111) rc=0 wall=0.12 Bps=349071317.6 m=119977
+large ('ctypes', 'src', '16m', 111) rc=0 wall=0.28 Bps=131420192.2 m=119977
+large ('vm', 'src', '16m', 111) rc=0 wall=0.49 Bps=70803675.1 m=119977
+large ('c', 'src', '1m', 97) rc=0 wall=0.01 Bps=1239645834.4 m=38
+large ('stubs', 'src', '1m', 97) rc=0 wall=0.01 Bps=1236189317.4 m=38
+large ('ctypes', 'src', '1m', 97) rc=0 wall=0.01 Bps=1115041612.7 m=38
+large ('vm', 'src', '1m', 97) rc=0 wall=0.04 Bps=59881895.4 m=38
+large ('rocq-scan', 'src', '1m', 97) rc=0 wall=0.14 Bps=25835089.0 m=38
+large ('fstar-scan', 'src', '1m', 97) rc=0 wall=0.16 Bps=19542110.6 m=38
+large ('c', 'src', '16m', 97) rc=0 wall=0.04 Bps=1211950975.5 m=1697
+large ('stubs', 'src', '16m', 97) rc=0 wall=0.05 Bps=1206891196.2 m=1697
+large ('ctypes', 'src', '16m', 97) rc=0 wall=0.05 Bps=1109280043.7 m=1697
+large ('vm', 'src', '16m', 97) rc=0 wall=0.58 Bps=59974239.1 m=1697
+large ('c', 'src', '1m', 107) rc=0 wall=0.03 Bps=99205572.8 m=45702
+large ('stubs', 'src', '1m', 107) rc=0 wall=0.03 Bps=84168233.1 m=45702
+large ('ctypes', 'src', '1m', 107) rc=0 wall=0.10 Bps=23861057.5 m=45702
+large ('vm', 'src', '1m', 107) rc=0 wall=0.13 Bps=17102375.9 m=45702
+large ('rocq-scan', 'src', '1m', 107) rc=0 wall=0.83 Bps=2719480.4 m=45702
+large ('fstar-scan', 'src', '1m', 107) rc=0 wall=1.97 Bps=1097940.0 m=45702
+large ('c', 'src', '16m', 107) rc=0 wall=0.28 Bps=129088885.2 m=454304
+large ('stubs', 'src', '16m', 107) rc=0 wall=0.32 Bps=113073844.5 m=454304
+large ('ctypes', 'src', '16m', 107) rc=0 wall=0.94 Bps=36452744.6 m=454304
+large ('vm', 'src', '16m', 107) rc=0 wall=2.01 Bps=16887680.8 m=454304
+large ('c', 'src', '1m', 94) rc=0 wall=0.01 Bps=894615325.5 m=1
+large ('stubs', 'src', '1m', 94) rc=0 wall=0.01 Bps=891459548.2 m=1
+large ('ctypes', 'src', '1m', 94) rc=0 wall=0.01 Bps=890413320.4 m=1
+large ('vm', 'src', '1m', 94) rc=0 wall=0.04 Bps=60195366.4 m=1
+large ('rocq-scan', 'src', '1m', 94) rc=0 wall=0.13 Bps=27452631.3 m=1
+large ('fstar-scan', 'src', '1m', 94) rc=0 wall=0.17 Bps=19116110.4 m=1
+large ('c', 'src', '16m', 94) rc=0 wall=0.05 Bps=874542045.9 m=8959
+large ('stubs', 'src', '16m', 94) rc=0 wall=0.06 Bps=857811559.9 m=8959
+large ('ctypes', 'src', '16m', 94) rc=0 wall=0.07 Bps=648358053.3 m=8959
+large ('vm', 'src', '16m', 94) rc=0 wall=0.57 Bps=60825478.2 m=8959
+large ('c', 'src', '1m', 103) rc=0 wall=0.01 Bps=215535903.3 m=6306
+large ('stubs', 'src', '1m', 103) rc=0 wall=0.02 Bps=206884236.8 m=6306
+large ('ctypes', 'src', '1m', 103) rc=0 wall=0.03 Bps=108863299.7 m=6306
+large ('vm', 'src', '1m', 103) rc=0 wall=0.10 Bps=21704244.2 m=6306
+large ('rocq-scan', 'src', '1m', 103) rc=0 wall=0.56 Bps=4138848.4 m=6306
+large ('fstar-scan', 'src', '1m', 103) rc=0 wall=1.38 Bps=1589093.5 m=6306
+large ('c', 'src', '16m', 103) rc=0 wall=0.17 Bps=222137162.7 m=82639
+large ('stubs', 'src', '16m', 103) rc=0 wall=0.18 Bps=212368603.2 m=82639
+large ('ctypes', 'src', '16m', 103) rc=0 wall=0.30 Bps=120408965.1 m=82639
+large ('vm', 'src', '16m', 103) rc=0 wall=1.59 Bps=21492295.6 m=82639
+large ('c', 'src', '1m', 99) rc=0 wall=0.01 Bps=260724347.6 m=13
+large ('stubs', 'src', '1m', 99) rc=0 wall=0.01 Bps=261721434.3 m=13
+large ('ctypes', 'src', '1m', 99) rc=0 wall=0.01 Bps=259718745.1 m=13
+large ('vm', 'src', '1m', 99) rc=0 wall=0.09 Bps=24431921.6 m=13
+large ('rocq-scan', 'src', '1m', 99) rc=0 wall=0.40 Bps=6025449.0 m=13
+large ('fstar-scan', 'src', '1m', 99) rc=0 wall=0.94 Bps=2366040.1 m=13
+large ('c', 'src', '16m', 99) rc=0 wall=0.15 Bps=258607048.6 m=591
+large ('stubs', 'src', '16m', 99) rc=0 wall=0.15 Bps=258232500.2 m=591
+large ('ctypes', 'src', '16m', 99) rc=0 wall=0.15 Bps=253703256.5 m=591
+large ('vm', 'src', '16m', 99) rc=0 wall=1.39 Bps=24447296.6 m=591
+large ('c', 'src', '1m', 101) rc=0 wall=0.01 Bps=218116430.6 m=5876
+large ('stubs', 'src', '1m', 101) rc=0 wall=0.02 Bps=207998238.4 m=5876
+large ('ctypes', 'src', '1m', 101) rc=0 wall=0.03 Bps=111160939.3 m=5876
+large ('vm', 'src', '1m', 101) rc=0 wall=0.14 Bps=15907884.3 m=5876
+large ('rocq-scan', 'src', '1m', 101) rc=0 wall=1.01 Bps=2200354.1 m=5876
+large ('fstar-scan', 'src', '1m', 101) rc=0 wall=2.26 Bps=951574.0 m=5876
+large ('c', 'src', '16m', 101) rc=0 wall=0.17 Bps=219059594.8 m=88332
+large ('stubs', 'src', '16m', 101) rc=0 wall=0.18 Bps=208821739.9 m=88332
+large ('ctypes', 'src', '16m', 101) rc=0 wall=0.31 Bps=117588831.7 m=88332
+large ('vm', 'src', '16m', 101) rc=0 wall=2.22 Bps=15293939.0 m=88332
+projection: extracted 16 MiB cells, 16 x 1 MiB wall: 351 s in all, max 36 s; large series 10 x pilot x 1.1 = 75.0 min
+large ('rocq-scan', 'log', '16m', 92) rc=0 wall=2.00 Bps=27345891.4 m=1
+large ('fstar-scan', 'log', '16m', 92) rc=0 wall=2.54 Bps=18735685.1 m=1
+large ('rocq-scan', 'log', '16m', 93) rc=0 wall=2.00 Bps=26777863.7 m=10
+large ('fstar-scan', 'log', '16m', 93) rc=0 wall=2.47 Bps=19535887.0 m=10
+large ('rocq-scan', 'log', '16m', 109) rc=0 wall=2.06 Bps=25836409.0 m=50809
+large ('fstar-scan', 'log', '16m', 109) rc=0 wall=2.47 Bps=19538012.1 m=50809
+large ('rocq-scan', 'log', '16m', 95) rc=0 wall=2.00 Bps=27051847.4 m=0
+large ('fstar-scan', 'log', '16m', 95) rc=0 wall=2.38 Bps=20703449.9 m=0
+large ('rocq-scan', 'log', '16m', 110) rc=0 wall=2.00 Bps=27048989.7 m=59
+large ('fstar-scan', 'log', '16m', 110) rc=0 wall=2.48 Bps=19471075.7 m=59
+large ('rocq-scan', 'log', '16m', 106) rc=0 wall=1.96 Bps=28594833.9 m=0
+large ('fstar-scan', 'log', '16m', 106) rc=0 wall=2.42 Bps=20164255.5 m=0
+large ('rocq-scan', 'log', '16m', 105) rc=0 wall=1.93 Bps=28655924.8 m=0
+large ('fstar-scan', 'log', '16m', 105) rc=0 wall=2.43 Bps=20083539.9 m=0
+large ('rocq-scan', 'log', '16m', 96) rc=0 wall=2.02 Bps=26786558.9 m=0
+large ('fstar-scan', 'log', '16m', 96) rc=0 wall=2.48 Bps=19636442.0 m=0
+large ('rocq-scan', 'log', '16m', 111) rc=0 wall=2.03 Bps=26346162.0 m=51117
+large ('fstar-scan', 'log', '16m', 111) rc=0 wall=2.48 Bps=19552746.7 m=51117
+large ('rocq-scan', 'log', '16m', 97) rc=0 wall=1.96 Bps=27816477.1 m=0
+large ('fstar-scan', 'log', '16m', 97) rc=0 wall=2.48 Bps=19483667.7 m=0
+large ('rocq-scan', 'log', '16m', 107) rc=0 wall=13.03 Bps=2734756.7 m=7543
+large ('fstar-scan', 'log', '16m', 107) rc=0 wall=31.92 Bps=1077623.6 m=7543
+large ('rocq-scan', 'log', '16m', 94) rc=0 wall=2.00 Bps=27164929.6 m=0
+large ('fstar-scan', 'log', '16m', 94) rc=0 wall=2.43 Bps=20072568.9 m=0
+large ('rocq-scan', 'log', '16m', 103) rc=0 wall=8.64 Bps=4259356.4 m=0
+large ('fstar-scan', 'log', '16m', 103) rc=0 wall=21.61 Bps=1614271.4 m=0
+large ('rocq-scan', 'log', '16m', 99) rc=0 wall=6.30 Bps=6060894.8 m=0
+large ('fstar-scan', 'log', '16m', 99) rc=0 wall=14.81 Bps=2390030.3 m=0
+large ('rocq-scan', 'src', '16m', 92) rc=0 wall=2.00 Bps=27173215.0 m=93522
+large ('fstar-scan', 'src', '16m', 92) rc=0 wall=2.53 Bps=18980142.6 m=93522
+large ('rocq-scan', 'src', '16m', 93) rc=0 wall=2.05 Bps=26177216.4 m=33024
+large ('fstar-scan', 'src', '16m', 93) rc=0 wall=2.48 Bps=19532068.3 m=33024
+large ('rocq-scan', 'src', '16m', 109) rc=0 wall=2.01 Bps=26801291.6 m=164109
+large ('fstar-scan', 'src', '16m', 109) rc=0 wall=2.53 Bps=19083894.8 m=164109
+large ('rocq-scan', 'src', '16m', 95) rc=0 wall=2.04 Bps=26142655.8 m=25982
+large ('fstar-scan', 'src', '16m', 95) rc=0 wall=2.50 Bps=19169177.8 m=25982
+large ('rocq-scan', 'src', '16m', 110) rc=0 wall=2.04 Bps=25850601.1 m=85365
+large ('fstar-scan', 'src', '16m', 110) rc=0 wall=2.49 Bps=19477938.9 m=85365
+large ('rocq-scan', 'src', '16m', 106) rc=0 wall=1.98 Bps=27243789.0 m=816
+large ('fstar-scan', 'src', '16m', 106) rc=0 wall=2.48 Bps=19431069.1 m=816
+large ('rocq-scan', 'src', '16m', 105) rc=0 wall=1.99 Bps=27167601.5 m=4199
+large ('fstar-scan', 'src', '16m', 105) rc=0 wall=2.49 Bps=19502428.1 m=4199
+large ('rocq-scan', 'src', '16m', 96) rc=0 wall=2.00 Bps=26976912.2 m=54
+large ('fstar-scan', 'src', '16m', 96) rc=0 wall=2.52 Bps=19043280.1 m=54
+large ('rocq-scan', 'src', '16m', 111) rc=0 wall=2.00 Bps=27054115.8 m=119977
+large ('fstar-scan', 'src', '16m', 111) rc=0 wall=2.50 Bps=19046098.3 m=119977
+large ('rocq-scan', 'src', '16m', 97) rc=0 wall=1.99 Bps=27126090.8 m=1697
+large ('fstar-scan', 'src', '16m', 97) rc=0 wall=2.52 Bps=19135064.9 m=1697
+large ('rocq-scan', 'src', '16m', 107) rc=0 wall=13.04 Bps=2731281.7 m=454304
+large ('fstar-scan', 'src', '16m', 107) rc=0 wall=31.61 Bps=1089270.3 m=454304
+large ('rocq-scan', 'src', '16m', 94) rc=0 wall=2.00 Bps=27179504.1 m=8959
+large ('fstar-scan', 'src', '16m', 94) rc=0 wall=2.48 Bps=19572204.2 m=8959
+large ('rocq-scan', 'src', '16m', 103) rc=0 wall=8.86 Bps=4147130.8 m=82639
+large ('fstar-scan', 'src', '16m', 103) rc=0 wall=21.71 Bps=1605845.5 m=82639
+large ('rocq-scan', 'src', '16m', 99) rc=0 wall=6.34 Bps=6015544.0 m=591
+large ('fstar-scan', 'src', '16m', 99) rc=0 wall=14.91 Bps=2382446.6 m=591
+large ('rocq-scan', 'src', '16m', 101) rc=0 wall=15.69 Bps=2244698.6 m=88332
+large ('fstar-scan', 'src', '16m', 101) rc=0 wall=36.11 Bps=949720.4 m=88332
+cata ('c', 'jq-frag', 16) rc=0 wall=0.00 nomatch 0.000002
+cata ('c', 'jq-frag', 32) rc=0 wall=0.00 nomatch 0.000001
+cata ('c', 'jq-frag', 64) rc=0 wall=0.00 nomatch 0.000001
+cata ('c', 'jq-frag', 128) rc=0 wall=0.00 nomatch 0.000001
+cata ('c', 'jq-frag', 256) rc=0 wall=0.00 nomatch 0.000001
+cata ('c', 'jq-frag', 512) rc=0 wall=0.00 nomatch 0.000002
+cata ('c', 'jq-frag', 1024) rc=0 wall=0.00 nomatch 0.000003
+cata ('c', 'jq-frag', 2048) rc=0 wall=0.00 nomatch 0.000004
+cata ('c', 'jq-frag', 4096) rc=0 wall=0.00 nomatch 0.000007
+cata ('c', 'php-frag', 16) rc=0 wall=0.00 nomatch 0.000001
+cata ('c', 'php-frag', 32) rc=0 wall=0.00 nomatch 0.000001
+cata ('c', 'php-frag', 64) rc=0 wall=0.00 nomatch 0.000001
+cata ('c', 'php-frag', 128) rc=0 wall=0.00 nomatch 0.000001
+cata ('c', 'php-frag', 256) rc=0 wall=0.00 nomatch 0.000001
+cata ('c', 'php-frag', 512) rc=0 wall=0.00 nomatch 0.000002
+cata ('c', 'php-frag', 1024) rc=0 wall=0.00 nomatch 0.000003
+cata ('c', 'php-frag', 2048) rc=0 wall=0.00 nomatch 0.000004
+cata ('c', 'php-frag', 4096) rc=0 wall=0.00 nomatch 0.000007
+cata ('c-noopt', 'jq-frag', 16) rc=0 wall=0.00 nomatch 0.001515
+cata ('c-noopt', 'jq-frag', 32) rc=0 wall=0.12 limit 0.114193
+cata ('c-noopt', 'jq-frag', 64) rc=0 wall=0.12 limit 0.116654
+cata ('c-noopt', 'jq-frag', 128) rc=0 wall=0.12 limit 0.113596
+cata ('c-noopt', 'jq-frag', 256) rc=0 wall=0.12 limit 0.111816
+cata ('c-noopt', 'jq-frag', 512) rc=0 wall=0.12 limit 0.112643
+cata ('c-noopt', 'jq-frag', 1024) rc=0 wall=0.12 limit 0.112305
+cata ('c-noopt', 'jq-frag', 2048) rc=0 wall=0.12 limit 0.113302
+cata ('c-noopt', 'jq-frag', 4096) rc=0 wall=0.12 limit 0.112197
+cata ('c-noopt', 'php-frag', 16) rc=0 wall=0.00 nomatch 0.000137
+cata ('c-noopt', 'php-frag', 32) rc=0 wall=0.28 nomatch 0.277929
+cata ('c-noopt', 'php-frag', 64) rc=0 wall=0.12 limit 0.114408
+cata ('c-noopt', 'php-frag', 128) rc=0 wall=0.12 limit 0.114473
+cata ('c-noopt', 'php-frag', 256) rc=0 wall=0.12 limit 0.114835
+cata ('c-noopt', 'php-frag', 512) rc=0 wall=0.12 limit 0.114758
+cata ('c-noopt', 'php-frag', 1024) rc=0 wall=0.12 limit 0.115106
+cata ('c-noopt', 'php-frag', 2048) rc=0 wall=0.12 limit 0.115365
+cata ('c-noopt', 'php-frag', 4096) rc=0 wall=0.12 limit 0.116856
+cata ('stubs', 'jq-frag', 16) rc=0 wall=0.01 nomatch 0.000001
+cata ('stubs', 'jq-frag', 32) rc=0 wall=0.01 nomatch 0.000001
+cata ('stubs', 'jq-frag', 64) rc=0 wall=0.00 nomatch 0.000001
+cata ('stubs', 'jq-frag', 128) rc=0 wall=0.01 nomatch 0.000001
+cata ('stubs', 'jq-frag', 256) rc=0 wall=0.01 nomatch 0.000001
+cata ('stubs', 'jq-frag', 512) rc=0 wall=0.01 nomatch 0.000002
+cata ('stubs', 'jq-frag', 1024) rc=0 wall=0.00 nomatch 0.000003
+cata ('stubs', 'jq-frag', 2048) rc=0 wall=0.00 nomatch 0.000004
+cata ('stubs', 'jq-frag', 4096) rc=0 wall=0.00 nomatch 0.000007
+cata ('stubs', 'php-frag', 16) rc=0 wall=0.00 nomatch 0.000001
+cata ('stubs', 'php-frag', 32) rc=0 wall=0.00 nomatch 0.000001
+cata ('stubs', 'php-frag', 64) rc=0 wall=0.00 nomatch 0.000001
+cata ('stubs', 'php-frag', 128) rc=0 wall=0.00 nomatch 0.000001
+cata ('stubs', 'php-frag', 256) rc=0 wall=0.00 nomatch 0.000001
+cata ('stubs', 'php-frag', 512) rc=0 wall=0.00 nomatch 0.000002
+cata ('stubs', 'php-frag', 1024) rc=0 wall=0.00 nomatch 0.000003
+cata ('stubs', 'php-frag', 2048) rc=0 wall=0.00 nomatch 0.000004
+cata ('stubs', 'php-frag', 4096) rc=0 wall=0.00 nomatch 0.000007
+cata ('ctypes', 'jq-frag', 16) rc=0 wall=0.00 nomatch 0.000006
+cata ('ctypes', 'jq-frag', 32) rc=0 wall=0.00 nomatch 0.000004
+cata ('ctypes', 'jq-frag', 64) rc=0 wall=0.00 nomatch 0.000004
+cata ('ctypes', 'jq-frag', 128) rc=0 wall=0.00 nomatch 0.000004
+cata ('ctypes', 'jq-frag', 256) rc=0 wall=0.00 nomatch 0.000007
+cata ('ctypes', 'jq-frag', 512) rc=0 wall=0.00 nomatch 0.000007
+cata ('ctypes', 'jq-frag', 1024) rc=0 wall=0.00 nomatch 0.000008
+cata ('ctypes', 'jq-frag', 2048) rc=0 wall=0.00 nomatch 0.000007
+cata ('ctypes', 'jq-frag', 4096) rc=0 wall=0.00 nomatch 0.000010
+cata ('ctypes', 'php-frag', 16) rc=0 wall=0.00 nomatch 0.000004
+cata ('ctypes', 'php-frag', 32) rc=0 wall=0.00 nomatch 0.000004
+cata ('ctypes', 'php-frag', 64) rc=0 wall=0.00 nomatch 0.000004
+cata ('ctypes', 'php-frag', 128) rc=0 wall=0.00 nomatch 0.000004
+cata ('ctypes', 'php-frag', 256) rc=0 wall=0.00 nomatch 0.000007
+cata ('ctypes', 'php-frag', 512) rc=0 wall=0.00 nomatch 0.000007
+cata ('ctypes', 'php-frag', 1024) rc=0 wall=0.00 nomatch 0.000008
+cata ('ctypes', 'php-frag', 2048) rc=0 wall=0.00 nomatch 0.000007
+cata ('ctypes', 'php-frag', 4096) rc=0 wall=0.00 nomatch 0.000010
+cata ('vm', 'jq-frag', 16) rc=0 wall=0.01 nomatch 0.006425
+cata ('vm', 'jq-frag', 32) rc=0 wall=0.25 limit 0.240979
+cata ('vm', 'jq-frag', 64) rc=0 wall=0.24 limit 0.239064
+cata ('vm', 'jq-frag', 128) rc=0 wall=0.25 limit 0.240239
+cata ('vm', 'jq-frag', 256) rc=0 wall=0.24 limit 0.239831
+cata ('vm', 'jq-frag', 512) rc=0 wall=0.25 limit 0.240604
+cata ('vm', 'jq-frag', 1024) rc=0 wall=0.24 limit 0.236723
+cata ('vm', 'jq-frag', 2048) rc=0 wall=0.24 limit 0.238763
+cata ('vm', 'jq-frag', 4096) rc=0 wall=0.24 limit 0.238167
+cata ('vm', 'php-frag', 16) rc=0 wall=0.01 nomatch 0.000564
+cata ('vm', 'php-frag', 32) rc=0 wall=0.27 limit 0.260282
+cata ('vm', 'php-frag', 64) rc=0 wall=0.26 limit 0.254826
+cata ('vm', 'php-frag', 128) rc=0 wall=0.26 limit 0.256375
+cata ('vm', 'php-frag', 256) rc=0 wall=0.26 limit 0.257657
+cata ('vm', 'php-frag', 512) rc=0 wall=0.26 limit 0.258580
+cata ('vm', 'php-frag', 1024) rc=0 wall=0.26 limit 0.256498
+cata ('vm', 'php-frag', 2048) rc=0 wall=0.26 limit 0.259544
+cata ('vm', 'php-frag', 4096) rc=0 wall=0.26 limit 0.256527
+cata ('rocq', 'jq-frag', 16) rc=0 wall=0.13 nomatch 0.123513
+cata ('rocq', 'php-frag', 16) rc=0 wall=0.02 nomatch 0.011015
+cata ('fstar', 'jq-frag', 16) rc=0 wall=0.22 nomatch 0.213259
+cata ('fstar', 'php-frag', 16) rc=0 wall=0.02 nomatch 0.018686
+decision 6: c-noopt completes under its budget at n >= 32 for [('php-frag', 32)]
+cata ('rocq', 'php-frag', 32) rc=0 wall=28.94 nomatch 28.616468
+cata ('fstar', 'php-frag', 32) rc=0 wall=55.28 nomatch 54.931550
+catafuel ('rocq', 'jq-frag', 32) rc=0 wall=1.40 fuel 1.366348
+catafuel ('rocq', 'jq-frag', 64) rc=0 wall=1.83 fuel 1.798783
+catafuel ('rocq', 'jq-frag', 128) rc=0 wall=2.65 fuel 2.622974
+catafuel ('rocq', 'jq-frag', 256) rc=0 wall=4.39 fuel 4.359584
+catafuel ('rocq', 'jq-frag', 512) rc=0 wall=7.71 fuel 7.671984
+catafuel ('rocq', 'jq-frag', 1024) rc=0 wall=14.30 fuel 14.258324
+catafuel ('rocq', 'jq-frag', 2048) rc=0 wall=27.93 fuel 27.890280
+catafuel ('rocq', 'jq-frag', 4096) rc=0 wall=53.93 fuel 53.888908
+catafuel ('rocq', 'php-frag', 64) rc=0 wall=1.91 fuel 1.877356
+catafuel ('rocq', 'php-frag', 128) rc=0 wall=2.88 fuel 2.851656
+catafuel ('rocq', 'php-frag', 256) rc=0 wall=4.78 fuel 4.745681
+catafuel ('rocq', 'php-frag', 512) rc=0 wall=8.42 fuel 8.384210
+catafuel ('rocq', 'php-frag', 1024) rc=0 wall=16.01 fuel 15.972481
+catafuel ('rocq', 'php-frag', 2048) rc=0 wall=31.25 fuel 31.212358
+catafuel ('rocq', 'php-frag', 4096) rc=0 wall=59.98 fuel 59.937865
+catafuel ('fstar', 'jq-frag', 32) rc=0 wall=2.73 fuel 2.694767
+catafuel ('fstar', 'jq-frag', 64) rc=0 wall=3.96 fuel 3.922051
+catafuel ('fstar', 'jq-frag', 128) rc=0 wall=6.02 fuel 5.989915
+catafuel ('fstar', 'jq-frag', 256) rc=0 wall=12.11 fuel 12.071221
+catafuel ('fstar', 'jq-frag', 512) rc=0 wall=18.95 fuel 18.915693
+catafuel ('fstar', 'jq-frag', 1024) rc=0 wall=37.08 fuel 37.045337
+catafuel ('fstar', 'jq-frag', 2048) rc=124 wall=60.03 cap 60
+catafuel ('fstar', 'php-frag', 64) rc=0 wall=3.96 fuel 3.925806
+catafuel ('fstar', 'php-frag', 128) rc=0 wall=6.64 fuel 6.605391
+catafuel ('fstar', 'php-frag', 256) rc=0 wall=11.80 fuel 11.770684
+catafuel ('fstar', 'php-frag', 512) rc=0 wall=20.85 fuel 20.814347
+catafuel ('fstar', 'php-frag', 1024) rc=0 wall=43.65 fuel 43.619589
+catafuel ('fstar', 'php-frag', 2048) rc=124 wall=60.03 cap 60
+TOTAL one run per cell (s): {'short': 14.9, 'large': 401.9, 'cata': 91.0, 'catafuel': 527.1}
+PROJECTION 10 runs + 10% (min): {'short': 2.7, 'large': 75.0, 'cata': 16.7, 'catafuel': 96.6}; total 191.1 min

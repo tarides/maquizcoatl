@@ -1,0 +1,11 @@
+== opam exec --switch provers -- rocq compile -R . S Syntax.v
+== opam exec --switch provers -- rocq compile -R . S Sem.v
+== opam exec --switch provers -- rocq compile -R . S Compile.v
+== opam exec --switch provers -- rocq compile -R . S Vm.v
+== opam exec --switch provers -- rocq compile -R . S Extract.v
+File "./Extract.v", line 5, characters 0-48:
+Warning: Setting extraction output directory by default to
+"<exp>/extract/rocq". Use
+"Set Extraction Output Directory" or command line option "-output-directory"
+to set a different directory for extracted files to appear in.
+[extraction-default-directory,extraction,default]

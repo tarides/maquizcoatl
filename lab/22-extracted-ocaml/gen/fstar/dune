@@ -1,0 +1,13 @@
+; Issue #22: copied by extract.sh beside the F*-extracted Custard.ml and
+; the release's Prims.ml (experiment #9, fstar/fstar.sh:23, :36: packages
+; zarith, yojson, ppx_deriving.show, ppx_deriving_yojson).  Generated
+; code: warnings disabled, nothing else.
+(library
+ (name fstar_extracted)
+ (wrapped false)
+ (modules Prims Custard)
+ (libraries zarith yojson)
+ (preprocess
+  (pps ppx_deriving.show ppx_deriving_yojson))
+ (flags
+  (:standard -w -a)))

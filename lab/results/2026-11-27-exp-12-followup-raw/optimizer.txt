@@ -1,0 +1,8 @@
+== php-frag syntax/options 1 12 pattern (a|aa)*b
+optimize: STR_FAST
+exact: [b]: length: 1, dmin: 0, dmax: inf.
+engine=c n=16 result=-1 outcome=nomatch sec=0.000003
+== jq-frag syntax/options 2 256 pattern (aa*)*b
+optimize: STR_FAST
+exact: [b]: length: 1, dmin: 0, dmax: inf.
+engine=c n=16 result=-1 outcome=nomatch sec=0.000003

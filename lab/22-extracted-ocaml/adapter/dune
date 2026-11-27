@@ -1,0 +1,7 @@
+; Issue #22: adapters of the extracted VMs (optional: built only when the
+; generated libraries rocq_extracted and fstar_extracted are present, in
+; the bench host's staging tree; see setup.sh engines)
+(library
+ (name extracted22)
+ (optional)
+ (libraries rocq_extracted fstar_extracted zarith))

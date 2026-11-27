@@ -35,13 +35,21 @@ ENGINES = {
     # review fix (run r2): the C driver against a libonig.so built with
     # -DONIG_DONT_OPTIMIZE (setup.sh cbuild-noopt); not in the default set
     "c-noopt": ("cdriver-noopt", None),
+    # issue #22: the extracted VMs (lab/22-extracted-ocaml); not in the
+    # default set
+    "rocq": ("main-ffi.exe", "rocq"),
+    "rocq-scan": ("main-ffi.exe", "rocq-scan"),
+    "fstar": ("main-ffi.exe", "fstar"),
+    "fstar-scan": ("main-ffi.exe", "fstar-scan"),
 }
+EXTRA = ["c-noopt", "rocq", "rocq-scan", "fstar", "fstar-scan"]
 # ENGINES_ONLY=c,c-noopt,vm restricts a series to these engines; the
-# default is every engine but c-noopt (the run r1 set).
+# default is every engine but those of EXTRA (the run r1 set).
 if os.environ.get("ENGINES_ONLY"):
     ENGINES = {k: ENGINES[k] for k in os.environ["ENGINES_ONLY"].split(",")}
 else:
-    del ENGINES["c-noopt"]
+    for k in EXTRA:
+        del ENGINES[k]
 
 CATA = [  # experiment #11's worst-case entry, one per family
     ("jq", 2, 256, "(a+)+$"),

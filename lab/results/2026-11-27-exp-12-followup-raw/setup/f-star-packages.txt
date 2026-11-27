@@ -1,0 +1,4 @@
+ppx_deriving        6.2.0
+ppx_deriving_yojson 3.10.0
+yojson              3.0.0
+zarith              1.14

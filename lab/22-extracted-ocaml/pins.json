@@ -1,0 +1,17 @@
+{
+  "upstream": {"repo": "https://github.com/kkos/oniguruma", "commit": "f95747b"},
+  "experiment_9": {"commit": "e1b9936", "pr": 32,
+                   "reference_sha256": {"frag.ml": "e76cf6f5643d59c21ed9c3d33af7440948c3f491db9b52e4cd95e32bbbc27c6f",
+                                        "frag.mli": "0fd4524098b411a0c907e6a929012e18bd1287934e45395b98e16ded91f1458e",
+                                        "Custard.ml": "ae703add9eb3bda0e825a3f61a14721df4068e7825f0a6cee57a19941895f238",
+                                        "Prims.ml": "e5b8a7e72625052eaccdbc3693aac8e26d8933498fe21a1369f3b1d809220aa8"}},
+  "opam": "2.6.1",
+  "ocaml": {"version": "5.4.1", "switch": "ffi (ocaml-base-compiler.5.4.1, no flambda)"},
+  "dune": "3.25.0", "ctypes": "0.24.0", "ctypes-foreign": "0.24.0", "mtime": "2.2.0",
+  "f_star_column_packages": {"zarith": "1.14", "yojson": "3.0.0", "ppx_deriving": "6.2.0",
+                             "ppx_deriving_yojson": "3.10.0",
+                             "reason": "the versions of switch provers, which built experiment #9's F* driver"},
+  "rocq": {"rocq-core": "9.3.0", "rocq-stdlib": "9.2.0", "switch": "provers"},
+  "fstar": {"release": "2026.11.15", "commit": "b92b0f87", "z3": "5.3.0"},
+  "gcc": "13.3.0", "cmake": "3.28.3", "python": "3.12"
+}

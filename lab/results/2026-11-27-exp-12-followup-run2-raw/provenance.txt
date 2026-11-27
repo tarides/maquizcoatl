@@ -1,0 +1,36 @@
+repo_commit: b49f057
+upstream_commit: f95747b
+experiment_9_commit: e1b9936; source check: identical to e1b9936 (lab/09-representative-proof/rocq lab/09-representative-proof/fstar lab/06-spec-speed/rocq/Spec2.v lab/06-spec-speed/fstar/Spec2.fst)
+rocq: The Rocq Prover, version 9.3.0 
+rocq_packages (provers): rocq-core   9.3.0 rocq-stdlib 9.2.0 
+rocq_extraction: Extract.v (ExtrOcamlBasic, ExtrOcamlNatInt), rocq compile -R . S on Syntax Sem Compile Vm Extract
+fstar: F* 2026.11.15 platform=Linux_x86_64 system=Unix compiler=OCaml 5.3.0 date=2026-11-15 18:52:39 +0000 commit=b92b0f87ce325a6ed0fd78086390fbaf2fc629a1 
+fstar_extraction: fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --codegen OCaml, --custard_entry Compile.compile Vm.vm Sem.sem Syntax.ncap Syntax.search Spec2.search Spec2.search_from Spec2.lookup Spec2.fuel0, Extract.fst
+extracted_sha256:
+  e76cf6f5643d59c21ed9c3d33af7440948c3f491db9b52e4cd95e32bbbc27c6f  rocq/frag.ml  same as experiment #9's copy
+  0fd4524098b411a0c907e6a929012e18bd1287934e45395b98e16ded91f1458e  rocq/frag.mli  same as experiment #9's copy
+  ae703add9eb3bda0e825a3f61a14721df4068e7825f0a6cee57a19941895f238  fstar/Custard.ml  same as experiment #9's copy
+  e5b8a7e72625052eaccdbc3693aac8e26d8933498fe21a1369f3b1d809220aa8  fstar/Prims.ml  same as experiment #9's copy
+onig-release: Release C_FLAGS='' C_FLAGS_RELEASE='-O3 -DNDEBUG' C_FLAGS_DEBUG='-g'
+onig-noopt: Release C_FLAGS='-DONIG_DONT_OPTIMIZE' C_FLAGS_RELEASE='-O3 -DNDEBUG' C_FLAGS_DEBUG='-g'
+onig-dbgc: Debug C_FLAGS='-DONIG_DEBUG_COMPILE' C_FLAGS_RELEASE='-O3 -DNDEBUG' C_FLAGS_DEBUG='-g'
+gcc: gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+cmake: cmake version 3.28.3
+python: Python 3.12.3
+opam: 2.6.1
+switch ffi: 5.4.1 architecture: amd64 system: linux flambda: false flat_float_array: true 
+  packages: conf-gmp            5 conf-libffi         2.0.0 cppo                1.8.0 ctypes              0.24.0 ctypes-foreign      0.24.0 dune                3.25.0 mtime               2.2.0 ocaml-compiler-libs v0.17.0 ppx_derivers        1.2.1 ppx_deriving        6.2.0 ppx_deriving_yojson 3.10.0 ppxlib              0.39.0 sexplib0            v0.17.0 yojson              3.0.0 zarith              1.14 
+switch ffi-flambda (run 2, decision 8): 5.4.1 architecture: amd64 system: linux flambda: true flat_float_array: true 
+  packages: conf-gmp            5 conf-libffi         2.0.0 cppo                1.8.0 ctypes              0.24.0 ctypes-foreign      0.24.0 dune                3.25.0 mtime               2.2.0 ocaml-compiler-libs v0.17.0 ppx_derivers        1.2.1 ppx_deriving        6.2.0 ppx_deriving_yojson 3.10.0 ppxlib              0.39.0 sexplib0            v0.17.0 yojson              3.0.0 zarith              1.14 
+libffi: 3.4.6
+gmp: 6.3.0
+cpu: AMD EPYC 7502P 32-Core Processor
+cpus_online: 64
+ram: 503 GiB
+kernel: Linux 6.8.0-100-generic
+os: Ubuntu 24.04.5 LTS
+cpu2_governor: schedutil
+timing_cpu: 2; build_cpus: 0-3,32-35 (nice -n 10)
+gc: defaults, OCAMLRUNPARAM unset
+loadavg: 0.63 0.90 1.32
+date: 2026-11-27T15:37:54Z

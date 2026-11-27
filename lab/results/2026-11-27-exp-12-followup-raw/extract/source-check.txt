@@ -1,0 +1,1 @@
+source check: identical to e1b9936 (lab/09-representative-proof/rocq lab/09-representative-proof/fstar lab/06-spec-speed/rocq/Spec2.v lab/06-spec-speed/fstar/Spec2.fst)

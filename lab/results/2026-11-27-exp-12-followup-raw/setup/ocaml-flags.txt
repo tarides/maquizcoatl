@@ -1,0 +1,15 @@
+== gen/rocq
+(flags (-w -40)) (ocamlc_flags (-g)) (ocamlopt_flags (-g)) (melange.compile_flags (-g)) (c_flags (-O2 -fno-strict-aliasing -fwrapv -fPIC -pthread -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always)) (cxx_flags (-x c++ -std=gnu++11 -O2 -fno-strict-aliasing -fwrapv -fPIC -pthread -Wall -fdiagnostics-color=always)) (link_flags ()) (menhir_flags ()) (menhir_explain ()) (rocq_flags (-q)) (rocqdep_flags ()) (rocqdoc_flags (--toc)) (rocqdoc_header ()) (rocqdoc_footer ()) (js_of_ocaml_flags ()) (js_of_ocaml_build_runtime_flags ()) (js_of_ocaml_link_flags ()) (wasm_of_ocaml_flags ()) (wasm_of_ocaml_build_runtime_flags ()) (wasm_of_ocaml_link_flags ()) 
+ (flags 
+== gen/fstar
+(flags (-w -40)) (ocamlc_flags (-g)) (ocamlopt_flags (-g)) (melange.compile_flags (-g)) (c_flags (-O2 -fno-strict-aliasing -fwrapv -fPIC -pthread -D_FILE_OFFSET_BITS=64 -Wall -fdiagnostics-color=always)) (cxx_flags (-x c++ -std=gnu++11 -O2 -fno-strict-aliasing -fwrapv -fPIC -pthread -Wall -fdiagnostics-color=always)) (link_flags ()) (menhir_flags ()) (menhir_explain ()) (rocq_flags (-q)) (rocqdep_flags ()) (rocqdoc_flags (--toc)) (rocqdoc_header ()) (rocqdoc_footer ()) (js_of_ocaml_flags ()) (js_of_ocaml_build_runtime_flags ()) (js_of_ocaml_link_flags ()) (wasm_of_ocaml_flags ()) (wasm_of_ocaml_build_runtime_flags ()) (wasm_of_ocaml_link_flags ()) 
+ (flags 
+== 22-extracted-ocaml/adapter
+
+
+== 12-ffi-vs-native/vm
+
+ (ocamlopt_flags    (:include ../oflags.sexp)))) 
+== 12-ffi-vs-native/bench
+
+ (ocamlopt_flags    (:include ../oflags.sexp))) 

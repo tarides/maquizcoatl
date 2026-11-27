@@ -1,0 +1,4 @@
+(executable
+ (name x22)
+ (optional)
+ (libraries extracted22 mtime.clock.os))

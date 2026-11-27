@@ -1,0 +1,11 @@
+(i) astcheck rc=0 RESULT astcheck passed=70 total=70
+(ii) astwork jq rc=0 RESULT astwork passed=10 total=10
+(ii) astwork php rc=0 RESULT astwork passed=21 total=21
+(ii) astwork vscode rc=0 RESULT astwork passed=277 total=277
+(ii) astwork longphp rc=0 RESULT astwork passed=1 total=1
+(ii) astwork large rc=0 RESULT astwork passed=15 total=15
+(iii) verdicts rocq fragment: 339 vm lines, reference 339 lines (2026-11-25-exp-09-correction-1-raw): identical
+(iii) verdicts rocq extra: 14 vm lines, reference 14 lines (2026-11-25-exp-09-raw): identical
+(iii) verdicts fstar fragment: 339 vm lines, reference 339 lines (2026-11-25-exp-09-fstar-m1-raw): identical
+(iii) verdicts fstar extra: 14 vm lines, reference 14 lines (2026-11-25-exp-09-fstar-m1-raw): identical
+CHECKS PASS
