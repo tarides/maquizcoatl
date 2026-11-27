@@ -1,0 +1,4 @@
+Closed under the global context
+File "./AbsentProof.v", line 1435, characters 42-68:
+Error: Found no subterm matching "?M4062 =? ?M4062" in HM.
+

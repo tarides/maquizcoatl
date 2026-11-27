@@ -1,0 +1,103 @@
+## Cells (version, seed): exit verified errors wall user sys rss max_fn_share max_fn failing
+4.16.0	default	-	0	191	0	33.21	42.86	0.97	546900	0.150	lib::absent_proof::m_term_stack	-
+4.16.0	1	-	0	191	0	33.09	54.51	0.97	546808	0.905	lib::absent_proof::term_core	-
+4.16.0	2	-	0	191	0	33.26	46.02	0.91	547284	0.292	lib::absent_proof::term_core	-
+4.16.0	3	-	0	191	0	33.27	44.98	0.91	547044	0.347	lib::absent_proof::term_core	-
+4.16.0	4	-	0	191	0	33.22	44.54	0.96	547916	0.152	lib::absent_proof::term_core	-
+4.16.0	5	-	0	191	0	33.32	51.51	0.95	546624	0.472	lib::absent_proof::term_core	-
+4.16.0	6	-	0	191	0	33.13	44.71	1.00	548176	0.191	lib::absent_proof::m_term_stack	-
+4.16.0	7	-	0	191	0	33.05	49.11	0.95	547600	0.899	lib::absent_proof::m_term_stack	-
+4.16.0	8	-	0	191	0	33.28	50.25	0.96	545900	0.385	lib::absent_proof::sim_a	-
+4.16.0	9	-	1	190	1	32.59	46.51	0.95	547224	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+4.16.0	10	-	1	190	1	32.71	51.52	0.92	545756	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+5.3.0	default	-	0	191	0	35.72	66.61	1.00	547144	0.817	lib::absent_proof::m_term_stack	-
+5.3.0	1	-	1	190	1	43.75	74.66	0.97	545172	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+5.3.0	2	-	0	191	0	39.58	70.41	0.93	545712	0.718	lib::absent_proof::m_term_stack	-
+5.3.0	3	-	1	190	1	67.30	98.11	0.98	546692	1.000	lib::absent_proof::sim_a	failed:lib::absent_proof::sim_a; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:1296(sim_a)
+5.3.0	4	-	0	191	0	33.28	63.49	0.93	546016	0.454	lib::absent_proof::scan_a	-
+5.3.0	5	-	0	191	0	34.74	65.59	0.95	545064	0.463	lib::absent_proof::scan_a	-
+5.3.0	6	-	0	191	0	51.00	81.83	1.02	549404	0.988	lib::absent_proof::sim_a	-
+5.3.0	7	-	0	191	0	37.94	68.80	0.99	547012	0.547	lib::absent_proof::term_core	-
+5.3.0	8	-	0	191	0	55.32	86.25	0.93	546980	0.983	lib::absent_proof::m_term_stack	-
+5.3.0	9	-	0	191	0	33.34	61.59	0.92	546456	0.470	lib::absent_proof::m_term_stack	-
+5.3.0	10	-	1	190	1	52.45	83.44	0.91	546160	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+4.15.3	default	-	0	191	0	33.30	47.42	0.93	547484	0.563	lib::absent_proof::m_term_stack	-
+4.15.3	1	-	0	191	0	33.28	50.02	0.92	546864	0.749	lib::absent_proof::term_core	-
+4.15.3	2	-	1	190	1	32.72	53.91	0.97	547900	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+4.15.3	3	-	0	191	0	33.23	42.98	0.93	546148	0.263	lib::absent_proof::term_core	-
+4.15.3	4	-	0	191	0	33.37	42.63	0.95	545920	0.164	lib::absent_proof::m_term_stack	-
+4.15.3	5	-	0	191	0	33.06	46.87	0.92	547320	0.657	lib::absent_proof::term_core	-
+4.15.3	6	-	1	190	1	32.37	46.22	0.94	547368	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+4.15.3	7	-	0	191	0	33.22	44.66	0.94	548000	0.176	lib::absent_proof::m_term_stack	-
+4.15.3	8	-	0	191	0	33.35	45.03	0.93	547544	0.199	lib::absent_proof::sim_a	-
+4.15.3	9	-	1	190	1	32.50	55.39	0.95	547052	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+4.15.3	10	-	0	191	0	33.30	49.46	0.97	547640	0.319	lib::absent_proof::term_core	-
+4.16.0	9	rep1	1	190	1	32.58	46.40	0.93	546260	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+4.16.0	10	rep1	1	190	1	32.66	51.46	0.98	547620	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+5.3.0	1	rep1	1	190	1	43.36	74.24	0.98	546776	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+5.3.0	3	rep1	1	190	1	66.42	97.43	0.97	545540	1.000	lib::absent_proof::sim_a	failed:lib::absent_proof::sim_a; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:1296(sim_a)
+5.3.0	10	rep1	1	190	1	52.90	84.02	0.96	546748	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+4.15.3	2	rep1	1	190	1	32.65	53.82	1.03	548128	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+4.15.3	6	rep1	1	190	1	32.57	46.31	0.96	547840	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+4.15.3	9	rep1	1	190	1	32.68	55.39	0.97	547864	1.000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+
+## Per version: cells, passing, wall median (min-max), CPU median, function checks, >10%, >25%, >50%, failed fns, highest share
+4.16.0	11	9	33.21 (32.59-33.32)	47.46	2101	35	11	6	2	1.000 lib::absent_proof::m_term_stack seed 9
+5.3.0	11	8	39.58 (33.28-67.30)	71.34	2101	67	41	13	3	1.000 lib::absent_proof::sim_a seed 3
+4.15.3	11	8	33.23 (32.37-33.37)	47.79	2101	32	12	7	3	1.000 lib::absent_proof::m_term_stack seed 9
+
+## Functions above 10% in any cell: version function count>10% max (seed)
+4.16.0	lib::absent_proof::m_term_stack	11	1.000 (9)
+4.16.0	lib::absent_proof::term_core	10	0.905 (1)
+4.16.0	lib::absent_proof::sim_a	3	0.444 (5)
+4.16.0	lib::absent_proof::sim_b_xs	3	0.179 (7)
+4.16.0	lib::absent_proof::scan_a	8	0.166 (9)
+5.3.0	lib::absent_proof::sim_a	8	1.000 (3)
+5.3.0	lib::absent_proof::m_term_stack	11	1.000 (10)
+5.3.0	lib::absent_proof::term_core	8	0.606 (1)
+5.3.0	lib::absent_proof::scan_a	11	0.553 (3)
+5.3.0	lib::absent_proof::sim_b_rep	8	0.438 (3)
+5.3.0	lib::absent_proof::sim_b	1	0.422 (2)
+5.3.0	lib::absent_proof::sim_b_xs	6	0.375 (6)
+5.3.0	lib::absent_proof::sim_b_alt	2	0.117 (10)
+5.3.0	lib::absent_proof::gen_intro	11	0.114 (6)
+5.3.0	lib::absent_proof::mstar_b	1	0.101 (9)
+4.15.3	lib::absent_proof::m_term_stack	11	1.000 (9)
+4.15.3	lib::absent_proof::term_core	9	0.749 (1)
+4.15.3	lib::absent_proof::sim_a	7	0.348 (9)
+4.15.3	lib::absent_proof::scan_a	4	0.153 (2)
+4.15.3	lib::absent_proof::sim_b_rep	1	0.122 (6)
+
+## Largest share per function, all cells, top 12 by 4.16.0 max
+lib::absent_proof::m_term_stack	4.16.0 1.000	5.3.0 1.000	4.15.3 1.000
+lib::absent_proof::term_core	4.16.0 0.905	5.3.0 0.606	4.15.3 0.749
+lib::absent_proof::sim_a	4.16.0 0.444	5.3.0 1.000	4.15.3 0.348
+lib::absent_proof::sim_b_xs	4.16.0 0.179	5.3.0 0.375	4.15.3 0.097
+lib::absent_proof::scan_a	4.16.0 0.166	5.3.0 0.553	4.15.3 0.153
+lib::absent_proof::sim_b_rep	4.16.0 0.091	5.3.0 0.438	4.15.3 0.122
+lib::absent_proof::scan_b	4.16.0 0.052	5.3.0 0.058	4.15.3 0.064
+lib::absent_proof::gen_b	4.16.0 0.037	5.3.0 0.070	4.15.3 0.019
+lib::absent_proof::sim_b_alt	4.16.0 0.031	5.3.0 0.117	4.15.3 0.025
+lib::absent_proof::m_ends_b	4.16.0 0.027	5.3.0 0.025	4.15.3 0.026
+lib::absent_proof::mstar_b	4.16.0 0.020	5.3.0 0.101	4.15.3 0.021
+lib::absent_proof::sim_a_xs	4.16.0 0.019	5.3.0 0.014	4.15.3 0.018
+
+## m_term_stack per seed (default, 1..10)
+4.16.0	.150	.558	.133	.204	.148	.111	.191	.899	.232	1.000	1.000
+5.3.0	.817	1.000	.718	.115	.121	.207	.111	.226	.983	.470	1.000
+4.15.3	.563	.204	1.000	.115	.164	.203	1.000	.176	.148	1.000	.204
+
+## term_core per seed (default, 1..10)
+4.16.0	.064	.905	.292	.347	.152	.472	.146	.120	.155	.237	.532
+5.3.0	.214	.606	.295	.299	.059	.211	.066	.547	.328	.047	.390
+4.15.3	.181	.749	.724	.263	.091	.657	.171	.120	.048	.400	.319
+
+## sim_a per seed (default, 1..10)
+4.16.0	.025	.026	.033	.026	.052	.444	.085	.101	.385	.026	.051
+5.3.0	.087	.162	.103	1.000	.102	.137	.988	.045	.684	.093	.680
+4.15.3	.117	.239	.117	.036	.036	.096	.026	.142	.199	.348	.291
+
+## sharp_s_sym per seed (default, 1..10)
+4.16.0	.010	.010	.010	.010	.010	.010	.010	.010	.010	.010	.010
+5.3.0	.010	.010	.010	.010	.010	.010	.010	.010	.010	.010	.010
+4.15.3	.010	.010	.010	.010	.010	.010	.010	.010	.010	.010	.010

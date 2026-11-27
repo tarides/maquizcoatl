@@ -1,0 +1,96 @@
+== df   41G
+cut: the delimiter must be a single character
+Try 'cut --help' for more information.
+== timed rocq 19:22:05Z load 
+1	Fold	0:00.87	389324	0.53	0.33
+1	FoldProof	0:02.13	423692	1.79	0.33
+1	Absent	0:01.18	411408	0.80	0.37
+1	Desugar	0:00.82	331476	0.52	0.30
+1	AbsentMono	0:02.55	442632	2.16	0.39
+1	AbsentProof	0:04.75	513220	4.27	0.47
+2	Fold	0:00.88	389324	0.53	0.34
+2	FoldProof	0:02.14	423688	1.81	0.33
+2	Absent	0:01.17	411412	0.82	0.35
+2	Desugar	0:00.81	331476	0.49	0.31
+2	AbsentMono	0:02.54	442636	2.18	0.35
+2	AbsentProof	0:04.75	513224	4.29	0.45
+3	Fold	0:00.87	389324	0.54	0.33
+3	FoldProof	0:02.15	423688	1.79	0.35
+3	Absent	0:01.18	411412	0.79	0.38
+3	Desugar	0:00.81	331472	0.49	0.32
+3	AbsentMono	0:02.54	442636	2.19	0.35
+3	AbsentProof	0:04.73	513076	4.29	0.44
+cut: the delimiter must be a single character
+Try 'cut --help' for more information.
+== timed verus 19:22:44Z load 
+1	lib	0:33.08	547384	42.75	0.93
+2	lib	0:32.96	547572	42.55	0.94
+3	lib	0:33.21	547144	42.69	0.92
+== df   41G
+== 4.16.0_default 19:24:25Z load 1.86 1.44 0.75
+4.16.0	default		0	191	0	33.21	4505123	lib::absent_proof::m_term_stack	-
+== 4.16.0_1 19:25:00Z load 1.77 1.47 0.79
+4.16.0	1		0	191	0	33.09	27153472	lib::absent_proof::term_core	-
+== 4.16.0_2 19:25:36Z load 1.81 1.53 0.84
+4.16.0	2		0	191	0	33.26	8751523	lib::absent_proof::term_core	-
+== 4.16.0_3 19:26:12Z load 1.85 1.58 0.88
+4.16.0	3		0	191	0	33.27	10422748	lib::absent_proof::term_core	-
+== 4.16.0_4 19:26:47Z load 1.77 1.59 0.91
+4.16.0	4		0	191	0	33.22	4570392	lib::absent_proof::term_core	-
+== 4.16.0_5 19:27:23Z load 1.80 1.62 0.95
+4.16.0	5		0	191	0	33.32	14152205	lib::absent_proof::term_core	-
+== 4.16.0_6 19:27:59Z load 1.75 1.63 0.98
+4.16.0	6		0	191	0	33.13	5728044	lib::absent_proof::m_term_stack	-
+== 4.16.0_7 19:28:35Z load 1.74 1.64 1.01
+4.16.0	7		0	191	0	33.05	26971160	lib::absent_proof::m_term_stack	-
+== 4.16.0_8 19:29:10Z load 1.60 1.62 1.03
+4.16.0	8		0	191	0	33.28	11562616	lib::absent_proof::sim_a	-
+== 4.16.0_9 19:29:46Z load 3.21 2.09 1.21
+4.16.0	9		1	190	1	32.59	30000000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+== 4.16.0_10 19:30:21Z load 2.44 2.03 1.22
+4.16.0	10		1	190	1	32.71	30000000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+== 5.3.0_default 19:30:56Z load 2.27 2.04 1.26
+5.3.0	default		0	191	0	35.72	24522892	lib::absent_proof::m_term_stack	-
+== 5.3.0_1 19:31:34Z load 2.39 2.10 1.31
+5.3.0	1		1	190	1	43.75	30000000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+== 5.3.0_2 19:32:21Z load 2.08 2.07 1.34
+5.3.0	2		0	191	0	39.58	21525865	lib::absent_proof::m_term_stack	-
+== 5.3.0_3 19:33:03Z load 2.08 2.07 1.38
+5.3.0	3		1	190	1	67.30	30000000	lib::absent_proof::sim_a	failed:lib::absent_proof::sim_a; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:1296(sim_a)
+== 5.3.0_4 19:34:12Z load 1.82 2.03 1.42
+5.3.0	4		0	191	0	33.28	13622759	lib::absent_proof::scan_a	-
+== 5.3.0_5 19:34:48Z load 2.13 2.08 1.45
+5.3.0	5		0	191	0	34.74	13876664	lib::absent_proof::scan_a	-
+== 5.3.0_6 19:35:25Z load 2.23 2.11 1.49
+5.3.0	6		0	191	0	51.00	29642452	lib::absent_proof::sim_a	-
+== 5.3.0_7 19:36:19Z load 2.11 2.11 1.53
+5.3.0	7		0	191	0	37.94	16403331	lib::absent_proof::term_core	-
+== 5.3.0_8 19:36:59Z load 2.00 2.08 1.54
+5.3.0	8		0	191	0	55.32	29482779	lib::absent_proof::m_term_stack	-
+== 5.3.0_9 19:37:57Z load 1.71 1.99 1.55
+5.3.0	9		0	191	0	33.34	14113587	lib::absent_proof::m_term_stack	-
+== 5.3.0_10 19:38:33Z load 2.02 2.03 1.58
+5.3.0	10		1	190	1	52.45	30000000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+== 4.15.3_default 19:39:28Z load 1.80 1.98 1.59
+4.15.3	default		0	191	0	33.30	16895261	lib::absent_proof::m_term_stack	-
+== 4.15.3_1 19:40:04Z load 1.73 1.95 1.59
+4.15.3	1		0	191	0	33.28	22473746	lib::absent_proof::term_core	-
+== 4.15.3_2 19:40:39Z load 1.92 1.97 1.62
+4.15.3	2		1	190	1	32.72	30000000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+== 4.15.3_3 19:41:15Z load 1.92 1.96 1.63
+4.15.3	3		0	191	0	33.23	7881898	lib::absent_proof::term_core	-
+== 4.15.3_4 19:41:50Z load 1.60 1.88 1.62
+4.15.3	4		0	191	0	33.37	4920297	lib::absent_proof::m_term_stack	-
+== 4.15.3_5 19:42:26Z load 1.70 1.88 1.63
+4.15.3	5		0	191	0	33.06	19697654	lib::absent_proof::term_core	-
+== 4.15.3_6 19:43:02Z load 1.79 1.89 1.64
+4.15.3	6		1	190	1	32.37	30000000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+== 4.15.3_7 19:43:36Z load 1.92 1.93 1.66
+4.15.3	7		0	191	0	33.22	5286660	lib::absent_proof::m_term_stack	-
+== 4.15.3_8 19:44:12Z load 2.62 2.16 1.75
+4.15.3	8		0	191	0	33.35	5970495	lib::absent_proof::sim_a	-
+== 4.15.3_9 19:44:48Z load 2.19 2.11 1.75
+4.15.3	9		1	190	1	32.50	30000000	lib::absent_proof::m_term_stack	failed:lib::absent_proof::m_term_stack; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:2188(m_term_stack)
+== 4.15.3_10 19:45:23Z load 2.08 2.09 1.76
+4.15.3	10		0	191	0	33.30	9575979	lib::absent_proof::term_core	-
+== done 19:45:58Z

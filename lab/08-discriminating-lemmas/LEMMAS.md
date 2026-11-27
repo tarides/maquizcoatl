@@ -266,12 +266,33 @@ side's fuel. They rest on monotonicity and determinism for both matchers
 every `occ` it evaluated was complete. Fuel adequacy (fuel as a function
 of the input) is later work.
 
-Termination is not proved either: neither matcher is shown to return a
-complete result at some fuel on an in-scope pattern (`mb_term`,
-`cut_term` and `term_core` cover only the absent-free parts). The
-theorem is conditional, and says nothing at a start where `m` and `md`
-both run out of fuel at every fuel. Non-vacuity is shown only on the 29
-cases, at fuel 1000 (`Cases.v`, `cases.rs`).
+**Termination (decision 8, run 5).** Both tools prove that the direct
+matcher terminates on every in-scope pattern: for every `s`, `i`, `rr`
+with `i <= rr <= length s` and `in_scope r`, there are fuels `g`, `f`
+and a list `l` with `m s g f [R r] i rr = Some l` (`m_term`). With
+direction (2a) of `absent_desugar_eq`, `md` on `desugar r` then returns
+`Some (rs, rr)` at some fuel, with `ends rs = l`
+(`absent_desugar_total`, stated identically in both tools), so lemma 2
+holds without assuming that either side is complete: at every such
+start, both matchers terminate and agree. `absent_desugar_eq` is
+unchanged.
+
+The induction (`m_term_stack`) generalises to item stacks made of
+in-scope `R` and `Chk` items and of `SetRR k` items with
+`k <= max q (length s)` (the restore at the end of `AbsExp`'s `exp`),
+with the register also at most `max q (length s)`. Its measure is
+`(length s - q, tmu ks q)` lexicographically: `term_core`'s, with an
+`AbsExp a e` weighed by its `exp` (`2 + size e`), since `exp` and the
+restore replace it at the same position. A consuming step moves forward
+below `length s` (`at_` reads the subject). The cut of `AbsRep`, `AbsExp`
+and the stopper exists at some inner fuel (`cut_term`) and lies between
+the position and the register (`scan_ge`, `scan_le`). An `AbsRep`'s
+`Ends` branches either stay at `q`, on the rest of the stack (a smaller
+`tmu`), or move forward to an end at most the cut, hence at most the
+register and the subject length. The per-branch fuels are merged by
+monotonicity (`m_mono`, `cut_mono`). Fuel adequacy, a fuel bound as a
+function of the input, is still later work: the proofs give fuels that
+exist, not a formula.
 
 **The invariant.** The core of the proof relates a direct item stack and
 register to a desugared item stack, register and save store: after a
@@ -309,6 +330,9 @@ makes the global register behave like experiment #8's per-branch `rr`.
   the item stacks.
 - (h) Range clear, as one more case of (g) if it closes in a few lines in
   each tool; otherwise named out of scope with the reason.
+- (i) Termination of `m` on in-scope patterns (`m_term_stack`, `m_term`)
+  and lemma 2 without its condition (`absent_desugar_total`), added in
+  run 5 by decision 8; see "Termination" above.
 
 **Run 2 (Rocq), how the plan was carried out.** `AbsentMono.v` proves
 (b). `AbsentProof.v` proves (a) and (c) together for an absent-free
