@@ -1,0 +1,9 @@
+; Issue #22: copied by extract.sh beside the Rocq-extracted frag.ml and
+; frag.mli (experiment #9, Extract.v: ExtrOcamlBasic, ExtrOcamlNatInt).
+; Generated code: warnings disabled, nothing else.
+(library
+ (name rocq_extracted)
+ (wrapped false)
+ (modules frag)
+ (flags
+  (:standard -w -a)))

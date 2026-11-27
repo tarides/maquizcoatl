@@ -23,3 +23,10 @@ summarise.py <exp>/out/r1 <out>`.
 Review-fix run `r2` (optimiser share): `setup.sh cbuild-noopt`, copy
 `<exp>/out/r1/work` to `<exp>/out/r2/work`, then
 `ENGINES_ONLY=c,c-noopt,vm run.py large r2 10 16`.
+
+Issue #22 registers four more engines (`rocq`, `rocq-scan`, `fstar`,
+`fstar-scan`: experiment #9's extracted VMs, `lab/22-extracted-ocaml/`).
+They are linked only when that library is in the same dune project
+(`bench/dune`'s `select`; stand-ins in `bench/extracted.none.ml`
+otherwise) and are not in `run.py`'s default engine set, so the replays
+above run the same cells as before.

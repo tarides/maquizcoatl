@@ -3,4 +3,16 @@
  (ocamlopt_flags
   (:standard
    (:include ../oflags.sexp)))
- (libraries vm onig onig_ctypes re mtime.clock.os))
+ (libraries
+  vm
+  onig
+  onig_ctypes
+  re
+  mtime.clock.os
+  ; issue #22: the extracted engines when lab/22-extracted-ocaml and the
+  ; generated sources are in the same dune workspace, stand-ins otherwise
+  (select
+   extracted.ml
+   from
+   (extracted22 -> extracted.x22.ml)
+   (-> extracted.none.ml))))
