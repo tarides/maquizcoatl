@@ -168,9 +168,22 @@ print absolute paths, hostnames or addresses.
    translator turns the dump into the VM's bytecode format: jump targets
    resolved, string operands decoded, and, in the translated tier, the
    two push variants rewritten to `OP_PUSH` with the same alternative
-   target. That rewrite preserves results: both variants only skip a
-   push whose alternative would fail at once. The equal-results
-   criterion (step T2) is the check.
+   target. That rewrite preserves match results
+   (`upstream/src/regexec.c:4333-4360`):
+   - `OP_PUSH_OR_JUMP_EXACT1` enters the loop body only when the next
+     byte is the body's first literal, and otherwise jumps straight to
+     the exit. As a plain `OP_PUSH`, the VM enters the body anyway, fails
+     at its first byte, and backtracks to the exit.
+   - `OP_PUSH_IF_PEEK_NEXT` pushes the exit only when the next byte is
+     the exit's first literal. As a plain `OP_PUSH`, the VM always
+     pushes it, and an exit restored on any other byte fails at once.
+
+   In both cases the VM restores more choice points than Oniguruma, so
+   its retry count is higher. A translated-tier case that hits the
+   retry limit on one side only is recorded as a limit difference, not
+   as a disagreement, and the catastrophic analogues run in the strict
+   tier only. The equal-results criterion (step T2) is the check for
+   everything else.
 
    **The dump is parsed as bytes, not lines.**
    - `p_string` writes the operand's raw bytes
@@ -507,7 +520,8 @@ kept as data. The maintainer decides what is worth recording.
   Coverage is a criterion in itself, and low rows are labelled.
 - **Translated-tier bias.** Oniguruma does strictly less work per
   iteration than the VM in this tier, so ratios there are lower bounds,
-  labelled as such.
+  labelled as such. The VM's extra backtracks also raise its retry
+  count, so limit outcomes can differ there (step 3).
 - **`onig_match` per start position** pays per-call setup. It is
   measured on an empty pattern, and the builds without the optimiser
   give a loop without it (decision B′).
