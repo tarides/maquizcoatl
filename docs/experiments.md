@@ -21,7 +21,7 @@ Always say "experiment #N" or "issue #N", never a bare "#N".
 | 8 | Hard-feature spec probe | [#12](https://github.com/tarides/maquizcoatl/issues/12) | [#26](https://github.com/tarides/maquizcoatl/pull/26) | pipeline |
 | 8 (follow-up) | Discriminating lemmas (lemma F over a symbolic subject, absent desugaring equivalence) | [#34](https://github.com/tarides/maquizcoatl/issues/34) | [#40](https://github.com/tarides/maquizcoatl/pull/40) | pipeline (Rocq and Verus) |
 | 9 | Representative proof | [#4](https://github.com/tarides/maquizcoatl/issues/4) | [#32](https://github.com/tarides/maquizcoatl/pull/32) | pipeline |
-| 10 | Generated code quality | [#8](https://github.com/tarides/maquizcoatl/issues/8) | [#27](https://github.com/tarides/maquizcoatl/pull/27) | pipeline |
+| 10 | Proved C VM, stack A vs stack C (re-scoped on 2026-11-27, was "Generated code quality") | [#8](https://github.com/tarides/maquizcoatl/issues/8) | [#27](https://github.com/tarides/maquizcoatl/pull/27) | pipeline |
 | 11 | Performance baselines | [#2](https://github.com/tarides/maquizcoatl/issues/2) | [#17](https://github.com/tarides/maquizcoatl/pull/17) | pipeline (review fixes by Vincent Balat) |
 | 12 | FFI versus native OCaml | [#10](https://github.com/tarides/maquizcoatl/issues/10) | [#23](https://github.com/tarides/maquizcoatl/pull/23) | pipeline |
 | 12 (follow-up) | Cost of Rocq- and F\*-extracted OCaml | [#22](https://github.com/tarides/maquizcoatl/issues/22) | [#42](https://github.com/tarides/maquizcoatl/pull/42) | pipeline |
