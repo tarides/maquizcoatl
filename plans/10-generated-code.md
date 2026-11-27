@@ -68,13 +68,27 @@ From the maintainer, 2026-11-27 (stack decision and re-scope):
   prover is installed on the workstation.
 - **Bench host** (never named in public text). Proof development and
   checking, extraction, builds and timing all run here.
-  - `<cache>` is the shared toolchain cache of earlier experiments. It
-    holds the opam root with the `provers` switch (Rocq 9.3.0, F\*
-    2026.11.15 with Pulse and krml), the `vst` switch (VST 2.17,
-    CompCert 3.18, Rocq 9.2.0) and the `refinedc` switch (RefinedC
-    `d0575839`, Rocq 9.1.0, OCaml 4.14.2), all installed by experiment
-    #5. It also holds Bedrock2 `67b682a5`, built in place against
-    `provers`, and the Z3 versions of experiment #9.
+  - `<cache>` is the shared toolchain cache of earlier experiments.
+    Checked on 2026-11-27, it holds:
+    - the opam root, with the `provers` switch (Rocq 9.3.0), the `vst`
+      switch (VST 2.17, CompCert 3.18, Rocq 9.2.0) and the `refinedc`
+      switch (RefinedC `d0575839` with `coq-lithium`, Rocq 9.1.0, OCaml
+      4.14.2), installed by experiments #5 and #8;
+    - the F\* 2026.11.15 binary release in `<cache>/fstar` (Pulse
+      included, `krml`, and Z3 4.8.5, 4.13.3, 4.15.3 and 5.3.0 under
+      `lib/fstar/`);
+    - Bedrock2 `67b682a5` with coqutil `4c399b7`, built in place against
+      `provers`.
+
+    The opam root's default switch is shared and was `compcert` on that
+    date, so every script names its switch explicitly
+    (`opam exec --root <cache>/opam --switch <name> --`) and never runs
+    `opam switch`.
+  - The CompCert column uses the `ccomp` of the `vst` switch, the
+    version VST's proofs target.
+  - Free disk was 40 GB on 2026-11-27. `setup.sh` checks for at least
+    20 GB free before building, as experiment #5's scripts did, and
+    stops if less is left.
   - `<exp>` is `<bench-workdir>/exp/10-generated-code/`. It holds a
     clone of this branch with `upstream/` at `f95747b` (read only), the
     out-of-tree builds (`<exp>/build/`), the proof and route builds
