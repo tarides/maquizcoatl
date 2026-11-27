@@ -49,6 +49,13 @@ From the issue's Decisions section (maintainer, 2026-11-27; binding):
    1 MiB only and the 16 MiB rows are recorded as not run.
 5. **Switches: (a), `ffi` only** for the extracted columns. Flambda is
    a follow-up row if time remains in the run.
+6. **Second comparable catastrophic point: (b)** (raised by the plan
+   review, [question](https://github.com/tarides/maquizcoatl/issues/22#issuecomment-7215619231)).
+   Wherever `c-noopt` completes under its retry budget at n >= 32
+   (expected: n = 32 for `(a|aa)*b`), `rocq` and `fstar` also run with
+   fuel `max_int` under the 60 s `timeout`, as a second comparable
+   point; a 60 s `cap` is recorded as such. The `cata-fuel` rows stay
+   for the other lengths.
 
 The issue review's fixes are the issue's "Plan requirements" 1-11;
 each one is implemented below and mapped in the last table. Three
@@ -79,7 +86,8 @@ corrected here (none changes a decision):
 
 One finding of this plan's checks bears on decision 3 and is handled
 without changing it (see Catastrophic patterns): Oniguruma's search
-optimiser rejects both new patterns before any backtracking.
+optimiser rejects both new patterns before any backtracking, so the C
+backtracking column is `c-noopt`. Decision 6 follows from it.
 
 `plans/12-ffi-vs-native.md:28-37` and `:109-116`, and the `reason`
 field of `lab/12-ffi-vs-native/pins.json`, predate decision 1 and are
@@ -483,10 +491,16 @@ Every timed column goes through experiment #12's harness
       `rocq`, `fstar` at n = 16 (fuel `max_int`). At n = 16 the
       columns are compared on the time of a complete search, and their
       outcomes must agree (`MISMATCH`).
-    - `rocq`, `fstar` at n >= 32 through `x22.exe cata-fuel` with a
-      stated fuel of 10,000,000 instructions per start position: the
-      time until `OutOfFuel`, labelled "not comparable" (fuel counts
-      instructions, the C budget counts backtracks).
+    - `rocq`, `fstar` at every n >= 32 where `c-noopt` completes
+      under its budget in every run (decision 6; expected: n = 32 for
+      `(a|aa)*b`), with fuel `max_int` under `timeout 60`: compared as
+      at n = 16 on the time of a complete search, outcomes checked; a
+      60 s `cap` is recorded as such.
+    - `rocq`, `fstar` at the other lengths n >= 32 through
+      `x22.exe cata-fuel` with a stated fuel of 10,000,000
+      instructions per start position: the time until `OutOfFuel`,
+      labelled "not comparable" (fuel counts instructions, the C
+      budget counts backtracks).
     - The optimiser finding: on a local `f95747b` build (workstation,
       2026-11-27), the default library's optimiser picks `STR_FAST` on
       the required literal `b` (dmin 0, dmax infinite) and returns
@@ -612,7 +626,9 @@ Experiment column; results files are
 4. `short`: time per call and words per call, every column on the
    fragment subset, experiment #12's figures as context.
 5. `large`: throughput and words per match, the fallback if applied.
-6. `catastrophic`: decision 3's figures, the reason there is no
+6. `catastrophic`: decisions 3 and 6's figures (the n = 16 rows and
+   the n = 32 `(a|aa)*b` rows as the two comparable points, the
+   `cata-fuel` rows labelled not comparable), the reason there is no
    retry-budget measurement for the extracted columns, and the
    optimiser finding.
 7. `conclusion`: done-criterion 2.
