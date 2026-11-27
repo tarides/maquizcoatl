@@ -1,0 +1,30 @@
+agree jq c rc=0
+agree jq stubs rc=0
+agree jq ctypes rc=0
+agree jq vm rc=0
+agree jq rocq rc=0
+agree jq fstar rc=0
+agree php c rc=0
+agree php stubs rc=0
+agree php ctypes rc=0
+agree php vm rc=0
+agree php rocq rc=0
+agree php fstar rc=0
+agree vscode c rc=0
+agree vscode stubs rc=0
+agree vscode ctypes rc=0
+agree vscode vm rc=0
+agree vscode rocq rc=0
+agree vscode fstar rc=0
+agree longphp c rc=0
+agree longphp stubs rc=0
+agree longphp ctypes rc=0
+agree longphp vm rc=0
+agree longphp rocq rc=0
+agree longphp fstar rc=0
+agree longphp rocq-scan rc=0
+agree longphp fstar-scan rc=0
+jq: calls 91, C limit code 0, stubs != C 0, ctypes != C 0, vm != C 0, rocq != C 0, fstar != C 0, agreed 91
+php: calls 63, C limit code 0, stubs != C 0, ctypes != C 0, vm != C 0, rocq != C 0, fstar != C 0, agreed 63
+vscode: calls 77067, C limit code 0, stubs != C 0, ctypes != C 0, vm != C 0, rocq != C 0, fstar != C 0, agreed 77067
+longphp: calls 10, C limit code 0, stubs != C 0, ctypes != C 0, vm != C 0, rocq != C 0, fstar != C 0, rocq-scan != C 0, fstar-scan != C 0, agreed 10

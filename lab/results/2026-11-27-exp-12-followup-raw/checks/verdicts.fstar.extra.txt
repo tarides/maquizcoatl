@@ -1,0 +1,14 @@
+probe:ei04	0	vm	MATCH 0 2 2 2
+probe:ei04	1	vm	MATCH 1 2 2 2
+probe:ei04	2	vm	MATCH 2 2 2 2
+probe:ei04	search	vm	MATCH 0 2 2 2
+probe:ei05	0	vm	MATCH 0 0 0 0
+probe:ei05	1	vm	MATCH 1 1 1 1
+probe:ei05	search	vm	MATCH 0 0 0 0
+probe:ei07	0	vm	MATCH 0 0 0 0
+probe:ei07	1	vm	MATCH 1 1 1 1
+probe:ei07	search	vm	MATCH 0 0 0 0
+probe:ei11t	0	vm	MATCH 0 1 1 1 0 1 1 1
+probe:ei11t	1	vm	MATCH 1 1 1 1 -1 -1 1 1
+probe:ei11t	2	vm	MATCH 2 2 2 2 -1 -1 2 2
+probe:ei11t	search	vm	MATCH 0 1 1 1 0 1 1 1

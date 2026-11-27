@@ -1,0 +1,1 @@
+RESULT astwork passed=10 total=10

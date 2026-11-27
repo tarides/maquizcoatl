@@ -1,0 +1,28 @@
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 Syntax.fst
+Verified module: Syntax
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 Sem.fst
+Verified module: Sem
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 Compile.fst
+Verified module: Compile
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 Vm.fst
+Verified module: Vm
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 Statement.fst
+Verified module: Statement
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 Tables.fst
+Verified module: Tables
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 Spec2.fst
+Verified module: Spec2
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 Extract.fst
+Verified module: Extract
+All verification conditions discharged successfully
+== fstar.exe --cache_checked_modules --cache_dir cache --z3version 5.3.0 --codegen OCaml --custard_entry Compile.compile --custard_entry Vm.vm --custard_entry Sem.sem --custard_entry Syntax.ncap --custard_entry Syntax.search --custard_entry Spec2.search --custard_entry Spec2.search_from --custard_entry Spec2.lookup --custard_entry Spec2.fuel0 Extract.fst --odir ml
+Verified module: Extract
+All verification conditions discharged successfully
+== cp <cache>/fstar/lib/fstar/lib/app/Prims.ml ml/

@@ -1,0 +1,1 @@
+RESULT   SUCC: 1554,  FAIL: 0,  ERROR: 0      (by Oniguruma 6.9.10)
