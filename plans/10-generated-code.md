@@ -73,7 +73,8 @@ From the maintainer, 2026-11-27 (stack decision and re-scope):
     - the opam root, with the `provers` switch (Rocq 9.3.0), the `vst`
       switch (VST 2.17, CompCert 3.18, Rocq 9.2.0) and the `refinedc`
       switch (RefinedC `d0575839` with `coq-lithium`, Rocq 9.1.0, OCaml
-      4.14.2), installed by experiments #5 and #8;
+      4.14.2); `provers` was installed by experiment #7, `vst` and
+      `refinedc` by experiment #5;
     - the F\* 2026.11.15 binary release in `<cache>/fstar` (Pulse
       included, `krml`, and Z3 4.8.5, 4.13.3, 4.15.3 and 5.3.0 under
       `lib/fstar/`);
