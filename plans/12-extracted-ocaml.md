@@ -209,7 +209,11 @@ files by experiment #12's `prep.py`, unchanged. `prep22.py` reads
   imported unchanged, accepts the pattern bytes (it rejects `\=`, `}`
   and `]`, which Oniguruma reads as literals; the coverage table
   counts these rejections under their own reasons);
-- it is a forward call (`range >= start`, or a match call).
+- it is a forward call (`range >= start`, or a match call). This rule
+  excludes two PHP search calls with an empty pattern and `range <
+  start`: case 7 (`start` 1, `range` 0, empty subject) and case 159
+  (`start` 11, `range` 10, 10-byte subject); the coverage table counts
+  them under their own reason.
 
 `prep22.py` writes `<fam>.frag.work` (same format), `<fam>.ast.tsv`
 (pattern id and `recognise`'s s-expression) and the coverage table:
@@ -221,13 +225,14 @@ classifier); the review found none outside it, and a call outside it
 stops the run.
 
 Expected counts, recomputed on the workstation with `prep.py` and
-`recognise` on 2026-11-27 (a difference at run time is reported, not
-corrected):
+`recognise` on 2026-11-27, with the four rules above (a difference at
+run time is reported, not corrected; the issue's 65 PHP calls include
+the two backward calls that the forward-call rule excludes):
 
 | Family | Calls admitted | Weighted (VS Code) | Pattern entries |
 |--------|---------------:|-------------------:|----------------:|
 | jq | 91 / 217 (41.9%) | | 10 / 44 |
-| PHP | 65 / 421 (15.4%) | | 21 / 187 |
+| PHP | 63 / 421 (15.0%) | | 21 / 187 |
 | VS Code (expanded searches) | 77,067 / 429,020 (18.0%) | 127,660 / 759,850 (16.8%) | 277 / 4,221 |
 | long-subject PHP (synthetic row) | 10 / 18 | | 1 / 5 |
 
@@ -272,17 +277,26 @@ Every timed column goes through experiment #12's harness
   context, labelled as such.
 - **Extracted columns**, two engines (Rocq, F\*), each registered in
   two subject modes (requirement 4), hence four names:
-  - `rocq`, `fstar` (short shape, agreement, catastrophic): on each
-    `search` or `match_` call the subject suffix from `start` is
-    converted to the extracted representation inside the call (the
-    fragment has no look-behind and no anchor, so a call never reads
-    before `start`);
-  - `rocq-scan`, `fstar-scan` (large shape): the subject is converted
-    once, on the first call with a new subject string (physical
-    equality), which in `scan` is the untimed warm-up scan; the adapter
-    keeps the list and a cursor on the suffix at the last start
-    position, moves it forward on a later start, and back to the head
-    when a new scan starts at 0.
+  - `rocq`, `fstar` (short shape except long PHP, agreement,
+    catastrophic): on each `search` or `match_` call the subject suffix
+    from `start` is converted to the extracted representation inside
+    the call (the fragment has no look-behind and no anchor, so a call
+    never reads before `start`);
+  - `rocq-scan`, `fstar-scan` (large shape, and the long-PHP row, which
+    is the large shape's labelled synthetic row:
+    `plans/12-ffi-vs-native.md`, "Large subjects"; `run.py:183-184`):
+    each subject is converted once, on the first call with that subject
+    string, which is in the untimed warm-up (the warm-up scan of `scan`,
+    the warm-up pass of `time`). The adapter keeps a cache holding every
+    subject of the work file, keyed by physical equality (the long-PHP
+    work file has one subject; each large `scan` process has one), and
+    per subject a cursor on the suffix at the last start position: a
+    later start moves it forward, a start before the cursor restarts it
+    from the head. The long-PHP row needs this: its 10 admitted calls
+    are pattern `a` at `start` 0..4 (4 twice), `range` 2,097,152, on the
+    one 2 MiB subject, each matching at its first position, so a
+    per-call conversion (about 2 million list cells) would outweigh the
+    engine's one `IStr` per call by orders of magnitude.
 
   Representation: `int list` for Rocq (`ExtrOcamlNatInt`), `Z.t list`
   for F\* (`fstar/main.ml:85`), one element per byte.
@@ -310,9 +324,9 @@ Every timed column goes through experiment #12's harness
 - **Fuel, limits, results** (requirement 5). Fuel is `max_int` (Rocq)
   and `Z.of_int max_int` (F\*) in every harness call; the `limit` and
   `stack_limit` of `ENGINE.compile` are ignored. `OutOfFuel` maps to
-  code -2000 (below every `ONIGERR_*` code, the lowest being -1001,
-  `upstream/src/oniguruma.h`), shown as `fuel`, and counts as a
-  disagreement. The 65 in-fragment PHP calls carry `retry_limit_in_match`
+  code -2000 (below every `ONIGERR_*` code, the lowest being -500,
+  `ONIGERR_LIBRARY_IS_NOT_INITIALIZED`, `upstream/src/oniguruma.h:654`), shown as `fuel`, and counts as a
+  disagreement. The 63 in-fragment PHP calls carry `retry_limit_in_match`
   1,000,000 and `match_stack_limit` 100,000; the extracted columns do
   not apply them, and the agreement entry says so.
 
@@ -394,11 +408,22 @@ Every timed column goes through experiment #12's harness
    the calls on which C returns neither -15
    (`ONIGERR_MATCH_STACK_LIMIT_OVER`), -17 nor -18 (retry limits) and
    every other column agrees with C (experiment #12's rule, extended to
-   the new columns); the excluded calls are counted. The C driver's
+   the new columns); the excluded calls are counted. The exclusion for
+   a C limit code is expected to be empty: experiment #12's three
+   limit-code calls (`A(B|C+)+D|AC+X`, retry limit; `\s+$` twice, stack
+   limit; `lab/results/2026-11-19-exp-12-agreement.md`) are outside the
+   fragment, and every in-fragment PHP call completed under its
+   1,000,000-retry limit in experiment #12. So the extracted columns,
+   with fuel `max_int`, face no call on which C gave up (the `agree`
+   jobs have no `timeout`, `run.py:69-72`). The C driver's
    spans are compared with experiment #1's `expected` for jq, PHP and
-   long PHP, and for VS Code on the scanner searches whose members are
-   all in the fragment (requirement 11: 227 of 11,263 per the review,
-   recomputed and reported as such, not over the family).
+   long PHP, and for VS Code on the scanner searches that have at least
+   one member and whose members are all in the fragment (requirement
+   11: 215 of 11,263, recomputed and reported as such, not over the
+   family). `summarise22.py` keeps experiment #12's rule from
+   `summarise.py`'s `agreement`: the 12 searches on the 5 member-less
+   scanners of `vscode.scanners.jsonl` are skipped (the issue review's
+   227 counted them vacuously).
 
 8. **Conversion cost** (requirement 4; untimed series, CPU 2). `x22.exe
    conv rocq|fstar` on each `<fam>.agreed.work`: the short shape's
@@ -410,19 +435,28 @@ Every timed column goes through experiment #12's harness
    (default settings, `OCAMLRUNPARAM` unset) and the heap size after
    conversion (about 400 MB at 16 MiB).
 
-9. **Pilot** (CPU 2). One untimed run of every cell of steps 10-12.
-   It projects each series as 10 × its pilot wall time (+10% for IQR
-   repeats). If the large series projects over 90 minutes, decision 4
-   applies: the extracted columns run at 1 MiB only and their 16 MiB
-   rows are recorded as not run. If the whole run still projects over
+9. **Pilot** (CPU 2). One untimed run of every cell of steps 10-12,
+   with one exception for the extracted columns' 16 MiB cells: their
+   1 MiB cells run first, and each 16 MiB cell is projected as 16 × its
+   1 MiB time. A 16 MiB extracted cell runs in the pilot only when the
+   projection keeps the large series under 90 minutes and the cell
+   under the 120 s timeout; otherwise decision 4 is applied from the
+   projection. Without this order the pilot has no upper bound (a
+   `scan` process does two scans; at 0.5 MB/s the F\* 16 MiB cells
+   alone take about 32 minutes). The pilot projects each series as
+   10 × its pilot wall time (+10% for IQR repeats). If the large
+   series projects over 90 minutes, decision 4 applies: the extracted
+   columns run at 1 MiB only and their 16 MiB rows are recorded as not
+   run. If the whole run still projects over
    its 4 hours, experiment #12's reduction rule applies to the large
    series (patterns removed from the bottom of the ranking, never the
    10 runs), and the reduction is recorded. Any cell that times out in
    the pilot is recorded with its timeout.
 
 10. **Short-subject series** (issue #10 criterion 2). Columns `c`,
-    `stubs`, `ctypes`, `vm`, `rocq`, `fstar`; families jq, PHP, VS
-    Code, long PHP; `<fam>.agreed.work`. Experiment #12's protocol
+    `stubs`, `ctypes`, `vm`, `rocq`, `fstar` (`rocq-scan`, `fstar-scan`
+    on the long-PHP row, Engines); families jq, PHP, VS Code, long PHP;
+    `<fam>.agreed.work`. Experiment #12's protocol
     unchanged: one process per cell under `taskset -c 2`, `timeout 120`,
     one untimed warm-up pass, passes repeated for at least 0.5 s;
     time per call, minor and major words per call; 10 runs, interleaved
@@ -571,7 +605,10 @@ Experiment column; results files are
    requirement 4 and their measured cost, the position-loop statement
    of requirement 3, fuel and the limits not applied (requirement 5).
 3. `agreement`: issue #10's criterion 7 for both columns, the excluded
-   calls, the expected-span check on the 227 scanner searches.
+   calls (none expected for a C limit code: experiment #12's three
+   limit-code calls are outside the fragment, so the fuel-`max_int`
+   extracted columns face no call on which C gave up), the
+   expected-span check on the 215 scanner searches.
 4. `short`: time per call and words per call, every column on the
    fragment subset, experiment #12's figures as context.
 5. `large`: throughput and words per match, the fallback if applied.
@@ -607,7 +644,7 @@ maintainer decides on any further entry.
 | Requirement 8: membership needs encoding and options | Workloads |
 | Requirement 9: budget, schedule, pilot gate | Machine budget, step 9 |
 | Requirement 10: where code and results go | Where things live, Lab notebook |
-| Requirement 11: VS Code expected spans on 227 searches | step 7 |
+| Requirement 11: VS Code expected spans on 215 searches (issue: 227) | step 7 |
 | Decisions 1-5 | Decisions folded in; decision 2 Workloads, 3 step 12, 4 step 9, 5 step 5 and Machine budget |
 
 ## Risks
