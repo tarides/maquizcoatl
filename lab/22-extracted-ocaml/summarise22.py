@@ -246,9 +246,12 @@ def large(rd, e12, out):
             per[k] = (md, iqr)
             w.writerow(list(k) + [rank[(k[1], k[3])][0], rank[(k[1], k[3])][1], len(xs), mn, md, iqr,
                                   statistics.median(aux[k]), repd, iqr > 0.1 * md])
+    # Context: experiment #12's medians over the patterns this run timed
+    # (after a reduction, a subset of work/large.list), not over the list.
+    timed = {(k[1], k[3]) for k in cell}
     ctx = defaultdict(list)
     for r in csv.DictReader(open(os.path.join(e12, "large-patterns.csv"))):
-        if (r["source"], int(r["pid"])) in rank:
+        if (r["source"], int(r["pid"])) in timed:
             ctx[(r["engine"], r["source"], r["size"])].append(float(r["median_Bps"]))
     agg = {}
     lines = ["| Source | Size | Column | patterns | median over patterns of median MB/s | min..max of per-pattern medians (MB/s) | patterns with IQR > 10% | median minor words/match | experiment #12, same patterns (context) |",

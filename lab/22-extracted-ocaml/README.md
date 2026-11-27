@@ -28,13 +28,20 @@ replay is unchanged.
 
 Replay of run `x1` on the bench host (`CACHE=<cache> EXP=<exp>
 E12=<exp12>`; the generated sources and the staging tree are outside the
-repository):
+repository). These are the commands run `x1` ran; the series are those
+of its `series.sh` (`lab/results/2026-11-27-exp-12-followup-raw/series.sh`),
+in that order:
 
     setup.sh clone x1; setup.sh switch x1; setup.sh cbuild x1; setup.sh subjects x1
     extract.sh x1; setup.sh engines x1
     run22.py prepare x1; run22.py checks x1; run22.py agree x1; run22.py conv x1 10
-    run22.py pilot x1; run22.py short x1 10; run22.py large x1 10
-    run22.py cata x1 10; run22.py catafuel x1 10
-    run22.py repeat x1 short; run22.py repeat x1 large
+    run22.py pilot x1
+    run22.py short x1 10; run22.py repeat x1 short; run22.py cata x1 10
+    run22.py large x1 10 10; run22.py repeat x1 large
     provenance.sh x1
+
+`large x1 10 10` keeps ranks 1-10 per source (the plan's reduction rule,
+applied after the loss of host contact). `run22.py catafuel x1 10` was
+not run in `x1`. The plan's intended sequence has `run22.py large x1 10`
+(every rank) and `run22.py catafuel x1 10` after `cata`.
     summarise22.py <copy of <exp>/out/x1> lab/results/2026-11-19-exp-12-raw/summary <out>

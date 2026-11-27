@@ -161,8 +161,12 @@ not carried over.
 
 The dune build root on the bench host is the staging tree `<exp>/src/`:
 `setup.sh engines` copies `lab/12-ffi-vs-native/`, `lab/22-extracted-ocaml/`
-and `<exp>/gen/` into it and writes a `dune-workspace` file, so lab/12's
-`bench` executable sees the `extracted22` library. Scripts take
+and `<exp>/gen/` into it, writes one `dune-project` (and a
+`dune-workspace`) at the staging root and leaves out the two
+per-directory `dune-project` files, so the staging tree is one dune
+project and lab/12's `bench` executable sees the private `extracted22`
+library (found in run 1: a `dune-workspace` file alone does not make a
+private library visible across dune projects). Scripts take
 `<cache>` and `<exp>` from environment variables and never print
 absolute paths, host names or addresses.
 
