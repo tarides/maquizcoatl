@@ -34,7 +34,8 @@ From the maintainer's answer of 2026-11-19
   whose compiled code stays inside experiment #9's opcode subset.
 - **B. Ratios only.** The verdict is taken at the stack decision,
   against experiment #11's reference points: the switch-dispatch build
-  and the direct-threaded build. Reference values are read from
+  (primary, since the design uses `switch`) and the direct-threaded build
+  (second). Reference values are read from
   experiment #11's latest notebook entry, not hard-coded.
 - **C. Native routes:** superseded by E-H.
 - **D. Bench host**, pinned to a free and idle cache complex, with the
@@ -127,8 +128,9 @@ print absolute paths, hostnames or addresses.
      harness protocol (`lab/12-ffi-vs-native/`), and its `onig-noopt`
      recipe;
    - experiment #11's build recipe, dispatch probe,
-     catastrophic-pattern set and baselines (branch
-     `exp/11-perf-baselines`, read only, owned by another contributor);
+     catastrophic-pattern set and baselines
+     (`experiments/11-perf-baselines/` on `main`: `build.sh`, with
+     `CFLAGS_E11` at line 12, `dispatch_probe.c` and `worst.sh`);
    - experiment #9's opcode subset, taken from
      `lab/09-representative-proof/FRAGMENT.md` (instruction table):
      `OP_STR_*`, `OP_PUSH`, `OP_JUMP`, `OP_FAIL`, `OP_MEM_START`,
@@ -148,7 +150,7 @@ print absolute paths, hostnames or addresses.
      only. It makes `onig_compile` print the compiled bytecode list
      (call site `upstream/src/regcomp.c:7636-7639`; printers
      `print_compiled_byte_code` and `onig_print_compiled_byte_code_list`,
-     `upstream/src/regexec.c:510-887`).
+     `upstream/src/regexec.c:510-890`).
 
    The dispatch style of each timing build is checked with experiment
    #11's dispatch probe and by comparing the `regexec.c.o` hashes, which
@@ -189,15 +191,20 @@ print absolute paths, hostnames or addresses.
    - `p_string` writes the operand's raw bytes
      (`upstream/src/regexec.c:456-459`), so a literal containing a
      newline splits its line.
-   - `OP_STR_N` prints no length (`:555-557`).
-   - The optimiser dump's `PATTERN: /…/` line contains the raw pattern.
-   - `onig_print_names` lines come before the list
-     (`upstream/src/regcomp.c:7637`).
+   - `OP_STR_N` prints no length (`:556-558`).
+   - Text printed before the list also holds raw bytes. `onig_compile`
+     prints `PATTERN: /…/` and `OPTIONS:` (`upstream/src/regcomp.c:7504-7510`).
+     The optimiser prints `optimize:` and `exact: [raw bytes]`
+     (`:7226-7282`). `onig_print_names` comes before the list too
+     (`upstream/src/regparse.c:970`).
 
-   The parser takes the length of `str_1`..`str_5` from the opcode, and
+   The parser anchors on the `code-length: N` line
+   (`upstream/src/regexec.c:877`) and must parse exactly N `\n%4d: `
+   entries, ending at the end of the dump; anything before that line is
+   skipped. It takes the length of `str_1`..`str_5` from the opcode, and
    ends a `str_n` at the next `\n%4d: ` prefix carrying the expected
-   index. A triple whose literal itself contains such a prefix is marked
-   out ("ambiguous dump"). Each `onig_new` writes its dump to its own
+   index. A dump where that parse is not unique marks the triple out
+   ("ambiguous dump"). Each `onig_new` writes its dump to its own
    file. The parser is unit-tested on hand-picked patterns: one per
    opcode in the subset, one per push variant, a newline-bearing literal
    and a `str_n` longer than 5 bytes.
@@ -224,20 +231,40 @@ print absolute paths, hostnames or addresses.
      syntax and options: `(a|aa)+(b|c)` and `(?:a|aa)+(?:b|c)`, on
      `"a"*n "!"` for n = 16 to 4096. They are labelled as analogues.
 
-   The retry budget is 10,000,000 per match through `OnigMatchParam`,
-   counted once per restored choice point
+   **Limits.** Every call runs with a retry limit of 10,000,000 in match
+   and 0 in search, on both sides, through `OnigMatchParam`. This
+   overrides the limits that PHP calls recorded (the `prep.py` columns
+   `retry_limit_in_match` and `match_stack_limit`), so on PHP's limit
+   cases C may differ from experiment #1's expected results; those
+   cases are listed.
+
+   Retries are counted once per restored choice point
    (`CHECK_RETRY_LIMIT_IN_MATCH` after `STACK_POP`,
    `upstream/src/regexec.c:4674-4677`, macro at `:1558-1563`). The
    counter resets per `onig_match_with_param` call, that is, per start
    position.
 
+   The VM's stack capacity is the call's recorded `match_stack_limit`
+   when that is non-zero, and 2^20 entries otherwise, recorded per run. A
+   -15 on either side goes in T2's limit-difference list.
+
 6. **C reference columns.** The driver times `onig_match_with_param` at
    each start position on `onig-threaded` and `onig-switch`. It times
    `onig_search_with_param` on `onig-noopt-threaded` and
-   `onig-noopt-switch` (decision B′). The per-call overhead of
-   `onig_match_with_param` is measured on an empty pattern and
-   reported. An `onig_search_with_param` column on the optimising builds
-   is timed too, labelled "whole search, not comparable".
+   `onig-noopt-switch` (decision B′).
+   - **Per-call overhead** of `onig_match_with_param`: setup grows with
+     the group count (`regexec.c:5402`, `:3265-3267`). It is measured on
+     an empty pattern and on a pattern of k empty groups that fails at
+     its first byte, for k = the tier's maximum group count, and
+     reported as a range.
+   - **Start positions** advance by the encoding's character length, as
+     `search_in_range` does (`regexec.c:5921-5923`). The find-all loop
+     uses experiment #12's rule (`lab/12-ffi-vs-native/bench/cdriver.c:137-141`):
+     after a match `[r, fin)`, the next start is `fin` if `fin > r`,
+     otherwise `r` plus one character. The VM adapters use the same two
+     rules (P0's trusted list).
+   - An `onig_search_with_param` column on the optimising builds is timed
+     too, labelled "whole search, not comparable".
 
 Milestone 1 is steps 1-6 alone: the coverage table and the C reference
 columns. It is useful before any proof exists.
@@ -246,23 +273,73 @@ columns. It is useful before any proof exists.
 
 **P0. Fixed VM design** (`vm/DESIGN.md`, written before any proof,
 identical for every route):
-- C entry point `vm_match(code, ncode, subject, len, start, regs,
-  nregs, retry_limit)`, returning the match end, `ONIG_MISMATCH`, or
-  `ONIGERR_RETRY_LIMIT_IN_MATCH_OVER` (-17);
-- one `switch` over the opcode inside one loop;
-- the backtrack stack as a caller-provided array of fixed-size entries,
-  each an alternative, a capture save or an empty-check start. Stack
-  exhaustion returns `ONIGERR_MATCH_STACK_LIMIT_OVER`;
-- captures held in a mutable array of `int` pairs;
-- machine integers, with `len` and stack capacity below `INT_MAX`;
-- the retry counter inside the VM, counted as upstream counts it.
+- C entry point `vm_match(code, ncode, strs, nstrs, subject, len, start,
+  regs, nregs, stack, stack_cap, retry_limit)`. It returns:
+  - the match length, as `onig_match_with_param` does
+    (`upstream/src/regexec.c:5413`; experiment #9's `Match e` is
+    `e - start`);
+  - `ONIG_MISMATCH`;
+  - `ONIGERR_RETRY_LIMIT_IN_MATCH_OVER` (-17);
+  - `ONIGERR_MATCH_STACK_LIMIT_OVER` (-15).
+- **Bytecode format:** an array of fixed-size operations
+  `{int opcode; int a; int b;}`, indexed like `reg->ops`, with jump and
+  push targets absolute, as in experiment #9. String operands live in a
+  byte pool `strs`, addressed by `(offset, length)`. `decode` is the pure
+  function from that array to experiment #9's `list instr`, written in
+  both tools.
+- One `switch` over the opcode, inside one loop.
+- **Backtrack stack:** the caller-provided array `stack` of `stack_cap`
+  fixed-size entries, each an alternative, a capture save or an
+  empty-check start. A push that would exceed `stack_cap` entries
+  returns -15, as upstream does at `match_stack_limit` entries
+  (`regexec.c:1966-1970`).
+- **Captures:** a mutable array of `int` pairs.
+- **Integers:** machine integers, with `len` and `stack_cap` below
+  `INT_MAX`.
+- **Retry counter:** inside the VM, counted as upstream counts it.
+- **One C source:** the pilot slice is one file, `vm/vm.c`, written in
+  the intersection of the tools' subsets: one call or memory access per
+  expression, and no `&&` or `||`. Before P2, the driver checks it
+  against `onig-threaded` on the pilot's cases, and it is then frozen,
+  with its sha256 recorded in `effort.tsv`.
+  - RefinedC's copy, `routes/refinedc/vm_rc.c`, is `vm.c` plus
+    `[[rc::…]]` attributes and `//@` lines. Its build checks that
+    stripping them gives back `vm.c`, as step 1 of experiment #5's
+    `refinedc/build.sh` does for `vu_rc.h`.
+  - A pilot that must change `vm.c` records the change, and the other
+    pilot re-checks on the changed file.
 
-The correctness statement is a refinement of experiment #9's VM in the
-same tool: `rocq/Vm.v` for stack A, and `fstar/Vm.fst` for stack C (both under `lab/09-representative-proof/`). The
-C VM returns what #9's VM returns, or one of the two limit errors.
-Experiment #9's main theorem then carries the result to the semantics.
-The design also names what is left to trusted code: the adapter that
-reads work files, and the outer loop over start positions.
+**Correctness statement.** It is written once in `vm/DESIGN.md` and
+transcribed in Rocq (for VST, RefinedC and Bedrock2) and in F\* (for
+Pulse). Take code `c` that `decode` accepts, a subject `s`,
+`start <= len`, a retry limit `L` and a stack capacity `K`. If
+`vm_match` returns `r`, then:
+1. if `r` is neither -17 nor -15, there is a fuel `f` such that
+   `vm f (decode c) nregs s start` returns:
+   - `Match (start + r) regs'` when `r` is a length, where `regs'`
+     reports a group only when its end is set (`regexec.c:3347-3357`);
+   - `NoMatch` when `r = ONIG_MISMATCH`;
+2. `r = -17` only if `retries (decode c) s start` reaches `L`. Here
+   `retries` counts the backtracks of experiment #9's `run`, including
+   the final pop that reaches `EFinish`: upstream runs
+   `CHECK_RETRY_LIMIT_IN_MATCH` after that pop (`regexec.c:4674-4677`),
+   and its test is `>=` (`:1559`);
+3. `r = -15` only if some state of that run has a stack longer than
+   `K`.
+
+`rocq/Vm.v` and `fstar/Vm.fst` are under
+`lab/09-representative-proof/`, and the fuel exists because experiment
+#9 proved `run_mono`, `run_det` and `vm_det`. `retries` and the stack
+depth are defined by recursion on the fuel beside `run`, in
+`lab/10-generated-code/vm/`, as Rocq and F\* transcriptions of each
+other; experiment #9's files are not edited. For code produced by
+experiment #9's `compile`, its main theorem carries item 1 to the
+semantics. For Oniguruma-compiled code, the proved property is items
+1-3 against experiment #9's VM.
+
+**Left to trusted code:** the translator (dump to this format), `decode`
+as a definition, the work-file reader, the outer loop over start
+positions, and the adapter's capture-array conventions.
 
 **P1. Toolchain checks.** Experiment #9's Rocq files (`rocq/`) were
 checked on Rocq 9.3.0. They are now checked on the `vst` switch (Rocq
@@ -270,7 +347,10 @@ checked on Rocq 9.3.0. They are now checked on the `vst` switch (Rocq
 recorded and kept minimal; if a file cannot be ported, that is recorded
 as a pilot cost. VST's `forward_switch` is checked on VST 2.17 with a
 one-function `switch` probe. RefinedC's handling of `switch` is checked
-with the same probe.
+with the same probe. The RefinedC probe's specification refers to a
+definition of `rocq/Vm.v` compiled in the `refinedc` switch, so the
+project wiring for experiment #9's files is settled before P2; VST's
+probe does the same with a `funspec` that mentions `Vm.vm`.
 
 **P2. Stack A pilot.** VST and RefinedC each prove the same slice of
 the design:
@@ -279,20 +359,32 @@ the design:
 - `OP_STR_*`, `OP_PUSH` and `OP_FAIL` (with `OP_JUMP` and `OP_END`, which
   the loop needs to run).
 
+The pilot's statement is P0's, under the hypothesis that `decode c`
+contains only `IStr`, `IPush`, `IJump`, `IFail` and `IEnd`; `regs` is
+then unchanged, and the reported region is all unset. Closing the slice
+means this statement is proved, with a clean axiom/admit report.
+
 Each pilot records proof cost in experiment #9's units (sessions, failed
 checks, failing invocations, proof lines and automatic share) in
 `effort.tsv` and `invocations.tsv`, with source digests. It also
 records trusted lines, using experiment #5's `TRUSTED` convention, and
-whether `switch` was provable as written. **Cap:** each pilot gets at
-most one third of a tool's proof budget. On the report's scale (2-4
-weeks per tool) that is about one week of engineering time. A pilot that
-has not closed the slice within its cap counts as failed, and what
-remains open is recorded. The two pilots run one after the other, VST
-first, so that each session's figures are its own.
+whether `switch` was provable as written.
+
+**Cap:** each pilot gets at most N hours of session wall-clock, summed
+over its `effort.tsv` `session` rows, with N = 6 (two 3-hour runs). The
+report's one third of 2-4 weeks is the scale, not the unit. A pilot
+whose sessions reach N without closing the slice counts as failed, and
+what remains open is recorded.
+
+Both pilots prove the frozen `vm.c` of P0. They run one after the other,
+VST first, so that each session's figures are its own; the order is
+recorded as a possible bias.
 
 **P3. Choice of the stack A tool.** The tool whose pilot closed with
 fewer failed checks finishes; if those are equal, the shorter total
-session time wins, and then the fewer trusted lines. If both pilots
+session time wins, and then the fewer trusted lines. (This rule is under
+review: a failed check measures how often the prover is run as well as
+how hard the proof is, so a slow checker scores better on it.) If both pilots
 fail, Bedrock2 proves the same slice under the same cap. Its language
 has no `switch`, so it dispatches with an if-chain, and that is
 recorded. If Bedrock2 fails too, stack A has no C VM, and that is the
@@ -327,7 +419,11 @@ For each one:
 
 - **T1. Build.** Compile with the reference's flags, `-O3 -DNDEBUG`
   (experiment #11's `CFLAGS_E11`). GCC `-O2` is only an optional extra
-  column. The CompCert column applies to VST only: CompCert is the
+  column. The stack A column compiles the frozen `vm.c` (for RefinedC,
+  the stripped file, byte-identical to the proved copy minus its
+  annotations). The annotated RefinedC copy is also compiled with
+  experiment #5's flags (`refinedc/build.sh:101-103`), untimed, to check
+  that it builds. The CompCert column applies to VST only: CompCert is the
   compiler VST's end-to-end guarantee covers. It is used here for
   research and evaluation, which the INRIA non-commercial licence
   allows.
@@ -351,8 +447,13 @@ For each one:
   - are there generated temporaries, and how many;
   - how many lines and functions does it have;
   - can a crash at a given line be mapped back to the source (for
-    Pulse, back to the `.fst` line);
-  - which annotations are left in the source (for RefinedC).
+    Pulse, back to the `.fst` line): for five lines chosen by a fixed
+    rule (every ⌊n/5⌋-th line of `vm_match`), the source construct each
+    maps to, and the time taken;
+  - which annotations are left in the source (for RefinedC);
+  - which file is shipped, and whether it is byte-identical to what was
+    proved, or what differs (stripped annotations, krml's rename layer,
+    `custard_init_globals`).
 
   Findings are recorded, not scored.
 
@@ -363,9 +464,9 @@ For each one:
 - trusted lines;
 - coverage per tier;
 - time per match and throughput (median, min/max and IQR over at least
-  10 runs);
-- ratios to the four C reference columns and to experiment #11's
-  baselines;
+  10 runs; the done-criterion's minimum is 5);
+- ratios to the four C reference columns, the switch build first, and
+  to experiment #11's baselines;
 - agreement, dispatch findings, brittleness and readability findings.
 
 It is recorded in the lab notebook and posted on issue #8 after the
@@ -374,7 +475,10 @@ maintainer's review, with no verdict.
 ## Tools and versions
 
 All actively maintained (report, "active" rows). Every prover was
-installed by experiments #5, #7 and #9; nothing new is installed. Pins
+installed by experiments #5 and #7; nothing new is installed. Experiment
+#5 installed F\* 2026.11.15 into this account's cache, because the
+shared copy's `.checked` files are owner-only
+(`2026-11-19-exp-05-toolchains-m1`). Pins
 go in `pins.json`, and the versions actually used are recorded in the
 notebook.
 
@@ -403,6 +507,8 @@ notebook.
   | The Pulse VM (P4) | 2-4 |
   | Timing stack A, then stack C (the two back ends share one adapter) | 2-4 |
   | **Total** | **7-13** |
+  | Bedrock2 fallback pilot (P3), only if both pilots fail | +1 |
+  | **Total with the fallback** | **8-14** |
 
   P0 and P1 add a few days on top.
 - **Bench host time** for builds and timing: one free and idle L3 cache
@@ -419,7 +525,7 @@ notebook.
 | Clone, five Oniguruma builds, sanity tests | 2 | 25 min |
 | Classification, coverage, workload preparation | 3-5 | 15 min |
 | C reference columns | 6 | 15 min |
-| Per timed route: build, agreement, dispatch check, timed series | T1-T4 | about 30 min each, 4 routes |
+| Per timed column: build, agreement, dispatch check, timed series | T1-T4 | about 30 min each, 4 columns (3 routes, plus CompCert for VST) |
 | Pulse brittleness matrix | T5 | about 33 full checks of the Pulse proof |
 | Summary, redaction check, record | S | 20 min |
 
@@ -462,30 +568,16 @@ kept as data. The maintainer decides what is worth recording.
 
 ## Done-criteria (from the issue)
 
-- **Stack A pilot:** the slice proved in VST and in RefinedC, each with
-  its proof cost, trusted lines, `switch` verdict and a clean axiom/admit
-  report, plus the choice of the tool to finish, with the rule applied.
-- **Finished routes** (stack A's chosen tool, and Pulse through both back
-  ends): the VM proved against experiment #9's semantics, with a clean
-  axiom/admit report.
-- **Coverage:** for each workload and tier, the share of patterns (and of
-  calls, where weighted) whose compiled code is timed.
-- **Speed:** for each finished route and each upstream build, throughput
-  (bytes/s) and time per match on each workload, as the median of at
-  least 5 runs with the spread recorded, on one pinned machine with its
-  configuration recorded.
-- **Ratios:** each route's speed relative to switch-dispatch `match_at`,
-  direct-threaded `match_at`, and the two builds without the optimiser.
-- **Equal results:** every VM gives the same match results as `match_at`
-  on all benchmark inputs (positions and captures); any difference is
-  recorded.
-- **Dispatch:** for each route, whether it can express threaded dispatch,
-  and whether that dispatch stays inside the proof.
-- **Brittleness:** Pulse's matrix, as experiment #9's.
-- **Readability:** the review of each shipped C VM.
-- **Report:** results in the lab notebook, and a comparison table across
-  the finalists' routes posted on issue #8 after the maintainer's review,
-  with no pass/fail verdict.
+- **Stack A pilot:** the slice proved in VST and in RefinedC, each with its proof cost, trusted lines, `switch` verdict and a clean axiom/admit report, plus the choice of the tool to finish, with the rule applied.
+- **Finished routes** (stack A's chosen tool, and Pulse through both back ends): the VM proved against experiment #9's semantics, with a clean axiom/admit report, as in experiment #9.
+- **Coverage:** for each workload and each tier, the share of patterns (and of calls, where weighted) whose compiled code is timed.
+- **Speed:** for each finished route and each upstream build, throughput (bytes/s) and time per match on each workload, as the median of at least 5 runs with the spread recorded, on one pinned machine with its configuration recorded.
+- **Ratios:** each route's speed relative to switch-dispatch `match_at`, direct-threaded `match_at`, and the two builds without the optimiser.
+- **Equal results:** every VM gives the same match results as `match_at` on all benchmark inputs (positions and captures); any difference is recorded.
+- **Dispatch:** for each route, whether it can express threaded dispatch, and whether that dispatch stays inside the proof.
+- **Brittleness:** Pulse's matrix, as experiment #9's (three Z3 versions × default seed + 10 seeds).
+- **Readability:** one reader reviews each shipped C VM for naming, structure, and how well a crash report maps back to the source.
+- **Report:** results in the lab notebook, plus a comparison table across the finalists' routes posted on issue #8 after the maintainer's review, with no pass/fail verdict.
 
 ## Risks
 
@@ -522,9 +614,9 @@ kept as data. The maintainer decides what is worth recording.
   iteration than the VM in this tier, so ratios there are lower bounds,
   labelled as such. The VM's extra backtracks also raise its retry
   count, so limit outcomes can differ there (step 3).
-- **`onig_match` per start position** pays per-call setup. It is
-  measured on an empty pattern, and the builds without the optimiser
-  give a loop without it (decision B′).
+- **`onig_match` per start position** pays per-call setup, which grows
+  with the group count. It is measured as a range (step 6), and the
+  builds without the optimiser give a loop without it (decision B′).
 - **Debug-print parsing.** The dump format is not an API. An ambiguous
   dump marks the triple out, with the reason logged.
 - **CompCert licence.** CompCert is non-commercial unless licensed from
