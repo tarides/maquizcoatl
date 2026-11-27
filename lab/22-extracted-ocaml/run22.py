@@ -10,10 +10,24 @@
   EXP=<exp> python3 -I run22.py conv RUNID [RUNS]   plan step 8
   EXP=<exp> python3 -I run22.py pilot RUNID     plan step 9 (writes pilot.json)
   EXP=<exp> python3 -I run22.py short RUNID [RUNS]
-  EXP=<exp> python3 -I run22.py large RUNID [RUNS] [NPAT]   (NPAT: top ranks kept per source)
+  EXP=<exp> python3 -I run22.py large RUNID [RUNS] [NPAT]   (NPAT: top ranks kept per source;
+                                                ">N": only the ranks above N)
   EXP=<exp> python3 -I run22.py cata RUNID [RUNS]
-  EXP=<exp> python3 -I run22.py catafuel RUNID [RUNS]
+  EXP=<exp> python3 -I run22.py catafuel RUNID [RUNS] [MAXLEN]   (lengths up to MAXLEN)
   EXP=<exp> python3 -I run22.py repeat RUNID short|large   noisy cells, 10 more runs
+
+Run 2 (issue #22 decisions 7 and 8; FLAMBDA=1 adds the columns built in
+ffi-flambda: vm-flambda, rocq-flambda, fstar-flambda, and the scan modes
+on long PHP):
+  EXP=<exp> python3 -I run22.py reuse RUNID FROM   work files, extraction
+                                                records and pilot.json's
+                                                decision 6 lengths of run FROM
+  EXP=<exp> FLAMBDA=1 python3 -I run22.py checks RUNID   (x22 built in ffi-flambda)
+  EXP=<exp> FLAMBDA=1 python3 -I run22.py agree RUNID
+  EXP=<exp> FLAMBDA=1 python3 -I run22.py pilot2 RUNID ">N"   the short cells and
+                                                the large cells of the ranks
+                                                above N; decision 4's gate
+  EXP=<exp> FLAMBDA=1 python3 -I run22.py short RUNID [RUNS]
 
 Untimed jobs: nice -n 10, taskset -c 0-3,32-35, at most 4 in parallel.
 Timed processes: taskset -c 2, one at a time; before each timed series
@@ -49,13 +63,21 @@ R.ENGINES = {
     "vm": ("main-ffi.exe", "vm"),
     "rocq": ("main-ffi.exe", "rocq"), "rocq-scan": ("main-ffi.exe", "rocq-scan"),
     "fstar": ("main-ffi.exe", "fstar"), "fstar-scan": ("main-ffi.exe", "fstar-scan"),
+    # run 2, decision 8: the same harness built in ffi-flambda
+    "vm-flambda": ("main-ffi-flambda.exe", "vm"),
+    "rocq-flambda": ("main-ffi-flambda.exe", "rocq"),
+    "rocq-flambda-scan": ("main-ffi-flambda.exe", "rocq-scan"),
+    "fstar-flambda": ("main-ffi-flambda.exe", "fstar"),
+    "fstar-flambda-scan": ("main-ffi-flambda.exe", "fstar-scan"),
 }
+FLAMBDA = os.environ.get("FLAMBDA") == "1"
+FL = ["vm-flambda", "rocq-flambda", "fstar-flambda"]
 # decision 3: the two catastrophic patterns inside the fragment
 R.CATA = [("jq-frag", 2, 256, "(aa*)*b"), ("php-frag", 1, 12, "(a|aa)*b")]
 FUEL = 10_000_000          # cata-fuel: fuel per start position
 FAMILIES = ["jq", "php", "vscode", "longphp"]
 BASE = ["c", "stubs", "ctypes", "vm"]
-X22 = os.path.join(BIN, "x22.exe")
+X22 = os.path.join(BIN, "x22-flambda.exe" if FLAMBDA else "x22.exe")
 REF = {  # experiment #9's reference verdicts (plan, "Decisions folded in")
     ("rocq", "fragment"): "2026-11-25-exp-09-correction-1-raw/rocq/fragment.verdicts.txt",
     ("rocq", "extra"): "2026-11-25-exp-09-raw/rocq/extra.verdicts.txt",
@@ -121,7 +143,7 @@ def prepare(runid):
 # ---------------------------------------------------------------- checks
 
 def checks(runid):
-    d = out(runid, "checks")
+    d = out(runid, "checks-flambda" if FLAMBDA else "checks")
     os.makedirs(d, exist_ok=True)
     wd = out(runid, "work")
     ok = True
@@ -159,9 +181,9 @@ def agree(runid):
     wd = out(runid, "work")
     ag = out(runid, "agree")
     os.makedirs(ag, exist_ok=True)
-    engines = BASE + ["rocq", "fstar"]
-    jobs = [(fam, e) for fam in FAMILIES for e in engines] + \
-        [("longphp", "rocq-scan"), ("longphp", "fstar-scan")]
+    engines = BASE + ["rocq", "fstar"] + (FL if FLAMBDA else [])
+    scans = ["rocq-scan", "fstar-scan"] + (["rocq-flambda-scan", "fstar-flambda-scan"] if FLAMBDA else [])
+    jobs = [(fam, e) for fam in FAMILIES for e in engines] + [("longphp", e) for e in scans]
 
     def one(j):
         fam, eng = j
@@ -176,7 +198,7 @@ def agree(runid):
         c = rd("c")
         others = {e: rd(e) for e in engines if e != "c"}
         if fam == "longphp":
-            others.update({e: rd(e) for e in ["rocq-scan", "fstar-scan"]})
+            others.update({e: rd(e) for e in scans})
         limit = {k for k, v in c.items() if v.split()[0] in ("-15", "-17", "-18")}
         bad = {e: {k for k in c if o.get(k) != c[k]} for e, o in others.items()}
         drop = limit.union(*bad.values())
@@ -298,21 +320,25 @@ def conv(runid, runs):
 
 def short_cells():
     cells = []
-    for e in BASE + ["rocq", "fstar"]:
+    for e in BASE + ["rocq", "fstar"] + (FL if FLAMBDA else []):
         for f in FAMILIES:
             # long PHP: the large shape's labelled synthetic row, scan mode
-            cells.append((e + "-scan" if f == "longphp" and e in ("rocq", "fstar") else e, f))
+            scan = f == "longphp" and e in ("rocq", "fstar", "rocq-flambda", "fstar-flambda")
+            cells.append((e + "-scan" if scan else e, f))
     return cells
 
 
 def large_cells(fallback, npat=None):
     """npat: experiment #12's reduction rule (patterns removed from the
     bottom of each source's ranking, rank kept), when the whole run
-    projects over its 4 hours."""
+    projects over its 4 hours: "N" keeps ranks 1..N; ">N" keeps only
+    the ranks above N (run 2: the ranks run 1 dropped)."""
     rows = [l.split() for l in open(os.path.join(R.EXP_OUT, "work", "large.list"))][1:]
+    above = npat is not None and str(npat).startswith(">")
+    lim = int(str(npat).lstrip(">")) if npat is not None else None
     cells = []
     for src, rank, pid, fam, calls, hx in rows:
-        if npat is not None and int(rank) > npat:
+        if lim is not None and (int(rank) <= lim if above else int(rank) > lim):
             continue
         for size in ["1m", "16m"]:
             for e in BASE + ["rocq-scan", "fstar-scan"]:
@@ -334,9 +360,10 @@ def cata_cells(comparable):
     return cells
 
 
-def catafuel_cells(comparable):
+def catafuel_cells(comparable, maxlen=None):
     return [(e, fam, n) for e in ["rocq", "fstar"] for (fam, _, _, _) in R.CATA
-            for n in LENGTHS if n >= 32 and (fam, n) not in comparable]
+            for n in LENGTHS if n >= 32 and (fam, n) not in comparable
+            and (maxlen is None or n <= maxlen)]
 
 
 def run_catafuel(eng, fam, n):
@@ -446,6 +473,85 @@ def pilot(runid):
     R.log_conditions(d, "pilot-end")
 
 
+# ---------------------------------------------------------------- run 2
+
+def reuse(runid, src):
+    """Run 2 keeps run 1's build: its work files (prepare is
+    deterministic), extraction records and decision 6 lengths (from
+    run 1's pilot of c-noopt, a deterministic retry count)."""
+    import shutil
+    s, d = out(src), out(runid)
+    for sub in ["work", "work12", "extract"]:
+        if not os.path.exists(os.path.join(d, sub)):
+            shutil.copytree(os.path.join(s, sub), os.path.join(d, sub))
+    p = json.load(open(os.path.join(s, "pilot.json")))
+    json.dump({"from": src, "comparable": p["comparable"]}, open(os.path.join(d, "reused.json"), "w"))
+    lines = []
+    for sub in ["work", "work12"]:
+        for n in sorted(os.listdir(os.path.join(s, sub))):
+            same = sha(os.path.join(s, sub, n)) == sha(os.path.join(d, sub, n))
+            lines.append(f"{sub}/{n} {'same' if same else 'DIFFERENT'}")
+    open(out(runid, "reused.txt"), "w").write(f"copied from {src}\n" + "\n".join(lines) + "\n")
+    print(f"reused {src}: {sum('same' in l for l in lines)}/{len(lines)} files identical")
+
+
+def pilot2(runid, npat):
+    """Run 2's pilot: one untimed run of the short cells (with the
+    flambda columns) and of the large cells of the given ranks, the
+    extracted 16 MiB cells projected from their 1 MiB walls first, as
+    in pilot(); decision 4's gate on the large series of these cells."""
+    d = R.EXP_OUT
+    wait_cpu2(d, "pilot2")
+    R.log_conditions(d, "pilot2-start")
+    tot = {"short": 0.0, "large": 0.0}
+    f = open(os.path.join(d, "pilot.txt"), "w")
+
+    def log(s):
+        f.write(s + "\n")
+        f.flush()
+        print(s, flush=True)
+    for c in short_cells():
+        kv, rc, wall = R.run_short(*c)
+        tot["short"] += wall
+        log(f"short {c} rc={rc} wall={wall:.2f} ns_per_call={kv.get('ns_per_call')}")
+    one_m, deferred = {}, []
+    for c in large_cells(False, npat):
+        e, src, size, pid = c
+        if size == "16m" and e.endswith("-scan"):
+            deferred.append(c)
+            continue
+        kv, rc, wall = R.run_large(*c)
+        tot["large"] += wall
+        if size == "1m":
+            one_m[(e, src, pid)] = (wall, rc)
+        log(f"large {c} rc={rc} wall={wall:.2f} Bps={kv.get('bytes_per_sec')} m={kv.get('matches')}")
+    proj16 = {c: 16 * one_m[(c[0], c[1], c[3])][0] for c in deferred}
+    large_proj = 10 * (tot["large"] + sum(proj16.values())) * 1.1
+    log(f"projection: extracted 16 MiB cells, 16 x 1 MiB wall: {sum(proj16.values()):.0f} s in all, "
+        f"max {max(proj16.values()):.0f} s; large series 10 x pilot x 1.1 = {large_proj / 60:.1f} min")
+    fallback = large_proj > 90 * 60
+    if fallback:
+        log("decision 4 applies: extracted columns at 1 MiB only (projection over 90 minutes)")
+    else:
+        for c in deferred:
+            if proj16[c] >= 120:
+                log(f"large {c} not run in the pilot: projected {proj16[c]:.0f} s >= 120 s timeout")
+                continue
+            kv, rc, wall = R.run_large(*c)
+            tot["large"] += wall
+            log(f"large {c} rc={rc} wall={wall:.2f} Bps={kv.get('bytes_per_sec')} m={kv.get('matches')}")
+    # under the fallback the extracted 16 MiB cells are not run, and the
+    # large series is the cells the pilot ran
+    proj = {"short": 10 * tot["short"] * 1.1 / 60,
+            "large": (10 * tot["large"] * 1.1 if fallback else large_proj) / 60}
+    log(f"TOTAL one run per cell (s): { {k: round(v, 1) for k, v in tot.items()} }")
+    log(f"PROJECTION 10 runs + 10% (min): { {k: round(v, 1) for k, v in proj.items()} }")
+    reused = json.load(open(os.path.join(d, "reused.json")))
+    json.dump({"fallback": fallback, "comparable": reused["comparable"], "comparable_from": reused["from"],
+               "npat": npat, "projection_min": proj}, open(os.path.join(d, "pilot.json"), "w"))
+    R.log_conditions(d, "pilot2-end")
+
+
 # ---------------------------------------------------------------- noisy cells
 
 def repeat(runid, kind, runs=10):
@@ -476,7 +582,7 @@ def repeat(runid, kind, runs=10):
 def main():
     what, runid = sys.argv[1], sys.argv[2]
     R.EXP_OUT = out(runid)
-    runs = int(sys.argv[3]) if len(sys.argv) > 3 and what != "repeat" else 10
+    runs = int(sys.argv[3]) if len(sys.argv) > 3 and what not in ("repeat", "reuse", "pilot2") else 10
     if what == "prepare":
         prepare(runid)
     elif what == "checks":
@@ -487,6 +593,10 @@ def main():
         conv(runid, runs)
     elif what == "pilot":
         pilot(runid)
+    elif what == "reuse":
+        reuse(runid, sys.argv[3])
+    elif what == "pilot2":
+        pilot2(runid, sys.argv[3])
     elif what == "short":
         wait_cpu2(R.EXP_OUT, "short")
         R.series("short", runs, short_cells(), R.run_short,
@@ -495,7 +605,7 @@ def main():
     elif what == "large":
         fallback, _ = load_pilot()
         wait_cpu2(R.EXP_OUT, "large")
-        npat = int(sys.argv[4]) if len(sys.argv) > 4 else None
+        npat = sys.argv[4] if len(sys.argv) > 4 else None
         R.series("large", runs, large_cells(fallback, npat), R.run_large,
                  ["bytes", "matches", "err", "scans", "sec_per_scan", "bytes_per_sec",
                   "minor_per_match", "major_per_match"], ["engine", "source", "size", "pid"])
@@ -507,7 +617,8 @@ def main():
     elif what == "catafuel":
         _, comparable = load_pilot()
         wait_cpu2(R.EXP_OUT, "catafuel")
-        series22("catafuel", runs, catafuel_cells(comparable), run_catafuel,
+        maxlen = int(sys.argv[4]) if len(sys.argv) > 4 else None
+        series22("catafuel", runs, catafuel_cells(comparable, maxlen), run_catafuel,
                  ["n", "fuel", "result", "outcome", "sec"], ["engine", "family", "len"],
                  prefilter=cata_prefilter)
     elif what == "repeat":
