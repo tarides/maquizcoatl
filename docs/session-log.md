@@ -337,3 +337,17 @@ yet: it waits for the CPU set it may use on the bench host.
 - **Issue #30 (experiment #5 follow-up)** modelled caller.c's two
   clients in Isabelle-LLVM and proved they meet `respects_i_apply`
   (PR #41, merged); the trusted line count is 109.
+
+## 2026-11-27: issue #34 closed, termination proved
+
+- **Issue #34 (experiment #8 follow-up)** is merged (PR #40). The PR
+  review found the posted comparison's limits incomplete: lemma 2 was
+  conditional on termination, covers only experiment #8's constructs,
+  and models only `onig_match` and a forward search of the whole
+  subject. A bytecode dump confirmed the simple/general path split.
+  The maintainer chose to prove termination (decision 8); run 5 did so
+  in both tools, making lemma 2 unconditional. The extra Verus lemma
+  made the crate fail under Verus's own Z3 at 2 of 11 seeds (25 of 33
+  checks pass, against 31), and unchanged functions moved up to 90.5%
+  of the solver budget. The maintainer kept that as the outcome
+  (decision 9); splitting the lemma is later work.
