@@ -1,84 +1,101 @@
-# Plan: experiment #10, generated code quality
+# Plan: experiment #10, settling stack A against stack C
 
-Issue: [#8](https://github.com/tarides/maquizcoatl/issues/8) (the issue
+Issue: [#8](https://github.com/tarides/maquizcoatl/issues/8). The issue
 body is the reference for scope, inputs, measurement protocol and
-done-criteria; this plan says how). Source: maintainer's
-state-of-the-art report, "Experiments before deciding", row of
-experiment #10 (https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc).
+done-criteria; this plan says how. The issue was re-scoped on 2026-11-27
+([comment](https://github.com/tarides/maquizcoatl/issues/8#issuecomment-7223979785)).
+This plan replaces the plan of 2026-11-19, which timed the code generated
+from experiment #9's VM and is kept in this branch's history. Source:
+maintainer's state-of-the-art report, "Experiments before deciding", row
+of experiment #10 (https://claude.ai/artifact/8w6PVuiTsLCKpugpCowMHc).
 
 ## Objective
 
-Measure how fast the code each candidate route generates for the VM
-proven in experiment #9 runs, against Oniguruma `f95747b`'s `match_at`
-on the same bytecode, the same subjects and the same retry budget, in
-both of Oniguruma's dispatch styles (direct-threaded and switch). Per
-route, report time per match, throughput, ratios to the two `match_at`
-builds and to experiment #11's baselines, agreement of results, and
-whether threaded dispatch is expressible inside the proof. The figures
-feed the report's open question "Which stack, A to G?"; no pass/fail
-verdict is given here.
+Settle the choice between the two finalist stacks, A (Rocq) and C
+(F\* + Pulse). Each finalist proves the same imperative VM design as C;
+then four things are measured:
+
+1. proof cost, in experiment #9's units;
+2. speed against Oniguruma `f95747b`'s `match_at` on the same bytecode,
+   subjects and retry budget;
+3. SMT brittleness, for Pulse;
+4. readability of the shipped C.
+
+The figures feed the stack decision. No pass/fail verdict is given here
+(decision B).
 
 ## Decisions folded in
 
-From the maintainer's
-[comment](https://github.com/tarides/maquizcoatl/issues/8#issuecomment-7023136027):
+From the maintainer's answer of 2026-11-19
+([comment](https://github.com/tarides/maquizcoatl/issues/8#issuecomment-7023136027)):
 
 - **A. Identical bytecode: (a).** Patterns are compiled by Oniguruma
-  through the public `onig_new`; only those whose compiled code stays
-  inside experiment #9's opcode subset are timed. The share of each
-  workload they cover is reported (experiment #12 found 63% of jq
-  calls, 38% of PHP calls, 26-29% of VS Code calls for a comparable
-  regular subset; the bytecode-level share is expected to be lower,
-  because star loops often compile to peephole opcodes).
+  through the public `onig_new`, and the *strict tier* times only those
+  whose compiled code stays inside experiment #9's opcode subset.
 - **B. Ratios only.** The verdict is taken at the stack decision,
-  against two reference points from experiment #11: the switch-dispatch
-  build (0.74-0.80x of direct-threaded on real workloads; experiment
-  #11's rerun revised its jq figure to 0.94x, so the reference values
-  are read from experiment #11's latest notebook entry, not hard-coded)
-  and the direct-threaded build.
-- **C. Native routes too**, for every route still standing.
+  against experiment #11's reference points: the switch-dispatch build
+  and the direct-threaded build. Reference values are read from
+  experiment #11's latest notebook entry, not hard-coded.
+- **C. Native routes:** superseded by E-H.
 - **D. Bench host**, pinned to a free and idle cache complex, with the
   protocol of experiments #11 and #12.
 
-The route list is fixed once experiment #9 reports (its tools are
-picked by the maintainer once experiments #4 and #5 close). This plan
-is therefore parametrised by route: the shared part (steps 1-6) does
-not depend on experiment #9's tools; each route gets one section
-instantiated from the template below.
+From the maintainer, 2026-11-27 (stack decision and re-scope):
+
+- **E. Drop-in from C source without a Rust toolchain.** All Rust
+  routes are out (Verus, Aeneas, hax, RefinedRust, Creusot).
+- **F. OCaml library through bindings.** The generated-OCaml rows are
+  dropped; issue #22 covers them.
+- **G. Stack A: a staged pilot.** VST and RefinedC each prove the same
+  slice, then the cheaper one finishes. Bedrock2 is the fallback.
+- **H. Re-scope.** The experiment settles between stacks A and C.
+- **A′. Translated tier: (ii).** A second, separately labelled tier.
+  For the VMs only, `OP_PUSH_OR_JUMP_EXACT1` and `OP_PUSH_IF_PEEK_NEXT`
+  are rewritten to `OP_PUSH`. Oniguruma does strictly less work per
+  iteration, so the ratio is a lower bound on the VM's relative speed.
+- **B′. Reference loop: (ii).** Besides `onig_match_with_param` per start
+  position, two builds without the optimiser (`-DONIG_DONT_OPTIMIZE`,
+  experiment #12's `onig-noopt` recipe, threaded and switch) are driven
+  through `onig_search` as extra reference columns.
 
 ## Where things live
 
 - **Workstation.** `<workdir>` is the work directory outside the
   repository; this branch's worktree is `<workdir>/wt/10-generated-code`.
-  Engineering for steps 1-6 (driver, classifier, translator, adapters)
-  happens here, with a Debug build of `upstream/` out of tree under
-  `<workdir>/e10/build/`; it needs only GCC, CMake and Python. No prover
-  is installed on the workstation.
-- **Extraction** of each route runs on the bench host, where experiment
-  #7 installed the provers and extractors into `<cache>`. It is counted
-  as setup, outside the timed phases; the extracted sources are
-  committed to this branch.
-- **Bench host** (never named in public text). `<cache>`: the shared
-  toolchain cache of earlier experiments (opam root with the `provers`,
-  `compcert` and `ffi` switches; the Rust toolchain of experiment #11).
-  `<exp>`: `<bench-workdir>/exp/10-generated-code/`, holding a clone of
-  this branch with `upstream/` at `f95747b` (read only), the
-  out-of-tree builds (`<exp>/build/`), the route builds
-  (`<exp>/routes/<route>/`) and raw outputs (`<exp>/out/<run-id>/`).
-  Nothing installed system-wide, no root.
+  Engineering for the shared part (driver, classifier, translator,
+  adapters) happens here, with a Debug build of `upstream/` out of tree
+  under `<workdir>/e10/build/`. It needs only GCC, CMake and Python. No
+  prover is installed on the workstation.
+- **Bench host** (never named in public text). Proof development and
+  checking, extraction, builds and timing all run here.
+  - `<cache>` is the shared toolchain cache of earlier experiments. It
+    holds the opam root with the `provers` switch (Rocq 9.3.0, F\*
+    2026.11.15 with Pulse and krml), the `vst` switch (VST 2.17,
+    CompCert 3.18, Rocq 9.2.0) and the `refinedc` switch (RefinedC
+    `d0575839`, Rocq 9.1.0, OCaml 4.14.2), all installed by experiment
+    #5. It also holds Bedrock2 `67b682a5`, built in place against
+    `provers`, and the Z3 versions of experiment #9.
+  - `<exp>` is `<bench-workdir>/exp/10-generated-code/`. It holds a
+    clone of this branch with `upstream/` at `f95747b` (read only), the
+    out-of-tree builds (`<exp>/build/`), the proof and route builds
+    (`<exp>/routes/<route>/`) and raw outputs (`<exp>/out/<run-id>/`).
+  - Nothing is installed system-wide, and nothing needs root.
 - **Repository** (branch `exp/10-generated-code`), under
   `lab/10-generated-code/`:
-  - `setup.sh` (clone check, the three Oniguruma builds, route builds),
-    `pins.json`, `provenance.sh`;
-  - `driver/`: the C driver (`onig_match_with_param` per start
-    position, plus a separately labelled `onig_search_with_param`
-    column) and the common work-file reader;
+  - `setup.sh` (clone check, the five Oniguruma builds), `pins.json`,
+    `provenance.sh`;
+  - `driver/`: the C driver and the common work-file reader;
   - `classify/`: the bytecode classifier and the dump-to-subset
-    translator (step 3);
-  - `routes/<route>/`: per route, the extracted VM sources as generated
-    (committed, with the extraction command and tool versions), and a
-    thin hand-written adapter to the common harness protocol;
-  - `run.py`, `summarise.py`;
+    translator, with both tiers;
+  - `vm/DESIGN.md`: the fixed VM design (step P0);
+  - `routes/vst/`, `routes/refinedc/`, `routes/pulse/` (and
+    `routes/bedrock2/` only if it is needed): the C VM or the Pulse
+    source, its proofs, the build and check scripts, the generated C
+    for Pulse (committed, with the extraction command and tool
+    versions), and a thin adapter to the harness protocol;
+  - `effort.tsv` and `invocations.tsv`, with experiment #9's columns;
+  - `run.py`, `summarise.py`, and `brittle.sh` (adapted from experiment
+    #9's);
   - `lab/notebook.md` and `lab/results/`.
 
 Scripts take `<cache>` and `<exp>` from environment variables and never
@@ -86,315 +103,406 @@ print absolute paths, hostnames or addresses.
 
 ## Approach
 
-Shared part (once, independent of experiment #9's tools):
+### Shared part (route-free; can start at once)
 
-1. **Inputs.** Read, without modifying them: experiment #1's workloads
-   (`experiments/01-pattern-inventory/workloads/data/` on `main`);
-   experiment #12's work-file format, `prep.py`, classifier and harness
-   protocol (`lab/12-ffi-vs-native/`); experiment #11's build recipe,
-   dispatch probe, catastrophic-pattern set and baselines (branch
-   `exp/11-perf-baselines`, read only, owned by another contributor);
-   experiment #9's opcode subset, seeded with issue #4's list
-   (`OP_STR_*`, `OP_PUSH`, `OP_JUMP`, `OP_FAIL`, `OP_MEM_START`,
-   `OP_MEM_START_PUSH`, `OP_MEM_END`, `OP_EMPTY_CHECK_START`,
-   `OP_EMPTY_CHECK_END`, `OP_EMPTY_CHECK_END_MEMST` (emitted by
-   `compile_quant_body_with_empty_check`,
-   `upstream/src/regcomp.c:958-1000`), `OP_END`), updated to whatever
-   experiment #9 actually proves. `OP_FINISH`, which issue #4 also
-   lists, is the backtrack-stack sentinel
-   (`upstream/src/regexec.c:3074`) and is never stored in `reg->ops`, so
-   the classifier never sees it.
+1. **Inputs.** Read, without modifying them:
+   - experiment #1's workloads
+     (`experiments/01-pattern-inventory/workloads/data/` on `main`);
+   - experiment #12's work-file format, `prep.py`, classifier and
+     harness protocol (`lab/12-ffi-vs-native/`), and its `onig-noopt`
+     recipe;
+   - experiment #11's build recipe, dispatch probe,
+     catastrophic-pattern set and baselines (branch
+     `exp/11-perf-baselines`, read only, owned by another contributor);
+   - experiment #9's opcode subset, taken from
+     `lab/09-representative-proof/FRAGMENT.md` (instruction table):
+     `OP_STR_*`, `OP_PUSH`, `OP_JUMP`, `OP_FAIL`, `OP_MEM_START`,
+     `OP_MEM_START_PUSH`, `OP_MEM_END`, `OP_EMPTY_CHECK_START`,
+     `OP_EMPTY_CHECK_END`, `OP_END`. `OP_FINISH` is the backtrack-stack
+     sentinel (`upstream/src/regexec.c:3074`), is never stored in
+     `reg->ops`, and so is never seen by the classifier.
 
-2. **Three out-of-tree Oniguruma builds**, experiment #11's recipe
-   (static, `Release`, identical flags apart from one macro):
-   `onig-threaded` (default), `onig-switch`
-   (`-DCMAKE_C_FLAGS=-DONIG_DISABLE_DIRECT_THREADING`), and, for
-   classification only, `onig-dump` (`Debug`,
-   `-DCMAKE_C_FLAGS=-DONIG_DEBUG_COMPILE`), which makes `onig_compile`
-   print the compiled bytecode list (call site
-   `upstream/src/regcomp.c:7636-7639`; printer `print_compiled_byte_code`
-   and `onig_print_compiled_byte_code_list`,
-   `upstream/src/regexec.c:510-887`). The dispatch style of the two
-   timing builds is checked with experiment #11's dispatch probe and by
-   comparing the `regexec.c.o` hashes (they must differ). `test_utf8`
-   is run on each build as a sanity check (1554 cases).
+2. **Five out-of-tree Oniguruma builds**, using experiment #11's recipe
+   (static, `Release`, identical flags apart from the macros named
+   here):
+   - `onig-threaded` (default);
+   - `onig-switch` (`-DONIG_DISABLE_DIRECT_THREADING`);
+   - `onig-noopt-threaded` and `onig-noopt-switch`, the same two with
+     `-DONIG_DONT_OPTIMIZE` added (decision B′);
+   - `onig-dump` (`Debug`, `-DONIG_DEBUG_COMPILE`), for classification
+     only. It makes `onig_compile` print the compiled bytecode list
+     (call site `upstream/src/regcomp.c:7636-7639`; printers
+     `print_compiled_byte_code` and `onig_print_compiled_byte_code_list`,
+     `upstream/src/regexec.c:510-887`).
+
+   The dispatch style of each timing build is checked with experiment
+   #11's dispatch probe and by comparing the `regexec.c.o` hashes, which
+   must differ. `test_utf8` (1554 cases) is run on each build as a
+   sanity check.
 
 3. **Bytecode classifier and translator.** The C driver compiles each
    (pattern, syntax, options) triple with `onig_new` on `onig-dump`,
-   captures the printed opcode list, and classifies the triple as *in
-   subset* (every opcode in experiment #9's subset) or *out*, with the
-   first offending opcode logged. Only the public API and the debug
-   output are used: no internal symbol, no `regint.h` structure
-   (DEV-005, from experiment #4: `spec/deviations.md:296` on branch
-   `exp/04-abi-feasibility`, cited from that branch until it merges).
-   For in-subset triples, the translator turns the dump into experiment
-   #9's bytecode format (jump targets resolved, string operands
-   decoded). Its correctness is checked by the equal-results criterion
-   (step 8).
+   captures the printed opcode list, and classifies the triple:
+   - *strict*: every opcode is in the subset;
+   - *translated*: every opcode is in the subset, or is
+     `OP_PUSH_OR_JUMP_EXACT1` or `OP_PUSH_IF_PEEK_NEXT` (decision A′);
+   - *out*: anything else, with the first offending opcode logged.
 
-   **The dump is parsed as bytes, not lines.** `p_string` writes the
-   operand's raw bytes (`upstream/src/regexec.c:456-459`), so a literal
-   containing a newline splits its line (`a\nb` gives a `str_3` over two
-   lines); `OP_STR_N` prints no length (`:555-557`); the optimiser
-   dump's `PATTERN: /…/` line contains the raw pattern; and
-   `onig_print_names` lines precede the list
-   (`upstream/src/regcomp.c:7637`). The parser takes the length of
-   `str_1`..`str_5` from the opcode, ends a `str_n` at the next
-   `\n%4d: ` prefix carrying the expected index, and marks a triple out
-   ("ambiguous dump") when its literal itself contains such a prefix.
-   Each `onig_new` writes its dump to its own file (or fenced by a
-   marker on stderr), never one concatenated stream to be split
-   afterwards. The parser is unit-tested on hand-picked patterns, one
-   per opcode in the subset, plus a newline-bearing literal and a
-   `str_n` longer than 5 bytes.
+   Only the public API and the debug output are used: no internal
+   symbol and no `regint.h` structure (DEV-005, from experiment #4). The
+   translator turns the dump into the VM's bytecode format: jump targets
+   resolved, string operands decoded, and, in the translated tier, the
+   two push variants rewritten to `OP_PUSH` with the same alternative
+   target. That rewrite preserves results: both variants only skip a
+   push whose alternative would fail at once. The equal-results
+   criterion (step T2) is the check.
 
-4. **Coverage table** (Decision A). Per workload (jq, PHP, VS Code,
-   with VS Code also weighted by experiment #1's frequency profile):
-   triples and calls in subset / total, the most frequent offending
-   opcodes, and the comparison with experiment #12's pattern-level
-   subset. If a workload's coverage is below about 5% of calls, it is
-   reported but its timing rows are labelled as not representative.
+   **The dump is parsed as bytes, not lines.**
+   - `p_string` writes the operand's raw bytes
+     (`upstream/src/regexec.c:456-459`), so a literal containing a
+     newline splits its line.
+   - `OP_STR_N` prints no length (`:555-557`).
+   - The optimiser dump's `PATTERN: /…/` line contains the raw pattern.
+   - `onig_print_names` lines come before the list
+     (`upstream/src/regcomp.c:7637`).
 
-5. **Workloads.** In-subset cases written in experiment #12's flat
-   format, in three shapes: short subjects (as recorded by experiment
-   #1), large subjects (experiment #12's 1 MiB cuts of the OCaml source
-   and Loghub SSH log, find-all loop; the top 16 patterns per source are
-   re-picked among the in-subset ones by running `pick_large.py` on the
-   bytecode classifier's coverage files, and there may be fewer than 16,
-   in which case the count is stated), and catastrophic patterns.
-   Experiment #11's catastrophic set (`(a+)+$`, `(a|aa)+$`,
-   `(\w+\s?)+$`) is entirely out of subset (`$`, `a+` as
-   `OP_PUSH_OR_JUMP_EXACT1`, `\w`/`\s`), so subset-shaped **analogues**
-   are used instead, one per family's syntax and options as experiment
-   #11's `worst.sh` does: `(a|aa)+(b|c)` (same blow-up as `(a|aa)+$`;
-   compiles to `mem-start-push`, `push`, `str_1`, `str_2`, `jump`,
-   `mem-end`, `mem-start`, `end` only) and `(?:a|aa)+(?:b|c)` without
-   captures, on `"a"*n "!"` for n = 16 to 4096. They are labelled as
-   analogues: comparable to experiments #11 and #12 in shape and
-   budget, not the same patterns. Retry budget: 10,000,000 per match
-   through `OnigMatchParam`, the generated VMs given the same counter
-   and the same stop-the-search rule as experiment #12; time-to-limit
-   reported where the limit is hit. Counting rule: one retry per
-   restored choice point. `CHECK_RETRY_LIMIT_IN_MATCH` runs once per
-   `fail`, after `STACK_POP` (`upstream/src/regexec.c:4674-4677`, macro
-   at `:1558-1563`), and `STACK_POP` (`:2295`) skips `STK_MEM_START`
-   and other non-choice entries without counting them. The counter
-   lives in the `MatchArg` and so resets on every
-   `onig_match_with_param` call, i.e. per start position, as in
-   experiment #12.
+   The parser takes the length of `str_1`..`str_5` from the opcode, and
+   ends a `str_n` at the next `\n%4d: ` prefix carrying the expected
+   index. A triple whose literal itself contains such a prefix is marked
+   out ("ambiguous dump"). Each `onig_new` writes its dump to its own
+   file. The parser is unit-tested on hand-picked patterns: one per
+   opcode in the subset, one per push variant, a newline-bearing literal
+   and a `str_n` longer than 5 bytes.
 
-6. **C reference columns.** The driver times `onig_match_with_param`
-   at each start position (the generated VMs have no search optimiser,
-   so this is the comparison point), on both timing builds; an
-   `onig_search_with_param` column is timed as well and labelled
-   "whole search, not comparable".
+4. **Coverage table.** For each workload (jq, PHP, VS Code, with VS Code
+   also weighted by experiment #1's frequency profile) and each tier:
+   - triples and calls classified, out of the total;
+   - the most frequent offending opcodes;
+   - a comparison with experiment #12's pattern-level subset.
 
-Per route (template below, once per route still standing):
+   A workload whose coverage in a tier is below about 5% of calls is
+   still reported, but its timing rows in that tier are labelled as not
+   representative.
 
-7. **Build** the route's extracted VM with the adapter, on the bench
-   host, with the compiler the route's proof assumes. C-emitting routes
-   and all C adapters are compiled with the reference's flags,
-   `-O3 -DNDEBUG` (experiment #11's `build.sh`, `CFLAGS_E11`, the flags
-   of the two `Release` timing builds), for the GCC column; GCC `-O2`
-   is only an optional extra column.
-8. **Agreement** on every in-subset case: return code, match span and
-   all capture positions against `onig-threaded`; every difference is
-   recorded (and, if Oniguruma is the one wrong, goes to
-   `spec/deviations.md`).
-9. **Allocation** (OCaml routes only): `Gc.minor_words` and
-   `Gc.promoted_words` delta per match over the loop, Why3 and Pulse
-   outputs reported separately.
-10. **Dispatch inspection**: what the route emits (`switch`, `match`,
-    function table, tail calls), whether the compiler turns it into a
-    jump table at the optimisation level used (disassembly check),
-    and whether threaded dispatch could be expressed inside the proof.
-11. **Timed series**: interleaved with the two `match_at` columns in
-    the same series, so ratios are same-session.
+5. **Workloads.** Cases in each tier are written in experiment #12's
+   flat format, in three shapes:
+   - **short subjects**, as recorded by experiment #1;
+   - **large subjects**: experiment #12's 1 MiB cuts of the OCaml source
+     and the Loghub SSH log, with a find-all loop. The top 16 patterns
+     per source and tier are re-picked among the classified ones with
+     `pick_large.py`; if there are fewer than 16, the count is stated;
+   - **catastrophic analogues**. Experiment #11's set is entirely out of
+     subset, so subset-shaped analogues are used, one per family's
+     syntax and options: `(a|aa)+(b|c)` and `(?:a|aa)+(?:b|c)`, on
+     `"a"*n "!"` for n = 16 to 4096. They are labelled as analogues.
 
-Close-out:
+   The retry budget is 10,000,000 per match through `OnigMatchParam`,
+   counted once per restored choice point
+   (`CHECK_RETRY_LIMIT_IN_MATCH` after `STACK_POP`,
+   `upstream/src/regexec.c:4674-4677`, macro at `:1558-1563`). The
+   counter resets per `onig_match_with_param` call, that is, per start
+   position.
 
-12. **Summary**: per route, time per match and throughput (median,
-    min/max and IQR over at least 10 runs), ratios to both `match_at`
-    builds and to experiment #11's baselines; coverage table;
-    agreement; dispatch findings. Recorded in the lab notebook and
-    summarised in a comment on issue #8, with no verdict (Decision B).
+6. **C reference columns.** The driver times `onig_match_with_param` at
+   each start position on `onig-threaded` and `onig-switch`. It times
+   `onig_search_with_param` on `onig-noopt-threaded` and
+   `onig-noopt-switch` (decision B′). The per-call overhead of
+   `onig_match_with_param` is measured on an empty pattern and
+   reported. An `onig_search_with_param` column on the optimising builds
+   is timed too, labelled "whole search, not comparable".
 
-## Per-route section template
+Milestone 1 is steps 1-6 alone: the coverage table and the C reference
+columns. It is useful before any proof exists.
 
-Each route gets a section in the run's notebook entry with these
-fields, filled before its timed run:
+### Proof part
 
-- **Route**: name and stack (A-G).
-- **Source**: experiment #9's proof artefact and commit.
-- **Extraction**: tool, version, command; generated files committed
-  under `routes/<route>/`, with their sha256.
-- **Compile**: compiler and flags on the bench host (GCC column at
-  `-O3 -DNDEBUG` for C, like the reference; `-O2` only as an extra).
-- **Adapter**: what the hand-written glue does (reading the work file,
-  the outer search loop, the retry counter if outside the proof), and
-  which of it is outside the proof.
-- **Dispatch**: what is emitted; jump table or not; threaded dispatch
-  expressible inside the proof (yes / no / only by post-processing).
-- **Results**: agreement, allocation (OCaml), timing, ratios.
+**P0. Fixed VM design** (`vm/DESIGN.md`, written before any proof,
+identical for every route):
+- C entry point `vm_match(code, ncode, subject, len, start, regs,
+  nregs, retry_limit)`, returning the match end, `ONIG_MISMATCH`, or
+  `ONIGERR_RETRY_LIMIT_IN_MATCH_OVER` (-17);
+- one `switch` over the opcode inside one loop;
+- the backtrack stack as a caller-provided array of fixed-size entries,
+  each an alternative, a capture save or an empty-check start. Stack
+  exhaustion returns `ONIGERR_MATCH_STACK_LIMIT_OVER`;
+- captures held in a mutable array of `int` pairs;
+- machine integers, with `len` and stack capacity below `INT_MAX`;
+- the retry counter inside the VM, counted as upstream counts it.
 
-Routes and their specifics (instantiated only for the routes experiment
-#9 leaves standing):
+The correctness statement is a refinement of experiment #9's VM in the
+same tool: `rocq/Vm.v` for stack A, and `fstar/Vm.fst` for stack C (both under `lab/09-representative-proof/`). The
+C VM returns what #9's VM returns, or one of the two limit errors.
+Experiment #9's main theorem then carries the result to the semantics.
+The design also names what is left to trusted code: the adapter that
+reads work files, and the outer loop over start positions.
 
-| Route | Stack | Generated | Compiled on the bench host with | Notes |
-|-------|-------|-----------|---------------------------------|-------|
-| Why3 → C | E (Why3) | C | GCC (version recorded) | Expected: Why3's C printer emits `switch`, no labels-as-values (not verified yet; confirmed at step 10) |
-| Pulse → C via KaRaMeL, and via F\*'s direct C back end (Custard, `--codegen C`) if experiment #9 uses it | C (F\*/Pulse) | C, with krmllib headers vendored next to it | GCC | Same VM through each back end if both are standing, as separate columns |
-| Verus Rust | D | Rust (the source is the verified artefact) | rustc, experiment #11's pinned toolchain or the one Verus pins, recorded | No computed goto in Rust; `match` |
-| Aeneas Rust | B | Rust | rustc, as above | Same as Verus |
-| hax Rust | A (or C) | Rust | rustc, as above | Native route of stack A |
-| VST/CompCert C | A | C | CompCert (`compcert` switch), plus GCC `-O2` | CompCert is the compiler the proof covers |
-| Isabelle-LLVM | F | LLVM IR | `llc`/Clang of a recorded LLVM version | Needs LLVM on the bench host; if absent, the prebuilt LLVM release tarball of the version Isabelle-LLVM's release names, unpacked under `<cache>` (no source build, no root; counted as setup) |
-| generated OCaml | whichever tool proved the VM (Why3, Pulse, Rocq, Isabelle) | OCaml | OCaml 5.4.1 (`ffi` switch, shared with experiment #12) | Shares code with issue #22; allocation measured |
+**P1. Toolchain checks.** Experiment #9's Rocq files (`rocq/`) were
+checked on Rocq 9.3.0. They are now checked on the `vst` switch (Rocq
+9.2.0) and the `refinedc` switch (Rocq 9.1.0). Any change needed is
+recorded and kept minimal; if a file cannot be ported, that is recorded
+as a pilot cost. VST's `forward_switch` is checked on VST 2.17 with a
+one-function `switch` probe. RefinedC's handling of `switch` is checked
+with the same probe.
+
+**P2. Stack A pilot.** VST and RefinedC each prove the same slice of
+the design:
+- the `switch` dispatch loop;
+- the array backtrack stack, with its exhaustion case;
+- `OP_STR_*`, `OP_PUSH` and `OP_FAIL` (with `OP_JUMP` and `OP_END`, which
+  the loop needs to run).
+
+Each pilot records proof cost in experiment #9's units (sessions, failed
+checks, failing invocations, proof lines and automatic share) in
+`effort.tsv` and `invocations.tsv`, with source digests. It also
+records trusted lines, using experiment #5's `TRUSTED` convention, and
+whether `switch` was provable as written. **Cap:** each pilot gets at
+most one third of a tool's proof budget. On the report's scale (2-4
+weeks per tool) that is about one week of engineering time. A pilot that
+has not closed the slice within its cap counts as failed, and what
+remains open is recorded. The two pilots run one after the other, VST
+first, so that each session's figures are its own.
+
+**P3. Choice of the stack A tool.** The tool whose pilot closed with
+fewer failed checks finishes; if those are equal, the shorter total
+session time wins, and then the fewer trusted lines. If both pilots
+fail, Bedrock2 proves the same slice under the same cap. Its language
+has no `switch`, so it dispatches with an if-chain, and that is
+recorded. If Bedrock2 fails too, stack A has no C VM, and that is the
+result. The choice and the rule applied are recorded before P4 starts.
+
+**P4. Finish.**
+- **Stack A:** the chosen tool proves the rest of the opcode subset
+  against the full refinement statement.
+- **Stack C:** a Pulse VM implements the same design and is proved
+  against F\*'s `Vm.fst`, reusing experiment #9's invariants where they
+  carry over. It is extracted to C twice, through KaRaMeL
+  (`--codegen KrmlC`, bundled krml) and through F\*'s direct C back end
+  (`--codegen C`). Both back ends start from one proof.
+
+  The generated C is compiled with its generated header included, so
+  that FStar#4932 (a dropped parameter, silent only without the header)
+  shows up as a compile error.
+
+  Every proof ends with experiment #9's axiom/admit report: `Print
+  Assumptions` for Rocq, and for F\* the `--admit_smt_queries false`
+  check plus the scan.
+
+### Timing and review (per finished route)
+
+The routes timed are:
+- stack A's chosen tool, as a GCC column, plus a CompCert column for
+  VST;
+- Pulse through KaRaMeL;
+- Pulse through the direct back end.
+
+For each one:
+
+- **T1. Build.** Compile with the reference's flags, `-O3 -DNDEBUG`
+  (experiment #11's `CFLAGS_E11`). GCC `-O2` is only an optional extra
+  column. The CompCert column applies to VST only: CompCert is the
+  compiler VST's end-to-end guarantee covers. It is used here for
+  research and evaluation, which the INRIA non-commercial licence
+  allows.
+- **T2. Agreement** on every case in both tiers: return code, match span
+  and all capture positions, against `onig-threaded`. Every difference is
+  recorded, and goes to `spec/deviations.md` if Oniguruma is the one
+  wrong.
+- **T3. Dispatch inspection.** Check whether the compiler turns the
+  `switch` into a jump table at the level used (disassembly), and
+  whether threaded dispatch could be expressed inside the proof.
+- **T4. Timed series**, interleaved with the four C reference columns in
+  the same series, so ratios are same-session.
+- **T5. Brittleness** (Pulse only). Experiment #9's matrix: Z3 5.3.0
+  (the baseline), 4.15.3 and 4.13.3, each with the default seed and
+  seeds 1-10, the rlimits as written, run with `brittle.sh` adapted from
+  experiment #9's.
+- **T6. Readability review.** A reader who did not write the proof
+  reviews each shipped C VM against a fixed checklist:
+  - do names match Oniguruma's opcodes;
+  - is there one `case` per opcode;
+  - are there generated temporaries, and how many;
+  - how many lines and functions does it have;
+  - can a crash at a given line be mapped back to the source (for
+    Pulse, back to the `.fst` line);
+  - which annotations are left in the source (for RefinedC).
+
+  Findings are recorded, not scored.
+
+### Close-out
+
+**S. Summary.** One table across the finalists' routes, with, for each:
+- proof cost (pilot and finish separately);
+- trusted lines;
+- coverage per tier;
+- time per match and throughput (median, min/max and IQR over at least
+  10 runs);
+- ratios to the four C reference columns and to experiment #11's
+  baselines;
+- agreement, dispatch findings, brittleness and readability findings.
+
+It is recorded in the lab notebook and posted on issue #8 after the
+maintainer's review, with no verdict.
 
 ## Tools and versions
 
-All actively maintained (report, "active" rows). No new prover installs
-for this experiment: provers and extractors are the ones experiment #9
-uses, already in the shared cache (experiment #7 recorded Why3 1.9.0,
-F\* 2026.11.15 with Pulse and bundled krml, Rocq 9.3.0, Lean 4.36.0,
-OCaml 5.4.1). Pinned in `pins.json`, versions actually used recorded in
-the notebook:
+All actively maintained (report, "active" rows). Every prover was
+installed by experiments #5, #7 and #9; nothing new is installed. Pins
+go in `pins.json`, and the versions actually used are recorded in the
+notebook.
 
 | Tool | Version |
 |------|---------|
 | Oniguruma | `f95747b` (`upstream/` submodule) |
+| VST, CompCert | 2.17, 3.18 (`clightgen` prints 3.17), Rocq 9.2.0, switch `vst` |
+| RefinedC | `d0575839` with `coq-lithium` at the same commit, Rocq 9.1.0, OCaml 4.14.2, switch `refinedc` |
+| Bedrock2 (fallback) | `67b682a5`, coqutil `4c399b76`, Rocq 9.3.0 |
+| Rocq (experiment #9's files) | 9.3.0 (`provers`), then checked on 9.2.0 and 9.1.0 (P1) |
+| F\*, Pulse, KaRaMeL | 2026.11.15 (`b92b0f87`), bundled Pulse, krml `3384ecaf` |
+| Z3 | 5.3.0, 4.15.3, 4.13.3, as in experiment #9 |
 | GCC | Ubuntu 24.04 package (13.3.0) |
 | CMake | system (3.28.3) |
-| OCaml, dune | 5.4.1, switch `ffi` of experiment #12 |
-| Rust | 1.100.0 (experiment #11), or the toolchain the Rust route pins |
-| F\* direct C back end (Custard, `--codegen C`, `--custard_entry`) | ships with F\* 2026.11.15 (release of 2026-11-15, so active); used by experiment #7; Pulse → C route only, if experiment #9 uses it |
-| CompCert | the `compcert` switch's version (VST route only) |
-| LLVM | version recorded (Isabelle-LLVM route only) |
 | Python | 3.12, stdlib only, run with `-I` |
 
-## Machine budget
+## Budget
 
-Bench host, one free and idle L3 cache complex chosen at the start of
-the run (from the dashboard and `ps`; recorded by CPU numbers only),
-all jobs under `taskset` on that complex, at most 4 parallel jobs.
-Timed runs on one core of that complex, one process at a time, nothing
-else of this experiment running; load average and other running
-experiments (by number) recorded before and after each series;
-governor recorded; warm-up pass before each cell. At most 3 hours of
-wall-clock for the whole run, setup included. Engineering on the
-workstation (driver, classifier, adapters, extraction) is not part of
-the 3 hours.
+- **Engineering time**, on the report's scale of 2-4 weeks per proof
+  tool and 1-2 weeks per timed route:
 
-| Phase | Steps | Time |
-|-------|-------|------|
-| Clone, three Oniguruma builds, sanity tests | 2 | 20 min |
+  | Item | Weeks |
+  |------|------:|
+  | Stack A pilots (P2), about one week each | 2 |
+  | Finishing stack A's chosen tool (P4), a tool's budget less its pilot week | 1-3 |
+  | The Pulse VM (P4) | 2-4 |
+  | Timing stack A, then stack C (the two back ends share one adapter) | 2-4 |
+  | **Total** | **7-13** |
+
+  P0 and P1 add a few days on top.
+- **Bench host time** for builds and timing: one free and idle L3 cache
+  complex chosen at the start of each run (recorded by CPU numbers
+  only), with all jobs under `taskset` on that complex and at most 4
+  parallel jobs. Timed runs use one core of that complex, one process
+  at a time, with nothing else of this experiment running. Load average
+  and other running experiments (by number) are recorded before and
+  after each series, along with the governor, and each cell gets a
+  warm-up pass.
+
+| Phase | Steps | Bench time |
+|-------|-------|------------|
+| Clone, five Oniguruma builds, sanity tests | 2 | 25 min |
 | Classification, coverage, workload preparation | 3-5 | 15 min |
-| C reference columns (pilot) | 6 | 10 min |
-| Per route: build, agreement, allocation, dispatch check, timed series | 7-11 | about 30 min each |
-| Summary, redaction check, record | 12 | 20 min |
+| C reference columns | 6 | 15 min |
+| Per timed route: build, agreement, dispatch check, timed series | T1-T4 | about 30 min each, 4 routes |
+| Pulse brittleness matrix | T5 | about 33 full checks of the Pulse proof |
+| Summary, redaction check, record | S | 20 min |
 
-**Milestone 1** (fits in 3 hours): steps 1-6 and 12, plus up to three
-routes, taken in this order among those standing: the generated OCaml
-route (shared with issue #22), the first C-emitting route, the first
-Rust route. **Follow-up**, outside this budget, listed on the issue:
-the remaining routes, one run of about 30 min each, using the same
-builds and work files; larger subjects (16 MiB cuts).
+**Milestones:**
+1. Steps 1-6: the route-free part.
+2. P0-P3: the design, toolchain checks, both pilots and the choice.
+3. P4: finishing both finalists.
+4. T1-T6 and S.
 
-If experiment #9 has not reported when this experiment is scheduled,
-steps 1-6 can run alone as a first, route-free milestone (coverage
-table and C reference columns), and the routes follow.
+Each milestone is recorded as it closes.
 
 ## Recorded with the lab-notebook skill
 
 In `lab/notebook.md` (section "Experiment #10") and `lab/results/`, one
 entry each, nothing overwritten:
-
-- provenance: builds, dispatch probe, `regexec.c.o` hashes, compiler
-  and toolchain versions, cache complex and protocol;
-- coverage table (bytecode-level subset, per workload);
-- C reference columns;
-- per route: agreement, allocation, dispatch inspection, timing and
-  ratios (one entry per route, from the template);
-- summary with the ratios table.
+- provenance: builds, dispatch probe, `regexec.c.o` hashes, compiler and
+  toolchain versions, cache complex and protocol;
+- the coverage table, for both tiers;
+- the C reference columns;
+- the toolchain checks (P1);
+- each pilot, and the choice (P2, P3);
+- each finished proof (P4);
+- for each timed route: agreement, dispatch inspection, timing and
+  ratios;
+- the brittleness matrix;
+- the readability review;
+- the summary.
 
 Deterministic re-runs are not logged twice; repeated timing series are
 kept as data. The maintainer decides what is worth recording.
 
 ## Outputs
 
-- `lab/10-generated-code/` (driver, classifier, translator, adapters,
-  extracted route sources, scripts).
-- Notebook entries and result files above.
-- Any match-result difference in `spec/deviations.md` when it reveals
+- `lab/10-generated-code/`: driver, classifier, translator, VM design,
+  route sources and proofs, generated C, scripts.
+- The notebook entries and result files above.
+- Any match-result difference in `spec/deviations.md`, when it reveals
   an Oniguruma bug.
 - A summary comment on issue #8, then a PR from this branch.
 
 ## Done-criteria (from the issue)
 
-- Coverage: for each workload, the share of patterns (and of calls,
-  where weighted) whose compiled code stays inside the experiment #9
-  subset.
-- For each route still standing (native routes included), plus both
-  upstream dispatch builds: throughput (bytes/s) and time per match on
-  each workload in the subset, as the median of at least 5 runs with
-  the spread recorded, on one pinned machine with its configuration
+- **Stack A pilot:** the slice proved in VST and in RefinedC, each with
+  its proof cost, trusted lines, `switch` verdict and a clean axiom/admit
+  report, plus the choice of the tool to finish, with the rule applied.
+- **Finished routes** (stack A's chosen tool, and Pulse through both back
+  ends): the VM proved against experiment #9's semantics, with a clean
+  axiom/admit report.
+- **Coverage:** for each workload and tier, the share of patterns (and of
+  calls, where weighted) whose compiled code is timed.
+- **Speed:** for each finished route and each upstream build, throughput
+  (bytes/s) and time per match on each workload, as the median of at
+  least 5 runs with the spread recorded, on one pinned machine with its
+  configuration recorded.
+- **Ratios:** each route's speed relative to switch-dispatch `match_at`,
+  direct-threaded `match_at`, and the two builds without the optimiser.
+- **Equal results:** every VM gives the same match results as `match_at`
+  on all benchmark inputs (positions and captures); any difference is
   recorded.
-- Each route's speed as a ratio to direct-threaded `match_at` and to
-  switch-dispatch `match_at`.
-- Every generated VM gives the same match results as `match_at` on all
-  benchmark inputs (positions and captures); any difference is
-  recorded.
-- For generated OCaml: allocation in the match loop, as the
-  `Gc.minor_words` delta per match (and `Gc.promoted_words`), reported
-  separately for the Why3 and the Pulse output.
-- For each route: whether it can express threaded dispatch, and
-  whether that dispatch stays inside the proof.
-- Results recorded in the lab notebook, with a summary comment on the
-  issue that gives, per route, the ratios against both `match_at`
-  builds and against the experiment #11 baselines, with no pass/fail
-  verdict: the verdict is taken at the stack decision (Decision B).
+- **Dispatch:** for each route, whether it can express threaded dispatch,
+  and whether that dispatch stays inside the proof.
+- **Brittleness:** Pulse's matrix, as experiment #9's.
+- **Readability:** the review of each shipped C VM.
+- **Report:** results in the lab notebook, and a comparison table across
+  the finalists' routes posted on issue #8 after the maintainer's review,
+  with no pass/fail verdict.
 
 ## Risks
 
-- **Experiment #9 not finished, or proves a different subset.** The
-  shared part runs first; the subset list in the classifier is read
-  from experiment #9's result, not from issue #4's text.
-- **Low bytecode-level coverage.** Three unconditional rewrites push
-  most star patterns out of subset (from `get_tree_head_literal`,
-  `upstream/src/regcomp.c:3237-3314`, which returns NULL for an
-  alternation, and `tune_next`, `:4703-4728`): a greedy star gets
-  `OP_PUSH_OR_JUMP_EXACT1` when its body begins with a literal (`(a)*`,
-  `ab*`), `OP_PUSH_IF_PEEK_NEXT` when the node after it begins with a
-  literal (`(a|b)*c`), and `OP_POP` (automatic possessivation,
-  `(?>a*)b`, compiled at `:1793-1807`) when both do and are exclusive:
-  `a*b` compiles to `push, str_1 a, pop, jump, str_1 b, end`. Expected
-  at the top of the offending opcodes: `OP_PUSH_OR_JUMP_EXACT1`,
-  `OP_PUSH_IF_PEEK_NEXT`, `OP_POP`, plus anchors and character types. A
-  plain `OP_PUSH` loop survives only when both the body head and the
-  successor are non-literal (alternation, group, end of pattern):
-  `x(a|b)*`, `(?:a|b)*`, `(a|b)+`, `(a|b)*(c|d)` are in subset. `{n,m}`
-  is expanded inline (no `OP_REPEAT*`) while body length times count
-  stays within `QUANTIFIER_EXPAND_LIMIT_SIZE` = 10
-  (`upstream/src/regcomp.c:1321-1353`): `a{2,3}` compiles to `str_1,
-  str_1, push, str_1, end` and is in subset; only larger counts give
-  `OP_REPEAT*`. Bytecode-level coverage will therefore be well below
-  experiment #12's 63/38/26-29% pattern-level figures, probably
-  dominated by literal-only and alternation-only patterns. Mitigation:
-  coverage is a criterion in itself; rows below a few per cent are
-  labelled, and the bias is stated in the summary.
-- **`onig_match` per start position** pays per-call setup (match
-  argument, region) that `match_at` inside `onig_search` does not; the
-  generated VMs' outer loop is in their adapter. Mitigation: both sides
-  use the same per-position structure, and the per-call overhead of
-  `onig_match` is measured on an empty pattern and reported.
-- **Debug-print build parsing.** The dump format is not an API; if it
-  is ambiguous for some opcode, the classifier marks the triple out and
-  logs why.
-- **Route-specific runtime support** (krmllib, Rust crates, OCaml
-  libraries from the provers) may need extra build steps; counted in
-  the route's 30 minutes, overflow moved to follow-up.
-- **Bench host contention.** If no cache complex is idle, the run
-  waits; a series started with load above the threshold of experiment
-  #12 is flagged.
-- **Reference ratios drift between sessions** (experiment #11 saw 3-7%):
-  ratios are taken within the same interleaved series only.
+- **Experiment #9's Rocq files on older Rocq versions.** VST pins Rocq
+  9.2.0 and RefinedC pins 9.1.0, while experiment #9 used 9.3.0. P1
+  checks this first; a port cost counts against that tool's pilot.
+- **`switch` not provable as written.** VST's `forward_switch` has not
+  been checked at 2.17, and RefinedC's support is unknown. If a tool
+  cannot prove `switch`, its pilot records that and falls back to an
+  if-chain. The dispatch difference then shows up in timing (T3, T4).
+- **The pilot is small.** The slice may understate the cost of the whole
+  VM, and experiment #9's fragment understates the cost of the whole of
+  Oniguruma: effort diverged between tools only on experiment #8's
+  larger follow-up proof. The summary states this. The pilot does
+  measure what imperative code adds (memory, aliasing, array bounds),
+  which experiment #9 did not.
+- **Pulse refinement cost.** The Pulse VM is proved against a total-F\*
+  VM over lists, so the gap from arrays to lists is part of stack C's
+  cost. It is counted, not avoided.
+- **FStar#4932** affects both C back ends. Compiling with the generated
+  header (P4) turns it into a compile error. Any workaround in the
+  Pulse source is recorded.
+- **Low coverage in the strict tier.** Three unconditional rewrites push
+  most star patterns out of subset (`get_tree_head_literal`,
+  `upstream/src/regcomp.c:3237-3314`, and `tune_next`, `:4703-4728`):
+  - `OP_PUSH_OR_JUMP_EXACT1`, when the body begins with a literal;
+  - `OP_PUSH_IF_PEEK_NEXT`, when the node after the loop begins with a
+    literal;
+  - `OP_POP` (automatic possessivation), when both do and are exclusive.
+
+  The translated tier recovers the first two; `OP_POP` stays out.
+  Coverage is a criterion in itself, and low rows are labelled.
+- **Translated-tier bias.** Oniguruma does strictly less work per
+  iteration than the VM in this tier, so ratios there are lower bounds,
+  labelled as such.
+- **`onig_match` per start position** pays per-call setup. It is
+  measured on an empty pattern, and the builds without the optimiser
+  give a loop without it (decision B′).
+- **Debug-print parsing.** The dump format is not an API. An ambiguous
+  dump marks the triple out, with the reason logged.
+- **CompCert licence.** CompCert is non-commercial unless licensed from
+  AbsInt. Its column here is research use. A shipped Maquizcoatl built
+  with GCC keeps VST's guarantee at the level of the C source only.
+- **Bench host contention.** If no cache complex is idle, the run waits.
+  A series started with load above experiment #12's threshold is
+  flagged.
+- **Reference ratios drift between sessions** (experiment #11 saw
+  3-7%), so ratios are taken within the same interleaved series only.
