@@ -11,6 +11,7 @@ Oniguruma itself is not listed. `kkos/oniguruma` is archived, so a bug found in 
 | F\* (Custard back end) | Issue [FStarLang/FStar#4932](https://github.com/FStarLang/FStar/issues/4932): "Custard: an entry point whose body is a tail call on its last parameter is emitted with one parameter fewer" | 2026-11-24 | open | experiment #5, milestone 1 | issue #29 (closed); [`lab/results/2026-11-24-exp-05-eta-upstream.md`](../lab/results/2026-11-24-exp-05-eta-upstream.md) |
 | F\* (Custard back end) | Pull request [FStarLang/FStar#4933](https://github.com/FStarLang/FStar/pull/4933): "Custard: a root keeps its binders on fixed-arity backends (#4932)", a proposed fix | 2026-11-24 | open | follow-up of #4932 | not recorded elsewhere in this repository |
 | Why3 (`why3 execute`) | Post on the why3-club mailing list: type mismatch on a polymorphic constructor value holding a list. No link to the post is recorded. | 2026-11-25 | no answer recorded | experiment #6, milestone 1; confirmed on Why3 master by milestone 2 | issue #36 (closed); [`lab/06-spec-speed/why3/bug/`](../lab/06-spec-speed/why3/bug/) |
+| Why3 (`-a compute`) | Reported by the maintainer: `-a compute` dies with `anomaly: File "src/core/trans.ml", line 503, characters 29-35: Assertion failed`. Channel and link not recorded. | not recorded (by 2026-11-27) | not recorded | experiment #7, entry 5 | [`lab/results/2026-11-19-exp-07-sanity-lemma.md`](../lab/results/2026-11-19-exp-07-sanity-lemma.md) |
 
 ### F\* eta-reduction (FStarLang/FStar#4932)
 
@@ -32,9 +33,8 @@ Oniguruma itself is not listed. `kkos/oniguruma` is archived, so a bug found in 
 
 ## Found, not reported
 
-Each of these is recorded in the lab notebook but has not been filed upstream. Whether to report any of them is the maintainer's decision.
+This one is recorded in the lab notebook but has not been filed upstream. Whether to report it is the maintainer's decision.
 
 | Tool | Problem | Where recorded | Next step if reported |
 |------|---------|----------------|-----------------------|
-| Why3 1.9.0 | `-a compute` dies with `anomaly: File "src/core/trans.ml", line 503, characters 29-35: Assertion failed` | [`lab/results/2026-11-19-exp-07-sanity-lemma.md`](../lab/results/2026-11-19-exp-07-sanity-lemma.md); listed as "worth reporting" in `2026-11-19-exp-07-review-fixes.md` | Reduce it to a tiny module and check it on master |
 | Verus 0.2026.11.02 | Given a Z3 version it does not support, without the opt-out flag, Verus panics (`air/src/smt_verify.rs:204`), then panics again while unwinding, instead of printing a clean error. Refusing the solver is the documented behaviour; the panic is not. | [`lab/results/2026-11-25-exp-09-verus-m3.md`](../lab/results/2026-11-25-exp-09-verus-m3.md); seen again in issue #34's run 4 | Check it on Verus's main branch |
