@@ -70,6 +70,14 @@ answered 2026-11-26 by the maintainer, each with the recommended option):
    every absent-free `e`, both the simple path (a greedy one-character
    repeat, `Star (Chr c)`) and the general path, with lemma (d) stated
    for a general step.
+8. **Termination of the direct matcher: (a).** Raised by the review of
+   PR #40 (`lab/results/2026-11-26-exp-08-lemmas-pr-review.md`); the
+   maintainer's answer is recorded in the issue body. Prove in each tool
+   that `m` returns a complete result at some fuel on every in-scope
+   pattern (`exists g f l, m s g f [R r] i rr = Some l` for
+   `in_scope r`), so that lemma 2, through direction (2a), also gives
+   the termination of `md` and is no longer conditional; new axioms
+   check. Done in run 5, the plan's reserve run.
 
 Nothing else is decided here. A question that comes up during a run and
 is not covered by one of these answers is raised on issue #34, not
@@ -377,6 +385,8 @@ tool, records the open lemmas (with their statement and the last error)
 in the notebook, and asks the maintainer on issue #34 (more runs, or
 report as is). The reserve run 5 counts as a proof run of the tool it
 continues; if both tools close in runs 2 and 3, there is no run 5.
+Run 5 was used for decision 8 (termination), under the stop rule's
+second proof run for each tool.
 
 The draft PR is this plan's PR; it stays a draft through the runs and is
 marked ready only after the comparison is posted, no decision is open,
