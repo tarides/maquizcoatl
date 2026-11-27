@@ -10,7 +10,7 @@
   EXP=<exp> python3 -I run22.py conv RUNID [RUNS]   plan step 8
   EXP=<exp> python3 -I run22.py pilot RUNID     plan step 9 (writes pilot.json)
   EXP=<exp> python3 -I run22.py short RUNID [RUNS]
-  EXP=<exp> python3 -I run22.py large RUNID [RUNS]
+  EXP=<exp> python3 -I run22.py large RUNID [RUNS] [NPAT]   (NPAT: top ranks kept per source)
   EXP=<exp> python3 -I run22.py cata RUNID [RUNS]
   EXP=<exp> python3 -I run22.py catafuel RUNID [RUNS]
   EXP=<exp> python3 -I run22.py repeat RUNID short|large   noisy cells, 10 more runs
@@ -305,10 +305,15 @@ def short_cells():
     return cells
 
 
-def large_cells(fallback):
+def large_cells(fallback, npat=None):
+    """npat: experiment #12's reduction rule (patterns removed from the
+    bottom of each source's ranking, rank kept), when the whole run
+    projects over its 4 hours."""
     rows = [l.split() for l in open(os.path.join(R.EXP_OUT, "work", "large.list"))][1:]
     cells = []
     for src, rank, pid, fam, calls, hx in rows:
+        if npat is not None and int(rank) > npat:
+            continue
         for size in ["1m", "16m"]:
             for e in BASE + ["rocq-scan", "fstar-scan"]:
                 if fallback and size == "16m" and e.endswith("-scan"):
@@ -490,7 +495,8 @@ def main():
     elif what == "large":
         fallback, _ = load_pilot()
         wait_cpu2(R.EXP_OUT, "large")
-        R.series("large", runs, large_cells(fallback), R.run_large,
+        npat = int(sys.argv[4]) if len(sys.argv) > 4 else None
+        R.series("large", runs, large_cells(fallback, npat), R.run_large,
                  ["bytes", "matches", "err", "scans", "sec_per_scan", "bytes_per_sec",
                   "minor_per_match", "major_per_match"], ["engine", "source", "size", "pid"])
     elif what == "cata":
