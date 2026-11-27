@@ -25,6 +25,10 @@ echo "python: $(python3 --version)"
 echo "opam: $(opam --version)"
 echo "switch ffi: $(opam exec --switch=ffi -- ocamlopt -version) $(opam exec --switch=ffi -- ocamlopt -config | grep -E '^(flambda|flat_float_array|architecture|system):' | tr '\n' ' ')"
 echo "  packages: $(opam list --switch=ffi -i --columns=name,version --short dune ctypes ctypes-foreign mtime conf-libffi zarith yojson ppx_deriving ppx_deriving_yojson conf-gmp cppo ocaml-compiler-libs ppx_derivers ppxlib sexplib0 2>/dev/null | tr '\n' ' ')"
+if opam list --switch=ffi-flambda -i --short zarith >/dev/null 2>&1 && [ -x "$EXP/bin/main-ffi-flambda.exe" ]; then
+  echo "switch ffi-flambda (run 2, decision 8): $(opam exec --switch=ffi-flambda -- ocamlopt -version) $(opam exec --switch=ffi-flambda -- ocamlopt -config | grep -E '^(flambda|flat_float_array|architecture|system):' | tr '\n' ' ')"
+  echo "  packages: $(opam list --switch=ffi-flambda -i --columns=name,version --short dune ctypes ctypes-foreign mtime conf-libffi zarith yojson ppx_deriving ppx_deriving_yojson conf-gmp cppo ocaml-compiler-libs ppx_derivers ppxlib sexplib0 2>/dev/null | tr '\n' ' ')"
+fi
 echo "libffi: $(pkg-config --modversion libffi)"
 echo "gmp: $(pkg-config --modversion gmp 2>/dev/null || echo '?')"
 echo "cpu: $(lscpu | sed -n 's/^Model name: *//p')"
