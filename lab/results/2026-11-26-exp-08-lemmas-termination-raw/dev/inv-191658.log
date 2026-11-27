@@ -1,0 +1,4 @@
+Closed under the global context
+File "./AbsentProof.v", line 1436, characters 58-61:
+Error: Tactic failure:  Cannot find witness.
+

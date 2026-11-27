@@ -1,0 +1,6 @@
+== rocq compile -R . S Kcheck.v (r1-dev build directory, after Fold.v)
+     = ([2], [2], [], [2])
+     : list nat * list nat * list nat * list nat
+     = ([1], [1], [2], [2],
+        [[[223]; [115; 115]; [83; 83]; [115; 83]; [83; 115]]],
+        [[[115; 83]; [223]; [83; 83]; [83; 115]; [115; 115]]])

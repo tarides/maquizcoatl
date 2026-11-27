@@ -1,0 +1,6 @@
+   busy, waiting 60 s (attempt 1)
+== 5.3.0_default_rep1 16:40:18Z load 0.50 1.99 1.87
+5.3.0	default	rep1	1	178	1	48.22	30000000	lib::absent_proof::sim_a	failed:lib::absent_proof::sim_a; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:1296(sim_a)
+== 5.3.0_10_rep1 16:41:09Z load 1.31 1.99 1.88
+5.3.0	10	rep1	1	178	1	44.35	30000000	lib::absent_proof::sim_a	failed:lib::absent_proof::sim_a; Error"function body check: resource limit (rlimit) exceeded; consider rerunning with `--profile` for more details"@absent_proof.rs:1296(sim_a)
+== done 16:41:55Z

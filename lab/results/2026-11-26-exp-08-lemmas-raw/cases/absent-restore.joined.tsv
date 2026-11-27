@@ -1,0 +1,19 @@
+id	options	pattern	subject	debug	asan	asan_same	sanitizer
+ab12	NONE	(?:(?~abc)z|.*)	xabcyy	M 0-6	M 0-6	yes	none
+ab13	NONE	(?:(?~|abc|\O*)z|.*)	xabcyy	M 0-6	M 0-6	yes	none
+ab14	NONE	(?:(?~|abc)z|.*)	xabcyy	M 0-6	M 0-6	yes	none
+ab15	NONE	(?:(?~|abc)\O*z|\O*)	xabcz	M 0-5	M 0-5	yes	none
+ab16	NONE	(?~abc)\O*	xabcy	M 0-5	M 0-5	yes	none
+ab17	NONE	(?~|abc|x*)a	xxxabcy	M 0-4	M 0-4	yes	none
+ab18	NONE	(?:(?~|abc|x*)z|\O*)	xxabcz	M 0-6	M 0-6	yes	none
+ab19	NONE	(?~|abc|x*)y	xxxabcy	M 6-7	M 6-7	yes	none
+ab20	NONE	(?~|abc|(?:x|\O\O\O\O))q	xabcqqq	M 2-7	M 2-7	yes	none
+ab21	NONE	(?~|abc|(?:xx|x)*)xa	xxxabc	M 0-4	M 0-4	yes	none
+ab22	NONE	(?~|abc|(?:x|y)*)\O*	xyabcxy	M 0-7	M 0-7	yes	none
+ab23	NONE	(?~|abc)(?:(?~|)\O*z|\O*)	xxabcyy	M 0-2	M 0-2	yes	none
+ab24	NONE	(?~|(?:a|)|(?:x|y)*)	xya	M 0-0	M 0-0	yes	none
+ab25	NONE	(?~|(?:)|\O*)z	z	M 0-1	M 0-1	yes	none
+ab26	NONE	(?~)z	xz	M 1-2	M 1-2	yes	none
+ab27	NONE	(?~|ab|\O*)(?~|cd|\O*)z	xxcdabz	M 0-7	M 0-7	yes	none
+ab28	NONE	(?:(?~ab)c)*	xcxcabc	M 0-4	M 0-4	yes	none
+ab29	NONE	(?:(?~|ab)c)*\O*	xcabcc	M 0-6	M 0-6	yes	none

@@ -1,0 +1,113 @@
+fold_proof.rs	memn_app	manual	6
+fold_proof.rs	m_seg	manual	16
+fold_proof.rs	prefix2	manual	5
+fold_proof.rs	prefix1	manual	5
+fold_proof.rs	m_df	manual	9
+fold_proof.rs	m_ss	manual	17
+fold_proof.rs	drop2_ends	manual	18
+fold_proof.rs	sharp_s_sym	manual	65
+fold_proof.rs	cost_pos	manual	3
+fold_proof.rs	seg_alts	manual	30
+fold_proof.rs	segs_m	manual	16
+fold_proof.rs	fold_lit	manual	7
+fold_proof.rs	cost_df	example	3
+fold_proof.rs	total 12	automatic 0	admitted 0	returning 0	examples 1
+absent_mono.rs	mb_mono	manual	33
+absent_mono.rs	mb_det	manual	6
+absent_mono.rs	scan_mono	manual	10
+absent_mono.rs	cut_mono	manual	6
+absent_mono.rs	m_mono	manual	48
+absent_mono.rs	m_det	manual	9
+absent_mono.rs	md_mono	manual	45
+absent_mono.rs	md_det	manual	6
+absent_mono.rs	total 8	automatic 0	admitted 0	returning 0	examples 0
+absent_proof.rs	core_in_scope	manual	12
+absent_proof.rs	core_desugar	manual	12
+absent_proof.rs	md_k	manual	20
+absent_proof.rs	core_k	manual	57
+absent_proof.rs	rsz_pos	automatic	1
+absent_proof.rs	at_lt	automatic	4
+absent_proof.rs	term_core	manual	74	returns
+absent_proof.rs	mb_term	manual	9	returns
+absent_proof.rs	att_unfold	manual	12
+absent_proof.rs	attempt	manual	15	returns
+absent_proof.rs	attempt_inv	manual	21
+absent_proof.rs	app_nil	manual	6
+absent_proof.rs	app_assoc	manual	6
+absent_proof.rs	downs_s	manual	15
+absent_proof.rs	ends_app	manual	6
+absent_proof.rs	step_eq	automatic	5
+absent_proof.rs	dcat_mono	manual	17
+absent_proof.rs	dcat_app	manual	9
+absent_proof.rs	dcat_downs_s	manual	10
+absent_proof.rs	scan_a	manual	54	returns
+absent_proof.rs	scan_b	manual	74	returns
+absent_proof.rs	scan_spec	manual	14
+absent_proof.rs	scan_intro	manual	12
+absent_proof.rs	nth_some	manual	7
+absent_proof.rs	at_some	manual	6
+absent_proof.rs	cut_top	manual	20	returns
+absent_proof.rs	cut_term	manual	6	returns
+absent_proof.rs	scan_term	manual	16	returns
+absent_proof.rs	m_ends_a	manual	15
+absent_proof.rs	mcat_mono	manual	12
+absent_proof.rs	m_ends_b	manual	12
+absent_proof.rs	mem_downs	manual	7
+absent_proof.rs	len_downs	manual	7
+absent_proof.rs	mcat_downs_s	manual	8
+absent_proof.rs	mcat_app	manual	9
+absent_proof.rs	mstar_a	manual	39	returns
+absent_proof.rs	mstar_b	manual	29
+absent_proof.rs	ends_dcat	manual	23
+absent_proof.rs	dmax_ok	manual	19
+absent_proof.rs	mmax_ok	manual	24
+absent_proof.rs	rel_free	manual	7
+absent_proof.rs	lookup_sv1	manual	5
+absent_proof.rs	md_rst	manual	19
+absent_proof.rs	md_ur	manual	13
+absent_proof.rs	simple_unfold	manual	19
+absent_proof.rs	simple_intro	manual	10
+absent_proof.rs	gen_unfold	manual	30
+absent_proof.rs	md_u2	manual	9
+absent_proof.rs	gen_intro	manual	21
+absent_proof.rs	rclear_unfold	manual	23
+absent_proof.rs	rrinit_eq	manual	11
+absent_proof.rs	rclear_intro	manual	11
+absent_proof.rs	tail_unfold	manual	22
+absent_proof.rs	upd_eps_eq	manual	12
+absent_proof.rs	tail_intro	manual	12
+absent_proof.rs	simple_finish	manual	38	returns
+absent_proof.rs	downs_hd	automatic	3
+absent_proof.rs	gen_finish	manual	28	returns
+absent_proof.rs	sim_a	manual	101	returns
+absent_proof.rs	sim_a_rep	manual	30	returns
+absent_proof.rs	sim_a_xs	manual	37	returns
+absent_proof.rs	sim_a_gen	manual	27	returns
+absent_proof.rs	sim_a_stop	manual	17	returns
+absent_proof.rs	simple_inv	manual	29
+absent_proof.rs	gen_inv	manual	53
+absent_proof.rs	rclear_inv	manual	32
+absent_proof.rs	tail_inv	manual	31
+absent_proof.rs	cut_from_scan	manual	14
+absent_proof.rs	simple_top	manual	22
+absent_proof.rs	sim_b	manual	80	returns
+absent_proof.rs	sim_b_alt	manual	24	returns
+absent_proof.rs	sim_b_star	manual	24	returns
+absent_proof.rs	simple_ends_b	manual	37
+absent_proof.rs	sim_b_rep	manual	37	returns
+absent_proof.rs	sim_b_xs	manual	56	returns
+absent_proof.rs	gen_b	manual	37	returns
+absent_proof.rs	sim_b_gen	manual	27	returns
+absent_proof.rs	sim_b_stop	manual	18	returns
+absent_proof.rs	absent_desugar_eq	manual	26
+absent_proof.rs	tsz_pos	automatic	1
+absent_proof.rs	toks_mono	manual	7
+absent_proof.rs	nth_len	manual	7
+absent_proof.rs	at_len	manual	6
+absent_proof.rs	scan_le	manual	7
+absent_proof.rs	cut_bounds	manual	9
+absent_proof.rs	m_term_stack	manual	129	returns
+absent_proof.rs	m_term	manual	9
+absent_proof.rs	absent_desugar_total	manual	19
+absent_proof.rs	total 88	automatic 5	admitted 0	returning 25	examples 0
+all	total 108	automatic 5	admitted 0

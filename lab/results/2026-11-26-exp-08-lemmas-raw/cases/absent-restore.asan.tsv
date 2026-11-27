@@ -1,0 +1,19 @@
+id	syntax	encoding	options	casefold	version	build	pattern	subject	result	result_bytes
+ab12	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:(?~abc)z|.*)	xabcyy	M 0-6	M 0-6
+ab13	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:(?~|abc|\O*)z|.*)	xabcyy	M 0-6	M 0-6
+ab14	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:(?~|abc)z|.*)	xabcyy	M 0-6	M 0-6
+ab15	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:(?~|abc)\O*z|\O*)	xabcz	M 0-5	M 0-5
+ab16	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~abc)\O*	xabcy	M 0-5	M 0-5
+ab17	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc|x*)a	xxxabcy	M 0-4	M 0-4
+ab18	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:(?~|abc|x*)z|\O*)	xxabcz	M 0-6	M 0-6
+ab19	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc|x*)y	xxxabcy	M 6-7	M 6-7
+ab20	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc|(?:x|\O\O\O\O))q	xabcqqq	M 2-7	M 2-7
+ab21	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc|(?:xx|x)*)xa	xxxabc	M 0-4	M 0-4
+ab22	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc|(?:x|y)*)\O*	xyabcxy	M 0-7	M 0-7
+ab23	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|abc)(?:(?~|)\O*z|\O*)	xxabcyy	M 0-2	M 0-2
+ab24	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|(?:a|)|(?:x|y)*)	xya	M 0-0	M 0-0
+ab25	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|(?:)|\O*)z	z	M 0-1	M 0-1
+ab26	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~)z	xz	M 1-2	M 1-2
+ab27	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?~|ab|\O*)(?~|cd|\O*)z	xxcdabz	M 0-7	M 0-7
+ab28	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:(?~ab)c)*	xcxcabc	M 0-4	M 0-4
+ab29	Oniguruma	UTF-8	NONE	0x40000000	6.9.10	asan	(?:(?~|ab)c)*\O*	xcabcc	M 0-6	M 0-6

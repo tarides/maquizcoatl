@@ -1,0 +1,2 @@
+     = (Some [2; 1; 0], Some ([0], 2))
+     : option (list nat) * option (list nat * nat)

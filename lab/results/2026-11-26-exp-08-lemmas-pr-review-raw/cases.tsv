@@ -1,0 +1,9 @@
+# Experiment #8, absent operator (non-nested). Columns: probes/README.md.
+id	syntax	encoding	options	pattern	subject	js	note
+ab13	Oniguruma	UTF-8		(?:(?~|abc|\O*)z|.*)	xabcyy		expression (general path): same, through the tail and the engine restore
+ab14	Oniguruma	UTF-8		(?:(?~|abc)z|.*)	xabcyy		stopper: same, through the engine restore
+ab15	Oniguruma	UTF-8		(?:(?~|abc)\O*z|\O*)	xabcz		stopper: the later alternative must not inherit the cut
+ab16	Oniguruma	UTF-8		(?~abc)\O*	xabcy		repeater: the continuation runs on the restored range
+ab17	Oniguruma	UTF-8		(?~|abc|x*)a	xxxabcy		expression, simple path with step x: continuation past the cut
+ab18	Oniguruma	UTF-8		(?:(?~|abc|x*)z|\O*)	xxabcz		expression, simple path: later alternative sees the restored range
+ab19	Oniguruma	UTF-8		(?~|abc|x*)y	xxxabcy		expression, simple path: no match before the last start

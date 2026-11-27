@@ -1,0 +1,4 @@
+Closed under the global context
+File "./AbsentProof.v", line 1399, characters 46-60:
+Error: Found no subterm matching "in_scope a" in the current goal.
+

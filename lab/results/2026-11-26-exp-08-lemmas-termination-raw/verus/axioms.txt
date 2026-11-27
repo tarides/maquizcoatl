@@ -1,0 +1,281 @@
+== verus --version
+Verus
+  Version: 0.2026.11.02.8bf68ee
+  Profile: release
+  Platform: linux_x86_64
+  Toolchain: 1.99.1-x86_64-unknown-linux-gnu (overridden by environment variable RUSTUP_TOOLCHAIN)
+
+== z3 --version (bundled with verus)
+Z3 version 4.16.0 - 64 bit
+== verus --crate-type=lib --num-threads 4  lib.rs
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:114:14
+    |
+114 |     requires forall|w: L<nat>| mem_w(w, l) ==> len(w) == 2,
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:114:48
+    |
+114 |     requires forall|w: L<nat>| mem_w(w, l) ==> len(w) == 2,
+    |                                                ^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:122:13
+    |
+122 |             assert forall|w2: L<nat>| mem_w(w2, *t) implies len(w2) == 2 by { assert(mem_w(w2, l)); }
+    |             ^^^^^^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:122:61
+    |
+122 |             assert forall|w2: L<nat>| mem_w(w2, *t) implies len(w2) == 2 by { assert(mem_w(w2, l)); }
+    |                                                             ^^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:138:9
+    |
+138 | /         forall|x: nat, y: nat| is_ss(x, y) ==>
+139 | |             (memn(i + 1, m(s, f, cons(Item::R(Re::ILit(two(x, y))), L::Nil), i)) <==> nth(s, i) == Some(223nat)),
+    | |________________________________________________________________________________________________________________^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:138:32
+    |
+138 |         forall|x: nat, y: nat| is_ss(x, y) ==>
+    |                                ^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:192:9
+    |
+192 |         assert forall|w: L<nat>| mem_w(w, l0) implies len(w) == 2 by {
+    |         ^^^^^^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:192:55
+    |
+192 |         assert forall|w: L<nat>| mem_w(w, l0) implies len(w) == 2 by {
+    |                                                       ^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:179:5
+    |
+179 |     assert forall|x: nat, y: nat| is_ss(x, y) implies
+    |     ^^^^^^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:179:35
+    |
+179 |     assert forall|x: nat, y: nat| is_ss(x, y) implies
+    |                                   ^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> absent_proof.rs:900:5
+    |
+900 |     choose|gf: (nat, nat)| m(s, gf.0, gf.1, ks, e, rr) is Some
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note:   trigger 1 of 1:
+   --> absent_proof.rs:900:28
+    |
+900 |     choose|gf: (nat, nat)| m(s, gf.0, gf.1, ks, e, rr) is Some
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> absent_proof.rs:842:14
+    |
+842 |       requires forall|e: nat| q <= e <= q + d ==>
+    |  ______________^
+843 | |         ends((#[trigger] md(s, fu, uu, e, reg(top, xt, y, e), sv)->0).0) == m(s, g, f, ks, e, rr)->0,
+    | |____________________________________________________________________________________________________^
+
+note:   trigger 1 of 1:
+   --> absent_proof.rs:843:77
+    |
+843 |         ends((#[trigger] md(s, fu, uu, e, reg(top, xt, y, e), sv)->0).0) == m(s, g, f, ks, e, rr)->0,
+    |                                                                             ^^^^^^^^^^^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+    --> absent_proof.rs:2084:13
+     |
+2084 | /             exists|f2: nat, rs: L<DRes>| md(s, f2, cons(DItem::DR(desugar(r, 0).0), L::Nil), i, rr, L::Nil) == Some((rs, rr))
+2085 | |                 && ends(rs) == m(s, g, f, cons(Item::R(r), L::Nil), i, rr)->0,
+     | |_____________________________________________________________________________^
+
+note:   trigger 1 of 1:
+    --> absent_proof.rs:2084:42
+     |
+2084 |             exists|f2: nat, rs: L<DRes>| md(s, f2, cons(DItem::DR(desugar(r, 0).0), L::Nil), i, rr, L::Nil) == Some((rs, rr))
+     |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2085 |                 && ends(rs) == m(s, g, f, cons(Item::R(r), L::Nil), i, rr)->0,
+     |                    ^^^^^^^^
+
+note: automatically chose triggers for this expression:
+    --> absent_proof.rs:2096:9
+     |
+2096 |         exists|f2: nat, rs: L<DRes>| md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0 by {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note:   trigger 1 of 1:
+    --> absent_proof.rs:2096:38
+     |
+2096 |         exists|f2: nat, rs: L<DRes>| md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0 by {
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^
+
+note: Verus printed one or more automatically chosen quantifier triggers
+      because it had low confidence in the chosen triggers.
+      To suppress these messages, do one of the following:
+        (1) manually annotate a single desired trigger using `#[trigger]`
+            (example: `forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)`),
+        (2) manually annotate multiple desired triggers using `#![trigger ...]`
+            (example: `forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)`),
+        (3) accept the automatically chosen trigger using `#![auto]`
+            (example: `forall|i: int, j: int| #![auto] f(i) && g(i) && h(j)`)
+        (4) use the `--triggers-mode silent` command-line option to suppress all printing of triggers.
+      (Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;
+      the theorem prover instantiates a quantifier whenever some expression matches the
+      pattern specified by one of the quantifier's triggers.)
+    --> absent_proof.rs:2096:9
+     |
+2096 |         exists|f2: nat, rs: L<DRes>| md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0 by {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+verification results:: 191 verified, 0 errors
+exit code 0
+== verus --crate-type=lib --num-threads 4 --no-cheating lib.rs
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:114:14
+    |
+114 |     requires forall|w: L<nat>| mem_w(w, l) ==> len(w) == 2,
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:114:48
+    |
+114 |     requires forall|w: L<nat>| mem_w(w, l) ==> len(w) == 2,
+    |                                                ^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:122:13
+    |
+122 |             assert forall|w2: L<nat>| mem_w(w2, *t) implies len(w2) == 2 by { assert(mem_w(w2, l)); }
+    |             ^^^^^^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:122:61
+    |
+122 |             assert forall|w2: L<nat>| mem_w(w2, *t) implies len(w2) == 2 by { assert(mem_w(w2, l)); }
+    |                                                             ^^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:138:9
+    |
+138 | /         forall|x: nat, y: nat| is_ss(x, y) ==>
+139 | |             (memn(i + 1, m(s, f, cons(Item::R(Re::ILit(two(x, y))), L::Nil), i)) <==> nth(s, i) == Some(223nat)),
+    | |________________________________________________________________________________________________________________^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:138:32
+    |
+138 |         forall|x: nat, y: nat| is_ss(x, y) ==>
+    |                                ^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:192:9
+    |
+192 |         assert forall|w: L<nat>| mem_w(w, l0) implies len(w) == 2 by {
+    |         ^^^^^^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:192:55
+    |
+192 |         assert forall|w: L<nat>| mem_w(w, l0) implies len(w) == 2 by {
+    |                                                       ^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> fold_proof.rs:179:5
+    |
+179 |     assert forall|x: nat, y: nat| is_ss(x, y) implies
+    |     ^^^^^^
+
+note:   trigger 1 of 1:
+   --> fold_proof.rs:179:35
+    |
+179 |     assert forall|x: nat, y: nat| is_ss(x, y) implies
+    |                                   ^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> absent_proof.rs:900:5
+    |
+900 |     choose|gf: (nat, nat)| m(s, gf.0, gf.1, ks, e, rr) is Some
+    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note:   trigger 1 of 1:
+   --> absent_proof.rs:900:28
+    |
+900 |     choose|gf: (nat, nat)| m(s, gf.0, gf.1, ks, e, rr) is Some
+    |                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+   --> absent_proof.rs:842:14
+    |
+842 |       requires forall|e: nat| q <= e <= q + d ==>
+    |  ______________^
+843 | |         ends((#[trigger] md(s, fu, uu, e, reg(top, xt, y, e), sv)->0).0) == m(s, g, f, ks, e, rr)->0,
+    | |____________________________________________________________________________________________________^
+
+note:   trigger 1 of 1:
+   --> absent_proof.rs:843:77
+    |
+843 |         ends((#[trigger] md(s, fu, uu, e, reg(top, xt, y, e), sv)->0).0) == m(s, g, f, ks, e, rr)->0,
+    |                                                                             ^^^^^^^^^^^^^^^^^^^^^
+
+note: automatically chose triggers for this expression:
+    --> absent_proof.rs:2084:13
+     |
+2084 | /             exists|f2: nat, rs: L<DRes>| md(s, f2, cons(DItem::DR(desugar(r, 0).0), L::Nil), i, rr, L::Nil) == Some((rs, rr))
+2085 | |                 && ends(rs) == m(s, g, f, cons(Item::R(r), L::Nil), i, rr)->0,
+     | |_____________________________________________________________________________^
+
+note:   trigger 1 of 1:
+    --> absent_proof.rs:2084:42
+     |
+2084 |             exists|f2: nat, rs: L<DRes>| md(s, f2, cons(DItem::DR(desugar(r, 0).0), L::Nil), i, rr, L::Nil) == Some((rs, rr))
+     |                                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+2085 |                 && ends(rs) == m(s, g, f, cons(Item::R(r), L::Nil), i, rr)->0,
+     |                    ^^^^^^^^
+
+note: automatically chose triggers for this expression:
+    --> absent_proof.rs:2096:9
+     |
+2096 |         exists|f2: nat, rs: L<DRes>| md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0 by {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+note:   trigger 1 of 1:
+    --> absent_proof.rs:2096:38
+     |
+2096 |         exists|f2: nat, rs: L<DRes>| md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0 by {
+     |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^                      ^^^^^^^^
+
+note: Verus printed one or more automatically chosen quantifier triggers
+      because it had low confidence in the chosen triggers.
+      To suppress these messages, do one of the following:
+        (1) manually annotate a single desired trigger using `#[trigger]`
+            (example: `forall|i: int, j: int| f(i) && #[trigger] g(i) && #[trigger] h(j)`),
+        (2) manually annotate multiple desired triggers using `#![trigger ...]`
+            (example: `forall|i: int| #![trigger f(i)] #![trigger g(i)] f(i) && g(i)`),
+        (3) accept the automatically chosen trigger using `#![auto]`
+            (example: `forall|i: int, j: int| #![auto] f(i) && g(i) && h(j)`)
+        (4) use the `--triggers-mode silent` command-line option to suppress all printing of triggers.
+      (Note: triggers are used by the underlying SMT theorem prover to instantiate quantifiers;
+      the theorem prover instantiates a quantifier whenever some expression matches the
+      pattern specified by one of the quantifier's triggers.)
+    --> absent_proof.rs:2096:9
+     |
+2096 |         exists|f2: nat, rs: L<DRes>| md(s, f2, dks, i, rr, L::Nil) == Some((rs, rr)) && ends(rs) == m(s, g, f, ks, i, rr)->0 by {
+     |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+verification results:: 191 verified, 0 errors
+exit code 0
+== scan (assume|admit|external_body|verifier::external|assume_specification|exec_allows_no_decreases_clause|no_verify|rlimit) in lib fold fold_proof absent desugar absent_mono absent_proof cases
+== end of scan

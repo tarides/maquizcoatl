@@ -1,0 +1,16 @@
+== M1_engine_no_restore
+ = [("ab13", Match 0 1, Match 0 6); ("ab14", Match 0 1, Match 0 6); ("ab15", Match 0 1, Match 0 5)] : list (string * sres * sres) = ["ab13"; "ab14"; "ab15"] : list string 
+== M2_tail_no_reinstall
+ = [("ab20", Match 0 5, Match 2 7)] : list (string * sres * sres) = ["ab20"] : list string 
+== M3_rclear_no_restore
+ = [("ab23", Match 0 7, Match 0 2)] : list (string * sres * sres) = ["ab23"] : list string 
+== M4_simple_no_final_restore
+ = [("ab16", Match 0 1, Match 0 5); ("ab26", NoMatch, Match 1 2)] : list (string * sres * sres) = ["ab16"; "ab26"] : list string 
+== M5_general_not_atomic
+ = [] : list (string * sres * sres) = ["ab05"; "ab07"; "ab09"; "ab20"; "ab21"; "ab22"; "ab27"] : list string 
+== M6_no_simple_dispatch
+ = [] : list (string * sres * sres) = [] : list string 
+== M7_tail_no_restore
+ = [("ab21", NoMatch, Match 0 4); ("ab22", Match 0 2, Match 0 7); ("ab25", NoMatch, Match 0 1); ("ab27", Match 5 7, Match 0 7)] : list (string * sres * sres) = ["ab21"; "ab22"; "ab25"; "ab27"] : list string 
+== M8_no_rewind
+ = [("ab09", NoMatch, Match 0 4); ("ab20", NoMatch, Match 2 7); ("ab21", NoMatch, Match 0 4); ("ab27", NoMatch, Match 0 7)] : list (string * sres * sres) = ["ab05"; "ab07"; "ab09"; "ab20"; "ab21"; "ab22"; "ab27"] : list string 

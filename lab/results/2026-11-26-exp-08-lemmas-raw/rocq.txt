@@ -1,0 +1,17 @@
+== rocq compile -R . S Fold.v
+Closed under the global context
+Closed under the global context
+wall 0.87 s, max RSS 389320 kB
+exit 0
+== rocq compile -R . S Absent.v
+Closed under the global context
+wall 1.16 s, max RSS 411408 kB
+exit 0
+== rocq compile -R . S Desugar.v
+wall 0.82 s, max RSS 331472 kB
+exit 0
+== rocq compile -R . S Cases.v
+Closed under the global context
+Closed under the global context
+wall 1.37 s, max RSS 401572 kB
+exit 0

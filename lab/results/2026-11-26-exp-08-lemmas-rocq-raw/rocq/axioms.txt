@@ -1,0 +1,20 @@
+== rocq --version
+The Rocq Prover, version 9.3.0
+compiled with OCaml 5.4.1
+== rocq compile -R . S Fold.v
+Closed under the global context
+Closed under the global context
+== rocq compile -R . S FoldProof.v
+Closed under the global context
+Closed under the global context
+== rocq compile -R . S Absent.v
+Closed under the global context
+== rocq compile -R . S Desugar.v
+== rocq compile -R . S AbsentMono.v
+== rocq compile -R . S AbsentProof.v
+Closed under the global context
+== rocq compile -R . S Axioms.v
+Closed under the global context
+Closed under the global context
+== scan (Admitted|admit|Axiom|Parameter|Conjecture|Hypothesis|Abort) in Fold FoldProof Absent Desugar AbsentMono AbsentProof
+== end of scan

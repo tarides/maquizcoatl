@@ -1,0 +1,16 @@
+Issue #34 run 4: recheck of Verus's rlimit unit (calib.sh 0.3; untimed, nice -n 10,
+CPUs 8-11, --num-threads 4, after the matrix; same eight sources as the matrix).
+verus --crate-type=lib --num-threads 4 --output-json --time-expanded --rlimit 0.3 --verify-module absent_proof lib.rs
+verification results: {'encountered-error': True, 'encountered-vir-error': False, 'verified': 88, 'errors': 4, 'is-verifying-entire-crate': False}
+largest per-function rlimit counts (count, function, success):
+  900000 lib::absent_proof::term_core False
+  900000 lib::absent_proof::sim_b_xs False
+  900000 lib::absent_proof::sim_a False
+  900000 lib::absent_proof::scan_a False
+  822914 lib::absent_proof::scan_b True
+  777159 lib::absent_proof::sim_b_alt True
+  655030 lib::absent_proof::mstar_b True
+  601874 lib::absent_proof::sim_b_rep True
+The four failing functions stop at exactly 900,000 = 0.3 x 3,000,000: one --rlimit unit
+is 3,000,000 Z3 resource units (as experiment #9's calibration), so the default --rlimit 10
+is 30,000,000 per function; the two failing matrix cells stop sim_a at exactly 30,000,000.

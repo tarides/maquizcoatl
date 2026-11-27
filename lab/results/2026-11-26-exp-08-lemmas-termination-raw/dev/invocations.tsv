@@ -1,0 +1,8 @@
+utc	target	rc	sha256_target_file	sha256_all_sources	summary
+2026-11-26T19:16:24Z	AbsentProof	rc=1	54aa05fec45ea8efc671a9c7646d778f4dd6c451a45d6ec1d912ea47db8618da	cd4ff7448d57bbca57446d79ebd8e1acb8757517546062d48eabad0ad1b0f958	Error: Found no subterm matching "in_scope a" in the current goal.
+2026-11-26T19:16:35Z	AbsentProof	rc=1	d4391616a99d3d14f6b5d23a2165ab3d3542242301ce99688d79a40d968fd907	6c1d75bdc72e1c4452652d56250511325b4469c9945619b2ea1613d1d07c8f1c	Error: Found no subterm matching "?M4062 =? ?M4062" in HM.
+2026-11-26T19:16:46Z	AbsentProof	rc=1	dba5fa0a498163ce671df27b9a7d7044c24c5d0a9f6658c327654b99fec991c5	fd952e46522710ba62335dd9b4fe80ccf48b4a98555c26d87fb627071970f76c	Error: Tactic failure:  Cannot find witness.
+2026-11-26T19:16:58Z	AbsentProof	rc=1	5c7e124075b369afb8977c6624db35fc0773fd60681b29f2f24838fc4dc3ecbc	049d3eb27b97fc80b42d38dc0afdd2a9ea3f1cd66e4fc603182eeffb41233c97	Error: Tactic failure:  Cannot find witness.
+2026-11-26T19:17:28Z	AbsentProof	rc=0	f2d597ec442f0b1d52f5aad8c6f8ba722f1efadccc4b795f455b0781a47c039f	dadfd312de1da82671832153d3ed9fc934a65e4938d02f5717a74754c7267fc1	ok
+2026-11-26T19:19:01Z	absent_proof	rc=0	1b5608e39a647aebefd106b4275e499237ee71cf57cde85ae4e8d6cefc8a224a	a752114941df809fbd8bc032bf58d42f804add276788fc2eea0075c222de702e	verification results:: 104 verified, 0 errors (partial verification with `--verify-*`)
+2026-11-26T19:19:22Z	all	rc=0	c2ed696c9ef62512f734d714796cb70c8826d91349249a5d2b112350fce35e0f	25bff55b4d264bfb7ddf00a45df1c66b6d56e72a8b0370262d3fe3ad508ac97f	verification results:: 191 verified, 0 errors

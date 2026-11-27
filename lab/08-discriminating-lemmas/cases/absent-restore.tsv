@@ -1,0 +1,20 @@
+# Experiment #8 follow-up (issue #34): absent cases that exercise the right-range restores. Columns: probes/README.md.
+id	syntax	encoding	options	pattern	subject	js	note
+ab12	Oniguruma	UTF-8		(?:(?~abc)z|.*)	xabcyy		repeater (simple path): continuation fails, the later alternative sees the range from before the absent (engine restore, id1)
+ab13	Oniguruma	UTF-8		(?:(?~|abc|\O*)z|.*)	xabcyy		expression (general path): same, through the tail and the engine restore
+ab14	Oniguruma	UTF-8		(?:(?~|abc)z|.*)	xabcyy		stopper: same, through the engine restore
+ab15	Oniguruma	UTF-8		(?:(?~|abc)\O*z|\O*)	xabcz		stopper: the later alternative must not inherit the cut
+ab16	Oniguruma	UTF-8		(?~abc)\O*	xabcy		repeater: the continuation runs on the restored range
+ab17	Oniguruma	UTF-8		(?~|abc|x*)a	xxxabcy		expression, simple path with step x: continuation past the cut
+ab18	Oniguruma	UTF-8		(?:(?~|abc|x*)z|\O*)	xxabcz		expression, simple path: later alternative sees the restored range
+ab19	Oniguruma	UTF-8		(?~|abc|x*)y	xxxabcy		expression, simple path: no match before the last start
+ab20	Oniguruma	UTF-8		(?~|abc|(?:x|\O\O\O\O))q	xabcqqq		expression, general path: backtracking into exp re-installs the cut (tail, id3)
+ab21	Oniguruma	UTF-8		(?~|abc|(?:xx|x)*)xa	xxxabc		expression, general path: exp with several ends, continuation fails on the first
+ab22	Oniguruma	UTF-8		(?~|abc|(?:x|y)*)\O*	xyabcxy		expression, exp not \O* and not simple: tail restore for the continuation
+ab23	Oniguruma	UTF-8		(?~|abc)(?:(?~|)\O*z|\O*)	xxabcyy		range clear backtracked over: the later alternative sees the stopper cut
+ab24	Oniguruma	UTF-8		(?~|(?:a|)|(?:x|y)*)	xya		absent pattern matching the empty string, expression form
+ab25	Oniguruma	UTF-8		(?~|(?:)|\O*)z	z		absent pattern matching the empty string, cut at the start, continuation on the restored range
+ab26	Oniguruma	UTF-8		(?~)z	xz		repeater with an empty absent pattern
+ab27	Oniguruma	UTF-8		(?~|ab|\O*)(?~|cd|\O*)z	xxcdabz		two expressions in sequence
+ab28	Oniguruma	UTF-8		(?:(?~ab)c)*	xcxcabc		repeater inside a greedy loop: the ids are reused at each iteration
+ab29	Oniguruma	UTF-8		(?:(?~|ab)c)*\O*	xcabcc		stopper inside a greedy loop: the cut persists into later iterations and the continuation
